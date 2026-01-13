@@ -6,7 +6,6 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   let browser;
-
   try {
     const body = await req.json();
     const { url } = body;
@@ -15,96 +14,66 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
-    // ✅ Browser Launch Logic (Vercel Compatible)
     const isLocal = process.env.NODE_ENV === 'development';
 
     browser = await puppeteer.launch({
       args: isLocal ? puppeteer.defaultArgs() : chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: isLocal
-        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // ⚠️ Local Testing ke liye apna path check kar lena
+        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // ⚠️ Windows Path check karlena
         : await chromium.executablePath(),
       headless: chromium.headless,
     });
 
     const page = await browser.newPage();
-
-    // ✅ Request Interception (Jo tumne code diya tha wahi logic)
-    // Images/Fonts block kar rahe hain speed ke liye
+    // Speed badhane ke liye images block logic (Optional, but good)
     await page.setRequestInterception(true);
     page.on('request', (req) => {
-        const type = req.resourceType();
-        if (type === 'image' || type === 'font' || type === 'stylesheet') {
-            req.abort();
-        } else {
-            req.continue();
+        if (['image', 'font', 'stylesheet'].includes(req.resourceType())) req.abort();
+        else req.continue();
+    });
+
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+
+    try { await page.waitForSelector('.ql-display-small', { timeout: 5000 }); } catch (e) {}
+
+    const data = await page.evaluate(() => {
+        const nameEl = document.querySelector('.ql-display-small') || document.querySelector('h1');
+        const userName = nameEl ? (nameEl as HTMLElement).innerText.trim() : "Unknown User";
+
+        let userAvatar = null;
+        const avatarContainer = document.querySelector('ql-avatar');
+        if (avatarContainer) {
+            userAvatar = avatarContainer.getAttribute('src') || avatarContainer.querySelector('img')?.src;
         }
-    });
 
-    // ✅ Page Load
-    await page.goto(url, {
-      waitUntil: 'networkidle2',
-      timeout: 60000,
-    });
+        const cards = document.querySelectorAll('.profile-badge');
+        let trivia = 0, games = 0, skills = 0;
 
-    // 🔥 Tumhara Main Logic (Evaluated inside browser)
-    const result = await page.evaluate(() => {
-      // 1. Name Logic
-      let userName = "Unknown User";
-      const h1 = document.querySelector('h1');
-      const classEl = document.querySelector('.ql-display-small');
-      
-      if (h1) {
-          userName = (h1 as HTMLElement).innerText.trim();
-      } else if (classEl) {
-          userName = (classEl as HTMLElement).innerText.trim();
-      }
+        cards.forEach((card) => {
+            const date = (card.querySelector('.ql-body-medium') as HTMLElement)?.innerText || '';
+            if (!date.includes('2026') || /Jan (1|2|3|4),/.test(date)) return;
 
-      // 2. Avatar Logic
-      let userAvatar = null;
-      const avatarEl = document.querySelector('ql-avatar');
-      if (avatarEl) {
-          userAvatar = avatarEl.getAttribute('src') || avatarEl.querySelector('img')?.src || null;
-      }
+            const t = (card.querySelector('.ql-title-medium') as HTMLElement)?.innerText.toLowerCase() || '';
+            if (t.includes('trivia')) trivia++;
+            else if (t.includes('game') || t.includes('level') || t.includes('monsoon')) games++;
+            else if (t.includes('skill badge')) skills++;
+        });
 
-      // 3. Points Logic
-      const cards = document.querySelectorAll('.profile-badge');
-      let trivia = 0, games = 0, skills = 0;
-
-      cards.forEach((card) => {
-          const title = (card.querySelector('.ql-title-medium') as HTMLElement)?.innerText || '';
-          const date = (card.querySelector('.ql-body-medium') as HTMLElement)?.innerText || '';
-
-          if (!date.includes('2026')) return;
-          if (/Jan (1|2|3|4),/.test(date)) return;
-
-          const t = title.toLowerCase();
-          
-          if (t.includes('trivia')) trivia++;
-          else if (t.includes('game') || t.includes('level') || t.includes('monsoon')) games++;
-          else if (t.includes('skill badge')) skills++;
-      });
-
-      return {
-          totalPoints: trivia + games + Math.floor(skills / 2),
-          breakdown: { trivia, games, skills },
-          userName,     
-          userAvatar  
-      };
+        return {
+            totalPoints: trivia + games + Math.floor(skills / 2),
+            breakdown: { trivia, games, skills },
+            userName,
+            userAvatar
+        };
     });
 
     await browser.close();
-    return NextResponse.json(result);
+    return NextResponse.json(data);
 
-  } catch (e: any) {
-    console.error("Scraping Error:", e.message);
+  } catch (error: any) {
+    console.error("Scraping Error:", error);
     if (browser) await browser.close();
-    return NextResponse.json({
-        totalPoints: 0,
-        breakdown: { trivia: 0, games: 0, skills: 0 },
-        userName: null,
-        userAvatar: null,
-        error: "Failed to scrape"
-    }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to scrape profile' }, { status: 500 });
   }
 }
