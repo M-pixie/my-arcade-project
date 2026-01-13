@@ -120,7 +120,7 @@ export default function AdminPage() {
                 alt="G"
                 className="w-5 h-5"
               />
-              Sign in with Google.
+              Sign in with Google
             </button>
             
             <div className="pt-2 text-center">

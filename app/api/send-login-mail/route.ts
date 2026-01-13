@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-const nodemailer = require ("nodemailer");
+const nodemailer = require("nodemailer");
 
 // 🖥️ OS detect helper
 function detectOS(userAgent: string) {
@@ -14,6 +14,14 @@ function detectOS(userAgent: string) {
 }
 
 export async function POST(req: Request) {
+  // 👇 JASOOS START (Debugging Logs)
+  console.log("------------------------------------------------");
+  console.log("🔍 DEBUG START: Checking Keys on Server");
+  console.log("📧 EMAIL_FROM:", process.env.EMAIL_FROM ? "✅ Mil Gya" : "❌ Missing Hai (Undefined)");
+  console.log("🔑 PASSWORD:", process.env.EMAIL_APP_PASSWORD ? "✅ Mil Gya" : "❌ Missing Hai (Undefined)");
+  console.log("------------------------------------------------");
+  // 👆 JASOOS END
+
   try {
     const { email, userAgent } = await req.json();
 
@@ -90,10 +98,11 @@ export async function POST(req: Request) {
     };
 
     await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent successfully!");
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Mail error:", err);
+    console.error("❌ Mail error details:", err); // Error detail log
     return NextResponse.json(
       { error: "Failed to send email" },
       { status: 500 }
