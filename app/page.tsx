@@ -35,12 +35,10 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]">
-              Track & Analyze Your <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600">
-                Arcade Progress
-              </span>
-            </h1>
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-blue-600 mb-6 leading-[1.1]">
+  Track & Analyze Your <br />
+  Arcade Progress
+</h1>
 
             <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
               The professional dashboard to calculate your Google Cloud Arcade
@@ -109,9 +107,9 @@ export default function HomePage() {
         {/* ================= FEATURES ================= */}
         <section className="relative z-10 py-28 bg-white">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-slate-900 mb-16">
-              Everything you need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Win Arcade</span>
-            </h2>
+            <h2 className="text-3xl font-bold text-center text-blue-600 mb-16">
+  Everything you need to Win Arcade
+</h2>
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
