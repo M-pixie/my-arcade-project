@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 👇 Tumhari purani settings (Errors ignore karne ke liye)
+  // 👇 Purani settings
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -8,7 +8,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // 👇 ✅ YE HAI NAYA FIX (Isse Chromium wala error hat jayega)
+  // 👇 ✅ YEH SETTING ZAROORI HAI (Isse 'directory not exist' wala error hat jayega)
   experimental: {
     serverComponentsExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
   },
