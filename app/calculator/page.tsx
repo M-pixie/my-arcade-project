@@ -27,7 +27,7 @@ export default function CalculatorPage() {
     }
   }, []);
 
-  const calculatePoints = async () => {
+ const calculatePoints = async () => {
     setError(null);
 
     if (rememberMe) {
@@ -47,12 +47,12 @@ export default function CalculatorPage() {
     setLoading(true);
     setPoints(null);
     setBreakdown(null);
-    // ✅ NEW: Reset name/avatar on new search
     setUserName(null); 
     setUserAvatar(null);
 
     try {
-      const res = await fetch("http://localhost:5000/api/calculate", {
+      // 👇 CHANGE HERE: "http://localhost:5000" hata diya
+      const res = await fetch("/api/calculate", { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,8 +70,6 @@ export default function CalculatorPage() {
       setPoints(data.totalPoints);
       setBreakdown(data.breakdown);
 
-      // ✅ NEW: Backend se aaye hue name aur avatar ko set kiya
-      // (Backend must return: { totalPoints, breakdown, userName, userAvatar })
       if (data.userName) setUserName(data.userName);
       if (data.userAvatar) setUserAvatar(data.userAvatar);
 
@@ -87,7 +85,6 @@ export default function CalculatorPage() {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans">
       <Navbar />
