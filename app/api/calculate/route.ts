@@ -1,75 +1,67 @@
 import { NextResponse } from 'next/server';
+import chromium from '@sparticuz/chromium-min';
 import puppeteer from 'puppeteer-core';
-import chromium from '@sparticuz/chromium';
 
-// Vercel function duration badhane ki koshish (Pro plan par work karta hai, Free par 10s hi rahega)
-export const maxDuration = 60; 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60; // Timeout badhane ke liye
 
 export async function POST(req: Request) {
   let browser;
   try {
-    const body = await req.json();
-    const { url } = body;
-
+    const { url } = await req.json();
     if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 });
 
-    // Localhost check
-    const isLocal = !!process.env.CHROME_EXECUTABLE_PATH; 
+    const isLocal = process.env.NODE_ENV === 'development';
+    console.log("🚀 Starting Browser (Remote Mode)...");
 
-    console.log("🚀 Starting Browser...");
+    // 👇 Graphics mode off (Error prevent karne ke liye)
+    chromium.setGraphicsMode = false;
 
     browser = await puppeteer.launch({
       args: isLocal ? puppeteer.defaultArgs() : [
-        ...chromium.args,
-        "--hide-scrollbars",
-        "--disable-web-security",
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-gpu", // GPU disable karna zaroori hai Vercel par
+          ...chromium.args,
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+          "--no-zygote",
       ],
       defaultViewport: chromium.defaultViewport,
       executablePath: isLocal
-        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Local path
-        : await chromium.executablePath(), // Vercel path
+        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Windows Path
+        : await chromium.executablePath(
+            // 👇 YE HAI MAGIC FIX: Browser Internet se download hoga
+            "https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar"
+          ),
       headless: chromium.headless,
-      ignoreHTTPSErrors: true,
     });
 
     const page = await browser.newPage();
 
-    // ✅ User-Agent (Google ko ullu banane ke liye)
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-
-    // ⚡ SPEED UP: Images aur Fonts ko load hi mat hone do
+    // ⚡ Speed Boost: Images Block Karo
     await page.setRequestInterception(true);
     page.on('request', (req) => {
-        const resourceType = req.resourceType();
-        if (['image', 'font', 'stylesheet', 'media', 'other'].includes(resourceType)) {
+        if (['image', 'stylesheet', 'font', 'media'].includes(req.resourceType())) {
             req.abort();
         } else {
             req.continue();
         }
     });
 
-    console.log("🌍 Navigating to URL...");
-    
-    // Timeout kam rakha hai taaki Vercel kill na kare (Wait until 'domcontentloaded' fast hota hai)
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 9000 });
+    console.log("🌍 Navigating...");
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
-    console.log("👀 Looking for elements...");
-    
-    // Selector dhoondo (Timeout sirf 4 sec taaki jaldi error pakde)
-    try { await page.waitForSelector('.ql-display-small', { timeout: 4000 }); } catch (e) { console.log("Selector timeout, trying parsing anyway..."); }
+    // Selector wait
+    try { await page.waitForSelector('.ql-display-small', { timeout: 6000 }); } catch (e) {}
 
     const data = await page.evaluate(() => {
         const nameEl = document.querySelector('.ql-display-small') || document.querySelector('h1');
         const userName = nameEl ? (nameEl as HTMLElement).innerText.trim() : "Unknown User";
 
         let userAvatar = null;
-        const avatarContainer = document.querySelector('ql-avatar');
-        if (avatarContainer) {
-            userAvatar = avatarContainer.getAttribute('src') || avatarContainer.querySelector('img')?.src;
+        const avatarEl = document.querySelector('ql-avatar');
+        if (avatarEl) {
+            userAvatar = avatarEl.getAttribute('src') || avatarEl.querySelector('img')?.src;
         }
 
         const cards = document.querySelectorAll('.profile-badge');
@@ -77,15 +69,11 @@ export async function POST(req: Request) {
 
         cards.forEach((card) => {
             const dateText = (card.querySelector('.ql-body-medium') as HTMLElement)?.innerText || '';
-            
-            // 2026 logic
-            if (!dateText.includes('2026')) return;
-            if (/Jan (1|2|3|4),/.test(dateText)) return;
+            if (!dateText.includes('2026') || /Jan (1|2|3|4),/.test(dateText)) return;
 
             const title = (card.querySelector('.ql-title-medium') as HTMLElement)?.innerText.toLowerCase() || '';
-            
             if (title.includes('trivia')) trivia++;
-            else if (title.includes('game') || title.includes('level') || title.includes('monsoon')) games++;
+            else if (title.includes('game') || title.includes('level')) games++;
             else if (title.includes('skill badge')) skills++;
         });
 
@@ -98,12 +86,11 @@ export async function POST(req: Request) {
     });
 
     await browser.close();
-    console.log("✅ Success!");
     return NextResponse.json(data);
 
   } catch (error: any) {
-    console.error("❌ SCRAPING ERROR DETAILS:", error); // Ye Logs me dikhega
+    console.error("❌ ERROR:", error);
     if (browser) await browser.close();
-    return NextResponse.json({ error: 'Failed to scrape profile. Check Logs.' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to scrape.' }, { status: 500 });
   }
 }
