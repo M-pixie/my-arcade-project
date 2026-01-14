@@ -1,11 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
-  experimental: {
-    // 👇 Naya Naam: @sparticuz/chromium-min
-    serverComponentsExternalPackages: ["@sparticuz/chromium-min", "puppeteer-core"],
-  },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    experimental: {
+        serverComponentsExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
+    },
 };
 
 module.exports = nextConfig;

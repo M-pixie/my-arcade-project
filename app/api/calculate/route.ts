@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import chromium from '@sparticuz/chromium-min';
+import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60; // Timeout badhane ke liye
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
   let browser;
@@ -12,9 +12,7 @@ export async function POST(req: Request) {
     if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 });
 
     const isLocal = process.env.NODE_ENV === 'development';
-    console.log("🚀 Starting Browser (Remote Mode)...");
 
-    // 👇 Graphics mode off (Error prevent karne ke liye)
     chromium.setGraphicsMode = false;
 
     browser = await puppeteer.launch({
@@ -24,21 +22,16 @@ export async function POST(req: Request) {
           "--disable-dev-shm-usage",
           "--disable-setuid-sandbox",
           "--no-sandbox",
-          "--no-zygote",
       ],
       defaultViewport: chromium.defaultViewport,
       executablePath: isLocal
-        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Windows Path
-        : await chromium.executablePath(
-            // 👇 YE HAI MAGIC FIX: Browser Internet se download hoga
-            "https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar"
-          ),
+        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+        : await chromium.executablePath(),
       headless: chromium.headless,
     });
 
     const page = await browser.newPage();
 
-    // ⚡ Speed Boost: Images Block Karo
     await page.setRequestInterception(true);
     page.on('request', (req) => {
         if (['image', 'stylesheet', 'font', 'media'].includes(req.resourceType())) {
@@ -48,12 +41,12 @@ export async function POST(req: Request) {
         }
     });
 
-    console.log("🌍 Navigating...");
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-
+    
     // Selector wait
-    try { await page.waitForSelector('.ql-display-small', { timeout: 6000 }); } catch (e) {}
+    try { await page.waitForSelector('.ql-display-small', { timeout: 4000 }); } catch (e) {}
 
+    // Scraping Logic
     const data = await page.evaluate(() => {
         const nameEl = document.querySelector('.ql-display-small') || document.querySelector('h1');
         const userName = nameEl ? (nameEl as HTMLElement).innerText.trim() : "Unknown User";
@@ -91,6 +84,6 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("❌ ERROR:", error);
     if (browser) await browser.close();
-    return NextResponse.json({ error: 'Failed to scrape.' }, { status: 500 });
+    return NextResponse.json({ error: 'Scraping failed.' }, { status: 500 });
   }
 }
