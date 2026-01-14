@@ -20,41 +20,64 @@ export async function POST(req: Request) {
       args: isLocal ? puppeteer.defaultArgs() : chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: isLocal
-        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // ⚠️ Windows Path check karlena
+        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // ⚠️ Windows Path (Make sure ye sahi ho)
         : await chromium.executablePath(),
       headless: chromium.headless,
     });
 
     const page = await browser.newPage();
-    // Speed badhane ke liye images block logic (Optional, but good)
+
+    // 👇 ✅ YE HAI MAGIC LINE (Google ko ullu banane ke liye)
+    // Isse Google ko lagega ki ye asli Chrome browser hai
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+
+    // Optimization: Images aur Fonts block kar rahe hain taaki speed tez ho
     await page.setRequestInterception(true);
     page.on('request', (req) => {
-        if (['image', 'font', 'stylesheet'].includes(req.resourceType())) req.abort();
-        else req.continue();
+        if (['image', 'font', 'stylesheet', 'media'].includes(req.resourceType())) {
+            req.abort();
+        } else {
+            req.continue();
+        }
     });
 
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+    // ⏳ Timeout badha diya (60s) aur wait condition 'domcontentloaded' kar di (Tez chalega)
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-    try { await page.waitForSelector('.ql-display-small', { timeout: 5000 }); } catch (e) {}
+    // Selector ka wait karenge
+    try { await page.waitForSelector('.ql-display-small', { timeout: 6000 }); } catch (e) {}
 
     const data = await page.evaluate(() => {
+        // Name nikaalo
         const nameEl = document.querySelector('.ql-display-small') || document.querySelector('h1');
         const userName = nameEl ? (nameEl as HTMLElement).innerText.trim() : "Unknown User";
 
+        // Avatar nikaalo
         let userAvatar = null;
         const avatarContainer = document.querySelector('ql-avatar');
         if (avatarContainer) {
             userAvatar = avatarContainer.getAttribute('src') || avatarContainer.querySelector('img')?.src;
         }
 
+        // Badges Count karo
         const cards = document.querySelectorAll('.profile-badge');
         let trivia = 0, games = 0, skills = 0;
 
         cards.forEach((card) => {
-            const date = (card.querySelector('.ql-body-medium') as HTMLElement)?.innerText || '';
-            if (!date.includes('2026') || /Jan (1|2|3|4),/.test(date)) return;
+            const dateEl = card.querySelector('.ql-body-medium') as HTMLElement;
+            const date = dateEl ? dateEl.innerText : '';
+            
+            // 📅 DATE CHECK (2026 logic)
+            // Agar date me 2026 nahi hai, toh skip karo
+            if (!date.includes('2026')) return;
+            
+            // Agar January ke shuru ke din hain (Arcade start hone se pehle), toh skip karo
+            // (Ye logic tumne lagaya tha, maine waisa hi rakha hai)
+            if (/Jan (1|2|3|4),/.test(date)) return;
 
-            const t = (card.querySelector('.ql-title-medium') as HTMLElement)?.innerText.toLowerCase() || '';
+            const titleEl = card.querySelector('.ql-title-medium') as HTMLElement;
+            const t = titleEl ? titleEl.innerText.toLowerCase() : '';
+
             if (t.includes('trivia')) trivia++;
             else if (t.includes('game') || t.includes('level') || t.includes('monsoon')) games++;
             else if (t.includes('skill badge')) skills++;
@@ -74,6 +97,6 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("Scraping Error:", error);
     if (browser) await browser.close();
-    return NextResponse.json({ error: 'Failed to scrape profile' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to scrape profile. Check URL or try again.' }, { status: 500 });
   }
 }
