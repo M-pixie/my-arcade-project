@@ -1,89 +1,78 @@
 import { NextResponse } from 'next/server';
-import chromium from '@sparticuz/chromium';
-import puppeteer from 'puppeteer-core';
+import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  let browser;
   try {
     const { url } = await req.json();
-    if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 });
 
-    const isLocal = process.env.NODE_ENV === 'development';
+    if (!url) {
+      return NextResponse.json({ error: 'URL required' }, { status: 400 });
+    }
 
-    chromium.setGraphicsMode = false;
+    console.log("🚀 Fetching Profile (Fast Mode)...");
 
-    browser = await puppeteer.launch({
-      args: isLocal ? puppeteer.defaultArgs() : [
-          ...chromium.args,
-          "--disable-gpu",
-          "--disable-dev-shm-usage",
-          "--disable-setuid-sandbox",
-          "--no-sandbox",
-      ],
-      defaultViewport: chromium.defaultViewport,
-      executablePath: isLocal
-        ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-        : await chromium.executablePath(),
-      headless: chromium.headless,
+    // 1. HTML Download karo (Bina Browser ke)
+    const response = await axios.get(url, {
+      headers: {
+        // Google ko lagega ye asli user hai
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      }
     });
 
-    const page = await browser.newPage();
+    // 2. HTML Parse karo
+    const $ = cheerio.load(response.data);
 
-    await page.setRequestInterception(true);
-    page.on('request', (req) => {
-        if (['image', 'stylesheet', 'font', 'media'].includes(req.resourceType())) {
-            req.abort();
-        } else {
-            req.continue();
-        }
+    // 3. Name Dhoondo
+    // (Google Cloud Profile par naam h1 ya .ql-display-small mein hota hai)
+    let userName = $('.ql-display-small').text().trim();
+    if (!userName) userName = $('h1').text().trim();
+    if (!userName) userName = "Arcade Player";
+
+    // 4. Avatar Dhoondo
+    let userAvatar = $('ql-avatar').attr('src');
+    if (!userAvatar) userAvatar = $('ql-avatar img').attr('src');
+
+    // 5. Badges Count Karo
+    let trivia = 0;
+    let games = 0;
+    let skills = 0;
+
+    // Har badge card ko check karo
+    $('.profile-badge').each((index, element) => {
+      const card = $(element);
+      const dateText = card.find('.ql-body-medium').text();
+      const title = card.find('.ql-title-medium').text().toLowerCase();
+
+      // 📅 Date Logic (2026 Check)
+      if (!dateText.includes('2026')) return; 
+      // January start skip logic
+      if (/Jan (1|2|3|4),/.test(dateText)) return;
+
+      // 🏷️ Category Logic
+      if (title.includes('trivia')) {
+        trivia++;
+      } else if (title.includes('game') || title.includes('level') || title.includes('monsoon')) {
+        games++;
+      } else if (title.includes('skill badge')) {
+        skills++;
+      }
     });
 
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-    
-    // Selector wait
-    try { await page.waitForSelector('.ql-display-small', { timeout: 4000 }); } catch (e) {}
+    console.log(`✅ Success! Found: ${userName}`);
 
-    // Scraping Logic
-    const data = await page.evaluate(() => {
-        const nameEl = document.querySelector('.ql-display-small') || document.querySelector('h1');
-        const userName = nameEl ? (nameEl as HTMLElement).innerText.trim() : "Unknown User";
-
-        let userAvatar = null;
-        const avatarEl = document.querySelector('ql-avatar');
-        if (avatarEl) {
-            userAvatar = avatarEl.getAttribute('src') || avatarEl.querySelector('img')?.src;
-        }
-
-        const cards = document.querySelectorAll('.profile-badge');
-        let trivia = 0, games = 0, skills = 0;
-
-        cards.forEach((card) => {
-            const dateText = (card.querySelector('.ql-body-medium') as HTMLElement)?.innerText || '';
-            if (!dateText.includes('2026') || /Jan (1|2|3|4),/.test(dateText)) return;
-
-            const title = (card.querySelector('.ql-title-medium') as HTMLElement)?.innerText.toLowerCase() || '';
-            if (title.includes('trivia')) trivia++;
-            else if (title.includes('game') || title.includes('level')) games++;
-            else if (title.includes('skill badge')) skills++;
-        });
-
-        return {
-            totalPoints: trivia + games + Math.floor(skills / 2),
-            breakdown: { trivia, games, skills },
-            userName,
-            userAvatar
-        };
+    return NextResponse.json({
+      totalPoints: trivia + games + Math.floor(skills / 2),
+      breakdown: { trivia, games, skills },
+      userName,
+      userAvatar
     });
-
-    await browser.close();
-    return NextResponse.json(data);
 
   } catch (error: any) {
-    console.error("❌ ERROR:", error);
-    if (browser) await browser.close();
-    return NextResponse.json({ error: 'Scraping failed.' }, { status: 500 });
+    console.error("❌ ERROR:", error.message);
+    return NextResponse.json({ error: 'Failed to fetch profile. Check URL.' }, { status: 500 });
   }
 }
