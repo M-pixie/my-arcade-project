@@ -35,11 +35,10 @@ export const metadata: Metadata = {
     description: "Check your Arcade Points and Leaderboard rank instantly.",
     type: "website",
   },
-  // 👇 GOOGLE SEARCH CONSOLE KA CODE YAHAN DALNA HAI
-  verification: {
-    google: "<meta name="google-site-verification" content="Whrghgx_Ik2-E-DkqCDfFwSQSVKms8_eVHOyffDHpsk" />", 
-  },
-};
+  // 👇 Sirf ye daalo (Pura tag hata diya hai)
+verification: {
+  google: "Whrghgx_Ik2-E-DkqCDfFwSQSVKms8_eVHOyffDHpsk",
+},
 
 export default function RootLayout({
   children,
