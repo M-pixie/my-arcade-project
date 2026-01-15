@@ -4,7 +4,7 @@ import { useState } from "react";
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import Navbar from "@/app/components/Navbar"; // 👈 IMPORTED NAVBAR
+import Navbar from "@/app/components/Navbar";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -62,7 +62,7 @@ export default function AdminPage() {
   };
 
   return (
-    // 👇 'pt-24' Add kiya taaki content Navbar ke piche na chhipe
+    // 'pt-24' Add kiya taaki content Navbar ke piche na chhipe
     <div className="min-h-screen flex flex-col bg-[#F0F2F5] font-sans text-[#202124] relative pt-24">
       
       {/* 1️⃣ REAL NAVBAR ADDED */}
@@ -128,21 +128,24 @@ export default function AdminPage() {
 
       </main>
 
-      {/* 3️⃣ PROFESSIONAL FOOTER */}
-      <footer className="bg-white border-t border-gray-200 py-8 mt-auto">
+      {/* 3️⃣ UPDATED SLIM FOOTER */}
+      {/* py-4 kar diya taaki height kam ho jaye */}
+      <footer className="bg-white border-t border-gray-200 py-4 mt-auto">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
            
            {/* Left: Copyright */}
-           <div className="text-sm text-gray-500">
+           <div className="text-xs text-gray-500">
              &copy; 2026 <strong>Arcade Nexus</strong>. All rights reserved.
            </div>
 
            {/* Right: Navigation Links */}
-           <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-600">
+           <div className="flex flex-wrap justify-center gap-6 text-xs font-medium text-gray-600">
+             {/* 👇 HOME BUTTON ADDED */}
+             <button onClick={() => router.push("/")} className="hover:text-[#1a73e8] transition-colors">Home</button>
              <button onClick={() => router.push("/calculator")} className="hover:text-[#1a73e8] transition-colors">Calculator</button>
              <button onClick={() => router.push("/dashboard")} className="hover:text-[#1a73e8] transition-colors">Dashboard</button>
              <button onClick={() => router.push("/leaderboard")} className="hover:text-[#1a73e8] transition-colors">Leaderboard</button>
-             <button onClick={handleLogout} className="text-red-500 hover:text-red-700 bg-red-50 px-3 py-1 rounded-full transition-colors">
+             <button onClick={handleLogout} className="text-red-500 hover:text-red-700 bg-red-50 px-3 py-0.5 rounded-full transition-colors border border-red-100">
                Logout
              </button>
            </div>
