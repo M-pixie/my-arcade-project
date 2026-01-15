@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/app/components/Navbar";
+import VisitCounter from "@/app/components/VisitCounter"; // 👈 Import kiya
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
@@ -36,9 +37,9 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-blue-600 mb-6 leading-[1.1]">
-  Track & Analyze Your <br />
-  Arcade Progress
-</h1>
+              Track & Analyze Your <br />
+              Arcade Progress
+            </h1>
 
             <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
               The professional dashboard to calculate your Google Cloud Arcade
@@ -79,7 +80,7 @@ export default function HomePage() {
                 { link: "https://share.google/mn0xUfmd49TA9RPc1", num: "01", title: "Create Account", desc: "Sign up on Cloud Skills Boost and set up your Arcade profile." },
                 { link: "https://share.google/45EC3J4RjWLzgbkGy", num: "02", title: "Subscribe", desc: "Enroll in Arcade to unlock labs, points and challenges." },
                 { link: "https://share.google/Ojw8FgQpGhPI1sXyt", num: "03", title: "Start Labs", desc: "Complete labs, earn points & Get Google Cloud rewards." },
-                { link: "https://share.google/JRMVQ9xd8tTwx8Mol", num: "04", title: "Facilitator", desc: "Join the program & Win Exclusive Points & rewards." },
+                { link: "https://share.google/JRMVQ9xd8tTwx8Mol", num: "04", title: "Facilitator Program", desc: "Join the program & Win Exclusive Points & rewards." },
               ].map((step, idx) => (
                 <a
                   key={idx}
@@ -108,8 +109,8 @@ export default function HomePage() {
         <section className="relative z-10 py-28 bg-white">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-3xl font-bold text-center text-blue-600 mb-16">
-  Everything you need to Win Arcade
-</h2>
+              Everything you need to Win Arcade
+            </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -234,7 +235,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= FINAL CTA ================= */}
+        {/* ================= FINAL CTA (COUNTER ADDED) ================= */}
         <section className="relative py-24 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 z-0"></div>
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
@@ -251,6 +252,12 @@ export default function HomePage() {
             >
               Get Started Now
             </button>
+            
+            {/* 👇 YAHAN LAGA DIYA HAI VISIT COUNTER */}
+            <div className="mt-8 flex justify-center">
+               <VisitCounter />
+            </div>
+
           </div>
         </section>
 
@@ -304,40 +311,40 @@ export default function HomePage() {
               </div>
 
               <div className="lg:col-span-1">
-  <h4 className="text-slate-900 font-semibold mb-6"> Arcade Facilitator Program</h4>
-  <ul className="space-y-4">
-    <li>
-      <a 
-        href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="text-slate-500 text-sm hover:text-blue-600 cursor-pointer transition-colors"
-      >
-        <strong>Enrollment</strong>
-      </a>
-    </li>
-    <li>
-      <a 
-        href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="text-slate-500 text-sm hover:text-blue-600 cursor-pointer transition-colors"
-      >
-         <strong>Points System</strong>
-      </a>
-    </li>
-    <li>
-      <a 
-        href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="text-slate-500 text-sm hover:text-blue-600 cursor-pointer transition-colors"
-      >
-        <strong>Syllabus</strong>
-      </a>
-    </li>
-  </ul>
-</div>
+                <h4 className="text-slate-900 font-semibold mb-6"> Arcade Facilitator Program</h4>
+                <ul className="space-y-4">
+                  <li>
+                    <a 
+                      href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-slate-500 text-sm hover:text-blue-600 cursor-pointer transition-colors"
+                    >
+                      <strong>Enrollment</strong>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-slate-500 text-sm hover:text-blue-600 cursor-pointer transition-colors"
+                    >
+                       <strong>Points System</strong>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-slate-500 text-sm hover:text-blue-600 cursor-pointer transition-colors"
+                    >
+                      <strong>Syllabus</strong>
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
               <div className="lg:col-span-2">
                 <h4 className="text-slate-900 font-semibold mb-6">Stay Updated</h4>
