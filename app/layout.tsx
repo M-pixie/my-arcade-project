@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 👇 YAHAN PAR MAINE METADATA UPDATE KIYA HAI
+// 👇 METADATA UPDATE (Sirf Icon add kiya hai, baaki same hai)
 export const metadata: Metadata = {
   title: "Arcade Nexus - Google Cloud Arcade Points Calculator",
   description: "Calculate your Google Cloud Arcade points instantly. Check your badges, trivia, and game progress for the Google Cloud Arcade program.",
@@ -35,7 +35,11 @@ export const metadata: Metadata = {
     description: "Check your Arcade Points and Leaderboard rank instantly.",
     type: "website",
   },
-  // 👇 GOOGLE VERIFICATION CODE
+  // 👇 YE LINE ADD KI HAI (Make sure icon.png 'public' folder mein ho)
+  icons: {
+    icon: '/icon.png', 
+  },
+  // 👇 GOOGLE VERIFICATION CODE (UNCHANGED)
   verification: {
     google: "Whrghgx_Ik2-E-DkqCDfFwSQSVKms8_eVHOyffDHpsk",
   },
