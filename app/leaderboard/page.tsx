@@ -31,7 +31,7 @@ export default function LeaderboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans">
+      <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans pt-24 pb-12">
         <Navbar />
 
         {/* ================= HEADER SECTION ================= */}
