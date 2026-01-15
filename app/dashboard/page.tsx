@@ -79,7 +79,7 @@ export default function DashboardPage() {
   /* ================= UI SECTION (UNCHANGED) ================= */
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans">
+      <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans pt-24 pb-10">
         <Navbar />
 
         <header className="bg-white border-b border-gray-200 pt-8 pb-8 px-4 sm:px-8">
