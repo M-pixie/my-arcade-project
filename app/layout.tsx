@@ -22,12 +22,12 @@ export const metadata: Metadata = {
     "Google Cloud Skills Boost",
     "Arcade Nexus",
     "Cloud Hero",
-    "Google Swags"
-    "arcade"
-    "points calculator"
-    "arcade points "
-    "google cloud"
-    "arcade"
+    "Google Swags",
+    "arcade",
+    "points calculator",
+    "arcade points",
+    "google cloud",
+    "arcade",
     "arcade points calculator"
   ],
   openGraph: {
@@ -35,10 +35,11 @@ export const metadata: Metadata = {
     description: "Check your Arcade Points and Leaderboard rank instantly.",
     type: "website",
   },
-  // 👇 Sirf ye daalo (Pura tag hata diya hai)
-verification: {
-  google: "Whrghgx_Ik2-E-DkqCDfFwSQSVKms8_eVHOyffDHpsk",
-},
+  // 👇 GOOGLE VERIFICATION CODE
+  verification: {
+    google: "Whrghgx_Ik2-E-DkqCDfFwSQSVKms8_eVHOyffDHpsk",
+  },
+};
 
 export default function RootLayout({
   children,
@@ -50,7 +51,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        
         {children}
       </body>
     </html>
