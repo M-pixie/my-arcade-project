@@ -2,22 +2,36 @@
 import { useState } from "react";
 
 const faqs = [
+  const faqs = [
   {
-    question: "Mera Public Profile URL kaise milega?",
-    answer: "Apne Google Cloud Skills Boost profile par jao, 'Public Profile' button par click karo, aur upar browser se link copy kar lo. Dhyan rahe profile 'Public' honi chahiye."
+    question: "How do I find my Public Profile URL?",
+    answer: "Navigate to your Google Cloud Skills Boost profile, click the 'Public Profile' button, and copy the URL from your browser. Ensure your profile visibility is set to 'Public'."
   },
   {
-    question: "Points 0 kyu dikha raha hai?",
-    answer: "Agar aapki profile private hai ya URL galat hai to 0 dikhega. Ye bhi check karein ki aapne games isi saal (2026) complete kiye hain."
+    question: "Why is my score showing as 0?",
+    answer: "This usually happens if your profile is private, the URL is incorrect, or no eligible games from the current 2026 season were found on your profile."
   },
   {
-    question: "Kya ye Google ka official tool hai?",
-    answer: "Nahi, ye ek community tool hai jo students ki madad ke liye banaya gaya hai. Iska Google Cloud se official connection nahi hai."
+    question: "How are the Arcade Points calculated?",
+    answer: "Standard Games, Levels & Trivia = 1 Point. Skill Badges = 1 Point per 2 badges. Special Games (e.g., Work-Life Refresh) = 2 Points."
   },
   {
-    question: "Points calculation kaise hoti hai?",
-    answer: "Trivia = 1 Pt, Levels/Games = 1 Pt, Skill Badges (2 badges) = 1 Pt. 'Work-Life Refresh' jese special games ke 2 Points milte hain."
+    question: "I just completed a lab, why isn't it counting?",
+    answer: "Google Cloud profiles can take a few minutes to update after you complete a lab. Please refresh your public profile page and try calculating again."
+  },
+  {
+    question: "Is this an official Google Cloud tool?",
+    answer: "No, this is a community-developed tool designed to assist learners in tracking their progress. We are not officially affiliated with Google or Google Cloud."
+  },
+  {
+    question: "Is my personal data safe?",
+    answer: "Yes. We only fetch public data from the URL you provide to calculate your score. We do not store your personal information permanently."
+  },
+  {
+    question: "Can I use this calculator on mobile?",
+    answer: "Absolutely! This tool is fully responsive and works seamlessly on both desktop and mobile devices."
   }
+];
 ];
 
 export default function FAQ() {
@@ -25,7 +39,7 @@ export default function FAQ() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 mb-8">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Frequently Asked Questions</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Frequently Asked Questions: FAQ</h2>
       <div className="space-y-4">
         {faqs.map((faq, index) => (
           <div key={index} className="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm">
