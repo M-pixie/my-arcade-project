@@ -37,9 +37,9 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-blue-600 mb-6 leading-[1.1]">
-              Calculate. Compete. <br /> Conquer the Arcade.
-            </h1>
+            <<h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-[1.1] text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-blue-700 to-indigo-600">
+  Calculate when you're ready.
+</h1>
 
             <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
               The professional dashboard to calculate your Google Cloud Arcade
