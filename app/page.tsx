@@ -3,6 +3,7 @@
 import Navbar from "@/app/components/Navbar";
 import VisitCounter from "@/app/components/VisitCounter"; // 👈 Import kiya
 import { useRouter } from "next/navigation";
+import FAQ from "@/app/components/FAQ";
 
 export default function HomePage() {
   const router = useRouter();
@@ -260,6 +261,8 @@ export default function HomePage() {
 
           </div>
         </section>
+
+        <FAQ />
 
         {/* ================= PROFESSIONAL FOOTER ================= */}
         <footer className="relative z-10 bg-slate-50 border-t border-slate-200 pt-20 pb-10">
