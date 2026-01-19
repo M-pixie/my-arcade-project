@@ -237,30 +237,51 @@ export default function HomePage() {
         </section>
 
         {/* ================= FINAL CTA (COUNTER ADDED) ================= */}
-        <section className="relative py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 z-0"></div>
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-extrabold text-white mb-4">
-              Ready to level up your Arcade Points?
-            </h2>
-            <p className="text-blue-100 text-lg mb-10">
-              Calculate & Analyze Your Arcade Points instantly.
-            </p>
-            <button
-              onClick={() => router.push("/calculator")}
-              className="px-10 py-4 bg-white text-blue-900 rounded-full font-bold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              Calculate Your Points
-            </button>
-            
-            {/* 👇 YAHAN LAGA DIYA HAI VISIT COUNTER */}
-            <div className="mt-8 flex justify-center">
-               <VisitCounter />
-            </div>
+        {/* ================= PREMIUM CTA SECTION (Dark Mode) ================= */}
+<section className="relative py-24 overflow-hidden bg-[#0B1120]">
+  
+  {/* Background Glow Effects (Same as Footer) */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]"></div>
+    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px]"></div>
+  </div>
 
-          </div>
-        </section>
+  <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+    
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight drop-shadow-2xl">
+      Ready to level up your Arcade Points?
+    </h2>
+    
+    <p className="text-slate-400 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed">
+      Calculate & Analyze Your Arcade Points instantly with our professional tool.
+    </p>
+
+    {/* 👇 Flex Container: Left (Counter) & Right (Button) */}
+    <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+      
+      {/* 👈 LEFT SIDE: Visit Counter (Bada Text) */}
+      <div className="flex flex-col items-center group">
+        {/* Counter Number Styling */}
+        <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 drop-shadow-lg tracking-tight transition-transform duration-500 group-hover:scale-105">
+          <VisitCounter />
+        </div>
+        <p className="text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-slate-800 pt-4 w-full">
+          Total Players Joined
+        </p>
+      </div>
+
+      {/* 👉 RIGHT SIDE: Button */}
+      <button
+        onClick={() => router.push("/calculator")}
+        className="relative px-10 py-5 bg-white text-[#0B1120] rounded-full font-bold text-xl shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-10px_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 transition-all duration-300"
+      >
+        <span className="relative z-10">Calculate Points Now</span>
+      </button>
+
+    </div>
+
+  </div>
+</section>
 
         <FAQ />
 
