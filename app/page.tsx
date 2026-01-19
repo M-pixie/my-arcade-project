@@ -38,8 +38,7 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-blue-600 mb-6 leading-[1.1]">
-              Track & Analyze Your <br />
-              Arcade Progress
+              Calculate. Compete. <br /> Conquer the Arcade.
             </h1>
 
             <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
@@ -250,7 +249,7 @@ export default function HomePage() {
   <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
     
     <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-      Ready to level up your Arcade Points?
+      Ready to level up your Arcade Points.
     </h2>
     
     <p className="text-gray-500 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed">
