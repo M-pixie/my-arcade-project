@@ -266,7 +266,7 @@ export default function HomePage() {
     <VisitCounter />
   </div>
   <p className="text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-slate-800 pt-4 w-full">
-    Total Players Joined
+    Total Visits Count
   </p>
 </div>
 
