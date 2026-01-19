@@ -236,45 +236,31 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= FINAL CTA (LAYOUT UPDATED) ================= */}
-<section className="relative py-24 overflow-hidden">
-  <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 z-0"></div>
-  <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-  
-  <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
-      Ready to level up your Arcade journey?
-    </h2>
-    <p className="text-blue-100 text-lg mb-12">
-      Calculate & Analyze Your Arcade Points instantly.
-    </p>
+        {/* ================= FINAL CTA (COUNTER ADDED) ================= */}
+        <section className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 z-0"></div>
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
+          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-4xl font-extrabold text-white mb-4">
+              Ready to level up your Arcade journey?
+            </h2>
+            <p className="text-blue-100 text-lg mb-10">
+              Calculate & Analyze Your Arcade Points instantly.
+            </p>
+            <button
+              onClick={() => router.push("/calculator")}
+              className="px-10 py-4 bg-white text-blue-900 rounded-full font-bold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+            >
+              Calculate Your Points
+            </button>
+            
+            {/* 👇 YAHAN LAGA DIYA HAI VISIT COUNTER */}
+            <div className="mt-8 flex justify-center">
+               <VisitCounter />
+            </div>
 
-    {/* 👇 Flex Container: Left (Counter) & Right (Button) */}
-    <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
-      
-      {/* 👈 LEFT SIDE: Visit Counter (Bada Text) */}
-      <div className="flex flex-col items-center">
-        {/* Counter Number Styling */}
-        <div className="text-6xl md:text-7xl font-black text-white drop-shadow-lg tracking-tight">
-          <VisitCounter />
-        </div>
-        <p className="text-blue-200 text-sm font-bold uppercase tracking-widest mt-2">
-          Total Players Joined
-        </p>
-      </div>
-
-      {/* 👉 RIGHT SIDE: Button */}
-      <button
-        onClick={() => router.push("/calculator")}
-        className="px-10 py-5 bg-white text-blue-900 rounded-full font-bold text-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-      >
-        Points Calculated Now
-      </button>
-
-    </div>
-
-  </div>
-</section>
+          </div>
+        </section>
 
         <FAQ />
 
