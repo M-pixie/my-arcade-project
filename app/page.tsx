@@ -260,15 +260,15 @@ export default function HomePage() {
     <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
       
       {/* 👈 LEFT SIDE: Visit Counter (Bada Text) */}
-      <div className="flex flex-col items-center group">
-        {/* Counter Number Styling */}
-        <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 drop-shadow-lg tracking-tight transition-transform duration-500 group-hover:scale-105">
-          <VisitCounter />
-        </div>
-        <p className="text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-slate-800 pt-4 w-full">
-          Total Players Joined
-        </p>
-      </div>
+<div className="flex flex-col items-center group">
+  {/* Counter Number Styling */}
+  <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 drop-shadow-lg tracking-tight transition-transform duration-500 group-hover:scale-105">
+    <VisitCounter />
+  </div>
+  <p className="text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-slate-800 pt-4 w-full">
+    Total Players Joined
+  </p>
+</div>
 
       {/* 👉 RIGHT SIDE: Button */}
       <button
