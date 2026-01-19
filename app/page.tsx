@@ -236,32 +236,71 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= FINAL CTA (COUNTER ADDED) ================= */}
-        <section className="relative py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-800 z-0"></div>
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
-          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-extrabold text-white mb-4">
-              Ready to level up your Arcade journey?
-            </h2>
-            <p className="text-blue-100 text-lg mb-10">
-              Calculate & Analyze Your Arcade Points instantly.
-            </p>
-            <button
-              onClick={() => router.push("/calculator")}
-              className="px-10 py-4 bg-white text-blue-900 rounded-full font-bold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              Get Started Now
-            </button>
+        {/* ================= FINAL CTA (UPDATED) ================= */}
+<section className="relative py-24 overflow-hidden">
+  {/* Background Gradients */}
+  <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-900 z-0"></div>
+  <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+  
+  {/* Glowing Orb Effect behind the counter */}
+  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-400 rounded-full blur-[128px] opacity-20 pointer-events-none"></div>
+
+  <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+    
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight drop-shadow-sm">
+      Ready to level up your Arcade journey?
+    </h2>
+    
+    <p className="text-blue-100 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
+      Calculate & Analyze Your Arcade Points instantly with our community tool.
+    </p>
+
+    <button
+      onClick={() => router.push("/calculator")}
+      className="group relative px-10 py-4 bg-white text-blue-900 rounded-full font-bold text-lg shadow-[0_10px_40px_-10px_rgba(255,255,255,0.4)] hover:shadow-[0_20px_40px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-1 transition-all duration-300"
+    >
+      <span className="relative z-10">Calculate Points Now</span>
+      <div className="absolute inset-0 rounded-full bg-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    </button>
+    
+    {/* 👇 YAHAN LAGA DIYA HAI PROFESSIONAL VISIT COUNTER 👇 */}
+    <div className="mt-16 flex justify-center">
+      <div className="flex flex-col items-center">
+        {/* Label */}
+        <p className="text-blue-200 text-sm font-semibold uppercase tracking-widest mb-3">
+          Join the Community
+        </p>
+        
+        {/* The Counter Container */}
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-300 to-purple-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+          
+          <div className="relative px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl flex items-center gap-4 min-w-[200px] justify-center">
             
-            {/* 👇 YAHAN LAGA DIYA HAI VISIT COUNTER */}
-            <div className="mt-8 flex justify-center">
-               <VisitCounter />
+            {/* Icon (Users/Eye) */}
+            <div className="p-2 bg-blue-500/20 rounded-lg text-blue-100">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+
+            {/* Counter Number */}
+            <div className="flex flex-col items-start">
+              {/* Note: VisitCounter ke andar ka text bada hona chahiye */}
+              <div className="text-3xl font-black text-white tracking-tight leading-none drop-shadow-md">
+                 <VisitCounter />
+              </div>
+              <span className="text-xs text-blue-200 font-medium mt-1">Total Arcade Players</span>
             </div>
 
           </div>
-        </section>
+        </div>
+      </div>
+    </div>
+    {/* 👆 End of Counter Section */}
 
+  </div>
+</section>
         <FAQ />
 
         {/* ================= PROFESSIONAL FOOTER ================= */}
