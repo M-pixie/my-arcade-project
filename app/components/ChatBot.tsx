@@ -4,13 +4,13 @@ import { useState, useRef, useEffect } from "react";
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: "bot", text: "Hello Player! 👋 Main Arcade Assistant hoon. Points ya Rules ke baare mein kuch bhi poocho!" }
+    { role: "bot", text: "Hello Player! 👋 I'm the Arcade Assistant. Ask me anything about Points or Rules!" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll
+  // Auto scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -21,34 +21,32 @@ export default function ChatBot() {
     if (!input.trim()) return;
 
     const userMsg = input;
+    // 1. User ka message turant dikhao
     setMessages((prev) => [...prev, { role: "user", text: userMsg }]);
     setInput("");
     setLoading(true);
 
     try {
-      console.log("🚀 Sending request to /api/chat...");
-
+      // 2. Server ko request bhejo
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg }),
       });
 
-      console.log("📩 Server Status:", res.status, res.statusText);
-
-      // Agar server ne error diya (404, 500 etc)
+      // 3. CHECK: Agar server ne Error diya (Jaise 404 ya 500)
       if (!res.ok) {
-        const errorText = await res.text(); // Error message padho
-        console.error("❌ SERVER ERROR DETAILS:", errorText);
+        const errorText = await res.text(); // Error ko text mein padho
         throw new Error(`Server Error: ${res.status} - ${errorText}`);
       }
 
+      // 4. Agar sab sahi hai to JSON padho
       const data = await res.json();
       setMessages((prev) => [...prev, { role: "bot", text: data.reply }]);
+    
     } catch (err: any) {
-      console.error("❌ FRONTEND CATCH ERROR:", err);
-      // User ko generic error dikhao, par console me asli error dekho
-      setMessages((prev) => [...prev, { role: "bot", text: "Error: Check Console (F12)" }]);
+      console.error("❌ Chat Error:", err); // Console mein asli error dikhega
+      setMessages((prev) => [...prev, { role: "bot", text: "Error: Kuch gadbad hai! F12 daba kar Console check karo." }]);
     } finally {
       setLoading(false);
     }
@@ -100,7 +98,7 @@ export default function ChatBot() {
               disabled={loading}
               className="p-2 bg-[#1a73e8] text-white rounded-full hover:bg-blue-700 disabled:opacity-50 transition"
             >
-              ➤
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
             </button>
           </div>
         </div>
@@ -109,9 +107,13 @@ export default function ChatBot() {
       {/* 🔵 Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-[#1a73e8] text-white rounded-full shadow-lg hover:bg-blue-700 hover:scale-110 transition-all flex items-center justify-center text-2xl"
+        className="w-14 h-14 bg-[#1a73e8] text-white rounded-full shadow-lg hover:bg-blue-700 hover:scale-110 transition-all flex items-center justify-center"
       >
-        💬
+        {isOpen ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        ) : (
+          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+        )}
       </button>
     </div>
   );

@@ -1,43 +1,70 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// 👇 Yahan apni API Key wapis paste kar dena
-const API_KEY = "AIzaSyAXx7CHEvpOO5nF1oiLqJvhgH5B9glT-f8"; 
-
-const genAI = new GoogleGenerativeAI(API_KEY);
+// Aapki Sahi API Key
+const API_KEY = "AIzaSyD4E0fbodxwwF33xUrjnRJy4OFcI-nGXUs"; 
 
 export async function POST(req: NextRequest) {
   try {
-    const { message } = await req.json();
+    const body = await req.json();
+    const { message } = body;
 
-    // ✅ FIX: Model ko 'gemini-1.5-flash' kar diya (Ye fast aur free hai)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // 👇 UPDATED INSTRUCTIONS: Ab ye Language detect karke jawab dega
+    const systemInstruction = `
+      You are the "Arcade Nexus Assistant". 
+      You ONLY help users with the "Google Cloud Arcade" program.
+      
+      RULES:
+      - Focus ONLY on Arcade Cloud Skills Boost.
+      - 1 Skill Badge = 1 Point (Usually).
+      - 1 Game Badge = 1 Point.
+      - Trivia = 1 Point.
+      - Milestones give bonus points.
+      
+      BEHAVIOR:
+      - **LANGUAGE RULE:** If the user asks in English, answer in **English**. If the user asks in Hindi/Hinglish, answer in **Hinglish**.
+      - Keep answers SHORT, COOL, and FRIENDLY.
+      - NEVER talk about Google Play Store, Android Apps, or Rupees (₹).
+      - If asked about "Calculation", explain: "Total Points = (Skill Badges) + (Game Badges) + (Trivia)."
+    `;
 
-    const chat = model.startChat({
-      history: [
-        {
-          role: "user",
-          parts: [{ text: "You are the Arcade Nexus Assistant. Your job is to help users with Google Cloud Arcade queries only. Keep answers short, friendly, and use emojis." }],
-        },
-        {
-          role: "model",
-          parts: [{ text: "Got it! I am the Arcade Nexus Assistant. I will help users calculate points and understand Arcade rules. 🚀" }],
-        },
-      ],
+    // ✅ Model Name: gemini-flash-latest (Jo working hai)
+    const modelName = "gemini-flash-latest";
+    
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: systemInstruction }] // Pehle Rules
+          },
+          {
+            role: "model",
+            parts: [{ text: "Got it! I will adapt to the user's language (English or Hinglish) and focus on Google Cloud Arcade. 🚀" }]
+          },
+          {
+            role: "user",
+            parts: [{ text: message }] // User ka sawal
+          },
+        ],
+      }),
     });
 
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const text = response.text();
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || "Google API Error");
+    }
 
-    return NextResponse.json({ reply: text });
+    const data = await response.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No reply from bot.";
+
+    return NextResponse.json({ reply: reply });
 
   } catch (error: any) {
-    // 👇 Ye error ab Terminal me dikhega
-    console.error("❌ BACKEND ERROR:", error.message || error);
-    
-    return NextResponse.json({ 
-      reply: "Sorry, abhi server connect nahi ho pa raha. Terminal check karo!" 
-    }, { status: 500 });
+    console.error("❌ Backend Error:", error);
+    return NextResponse.json({ reply: `Error: ${error.message}` }, { status: 500 });
   }
 }
