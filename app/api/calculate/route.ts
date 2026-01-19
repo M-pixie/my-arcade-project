@@ -27,7 +27,6 @@ export async function POST(req: Request) {
     const $ = cheerio.load(response.data);
 
     // 3. Name Dhoondo
-    // (Google Cloud Profile par naam h1 ya .ql-display-small mein hota hai)
     let userName = $('.ql-display-small').text().trim();
     if (!userName) userName = $('h1').text().trim();
     if (!userName) userName = "Arcade Player";
@@ -38,7 +37,7 @@ export async function POST(req: Request) {
 
     // 5. Badges Count Karo
     let trivia = 0;
-    let games = 0;
+    let games = 0; // Note: Isme ab hum POINTS count karenge (Badge count nahi)
     let skills = 0;
 
     // Har badge card ko check karo
@@ -55,10 +54,25 @@ export async function POST(req: Request) {
       // 🏷️ Category Logic
       if (title.includes('trivia')) {
         trivia++;
-      } else if (title.includes('game') || title.includes('level') || title.includes('monsoon')) {
-        games++;
       } else if (title.includes('skill badge')) {
         skills++;
+      } 
+      // 👇 UPDATED GAME LOGIC (Jo aapne manga) 👇
+      else {
+        // 1. Special Game (2 Points) check sabse pehle
+        if (title.includes('work life refresh')) {
+          games += 2; 
+        } 
+        // 2. Baaki Games (1 Point) check
+        else if (
+          title.includes('level') || 
+          title.includes('a cloud that cares') || 
+          title.includes('certification zone') || 
+          title.includes('base camp') ||
+          title.includes('game') // Fallback agar future me koi aur 'game' aaye
+        ) {
+          games += 1;
+        }
       }
     });
 
