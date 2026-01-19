@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 const faqs = [
-  const faqs = [
+  
   {
     question: "How do I find my Public Profile URL?",
     answer: "Navigate to your Google Cloud Skills Boost profile, click the 'Public Profile' button, and copy the URL from your browser. Ensure your profile visibility is set to 'Public'."
@@ -31,7 +31,7 @@ const faqs = [
     question: "Can I use this calculator on mobile?",
     answer: "Absolutely! This tool is fully responsive and works seamlessly on both desktop and mobile devices."
   }
-];
+
 ];
 
 export default function FAQ() {
