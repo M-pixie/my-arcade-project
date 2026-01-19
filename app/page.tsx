@@ -242,7 +242,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay"></div>
           <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-extrabold text-white mb-4">
-              Ready to level up your Arcade journey?
+              Ready to level up your Arcade Points?
             </h2>
             <p className="text-blue-100 text-lg mb-10">
               Calculate & Analyze Your Arcade Points instantly.
