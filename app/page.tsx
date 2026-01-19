@@ -249,7 +249,7 @@ export default function HomePage() {
   <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
     
     <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-      Ready to level up your Arcade Points.
+      Ready to level up your Arcade Points
     </h2>
     
     <p className="text-gray-500 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed">
