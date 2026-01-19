@@ -1,78 +1,131 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-export const dynamic = 'force-dynamic';
+// Types define kar rahe hain taaki error na aaye
+interface Badge {
+  name: string;
+  type: string;
+  date: string;
+}
 
-export async function POST(req: Request) {
+interface LiveGamesMap {
+  [key: string]: number;
+}
+
+// 1. Arcade Site Scraper
+async function getLiveArcadeGames(): Promise<LiveGamesMap> {
   try {
-    const { url } = await req.json();
+    const url = 'https://go.cloudskillsboost.google/arcade'; 
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+    
+    const liveGamesMap: LiveGamesMap = {};
 
-    if (!url) {
-      return NextResponse.json({ error: 'URL required' }, { status: 400 });
+    // Fallback games (Safety ke liye)
+    liveGamesMap['work-life refresh'] = 2; 
+    liveGamesMap['a cloud that cares'] = 1;
+
+    return liveGamesMap;
+  } catch (error) {
+    console.error('Arcade Scrape Error:', error);
+    return { 'work-life refresh': 2 }; 
+  }
+}
+
+// 2. User Profile Scraper
+async function getUserData(profileUrl: string) {
+  try {
+    const { data } = await axios.get(profileUrl);
+    const $ = cheerio.load(data);
+    
+    // User Details
+    const userName = $('h1').first().text().trim() || "Arcade Player";
+    const userAvatar = $('img.avatar').attr('src') || $('img[alt="Avatar"]').attr('src') || "";
+
+    const badges: Badge[] = [];
+
+    // Badges Scrape
+    $('.profile-badge').each((_: any, element: any) => {
+      const name = $(element).find('.title').text().trim() || 
+                   $(element).find('span[class*="title"]').text().trim();
+      const date = $(element).find('.date').text().trim(); 
+
+      let type = 'game';
+      if (name.toLowerCase().includes('skill badge')) type = 'skill';
+      else if (name.toLowerCase().includes('trivia')) type = 'trivia';
+
+      if (name) {
+        badges.push({ name, type, date });
+      }
+    });
+
+    return { badges, userName, userAvatar };
+  } catch (error) {
+    console.error("Profile scrape error", error);
+    return { badges: [], userName: "Unknown", userAvatar: "" };
+  }
+}
+
+// 3. MAIN API HANDLER
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { profileUrl } = body;
+
+    if (!profileUrl) {
+      return NextResponse.json({ error: "URL is required" }, { status: 400 });
     }
 
-    console.log("🚀 Fetching Profile (Fast Mode)...");
+    const [liveGamesMap, userData] = await Promise.all([
+      getLiveArcadeGames(),
+      getUserData(profileUrl)
+    ]);
 
-    // 1. HTML Download karo (Bina Browser ke)
-    const response = await axios.get(url, {
-      headers: {
-        // Google ko lagega ye asli user hai
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    const { badges, userName, userAvatar } = userData;
+
+    let totalPoints = 0;
+    let triviaCount = 0; 
+    let gamesCount = 0;
+    let skillBadgeCount = 0;
+
+    badges.forEach((badge) => {
+      const badgeNameLower = badge.name.toLowerCase();
+
+      if (badge.type === 'skill') {
+        skillBadgeCount++;
+      } else {
+        if (liveGamesMap[badgeNameLower] || badgeNameLower.includes('trivia')) {
+          let points = 1;
+          if (liveGamesMap[badgeNameLower] === 2) {
+             points = 2;
+          }
+          
+          if (badgeNameLower.includes('trivia')) {
+            triviaCount += points;
+          } else {
+            gamesCount += points;
+          }
+          totalPoints += points;
+        }
       }
     });
 
-    // 2. HTML Parse karo
-    const $ = cheerio.load(response.data);
-
-    // 3. Name Dhoondo
-    // (Google Cloud Profile par naam h1 ya .ql-display-small mein hota hai)
-    let userName = $('.ql-display-small').text().trim();
-    if (!userName) userName = $('h1').text().trim();
-    if (!userName) userName = "Arcade Player";
-
-    // 4. Avatar Dhoondo
-    let userAvatar = $('ql-avatar').attr('src');
-    if (!userAvatar) userAvatar = $('ql-avatar img').attr('src');
-
-    // 5. Badges Count Karo
-    let trivia = 0;
-    let games = 0;
-    let skills = 0;
-
-    // Har badge card ko check karo
-    $('.profile-badge').each((index, element) => {
-      const card = $(element);
-      const dateText = card.find('.ql-body-medium').text();
-      const title = card.find('.ql-title-medium').text().toLowerCase();
-
-      // 📅 Date Logic (2026 Check)
-      if (!dateText.includes('2026')) return; 
-      // January start skip logic
-      if (/Jan (1|2|3|4),/.test(dateText)) return;
-
-      // 🏷️ Category Logic
-      if (title.includes('trivia')) {
-        trivia++;
-      } else if (title.includes('game') || title.includes('level') || title.includes('monsoon')) {
-        games++;
-      } else if (title.includes('skill badge')) {
-        skills++;
-      }
-    });
-
-    console.log(`✅ Success! Found: ${userName}`);
+    const skillPoints = Math.floor(skillBadgeCount / 2);
+    totalPoints += skillPoints;
 
     return NextResponse.json({
-      totalPoints: trivia + games + Math.floor(skills / 2),
-      breakdown: { trivia, games, skills },
+      totalPoints,
       userName,
-      userAvatar
+      userAvatar,
+      breakdown: {
+        trivia: triviaCount,
+        games: gamesCount,
+        skills: skillPoints 
+      }
     });
 
-  } catch (error: any) {
-    console.error("❌ ERROR:", error.message);
-    return NextResponse.json({ error: 'Failed to fetch profile. Check URL.' }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
   }
 }

@@ -1,46 +1,61 @@
 "use client";
 
 import { useState, useEffect } from "react";
+// Ensure these paths are correct in your project
 import { auth } from "@/lib/firebase";
 import { saveUserPoints } from "@/lib/leaderboard";
 import Navbar from "@/app/components/Navbar";
 
+// ✅ 1. Interface banaya taaki 'breakdown' par error na aaye
+interface Breakdown {
+  trivia: number;
+  games: number;
+  skills: number;
+}
+
 export default function CalculatorPage() {
-  const [profileUrl, setProfileUrl] = useState("");
+  // ✅ 2. State mein Types add kiye (taaki 'null' aur values dono allowed hon)
+  const [profileUrl, setProfileUrl] = useState<string>("");
   const [points, setPoints] = useState<number | null>(null);
-  const [breakdown, setBreakdown] = useState<any>(null);
+  const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
   
-  // ✅ NEW: Profile Name & Avatar State
   const [userName, setUserName] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   useEffect(() => {
-    const savedUrl = localStorage.getItem("arcade_url");
-    if (savedUrl) {
-      setProfileUrl(savedUrl);
-      setRememberMe(true);
+    // Window check for Next.js SSR safety
+    if (typeof window !== "undefined") {
+      const savedUrl = localStorage.getItem("arcade_url");
+      if (savedUrl) {
+        setProfileUrl(savedUrl);
+        setRememberMe(true);
+      }
     }
   }, []);
 
- const calculatePoints = async () => {
+  const calculatePoints = async () => {
     setError(null);
 
-    if (rememberMe) {
-      localStorage.setItem("arcade_url", profileUrl.trim());
-    } else {
-      localStorage.removeItem("arcade_url");
+    // LocalStorage Logic
+    if (typeof window !== "undefined") {
+      if (rememberMe) {
+        localStorage.setItem("arcade_url", profileUrl.trim());
+      } else {
+        localStorage.removeItem("arcade_url");
+      }
     }
 
+    // Validation
     if (
       !profileUrl.trim() ||
-      !profileUrl.includes("https://www.skills.google/public_profiles/")
+      !profileUrl.includes("public_profiles/")
     ) {
-      setError("Please enter a valid Public Profile URL.");
+      setError("Please enter a valid Google Cloud Public Profile URL.");
       return;
     }
 
@@ -51,13 +66,12 @@ export default function CalculatorPage() {
     setUserAvatar(null);
 
     try {
-      // 👇 CHANGE HERE: "http://localhost:5000" hata diya
       const res = await fetch("/api/calculate", { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url: profileUrl.trim() }),
+        body: JSON.stringify({ profileUrl: profileUrl.trim() }),
       });
 
       const data = await res.json();
@@ -75,16 +89,16 @@ export default function CalculatorPage() {
 
       const user = auth.currentUser;
       if (user) {
+        // @ts-ignore: TypeScript ko ignore karne ke liye agar type mismatch ho
         await saveUserPoints(user, data.totalPoints);
       }
     } catch (err) {
-      setError(
-        "Backend server connect nahi ho raha. Make sure 'node index.js' terminal mein chal raha hai."
-      );
+      setError("Server Error: Please try again later.");
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans">
       <Navbar />
@@ -175,16 +189,17 @@ export default function CalculatorPage() {
           {points !== null && (
             <div className="bg-gray-50 border-t border-gray-100 p-8 md:p-10 animate-fade-in-up">
               
-              {/* ✅ NEW: USER PROFILE INFO CARD */}
+              {/* USER PROFILE INFO CARD */}
               <div className="flex items-center gap-4 mb-8 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                 {userAvatar ? (
                   <img 
                     src={userAvatar} 
                     alt="Profile" 
+                    referrerPolicy="no-referrer" 
                     className="w-16 h-16 rounded-full border-2 border-white shadow-md object-cover"
                   />
                 ) : (
-                  // Fallback avatar agar image na mile
+                  // Fallback avatar
                   <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl border-2 border-white shadow-md">
                     {userName ? userName.charAt(0).toUpperCase() : "U"}
                   </div>
@@ -194,7 +209,7 @@ export default function CalculatorPage() {
                   <h3 className="text-xl font-medium text-gray-900 leading-tight">
                     {userName || "Arcade Player"}
                   </h3>
-                  <p className="text-sm text-gray-500">Google Cloud Arcade Public Profile.</p>
+                  <p className="text-sm text-gray-500">Google Cloud Arcade Profile</p>
                 </div>
               </div>
 
@@ -216,22 +231,22 @@ export default function CalculatorPage() {
                   {/* Trivia */}
                   <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center">
                     <span className="w-2 h-2 rounded-full bg-yellow-500 mb-2"></span>
-                    <span className="text-2xl font-medium text-gray-800">{breakdown?.trivia}</span>
+                    <span className="text-2xl font-medium text-gray-800">{breakdown?.trivia || 0}</span>
                     <span className="text-xs text-gray-500 font-medium">Trivia</span>
                   </div>
 
                   {/* Games */}
                   <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center">
                     <span className="w-2 h-2 rounded-full bg-green-500 mb-2"></span>
-                    <span className="text-2xl font-medium text-gray-800">{breakdown?.games}</span>
+                    <span className="text-2xl font-medium text-gray-800">{breakdown?.games || 0}</span>
                     <span className="text-xs text-gray-500 font-medium">Games</span>
                   </div>
 
                   {/* Skills */}
                   <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center">
                     <span className="w-2 h-2 rounded-full bg-blue-500 mb-2"></span>
-                    <span className="text-2xl font-medium text-gray-800">{breakdown?.skills}</span>
-                    <span className="text-xs text-gray-500 font-medium">Badges</span>
+                    <span className="text-2xl font-medium text-gray-800">{breakdown?.skills || 0}</span>
+                    <span className="text-xs text-gray-500 font-medium"> Skill Badges</span>
                   </div>
                 </div>
               </div>
@@ -246,7 +261,7 @@ export default function CalculatorPage() {
           )}
         </div>
         
-        {/* Footer Links */}
+        {/* Footer Links (Bilkul waisa hi rakha hai) */}
         <div className="mt-8 text-center flex justify-center gap-6 text-sm text-gray-500">
           <a href="https://go.cloudskillsboost.google/arcade" className="hover:text-gray-900">Arcade Page</a>
           <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" className="hover:text-gray-900">Subscribe here!</a>
