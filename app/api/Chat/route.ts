@@ -1,27 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// ⚠️ Yahan apni API Key daal dena ya .env file use karna
-const API_KEY = "AIzaSyAXx7CHEvpO05nF1oiLqJvhgH5B9glT-f8"; 
-
-const genAI = new GoogleGenerativeAI(API_KEY);
+// 👇 YAHAN APNI KEY DAALO (Quotes ke andar)
+const API_KEY = "YAIzaSyAXx7CHEvpO05nF1oiLqJvhgH5B9glT-f8"; 
 
 export async function POST(req: NextRequest) {
   try {
+    // 1. Check agar Key nahi daali
+    if (!API_KEY || API_KEY.startsWith("YAHAN")) {
+      console.error("❌ Error: API Key missing hai!");
+      return NextResponse.json({ reply: "Bhaii API Key daalna bhool gaye code mein! 😅" });
+    }
+
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const { message } = await req.json();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    console.log("📩 User message:", message); // Terminal me dikhega
 
-    // 🤖 Bot ki Training (System Prompt)
     const chat = model.startChat({
       history: [
         {
           role: "user",
-          parts: [{ text: "You are the Arcade Nexus Assistant. Your job is to help users with Google Cloud Arcade queries only. Keep answers short, friendly, and use emojis. Rules: 1. Trivia/Standard Games = 1 Point. 2. Skill Badges = 1 Point (Need 2 badges). 3. Special Games = 2 Points. 4. If someone asks about non-arcade topics, politely refuse." }],
+          parts: [{ text: "You are Arcade Assistant. Keep answers short and friendly." }],
         },
         {
           role: "model",
-          parts: [{ text: "Got it! I am the Arcade Nexus Assistant. I will help users calculate points and understand Arcade rules. 🚀" }],
+          parts: [{ text: "Hello! I am ready to help. 🚀" }],
         },
       ],
     });
@@ -30,10 +35,11 @@ export async function POST(req: NextRequest) {
     const response = await result.response;
     const text = response.text();
 
+    console.log("✅ Reply sent:", text); // Terminal me dikhega
     return NextResponse.json({ reply: text });
 
   } catch (error) {
-    console.error("Chat Error:", error);
-    return NextResponse.json({ reply: "Sorry bhaii, abhi server busy hai. Thodi der baad try karna! 😅" });
+    console.error("❌ Chat Error:", error); // Asli error yahan print hoga
+    return NextResponse.json({ reply: "Server Error: Terminal check karo bhaii!" });
   }
 }
