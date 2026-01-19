@@ -238,15 +238,16 @@ export default function HomePage() {
 
         
         {/* ================= LIGHT THEME CTA SECTION ================= */}
-<section className="relative py-24 overflow-hidden bg-white rounded-3xl shadow-sm border border-gray-100 mb-12">
+
+<section className="relative py-24 overflow-hidden bg-white">
   
-  {/* Background Glow Effects (Subtle for White Mode) */}
+  {/* Background Glow Effects (Optional - rakha hai taaki thoda premium lage, chaho to hata sakte ho) */}
   <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-100/50 rounded-full blur-[100px]"></div>
-    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-100/50 rounded-full blur-[100px]"></div>
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-50 rounded-full blur-[100px]"></div>
+    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-50 rounded-full blur-[100px]"></div>
   </div>
 
-  <div className="relative z-10 px-6 text-center">
+  <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
     
     <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
       Ready to level up your Arcade Points?
@@ -259,9 +260,9 @@ export default function HomePage() {
     {/* Layout: Left (Big Counter) & Right (Button) */}
     <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
       
-      {/* 👈 LEFT SIDE: Visit Counter (Bada Text on White) */}
+      {/* 👈 LEFT SIDE: Visit Counter */}
       <div className="flex flex-col items-center group">
-        {/* Counter Number Styling - Darker Gradient for visibility */}
+        {/* Counter Number Styling */}
         <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-sm tracking-tight transition-transform duration-500 group-hover:scale-105">
           <VisitCounter /> 
         </div>
@@ -273,7 +274,7 @@ export default function HomePage() {
       {/* 👉 RIGHT SIDE: Button (Blue) */}
       <button
         onClick={() => router.push("/calculator")}
-        className="relative px-10 py-5 bg-[#1a73e8] text-white rounded-full font-bold text-xl shadow-[0_10px_20px_-10px_rgba(26,115,232,0.5)] hover:bg-[#1557b0] hover:shadow-[0_20px_40px_-10px_rgba(26,115,232,0.4)] hover:scale-105 active:scale-95 transition-all duration-300"
+        className="relative px-10 py-5 bg-[#1a73e8] text-white rounded-full font-bold text-xl shadow-[0_4px_14px_0_rgba(26,115,232,0.39)] hover:bg-[#1557b0] hover:scale-105 active:scale-95 transition-all duration-300"
       >
         <span className="relative z-10">Calculate Points Now</span>
       </button>
