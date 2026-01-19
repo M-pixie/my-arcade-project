@@ -236,50 +236,49 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= FINAL CTA (COUNTER ADDED) ================= */}
-        {/* ================= PREMIUM CTA SECTION (Dark Mode) ================= */}
-<section className="relative py-24 overflow-hidden bg-[#0B1120]">
+        
+        {/* ================= LIGHT THEME CTA SECTION ================= */}
+<section className="relative py-24 overflow-hidden bg-white rounded-3xl shadow-sm border border-gray-100 mb-12">
   
-  {/* Background Glow Effects (Same as Footer) */}
+  {/* Background Glow Effects (Subtle for White Mode) */}
   <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px]"></div>
-    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px]"></div>
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-100/50 rounded-full blur-[100px]"></div>
+    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-100/50 rounded-full blur-[100px]"></div>
   </div>
 
-  <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+  <div className="relative z-10 px-6 text-center">
     
-    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight drop-shadow-2xl">
+    <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
       Ready to level up your Arcade Points?
     </h2>
     
-    <p className="text-slate-400 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed">
+    <p className="text-gray-500 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed">
       Calculate & Analyze Your Arcade Points instantly with our professional tool.
     </p>
 
-    {/* 👇 Flex Container: Left (Counter) & Right (Button) */}
+    {/* Layout: Left (Big Counter) & Right (Button) */}
     <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
       
-      {/* 👈 LEFT SIDE: Visit Counter (Bada Text) */}
-<div className="flex flex-col items-center group">
-  {/* Counter Number Styling */}
-  <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 drop-shadow-lg tracking-tight transition-transform duration-500 group-hover:scale-105">
-    <VisitCounter />
-  </div>
-  <p className="text-slate-500 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-slate-800 pt-4 w-full">
-    Total Visits Count
-  </p>
-</div>
+      {/* 👈 LEFT SIDE: Visit Counter (Bada Text on White) */}
+      <div className="flex flex-col items-center group">
+        {/* Counter Number Styling - Darker Gradient for visibility */}
+        <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-sm tracking-tight transition-transform duration-500 group-hover:scale-105">
+          <VisitCounter /> 
+        </div>
+        <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-gray-200 pt-4 w-full">
+          Total Visits Count
+        </p>
+      </div>
 
-      {/* 👉 RIGHT SIDE: Button */}
+      {/* 👉 RIGHT SIDE: Button (Blue) */}
       <button
         onClick={() => router.push("/calculator")}
-        className="relative px-10 py-5 bg-white text-[#0B1120] rounded-full font-bold text-xl shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-10px_rgba(255,255,255,0.5)] hover:scale-105 active:scale-95 transition-all duration-300"
+        className="relative px-10 py-5 bg-[#1a73e8] text-white rounded-full font-bold text-xl shadow-[0_10px_20px_-10px_rgba(26,115,232,0.5)] hover:bg-[#1557b0] hover:shadow-[0_20px_40px_-10px_rgba(26,115,232,0.4)] hover:scale-105 active:scale-95 transition-all duration-300"
       >
         <span className="relative z-10">Calculate Points Now</span>
       </button>
 
     </div>
-
   </div>
 </section>
 
