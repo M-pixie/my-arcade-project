@@ -26,11 +26,11 @@ export default function ChatBot() {
 
     try {
       // 1. Request bhejo
-      const res = await fetch("/api/chat?v=" + Date.now(), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMsg }),
-      });
+      const res = await fetch("/api/chat-v2", { // ?v= ki zarurat nahi kyunki URL hi naya hai
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: userMsg }),
+});
 
       // 2. ✅ DEBUGGING FIX: Pehle text mein jawaab lo (JSON nahi)
       const textData = await res.text(); 
