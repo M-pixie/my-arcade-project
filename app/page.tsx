@@ -1,11 +1,11 @@
 "use client";
 
 import Navbar from "@/app/components/Navbar";
-import VisitCounter from "@/app/components/VisitCounter"; // 👈 Import kiya
+import VisitCounter from "@/app/components/VisitCounter"; 
 import { useRouter } from "next/navigation";
 import FAQ from "@/app/components/FAQ";
-import ChatBot from "@/app/components/ChatBot"; 
-// Note: Agar tumne file "components" folder me banayi hai to path check karlena
+
+
 
 export default function HomePage() {
   const router = useRouter();
@@ -297,7 +297,7 @@ export default function HomePage() {
 
         <FAQ />
 
-<ChatBot />
+
 
 
         {/* ================= PREMIUM FOOTER (LIGHT THEME) ================= */}

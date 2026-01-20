@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+// ✅ 1. Yahan ChatBot import kiya
+import ChatBot from "./components/ChatBot";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -12,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 👇 METADATA UPDATE (Sirf Icon add kiya hai, baaki same hai)
+// 👇 METADATA (Aapka wala same to same)
 export const metadata: Metadata = {
   title: "Arcade Nexus - Google Cloud Arcade Points Calculator",
   description: "Calculate your Google Cloud Arcade points instantly. Check your badges, trivia, and game progress for the Google Cloud Arcade program.",
@@ -35,11 +38,9 @@ export const metadata: Metadata = {
     description: "Check your Arcade Points and Leaderboard rank instantly.",
     type: "website",
   },
-  // 👇 YE LINE ADD KI HAI (Make sure icon.png 'public' folder mein ho)
   icons: {
     icon: '/icon.png', 
   },
-  // 👇 GOOGLE VERIFICATION CODE (UNCHANGED)
   verification: {
     google: "Whrghgx_Ik2-E-DkqCDfFwSQSVKms8_eVHOyffDHpsk",
   },
@@ -55,7 +56,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Main Content */}
         {children}
+
+        {/* ✅ 2. Yahan ChatBot laga diya (Body khatam hone se pehle) */}
+        <ChatBot />
       </body>
     </html>
   );
