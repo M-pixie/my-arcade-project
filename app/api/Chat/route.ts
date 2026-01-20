@@ -1,76 +1,48 @@
+export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ UPDATE: Ab ye API Key seedha Vercel/System se uthayega (Secure hai)
-const API_KEY = process.env.GEMINI_API_KEY;
+const API_KEY = process.env.ARCADE_BOT_KEY; 
 
 export async function POST(req: NextRequest) {
   try {
-    // 👇 Safety Check: Agar key set karna bhool gaye to ye bata dega
     if (!API_KEY) {
-      throw new Error("API Key missing! Please check Vercel Environment Variables.");
+      return NextResponse.json({ reply: "❌ Server Error: API Key missing hai (Vercel Settings check karein)." }, { status: 500 });
     }
 
     const body = await req.json();
     const { message } = body;
 
-    // 👇 SAME INSTRUCTIONS (English + Hinglish Logic)
-    const systemInstruction = `
-      You are the "Arcade Nexus Assistant". 
-      You ONLY help users with the "Google Cloud Arcade" program.
-      
-      RULES:
-      - Focus ONLY on Arcade Cloud Skills Boost.
-      - 1 Skill Badge = 1 Point (Usually).
-      - 1 Game Badge = 1 Point.
-      - Trivia = 1 Point.
-      - Milestones give bonus points.
-      
-      BEHAVIOR:
-      - **LANGUAGE RULE:** If the user asks in English, answer in **English**. If the user asks in Hindi/Hinglish, answer in **Hinglish**.
-      - Keep answers SHORT, COOL, and FRIENDLY.
-      - NEVER talk about Google Play Store, Android Apps, or Rupees (₹).
-      - If asked about "Calculation", explain: "Total Points = (Skill Badges) + (Game Badges) + (Trivia)."
-    `;
-
-    // ✅ Model Name: gemini-flash-latest
-    const modelName = "gemini-flash-latest";
+    // ✅ "gemini-pro" (Classic model) use kar rahe hain.
+    // Ye naye models ki tarah "Not Found" ya "Limit 0" ke nakhre kam karta hai.
+    const modelName = "gemini-pro"; 
     
-    // URL me ab API Key automatically 'process.env' se aa jayegi
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: systemInstruction }] // Pehle Rules
-          },
-          {
-            role: "model",
-            parts: [{ text: "Got it! I will adapt to the user's language (English or Hinglish) and focus on Google Cloud Arcade. 🚀" }]
-          },
-          {
-            role: "user",
-            parts: [{ text: message }] // User ka sawal
-          },
-        ],
+        contents: [{ role: "user", parts: [{ text: message }] }],
       }),
     });
 
+    const data = await response.json();
+
+    // Error Handling
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error?.message || "Google API Error");
+        // Agar Quota Error (429) hai
+        if (response.status === 429) {
+             throw new Error("⚠️ Limit Hit: Google thoda busy hai, 1 minute baad try karein.");
+        }
+        // Agar Model Not Found ya Key Error hai
+        throw new Error(`Google Error (${response.status}): ${data.error?.message || response.statusText}`);
     }
 
-    const data = await response.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No reply from bot.";
-
-    return NextResponse.json({ reply: reply });
+    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+    return NextResponse.json({ reply: botReply });
 
   } catch (error: any) {
-    console.error("❌ Backend Error:", error);
-    return NextResponse.json({ reply: `Error: ${error.message}` }, { status: 500 });
+    // Ye error frontend par jayega
+    return NextResponse.json({ reply: error.message }, { status: 500 });
   }
 }

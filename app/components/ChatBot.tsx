@@ -46,7 +46,7 @@ export default function ChatBot() {
     
     } catch (err: any) {
       console.error("❌ Chat Error:", err); // Console mein asli error dikhega
-      setMessages((prev) => [...prev, { role: "bot", text: "Error: Kuch gadbad hai! F12 daba kar Console check karo." }]);
+      setMessages((prev) => [...prev, { role: "bot", text: "❌ Error: " + err.message }]);
     } finally {
       setLoading(false);
     }
