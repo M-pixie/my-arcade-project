@@ -22,53 +22,60 @@ export default function HomePage() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-100/50 rounded-full blur-[100px]" />
         </div>
 
-        {/* ================= HERO ================= */}
-        <section className="relative z-10 pt-32 pb-24 md:pt-48 md:pb-32">
-          {/* Subtle Grid Pattern */}
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-multiply"></div>
-          
-          <div className="max-w-6xl mx-auto px-4 text-center relative">
-            
-            <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-blue-200 bg-blue-50 shadow-sm animate-fade-in-up">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-              </span>
-              <span className="text-sm font-medium text-blue-700 tracking-wide">
-                Arcade Nexus
-              </span>
-            </div>
+        {/* ================= HERO SECTION (UPDATED TYPOGRAPHY) ================= */}
+<section className="relative pt-32 pb-20 px-6 text-center overflow-hidden">
+  
+  {/* Background Glow (Peeche ka light effect) */}
+  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50/60 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-blue-600 mb-6 leading-[1.1]">
-              Calculate when you're ready
-            </h1>
+  <div className="max-w-5xl mx-auto relative z-10">
+    
+    {/* Badge */}
+    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-blue-100 text-blue-600 text-sm font-semibold mb-8 shadow-sm">
+      <span className="relative flex h-2.5 w-2.5">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+      </span>
+      Arcade Nexus
+    </div>
 
-            <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              The professional dashboard to calculate your Google Cloud Arcade
-              points, monitor leaderboard rankings & track your growth in real-time.
-            </p>
+    {/* 👇 MAIN HEADING (Ye change kiya hai) */}
+    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-slate-900 mb-6 leading-[1.1]">
+      Calculate when <br className="hidden md:block" />
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] drop-shadow-sm">
+        you&apos;re ready
+      </span>
+    </h1>
 
-            <div className="mt-10 flex flex-col sm:flex-row justify-center gap-5">
-              <button
-                onClick={() => router.push("/calculator")}
-                className="group relative px-8 py-4 bg-blue-600 rounded-xl font-semibold text-white shadow-xl shadow-blue-200 hover:shadow-blue-300 hover:bg-blue-700 hover:scale-[1.02] transition-all duration-300 overflow-hidden"
-              >
-                Open Calculator
-              </button>
+    {/* Subheading */}
+    <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+      The professional dashboard to calculate your Google Cloud Arcade points, 
+      monitor leaderboard rankings & track your growth in real-time.
+    </p>
 
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="px-8 py-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium shadow-sm hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 transition-all duration-300"
-              >
-                View Dashboard
-              </button>
-            </div>
-
-            <p className="mt-12 text-sm text-slate-500 font-medium tracking-wide uppercase">
-              Trusted by thousands of cloud enthusiasts
-            </p>
-          </div>
-        </section>
+    {/* Buttons */}
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <button
+        onClick={() => router.push("/calculator")}
+        className="px-8 py-4 rounded-full bg-[#1a73e8] text-white font-bold text-lg shadow-[0_4px_14px_0_rgba(26,115,232,0.39)] hover:bg-[#1557b0] hover:scale-105 hover:shadow-lg transition-all duration-300"
+      >
+        Open Calculator
+      </button>
+      
+      <button
+        onClick={() => router.push("/dashboard")}
+        className="px-8 py-4 rounded-full bg-white text-slate-700 border border-slate-200 font-bold text-lg hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all duration-300 shadow-sm"
+      >
+        View Dashboard
+      </button>
+    </div>
+    
+    {/* Trust Badge */}
+    <p className="mt-10 text-xs font-bold text-slate-400 tracking-widest uppercase">
+      Trusted by thousands of cloud enthusiasts
+    </p>
+  </div>
+</section>
 
         {/* ================= HOW TO GET STARTED ================= */}
         <section className="relative z-10 py-24 bg-slate-50/80 border-y border-slate-200">
