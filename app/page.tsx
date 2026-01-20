@@ -22,10 +22,10 @@ export default function HomePage() {
           <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-100/50 rounded-full blur-[100px]" />
         </div>
 
-        {/* ================= HERO SECTION (UPDATED TYPOGRAPHY) ================= */}
+        {/* ================= HERO SECTION (REFINED FONT WEIGHT) ================= */}
 <section className="relative pt-32 pb-20 px-6 text-center overflow-hidden">
   
-  {/* Background Glow (Peeche ka light effect) */}
+  {/* Background Glow */}
   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50/60 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
   <div className="max-w-5xl mx-auto relative z-10">
@@ -39,8 +39,8 @@ export default function HomePage() {
       Arcade Nexus
     </div>
 
-    {/* 👇 MAIN HEADING (Ye change kiya hai) */}
-    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-slate-900 mb-6 leading-[1.1]">
+    {/* 👇 MAIN HEADING (Weight kam kiya: 'font-extrabold' aur 'tracking-tight') */}
+    <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15]">
       Calculate when <br className="hidden md:block" />
       <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] drop-shadow-sm">
         you&apos;re ready
