@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 const faqs = [
-  
   {
     question: "How do I find my Public Profile URL?",
     answer: "Navigate to your Google Cloud Skills Boost profile, click the 'Public Profile' button, and copy the URL from your browser. Ensure your profile visibility is set to 'Public'."
@@ -31,7 +30,6 @@ const faqs = [
     question: "Can I use this calculator on mobile?",
     answer: "Absolutely! This tool is fully responsive and works seamlessly on both desktop and mobile devices."
   }
-
 ];
 
 export default function FAQ() {
@@ -39,32 +37,39 @@ export default function FAQ() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 mb-8">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Frequently Asked Questions: FAQ</h2>
+      {/* Heading bhi dark kar di hai */}
+      <h2 className="text-2xl font-bold text-center text-black mb-8">Frequently Asked Questions</h2>
+      
       <div className="space-y-4">
         {faqs.map((faq, index) => (
-          <div key={index} className="border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm">
+          <div key={index} className="border border-gray-300 rounded-lg bg-white overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
             <button
-              className="w-full flex justify-between items-center p-4 text-left font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              className="w-full flex justify-between items-center p-4 text-left focus:outline-none hover:bg-gray-50 transition-colors"
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
-              <span>{faq.question}</span>
+              {/* Question Text: Black aur thoda Bold */}
+              <span className="text-black font-semibold text-base md:text-lg">
+                {faq.question}
+              </span>
+              
               <svg 
-                className={`w-5 h-5 transform transition-transform duration-200 ${openIndex === index ? "rotate-180" : ""}`} 
+                className={`w-6 h-6 text-black transform transition-transform duration-200 ${openIndex === index ? "rotate-180" : ""}`} 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
             
-            {/* Animation logic for smooth opening */}
+            {/* Animation Logic */}
             <div 
               className={`transition-all duration-300 ease-in-out ${
-                openIndex === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               } overflow-hidden`}
             >
-              <div className="p-4 bg-gray-50 text-gray-600 text-sm border-t border-gray-100">
+              {/* Answer Text: Dark Gray (Almost Black) aur clear background */}
+              <div className="p-4 bg-gray-100 text-gray-900 font-medium text-sm md:text-base border-t border-gray-200 leading-relaxed">
                 {faq.answer}
               </div>
             </div>
