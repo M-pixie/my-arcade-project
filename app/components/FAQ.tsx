@@ -36,25 +36,31 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10 mb-8">
-      <h2 className="text-2xl font-bold text-center text-black mb-6">Frequently Asked Questions</h2>
+    <div className="max-w-3xl mx-auto px-4 py-8 md:py-12 mb-8">
+      {/* Heading: Pure Black aur Bold */}
+      <h2 className="text-xl md:text-2xl font-bold text-center text-black mb-6">
+        Frequently Asked Questions
+      </h2>
       
-      <div className="space-y-4">
+      <div className="space-y-3">
         {faqs.map((faq, index) => (
-          <div key={index} className="border border-gray-300 rounded-lg bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div key={index} className="border border-gray-300 rounded-lg bg-white overflow-hidden shadow-sm">
             <button
-              className="w-full flex justify-between items-center p-4 text-left focus:outline-none hover:bg-gray-50 transition-colors gap-4"
+              className="w-full flex justify-between items-center p-4 text-left bg-white hover:bg-gray-50 transition-colors gap-4"
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
-              {/* ✅ Change 1: Text Size bada kar diya Mobile ke liye bhi (text-base) */}
-              {/* ✅ Change 2: 'font-bold' kar diya taaki mota dikhe */}
-              <span className="text-black font-bold text-base md:text-lg leading-snug">
+              {/* ✅ MOBILE FIX: 
+                  - text-[16px]: Mobile par size fix kiya.
+                  - text-black: Zabardasti black color.
+                  - font-bold: Mota font.
+              */}
+              <span className="text-black font-bold text-[16px] md:text-lg leading-snug">
                 {faq.question}
               </span>
               
-              {/* ✅ Change 3: Icon hamesha Center mein rahega (items-center parent me hai) */}
+              {/* Icon: Always Black & Centered */}
               <svg 
-                className={`w-6 h-6 text-black transform transition-transform duration-200 flex-shrink-0 ${openIndex === index ? "rotate-180" : ""}`} 
+                className={`w-6 h-6 text-black flex-shrink-0 transform transition-transform duration-200 ${openIndex === index ? "rotate-180" : ""}`} 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -68,7 +74,7 @@ export default function FAQ() {
                 openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               } overflow-hidden`}
             >
-              <div className="p-4 bg-gray-100 text-gray-900 font-medium text-sm md:text-base border-t border-gray-200 leading-relaxed">
+              <div className="p-4 bg-gray-100 text-gray-900 font-medium text-[15px] md:text-base border-t border-gray-200 leading-relaxed">
                 {faq.answer}
               </div>
             </div>
