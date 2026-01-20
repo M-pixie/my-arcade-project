@@ -36,24 +36,33 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 mb-8">
-      {/* Heading bhi dark kar di hai */}
-      <h2 className="text-2xl font-bold text-center text-black mb-8">Frequently Asked Questions</h2>
+    <div className="max-w-3xl mx-auto px-4 py-8 md:py-12 mb-8">
+      {/* Heading: Mobile pe thoda chhota, Laptop pe bada */}
+      <h2 className="text-xl md:text-2xl font-bold text-center text-black mb-6 md:mb-8">
+        Frequently Asked Questions
+      </h2>
       
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {faqs.map((faq, index) => (
-          <div key={index} className="border border-gray-300 rounded-lg bg-white overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200">
+          <div key={index} className="border border-gray-300 rounded-xl bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
             <button
-              className="w-full flex justify-between items-center p-4 text-left focus:outline-none hover:bg-gray-50 transition-colors"
+              className="w-full flex justify-between items-start p-4 text-left focus:outline-none hover:bg-gray-50 transition-colors gap-4"
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
-              {/* Question Text: Black aur thoda Bold */}
-              <span className="text-black font-semibold text-base md:text-lg">
+              {/* Question Text: 
+                  - Mobile par text thoda chhota rakha hai taaki overflow na ho.
+                  - Leading-snug rakha hai taaki lines chipke nahi.
+              */}
+              <span className="text-black font-semibold text-[15px] md:text-lg leading-snug">
                 {faq.question}
               </span>
               
+              {/* Icon Fix: 
+                  - 'flex-shrink-0' lagaya taaki text lamba hone par arrow pichke nahi.
+                  - 'mt-0.5' lagaya taaki text ki pehli line ke sath align rahe.
+              */}
               <svg 
-                className={`w-6 h-6 text-black transform transition-transform duration-200 ${openIndex === index ? "rotate-180" : ""}`} 
+                className={`w-5 h-5 md:w-6 md:h-6 text-black transform transition-transform duration-200 flex-shrink-0 mt-0.5 ${openIndex === index ? "rotate-180" : ""}`} 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -62,14 +71,13 @@ export default function FAQ() {
               </svg>
             </button>
             
-            {/* Animation Logic */}
+            {/* Answer Box */}
             <div 
               className={`transition-all duration-300 ease-in-out ${
                 openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               } overflow-hidden`}
             >
-              {/* Answer Text: Dark Gray (Almost Black) aur clear background */}
-              <div className="p-4 bg-gray-100 text-gray-900 font-medium text-sm md:text-base border-t border-gray-200 leading-relaxed">
+              <div className="p-4 pt-2 bg-gray-50 text-gray-900 font-medium text-sm md:text-base border-t border-gray-200 leading-relaxed">
                 {faq.answer}
               </div>
             </div>
