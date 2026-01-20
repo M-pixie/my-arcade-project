@@ -240,45 +240,56 @@ export default function HomePage() {
         
         {/* ================= LIGHT THEME CTA SECTION ================= */}
 
-<section className="relative py-24 overflow-hidden bg-white">
+<section className="py-12 px-4 bg-white">
   
-  {/* Background Glow Effects (Optional - rakha hai taaki thoda premium lage, chaho to hata sakte ho) */}
-  <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-50 rounded-full blur-[100px]"></div>
-    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-50 rounded-full blur-[100px]"></div>
-  </div>
-
-  <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+  {/* Premium Card Container */}
+  <div className="max-w-5xl mx-auto bg-gradient-to-b from-gray-50 to-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
     
-    <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
-      Ready to level up your Arcade Points
-    </h2>
-    
-    <p className="text-gray-500 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed">
-      Calculate & Analyze Your Arcade Points instantly with our professional tool.
-    </p>
+    {/* Background Decoration (Subtle) */}
+    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 opacity-60"></div>
 
-    {/* Layout: Left (Big Counter) & Right (Button) */}
-    <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
       
-      {/* 👈 LEFT SIDE: Visit Counter */}
-      <div className="flex flex-col items-center group">
-        {/* Counter Number Styling */}
-        <div className="text-7xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-sm tracking-tight transition-transform duration-500 group-hover:scale-105">
-          <VisitCounter /> 
-        </div>
-        <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.2em] mt-2 border-t border-gray-200 pt-4 w-full">
-          Total Visits Count
+      {/* 👈 LEFT SIDE: Text Content */}
+      <div className="text-center md:text-left flex-1">
+        <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 leading-tight">
+          Analyze Your <span className="text-[#1a73e8]">Arcade Points</span>
+        </h2>
+        <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
+          Join thousands of developers tracking their progress. Get your score instantly with our professional tool.
         </p>
       </div>
 
-      {/* 👉 RIGHT SIDE: Button (Blue) */}
-      <button
-        onClick={() => router.push("/calculator")}
-        className="relative px-10 py-5 bg-[#1a73e8] text-white rounded-full font-bold text-xl shadow-[0_4px_14px_0_rgba(26,115,232,0.39)] hover:bg-[#1557b0] hover:scale-105 active:scale-95 transition-all duration-300"
-      >
-        <span className="relative z-10">Calculate Points Now</span>
-      </button>
+      {/* 👉 RIGHT SIDE: Action & Counter */}
+      <div className="flex flex-col items-center md:items-end gap-6">
+        
+        {/* Counter (Ab chhota aur clean hai) */}
+        <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100">
+          <div className="flex flex-col items-start">
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Visits</span>
+            <div className="text-3xl font-bold text-gray-800 tracking-tight">
+              {/* Counter Component Yahan */}
+              <VisitCounter />
+            </div>
+          </div>
+          {/* Decorative Icon */}
+          <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          </div>
+        </div>
+
+        {/* Button (Simple & Effective) */}
+        <button
+          onClick={() => router.push("/calculator")}
+          className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white transition-all duration-200 bg-[#1a73e8] rounded-full hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
+        >
+          Calculate Now
+          <svg className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </button>
+
+      </div>
 
     </div>
   </div>
