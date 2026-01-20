@@ -25,18 +25,26 @@ export default function ChatBot() {
     setLoading(true);
 
     try {
-      // ✅ FIX 1: "?v=" lagaya taaki Vercel purana cache na uthaye (Bahut Zaroori)
+      // 1. Request bhejo
       const res = await fetch("/api/chat?v=" + Date.now(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg }),
       });
 
-      // ✅ FIX 2: Pehle JSON padho, taaki error bhi saaf dikhe
-      const data = await res.json();
+      // 2. ✅ DEBUGGING FIX: Pehle text mein jawaab lo (JSON nahi)
+      const textData = await res.text(); 
+      
+      // 3. Check karo ki response JSON hai ya HTML Error hai
+      let data;
+      try {
+        data = JSON.parse(textData); // Ab JSON parse karne ki koshish karo
+      } catch (e) {
+        // Agar JSON parse nahi hua, iska matlab Vercel ne HTML/Text error bheja hai
+        throw new Error(`Server Error (Not JSON): ${textData.substring(0, 50)}...`); 
+      }
 
       if (!res.ok) {
-        // Agar backend se 'reply' aaya hai to wo dikhao, nahi to status code
         throw new Error(data.reply || `Server Error: ${res.status}`);
       }
 
@@ -44,8 +52,7 @@ export default function ChatBot() {
     
     } catch (err: any) {
       console.error("❌ Chat Error:", err);
-      // User ko saaf error dikhega
-      setMessages((prev) => [...prev, { role: "bot", text: `⚠️ ${err.message}` }]);
+      setMessages((prev) => [...prev, { role: "bot", text: `⚠️ Error: ${err.message}` }]);
     } finally {
       setLoading(false);
     }
