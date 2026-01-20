@@ -1,24 +1,18 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 
-// ❌ Purani line ko comment karo (ya hata do):
-// const API_KEY = process.env.ARCADE_BOT_KEY;
-
-// ✅ TESTING MODE: Apni Key direct yahan paste karo (Quotes "" ke andar)
-// Dhyan rahe: Ye key kisi ko dikhana mat, baad mein hata denge.
+// ✅ TESTING: Key yahin rakho jab tak chat chal na jaye.
 const API_KEY = "AIzaSyA7aOITJkIgswleGaUVhyLzlV3vrFip8zc"; 
 
 export async function POST(req: NextRequest) {
   try {
-    // Ye check ab hata diya kyunki key upar likh di hai
-    // if (!API_KEY) ... 
-
     const body = await req.json();
     const { message } = body;
 
-    const modelName = "gemini-1.5-flash"; 
+    // ✅ FINAL CORRECTION: '-001' lagana zaroori hai.
+    // "gemini-1.5-flash" kabhi-kabhi nahi milta, par "-001" hamesha milta hai.
+    const modelName = "gemini-1.5-flash-001"; 
     
-    // Baaki code same rahega...
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
     const response = await fetch(url, {
@@ -28,11 +22,16 @@ export async function POST(req: NextRequest) {
         contents: [{ role: "user", parts: [{ text: message }] }],
       }),
     });
-    
-    // ...neeche ka code waisa hi rakho
+
     const data = await response.json();
+
+    // 🛑 Error Handling
     if (!response.ok) {
-       // Error handling...
+       // Agar Limit Error (429) aaye
+       if (response.status === 429) {
+          return NextResponse.json({ reply: "⚠️ Limit Full: 1 minute ruko, Google saans le raha hai." }, { status: 200 });
+       }
+       // Agar Model Name galat ho
        return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
     }
 
