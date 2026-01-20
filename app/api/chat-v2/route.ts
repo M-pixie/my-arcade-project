@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     // ✅ SOLUTION: Aapki list me se ye model select kiya hai.
     // 'gemini-pro' aur '1.5' aapke account par nahi hain.
     // '2.0-flash-exp' naya hai aur chalna chahiye.
-    const modelName = "gemini-2.0-flash-exp"; 
+    const modelName = "gemini-flash-latest"; 
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
