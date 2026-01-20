@@ -10,7 +10,6 @@ export default function ChatBot() {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -21,32 +20,32 @@ export default function ChatBot() {
     if (!input.trim()) return;
 
     const userMsg = input;
-    // 1. User ka message turant dikhao
     setMessages((prev) => [...prev, { role: "user", text: userMsg }]);
     setInput("");
     setLoading(true);
 
     try {
-      // 2. Server ko request bhejo
-      const res = await fetch("/api/chat", {
+      // ✅ FIX 1: "?v=" lagaya taaki Vercel purana cache na uthaye (Bahut Zaroori)
+      const res = await fetch("/api/chat?v=" + Date.now(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg }),
       });
 
-      // 3. CHECK: Agar server ne Error diya (Jaise 404 ya 500)
+      // ✅ FIX 2: Pehle JSON padho, taaki error bhi saaf dikhe
+      const data = await res.json();
+
       if (!res.ok) {
-        const errorText = await res.text(); // Error ko text mein padho
-        throw new Error(`Server Error: ${res.status} - ${errorText}`);
+        // Agar backend se 'reply' aaya hai to wo dikhao, nahi to status code
+        throw new Error(data.reply || `Server Error: ${res.status}`);
       }
 
-      // 4. Agar sab sahi hai to JSON padho
-      const data = await res.json();
       setMessages((prev) => [...prev, { role: "bot", text: data.reply }]);
     
     } catch (err: any) {
-      console.error("❌ Chat Error:", err); // Console mein asli error dikhega
-      setMessages((prev) => [...prev, { role: "bot", text: "❌ Error: " + err.message }]);
+      console.error("❌ Chat Error:", err);
+      // User ko saaf error dikhega
+      setMessages((prev) => [...prev, { role: "bot", text: `⚠️ ${err.message}` }]);
     } finally {
       setLoading(false);
     }
@@ -71,7 +70,7 @@ export default function ChatBot() {
           <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] p-3 text-sm rounded-2xl ${
+                <div className={`max-w-[85%] p-3 text-sm rounded-2xl ${
                   msg.role === "user" 
                     ? "bg-[#1a73e8] text-white rounded-tr-none" 
                     : "bg-white border border-gray-200 text-gray-800 rounded-tl-none shadow-sm"
