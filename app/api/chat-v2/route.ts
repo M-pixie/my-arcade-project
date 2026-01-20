@@ -1,20 +1,21 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ SAFE MODE: Ab hum key wapas Vercel settings se uthayenge
-const API_KEY = process.env.ARCADE_BOT_KEY; 
+
+
+// ✅ FINAL SOLUTION: Key ko direct yahan daal diya.
+// Ab Vercel ki settings ka koi jhanjhat nahi.
+const API_KEY = "AIzaSyA7aOITJkIgswleGaUVhyLzlV3vrFip8zc"; 
 
 export async function POST(req: NextRequest) {
   try {
-    // Check agar key nahi mili (Safety)
-    if (!API_KEY) {
-      return NextResponse.json({ reply: "❌ API Key Missing in Vercel Settings!" }, { status: 500 });
-    }
+    // Ye check hata diya kyunki key upar likhi hai, to missing ho hi nahi sakti
+    // if (!API_KEY) ... 
 
     const body = await req.json();
     const { message } = body;
 
-    // ✅ WINNING MODEL: Ye wala model chal gaya hai, isliye ise hi rakhenge.
+    // ✅ MODEL: Ye wahi model hai jo pichli baar "Hi there" bola tha.
     const modelName = "gemini-flash-latest"; 
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
 
-    // 🛑 Error Handling (Agar phir se limit aaye to user ko bata dega)
+    // 🛑 Error Handling
     if (!response.ok) {
        if (response.status === 429) {
           return NextResponse.json({ reply: "⚠️ Limit Hit: Google thoda busy hai, 1 minute baad try karna." }, { status: 200 });
