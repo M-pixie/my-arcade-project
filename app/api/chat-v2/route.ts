@@ -1,20 +1,24 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_KEY = process.env.ARCADE_BOT_KEY; 
+// ❌ Purani line ko comment karo (ya hata do):
+// const API_KEY = process.env.ARCADE_BOT_KEY;
+
+// ✅ TESTING MODE: Apni Key direct yahan paste karo (Quotes "" ke andar)
+// Dhyan rahe: Ye key kisi ko dikhana mat, baad mein hata denge.
+const API_KEY = "AIzaSyA7aOITJkIgswleGaUVhyLzlV3vrFip8zc"; 
 
 export async function POST(req: NextRequest) {
   try {
-    if (!API_KEY) {
-      return NextResponse.json({ reply: "❌ Error: API Key missing in Vercel!" }, { status: 500 });
-    }
+    // Ye check ab hata diya kyunki key upar likh di hai
+    // if (!API_KEY) ... 
 
     const body = await req.json();
     const { message } = body;
 
-    // ✅ FAST MODEL: Timeout se bachne ke liye Flash use kar rahe hain
     const modelName = "gemini-1.5-flash"; 
     
+    // Baaki code same rahega...
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
     const response = await fetch(url, {
@@ -24,21 +28,18 @@ export async function POST(req: NextRequest) {
         contents: [{ role: "user", parts: [{ text: message }] }],
       }),
     });
-
+    
+    // ...neeche ka code waisa hi rakho
     const data = await response.json();
-
     if (!response.ok) {
-        // 429 Quota Error Handling
-        if (response.status === 429) {
-             return NextResponse.json({ reply: "⚠️ Traffic High: 1 minute ruko phir try karo." }, { status: 200 });
-        }
-        return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message || response.statusText}` }, { status: 500 });
+       // Error handling...
+       return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
     }
 
     const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
     return NextResponse.json({ reply: botReply });
 
   } catch (error: any) {
-    return NextResponse.json({ reply: `❌ Server Crash: ${error.message}` }, { status: 500 });
+    return NextResponse.json({ reply: error.message }, { status: 500 });
   }
 }
