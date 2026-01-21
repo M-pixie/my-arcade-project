@@ -11,19 +11,18 @@ export async function POST(req: NextRequest) {
     const systemInstruction = `
     You are the "Arcade Nexus Assistant", a friendly expert on Google Cloud Arcade.
     STRICT RULES:
-    1. Topic: ONLY Google Cloud Arcade, Points, Swags, Facilitator Program, and Cloud Skills Boost.
+    1. Topic: ONLY Google Cloud Arcade related topics.
     2. Length: VERY SHORT (max 2-3 sentences).
-    3. Language: Match user (Hinglish for Hinglish, English for English).
-    4. Tone: Expressive, friendly, use emojis (😎, 🔥, 🚀).
+    3. Language: Match user (Hinglish/English).
+    4. Tone: Expressive, friendly, use emojis (😎, 🔥).
     `;
 
     const finalPrompt = `${systemInstruction}\n\nUser Question: ${message}`;
 
-    // ✅ List of models for rotation
-    const models = ["gemini-1.5-flash", "gemini-2.0-flash-exp"];
+    // ✅ FIXED MODELS: Pehle aapka wala 'latest', phir backup '8b'
+    const models = ["gemini-flash-latest", "gemini-1.5-flash-8b"];
     let lastError = "";
 
-    // ✅ Loop to try different models if one hits a limit
     for (const modelName of models) {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
@@ -42,23 +41,26 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ reply: botReply });
       }
 
-      // Agar limit hit hui (429), to loop agle model par jayega
       if (response.status === 429) {
         lastError = "limit";
-        continue; 
+        continue; // Agle model par switch karega
+      }
+
+      // Agar model 'Not Found' hai to agle par jao
+      if (response.status === 404) {
+        continue;
       }
 
       return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
     }
 
-    // ✅ Agar saare models ki limit khatam ho jaye, tab ye message dikhega
     if (lastError === "limit") {
       return NextResponse.json({ 
         reply: "⚠️ Rate Limit Reached: Google's AI is currently handling too many requests. Please try again after a short break." 
       }, { status: 200 });
     }
 
-    return NextResponse.json({ reply: "Something went wrong" }, { status: 500 });
+    return NextResponse.json({ reply: "Service temporarily unavailable. Please try again later." }, { status: 500 });
 
   } catch (error: any) {
     return NextResponse.json({ reply: error.message }, { status: 500 });
