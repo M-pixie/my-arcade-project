@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
        if (response.status === 429) {
-          return NextResponse.json({ reply: "⚠️ Limit Hit: Google thoda busy hai, 1 minute baad try karna." }, { status: 200 });
+          return NextResponse.json({ reply: "⚠️ Rate Limit Reached: Google's AI is currently handling too many requests. Please try again after a short break." }, { status: 200 });
        }
        return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
     }
