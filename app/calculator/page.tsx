@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { auth } from "@/lib/firebase";
 import { saveUserPoints } from "@/lib/leaderboard";
 import Navbar from "@/app/components/Navbar";
+import UrlHelp from "@/app/components/UrlHelp";
 
 export default function CalculatorPage() {
   const [profileUrl, setProfileUrl] = useState("");
@@ -116,6 +117,8 @@ export default function CalculatorPage() {
           )}
 
           <div className="p-8 md:p-10">
+
+
             {/* INPUT FIELD */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2 ml-1">
@@ -147,7 +150,10 @@ export default function CalculatorPage() {
                   {error}
                 </div>
               )}
+
+              <UrlHelp />
             </div>
+
 
             <div className="flex items-center mb-8">
               <input
