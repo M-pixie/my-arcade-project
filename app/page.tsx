@@ -4,6 +4,7 @@ import Navbar from "@/app/components/Navbar";
 import VisitCounter from "@/app/components/VisitCounter"; 
 import { useRouter } from "next/navigation";
 import FAQ from "@/app/components/FAQ";
+import PopupModal from "@/app/components/PopupModal"; // 👈 Import kiya
 
 
 
@@ -12,6 +13,7 @@ export default function HomePage() {
 
   return (
     <>
+    <PopupModal /> {/* 👈 Yahan laga diya (Sabse pehle load hoga) */}
       <Navbar />
 
       <main className="min-h-screen bg-white text-slate-900 overflow-hidden selection:bg-blue-500 selection:text-white">
