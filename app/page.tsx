@@ -247,54 +247,70 @@ export default function HomePage() {
         </section>
 
         
-        {/* ================= LIGHT THEME CTA SECTION ================= */}
+{/* ================= LIGHT THEME CTA SECTION (Updated) ================= */}
 
 <section className="py-12 px-4 bg-white">
   
   {/* Premium Card Container */}
-  <div className="max-w-5xl mx-auto bg-gradient-to-b from-gray-50 to-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+  <div className="max-w-6xl mx-auto bg-gradient-to-b from-gray-50 to-white rounded-[32px] p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
     
-    {/* Background Decoration (Subtle) */}
-    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 opacity-60"></div>
+    {/* Background Decoration (Subtle Blue Glow) */}
+    <div className="absolute top-0 right-0 w-80 h-80 bg-blue-50 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 opacity-60"></div>
 
-    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
+    <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
       
       {/* 👈 LEFT SIDE: Text Content */}
-      <div className="text-center md:text-left flex-1">
-        <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 leading-tight">
+      <div className="text-center lg:text-left flex-1 max-w-2xl">
+        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
           Analyze Your <span className="text-[#1a73e8]">Arcade Points</span>
         </h2>
-        <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
-          Join thousands of developers tracking their progress. Get your score instantly with our professional tool.
+        <p className="text-gray-500 text-base md:text-lg leading-relaxed">
+          Join thousands of developers tracking their progress. Check your live stats and get your score instantly with our professional tool.
         </p>
       </div>
 
-      {/* 👉 RIGHT SIDE: Action & Counter */}
-      <div className="flex flex-col items-center md:items-end gap-6">
+      {/* 👉 RIGHT SIDE: Stats Grid & Action */}
+      <div className="flex flex-col gap-6 w-full lg:w-auto">
         
-        {/* Counter (Ab chhota aur clean hai) */}
-        <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex flex-col items-start">
-            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Visits</span>
-            <div className="text-3xl font-bold text-gray-800 tracking-tight">
-              {/* Counter Component Yahan */}
+        {/* --- STATS CARDS ROW (Separated Professional Look) --- */}
+        <div className="grid grid-cols-2 gap-4">
+          
+          {/* Card 1: Total Visits (Green Theme) */}
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-start min-w-[150px]">
+            <div className="flex items-center justify-between w-full mb-2">
+              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Visits</span>
+              <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              </div>
+            </div>
+            <div className="text-2xl md:text-3xl font-bold text-gray-800">
               <VisitCounter />
             </div>
           </div>
-          {/* Decorative Icon */}
-          <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+
+          {/* Card 2: Registered Users (Blue Theme) */}
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-start min-w-[150px]">
+            <div className="flex items-center justify-between w-full mb-2">
+              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Users</span>
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              </div>
+            </div>
+            <div className="text-2xl md:text-3xl font-bold text-gray-800">
+              <LoginCounter />
+            </div>
           </div>
+
         </div>
 
-        {/* Button (Simple & Effective) */}
+        {/* --- MAIN ACTION BUTTON --- */}
         <button
           onClick={() => router.push("/calculator")}
-          className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white transition-all duration-200 bg-[#1a73e8] rounded-full hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
+          className="group w-full relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-[#1a73e8] rounded-2xl hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5 shadow-blue-500/30"
         >
           Calculate Now
-          <svg className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          <svg className="w-5 h-5 ml-2 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
         </button>
 
@@ -303,6 +319,8 @@ export default function HomePage() {
     </div>
   </div>
 </section>
+
+
 
         <FAQ />
 
