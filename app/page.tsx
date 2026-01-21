@@ -41,7 +41,7 @@ export default function HomePage() {
 
     {/* 👇 MAIN HEADING (Weight kam kiya: 'font-extrabold' aur 'tracking-tight') */}
     <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15]">
-      Calculate when <br className="hidden md:block" />
+      calculate when <br className="hidden md:block" />
       <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] drop-shadow-sm">
         you&apos;re ready
       </span>
