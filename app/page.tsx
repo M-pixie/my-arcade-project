@@ -5,6 +5,7 @@ import VisitCounter from "@/app/components/VisitCounter";
 import { useRouter } from "next/navigation";
 import FAQ from "@/app/components/FAQ";
 import PopupModal from "@/app/components/PopupModal"; // 👈 Import kiya
+import LoginCounter from "@/app/components/LoginCounter";
 
 
 
