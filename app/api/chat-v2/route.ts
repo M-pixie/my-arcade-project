@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_KEY = "AIzaSyA7aOITJkIgswleGaUVhyLzlV3vrFip8zc"; 
 
+// ✅ Helper function: Wait karne ke liye
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -18,13 +21,17 @@ export async function POST(req: NextRequest) {
     `;
 
     const finalPrompt = `${systemInstruction}\n\nUser Question: ${message}`;
+    
+    // ✅ Sirf wo model jo 100% chalta hai
+    const modelName = "gemini-flash-latest";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
-    // ✅ FIXED MODELS: Pehle aapka wala 'latest', phir backup '8b'
-    const models = ["gemini-flash-latest", "gemini-1.5-flash-8b"];
-    let lastError = "";
+    // 🔄 RETRY LOGIC (3 Baar koshish karega)
+    let attempts = 0;
+    const maxAttempts = 3;
 
-    for (const modelName of models) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
+    while (attempts < maxAttempts) {
+      attempts++;
 
       const response = await fetch(url, {
         method: "POST",
@@ -36,31 +43,29 @@ export async function POST(req: NextRequest) {
 
       const data = await response.json();
 
+      // ✅ Agar Success hai to turant reply bhejo
       if (response.ok) {
         const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
         return NextResponse.json({ reply: botReply });
       }
 
+      // ⚠️ Agar Limit Hit hui (429), to wait karo aur dobara try karo
       if (response.status === 429) {
-        lastError = "limit";
-        continue; // Agle model par switch karega
+        console.log(`Limit hit, retrying attempt ${attempts}...`);
+        if (attempts < maxAttempts) {
+          await wait(2000); // 2 second ruko
+          continue; // Loop wapas chalega
+        }
+      } else {
+        // Agar koi aur error hai (jaise 404/500), to ruk jao
+        return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
       }
-
-      // Agar model 'Not Found' hai to agle par jao
-      if (response.status === 404) {
-        continue;
-      }
-
-      return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
     }
 
-    if (lastError === "limit") {
-      return NextResponse.json({ 
-        reply: "⚠️ Rate Limit Reached: Google's AI is currently handling too many requests. Please try again after a short break." 
-      }, { status: 200 });
-    }
-
-    return NextResponse.json({ reply: "Service temporarily unavailable. Please try again later." }, { status: 500 });
+    // 🛑 Agar 3 baar try karne ke baad bhi nahi chala, tab error dikhao
+    return NextResponse.json({ 
+      reply: "⚠️ Rate Limit Reached: Google's AI is currently handling too many requests. Please try again after a short break." 
+    }, { status: 200 });
 
   } catch (error: any) {
     return NextResponse.json({ reply: error.message }, { status: 500 });
