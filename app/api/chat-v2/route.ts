@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 
 // ✅ Key Direct (Jaisa aapne rakha tha)
-const API_KEY = "AIzaSyB8FT2kbqxpdgnOpqw0oTRUFrbZ28Ux-_U"; 
+const API_KEY = "AIzaSyDHGezUE2AaQwPNlqDc9ysSrkoCJBb0J80"; 
 
 export async function POST(req: NextRequest) {
   try {
