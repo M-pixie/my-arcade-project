@@ -9,6 +9,7 @@ export default function PopupModal() {
   const WHATSAPP_LINK = "https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY";
 
   useEffect(() => {
+    // Sirf localStorage check karenge (Permanent memory)
     const hasSeenModal = localStorage.getItem("arcade_popup_seen");
     if (!hasSeenModal) {
       const timer = setTimeout(() => {
@@ -18,12 +19,14 @@ export default function PopupModal() {
     }
   }, []);
 
-  const handleClose = (action: string) => {
+  const handleClose = (action) => {
     setIsOpen(false);
     if (action === "joined") {
+      // Jab user "Already Joined" bolega, to hum isse permanent save karenge
       localStorage.setItem("arcade_popup_seen", "true");
     }
     if (action === "later") {
+      // Cross dabane par session storage use hoga (par useEffect isse ignore karega, to refresh pe wapas aayega)
       sessionStorage.setItem("arcade_popup_seen", "true");
     }
   };
@@ -96,9 +99,10 @@ export default function PopupModal() {
             Follow Communty
           </a>
 
-          {/* 2. Joined/Close (Gray) */}
+          {/* 2. Joined/Close (Gray) - UPDATED HERE */}
           <button 
-            onClick={() => handleClose("later")}
+            // MAIN CHANGE: Yahan "later" ki jagah "joined" kar diya hai
+            onClick={() => handleClose("joined")}
             className="col-span-1 flex items-center justify-center gap-2 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-bold rounded-lg border border-gray-200 transition-all"
           >
             <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
