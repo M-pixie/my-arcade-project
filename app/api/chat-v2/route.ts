@@ -13,7 +13,7 @@ const API_KEYS = [
   "AIzaSyDEeBJAvdSio49NuC0oudLq7ztbnZ7e4YM",
   "AIzaSyBwjyn9VkcOxy-JTccmi3Qb2E2_Yk9lOnk",
   "AIzaSyDdFcuoOqcM967-Gx5SWdUnjnZIY7vQMlk",
-  "AIzaSyB8FT2kbqxpdgnOpqw0oTRUFrbZ28Ux-_U"
+  "AIzaSyB8FT2kbqxpdgnOpqw0oTRUFrbZ28Ux-_U",
 ];
 
 export async function POST(req: NextRequest) {
