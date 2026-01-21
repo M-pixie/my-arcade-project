@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { auth } from "@/lib/firebase";
 import { saveUserPoints } from "@/lib/leaderboard";
 import Navbar from "@/app/components/Navbar";
-import UrlHelp from "@/app/components/UrlHelp";
+
 
 export default function CalculatorPage() {
   const [profileUrl, setProfileUrl] = useState("");
@@ -151,7 +151,7 @@ export default function CalculatorPage() {
                 </div>
               )}
 
-              <UrlHelp />
+              
             </div>
 
 
