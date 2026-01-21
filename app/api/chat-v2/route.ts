@@ -1,37 +1,53 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 
-const API_KEY = "AIzaSyA7aOITJkIgswleGaUVhyLzlV3vrFip8zc"; 
-
-// ✅ Helper function: Wait karne ke liye
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// ✅ YAHAN APNI 10 API KEYS DAALO
+// Pehli wali maine daal di hai, baaki 9 aap paste kar dena (Quotes "" ke andar)
+const API_KEYS = [
+  "AIzaSyA7aOITJkIgswleGaUVhyLzlV3vrFip8zc", // Key 1 (Original)
+  "AIzaSyAudMgYSfhpGhkjz5V0rwj_7PMekMOzd0c",
+  "AIzaSyCEQPZZry_vF1bQxhZCcSSV0K2IGXLqFLo",
+  "AIzaSyDUnFQMX-fglEVoYtHTQIeVYspqk6ivzLU",
+  "AIzaSyBkFoJicR2NQIk5y1WDzdyHFR74g72Pj0o",
+  "AIzaSyD712J5F6e_MRzS4f30fDYRZQLClTy81Ds",
+  "AIzaSyDEeBJAvdSio49NuC0oudLq7ztbnZ7e4YM",
+  "AIzaSyBwjyn9VkcOxy-JTccmi3Qb2E2_Yk9lOnk",
+  "AIzaSyDdFcuoOqcM967-Gx5SWdUnjnZIY7vQMlk",
+  "AIzaSyB8FT2kbqxpdgnOpqw0oTRUFrbZ28Ux-_U"
+];
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { message } = body;
 
+    // ✅ SYSTEM INSTRUCTION (SAME AS BEFORE)
     const systemInstruction = `
     You are the "Arcade Nexus Assistant", a friendly expert on Google Cloud Arcade.
-    STRICT RULES:
-    1. Topic: ONLY Google Cloud Arcade related topics.
-    2. Length: VERY SHORT (max 2-3 sentences).
-    3. Language: Match user (Hinglish/English).
-    4. Tone: Expressive, friendly, use emojis (😎, 🔥).
+    
+    STRICT RULES FOR YOU:
+    1. **Topic:** ONLY answer questions related to Google Cloud Arcade, Points, Swags, Facilitator Program, and Cloud Skills Boost. If the user asks unrelated topics (like weather, movies), politely refuse in a fun way.
+    2. **Length:** Keep answers VERY SHORT and concise (max 2-3 sentences). Don't write essays.
+    3. **Language Matching:** - If the user uses Hindi/Hinglish words (like "kaise", "bhai", "kya"), reply in **Casual Hinglish** (e.g., "Haan bhaii, points update hone me time lagta hai 🚀").
+       - If the user speaks formal English, reply in **Cool English**.
+    4. **Tone:** Be expressive, friendly, and use emojis (😎, 🔥, 👇). Sound like a real person, not a robot.
     `;
 
     const finalPrompt = `${systemInstruction}\n\nUser Question: ${message}`;
+    const modelName = "gemini-flash-latest"; 
+
+    // 🔄 KEY ROTATION LOGIC
+    // Keys ko random order me shuffle karenge taaki load barabar bate
+    const shuffledKeys = API_KEYS.sort(() => Math.random() - 0.5);
     
-    // ✅ Sirf wo model jo 100% chalta hai
-    const modelName = "gemini-flash-latest";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
+    let lastError = "";
 
-    // 🔄 RETRY LOGIC (3 Baar koshish karega)
-    let attempts = 0;
-    const maxAttempts = 3;
+    // Loop through keys
+    for (const apiKey of shuffledKeys) {
+      // Agar placeholder abhi bhi hai to usse skip karo
+      if (apiKey.includes("PASTE_KEY")) continue;
 
-    while (attempts < maxAttempts) {
-      attempts++;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -43,29 +59,30 @@ export async function POST(req: NextRequest) {
 
       const data = await response.json();
 
-      // ✅ Agar Success hai to turant reply bhejo
+      // ✅ SUCCESS: Agar reply aa gaya to turant bhej do
       if (response.ok) {
         const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
         return NextResponse.json({ reply: botReply });
       }
 
-      // ⚠️ Agar Limit Hit hui (429), to wait karo aur dobara try karo
+      // ⚠️ LIMIT HIT (429): Agar ye key busy hai, to agli key try karo (Loop continue)
       if (response.status === 429) {
-        console.log(`Limit hit, retrying attempt ${attempts}...`);
-        if (attempts < maxAttempts) {
-          await wait(2000); // 2 second ruko
-          continue; // Loop wapas chalega
-        }
-      } else {
-        // Agar koi aur error hai (jaise 404/500), to ruk jao
-        return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
+        lastError = "limit";
+        continue; 
       }
+
+      // Other Errors (like 400, 500)
+      return NextResponse.json({ reply: `❌ Google Error: ${data.error?.message}` }, { status: 500 });
     }
 
-    // 🛑 Agar 3 baar try karne ke baad bhi nahi chala, tab error dikhao
-    return NextResponse.json({ 
-      reply: "⚠️ Rate Limit Reached: Google's AI is currently handling too many requests. Please try again after a short break." 
-    }, { status: 200 });
+    // 🛑 Agar SAARI KEYS try karne ke baad bhi limit hit hai (Jo 10 keys me namumkin hai)
+    if (lastError === "limit") {
+      return NextResponse.json({ 
+        reply: "⚠️ Rate Limit Reached: Google's AI is currently handling too many requests. Please try again after a short break." 
+      }, { status: 200 });
+    }
+
+    return NextResponse.json({ reply: "Something went wrong" }, { status: 500 });
 
   } catch (error: any) {
     return NextResponse.json({ reply: error.message }, { status: 500 });
