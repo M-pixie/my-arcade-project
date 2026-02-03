@@ -203,8 +203,8 @@ export default function HomePage() {
                 <div className="flex items-center gap-4">
                   <div className="w-2 h-12 rounded-full bg-green-500 shadow-sm"></div>
                   <div>
-                    <h4 className="font-bold text-lg text-slate-900">Levelled Game</h4>
-                    <p className="text-sm text-slate-500">Monthly Levels Games</p>
+                    <h4 className="font-bold text-lg text-slate-900">Arcade Adventure</h4>
+                    <p className="text-sm text-slate-500">x1 game badge = 1 point</p>
                   </div>
                 </div>
                 <div className="px-4 py-1.5 rounded-full bg-green-100 text-green-700 border border-green-200 text-sm font-semibold">1 Point Each</div>
@@ -214,8 +214,8 @@ export default function HomePage() {
                 <div className="flex items-center gap-4">
                   <div className="w-2 h-12 rounded-full bg-yellow-500 shadow-sm"></div>
                   <div>
-                    <h4 className="font-bold text-lg text-slate-900">Trivia Badge</h4>
-                    <p className="text-sm text-slate-500">Week 1 to 4 Trivia Badges</p>
+                    <h4 className="font-bold text-lg text-slate-900">Trivia & SPRINT</h4>
+                    <p className="text-sm text-slate-500">x1 game badge = 1 point</p>
                   </div>
                 </div>
                 <div className="px-4 py-1.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 text-sm font-semibold">1 Point Each</div>
