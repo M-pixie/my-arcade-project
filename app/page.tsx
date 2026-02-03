@@ -435,7 +435,7 @@ export default function HomePage() {
       <div className="text-gray-500 text-sm font-medium text-center md:text-left">
         <p>© {new Date().getFullYear()} Arcade Nexus. All rights reserved.</p>
         <p className="mt-1 text-gray-600">
-          Powered by : <span className="text-gray-900 font-bold">Manish Kumar</span>
+          Powered by : <span className="text-gray-900 font-bold">Manish Kumar & Anjali Patel</span>
         </p>
         {/* ✅ Last Updated Date Added Here */}
         <p className="mt-1 text-xs text-gray-400">
