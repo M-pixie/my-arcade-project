@@ -223,14 +223,14 @@ export default function CalculatorPage() {
                   <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center">
                     <span className="w-2 h-2 rounded-full bg-yellow-500 mb-2"></span>
                     <span className="text-2xl font-medium text-gray-800">{breakdown?.trivia}</span>
-                    <span className="text-xs text-gray-500 font-medium">Trivia</span>
+                    <span className="text-xs text-gray-500 font-medium">Trivia & Sprint</span>
                   </div>
 
                   {/* Games */}
                   <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center">
                     <span className="w-2 h-2 rounded-full bg-green-500 mb-2"></span>
                     <span className="text-2xl font-medium text-gray-800">{breakdown?.games}</span>
-                    <span className="text-xs text-gray-500 font-medium">Games</span>
+                    <span className="text-xs text-gray-500 font-medium">All Games</span>
                   </div>
 
                   {/* Skills */}
