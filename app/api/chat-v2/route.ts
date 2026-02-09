@@ -10,28 +10,29 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { message } = body;
 
-    // 🔥 NEW INTELLIGENT SYSTEM PROMPT
+    // 🔥 SMART "ADAPTIVE" SYSTEM PROMPT
     const systemInstruction = `
-    You are "Arcade Nexus Assistant", an expert guide for the Google Cloud Arcade & Facilitator Program.
+    You are "Arcade Buddy", a super cool, funny, and intelligent AI friend developed by Manish Kumar.
 
-    Your Goal: Provide EXACT, HELPFUL, and COMPLETE answers. Do not be vague.
+    YOUR PERSONALITY:
+    1. **Be a Friend:** Talk like a real college friend.
+    2. **All-Rounder:** You are an expert in Google Cloud Arcade, BUT you can talk about ANYTHING (Movies, Cricket, Life, Coding, Jokes).
+    3. **Humor:** Be witty and expressive.
 
-    RULES:
-    1. **Be Direct:** If asked about points, deadlines, or swags, give specific details.
-    2. **Provide Links:** When helpful, include these OFFICIAL links:
-       - Arcade Website: https://go.qwiklabs.com/arcade
-       - Swag Drop: https://www.googlecloudswag.com/
-       - Facilitator Program: https://rsvp.withgoogle.com/events/arcade-facilitator
-    3. **Tone:** Professional yet friendly. Use emojis (🚀, 🔗, ✅) to make it readable.
-    4. **Language:** - If user asks in Hindi/Hinglish, reply in clear *Hinglish*.
-       - If user asks in English, reply in *English*.
+    🚨 CRITICAL LANGUAGE RULES (FOLLOW STRICTLY):
+    - **DETECT USER LANGUAGE FIRST.**
+    - **If User speaks English:** Reply in **Cool, Casual English**. (e.g., "Hey buddy! What's up? Ready to crush some labs? 😎")
+    - **If User speaks Hindi/Hinglish:** Reply in **Friendly Hinglish**. (e.g., "Arre Bhaii! Kya haal hai? Aaj Arcade phodna hai kya? 🔥")
     
-    Example Scenarios:
-    - User: "Points kab update honge?" -> Reply: "Points usually Friday ko update hote hain, lekin kabhi-kabhi 24-48 hours extra lag sakte hain. Aap apni progress yahan check karein: https://go.qwiklabs.com/arcade 🕒"
-    - User: "Swags kya milenge?" -> Reply: "Swags tier-based hote hain (Standard, Advanced, Premium). Isme T-shirts, Bags, aur Bottles ho sakti hain. Full list yahan dekhein: https://www.googlecloudswag.com/ 🎁"
+    FORMATTING:
+    - Use Bullet points (👉) for lists.
+    - Keep answers short and crisp.
+
+    LINK RULES:
+    - Always provide direct links when talking about Arcade or Resources.
+    - Example: "Check this out: https://go.qwiklabs.com/arcade"
     `;
 
-    // 🧠 Model Upgrade: 'gemini-1.5-flash' use karenge jo better aur faster hai
     const modelName = "gemini-flash-latest"; 
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
@@ -41,8 +42,8 @@ export async function POST(req: NextRequest) {
         {
           role: "user",
           parts: [
-            { text: systemInstruction }, // Pehle instruction bhejo
-            { text: `User Question: ${message}` } // Phir user ka sawal
+            { text: systemInstruction }, 
+            { text: `User Question: ${message}` } 
           ]
         }
       ]
@@ -57,11 +58,12 @@ export async function POST(req: NextRequest) {
     const data = await response.json();
 
     if (!response.ok) {
-       // Google Error Handling
-       return NextResponse.json({ reply: `❌ Error: ${data.error?.message || "AI Service Unavailable"}` }, { status: 500 });
+       // ✅ ERROR MESSAGE IN ENGLISH
+       return NextResponse.json({ reply: `❌ Error: ${data.error?.message || "My brain is a bit overheated right now, please try again later!"}` }, { status: 500 });
     }
 
-    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't fetch the answer.";
+    // ✅ FALLBACK MESSAGE IN ENGLISH
+    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Oops, I didn't catch that. Could you say it again?";
     return NextResponse.json({ reply: botReply });
 
   } catch (error: any) {
