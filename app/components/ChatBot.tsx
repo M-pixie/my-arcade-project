@@ -39,8 +39,7 @@ export default function ChatBot() {
       setMessages((prev) => [...prev, { role: "bot", text: data.reply }]);
     
     } catch (err: any) {
-      console.error(err); // Console mein error print karega
-      setMessages((prev) => [...prev, { role: "bot", text: `⚠️ Error: ${err.message}` }]); // Asli error screen pe dikhayega
+      setMessages((prev) => [...prev, { role: "bot", text: "⚠️ Network Issue! Check your internet." }]);
     } finally {
       setLoading(false);
     }
