@@ -12,7 +12,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'URL required' }, { status: 400 });
     }
 
-    console.log("🚀 Fetching Profile (2026 Logic Updated)...");
+    console.log(" Fetching Profile (2026 Logic Updated with 3 Point Games)...");
+
+
 
     // 1. HTML Download
     const response = await axios.get(url, {
@@ -34,9 +36,9 @@ export async function POST(req: Request) {
     if (!userAvatar) userAvatar = $('ql-avatar img').attr('src');
 
     // 4. Variables Initialize
-    let triviaPoints = 0; // Ab isme Trivia + Sprint dono aayenge
-    let gamePoints = 0;   // Isme Games ke points direct add honge
-    let skillBadgesCount = 0; // Skill badges ka count (baad me /2 hoga)
+    let triviaPoints = 0; 
+    let gamePoints = 0;   
+    let skillBadgesCount = 0; 
 
     // 5. Main Logic Loop
     $('.profile-badge').each((index, element) => {
@@ -47,7 +49,7 @@ export async function POST(req: Request) {
       // 📅 Date Filter (Sirf 2026 ka data chahiye)
       if (!dateText.includes('2026')) return; 
       
-      // Optional: Agar Jan ke starting days skip karne the to ye logic rakho, warna hata sakte ho
+      // Optional: Agar Jan ke starting days skip karne the
       if (/Jan (1|2|3|4),/.test(dateText)) return;
 
       // ==========================================
@@ -55,7 +57,6 @@ export async function POST(req: Request) {
       // ==========================================
 
       // CATEGORY 1: Trivia & Sprints (1 Point each)
-      // Ab "Sprint" bhi yahi count hoga
       if (title.includes('trivia') || title.includes('sprint')) {
         triviaPoints++;
       } 
@@ -67,23 +68,27 @@ export async function POST(req: Request) {
       
       // CATEGORY 3: Games & Milestones
       else {
+        
+        // 🔥 NEW: 3 POINTS GAMES (Ye naya add kiya hai)
+        if (title.includes('skills at the pitch') || title.includes('from foundations to wonders')) {
+          gamePoints += 3;
+        }
+
         // A. Special Games (2 Points)
-        // Agar future me koi aur 2 pointer game aaye to yaha OR condition (|) laga dena
-        if (title.includes('work life refresh')) {
+        else if (title.includes('work life refresh')) {
           gamePoints += 2; 
         } 
         
         // B. Standard Games & Levels (1 Point)
-        // Yaha naye 2026 keywords add kar diye hain (Trail, Voyage, Adventure, Base Camp)
         else if (
           title.includes('level') || 
-          title.includes('base camp') ||  // New 2026
-          title.includes('trail') ||      // New 2026
-          title.includes('voyage') ||     // New 2026
-          title.includes('adventure') ||  // New 2026
+          title.includes('base camp') ||  
+          title.includes('trail') ||      
+          title.includes('voyage') ||     
+          title.includes('adventure') ||  
           title.includes('certification zone') || 
-          title.includes('Journeys made easy') || 
-          title.includes('game')          // Generic fallback
+          title.includes('journeys made easy') || 
+          title.includes('game')          
         ) {
           gamePoints += 1;
         }
@@ -93,13 +98,12 @@ export async function POST(req: Request) {
     console.log(`✅ Success! Found: ${userName}`);
 
     // Final Calculation
-    // Math.floor use kiya taki 1 Skill badge ka 0.5 na mile, 2 hone par hi 1 mile.
     const calculatedPoints = triviaPoints + gamePoints + Math.floor(skillBadgesCount / 2);
 
     return NextResponse.json({
       totalPoints: calculatedPoints,
       breakdown: { 
-        trivia: triviaPoints, // Isme Sprint bhi shamil hai
+        trivia: triviaPoints, 
         games: gamePoints, 
         skills: skillBadgesCount 
       },

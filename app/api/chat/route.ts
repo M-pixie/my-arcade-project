@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
     LINK RULES:
     - Always provide direct links when talking about Arcade or Resources.
-    - Example: "Check this out: https://go.qwiklabs.com/arcade"
+    - Example: "Check this out: https://go.cloudskillsboost.google/arcade"
     `;
 
     const modelName = "gemini-flash-latest"; 
