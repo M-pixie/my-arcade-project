@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // ✅ Key Direct
-const API_KEY = "AIzaSyDHGezUE2AaQwPNlqDc9ysSrkoCJBb0J80"; 
+const API_KEY = "AIzaSyDwOPJjDRNd2_0_tgybpmLNvsZ-tjJ6o4U"; 
 
 export const dynamic = "force-dynamic";
 
