@@ -248,60 +248,46 @@ export default function HomePage() {
         </section>
 
         
-{/* ================= LIGHT THEME CTA SECTION ================= */}
+{/* ================= MINIMALIST CTA SECTION ================= */}
 
-<section className="py-12 px-4 bg-white">
-  
-  {/* Premium Card Container */}
-  <div className="max-w-5xl mx-auto bg-gradient-to-b from-gray-50 to-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+<section className="py-24 px-6 bg-white border-y border-gray-100">
+  <div className="max-w-3xl mx-auto text-center">
     
-    {/* Background Decoration (Subtle) */}
-    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 opacity-60"></div>
-
-    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
-      
-      {/* 👈 LEFT SIDE: Text Content */}
-      <div className="text-center md:text-left flex-1">
-        <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 leading-tight">
-          Analyze Your <span className="text-[#1a73e8]">Arcade Points</span>
-        </h2>
-        <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-lg mx-auto md:mx-0">
-          Join thousands of developers tracking their progress. Get your score instantly with our professional tool.
-        </p>
-      </div>
-
-      {/* 👉 RIGHT SIDE: Action & Counter */}
-      <div className="flex flex-col items-center md:items-end gap-6">
-        
-        {/* Counter (Ab chhota aur clean hai) */}
-        <div className="flex items-center gap-4 bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex flex-col items-start">
-            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Visits</span>
-            <div className="text-3xl font-bold text-gray-800 tracking-tight">
-              {/* Counter Component Yahan */}
-              <VisitCounter />
-            </div>
-          </div>
-          {/* Decorative Icon */}
-          <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-          </div>
-        </div>
-
-        {/* Button (Simple & Effective) */}
-        <button
-          onClick={() => router.push("/calculator")}
-          className="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white transition-all duration-200 bg-[#1a73e8] rounded-full hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
-        >
-          Calculate Now
-          <svg className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
-        </button>
-
-      </div>
-
+    {/* Clean Badge */}
+    <div className="inline-block mb-6">
+      <span className="px-3 py-1 rounded-full border border-gray-200 text-[11px] font-medium text-gray-500 uppercase tracking-widest bg-gray-50">
+        Visit Live Counter
+      </span>
     </div>
+
+    {/* Minimal Headline */}
+    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
+      Track your Arcade progress.
+    </h2>
+    
+    <p className="text-lg text-gray-500 font-light mb-12 max-w-xl mx-auto">
+      Simple, fast, and accurate point calculation for developers.
+    </p>
+
+    {/* The Counter - Pure Typography */}
+    <div className="flex flex-col items-center justify-center mb-12">
+      <div className="text-6xl md:text-7xl font-bold text-black tracking-tighter tabular-nums">
+        <VisitCounter />
+      </div>
+      <p className="text-sm text-gray-400 mt-2 font-medium">Calculations served</p>
+    </div>
+
+    {/* Minimal Button */}
+    <button
+      onClick={() => router.push("/calculator")}
+      className="group inline-flex items-center justify-center h-12 px-8 rounded-full bg-black text-white text-sm font-medium transition-transform hover:scale-105 active:scale-95"
+    >
+      Calculate Now
+      <svg className="w-4 h-4 ml-2 text-gray-400 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </button>
+
   </div>
 </section>
 
