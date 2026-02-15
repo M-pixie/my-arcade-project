@@ -248,46 +248,67 @@ export default function HomePage() {
         </section>
 
         
-{/* ================= MINIMALIST CTA SECTION ================= */}
+{/* ================= GOOGLE STYLE CTA SECTION ================= */}
 
-<section className="py-24 px-6 bg-white border-y border-gray-100">
-  <div className="max-w-3xl mx-auto text-center">
+<section className="py-16 px-4 bg-white">
+  
+  {/* Main Container */}
+  <div className="max-w-5xl mx-auto">
     
-    {/* Clean Badge */}
-    <div className="inline-block mb-6">
-      <span className="px-3 py-1 rounded-full border border-gray-200 text-[11px] font-medium text-gray-500 uppercase tracking-widest bg-gray-50">
-        Visit Live Counter
-      </span>
-    </div>
+    {/* Google-like Card: White BG, Thin Border, Subtle Shadow */}
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] overflow-hidden">
+      
+      <div className="flex flex-col md:flex-row">
+        
+        {/* 👈 LEFT SIDE: Text Content */}
+        <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
+          <div className="flex items-center gap-3 mb-4">
+             {/* Google-style Icon Badge */}
+             <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+             </div>
+             <span className="text-xs font-bold text-[#1a73e8] uppercase tracking-wider">Arcade Insights</span>
+          </div>
+          
+          <h2 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3 leading-tight">
+            Analyze your <span className="font-bold">Arcade Points</span>
+          </h2>
+          
+          <p className="text-[#5f6368] text-base leading-relaxed max-w-lg">
+            Join thousands of developers tracking their progress. Get your score instantly with our professional tool designed for accuracy.
+          </p>
+        </div>
 
-    {/* Minimal Headline */}
-    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
-      Track your Arcade progress.
-    </h2>
-    
-    <p className="text-lg text-gray-500 font-light mb-12 max-w-xl mx-auto">
-      Simple, fast, and accurate point calculation for developers.
-    </p>
+        {/* ➖ THE "THIN LINE" (Vertical Divider) */}
+        <div className="hidden md:block w-px bg-gray-200 self-stretch"></div>
+        <div className="block md:hidden h-px w-full bg-gray-200"></div>
 
-    {/* The Counter - Pure Typography */}
-    <div className="flex flex-col items-center justify-center mb-12">
-      <div className="text-6xl md:text-7xl font-bold text-black tracking-tighter tabular-nums">
-        <VisitCounter />
+        {/* 👉 RIGHT SIDE: Action & Counter (Slightly Grey BG for contrast) */}
+        <div className="p-8 md:p-10 bg-[#f8f9fa] md:w-[400px] flex flex-col justify-center items-center gap-6">
+          
+          {/* Counter Box */}
+          <div className="w-full bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center text-center">
+            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Website Visit Count</span>
+            <div className="text-4xl font-normal text-[#202124] tabular-nums tracking-tight">
+              <VisitCounter />
+            </div>
+          </div>
+
+          {/* Google Blue Button */}
+          <button
+            onClick={() => router.push("/calculator")}
+            className="w-full group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white transition-all duration-200 bg-[#1a73e8] rounded-lg hover:bg-[#1765cc] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-600"
+          >
+            Calculate Now
+            <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+
+        </div>
+
       </div>
-      <p className="text-sm text-gray-400 mt-2 font-medium">Calculations served</p>
     </div>
-
-    {/* Minimal Button */}
-    <button
-      onClick={() => router.push("/calculator")}
-      className="group inline-flex items-center justify-center h-12 px-8 rounded-full bg-black text-white text-sm font-medium transition-transform hover:scale-105 active:scale-95"
-    >
-      Calculate Now
-      <svg className="w-4 h-4 ml-2 text-gray-400 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-      </svg>
-    </button>
-
   </div>
 </section>
 
