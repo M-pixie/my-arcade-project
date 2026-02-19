@@ -30,7 +30,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full bg-[#1a73e8] rounded-sm opacity-50"></span>
                 <span className="relative inline-flex h-2 w-2 bg-[#1a73e8] rounded-sm shadow-[0_0_8px_#1a73e8]"></span>
               </span>
-              <span className="relative z-10">Arcade Nexus 2.0</span>
+              <span className="relative z-10">Google Cloud Arcade</span>
             </div>
 
             {/* MAIN HEADING */}
@@ -402,7 +402,7 @@ export default function HomePage() {
                   Powered by: <span className="text-[#202124] font-medium">Manish Kumar & Anjali Patel</span>
                 </p>
                 <p className="mt-1 text-xs text-[#80868b]">
-                  Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  Last Updated: February 20, 2026
                 </p>
               </div>
 

@@ -62,16 +62,41 @@ export default function AdminPage() {
   };
 
   return (
-    // 'pt-24' Add kiya taaki content Navbar ke piche na chhipe
-    <div className="min-h-screen flex flex-col bg-[#F0F2F5] font-sans text-[#202124] relative pt-24">
+    // 'pt-16' hata diya taaki sub-header Navbar se chipak jaye. 
+    // Navbar components usually absolute/fixed hote hain (pt-16 Navbar me hi handle hona chahiye).
+    <div className="min-h-screen flex flex-col bg-[#f8f9fa] font-sans text-[#202124]">
       
       {/* 1️⃣ REAL NAVBAR ADDED */}
       <Navbar />
 
+      {/* 2️⃣ EKDUM TOP NAVIGATION BAR (Navbar ke exact neeche sata hua) */}
+      <div className="w-full bg-white border-b border-[#dadce0] py-3 px-6 shadow-sm z-20">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+          
+          {/* Navigation Links */}
+          <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-[#5f6368]">
+             <button onClick={() => router.push("/")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Home</button>
+             <button onClick={() => router.push("/calculator")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Calculator</button>
+             <button onClick={() => router.push("/dashboard")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Dashboard</button>
+             <button onClick={() => router.push("/leaderboard")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Leaderboard</button>
+          </div>
+
+          {/* PROMINENT LOGOUT BUTTON */}
+          <button 
+             onClick={handleLogout} 
+             className="text-[#d93025] border border-[#d93025] hover:bg-[#fce8e6] px-4 py-1.5 rounded-sm transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-200"
+          >
+             Logout
+          </button>
+        </div>
+      </div>
+
       {/* ===== CENTERED LOGIN CARD ===== */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 mb-10">
+      {/* py-10 add kiya taaki card aur header ke beech theek space rahe */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-10">
         
-        <div className="w-full max-w-[450px] bg-white rounded-2xl border border-[#dadce0] p-10 shadow-lg transition-all hover:shadow-xl">
+        {/* Google/Microsoft Style Square Card */}
+        <div className="w-full max-w-[450px] bg-white rounded-sm border border-[#dadce0] p-10 shadow-sm">
           
           <div className="text-center mb-10">
             {/* Google Logo */}
@@ -85,17 +110,17 @@ export default function AdminPage() {
                </svg>
             </div>
             
-            <h1 className="text-2xl font-bold text-[#202124] mb-2 tracking-tight">
+            <h1 className="text-2xl font-normal text-[#202124] mb-2 tracking-tight">
               Admin Console
             </h1>
-            <p className="text-gray-500">
+            <p className="text-[#5f6368] text-sm">
               Secure login for Arcade Nexus Administrators
             </p>
           </div>
 
           {/* ERROR ALERT */}
           {errorMessage && (
-            <div className="mb-6 flex items-start gap-3 text-sm text-[#d93025] bg-red-50 p-3 rounded-lg border border-red-100">
+            <div className="mb-6 flex items-start gap-3 text-sm text-[#d93025] bg-[#fce8e6] p-4 rounded-sm border border-[#fad2cf]">
                <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                </svg>
@@ -105,9 +130,10 @@ export default function AdminPage() {
 
           {/* ACTIONS */}
           <div className="space-y-6">
+            {/* Square Google Button */}
             <button
               onClick={loginWithGoogle}
-              className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-full px-6 py-3.5 text-sm font-semibold text-[#3c4043] hover:bg-blue-50 hover:border-blue-200 hover:shadow-md transition-all duration-200 active:scale-[0.98]"
+              className="w-full flex items-center justify-center gap-3 bg-white border border-[#dadce0] rounded-sm px-6 py-3.5 text-sm font-medium text-[#3c4043] hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/20"
             >
               <img
                 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -117,10 +143,10 @@ export default function AdminPage() {
               Continue with Google
             </button>
             
-            <div className="pt-4 text-center border-t border-gray-100">
-               <a href="https://go.cloudskillsboost.google/arcade" target="_blank" className="text-xs font-medium text-[#1a73e8] hover:underline flex items-center justify-center gap-1">
+            <div className="pt-6 text-center border-t border-[#dadce0]">
+               <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#1a73e8] hover:underline flex items-center justify-center gap-1">
                  What is Google Cloud Arcade?
-                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                </a>
             </div>
           </div>
@@ -128,39 +154,15 @@ export default function AdminPage() {
 
       </main>
 
-      {/* 3️⃣ UPDATED SLIM FOOTER */}
-      {/* py-4 kar diya taaki height kam ho jaye */}
-      <footer className="bg-white border-t border-gray-200 py-4 mt-auto">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-           
-           {/* Left: Copyright */}
-           <div className="text-xs text-gray-500">
-             &copy; 2026 <strong>Arcade Nexus</strong>. All rights reserved.
-           </div>
-
-           {/* Right: Navigation Links */}
-           <div className="flex flex-wrap justify-center gap-6 text-xs font-medium text-gray-600">
-             {/* 👇 HOME BUTTON ADDED */}
-             <button onClick={() => router.push("/")} className="hover:text-[#1a73e8] transition-colors">Home</button>
-             <button onClick={() => router.push("/calculator")} className="hover:text-[#1a73e8] transition-colors">Calculator</button>
-             <button onClick={() => router.push("/dashboard")} className="hover:text-[#1a73e8] transition-colors">Dashboard</button>
-             <button onClick={() => router.push("/leaderboard")} className="hover:text-[#1a73e8] transition-colors">Leaderboard</button>
-             <button onClick={handleLogout} className="text-red-500 hover:text-red-700 bg-red-50 px-3 py-0.5 rounded-full transition-colors border border-red-100">
-               Logout
-             </button>
-           </div>
-        </div>
-      </footer>
-
-      {/* ✅ SUCCESS TOAST NOTIFICATION */}
+      {/* ✅ SUCCESS TOAST NOTIFICATION (Google Snackbar Style) */}
       {successMessage && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-          <div className="bg-[#323232] text-white px-6 py-3.5 rounded-lg shadow-2xl flex items-center gap-3 min-w-[320px] justify-between border border-gray-700">
+          <div className="bg-[#323232] text-[#f1f3f4] px-6 py-3.5 rounded-sm shadow-md flex items-center gap-3 min-w-[320px] justify-between">
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
-              <span className="text-sm font-medium">{successMessage}</span>
+              <svg className="w-5 h-5 text-[#81c995]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
+              <span className="text-sm font-normal">{successMessage}</span>
             </div>
-            <button onClick={() => setSuccessMessage(null)} className="text-gray-400 hover:text-white transition-colors">
+            <button onClick={() => setSuccessMessage(null)} className="text-[#9aa0a6] hover:text-white transition-colors focus:outline-none">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>

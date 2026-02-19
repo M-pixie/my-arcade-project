@@ -31,28 +31,28 @@ export default function LeaderboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[#F8F9FA] text-[#202124] font-sans pt-24 pb-12">
+      {/* GOOGLE STYLE BACKGROUND */}
+      <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans pt-16 pb-12">
         <Navbar />
 
         {/* ================= HEADER SECTION ================= */}
-        <header className="bg-white border-b border-gray-200 py-12 px-4 text-center">
+        <header className="bg-white border-b border-[#dadce0] py-12 px-6 text-center shadow-sm">
           <div className="max-w-4xl mx-auto space-y-3">
-            <div className="inline-flex items-center justify-center p-3 bg-yellow-50 rounded-full mb-2">
-              <span className="text-2xl">🏆</span>
+            <div className="inline-flex items-center justify-center p-3 bg-[#f8f9fa] border border-[#dadce0] rounded-sm mb-3">
+              <span className="text-2xl leading-none">🏆</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-normal text-gray-900 tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-normal text-[#202124] tracking-tight">
               Leaderboard
             </h1>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+            <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto">
               See who is leading the charts in the Arcade.
             </p>
           </div>
         </header>
 
-        <main className="max-w-5xl mx-auto px-4 py-12 space-y-12">
+        <main className="max-w-5xl mx-auto px-6 py-12 space-y-12">
 
           {/* ================= TOP 3 (PODIUM CARDS) ================= */}
-          {/* Note: Logic preserves the 2-1-3 order, but we style it professionally */}
           <div className="flex flex-col md:flex-row justify-center items-end gap-6">
             
             {podiumOrder.map((user) => {
@@ -64,49 +64,49 @@ export default function LeaderboardPage() {
               return (
                 <div
                   key={user.id}
-                  className={`relative flex flex-col items-center w-full md:w-1/3 bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] border border-gray-100 overflow-hidden transition-transform hover:-translate-y-1 duration-300
-                    ${isFirst ? "order-1 md:order-2 z-10 md:-mt-8 ring-4 ring-yellow-50 shadow-xl" : ""}
+                  className={`relative flex flex-col items-center w-full md:w-1/3 bg-white rounded-sm shadow-sm border border-[#dadce0] overflow-hidden transition-all hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] duration-300
+                    ${isFirst ? "order-1 md:order-2 z-10 md:-mt-8 shadow-md border-[#fbbc04]/30" : ""}
                     ${isSecond ? "order-2 md:order-1" : ""}
                     ${isThird ? "order-3 md:order-3" : ""}
                   `}
                 >
-                  {/* Decorative Top Bar for Rank 1 */}
-                  {isFirst && <div className="w-full h-2 bg-[#FBBC04]"></div>}
-                  {isSecond && <div className="w-full h-1.5 bg-[#9AA0A6]"></div>}
-                  {isThird && <div className="w-full h-1.5 bg-[#CE8F6F]"></div>}
+                  {/* Decorative Top Bar for Ranks */}
+                  {isFirst && <div className="w-full h-2 bg-[#fbbc04]"></div>}
+                  {isSecond && <div className="w-full h-1.5 bg-[#9aa0a6]"></div>}
+                  {isThird && <div className="w-full h-1.5 bg-[#ce8f6f]"></div>}
 
-                  <div className="p-8 text-center w-full">
+                  <div className="p-8 text-center w-full flex flex-col items-center">
                     {/* Rank Badge */}
-                    <div className={`mx-auto w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold mb-4
-                      ${isFirst ? "bg-yellow-100 text-yellow-800" : "bg-gray-100 text-gray-600"}
+                    <div className={`mx-auto w-8 h-8 flex items-center justify-center rounded-sm text-xs font-bold mb-5 border
+                      ${isFirst ? "bg-[#fef7e0] text-[#b06000] border-[#fde293]" : "bg-[#f8f9fa] text-[#5f6368] border-[#dadce0]"}
                     `}>
                       #{user.rank}
                     </div>
 
                     {/* Avatar */}
-                    <div className="relative inline-block">
+                    <div className="relative inline-block mb-2">
                       <img
                         src={user.photoURL || "/avatar.png"}
                         alt={user.name}
-                        className={`rounded-full object-cover border-4 border-white shadow-md
+                        className={`rounded-full object-cover border border-[#dadce0] p-1 bg-[#f8f9fa]
                           ${isFirst ? "w-28 h-28" : "w-20 h-20"}
                         `}
                       />
                       {isFirst && (
-                        <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-sm border border-gray-100">
-                          <span className="text-xl">🥇</span>
+                        <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 border border-[#dadce0] shadow-sm flex items-center justify-center">
+                          <span className="text-lg leading-none">🥇</span>
                         </div>
                       )}
                     </div>
 
                     {/* Name & Points */}
-                    <div className="mt-4 space-y-1">
-                      <h3 className="text-lg font-medium text-gray-900 truncate px-2">
+                    <div className="mt-4 space-y-1 w-full">
+                      <h3 className="text-lg font-medium text-[#202124] truncate px-2">
                         {user.name || "Anonymous"}
                       </h3>
-                      <p className={`text-xl font-normal ${isFirst ? "text-[#1a73e8]" : "text-gray-600"}`}>
+                      <p className={`text-xl font-normal ${isFirst ? "text-[#1a73e8]" : "text-[#5f6368]"}`}>
                         {user.points?.toLocaleString() ?? 0}
-                        <span className="text-xs text-gray-400 ml-1">pts</span>
+                        <span className="text-xs text-[#80868b] ml-1 font-medium uppercase tracking-wider">pts</span>
                       </p>
                     </div>
                   </div>
@@ -116,24 +116,24 @@ export default function LeaderboardPage() {
           </div>
 
           {/* ================= THE LIST (RANK 4+) ================= */}
-          <div className="bg-white rounded-2xl shadow-[0_1px_2px_rgba(60,64,67,0.3),0_1px_3px_1px_rgba(60,64,67,0.15)] border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded-sm border border-[#dadce0] shadow-sm overflow-hidden">
             
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#f8f9fa] border-b border-[#dadce0] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
               <div className="col-span-2 text-center">Rank</div>
               <div className="col-span-7">User</div>
               <div className="col-span-3 text-right">Total Points</div>
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-[#dadce0]">
               {restLeaders.map((user) => (
                 <div
                   key={user.id}
-                  className="grid grid-cols-12 gap-4 items-center px-6 py-4 hover:bg-blue-50/50 transition-colors duration-150"
+                  className="grid grid-cols-12 gap-4 items-center px-6 py-4 hover:bg-[#f8f9fa] transition-colors duration-150"
                 >
                   {/* Rank */}
-                  <div className="col-span-2 text-center text-sm font-medium text-gray-500">
+                  <div className="col-span-2 text-center text-sm font-medium text-[#5f6368]">
                     #{user.rank}
                   </div>
 
@@ -142,16 +142,16 @@ export default function LeaderboardPage() {
                     <img
                       src={user.photoURL || "/avatar.png"}
                       alt={user.name}
-                      className="w-10 h-10 rounded-full border border-gray-200"
+                      className="w-10 h-10 rounded-full border border-[#dadce0] p-0.5 object-cover"
                     />
-                    <span className="text-sm font-medium text-gray-900 truncate">
+                    <span className="text-sm font-medium text-[#202124] truncate">
                       {user.name || "Anonymous"}
                     </span>
                   </div>
 
                   {/* Points */}
                   <div className="col-span-3 text-right">
-                    <span className="text-sm font-semibold text-[#1a73e8]">
+                    <span className="text-sm font-medium text-[#1a73e8]">
                       {user.points?.toLocaleString() ?? 0}
                     </span>
                   </div>
@@ -159,16 +159,16 @@ export default function LeaderboardPage() {
               ))}
 
               {restLeaders.length === 0 && (
-                <div className="p-10 text-center text-gray-500 text-sm">
+                <div className="p-10 text-center text-[#5f6368] text-sm">
                   Waiting for more players to join...
                 </div>
               )}
             </div>
             
-            {/* Optional Footer for Table */}
-            <div className="bg-gray-50 px-6 py-3 border-t border-gray-200 text-center">
-              <p className="text-xs text-gray-400">
-                Leaderboard updates in real-time.
+            {/* Table Footer */}
+            <div className="bg-[#f8f9fa] px-6 py-3 border-t border-[#dadce0] text-center">
+              <p className="text-xs font-medium text-[#80868b] uppercase tracking-widest">
+                Leaderboard updates in real-time
               </p>
             </div>
 
