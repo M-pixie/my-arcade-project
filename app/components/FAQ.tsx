@@ -36,45 +36,44 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 md:py-12 mb-8">
-      {/* Heading: Pure Black aur Bold */}
-      <h2 className="text-xl md:text-2xl font-bold text-center text-black mb-6">
+    <div className="max-w-4xl mx-auto px-6 py-20 bg-white">
+      {/* Heading: Google UI Style (font-normal, dark grey text) */}
+      <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-12 tracking-tight">
         Frequently Asked Questions
       </h2>
       
-      <div className="space-y-3">
+      {/* Contiguous Box Style (Thin borders, square corners, split by thin lines) */}
+      <div className="border border-[#dadce0] rounded-sm bg-white divide-y divide-[#dadce0] shadow-sm">
         {faqs.map((faq, index) => (
-          <div key={index} className="border border-gray-300 rounded-lg bg-white overflow-hidden shadow-sm">
+          <div key={index} className="overflow-hidden bg-white">
             <button
-              className="w-full flex justify-between items-center p-4 text-left bg-white hover:bg-gray-50 transition-colors gap-4"
+              className="w-full flex justify-between items-center p-6 text-left bg-white hover:bg-[#f8f9fa] transition-colors gap-4 focus:outline-none"
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
-              {/* ✅ MOBILE FIX: 
-                  - text-[16px]: Mobile par size fix kiya.
-                  - text-black: Zabardasti black color.
-                  - font-bold: Mota font.
-              */}
-              <span className="text-black font-bold text-[16px] md:text-lg leading-snug">
+              {/* Question Text */}
+              <span className="text-[#202124] font-medium text-base md:text-lg leading-snug">
                 {faq.question}
               </span>
               
-              {/* Icon: Always Black & Centered */}
+              {/* Icon: Google Grey & Smooth Rotation */}
               <svg 
-                className={`w-6 h-6 text-black flex-shrink-0 transform transition-transform duration-200 ${openIndex === index ? "rotate-180" : ""}`} 
+                className={`w-5 h-5 text-[#5f6368] flex-shrink-0 transform transition-transform duration-300 ease-in-out ${openIndex === index ? "rotate-180" : ""}`} 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
             
+            {/* Answer Panel: Smooth Reveal */}
             <div 
               className={`transition-all duration-300 ease-in-out ${
                 openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-              } overflow-hidden`}
+              }`}
             >
-              <div className="p-4 bg-gray-100 text-gray-900 font-medium text-[15px] md:text-base border-t border-gray-200 leading-relaxed">
+              {/* Answer Text: Light Grey Text, Pure White Background */}
+              <div className="p-6 pt-0 bg-white text-[#5f6368] text-base leading-relaxed">
                 {faq.answer}
               </div>
             </div>

@@ -4,87 +4,79 @@ import Navbar from "@/app/components/Navbar";
 import VisitCounter from "@/app/components/VisitCounter"; 
 import { useRouter } from "next/navigation";
 import FAQ from "@/app/components/FAQ";
-import PopupModal from "@/app/components/PopupModal"; // 👈 Import kiya
-
-
-
+import PopupModal from "@/app/components/PopupModal";
 
 export default function HomePage() {
   const router = useRouter();
 
   return (
     <>
-    <PopupModal /> {/* 👈 Yahan laga diya (Sabse pehle load hoga) */}
+      <PopupModal />
       <Navbar />
 
-      <main className="min-h-screen bg-white text-slate-900 overflow-hidden selection:bg-blue-500 selection:text-white">
+      {/* PURE WHITE BACKGROUND, GOOGLE TEXT COLORS */}
+      <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
         
-        {/* BACKGROUND GLOW EFFECTS */}
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-[100px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-100/50 rounded-full blur-[100px]" />
-        </div>
+        {/* ================= HERO SECTION (CLEAN & MINIMAL) ================= */}
+        <section className="relative pt-36 pb-24 px-6 text-center border-b border-gray-200 bg-white overflow-hidden">
+          <div className="max-w-5xl mx-auto relative z-10">
+            
+            {/* 🔥 UPDATED: Animated Square Badge */}
+            <div className="group relative inline-flex items-center gap-2 px-4 py-1.5 bg-[#f8f9fa] border border-gray-200 text-[#5f6368] text-xs font-semibold mb-8 uppercase tracking-wider rounded-sm overflow-hidden transition-colors hover:border-[#1a73e8] hover:text-[#1a73e8] cursor-default">
+              {/* Shimmer Effect */}
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
+              
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full bg-[#1a73e8] rounded-sm opacity-50"></span>
+                <span className="relative inline-flex h-2 w-2 bg-[#1a73e8] rounded-sm shadow-[0_0_8px_#1a73e8]"></span>
+              </span>
+              <span className="relative z-10">Arcade Nexus 2.0</span>
+            </div>
 
-        {/* ================= HERO SECTION (REFINED FONT WEIGHT) ================= */}
-<section className="relative pt-32 pb-20 px-6 text-center overflow-hidden">
-  
-  {/* Background Glow */}
-  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-50/60 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+            {/* MAIN HEADING */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-[#202124] mb-6 leading-[1.1]">
+              Calculate when <br className="hidden md:block" />
+              <span className="text-[#1a73e8] relative inline-block">
+                you&apos;re ready
+                <span className="absolute bottom-1 left-0 w-full h-2 bg-[#e8f0fe] -z-10 transform -rotate-1"></span>
+              </span>
+            </h1>
 
-  <div className="max-w-5xl mx-auto relative z-10">
-    
-    {/* Badge */}
-    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-blue-100 text-blue-600 text-sm font-semibold mb-8 shadow-sm">
-      <span className="relative flex h-2.5 w-2.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-      </span>
-      Arcade Nexus
-    </div>
+            {/* Subheading */}
+            <p className="text-lg md:text-xl text-[#5f6368] max-w-2xl mx-auto mb-10 leading-relaxed">
+              The professional dashboard to calculate your Google Cloud Arcade points, 
+              monitor leaderboard rankings & track your growth in real-time.
+            </p>
 
-    {/* 👇 MAIN HEADING (Weight kam kiya: 'font-extrabold' aur 'tracking-tight') */}
-    <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15]">
-      calculate when <br className="hidden md:block" />
-      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#4F46E5] to-[#7C3AED] drop-shadow-sm">
-        you&apos;re ready
-      </span>
-    </h1>
+            {/* Square/Slightly Rounded Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button
+                onClick={() => router.push("/calculator")}
+                className="px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-base rounded-sm hover:bg-[#1557b0] hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] transition-all duration-200"
+              >
+                Open Calculator
+              </button>
+              
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="px-8 py-3.5 bg-white text-[#1a73e8] border border-[#dadce0] font-medium text-base rounded-sm hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-all duration-200"
+              >
+                View Dashboard
+              </button>
+            </div>
+            
+            {/* Trust Badge */}
+            <p className="mt-12 text-xs font-medium text-[#80868b] tracking-widest uppercase">
+              Trusted by thousands of cloud enthusiasts
+            </p>
+          </div>
+        </section>
 
-    {/* Subheading */}
-    <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-      The professional dashboard to calculate your Google Cloud Arcade points, 
-      monitor leaderboard rankings & track your growth in real-time.
-    </p>
-
-    {/* Buttons */}
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-      <button
-        onClick={() => router.push("/calculator")}
-        className="px-8 py-4 rounded-full bg-[#1a73e8] text-white font-bold text-lg shadow-[0_4px_14px_0_rgba(26,115,232,0.39)] hover:bg-[#1557b0] hover:scale-105 hover:shadow-lg transition-all duration-300"
-      >
-        Open Calculator
-      </button>
-      
-      <button
-        onClick={() => router.push("/dashboard")}
-        className="px-8 py-4 rounded-full bg-white text-slate-700 border border-slate-200 font-bold text-lg hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all duration-300 shadow-sm"
-      >
-        View Dashboard
-      </button>
-    </div>
-    
-    {/* Trust Badge */}
-    <p className="mt-10 text-xs font-bold text-slate-400 tracking-widest uppercase">
-      Trusted by thousands of cloud enthusiasts
-    </p>
-  </div>
-</section>
-
-        {/* ================= HOW TO GET STARTED ================= */}
-        <section className="relative z-10 py-24 bg-slate-50/80 border-y border-slate-200">
+        {/* ================= HOW TO GET STARTED (MICROSOFT/GOOGLE HYBRID SQUARES) ================= */}
+        <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-16">
-              How to Start Your <span className="text-blue-600">Journey</span>?
+            <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-16 tracking-tight">
+              How to Start Your <span className="text-[#1a73e8] font-medium">Journey</span>?
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -99,16 +91,18 @@ export default function HomePage() {
                   href={step.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:border-blue-300 hover:-translate-y-1 transition-all duration-300"
+                  className="group relative p-8 bg-white border border-[#dadce0] rounded-sm hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] hover:border-[#1a73e8] transition-all duration-200 flex flex-col h-full"
                 >
-                  <div className="absolute top-0 right-0 p-4 opacity-5 font-black text-6xl text-slate-900 group-hover:text-blue-600 transition-colors">
-                    {step.num}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-10 h-10 bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] font-medium text-lg rounded-sm group-hover:bg-[#1a73e8] group-hover:text-white transition-colors">
+                      {idx + 1}
+                    </div>
+                    <span className="text-3xl font-light text-[#f1f3f4] group-hover:text-[#e8f0fe] transition-colors">
+                      {step.num}
+                    </span>
                   </div>
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-bold mb-5 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    {idx + 1}
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed group-hover:text-slate-600">
+                  <h3 className="text-lg font-medium text-[#202124] mb-2">{step.title}</h3>
+                  <p className="text-sm text-[#5f6368] leading-relaxed mt-auto">
                     {step.desc}
                   </p>
                 </a>
@@ -117,14 +111,14 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= FEATURES ================= */}
-        <section className="relative z-10 py-28 bg-white">
-          <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-blue-600 mb-16">
-              Everything you need to Win Arcade
+        {/* ================= FEATURES (THIN LINES, SHARP EDGES) ================= */}
+        <section className="relative z-10 py-24 bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-16 tracking-tight">
+              Everything you need to <span className="text-[#1a73e8] font-medium">Win Arcade</span>
             </h2>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6">
               {[
                 { title: "Accurate Calculator", icon: "🎯", desc: "Get reliable Arcade point calculation directly from your profile URL.", link: "/calculator" },
                 { title: "Smart Dashboard", icon: "📊", desc: "View total points, recent activity, rank and history cleanly.", link: "/dashboard" },
@@ -133,15 +127,15 @@ export default function HomePage() {
                 <div
                   key={idx}
                   onClick={() => router.push(feature.link)}
-                  className="group cursor-pointer p-8 rounded-2xl bg-white border border-slate-200 shadow-lg shadow-slate-200/50 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-100 transition-all duration-300"
+                  className="group cursor-pointer p-8 bg-white border border-[#dadce0] rounded-sm hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] transition-all duration-200"
                 >
-                  <div className="text-4xl mb-6 bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                  <div className="text-3xl mb-6 w-14 h-14 bg-[#f8f9fa] border border-[#dadce0] rounded-sm flex items-center justify-center group-hover:bg-[#e8f0fe] group-hover:border-[#d2e3fc] transition-colors">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
+                  <h3 className="text-xl font-medium text-[#202124] mb-3 group-hover:text-[#1a73e8] transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">
+                  <p className="text-[#5f6368] text-sm leading-relaxed">
                     {feature.desc}
                   </p>
                 </div>
@@ -150,16 +144,16 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= HOW IT WORKS ================= */}
-        <section className="relative z-10 py-28 bg-slate-50">
-          <div className="max-w-6xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-16">How it works?</h2>
+        {/* ================= HOW IT WORKS (CLEAN GRID WITH ARROWS) ================= */}
+        <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-6 text-center">
+            <h2 className="text-3xl md:text-4xl font-normal text-[#202124] mb-16 tracking-tight">How it works?</h2>
 
-            <div className="grid md:grid-cols-3 gap-8 relative">
-              <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-slate-300 to-transparent z-0"></div>
-
-              <div className="relative z-10 bg-white p-8 rounded-2xl border border-slate-200 shadow-md hover:translate-y-[-5px] transition-transform">
-                <div className="w-16 h-16 mx-auto rounded-full bg-white border border-slate-100 flex items-center justify-center mb-6 shadow-md">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0 relative">
+              
+              {/* STEP 1 */}
+              <div className="relative z-10 flex flex-col items-center group bg-[#f8f9fa] p-4 flex-1">
+                <div className="w-20 h-20 bg-white border border-[#dadce0] rounded-sm flex items-center justify-center mb-6 shadow-sm group-hover:border-[#1a73e8] transition-colors">
                   <svg className="w-8 h-8" viewBox="0 0 48 48">
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.72 1.22 9.22 3.22l6.85-6.85C35.9 1.84 30.3 0 24 0 14.64 0 6.51 5.38 2.56 13.22l7.98 6.19C12.4 13.4 17.74 9.5 24 9.5z" />
                     <path fill="#4285F4" d="M46.1 24.5c0-1.67-.15-3.27-.43-4.82H24v9.13h12.4c-.53 2.86-2.13 5.29-4.53 6.92l7.01 5.45C43.5 36.6 46.1 31.1 46.1 24.5z" />
@@ -167,325 +161,277 @@ export default function HomePage() {
                     <path fill="#34A853" d="M24 48c6.3 0 11.6-2.08 15.47-5.67l-7.01-5.45c-1.95 1.31-4.45 2.08-8.46 2.08-6.26 0-11.6-3.9-13.46-9.26l-7.98 6.19C6.51 42.62 14.64 48 24 48z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900">Login with Google</h3>
-                <p className="mt-3 text-sm text-slate-500">Securely sign in using your Google account to access.</p>
+                <h3 className="text-lg font-medium text-[#202124]">Login with Google</h3>
+                <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Securely sign in using your Google account to access.</p>
               </div>
 
-              <div className="relative z-10 bg-white p-8 rounded-2xl border border-slate-200 shadow-md hover:translate-y-[-5px] transition-transform">
-                <div className="w-16 h-16 mx-auto rounded-full bg-white border border-slate-100 flex items-center justify-center mb-6 shadow-md text-2xl">
+              {/* LONG ARROW 1 (Visible only on desktop) */}
+              <div className="hidden md:flex flex-col items-center justify-center w-24 lg:w-32 -mt-16 text-[#dadce0]">
+                <svg className="w-full h-8" fill="none" stroke="currentColor" viewBox="0 0 100 24" preserveAspectRatio="none">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M0 12h96M88 4l8 8-8 8" />
+                </svg>
+              </div>
+
+              {/* Down Arrow for Mobile (Visible only on mobile) */}
+              <div className="md:hidden text-[#dadce0] my-2">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
+                 </svg>
+              </div>
+
+              {/* STEP 2 */}
+              <div className="relative z-10 flex flex-col items-center group bg-[#f8f9fa] p-4 flex-1">
+                <div className="w-20 h-20 bg-white border border-[#dadce0] rounded-sm flex items-center justify-center mb-6 shadow-sm text-2xl group-hover:border-[#1a73e8] transition-colors">
                   📎
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900">Paste URL</h3>
-                <p className="mt-3 text-sm text-slate-500">Add your Google Cloud Arcade profile link to calculate.</p>
+                <h3 className="text-lg font-medium text-[#202124]">Paste Public URL</h3>
+                <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Add your Google Cloud Arcade profile link to calculate.</p>
               </div>
 
-              <div className="relative z-10 bg-white p-8 rounded-2xl border border-slate-200 shadow-md hover:translate-y-[-5px] transition-transform">
-                <div className="w-16 h-16 mx-auto rounded-full bg-white border border-slate-100 flex items-center justify-center mb-6 shadow-md text-2xl">
+              {/* LONG ARROW 2 (Visible only on desktop) */}
+              <div className="hidden md:flex flex-col items-center justify-center w-24 lg:w-32 -mt-16 text-[#dadce0]">
+                <svg className="w-full h-8" fill="none" stroke="currentColor" viewBox="0 0 100 24" preserveAspectRatio="none">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M0 12h96M88 4l8 8-8 8" />
+                </svg>
+              </div>
+
+              {/* Down Arrow for Mobile (Visible only on mobile) */}
+              <div className="md:hidden text-[#dadce0] my-2">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
+                 </svg>
+              </div>
+
+              {/* STEP 3 */}
+              <div className="relative z-10 flex flex-col items-center group bg-[#f8f9fa] p-4 flex-1">
+                <div className="w-20 h-20 bg-white border border-[#dadce0] rounded-sm flex items-center justify-center mb-6 shadow-sm text-2xl group-hover:border-[#1a73e8] transition-colors">
                   🏆
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900">Get Points</h3>
-                <p className="mt-3 text-sm text-slate-500">Instantly view total points, history & leaderboard rank.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= BASE POINTS SYSTEM ================= */}
-        <section className="relative z-10 py-24 bg-white">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-slate-900">Arcade Points System</h2>
-              <p className="text-slate-500 mt-2">How your effort translates to score</p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-md transition-all">
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-12 rounded-full bg-green-500 shadow-sm"></div>
-                  <div>
-                    <h4 className="font-bold text-lg text-slate-900">Arcade Adventure</h4>
-                    <p className="text-sm text-slate-500">x1 game badge = 1 point</p>
-                  </div>
-                </div>
-                <div className="px-4 py-1.5 rounded-full bg-green-100 text-green-700 border border-green-200 text-sm font-semibold">1 Point Each</div>
+                <h3 className="text-lg font-medium text-[#202124]">Get Arcade Points.</h3>
+                <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Instantly view total points, history & leaderboard rank.</p>
               </div>
               
-              <div className="flex items-center justify-between p-5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-md transition-all">
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-12 rounded-full bg-yellow-500 shadow-sm"></div>
-                  <div>
-                    <h4 className="font-bold text-lg text-slate-900">Trivia & SPRINT</h4>
-                    <p className="text-sm text-slate-500">x1 game badge = 1 point</p>
-                  </div>
-                </div>
-                <div className="px-4 py-1.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 text-sm font-semibold">1 Point Each</div>
-              </div>
-
-              <div className="flex items-center justify-between p-5 rounded-xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-md transition-all">
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-12 rounded-full bg-purple-500 shadow-sm"></div>
-                  <div>
-                    <h4 className="font-bold text-lg text-slate-900">Skill Badges</h4>
-                    <p className="text-sm text-slate-500">90+ Skills Badges available</p>
-                  </div>
-                </div>
-                <div className="px-4 py-1.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200 text-sm font-semibold">x2 = 1 Point</div>
-              </div>
-
-              <div className="relative overflow-hidden flex items-center justify-between p-5 rounded-xl bg-gradient-to-r from-pink-50 to-white border border-pink-200">
-                <div className="absolute top-0 left-0 w-full h-full bg-pink-100/30 animate-pulse"></div>
-                <div className="relative flex items-center gap-4 z-10">
-                  <div className="w-2 h-12 rounded-full bg-pink-500 shadow-sm"></div>
-                  <div>
-                    <h4 className="font-bold text-lg text-slate-900">Special Badges</h4>
-                    <p className="text-sm text-slate-600">Limited-time exclusive Points</p>
-                  </div>
-                </div>
-                <div className="relative z-10 px-4 py-1.5 rounded-full bg-pink-500 text-white shadow-md text-sm font-bold">2 Points</div>
-              </div>
             </div>
           </div>
         </section>
 
-        
-{/* ================= GOOGLE STYLE CTA SECTION ================= */}
+        {/* ================= BASE POINTS SYSTEM (CLEAN LIST STYLE) ================= */}
+        <section className="relative z-10 py-24 bg-white border-b border-gray-200">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="mb-12">
+              <h2 className="text-3xl font-normal text-[#202124]">Arcade Points System</h2>
+              <p className="text-[#5f6368] mt-2 text-sm">How your effort translates to score.</p>
+            </div>
 
-<section className="py-16 px-4 bg-white">
-  
-  {/* Main Container */}
-  <div className="max-w-5xl mx-auto">
-    
-    {/* Google-like Card: White BG, Thin Border, Subtle Shadow */}
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_1px_3px_rgba(0,0,0,0.08)] overflow-hidden">
-      
-      <div className="flex flex-col md:flex-row">
-        
-        {/* 👈 LEFT SIDE: Text Content */}
-        <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
-          <div className="flex items-center gap-3 mb-4">
-             {/* Google-style Icon Badge */}
-             <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-             </div>
-             <span className="text-xs font-bold text-[#1a73e8] uppercase tracking-wider">Arcade Insights</span>
-          </div>
-          
-          <h2 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3 leading-tight">
-            Analyze your <span className="font-bold">Arcade Points</span>
-          </h2>
-          
-          <p className="text-[#5f6368] text-base leading-relaxed max-w-lg">
-            Join thousands of developers tracking their progress. Get your score instantly with our professional tool designed for accuracy.
-          </p>
-        </div>
+            <div className="border border-[#dadce0] rounded-sm bg-white divide-y divide-[#dadce0]">
+              
+              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-1 h-10 bg-[#34a853] rounded-sm"></div>
+                  <div>
+                    <h4 className="font-medium text-[#202124]">Arcade Adventure</h4>
+                    <p className="text-sm text-[#5f6368]">x1 game badge = 1 point</p>
+                  </div>
+                </div>
+                <div className="px-3 py-1 bg-[#e6f4ea] text-[#137333] border border-[#ceead6] text-xs font-bold rounded-sm uppercase tracking-wide">1 Point Each</div>
+              </div>
+              
+              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-1 h-10 bg-[#fbbc04] rounded-sm"></div>
+                  <div>
+                    <h4 className="font-medium text-[#202124]">Trivia & SPRINT</h4>
+                    <p className="text-sm text-[#5f6368]">x1 game badge = 1 point</p>
+                  </div>
+                </div>
+                <div className="px-3 py-1 bg-[#fef7e0] text-[#b06000] border border-[#fde293] text-xs font-bold rounded-sm uppercase tracking-wide">1 Point Each</div>
+              </div>
 
-        {/* ➖ THE "THIN LINE" (Vertical Divider) */}
-        <div className="hidden md:block w-px bg-gray-200 self-stretch"></div>
-        <div className="block md:hidden h-px w-full bg-gray-200"></div>
+              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-1 h-10 bg-[#a142f4] rounded-sm"></div>
+                  <div>
+                    <h4 className="font-medium text-[#202124]">Skill Badges</h4>
+                    <p className="text-sm text-[#5f6368]">90+ Skills Badges available</p>
+                  </div>
+                </div>
+                <div className="px-3 py-1 bg-[#f3e8fd] text-[#681da8] border border-[#d7aefb] text-xs font-bold rounded-sm uppercase tracking-wide">x2 = 1 Point</div>
+              </div>
 
-        {/* 👉 RIGHT SIDE: Action & Counter (Slightly Grey BG for contrast) */}
-        <div className="p-8 md:p-10 bg-[#f8f9fa] md:w-[400px] flex flex-col justify-center items-center gap-6">
-          
-          {/* Counter Box */}
-          <div className="w-full bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center text-center">
-            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Website Visit Count</span>
-            <div className="text-4xl font-normal text-[#202124] tabular-nums tracking-tight">
-              <VisitCounter />
+              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors bg-[#fce8e6]/30">
+                <div className="flex items-center gap-4">
+                  <div className="w-1 h-10 bg-[#ea4335] rounded-sm"></div>
+                  <div>
+                    <h4 className="font-medium text-[#202124]">Special Badges</h4>
+                    <p className="text-sm text-[#5f6368]">Limited-time exclusive Points</p>
+                  </div>
+                </div>
+                <div className="px-3 py-1 bg-[#ea4335] text-white text-xs font-bold rounded-sm uppercase tracking-wide">2 Points</div>
+              </div>
+
             </div>
           </div>
+        </section>
 
-          {/* Google Blue Button */}
-          <button
-            onClick={() => router.push("/calculator")}
-            className="w-full group relative inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white transition-all duration-200 bg-[#1a73e8] rounded-lg hover:bg-[#1765cc] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-600"
-          >
-            Calculate Now
-            <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+        {/* ================= GOOGLE STYLE CTA SECTION ================= */}
+        <section className="py-24 px-6 bg-[#f8f9fa] border-b border-gray-200">
+          <div className="max-w-5xl mx-auto">
+            
+            {/* Pure Square, Thin Border Card */}
+            <div className="bg-white rounded-sm border border-[#dadce0] shadow-sm flex flex-col md:flex-row">
+                
+              {/* 👈 LEFT SIDE: Text Content */}
+              <div className="flex-1 p-10 md:p-14 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-6">
+                   <div className="w-8 h-8 rounded-sm bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center">
+                      <svg className="w-4 h-4 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                   </div>
+                   <span className="text-xs font-medium text-[#1a73e8] uppercase tracking-wider">Arcade Insights</span>
+                </div>
+                
+                <h2 className="text-3xl font-normal text-[#202124] mb-4 leading-tight">
+                  Analyze your <span className="font-medium">Arcade Points</span>
+                </h2>
+                
+                <p className="text-[#5f6368] text-base leading-relaxed max-w-lg">
+                  Join thousands of developers tracking their progress. Get your score instantly with our professional tool designed for accuracy.
+                </p>
+              </div>
 
-        </div>
+              {/* ➖ THE "THIN LINE" (Vertical Divider) */}
+              <div className="hidden md:block w-px bg-[#dadce0] self-stretch"></div>
+              <div className="block md:hidden h-px w-full bg-[#dadce0]"></div>
 
-      </div>
-    </div>
-  </div>
-</section>
+              {/* 👉 RIGHT SIDE: Action & Counter */}
+              <div className="p-10 md:p-14 bg-white md:w-[400px] flex flex-col justify-center items-center gap-6">
+                
+                {/* Counter Box */}
+                <div className="w-full bg-[#f8f9fa] p-5 rounded-sm border border-[#dadce0] flex flex-col items-center text-center">
+                  <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-widest mb-1">Website Visit Count</span>
+                  <div className="text-4xl font-light text-[#202124] tabular-nums tracking-tight">
+                    <VisitCounter />
+                  </div>
+                </div>
 
+                {/* Google Blue Button */}
+                <button
+                  onClick={() => router.push("/calculator")}
+                  className="w-full group relative inline-flex items-center justify-center px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 bg-[#1a73e8] rounded-sm hover:bg-[#1557b0] hover:shadow-md focus:outline-none"
+                >
+                  Calculate Now
+                  <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
 
         <FAQ />
 
+        {/* ================= PURE WHITE PROFESSIONAL FOOTER ================= */}
+        <footer className="bg-white pt-20 pb-10">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
+              
+              {/* BRAND COLUMN */}
+              <div className="lg:col-span-2">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-sm bg-[#1a73e8] flex items-center justify-center text-white text-lg font-medium">
+                    A
+                  </div>
+                  <span className="text-xl font-normal text-[#202124] tracking-tight">
+                    Arcade Nexus
+                  </span>
+                </div>
+                <p className="text-[#5f6368] text-sm leading-relaxed mb-6 max-w-sm">
+                  This platform is independently designed and developed to help users track, 
+                  analyze, and improve their Google Cloud Arcade progress efficiently.
+                </p>
+                <div className="p-4 rounded-sm bg-[#f8f9fa] border border-[#dadce0]">
+                  <p className="text-xs text-[#5f6368] leading-relaxed">
+                    <strong className="text-[#202124]">Disclaimer:</strong> This website is an independent, community-built tool and is not 
+                    an official website of Google Cloud Arcade or Google. All trademarks belong to their respective owners.
+                  </p>
+                </div>
+              </div>
 
+              {/* LINKS: Platform */}
+              <div className="lg:col-span-1">
+                <h4 className="text-[#202124] font-medium mb-6 text-sm">Platform</h4>
+                <ul className="space-y-4">
+                  <li onClick={() => router.push("/calculator")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline cursor-pointer">Calculator</li>
+                  <li onClick={() => router.push("/dashboard")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline cursor-pointer">Dashboard</li>
+                  <li onClick={() => router.push("/leaderboard")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline cursor-pointer">Leaderboard</li>
+                </ul>
+              </div>
 
-        {/* ================= PREMIUM FOOTER (LIGHT THEME) ================= */}
-<footer className="relative z-10 bg-white border-t border-gray-200 pt-20 pb-10 overflow-hidden">
-  
-  {/* Background Glow Effect (Subtle for Light Theme) */}
-  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
-    <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-50 rounded-full blur-[100px] opacity-60"></div>
-    <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-50 rounded-full blur-[100px] opacity-60"></div>
-  </div>
+              {/* LINKS: Program */}
+              <div className="lg:col-span-1">
+                <h4 className="text-[#202124] font-medium mb-6 text-sm">Resources</h4>
+                <ul className="space-y-4">
+                  <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline block">Enrollment</a></li>
+                  <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline block">Points System</a></li>
+                  <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline block">Syllabus</a></li>
+                </ul>
+              </div>
 
-  <div className="relative z-10 max-w-7xl mx-auto px-6">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
-      
-      {/* BRAND COLUMN */}
-      <div className="lg:col-span-2">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-600/20">
-            A
+              {/* STAY UPDATED */}
+              <div className="lg:col-span-2">
+                <h4 className="text-[#202124] font-medium mb-6 text-sm">Stay Connected</h4>
+                <p className="text-sm text-[#5f6368] mb-6">Join our community for the latest Arcade updates, hints, and support.</p>
+                <a href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#dadce0] bg-white hover:bg-[#f8f9fa] text-[#202124] text-sm font-medium rounded-sm transition-colors group">
+                  <svg className="w-5 h-5 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/>
+                  </svg>
+                  <span>WhatsApp Community</span>
+                </a>
+              </div>
+            </div>
+
+            {/* DIVIDER */}
+            <div className="h-px bg-[#dadce0] mb-6"></div>
+
+            {/* BOTTOM BAR */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="text-[#5f6368] text-sm text-center md:text-left">
+                <p>© {new Date().getFullYear()} Arcade Nexus. All rights reserved.</p>
+                <p className="mt-1">
+                  Powered by: <span className="text-[#202124] font-medium">Manish Kumar & Anjali Patel</span>
+                </p>
+                <p className="mt-1 text-xs text-[#80868b]">
+                  Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </p>
+              </div>
+
+              {/* 🔥 UPDATED: Minimal Social Icons (Added IG & WA) */}
+              <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
+                {/* GitHub */}
+                <a href="https://github.com/M-pixie" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                </a>
+                
+                {/* LinkedIn */}
+                <a href="https://linkedin.com/in/manish-ui" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+
+                {/* Instagram */}
+                <a href="https://instagram.com/pov.pixi" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+
+                {/* WhatsApp */}
+                <a href="https://wa.me/8538980608" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/></svg>
+                </a>
+              </div>
+            </div>
           </div>
-          <span className="text-2xl font-bold text-gray-900 tracking-tight">
-            Arcade Nexus
-          </span>
-        </div>
-        <p className="text-gray-500 text-sm leading-7 mb-6 max-w-sm">
-          This platform is independently designed and developed to help users track, 
-          analyze, and improve their Google Cloud Arcade progress efficiently.
-        </p>
-        <div className="p-4 rounded-lg bg-gray-50 border border-gray-100">
-          <p className="text-xs text-gray-500 leading-relaxed">
-            <strong>Disclaimer:</strong> This website is an independent, community-built tool and is not 
-            an official website of Google Cloud Arcade or Google. All trademarks belong to their respective owners.
-          </p>
-        </div>
-      </div>
-
-      {/* LINKS: Platform */}
-      <div className="lg:col-span-1">
-        <h4 className="text-gray-900 font-bold mb-6 tracking-wide">Platform</h4>
-        <ul className="space-y-4">
-          <li 
-            onClick={() => router.push("/calculator")}
-            className="text-gray-500 text-sm hover:text-blue-600 hover:translate-x-1 cursor-pointer transition-all duration-300 font-medium"
-          >
-            Calculator
-          </li>
-          <li 
-            onClick={() => router.push("/dashboard")}
-            className="text-gray-500 text-sm hover:text-blue-600 hover:translate-x-1 cursor-pointer transition-all duration-300 font-medium"
-          >
-            Dashboard
-          </li>
-          <li 
-            onClick={() => router.push("/leaderboard")}
-            className="text-gray-500 text-sm hover:text-blue-600 hover:translate-x-1 cursor-pointer transition-all duration-300 font-medium"
-          >
-            Leaderboard
-          </li>
-        </ul>
-      </div>
-
-      {/* LINKS: Program */}
-      <div className="lg:col-span-1">
-        <h4 className="text-gray-900 font-bold mb-6 tracking-wide">Resources</h4>
-        <ul className="space-y-4">
-          <li>
-            <a 
-              href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-500 text-sm hover:text-blue-600 hover:translate-x-1 cursor-pointer transition-all duration-300 block font-medium"
-            >
-              Enrollment
-            </a>
-          </li>
-          <li>
-            <a 
-              href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-500 text-sm hover:text-blue-600 hover:translate-x-1 cursor-pointer transition-all duration-300 block font-medium"
-            >
-              Points System
-            </a>
-          </li>
-          <li>
-            <a 
-              href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-500 text-sm hover:text-blue-600 hover:translate-x-1 cursor-pointer transition-all duration-300 block font-medium"
-            >
-              Syllabus
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {/* STAY UPDATED */}
-      <div className="lg:col-span-2">
-        <h4 className="text-gray-900 font-bold mb-6 tracking-wide">Stay Connected</h4>
-        <p className="text-sm text-gray-500 mb-6">
-          Join our community for the latest Arcade updates, hints, and support.
-        </p>
-        
-        <a 
-          href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-bold rounded-lg transition-all shadow-lg shadow-green-500/20 group"
-        >
-          <span>Join WhatsApp Community</span>
-          <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </a>
-      </div>
-    </div>
-
-    {/* DIVIDER */}
-    <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
-
-    {/* BOTTOM BAR */}
-    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-      <div className="text-gray-500 text-sm font-medium text-center md:text-left">
-        <p>© {new Date().getFullYear()} Arcade Nexus. All rights reserved.</p>
-        <p className="mt-1 text-gray-600">
-          Powered by : <span className="text-gray-900 font-bold">Manish Kumar & Anjali Patel</span>
-        </p>
-        {/* ✅ Last Updated Date Added Here */}
-        <p className="mt-1 text-xs text-gray-400">
-          Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-        </p>
-      </div>
-
-      {/* SOCIAL ICONS (Light Theme Optimized) */}
-      <div className="flex items-center gap-4">
-        
-        {/* GitHub */}
-        <a href="https://github.com/M-pixie" target="_blank" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group hover:bg-[#333] hover:scale-110 transition-all duration-300 border border-gray-200 hover:border-transparent">
-          <svg className="w-5 h-5 fill-gray-600 group-hover:fill-white transition-colors" viewBox="0 0 24 24">
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-          </svg>
-        </a>
-
-        {/* LinkedIn */}
-        <a href="https://linkedin.com/in/manish-ui" target="_blank" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group hover:bg-[#0077b5] hover:scale-110 transition-all duration-300 border border-gray-200 hover:border-transparent">
-          <svg className="w-5 h-5 fill-gray-600 group-hover:fill-white transition-colors" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </a>
-
-        {/* Instagram */}
-        <a href="https://instagram.com/urpixie7" target="_blank" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:scale-110 transition-all duration-300 border border-gray-200 hover:border-transparent">
-          <svg className="w-5 h-5 fill-gray-600 group-hover:fill-white transition-colors" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-        </a>
-
-        {/* WhatsApp */}
-        <a href="https://wa.me/8538980608" target="_blank" className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group hover:bg-[#25D366] hover:scale-110 transition-all duration-300 border border-gray-200 hover:border-transparent">
-          <svg className="w-5 h-5 fill-gray-600 group-hover:fill-white transition-colors" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/>
-          </svg>
-        </a>
-
-      </div>
-    </div>
-  </div>
-</footer>
-</main>
-</>
-);
+        </footer>
+      </main>
+    </>
+  );
 }
