@@ -51,7 +51,7 @@ export default function FacilitatorPage() {
       name: "Anjali", 
       role: "Arcade Facilitator", 
       initials: "A", 
-      linkedin: "https://www.linkedin.com/in/anjali-p-a2ba1419b", 
+      linkedin: "https://www.linkedin.com/in/anjali..", 
       color: "bg-[#fef7e0] text-[#b06000] border-[#fde293]" 
     },
     { 
