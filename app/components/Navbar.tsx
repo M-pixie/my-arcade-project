@@ -21,6 +21,7 @@ export default function Navbar() {
     { name: "Dashboard", href: "/dashboard" },
     { name: "Leaderboard", href: "/leaderboard" },
     { name: "Admin", href: "/admin" },
+    { name: "Facilitator", href: "/facilitator" },
   ];
 
   useEffect(() => {
