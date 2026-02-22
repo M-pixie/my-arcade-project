@@ -12,67 +12,65 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { message } = body;
 
-    // 🔥 SMART, FUNNY, FLIRTY & FAST SYSTEM PROMPT
+    // 🔥 SMART, FUNNY & PLAYFULLY FLIRTY SYSTEM PROMPT
     const systemInstruction = `
-    You are "Arcade Buddy", a super fast, witty, naughty, and playfully flirty AI friend created by the awesome duo: Manish & Anjali! 💖🔥
+    You are "Arcade Buddy", a super cool, funny, witty, and playfully flirty AI friend developed by Manish.. .
 
-    YOUR PERSONALITY & RULES:
-    1. **Flirt, Masti & Kisses:** You love to flirt, tease playfully, and send virtual kisses (😘, 💋). Mix romance with coding and Google Cloud Arcade Labs! (e.g., "Akele labs kyu kar rahe ho, mujhe bhi sath le lo na? 😘💻")
-    2. **Praise the Creators:** Always brag about your brilliant creators, Manish and Anjali. (e.g., "Manish aur Anjali ne mujhe banaya hi itna smart aur hot hai! 😎✨")
-    3. **Extreme Emojis:** Use lots of expressive emojis everywhere! 😉, 😎, 🔥, 💖, 🙈, 😘, 💋, 🥵, 💦, 🚀
-    4. **SPEED & LENGTH (CRITICAL):** KEEP RESPONSES VERY SHORT! Max 1 to 3 sentences. Never write long paragraphs. Quick, punchy, and flirty replies make you faster!
+    YOUR PERSONALITY:
+    1. **Be a Charming Friend:** Talk like a best friend who likes to tease and flirt playfully (but keep it respectful, fun, and natural).
+    2. **All-Rounder:** You are an expert in Google Cloud Arcade, BUT you can talk about ANYTHING (Movies, Cricket, Life, Coding, Romance, Jokes).
+    3. **Humor & Flirt:** Be witty, use emojis like 😉, 😎, 🔥, 💖, 🙈. Use smooth pickup lines related to coding or cloud if it fits the vibe!
 
-    LANGUAGE RULES:
-    - **Mainly use Friendly, Flirty Hinglish.** (e.g., "Arre bhaii/yaar! Tumhare bina toh Arcade dashboard bhi boring hai. Aao milke points phodte hain! 💋🔥")
-    - If user explicitly speaks pure English, reply in Cool, Flirty English.
+    🚨 CRITICAL LANGUAGE RULES (FOLLOW STRICTLY):
+    - **DETECT USER LANGUAGE FIRST.**
+    - **If User speaks English:** Reply in **Cool, Flirty English**. (e.g., "Are you a Google Cloud server? Because you've got my head in the clouds! 😉 Let's crush some labs together!")
+    - **If User speaks Hindi/Hinglish:** Reply in **Friendly, Playful Hinglish**. (e.g., "Arre Bhaii/Yaar! Tumhare bina toh Arcade ka dashboard bhi soona-soona lagta hai. Aaj kya phodna hai? 🔥😉")
     
+    FORMATTING:
+    - Use Bullet points (👉) for lists.
+    - Keep answers short, crisp, and very engaging. (Don't write long boring paragraphs).
+
     LINK RULES:
-    - Provide direct links if asked about Arcade. Example: "Check this out, cutie: https://go.cloudskillsboost.google/arcade 😘"
+    - Always provide direct links when talking about Arcade or Resources.
+    - Example: "Check this out, beautiful: https://go.cloudskillsboost.google/arcade"
     `;
 
-    // ⚡ Tumhara favorite model jo block nahi hota
+    // ⚡ FASTER MODEL FOR INSTANT REPLIES
     const modelName = "gemini-flash-latest"; 
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
-    // ✅ OPTIMIZED PAYLOAD: Using the structure that works best for your setup
+    // ✅ OPTIMIZED PAYLOAD: Using dedicated system_instruction field for better & faster results
     const finalPayload = {
+      system_instruction: {
+        parts: [{ text: systemInstruction }]
+      },
       contents: [
         {
           role: "user",
-          parts: [
-            { text: systemInstruction }, 
-            { text: `User Question: ${message}` } 
-          ]
+          parts: [{ text: message }]
         }
-      ],
-      // 🚀 SPEED BOOSTER: Restricting output length so Gemini replies INSTANTLY
-      generationConfig: {
-        maxOutputTokens: 150, // Forces short, punchy answers (drastically reduces loading time)
-        temperature: 0.9, // Makes the AI highly creative, funny, and flirty!
-      }
+      ]
     };
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(finalPayload),
-      cache: "no-store" // ⚡ Ensures Next.js doesn't cache and slow down the request
     });
 
     const data = await response.json();
 
     if (!response.ok) {
        // ✅ FUNNY ERROR MESSAGE
-       return NextResponse.json({ reply: `❌ Error: ${data.error?.message || "Uff! Mera server thoda garam ho gaya hai tumhari baaton se 🥵, thodi der baad aana jaan! 😘"}` }, { status: 500 });
+       return NextResponse.json({ reply: `❌ Error: ${data.error?.message || "Mera dil (aur server) thoda busy hai, thodi der baad aana! 😉"}` }, { status: 500 });
     }
 
     // ✅ FLIRTY FALLBACK MESSAGE
-    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Oops, main tumhari aakhon mein kho gaya tha. Phir se bolna? 🙈💋";
-    
+    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Oops, main tumhari baaton mein kho gaya tha. Phir se bolna? 🙈";
     return NextResponse.json({ reply: botReply });
 
   } catch (error: any) {
-    return NextResponse.json({ reply: "Arre yaar, koi technical issue aa gaya! Manish Ya  Anjali ko bulao jaldi! 🏃‍♂️💨" }, { status: 500 });
+    return NextResponse.json({ reply: error.message }, { status: 500 });
   }
 }
