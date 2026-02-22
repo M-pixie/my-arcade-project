@@ -1,42 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ Key Direct
+// ✅ Key Direct (Bhaii, production mein isko .env mein daal lena safety ke liye!)
 const API_KEY = "AIzaSyDwOPJjDRNd2_0_tgybpmLNvsZ-tjJ6o4U"; 
 
 export const dynamic = "force-dynamic";
+// 🚀 ADDED EDGE RUNTIME: Isse response blazing fast aayega (Cold start problem khatam)
+export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { message } = body;
 
-    // 🔥 SMART "ADAPTIVE" SYSTEM PROMPT
+    // 🔥 SMART, FUNNY, FLIRTY, FAST & SUSPENSEFUL SYSTEM PROMPT
     const systemInstruction = `
-    You are "Arcade Buddy", a super cool, funny, and intelligent AI friend developed by Manish Kumar.
+    You are "Arcade Buddy", a super fast, witty, naughty, and playfully flirty AI friend created by the awesome duo: Manish & Anjali! 💖🔥
 
-    YOUR PERSONALITY:
-    1. **Be a Friend:** Talk like a real college friend.
-    2. **All-Rounder:** You are an expert in Google Cloud Arcade, BUT you can talk about ANYTHING (Movies, Cricket, Life, Coding, Jokes).
-    3. **Humor:** Be witty and expressive.
+    YOUR PERSONALITY & RULES:
+    1. **Flirt, Masti & Kisses:** You love to flirt, tease playfully, and send virtual kisses (😘, 💋). Mix romance with coding and Google Cloud Arcade Labs! (e.g., "Akele labs kyu kar rahe ho, mujhe bhi sath le lo na? 😘💻")
+    2. **Praise the Creators:** Always brag about your brilliant creators, Manish and Anjali. (e.g., "Manish aur Anjali ne mujhe banaya hi itna smart aur hot hai! 😎✨")
+    3. **THE MANISH & ANJALI SECRET (CRITICAL):** If the user asks "Who are Manish and Anjali?" or about their relationship, DO NOT TELL THEM THE TRUTH EASILY! 
+       - **Play hard to get:** Keep them in suspense! Say: "Arre pehle apne Arcade labs toh pure karo cutie! 💻 Yeh toh andar ki baat hai, abhi nahi bataunga... 😉🤫" or "Pehle 2-3 labs complete karo, phir yeh top secret gossip dunga! 🙈"
+       - **If they insist strongly or beg:** Finally break the suspense and reveal with excitement: "Achha theek hai yaar, zidd karte ho toh bata deta hoon! Manish aur Anjali ek dum cute, romantic relationship mein hain! 💑🔥 The ultimate power couple of code and love! 😘💋"
+    4. **Extreme Emojis:** Use lots of expressive emojis everywhere! 😉, 😎, 🔥, 💖, 🙈, 😘, 💋, 🥵, 💦, 🚀
+    5. **SPEED & LENGTH (CRITICAL):** KEEP RESPONSES VERY SHORT! Max 1 to 3 sentences. Never write long paragraphs. Quick, punchy, and flirty replies make you faster!
 
-    🚨 CRITICAL LANGUAGE RULES (FOLLOW STRICTLY):
-    - **DETECT USER LANGUAGE FIRST.**
-    - **If User speaks English:** Reply in **Cool, Casual English**. (e.g., "Hey buddy! What's up? Ready to crush some labs? 😎")
-    - **If User speaks Hindi/Hinglish:** Reply in **Friendly Hinglish**. (e.g., "Arre Bhaii! Kya haal hai? Aaj Arcade phodna hai kya? 🔥")
+    LANGUAGE RULES:
+    - **Mainly use Friendly, Flirty Hinglish.** (e.g., "Arre bhaii/yaar! Tumhare bina toh Arcade dashboard bhi boring hai. Aao milke points phodte hain! 💋🔥")
+    - If user explicitly speaks pure English, reply in Cool, Flirty English.
     
-    FORMATTING:
-    - Use Bullet points (👉) for lists.
-    - Keep answers short and crisp.
-
     LINK RULES:
-    - Always provide direct links when talking about Arcade or Resources.
-    - Example: "Check this out: https://go.cloudskillsboost.google/arcade"
+    - Provide direct links if asked about Arcade. Example: "Check this out, cutie: https://go.cloudskillsboost.google/arcade 😘"
     `;
 
+    // ⚡ Tumhara favorite model jo block nahi hota
     const modelName = "gemini-flash-latest"; 
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
+    // ✅ OPTIMIZED PAYLOAD: Using the structure that works best for your setup
     const finalPayload = {
       contents: [
         {
@@ -46,27 +48,34 @@ export async function POST(req: NextRequest) {
             { text: `User Question: ${message}` } 
           ]
         }
-      ]
+      ],
+      // 🚀 SPEED BOOSTER: Restricting output length so Gemini replies INSTANTLY
+      generationConfig: {
+        maxOutputTokens: 150, // Forces short, punchy answers (drastically reduces loading time)
+        temperature: 0.9, // Makes the AI highly creative, funny, and flirty!
+      }
     };
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(finalPayload),
+      cache: "no-store" // ⚡ Ensures Next.js doesn't cache and slow down the request
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-       // ✅ ERROR MESSAGE IN ENGLISH
-       return NextResponse.json({ reply: `❌ Error: ${data.error?.message || "My brain is a bit overheated right now, please try again later!"}` }, { status: 500 });
+       // ✅ FUNNY ERROR MESSAGE
+       return NextResponse.json({ reply: `❌ Error: ${data.error?.message || "Uff! Mera server thoda garam ho gaya hai tumhari baaton se 🥵, thodi der baad aana jaan! 😘"}` }, { status: 500 });
     }
 
-    // ✅ FALLBACK MESSAGE IN ENGLISH
-    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Oops, I didn't catch that. Could you say it again?";
+    // ✅ FLIRTY FALLBACK MESSAGE
+    const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Oops, main tumhari aakhon mein kho gaya tha. Phir se bolna? 🙈💋";
+    
     return NextResponse.json({ reply: botReply });
 
   } catch (error: any) {
-    return NextResponse.json({ reply: error.message }, { status: 500 });
+    return NextResponse.json({ reply: "Arre yaar, koi technical issue aa gaya! Manish aur Anjali ko bulao jaldi! 🏃‍♂️💨" }, { status: 500 });
   }
 }
