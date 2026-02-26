@@ -19,6 +19,9 @@ export default function CalculatorPage() {
   
   const [rememberMe, setRememberMe] = useState(false);
 
+  // 👇 GUARANTEED BLINK STATE 👇
+  const [hideRedLine, setHideRedLine] = useState(false);
+
   useEffect(() => {
     const savedUrl = localStorage.getItem("arcade_url");
     if (savedUrl) {
@@ -27,8 +30,26 @@ export default function CalculatorPage() {
     }
   }, []);
 
+  // 👇 100% WORKING ASYNC BLINK LOGIC 👇
+  const triggerBlink = async () => {
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+    
+    // Blink 1 (Gray -> Red)
+    setHideRedLine(true);  await delay(150);
+    setHideRedLine(false); await delay(150);
+    
+    // Blink 2 (Gray -> Red)
+    setHideRedLine(true);  await delay(150);
+    setHideRedLine(false); await delay(150);
+    
+    // Blink 3 (Gray -> Red)
+    setHideRedLine(true);  await delay(150);
+    setHideRedLine(false); // Final state stays RED
+  };
+
   const calculatePoints = async () => {
     setError(null);
+    setHideRedLine(false);
 
     if (rememberMe) {
       localStorage.setItem("arcade_url", profileUrl.trim());
@@ -41,6 +62,7 @@ export default function CalculatorPage() {
       !profileUrl.includes("https://www.skills.google/public_profiles/")
     ) {
       setError("Please enter a valid Public Profile URL.");
+      triggerBlink(); 
       return;
     }
 
@@ -63,6 +85,7 @@ export default function CalculatorPage() {
 
       if (!res.ok) {
         setError(data.error || "Failed to calculate points.");
+        triggerBlink();
         return;
       }
 
@@ -80,6 +103,7 @@ export default function CalculatorPage() {
       setError(
         "Backend server connect nahi ho raha. Make sure 'node index.js' terminal mein chal raha hai."
       );
+      triggerBlink();
     } finally {
       setLoading(false);
     }
@@ -91,7 +115,6 @@ export default function CalculatorPage() {
 
       <main className="max-w-3xl mx-auto px-6 py-16">
         
-        {/* ================= HEADER SECTION ================= */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center p-3 bg-[#e8f0fe] border border-[#d2e3fc] rounded-sm mb-6">
             <svg className="w-8 h-8 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
@@ -106,10 +129,8 @@ export default function CalculatorPage() {
           </p>
         </div>
 
-        {/* ================= MAIN CARD ================= */}
         <div className="bg-white rounded-sm border border-[#dadce0] shadow-sm overflow-hidden">
           
-          {/* Google Style Loading Bar */}
           {loading && (
             <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden">
               <div className="h-full bg-[#1a73e8] animate-progress origin-left-right w-full"></div>
@@ -118,26 +139,41 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12">
             
-            {/* INPUT FIELD */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-[#202124] mb-2">
-                Enter Public Profile URL
-              </label>
-              <input
-                type="text"
-                placeholder="https://www.skills.google/public_profiles/..."
-                value={profileUrl}
-                onChange={(e) => {
-                  setProfileUrl(e.target.value);
-                  setError(null);
-                }}
-                className={`w-full px-4 py-3.5 text-base text-[#202124] bg-white border rounded-sm focus:outline-none transition-colors
+            {/* ================= BLINKING CUTOUT INPUT FIELD ================= */}
+            <div className="mb-6 mt-3">
+              <div 
+                className={`relative border-2 rounded-md transition-colors duration-75
                   ${error 
-                    ? "border-[#d93025] focus:border-[#d93025]" 
-                    : "border-[#dadce0] focus:border-[#1a73e8] hover:border-[#b0b3b8]"
+                    ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") 
+                    : "border-[#00A859] focus-within:border-[#007b41]"
                   }
                 `}
-              />
+              >
+                {/* Floating Cutout Label */}
+                <label 
+                  className={`absolute -top-3 left-3 bg-white px-1 text-sm font-medium transition-colors duration-75
+                    ${error 
+                      ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") 
+                      : "text-[#00A859]"
+                    }
+                  `}
+                >
+                  Enter Public Profile URL
+                </label>
+                
+                {/* Actual Input Field */}
+                <input
+                  type="text"
+                  placeholder="https://www.skills.google/public_profiles/..."
+                  value={profileUrl}
+                  onChange={(e) => {
+                    setProfileUrl(e.target.value);
+                    setError(null);
+                    setHideRedLine(false); // Jaise hi type karega, error aur red line hat jayegi
+                  }}
+                  className="w-full px-4 py-3.5 text-base text-[#202124] bg-transparent outline-none rounded-md"
+                />
+              </div>
 
               {error && (
                 <div className="flex items-center gap-2 mt-2 text-[#d93025] text-sm font-medium">
@@ -148,6 +184,7 @@ export default function CalculatorPage() {
                 </div>
               )}
             </div>
+            {/* ================= END OF CUTOUT INPUT FIELD ================= */}
 
             {/* CHECKBOX */}
             <div className="flex items-center mb-8">
@@ -177,7 +214,6 @@ export default function CalculatorPage() {
           {points !== null && (
             <div className="bg-[#f8f9fa] border-t border-[#dadce0] p-8 md:p-12 animate-fade-in-up">
               
-              {/* USER PROFILE INFO CARD */}
               <div className="flex items-center gap-5 mb-10 bg-white p-5 rounded-sm border border-[#dadce0]">
                 {userAvatar ? (
                   <img 
@@ -201,7 +237,6 @@ export default function CalculatorPage() {
 
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                 
-                {/* Total Score */}
                 <div className="text-center md:text-left flex-shrink-0">
                   <p className="text-xs font-bold text-[#5f6368] uppercase tracking-wider">Total Points</p>
                   <p className="text-7xl font-light text-[#1a73e8] tracking-tight mt-1">
@@ -209,29 +244,23 @@ export default function CalculatorPage() {
                   </p>
                 </div>
 
-                {/* Vertical Divider (Desktop only) */}
                 <div className="hidden md:block w-px h-20 bg-[#dadce0]"></div>
-                {/* Horizontal Divider (Mobile only) */}
                 <div className="block md:hidden h-px w-full bg-[#dadce0]"></div>
 
-                {/* Breakdown Stats */}
                 <div className="flex-1 w-full grid grid-cols-3 gap-3">
                   
-                  {/* Trivia */}
                   <div className="bg-white p-4 rounded-sm border border-[#dadce0] flex flex-col items-center justify-center">
                     <span className="w-2 h-2 rounded-sm bg-[#fbbc04] mb-3"></span>
                     <span className="text-2xl font-normal text-[#202124] leading-none mb-1">{breakdown?.trivia}</span>
                     <span className="text-[11px] text-[#5f6368] font-medium uppercase tracking-wider text-center">Trivia & Sprint</span>
                   </div>
 
-                  {/* Games */}
                   <div className="bg-white p-4 rounded-sm border border-[#dadce0] flex flex-col items-center justify-center">
                     <span className="w-2 h-2 rounded-sm bg-[#34a853] mb-3"></span>
                     <span className="text-2xl font-normal text-[#202124] leading-none mb-1">{breakdown?.games}</span>
                     <span className="text-[11px] text-[#5f6368] font-medium uppercase tracking-wider text-center">All Games</span>
                   </div>
 
-                  {/* Skills */}
                   <div className="bg-white p-4 rounded-sm border border-[#dadce0] flex flex-col items-center justify-center">
                     <span className="w-2 h-2 rounded-sm bg-[#a142f4] mb-3"></span>
                     <span className="text-2xl font-normal text-[#202124] leading-none mb-1">{breakdown?.skills}</span>
@@ -251,7 +280,6 @@ export default function CalculatorPage() {
           )}
         </div>
         
-        {/* Footer Links */}
         <div className="mt-8 text-center flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-[#5f6368]">
           <a href="https://go.cloudskillsboost.google/arcade" className="hover:text-[#1a73e8] hover:underline transition-colors">Arcade Page</a>
           <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" className="hover:text-[#1a73e8] hover:underline transition-colors">Subscribe here!</a>
