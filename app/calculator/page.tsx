@@ -125,7 +125,7 @@ export default function CalculatorPage() {
             Arcade Points Calculator
           </h1>
           <p className="text-[#5f6368] text-base md:text-lg">
-            Calculate your points from Google cloud skills public profile URL.
+            Calculate your points from Google cloud skills public profile url.
           </p>
         </div>
 
@@ -158,7 +158,7 @@ export default function CalculatorPage() {
                     }
                   `}
                 >
-                  Enter Public Profile Url
+                  Enter public profile url
                 </label>
                 
                 {/* Actual Input Field */}
@@ -206,7 +206,7 @@ export default function CalculatorPage() {
               disabled={loading}
               className="w-full bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-base font-medium py-3.5 rounded-sm transition-colors disabled:bg-[#f1f3f4] disabled:text-[#9aa0a6] flex justify-center items-center gap-2"
             >
-              {loading ? "Analyzing profile..." : "Calculate Points"}
+              {loading ? "Analyzing your profile..." : "Calculate Points"}
             </button>
           </div>
 
@@ -231,7 +231,7 @@ export default function CalculatorPage() {
                   <h3 className="text-lg font-medium text-[#202124] leading-tight">
                     {userName || "Arcade Player"}
                   </h3>
-                  <p className="text-sm text-[#5f6368] mt-0.5">Google Cloud Skills Boost Profile</p>
+                  <p className="text-sm text-[#5f6368] mt-0.5">(You) : Google cloud skills boost profile</p>
                 </div>
               </div>
 
