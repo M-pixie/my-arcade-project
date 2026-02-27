@@ -158,7 +158,7 @@ export default function CalculatorPage() {
                     }
                   `}
                 >
-                  Enter Public Profile URL
+                  Enter Public Profile Url
                 </label>
                 
                 {/* Actual Input Field */}
@@ -196,7 +196,7 @@ export default function CalculatorPage() {
                 onChange={(e) => setRememberMe(e.target.checked)}
               />
               <label htmlFor="remember-me" className="ml-3 text-sm text-[#5f6368] cursor-pointer select-none">
-                Remember my URL for next time
+                Remember my url for next time
               </label>
             </div>
 
@@ -206,7 +206,7 @@ export default function CalculatorPage() {
               disabled={loading}
               className="w-full bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-base font-medium py-3.5 rounded-sm transition-colors disabled:bg-[#f1f3f4] disabled:text-[#9aa0a6] flex justify-center items-center gap-2"
             >
-              {loading ? "Analyzing Profile..." : "Calculate Points"}
+              {loading ? "Analyzing profile..." : "Calculate Points"}
             </button>
           </div>
 
@@ -280,11 +280,59 @@ export default function CalculatorPage() {
           )}
         </div>
         
-        <div className="mt-8 text-center flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-[#5f6368]">
-          <a href="https://go.cloudskillsboost.google/arcade" className="hover:text-[#1a73e8] hover:underline transition-colors">Arcade Page</a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" className="hover:text-[#1a73e8] hover:underline transition-colors">Subscribe here!</a>
-          <a href="http://qwiklab.zendesk.com/hc/requests/4774945" className="hover:text-[#1a73e8] hover:underline transition-colors">Arcade Support</a>
+        {/* ================= FOOTER SECTION START (Sirf Ye Change Hai) ================= */}
+        <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4 text-sm w-full">
+          
+          {/* Button 1: Arcade Page */}
+          <div className="relative group w-full sm:w-auto flex justify-center">
+            <a 
+              href="https://go.cloudskillsboost.google/arcade" 
+              target="_blank" rel="noopener noreferrer"
+              className="block w-full sm:w-48 px-4 py-3 bg-[#00A859] text-white text-center rounded-md font-medium transition-colors hover:bg-[#008c4a] shadow-sm"
+            >
+              Arcade Page
+            </a>
+            {/* Black Popup */}
+            <span className="absolute -top-10 scale-0 transition-all rounded bg-black px-3 py-1.5 text-xs text-white group-hover:scale-100 whitespace-nowrap shadow-lg z-20">
+              Visit Arcade Page
+              <span className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-black"></span>
+            </span>
+          </div>
+
+          {/* Button 2: Subscribe here! */}
+          <div className="relative group w-full sm:w-auto flex justify-center">
+            <a 
+              href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
+              target="_blank" rel="noopener noreferrer"
+              className="block w-full sm:w-48 px-4 py-3 bg-[#00A859] text-white text-center rounded-md font-medium transition-colors hover:bg-[#008c4a] shadow-sm"
+            >
+              Subscribe here!
+            </a>
+            {/* Black Popup */}
+            <span className="absolute -top-10 scale-0 transition-all rounded bg-black px-3 py-1.5 text-xs text-white group-hover:scale-100 whitespace-nowrap shadow-lg z-20">
+              Go to Subscribe Form
+              <span className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-black"></span>
+            </span>
+          </div>
+
+          {/* Button 3: Arcade Support */}
+          <div className="relative group w-full sm:w-auto flex justify-center">
+            <a 
+              href="http://qwiklab.zendesk.com/hc/requests/4774945" 
+              target="_blank" rel="noopener noreferrer"
+              className="block w-full sm:w-48 px-4 py-3 bg-[#00A859] text-white text-center rounded-md font-medium transition-colors hover:bg-[#008c4a] shadow-sm"
+            >
+              Arcade Support
+            </a>
+            {/* Black Popup */}
+            <span className="absolute -top-10 scale-0 transition-all rounded bg-black px-3 py-1.5 text-xs text-white group-hover:scale-100 whitespace-nowrap shadow-lg z-20">
+              Open Support Ticket
+              <span className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-black"></span>
+            </span>
+          </div>
+
         </div>
+        {/* ================= FOOTER SECTION END ================= */}
 
       </main>
     </div>
