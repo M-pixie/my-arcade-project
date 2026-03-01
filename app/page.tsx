@@ -21,7 +21,7 @@ export default function HomePage() {
         <section className="relative pt-36 pb-24 px-6 text-center border-b border-gray-200 bg-white overflow-hidden">
           <div className="max-w-5xl mx-auto relative z-10">
             
-            {/* 🔥 UPDATED: Animated Square Badge */}
+            {/* Animated Square Badge */}
             <div className="group relative inline-flex items-center gap-2 px-4 py-1.5 bg-[#f8f9fa] border border-gray-200 text-[#5f6368] text-xs font-semibold mb-8 uppercase tracking-wider rounded-sm overflow-hidden transition-colors hover:border-[#1a73e8] hover:text-[#1a73e8] cursor-default">
               {/* Shimmer Effect */}
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
@@ -72,7 +72,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= HOW TO GET STARTED (MICROSOFT/GOOGLE HYBRID SQUARES) ================= */}
+        {/* ================= HOW TO GET STARTED ================= */}
         <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-16 tracking-tight">
@@ -111,7 +111,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= FEATURES (THIN LINES, SHARP EDGES) ================= */}
+        {/* ================= FEATURES ================= */}
         <section className="relative z-10 py-24 bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-16 tracking-tight">
@@ -144,7 +144,76 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= HOW IT WORKS (CLEAN GRID WITH ARROWS) ================= */}
+        {/* ================= 🔥 PREMIUM REWARDS SECTION (NEW) ================= */}
+        <section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-gray-200 overflow-hidden">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#fff8e1] border border-[#ffeb3b] text-[#f57f17] text-xs font-bold mb-4 uppercase tracking-wider rounded-sm">
+                <span>⭐ Premium Swags</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-normal text-[#202124] tracking-tight mb-4">
+                Redeem your <span className="text-[#1a73e8] font-medium">Hard-Earned Points</span>
+              </h2>
+              <p className="text-[#5f6368] text-base max-w-2xl mx-auto">
+                Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              
+              {/* Premium Box 1 */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#34a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div className="h-48 w-full flex items-center justify-center mb-8 p-4">
+                  <img 
+                    src="https://services.google.com/fh/files/misc/gcaf25_prizes_image4.png" 
+                    alt="Standard Tier Rewards" 
+                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
+                  />
+                </div>
+                <h3 className="text-xl font-medium text-[#202124] mb-2">Milestone Rewards</h3>
+                <p className="text-[#5f6368] text-sm leading-relaxed">
+                  Kickstart your collection. Trade your initial points for essential Google Cloud standard gear.
+                </p>
+              </div>
+
+              {/* Premium Box 2 */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#1a73e8] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div className="h-48 w-full flex items-center justify-center mb-8 p-4">
+                  <img 
+                    src="https://services.google.com/fh/files/misc/gcaf25_prizes_image5.png" 
+                    alt="Advanced Tier Rewards" 
+                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
+                  />
+                </div>
+                <h3 className="text-xl font-medium text-[#202124] mb-2">Advanced Collection</h3>
+                <p className="text-[#5f6368] text-sm leading-relaxed">
+                  Step up your game. Unlock high-quality, exclusive merchandise crafted for true cloud enthusiasts.
+                </p>
+              </div>
+
+              {/* Premium Box 3 */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#ea4335] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div className="h-48 w-full flex items-center justify-center mb-8 p-4">
+                  <img 
+                    src="https://services.google.com/fh/files/misc/gcaf25_prizes_image6.png" 
+                    alt="Champion Tier Rewards" 
+                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
+                  />
+                </div>
+                <h3 className="text-xl font-medium text-[#202124] mb-2">Champion Elite</h3>
+                <p className="text-[#5f6368] text-sm leading-relaxed">
+                  The ultimate prize tier. Claim top-of-the-line flagship rewards reserved for Arcade champions.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ================= HOW IT WORKS ================= */}
         <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-4xl font-normal text-[#202124] mb-16 tracking-tight">How it works?</h2>
@@ -165,14 +234,14 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Securely sign in using your Google account to access.</p>
               </div>
 
-              {/* LONG ARROW 1 (Visible only on desktop) */}
+              {/* LONG ARROW 1 */}
               <div className="hidden md:flex flex-col items-center justify-center w-24 lg:w-32 -mt-16 text-[#dadce0]">
                 <svg className="w-full h-8" fill="none" stroke="currentColor" viewBox="0 0 100 24" preserveAspectRatio="none">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M0 12h96M88 4l8 8-8 8" />
                 </svg>
               </div>
 
-              {/* Down Arrow for Mobile (Visible only on mobile) */}
+              {/* Down Arrow for Mobile */}
               <div className="md:hidden text-[#dadce0] my-2">
                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
@@ -188,14 +257,14 @@ export default function HomePage() {
                 <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Add your Google Cloud Arcade profile link to calculate.</p>
               </div>
 
-              {/* LONG ARROW 2 (Visible only on desktop) */}
+              {/* LONG ARROW 2 */}
               <div className="hidden md:flex flex-col items-center justify-center w-24 lg:w-32 -mt-16 text-[#dadce0]">
                 <svg className="w-full h-8" fill="none" stroke="currentColor" viewBox="0 0 100 24" preserveAspectRatio="none">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M0 12h96M88 4l8 8-8 8" />
                 </svg>
               </div>
 
-              {/* Down Arrow for Mobile (Visible only on mobile) */}
+              {/* Down Arrow for Mobile */}
               <div className="md:hidden text-[#dadce0] my-2">
                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
@@ -215,7 +284,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= BASE POINTS SYSTEM (CLEAN LIST STYLE) ================= */}
+        {/* ================= BASE POINTS SYSTEM ================= */}
         <section className="relative z-10 py-24 bg-white border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-6">
             <div className="mb-12">
@@ -277,10 +346,8 @@ export default function HomePage() {
         <section className="py-24 px-6 bg-[#f8f9fa] border-b border-gray-200">
           <div className="max-w-5xl mx-auto">
             
-            {/* Pure Square, Thin Border Card */}
             <div className="bg-white rounded-sm border border-[#dadce0] shadow-sm flex flex-col md:flex-row">
                 
-              {/* 👈 LEFT SIDE: Text Content */}
               <div className="flex-1 p-10 md:p-14 flex flex-col justify-center">
                 <div className="flex items-center gap-3 mb-6">
                    <div className="w-8 h-8 rounded-sm bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center">
@@ -298,14 +365,11 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* ➖ THE "THIN LINE" (Vertical Divider) */}
               <div className="hidden md:block w-px bg-[#dadce0] self-stretch"></div>
               <div className="block md:hidden h-px w-full bg-[#dadce0]"></div>
 
-              {/* 👉 RIGHT SIDE: Action & Counter */}
               <div className="p-10 md:p-14 bg-white md:w-[400px] flex flex-col justify-center items-center gap-6">
                 
-                {/* Counter Box */}
                 <div className="w-full bg-[#f8f9fa] p-5 rounded-sm border border-[#dadce0] flex flex-col items-center text-center">
                   <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-widest mb-1">Website Visit Count</span>
                   <div className="text-4xl font-light text-[#202124] tabular-nums tracking-tight">
@@ -313,7 +377,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Google Blue Button */}
                 <button
                   onClick={() => router.push("/calculator")}
                   className="w-full group relative inline-flex items-center justify-center px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 bg-[#1a73e8] rounded-sm hover:bg-[#1557b0] hover:shadow-md focus:outline-none"
@@ -331,12 +394,11 @@ export default function HomePage() {
 
         <FAQ />
 
-        {/* ================= PURE WHITE PROFESSIONAL FOOTER ================= */}
+        {/* ================= FOOTER ================= */}
         <footer className="bg-white pt-20 pb-10">
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
               
-              {/* BRAND COLUMN */}
               <div className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-sm bg-[#1a73e8] flex items-center justify-center text-white text-lg font-medium">
@@ -358,7 +420,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* LINKS: Platform */}
               <div className="lg:col-span-1">
                 <h4 className="text-[#202124] font-medium mb-6 text-sm">Platform</h4>
                 <ul className="space-y-4">
@@ -368,7 +429,6 @@ export default function HomePage() {
                 </ul>
               </div>
 
-              {/* LINKS: Program */}
               <div className="lg:col-span-1">
                 <h4 className="text-[#202124] font-medium mb-6 text-sm">Resources</h4>
                 <ul className="space-y-4">
@@ -378,7 +438,6 @@ export default function HomePage() {
                 </ul>
               </div>
 
-              {/* STAY UPDATED */}
               <div className="lg:col-span-2">
                 <h4 className="text-[#202124] font-medium mb-6 text-sm">Stay Connected</h4>
                 <p className="text-sm text-[#5f6368] mb-6">Join our community for the latest Arcade updates, hints, and support.</p>
@@ -391,10 +450,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* DIVIDER */}
             <div className="h-px bg-[#dadce0] mb-6"></div>
 
-            {/* BOTTOM BAR */}
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-[#5f6368] text-sm text-center md:text-left">
                 <p>© {new Date().getFullYear()} Arcade Nexus. All rights reserved.</p>
@@ -406,24 +463,19 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* 🔥 UPDATED: Minimal Social Icons (Added IG & WA) */}
               <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
-                {/* GitHub */}
                 <a href="https://github.com/M-pixie" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
                   <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                 </a>
                 
-                {/* LinkedIn */}
                 <a href="https://linkedin.com/in/manish-ui" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
                   <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                 </a>
 
-                {/* Instagram */}
                 <a href="https://instagram.com/pov.pixi" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
                   <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
 
-                {/* WhatsApp */}
                 <a href="https://wa.me/8538980608" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
                   <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/></svg>
                 </a>
