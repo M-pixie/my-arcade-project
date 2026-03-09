@@ -14,8 +14,6 @@ export async function POST(req: Request) {
 
     console.log(" Fetching Profile (2026 Logic Updated with 3 Point Games)...");
 
-
-
     // 1. HTML Download
     const response = await axios.get(url, {
       headers: {
@@ -75,7 +73,7 @@ export async function POST(req: Request) {
         }
 
         // A. Special Games (2 Points)
-        else if (title.includes('work life refresh')) {
+        else if (title.includes('work life refresh') || title.includes('holi-istic infrastructures')) {
           gamePoints += 2; 
         } 
         
@@ -88,6 +86,7 @@ export async function POST(req: Request) {
           title.includes('adventure') ||  
           title.includes('certification zone') || 
           title.includes('journeys made easy') || 
+          title.includes('metrics in motion') || // Ye naya 1 point game add kiya
           title.includes('game')          
         ) {
           gamePoints += 1;

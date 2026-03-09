@@ -35,10 +35,10 @@ export default function HomePage() {
 
             {/* MAIN HEADING */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-[#202124] mb-6 leading-[1.1]">
-              Calculate when <br className="hidden md:block" />
+              calculate when <br className="hidden md:block" />
               <span className="text-[#1a73e8] relative inline-block">
                 you&apos;re ready
-                <span className="absolute bottom-1 left-0 w-full h-2 bg-[#e8f0fe] -z-10 transform -rotate-1"></span>
+                
               </span>
             </h1>
 
@@ -152,7 +152,7 @@ export default function HomePage() {
                 <span>⭐ Premium Swags</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-normal text-[#202124] tracking-tight mb-4">
-                Redeem your <span className="text-[#1a73e8] font-medium">Hard-Earned Points</span>
+                Redeem your <span className="text-[#1a73e8] font-medium">Self-Earned Arcade Points</span>
               </h2>
               <p className="text-[#5f6368] text-base max-w-2xl mx-auto">
                 Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
