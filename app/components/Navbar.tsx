@@ -46,7 +46,7 @@ export default function Navbar() {
     router.push("/admin");
   };
 
-  if (!user) return null;
+  // 🚨 YAHAN SE 'if (!user) return null;' HATA DIYA HAI TAAKI NAVBAR HAMESHA DIKHE!
 
   return (
     <header className="fixed top-0 left-0 w-full h-16 bg-white/90 backdrop-blur-md border-b border-gray-200 z-50">
@@ -101,35 +101,37 @@ export default function Navbar() {
         {/* ================= RIGHT: PROFILE & MOBILE TOGGLE ================= */}
         <div className="flex items-center gap-4">
           
-          {/* Profile Dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button 
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className={`flex items-center justify-center p-0.5 rounded-full transition-all duration-200 ${dropdownOpen ? 'ring-2 ring-blue-500/30 bg-gray-50' : 'hover:bg-gray-100'}`}
-            >
-              <img
-                src={user.photoURL || "/avatar.png"}
-                alt="User"
-                className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border border-gray-200"
-              />
-            </button>
+          {/* ✅ PROFILE DROPDOWN (Sirf tab dikhega jab user login hoga) */}
+          {user && (
+            <div className="relative" ref={dropdownRef}>
+              <button 
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className={`flex items-center justify-center p-0.5 rounded-full transition-all duration-200 ${dropdownOpen ? 'ring-2 ring-blue-500/30 bg-gray-50' : 'hover:bg-gray-100'}`}
+              >
+                <img
+                  src={user.photoURL || "/avatar.png"}
+                  alt="User"
+                  className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border border-gray-200"
+                />
+              </button>
 
-            {/* Dropdown Menu (White Theme) */}
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-3 w-72 rounded-2xl bg-white border border-gray-200 shadow-xl shadow-gray-200/50 transform origin-top-right animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5 overflow-hidden">
-                <div className="p-5 flex flex-col items-center text-center border-b border-gray-100 bg-gray-50/50">
-                   <img src={user.photoURL || "/avatar.png"} className="w-16 h-16 rounded-full border-2 border-white shadow-sm mb-3" />
-                   <p className="text-gray-900 font-semibold">{user.displayName}</p>
-                   <p className="text-xs text-gray-500">{user.email}</p>
+              {/* Dropdown Menu (White Theme) */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-3 w-72 rounded-2xl bg-white border border-gray-200 shadow-xl shadow-gray-200/50 transform origin-top-right animate-in fade-in zoom-in-95 duration-200 ring-1 ring-black/5 overflow-hidden">
+                  <div className="p-5 flex flex-col items-center text-center border-b border-gray-100 bg-gray-50/50">
+                     <img src={user.photoURL || "/avatar.png"} className="w-16 h-16 rounded-full border-2 border-white shadow-sm mb-3" />
+                     <p className="text-gray-900 font-semibold">{user.displayName || "Admin User"}</p>
+                     <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
+                  <div className="p-2">
+                    <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium">
+                      Sign out
+                    </button>
+                  </div>
                 </div>
-                <div className="p-2">
-                  <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium">
-                    Sign out
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* Mobile Menu Button */}
           <button 
