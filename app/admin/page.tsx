@@ -1,20 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "@/lib/firebase";
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Navbar from "@/app/components/Navbar";
 
 export default function AdminPage() {
   const router = useRouter();
 
+  // Auth States
+  const [user, setUser] = useState<User | null>(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  // Message States
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
-  // ✅ Success Message State
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Login Function
+  // ✅ LISTEN FOR AUTH STATE CHANGES
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoadingAuth(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // ✅ LOGIN FUNCTION
   const loginWithGoogle = async () => {
     try {
       setErrorMessage(null);
@@ -22,22 +34,20 @@ export default function AdminPage() {
 
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      const loggedInUser = result.user;
 
       // 📨 LOGIN SUCCESS API CALL
       await fetch("/api/send-login-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: user.email,
+          email: loggedInUser.email,
           userAgent: navigator.userAgent,
         }),
       });
 
-      // ✅ SHOW SUCCESS MESSAGE BEFORE REDIRECT
       setSuccessMessage("Login Successful! Redirecting...");
       
-      // 2 Second delay taaki user message padh sake
       setTimeout(() => {
         router.push("/dashboard");
       }, 2000);
@@ -52,28 +62,27 @@ export default function AdminPage() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setSuccessMessage("Logged out successfully");
+      setSuccessMessage("Logged out successfully!");
+      // Halka delay taaki message dikhe
       setTimeout(() => {
         setSuccessMessage(null);
       }, 3000);
     } catch (error) {
       console.error("Logout error", error);
+      setErrorMessage("Failed to log out. Try again.");
     }
   };
 
   return (
-    // 'pt-16' hata diya taaki sub-header Navbar se chipak jaye. 
-    // Navbar components usually absolute/fixed hote hain (pt-16 Navbar me hi handle hona chahiye).
     <div className="min-h-screen flex flex-col bg-[#f8f9fa] font-sans text-[#202124]">
       
       {/* 1️⃣ REAL NAVBAR ADDED */}
       <Navbar />
 
-      {/* 2️⃣ EKDUM TOP NAVIGATION BAR (Navbar ke exact neeche sata hua) */}
+      {/* 2️⃣ EKDUM TOP NAVIGATION BAR */}
       <div className="w-full bg-white border-b border-[#dadce0] py-3 px-6 shadow-sm z-20">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
           
-          {/* Navigation Links */}
           <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-[#5f6368]">
              <button onClick={() => router.push("/")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Home</button>
              <button onClick={() => router.push("/calculator")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Calculator</button>
@@ -81,25 +90,25 @@ export default function AdminPage() {
              <button onClick={() => router.push("/leaderboard")} className="hover:text-[#1a73e8] hover:underline transition-colors focus:outline-none">Leaderboard</button>
           </div>
 
-          {/* PROMINENT LOGOUT BUTTON */}
-          <button 
-             onClick={handleLogout} 
-             className="text-[#d93025] border border-[#d93025] hover:bg-[#fce8e6] px-4 py-1.5 rounded-sm transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-200"
-          >
-             Logout
-          </button>
+          {/* DYNAMIC LOGOUT BUTTON IN NAVBAR */}
+          {!loadingAuth && user && (
+            <button 
+               onClick={handleLogout} 
+               className="text-[#d93025] border border-[#d93025] hover:bg-[#fce8e6] px-4 py-1.5 rounded-sm transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-200"
+            >
+               Logout
+            </button>
+          )}
         </div>
       </div>
 
-      {/* ===== CENTERED LOGIN CARD ===== */}
-      {/* py-10 add kiya taaki card aur header ke beech theek space rahe */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-10">
+      {/* ===== MAIN CONTENT AREA ===== */}
+      <main className="flex-1 flex flex-col items-center px-4 py-12">
         
-        {/* Google/Microsoft Style Square Card */}
-        <div className="w-full max-w-[450px] bg-white rounded-sm border border-[#dadce0] p-10 shadow-sm">
+        {/* === LOGIN / WELCOME CARD === */}
+        <div className="w-full max-w-[450px] bg-white rounded-sm border border-[#dadce0] p-10 shadow-sm mb-12">
           
           <div className="text-center mb-10">
-            {/* Google Logo */}
             <div className="flex justify-center mb-6">
                <svg className="w-12 h-12" viewBox="0 0 48 48">
                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
@@ -114,11 +123,10 @@ export default function AdminPage() {
               Admin Console
             </h1>
             <p className="text-[#5f6368] text-sm">
-              Secure login for Arcade Nexus Administrators
+              Secure access for Arcade Nexus Administrators
             </p>
           </div>
 
-          {/* ERROR ALERT */}
           {errorMessage && (
             <div className="mb-6 flex items-start gap-3 text-sm text-[#d93025] bg-[#fce8e6] p-4 rounded-sm border border-[#fad2cf]">
                <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -128,20 +136,50 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* ACTIONS */}
           <div className="space-y-6">
-            {/* Square Google Button */}
-            <button
-              onClick={loginWithGoogle}
-              className="w-full flex items-center justify-center gap-3 bg-white border border-[#dadce0] rounded-sm px-6 py-3.5 text-sm font-medium text-[#3c4043] hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/20"
-            >
-              <img
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                alt="G"
-                className="w-5 h-5"
-              />
-              Continue with Google
-            </button>
+            {loadingAuth ? (
+              <div className="flex justify-center py-4">
+                 <div className="w-6 h-6 border-2 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : user ? (
+              // 🔥 NEW: CENTERED DASHBOARD & LOGOUT BUTTONS
+              <div className="text-center space-y-3">
+                <div className="px-4 py-3 mb-4 bg-[#e8f0fe] text-[#1a73e8] text-sm font-medium rounded-sm border border-[#d2e3fc]">
+                  Logged in as <br/><span className="font-bold text-[#1557b0]">{user.email}</span>
+                </div>
+                
+                {/* Go to Dashboard Button */}
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="w-full flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white rounded-sm px-6 py-3.5 text-sm font-medium transition-colors focus:outline-none shadow-sm"
+                >
+                  Go to Dashboard
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+
+                {/* ✅ BIG LOGOUT BUTTON INSIDE CARD */}
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 bg-white text-[#d93025] border border-[#dadce0] hover:bg-[#fce8e6] hover:border-[#fad2cf] rounded-sm px-6 py-3.5 text-sm font-medium transition-colors focus:outline-none"
+                >
+                  Logout
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                </button>
+              </div>
+            ) : (
+              // If User is NOT logged in
+              <button
+                onClick={loginWithGoogle}
+                className="w-full flex items-center justify-center gap-3 bg-white border border-[#dadce0] rounded-sm px-6 py-3.5 text-sm font-medium text-[#3c4043] hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-colors focus:outline-none shadow-sm"
+              >
+                <img
+                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                  alt="G"
+                  className="w-5 h-5"
+                />
+                Continue with Google
+              </button>
+            )}
             
             <div className="pt-6 text-center border-t border-[#dadce0]">
                <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#1a73e8] hover:underline flex items-center justify-center gap-1">
@@ -152,9 +190,49 @@ export default function AdminPage() {
           </div>
         </div>
 
+        {/* === HOW IT WORKS SECTION === */}
+        <div className="w-full max-w-4xl mt-4">
+          <div className="text-center mb-8">
+            <h2 className="text-xl md:text-2xl font-normal text-[#202124] tracking-tight">How the Admin Console Works</h2>
+            <div className="w-12 h-1 bg-[#1a73e8] mx-auto mt-4 rounded-full"></div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 border border-[#dadce0] rounded-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-[#e8f0fe] text-[#1a73e8] flex items-center justify-center rounded-full mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <h3 className="text-base font-medium text-[#202124] mb-2">Secure Authentication</h3>
+              <p className="text-sm text-[#5f6368] leading-relaxed">
+                Login securely using your authorized Google Workspace or Gmail account. Multi-factor authentication is supported through Google's robust security infrastructure.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 border border-[#dadce0] rounded-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-[#fef7e0] text-[#fbbc04] flex items-center justify-center rounded-full mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+              <h3 className="text-base font-medium text-[#202124] mb-2">Access Control</h3>
+              <p className="text-sm text-[#5f6368] leading-relaxed">
+                Upon successful login, your email is verified against our database. Only authorized facilitators and admins are granted access to the internal dashboard.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 border border-[#dadce0] rounded-sm hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-[#e6f4ea] text-[#34a853] flex items-center justify-center rounded-full mb-4">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <h3 className="text-base font-medium text-[#202124] mb-2">Session Management</h3>
+              <p className="text-sm text-[#5f6368] leading-relaxed">
+                Your session is safely maintained. You will be automatically redirected to the dashboard if you return. Always use the logout button when finishing your tasks.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </main>
 
-      {/* ✅ SUCCESS TOAST NOTIFICATION (Google Snackbar Style) */}
+      {/* ✅ SUCCESS TOAST NOTIFICATION */}
       {successMessage && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
           <div className="bg-[#323232] text-[#f1f3f4] px-6 py-3.5 rounded-sm shadow-md flex items-center gap-3 min-w-[320px] justify-between">

@@ -247,12 +247,53 @@ export default function FacilitatorPage() {
         {/* ================= HOW IT WORKS / ABOUT ================= */}
         <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-4">Arcade Facilitator Program ?</h2>
-              <p className="text-[#5f6368] max-w-2xl mx-auto">
-                The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
-              </p>
+
+
+
+            
+           {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
+            <div className="mb-16 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
+              
+              {/* Google Colors Top Accent Line */}
+              <div className="absolute top-0 left-0 w-full h-1.5 flex">
+                <div className="h-full bg-[#4285F4] w-1/4"></div>
+                <div className="h-full bg-[#EA4335] w-1/4"></div>
+                <div className="h-full bg-[#FBBC05] w-1/4"></div>
+                <div className="h-full bg-[#34A853] w-1/4"></div>
+              </div>
+
+              <div className="text-center relative z-10">
+                <h2 className="text-3xl font-medium text-[#202124] tracking-tight mb-8">Arcade Facilitator Program ?</h2>
+                
+                {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
+                <div className="max-w-4xl mx-auto bg-[#e8f0fe]/60 border border-[#d2e3fc] rounded-xl p-6 md:p-8 mb-8 shadow-sm">
+                  <p className="text-[#3c4043] text-base md:text-lg leading-relaxed font-medium">
+                    The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
+                  </p>
+                </div>
+
+                {/* 🔥 PREMIUM FACILITATOR BADGE */}
+                <div className="inline-flex items-center gap-2 bg-white border border-[#dadce0] px-6 py-2.5 rounded-full shadow-sm hover:shadow-md transition-shadow">
+                  <span className="text-[#5f6368] text-sm md:text-base font-medium">Your Facilitator :</span>
+                  <a 
+                    href="https://linkedin.com/in/manish-ui" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="font-bold text-[#1a73e8] hover:text-[#1557b0] text-sm md:text-base hover:underline transition-colors flex items-center gap-1.5"
+                  >
+                    Mr Manish Kumar
+                    {/* Chota sa LinkedIn Icon bhi add kar diya premium feel ke liye */}
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </a>
+                </div>
+
+              </div>
             </div>
+            {/* ================= END PREMIUM INTRO BOX ================= */}
+            {/* ================= END PREMIUM INTRO BOX ================= */}
+            {/* ================= END PREMIUM INTRO BOX ================= */}
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -432,17 +473,21 @@ export default function FacilitatorPage() {
               ))}
             </div>
 
-            <div className="mt-8 text-center">
+            {/* ================= PREMIUM FAQ BUTTON BOX ================= */}
+            <div className="mt-10 text-center">
                <a 
                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/faqs" 
                  target="_blank" 
                  rel="noopener noreferrer"
-                 className="inline-flex items-center gap-2 text-sm font-medium text-[#1a73e8] hover:underline"
+                 className="inline-flex items-center gap-2 text-sm font-medium text-[#1a73e8] bg-white border border-[#dadce0] px-6 py-3.5 rounded-xl hover:shadow-md hover:border-[#1a73e8] hover:bg-[#f8f9fa] transition-all duration-300 group"
                >
                  View all FAQs on official site
-                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                 <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                 </svg>
                </a>
             </div>
+            {/* ================= END PREMIUM FAQ BUTTON ================= */}
           </div>
         </section>
 
