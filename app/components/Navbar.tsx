@@ -79,9 +79,7 @@ export default function Navbar() {
           )}
 
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-sm bg-[#1a73e8] flex items-center justify-center text-white font-medium shadow-sm group-hover:bg-[#1557b0] transition-colors">
-              A
-            </div>
+            
             <span className="hidden sm:block text-lg font-medium text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
               Arcade Nexus
             </span>
