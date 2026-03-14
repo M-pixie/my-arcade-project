@@ -123,98 +123,124 @@ export default function FacilitatorPage() {
               </div>
             </div>
 
-            {/* Hero Graphic / Illustration - HIGH LEVEL */}
-            <div className="flex-1 w-full max-w-lg relative z-10 hidden md:block group cursor-default">
-              {/* Main Card Container with Glassmorphism */}
-              <div className="aspect-square bg-slate-50/60 backdrop-blur-xl border border-white/60 rounded-3xl shadow-2xl relative overflow-hidden transition-all duration-700 hover:shadow-[0_20px_60px_-15px_rgba(26,115,232,0.3)]">
-                
-                {/* Animated Background Grid & Gradient */}
-                <div className="absolute inset-0" 
-                     style={{ 
-                       backgroundImage: 'linear-gradient(#cbd5e1 1px, transparent 1px), linear-gradient(90deg, #cbd5e1 1px, transparent 1px)', 
-                       backgroundSize: '32px 32px',
-                       opacity: 0.5
-                     }}>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/90 via-transparent to-white/30"></div>
+            {/* ================= PREMIUM HERO GRAPHIC ================= */}
+            <div className="flex-1 w-full max-w-[400px] relative z-10 hidden md:block group cursor-default lg:ml-auto mt-8 md:mt-0">
+              
+              {/* Premium Smooth Float Animation CSS */}
+              <style>{`
+                @keyframes smoothFloat {
+                  0%, 100% { transform: translateY(0) scale(1); }
+                  50% { transform: translateY(-12px) scale(1.02); }
+                }
+                @keyframes smoothFloatReverse {
+                  0%, 100% { transform: translateY(0) scale(1); }
+                  50% { transform: translateY(12px) scale(1.02); }
+                }
+                .float-premium { animation: smoothFloat 6s ease-in-out infinite; }
+                .float-premium-delay { animation: smoothFloatReverse 7s ease-in-out infinite; }
+              `}</style>
 
-                {/* Center: Advanced GCP Core */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {/* Outer Rotating Ring */}
-                  <div className="absolute w-72 h-72 border-[2px] border-dashed border-[#1a73e8]/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
-                  {/* Inner Rotating Ring (Reverse) */}
-                  <div className="absolute w-56 h-56 border border-[#34a853]/40 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
-                  {/* Middle Pulsing Glow */}
-                  <div className="absolute w-40 h-40 bg-[#e8f0fe] rounded-full animate-pulse blur-2xl"></div>
+              {/* Main Container */}
+              <div className="relative w-full aspect-square">
+                
+                {/* BACKDROP GLASS CARD (With Overflow Hidden for Grid/Rings) */}
+                <div className="absolute inset-0 bg-white/40 backdrop-blur-2xl border border-white/80 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(26,115,232,0.15)] overflow-hidden transition-all duration-700 group-hover:shadow-[0_30px_70px_-15px_rgba(26,115,232,0.25)]">
                   
-                  {/* Core GCP Badge */}
-                  <div className="relative w-32 h-32 bg-white border-[5px] border-[#1a73e8] rounded-2xl shadow-[0_0_30px_rgba(26,115,232,0.4)] flex items-center justify-center rotate-3 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-110 z-20">
-                    <svg className="w-16 h-16 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.36 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" />
-                    </svg>
+                  {/* Subtle Grid Pattern */}
+                  <div className="absolute inset-0 opacity-30" 
+                       style={{ backgroundImage: 'linear-gradient(#1a73e8 1px, transparent 1px), linear-gradient(90deg, #1a73e8 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
+                  </div>
+                  {/* Radial Gradient to fade out the grid at edges */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.9)_70%)]"></div>
+
+                  {/* ROTATING RINGS & GLOW */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {/* Glowing Aura */}
+                    <div className="absolute w-48 h-48 bg-[#1a73e8]/20 rounded-full blur-[40px] animate-pulse"></div>
+                    
+                    {/* Outer Premium Ring (Multi-color gradient border) */}
+                    <div className="absolute w-72 h-72 border-[2px] border-t-[#1a73e8]/60 border-r-transparent border-b-[#34a853]/60 border-l-transparent rounded-full animate-[spin_12s_linear_infinite]"></div>
+                    
+                    {/* Inner Dashed Ring */}
+                    <div className="absolute w-52 h-52 border-[1.5px] border-dashed border-[#ea4335]/50 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
                   </div>
                 </div>
 
-                {/* Floating Card 1: Cloud Skill Boost (Labs - Green) */}
-                <div className="absolute top-10 left-6 bg-white/90 backdrop-blur-md p-3 pr-5 border border-gray-100 rounded-2xl shadow-lg z-30 animate-[bounce_4s_infinite] flex items-center gap-3 transition-transform hover:scale-105">
-                  <div className="bg-[#e6f4ea] p-2.5 rounded-xl shadow-inner">
-                    <svg className="w-6 h-6 text-[#34a853]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                {/* CENTRAL CORE CARD (Placed outside hidden overflow to pop out) */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="relative w-28 h-28 bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl shadow-[0_10px_40px_rgba(26,115,232,0.2)] flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 z-20 pointer-events-auto">
+                    
+                    {/* 🔥 UPDATED: Google Colorful Logo instead of Cloud Icon */}
+                    <svg className="w-14 h-14" viewBox="0 0 24 24">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+
+                  </div>
+                </div>
+
+                {/* --- FLOATING CARDS --- */}
+                
+                {/* 1. Cloud Skill Boost (Top Left) */}
+                <div className="absolute -top-4 -left-6 bg-white/95 backdrop-blur-md p-2.5 pr-4 border border-white/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-30 float-premium flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-[#e6f4ea] to-[#ceead6] p-2 rounded-xl shadow-inner">
+                    <svg className="w-5 h-5 text-[#137333]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-gray-800">Cloud Labs</div>
-                    <div className="text-[10px] text-green-600 font-bold flex items-center gap-1.5 mt-0.5">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                      </span>
+                    <div className="text-xs font-bold text-[#202124]">Cloud Labs</div>
+                    <div className="text-[10px] text-[#137333] font-bold flex items-center gap-1.5 mt-0.5">
+                      <span className="relative flex h-1.5 w-1.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#34a853]"></span></span>
                       Active
                     </div>
                   </div>
                 </div>
 
-                {/* Floating Card 2: Swag Unlocked (T-Shirt - Red) */}
-                <div className="absolute top-16 right-4 bg-white/90 backdrop-blur-md p-3 pr-5 border border-gray-100 rounded-2xl shadow-lg z-30 animate-[bounce_5s_infinite_reverse] flex items-center gap-3 transition-transform hover:scale-105">
-                  <div className="bg-[#fce8e6] p-2.5 rounded-xl shadow-inner">
-                    <svg className="w-6 h-6 text-[#ea4335]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                {/* 2. Swag Unlocked (Top Right) */}
+                <div className="absolute top-10 -right-8 bg-white/95 backdrop-blur-md p-2.5 pr-4 border border-white/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-30 float-premium-delay flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-[#fce8e6] to-[#fad2cf] p-2 rounded-xl shadow-inner">
+                    <svg className="w-5 h-5 text-[#c5221f]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-gray-800">Premium Swag</div>
-                    <div className="text-[10px] text-gray-500 font-semibold mt-0.5">Unlocked 🎉</div>
+                    <div className="text-xs font-bold text-[#202124]">Swags</div>
+                    <div className="text-[10px] text-[#5f6368] font-semibold mt-0.5">Unlocked 🎉</div>
                   </div>
                 </div>
 
-                {/* Floating Card 3: Arcade Points (Yellow) */}
-                <div className="absolute bottom-20 right-8 bg-white/90 backdrop-blur-md p-3 pr-5 border border-gray-100 rounded-2xl shadow-lg z-30 animate-[bounce_6s_infinite] flex items-center gap-3 transition-transform hover:scale-105">
-                  <div className="bg-[#fef7e0] p-2.5 rounded-xl shadow-inner">
-                    <svg className="w-6 h-6 text-[#fbbc04]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                {/* 3. Arcade Points (Bottom Right) */}
+                <div className="absolute bottom-16 -right-4 bg-white/95 backdrop-blur-md p-2.5 pr-4 border border-white/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-30 float-premium flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-[#fef7e0] to-[#fde293] p-2 rounded-xl shadow-inner">
+                    <svg className="w-5 h-5 text-[#b06000]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-gray-800">Arcade Points</div>
-                    <div className="text-[11px] text-[#fbbc04] font-bold mt-0.5">+100 PTS</div>
+                    <div className="text-xs font-bold text-[#202124]">Arcade Points</div>
+                    <div className="text-[11px] text-[#b06000] font-extrabold mt-0.5">+100 PTS</div>
                   </div>
                 </div>
 
-                {/* Floating Card 4: Skill Badge (Blue) */}
-                <div className="absolute bottom-12 left-8 bg-white/90 backdrop-blur-md p-3 pr-5 border border-gray-100 rounded-2xl shadow-lg z-30 animate-[bounce_4.5s_infinite_reverse] flex items-center gap-3 transition-transform hover:scale-105">
-                  <div className="bg-[#e8f0fe] p-2.5 rounded-xl shadow-inner">
-                    <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                {/* 4. Skill Badge (Bottom Left) */}
+                <div className="absolute -bottom-4 left-4 bg-white/95 backdrop-blur-md p-2.5 pr-4 border border-white/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-30 float-premium-delay flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-[#e8f0fe] to-[#d2e3fc] p-2 rounded-xl shadow-inner">
+                    <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-gray-800">Skill Badge</div>
+                    <div className="text-xs font-bold text-[#202124]">Skill Badge</div>
                     <div className="text-[10px] text-[#1a73e8] font-bold mt-0.5">Verified ✓</div>
                   </div>
                 </div>
 
               </div>
             </div>
+            {/* ================= END PREMIUM HERO GRAPHIC ================= */}
           </div>
         </section>
 
