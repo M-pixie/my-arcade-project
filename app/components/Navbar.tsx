@@ -15,13 +15,14 @@ export default function Navbar() {
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
+  // 🔥 NEW: Added tooltip descriptions for each link
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Calculator", href: "/calculator" },
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Leaderboard", href: "/leaderboard" },
-    { name: "Admin", href: "/admin" },
-    { name: "Facilitator", href: "/facilitator" },
+    { name: "Home", href: "/", tooltip: "Go to Homepage" },
+    { name: "Calculator", href: "/calculator", tooltip: "Calculate your points" },
+    { name: "Dashboard", href: "/dashboard", tooltip: "View your dashboard" },
+    { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
+    { name: "Admin", href: "/admin", tooltip: "Admin console" },
+    { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
   ];
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export default function Navbar() {
               </button>
               
               {/* Tooltip for Back Button */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2.5 py-1 bg-[#202124] text-white text-xs font-medium whitespace-nowrap rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-md">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2.5 py-1 bg-[#202124] text-white text-xs font-medium whitespace-nowrap rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-md pointer-events-none">
                 Go Back
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-b-[#202124]"></div>
               </div>
@@ -78,7 +79,9 @@ export default function Navbar() {
           )}
 
           <Link href="/" className="flex items-center gap-2 group">
-            
+            <div className="w-8 h-8 rounded-sm bg-[#1a73e8] flex items-center justify-center text-white font-medium shadow-sm group-hover:bg-[#1557b0] transition-colors">
+              A
+            </div>
             <span className="hidden sm:block text-lg font-medium text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
               Arcade Nexus
             </span>
@@ -90,17 +93,25 @@ export default function Navbar() {
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 
-                  ${isActive 
-                    ? "bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]" 
-                    : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa]"
-                  }`}
-              >
-                {link.name}
-              </Link>
+              // 🔥 NEW: Wrapper div for group hover tooltip
+              <div key={link.name} className="relative group">
+                <Link
+                  href={link.href}
+                  className={`block px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 
+                    ${isActive 
+                      ? "bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]" 
+                      : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa]"
+                    }`}
+                >
+                  {link.name}
+                </Link>
+                
+                {/* 🔥 POP MODAL / TOOLTIP FOR NAV LINKS */}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2.5 py-1 bg-[#202124] text-white text-xs font-medium whitespace-nowrap rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-md pointer-events-none">
+                  {link.tooltip}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-b-[#202124]"></div>
+                </div>
+              </div>
             );
           })}
         </nav>
