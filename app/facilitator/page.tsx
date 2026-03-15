@@ -4,7 +4,7 @@ import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// NEW: Official FAQ Data
+// Official FAQ Data
 const officialFaqs = [
   {
     question: "When is the Arcade Facilitator program starting?",
@@ -38,32 +38,36 @@ export default function FacilitatorPage() {
   // NEW: State for FAQ Accordion
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // Team data array - UPDATED WITH INITIALS AND LINKEDIN LINKS!
+  // 🔥 UPDATED TEAM DATA ARRAY (With Correct Sequence: Manish 1st)
   const teamMembers = [
     { 
       name: "Manish", 
       role: "Arcade Facilitator", 
-      initials: "M", 
+      image: "https://img.sanishtech.com/u/ab32bfb9414fbe6f2b7ddfa781590c28.jpg", 
+      initials: "M",
       linkedin: "https://linkedin.com/in/manish-ui", 
       color: "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" 
     },
     { 
       name: "Anjali", 
       role: "Arcade Facilitator", 
-      initials: "A", 
-      linkedin: "https://www.linkedin.com/in/anjali..", 
+      image: "https://img.sanishtech.com/u/3309659d83199a9b8ed3aba6344560cf.jpg", 
+      initials: "A",
+      linkedin: "https://www.linkedin.com/in/anjali-p-a2ba1419b", 
       color: "bg-[#fef7e0] text-[#b06000] border-[#fde293]" 
     },
     { 
       name: "Preeti", 
       role: "Community Lead", 
-      initials: "P", 
+      image: "https://img.sanishtech.com/u/c1143a2a8ab3226ca5570e4498beb552.png", 
+      initials: "P",
       linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331", 
       color: "bg-[#e6f4ea] text-[#137333] border-[#ceead6]" 
     },
     { 
       name: "Rohit", 
       role: "Google Cloud Labs Lead", 
+      image: "https://img.sanishtech.com/u/7a3f53b22b40cd0f159aeed18f4e5b6f.jpg",
       initials: "R", 
       linkedin: "https://www.linkedin.com/in/rohit-kumar-b482752ab", 
       color: "bg-[#fce8e6] text-[#c5221f] border-[#fad2cf]" 
@@ -143,7 +147,7 @@ export default function FacilitatorPage() {
               {/* Main Container */}
               <div className="relative w-full aspect-square">
                 
-                {/* BACKDROP GLASS CARD (With Overflow Hidden for Grid/Rings) */}
+                {/* BACKDROP GLASS CARD */}
                 <div className="absolute inset-0 bg-white/40 backdrop-blur-2xl border border-white/80 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(26,115,232,0.15)] overflow-hidden transition-all duration-700 group-hover:shadow-[0_30px_70px_-15px_rgba(26,115,232,0.25)]">
                   
                   {/* Subtle Grid Pattern */}
@@ -155,22 +159,17 @@ export default function FacilitatorPage() {
 
                   {/* ROTATING RINGS & GLOW */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    {/* Glowing Aura */}
                     <div className="absolute w-48 h-48 bg-[#1a73e8]/20 rounded-full blur-[40px] animate-pulse"></div>
-                    
-                    {/* Outer Premium Ring (Multi-color gradient border) */}
                     <div className="absolute w-72 h-72 border-[2px] border-t-[#1a73e8]/60 border-r-transparent border-b-[#34a853]/60 border-l-transparent rounded-full animate-[spin_12s_linear_infinite]"></div>
-                    
-                    {/* Inner Dashed Ring */}
                     <div className="absolute w-52 h-52 border-[1.5px] border-dashed border-[#ea4335]/50 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
                   </div>
                 </div>
 
-                {/* CENTRAL CORE CARD (Placed outside hidden overflow to pop out) */}
+                {/* CENTRAL CORE CARD */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="relative w-28 h-28 bg-white/90 backdrop-blur-xl border border-white/60 rounded-3xl shadow-[0_10px_40px_rgba(26,115,232,0.2)] flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 z-20 pointer-events-auto">
                     
-                    {/* 🔥 UPDATED: Google Colorful Logo instead of Cloud Icon */}
+                    {/* Google Colorful Logo */}
                     <svg className="w-14 h-14" viewBox="0 0 24 24">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -182,7 +181,6 @@ export default function FacilitatorPage() {
                 </div>
 
                 {/* --- FLOATING CARDS --- */}
-                
                 {/* 1. Cloud Skill Boost (Top Left) */}
                 <div className="absolute -top-4 -left-6 bg-white/95 backdrop-blur-md p-2.5 pr-4 border border-white/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-30 float-premium flex items-center gap-3">
                   <div className="bg-gradient-to-br from-[#e6f4ea] to-[#ceead6] p-2 rounded-xl shadow-inner">
@@ -203,7 +201,7 @@ export default function FacilitatorPage() {
                 <div className="absolute top-10 -right-8 bg-white/95 backdrop-blur-md p-2.5 pr-4 border border-white/80 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-30 float-premium-delay flex items-center gap-3">
                   <div className="bg-gradient-to-br from-[#fce8e6] to-[#fad2cf] p-2 rounded-xl shadow-inner">
                     <svg className="w-5 h-5 text-[#c5221f]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M20.38 3.46L16 2a8 8 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20.38 3.46L16 2a8 8 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
                     </svg>
                   </div>
                   <div>
@@ -247,11 +245,8 @@ export default function FacilitatorPage() {
         {/* ================= HOW IT WORKS / ABOUT ================= */}
         <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
           <div className="max-w-6xl mx-auto">
-
-
-
             
-           {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
+            {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
             <div className="mb-16 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
               
               {/* Google Colors Top Accent Line */}
@@ -282,9 +277,8 @@ export default function FacilitatorPage() {
                     className="font-bold text-[#1a73e8] hover:text-[#1557b0] text-sm md:text-base hover:underline transition-colors flex items-center gap-1.5"
                   >
                     Mr Manish Kumar
-                    {/* Chota sa LinkedIn Icon bhi add kar diya premium feel ke liye */}
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
                   </a>
                 </div>
@@ -292,12 +286,10 @@ export default function FacilitatorPage() {
               </div>
             </div>
             {/* ================= END PREMIUM INTRO BOX ================= */}
-            {/* ================= END PREMIUM INTRO BOX ================= */}
-            {/* ================= END PREMIUM INTRO BOX ================= */}
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { title: "Learn Google Cloud Skills ", icon: "📚", color: "text-[#1a73e8]", bg: "bg-[#e8f0fe]", border: "border-[#d2e3fc]", desc: "Access free Qwiklabs credits and start learning Google Cloud basics, Gen AI, and Big Data." },
+                { title: "Learn Google Cloud Skills", icon: "📚", color: "text-[#1a73e8]", bg: "bg-[#e8f0fe]", border: "border-[#d2e3fc]", desc: "Access free Qwiklabs credits and start learning Google Cloud basics, Gen AI, and Big Data." },
                 { title: "Earn Cloud Skill Badges", icon: "🎖️", color: "text-[#fbbc04]", bg: "bg-[#fef7e0]", border: "border-[#fde293]", desc: "Complete quests and skill badges on Google Cloud Skills Boost to earn Arcade Points." },
                 { title: "Win Google Cloud Swags", icon: "🎁", color: "text-[#34a853]", bg: "bg-[#e6f4ea]", border: "border-[#ceead6]", desc: "Accumulate points and redeem them at the prize counter for official Google Cloud swags." }
               ].map((item, index) => (
@@ -313,7 +305,7 @@ export default function FacilitatorPage() {
           </div>
         </section>
 
-        {/* ================= MILESTONES & REWARDS (TABLE STYLE) ================= */}
+        {/* ================= MILESTONES & REWARDS ================= */}
         <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-10 text-center">Milestones & Swags</h2>
@@ -370,7 +362,6 @@ export default function FacilitatorPage() {
             
             {/* MOVING MARQUEE TEXT */}
             <div className="overflow-hidden bg-[#e8f0fe] border border-[#d2e3fc] rounded-sm py-2 mb-6 w-full whitespace-nowrap">
-              {/* Animation CSS directly injected */}
               <style>{`
                 @keyframes scroll-text {
                   0% { transform: translateX(100%); }
@@ -383,7 +374,6 @@ export default function FacilitatorPage() {
                 }
               `}</style>
               
-              {/* Sirf Ek Text Line */}
               <div className="animate-scroll-text w-full text-sm font-medium text-[#1a73e8] px-4">
                 * Rewards are subject to change and availability by Google Cloud. Points must be earned in the active cohort. Please refer to official guidelines.
               </div>
@@ -391,14 +381,43 @@ export default function FacilitatorPage() {
           </div>
         </section>
 
-        {/* ================= TEAM SECTION (INITIALS + LINKEDIN) ================= */}
+        {/* ================= TEAM SECTION ================= */}
         <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-4"> [ Meet Our Arcade Team ]</h2>
-              <p className="text-[#5f6368] max-w-2xl mx-auto">
+          <div className="max-w-6xl mx-auto relative z-10">
+
+            {/* Premium Animations */}
+            <style>{`
+              @keyframes gradient-rotate {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+              }
+              .animate-gradient-rotate {
+                animation: gradient-rotate 8s linear infinite;
+                width: 200%; 
+                height: 200%;
+                top: -50%;
+                left: -50%;
+              }
+              @keyframes shimmer-text {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+              .animate-shimmer-text {
+                background-size: 200% auto;
+                animation: shimmer-text 3s linear infinite;
+              }
+            `}</style>
+
+            {/* 🔥 NEW PROFESSIONAL HEADING */}
+            <div className="text-center mb-20 relative z-10">
+              <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-4">
+                Meet Our Arcade Team
+              </h2>
+              <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
                 Connect with the people driving the Arcade Facilitator Program in our community.
               </p>
+               {/* Decorative Colorful Blended Underline */}
+              <div className="h-0.5 w-40 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853] mx-auto rounded-full mt-6"></div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -408,22 +427,52 @@ export default function FacilitatorPage() {
                   href={member.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block bg-white border border-[#dadce0] rounded-sm p-8 text-center hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] hover:border-[#1a73e8] transition-all duration-200"
+                  className="group relative block rounded-2xl hover:shadow-[0_8px_30px_rgba(26,115,232,0.18)] transition-all duration-500 overflow-hidden pointer-events-auto"
                 >
                   
-                  {/* Clean Initial Avatar (Reverted to Initials) */}
-                  <div className={`w-16 h-16 mx-auto rounded-sm border flex items-center justify-center text-xl font-medium mb-5 ${member.color}`}>
-                    {member.initials}
-                  </div>
+                  {/* 🔥 CHAARO TARAF GOOGLE COLORS KA MOVE HONE WALA BORDER */}
+                  <div className="absolute animate-gradient-rotate bg-[conic-gradient(from_0deg_at_50%_50%,#4285F4,#EA4335,#FBBC05,#34A853,#4285F4)] opacity-50 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
                   
-                  <h3 className="text-lg font-medium text-[#202124] mb-1 group-hover:text-[#1a73e8] transition-colors">{member.name}</h3>
-                  <p className="text-xs text-[#5f6368] font-medium tracking-wider uppercase mb-5">{member.role}</p>
+                  {/* Inner White Box - Content */}
+                  <div className="relative h-full bg-white rounded-[14px] text-center flex flex-col items-center justify-center z-10 m-[3px] pointer-events-none">
+                    
+                    {/* 🔥 ENLARGED FULL BOX IMAGE SECTION 🔥 */}
+                    <div className="w-full aspect-square object-cover rounded-t-[14px] mb-6 overflow-hidden border-b border-[#dadce0]">
+                      {member.image ? (
+                          <img 
+                            src={member.image} 
+                            alt={member.name} 
+                            // 🔥 Added object-top so heads don't get cut off!
+                            className="w-full h-full object-cover object-top"
+                          />
+                      ) : (
+                          <div className={`w-full h-full flex items-center justify-center text-4xl font-bold ${member.color}`}>
+                            {member.initials || member.name.charAt(0)}
+                          </div>
+                      )}
+                    </div>
 
-                  {/* LinkedIn Mini Icon */}
-                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-sm bg-[#f8f9fa] border border-[#dadce0] group-hover:bg-[#e8f0fe] group-hover:border-[#d2e3fc] transition-colors">
-                    <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8] transition-colors" viewBox="0 0 24 24">
-                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
+                    {/* 🔥 Role Badges integrated with text block below image 🔥 */}
+                    <div className="px-8 pb-8 flex flex-col items-center">
+                        <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#1a73e8] transition-colors">{member.name}</h3>
+
+                        {member.role === "Arcade Facilitator" ? (
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#e8f0fe] border border-[#d2e3fc] rounded-md mb-5 shadow-sm">
+                            <svg className="w-3.5 h-3.5 text-[#FBBC05] animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                            </svg>
+                            <span className="text-[10px] font-extrabold uppercase tracking-widest bg-gradient-to-r from-[#1a73e8] via-[#8ab4f8] to-[#1a73e8] animate-shimmer-text bg-clip-text text-transparent">
+                              {member.role}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${member.color} text-[10px] font-bold uppercase tracking-widest rounded-md mb-5`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>
+                            {member.role}
+                          </div>
+                        )}
+                    </div>
+
                   </div>
                 </a>
               ))}
@@ -473,7 +522,7 @@ export default function FacilitatorPage() {
               ))}
             </div>
 
-            {/* ================= PREMIUM FAQ BUTTON BOX ================= */}
+            {/* PREMIUM FAQ BUTTON */}
             <div className="mt-10 text-center">
                <a 
                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/faqs" 
@@ -487,7 +536,6 @@ export default function FacilitatorPage() {
                  </svg>
                </a>
             </div>
-            {/* ================= END PREMIUM FAQ BUTTON ================= */}
           </div>
         </section>
 

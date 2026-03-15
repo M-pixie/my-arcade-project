@@ -15,14 +15,14 @@ export default function Navbar() {
   const pathname = usePathname();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 NEW: Added tooltip descriptions for each link
+  // 🔥 NEW: Reordered links as requested
   const navLinks = [
     { name: "Home", href: "/", tooltip: "Go to Homepage" },
     { name: "Calculator", href: "/calculator", tooltip: "Calculate your points" },
+    { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
     { name: "Dashboard", href: "/dashboard", tooltip: "View your dashboard" },
     { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
     { name: "Admin", href: "/admin", tooltip: "Admin console" },
-    { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
   ];
 
   useEffect(() => {
