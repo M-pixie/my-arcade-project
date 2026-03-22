@@ -43,7 +43,7 @@ export default function FacilitatorPage() {
     { 
       name: "Manish", 
       role: "Arcade Facilitator", 
-      image: "https://img.sanishtech.com/u/ab32bfb9414fbe6f2b7ddfa781590c28.jpg", 
+      image: "https://i.postimg.cc/q7VZ7VZH/1770572601467.jpg", 
       initials: "M",
       linkedin: "https://linkedin.com/in/manish-ui", 
       color: "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" 
@@ -51,7 +51,7 @@ export default function FacilitatorPage() {
     { 
       name: "Anjali", 
       role: "Arcade Facilitator", 
-      image: "https://img.sanishtech.com/u/3309659d83199a9b8ed3aba6344560cf.jpg", 
+      image: "https://i.postimg.cc/Nf2ykWb1/1000111442.png", 
       initials: "A",
       linkedin: "https://www.linkedin.com/in/?", 
       color: "bg-[#fef7e0] text-[#b06000] border-[#fde293]" 
@@ -59,7 +59,7 @@ export default function FacilitatorPage() {
     { 
       name: "Preeti", 
       role: "Community Lead", 
-      image: "https://img.sanishtech.com/u/c1143a2a8ab3226ca5570e4498beb552.png", 
+      image: "https://i.postimg.cc/xdBj8CVc/file-00000000ed287208a169cdbe1ea331c9.png", 
       initials: "P",
       linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331", 
       color: "bg-[#e6f4ea] text-[#137333] border-[#ceead6]" 
@@ -67,7 +67,7 @@ export default function FacilitatorPage() {
     { 
       name: "Rohit", 
       role: "Google Cloud Labs Lead", 
-      image: "https://img.sanishtech.com/u/7a3f53b22b40cd0f159aeed18f4e5b6f.jpg",
+      image: "https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg",
       initials: "R", 
       linkedin: "https://www.linkedin.com/in/rohit-kumar-b482752ab", 
       color: "bg-[#fce8e6] text-[#c5221f] border-[#fad2cf]" 
