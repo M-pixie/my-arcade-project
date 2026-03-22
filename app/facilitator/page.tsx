@@ -53,7 +53,7 @@ export default function FacilitatorPage() {
       role: "Arcade Facilitator", 
       image: "https://img.sanishtech.com/u/3309659d83199a9b8ed3aba6344560cf.jpg", 
       initials: "A",
-      linkedin: "https://www.linkedin.com/in/anjali-p-a2ba1419b", 
+      linkedin: "https://www.linkedin.com/in/?", 
       color: "bg-[#fef7e0] text-[#b06000] border-[#fde293]" 
     },
     { 
