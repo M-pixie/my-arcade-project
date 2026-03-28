@@ -43,7 +43,7 @@ export default function FacilitatorPage() {
     { 
       name: "Manish Kumar", 
       role: "Arcade Facilitator", 
-      image: "https://i.postimg.cc/q7VZ7VZH/1770572601467.jpg", 
+      image: "https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg", 
       initials: "M",
       linkedin: "https://linkedin.com/in/manish-ui", 
       color: "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" 
@@ -53,7 +53,7 @@ export default function FacilitatorPage() {
       role: "Arcade Facilitator", 
       image: "https://i.postimg.cc/Nf2ykWb1/1000111442.png", 
       initials: "A",
-      linkedin: "https://www.linkedin.com/in/?", 
+      linkedin: "https://www.linkedin.com/in/anjali-p-a2ba1419b", 
       color: "bg-[#fef7e0] text-[#b06000] border-[#fde293]" 
     },
     { 
@@ -233,7 +233,7 @@ export default function FacilitatorPage() {
         <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
           <div className="max-w-6xl mx-auto">
             
-            
+
             {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
             <div className="mb-10 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
               
