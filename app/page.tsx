@@ -272,19 +272,17 @@ export default function HomePage() {
                 
                 {/* Form Header */}
                 <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-8 md:p-10 text-center relative overflow-hidden">
-                  {/* Google Colors Top Accent Line */}
-                  <div className="absolute top-0 left-0 w-full h-1.5 flex">
-                    <div className="h-full bg-[#4285F4] w-1/4"></div>
-                    <div className="h-full bg-[#EA4335] w-1/4"></div>
-                    <div className="h-full bg-[#FBBC05] w-1/4"></div>
-                    <div className="h-full bg-[#34A853] w-1/4"></div>
-                  </div>
+                  
+                  {/* Clean Single Blue Accent Line (Copyright Free) */}
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
                   
                   <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Facing Any Issues?</h3>
                   <p className="text-[#5f6368] text-base">
                     Drop a message regarding your Swags, Labs, or Arcade Points. Our community team will look into it directly.
                   </p>
                 </div>
+
+                {/* Yahan se aage tumhara form wala code shuru hota hai... */}
                 
                 {/* Form Body */}
                 <form onSubmit={handleFormSubmit} className="p-8 md:p-10 flex flex-col gap-6">

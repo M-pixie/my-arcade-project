@@ -233,19 +233,17 @@ export default function FacilitatorPage() {
         <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
           <div className="max-w-6xl mx-auto">
             
+            
             {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
             <div className="mb-10 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
               
-              {/* Google Colors Top Accent Line */}
-              <div className="absolute top-0 left-0 w-full h-1.5 flex">
-                <div className="h-full bg-[#4285F4] w-1/4"></div>
-                <div className="h-full bg-[#EA4335] w-1/4"></div>
-                <div className="h-full bg-[#FBBC05] w-1/4"></div>
-                <div className="h-full bg-[#34A853] w-1/4"></div>
-              </div>
+              {/* Clean Single Blue Accent Line (Copyright Free) */}
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
 
               <div className="text-center relative z-10">
                 <h2 className="text-3xl font-medium text-[#202124] tracking-tight mb-8">Arcade Facilitator Program ?</h2>
+
+
                 
                 {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
                 <div className="max-w-4xl mx-auto bg-[#e8f0fe]/60 border border-[#d2e3fc] rounded-xl p-6 md:p-8 mb-8 shadow-sm">
