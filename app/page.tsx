@@ -598,7 +598,7 @@ export default function HomePage() {
                   Powered by: <span className="text-[#202124] font-medium">Manish Kumar & Anjali P.</span>
                 </p>
                 <p className="mt-1 text-xs text-[#80868b]">
-                  Last Updated: February 20, 2026
+                  Last Updated: March 28, 2026
                 </p>
               </div>
 
