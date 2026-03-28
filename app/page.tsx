@@ -5,9 +5,27 @@ import VisitCounter from "@/app/components/VisitCounter";
 import { useRouter } from "next/navigation";
 import FAQ from "@/app/components/FAQ";
 import PopupModal from "@/app/components/PopupModal";
+import { useState } from "react"; // ADDED For Message Box State
 
 export default function HomePage() {
   const router = useRouter();
+
+  // 🔥 NEW: State for Premium Problem Box Form
+  const [formName, setFormName] = useState("");
+  const [formCategory, setFormCategory] = useState("Swags");
+  const [formMessage, setFormMessage] = useState("");
+
+  // Handler to send form data directly to your WhatsApp!
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = `Hi Manish, I am ${formName}.\n\nI have a query regarding: *${formCategory}*\n\nMessage:\n${formMessage}`;
+    const whatsappUrl = `https://wa.me/918538980608?text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    // Optional: Clear form after sending
+    setFormName("");
+    setFormMessage("");
+  };
 
   return (
     <>
@@ -35,7 +53,7 @@ export default function HomePage() {
 
             {/* MAIN HEADING */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-[#202124] mb-6 leading-[1.1]">
-              calculate when <br className="hidden md:block" />
+              analyze when <br className="hidden md:block" />
               <span className="text-[#1a73e8] relative inline-block">
                 you&apos;re ready
                 
@@ -144,9 +162,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= 🔥 PREMIUM REWARDS SECTION (NEW) ================= */}
+        {/* ================= 🔥 PREMIUM REWARDS SECTION (UPDATED WITH PARTNERS & FORM) ================= */}
         <section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-gray-200 overflow-hidden">
           <div className="max-w-6xl mx-auto px-6">
+            
+            {/* Rewards Intro & Boxes */}
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#fff8e1] border border-[#ffeb3b] text-[#f57f17] text-xs font-bold mb-4 uppercase tracking-wider rounded-sm">
                 <span>⭐ Premium Swags</span>
@@ -159,7 +179,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
               
               {/* Premium Box 1 */}
               <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
@@ -208,8 +228,127 @@ export default function HomePage() {
                   The ultimate prize tier. Claim top-of-the-line flagship rewards reserved for Arcade champions.
                 </p>
               </div>
-
             </div>
+
+            {/* ================= 🔥 NEW: OFFICIAL SWAG PARTNERS ================= */}
+            <div className="pt-16 border-t border-[#dadce0]">
+              <div className="text-center mb-10">
+                <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Official Google Swags Partners</h3>
+                <p className="text-[#5f6368] text-base max-w-xl mx-auto">
+                  Having trouble tracking your rewards? Connect with the official dispatch partners directly for faster resolution.
+                </p>
+              </div>
+              
+              <div className="flex flex-col md:flex-row justify-center gap-6">
+                
+                {/* Printo Card */}
+                <a href="mailto:printose@printo.in" className="flex items-center gap-5 p-6 bg-white border border-[#dadce0] rounded-xl hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgba(26,115,232,0.1)] transition-all group w-full md:w-[360px]">
+                  <div className="w-14 h-14 bg-[#f8f9fa] text-[#5f6368] rounded-full border border-[#dadce0] flex items-center justify-center text-2xl group-hover:bg-[#1a73e8] group-hover:text-white group-hover:border-[#1a73e8] transition-colors">
+                    📦
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[#202124] font-semibold text-lg mb-0.5">Printo Support</h4>
+                    <p className="text-[#1a73e8] text-sm group-hover:underline">printose@printo.in</p>
+                  </div>
+                </a>
+
+                {/* Whitesquare Card */}
+                <a href="mailto:support@whitesquarein.com" className="flex items-center gap-5 p-6 bg-white border border-[#dadce0] rounded-xl hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgba(26,115,232,0.1)] transition-all group w-full md:w-[360px]">
+                  <div className="w-14 h-14 bg-[#f8f9fa] text-[#5f6368] rounded-full border border-[#dadce0] flex items-center justify-center text-2xl group-hover:bg-[#1a73e8] group-hover:text-white group-hover:border-[#1a73e8] transition-colors">
+                    📦
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-[#202124] font-semibold text-lg mb-0.5">Whitesquare Int.</h4>
+                    <p className="text-[#1a73e8] text-sm group-hover:underline">support@whitesquarein.com</p>
+                  </div>
+                </a>
+
+              </div>
+            </div>
+
+            {/* ================= 🔥 NEW: PREMIUM PROBLEM / MESSAGE BOX ================= */}
+            <div className="mt-20 max-w-3xl mx-auto">
+              <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden transition-shadow hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+                
+                {/* Form Header */}
+                <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-8 md:p-10 text-center relative overflow-hidden">
+                  {/* Google Colors Top Accent Line */}
+                  <div className="absolute top-0 left-0 w-full h-1.5 flex">
+                    <div className="h-full bg-[#4285F4] w-1/4"></div>
+                    <div className="h-full bg-[#EA4335] w-1/4"></div>
+                    <div className="h-full bg-[#FBBC05] w-1/4"></div>
+                    <div className="h-full bg-[#34A853] w-1/4"></div>
+                  </div>
+                  
+                  <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Facing Any Issues?</h3>
+                  <p className="text-[#5f6368] text-base">
+                    Drop a message regarding your Swags, Labs, or Arcade Points. Our community team will look into it directly.
+                  </p>
+                </div>
+                
+                {/* Form Body */}
+                <form onSubmit={handleFormSubmit} className="p-8 md:p-10 flex flex-col gap-6">
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-2.5">
+                      <label className="text-sm font-semibold text-[#3c4043]">Your Name</label>
+                      <input 
+                        type="text" 
+                        required 
+                        value={formName} 
+                        onChange={(e) => setFormName(e.target.value)} 
+                        className="px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] placeholder-[#9aa0a6]" 
+                        placeholder="Enter your full name" 
+                      />
+                    </div>
+                    
+                    <div className="flex flex-col gap-2.5">
+                      <label className="text-sm font-semibold text-[#3c4043]">Issue Category</label>
+                      <div className="relative">
+                        <select 
+                          value={formCategory} 
+                          onChange={(e) => setFormCategory(e.target.value)} 
+                          className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer"
+                        >
+                          <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
+                          <option value="Labs Completion Issue">Labs Completion Issue</option>
+                          <option value="Arcade Points Calculation">Arcade Points Calculation</option>
+                          <option value="Other Queries">Other Queries</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Describe Your Problem</label>
+                    <textarea 
+                      required 
+                      value={formMessage} 
+                      onChange={(e) => setFormMessage(e.target.value)} 
+                      rows={5} 
+                      className="px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] resize-none placeholder-[#9aa0a6]" 
+                      placeholder="Explain your doubt or issue in detail here..."
+                    ></textarea>
+                  </div>
+
+                  {/* Submit Button routes directly to WhatsApp */}
+                  <button 
+                    type="submit" 
+                    className="mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-base font-semibold rounded-lg shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all focus:outline-none"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                    Send Request Securely
+                  </button>
+                  <p className="text-center text-xs text-[#80868b] mt-1">
+                    * This will securely redirect your query to our official WhatsApp support channel.
+                  </p>
+                </form>
+
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -476,7 +615,7 @@ export default function HomePage() {
                   <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
 
-                <a href="https://wa.me/8538980608" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
+                <a href="https://wa.me/918538980608" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
                   <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/></svg>
                 </a>
               </div>
