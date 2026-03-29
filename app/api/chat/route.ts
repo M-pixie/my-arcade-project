@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // ✅ Key Direct (Bhaii, production mein isko .env mein daal lena safety ke liye!)
-const API_KEY = "AIzaSyC9ENV4ggEZ5xVjoqvHGKgfA_m71CqjjUc"; 
+const API_KEY = "AIzaSyDz4ga4fFD_ru_47u5GLurnxYKABQ9hZZE"; 
 
 export const dynamic = "force-dynamic";
 // 🚀 ADDED EDGE RUNTIME: Isse response blazing fast aayega (Cold start problem khatam)
