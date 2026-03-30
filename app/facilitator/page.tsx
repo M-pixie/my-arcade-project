@@ -125,36 +125,51 @@ export default function FacilitatorPage() {
                   <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Facilitator Program</span>
                 </h1>
                 
-                <p className="text-[#5f6368] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8">
+                <p className="text-[#5f6368] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
                   Kickstart your cloud journey, learn new skills on Google Cloud Platform, and win exciting exclusive Google Cloud swags by completing milestones.
                 </p>
 
-                {/* THREE BUTTONS IN A ROW */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
+                {/* 🔥 PREMIUM GOOGLE SEARCH BOX STYLE BUTTONS 🔥 */}
+                <div className="w-full max-w-[750px] mx-auto bg-white border border-[#dfe1e5] rounded-2xl sm:rounded-full shadow-sm hover:shadow-[0_1px_6px_rgba(32,33,36,.28)] hover:border-transparent transition-all duration-300 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden">
+                  
+                  {/* Google Search Icon (Left) */}
+                  <div className="hidden sm:flex items-center justify-center pl-6 pr-2 bg-transparent">
+                    <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 text-[#9aa0a6]">
+                      <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"></path>
+                    </svg>
+                  </div>
+
+                  {/* Button 1: Enroll Now */}
                   <a 
                     href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-base font-medium rounded-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all text-center focus:outline-none"
+                    className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#3c4043] hover:text-[#1a73e8] hover:bg-[#f8f9fa] font-medium text-sm sm:text-base transition-colors border-b sm:border-b-0 sm:border-r border-[#dfe1e5] focus:outline-none flex items-center justify-center gap-2"
                   >
                     Enroll Now
                   </a>
+                  
+                  {/* Button 2: Points System */}
                   <a 
                     href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#dadce0] hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] text-[#5f6368] text-base font-medium rounded-sm shadow-sm hover:shadow-md transition-all text-center focus:outline-none"
+                    className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#3c4043] hover:text-[#1a73e8] hover:bg-[#f8f9fa] font-medium text-sm sm:text-base transition-colors border-b sm:border-b-0 sm:border-r border-[#dfe1e5] focus:outline-none flex items-center justify-center gap-2"
                   >
                     Points System
                   </a>
-                  {/* NEW CALCULATOR BUTTON */}
+                  
+                  {/* Button 3: Calculator */}
                   <button 
                     onClick={() => router.push("/calculator")}
-                    className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#dadce0] hover:bg-[#e8f0fe] hover:border-[#1a73e8] text-[#1a73e8] text-base font-medium rounded-sm shadow-sm hover:shadow-md transition-all text-center focus:outline-none"
+                    className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#1a73e8] font-semibold hover:bg-[#f8f9fa] text-sm sm:text-base transition-colors focus:outline-none flex items-center justify-center gap-2"
                   >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     Open Calculator
                   </button>
+                
                 </div>
+
               </div>
 
             </div>
@@ -165,7 +180,7 @@ export default function FacilitatorPage() {
             <div className="max-w-6xl mx-auto">
               
 
-              {/* ================= PREMIUM RECTANGULAR INTRO BOX (RESTORED EXACTLY) ================= */}
+              {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
               <div className="mb-10 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
                 
                 {/* Clean Single Blue Accent Line (Copyright Free) */}
