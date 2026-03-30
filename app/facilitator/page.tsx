@@ -159,7 +159,7 @@ export default function FacilitatorPage() {
                     Points System
                   </a>
                   
-                  {/* Button 3: Calculator */}
+                  {/* Button 3: Calculator (MIC REMOVED AS REQUESTED) */}
                   <button 
                     onClick={() => router.push("/calculator")}
                     className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#1a73e8] font-semibold hover:bg-[#f8f9fa] text-sm sm:text-base transition-colors focus:outline-none flex items-center justify-center gap-2"
@@ -167,9 +167,8 @@ export default function FacilitatorPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     Open Calculator
                   </button>
-                
+                  
                 </div>
-
               </div>
 
             </div>
@@ -180,46 +179,45 @@ export default function FacilitatorPage() {
             <div className="max-w-6xl mx-auto">
               
 
-              {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
-              <div className="mb-10 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
+              {/* ================= PREMIUM RECTANGULAR INTRO BOX (UPDATED) ================= */}
+              <div className="mb-10 bg-white border border-[#dadce0] rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden group">
                 
-                {/* Clean Single Blue Accent Line (Copyright Free) */}
+                {/* Clean Single Blue Accent Line */}
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
 
                 <div className="text-center relative z-10">
-                  <h2 className="text-3xl font-medium text-[#202124] tracking-tight mb-8">Arcade Facilitator Program ?</h2>
+                  <h2 className="text-3xl font-medium text-black tracking-tight mb-10">Arcade Facilitator Program ?</h2>
 
-                  
-                  {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
-                  <div className="max-w-4xl mx-auto bg-[#e8f0fe]/60 border border-[#d2e3fc] rounded-xl p-6 md:p-8 mb-12 shadow-sm">
-                    <p className="text-[#3c4043] text-base md:text-lg leading-relaxed font-medium">
+                  {/* 🔥 HIGHLIGHTED PARAGRAPH BOX (CLEAN, MODERN, BLACK TEXT) */}
+                  <div className="max-w-4xl mx-auto text-left border-l-4 border-[#1a73e8] pl-6 md:pl-8 mb-16">
+                    <p className="text-black text-base md:text-lg leading-relaxed font-medium">
                       The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
                     </p>
                   </div>
 
-                  {/* 🔥 NEW: PREMIUM FACILITATOR PORTFOLIO BOX 🔥 */}
-                  <div className="max-w-4xl mx-auto bg-gradient-to-br from-white to-[#f4f7fd] border border-[#dadce0] rounded-2xl p-8 md:p-10 shadow-[0_8px_30px_rgba(26,115,232,0.05)] text-left hover:border-[#1a73e8] transition-colors duration-500">
-                    <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                  {/* 🔥 NEW: PREMIUM FACILITATOR PORTFOLIO BOX (WHITE, SLEEK, LATEST UI) 🔥 */}
+                  <div className="max-w-4xl mx-auto bg-white border border-[#dadce0] rounded-[2rem] p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left hover:shadow-md transition-all duration-500">
+                    <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
                       
-                      {/* Facilitator Image & Title */}
+                      {/* Facilitator Image & Title (MODERN SQUIRCLE SHAPE) */}
                       <div className="flex flex-col items-center flex-shrink-0">
-                        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#e8f0fe] shadow-md mb-4">
+                        <div className="w-32 h-40 rounded-[1.5rem] overflow-hidden shadow-sm border border-[#dadce0] mb-5 relative group/img">
                           <img 
                             src="https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg" 
                             alt="Manish Kumar" 
-                            className="w-full h-full object-cover object-top"
+                            className="w-full h-full object-cover object-top transform group-hover/img:scale-105 transition-transform duration-500"
                           />
                         </div>
-                        <h3 className="text-xl font-bold text-[#202124]">Manish Kumar</h3>
-                        <p className="text-sm font-semibold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full mt-1">Arcade Facilitator</p>
+                        <h3 className="text-2xl font-bold text-black">Manish Kumar</h3>
+                        <p className="text-sm font-semibold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full mt-2">Arcade Facilitator</p>
                         
                         <a 
                           href="https://linkedin.com/in/manish-ui" 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#5f6368] hover:text-[#1a73e8] transition-colors"
+                          className="mt-6 inline-flex items-center justify-center gap-2 text-sm font-medium text-black hover:text-[#1a73e8] hover:bg-[#f8f9fa] border border-[#dadce0] px-5 py-2.5 rounded-xl transition-colors w-full"
                         >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5 text-[#0a66c2]" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                           </svg>
                           Connect
@@ -228,32 +226,28 @@ export default function FacilitatorPage() {
 
                       {/* Achievements & Description */}
                       <div className="flex-1">
-                        <p className="text-[#3c4043] text-base md:text-lg leading-relaxed mb-6 text-center md:text-left">
-                          As a dedicated <strong className="text-[#202124]">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="text-[#1a73e8]">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
+                        <p className="text-black text-base md:text-lg leading-relaxed mb-10 text-center md:text-left">
+                          As a dedicated <strong className="font-bold">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="text-[#1a73e8]">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
                         </p>
                         
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                            <div className="text-2xl mb-1">🏆</div>
-                            <div className="font-bold text-[#202124] text-sm">2x Ultimate</div>
-                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Cohort 1 & 2</div>
-                          </div>
-                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                            <div className="text-2xl mb-1">👥</div>
-                            <div className="font-bold text-[#202124] text-sm">2000+</div>
-                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">People Guided</div>
-                          </div>
-                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                            <div className="text-2xl mb-1">⭐</div>
-                            <div className="font-bold text-[#202124] text-sm">20+</div>
-                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Coordinators</div>
-                          </div>
-                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                            <div className="text-2xl mb-1">🎁</div>
-                            <div className="font-bold text-[#202124] text-sm">Gifts & Certs</div>
-                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Distributed</div>
-                          </div>
+                        {/* 🔥 MODERN STATS SYMBOLS / BOXES 🔥 */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                          {[
+                            { icon: "🏆", title: "2x Ultimate", subtitle: "Cohort 1 & 2" },
+                            { icon: "👥", title: "2000+", subtitle: "People Guided" },
+                            { icon: "⭐", title: "20+", subtitle: "Coordinators" },
+                            { icon: "🎁", title: "Gifts & Certs", subtitle: "Distributed" }
+                          ].map((stat, i) => (
+                            <div key={i} className="group p-5 rounded-2xl bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:shadow-[0_4px_16px_rgba(26,115,232,0.08)] transition-all duration-300 flex flex-col items-center justify-center text-center cursor-default">
+                              <div className="w-12 h-12 rounded-xl bg-[#f8f9fa] border border-[#e8eaed] group-hover:bg-[#e8f0fe] group-hover:border-[#d2e3fc] flex items-center justify-center text-2xl mb-3 transition-colors">
+                                {stat.icon}
+                              </div>
+                              <div className="font-bold text-black text-[15px]">{stat.title}</div>
+                              <div className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
+                            </div>
+                          ))}
                         </div>
+                        
                       </div>
 
                     </div>
@@ -430,7 +424,7 @@ export default function FacilitatorPage() {
 
               <div className="text-center mb-20 relative z-10">
                 <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-4">
-                  Meet Our Arcade Team
+                  Meet The Arcade Team
                 </h2>
                 <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
                   Connect with the people driving the Arcade Facilitator Program in our community.
