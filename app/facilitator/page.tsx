@@ -4,7 +4,7 @@ import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// Official FAQ Data
+// 🔥 UPDATED: Official FAQ Data from Google Cloud Arcade Site
 const officialFaqs = [
   {
     question: "When is the Arcade Facilitator program starting?",
@@ -62,7 +62,7 @@ export default function FacilitatorPage() {
   // NEW: State for FAQ Accordion
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // 🔥 UPDATED TEAM DATA ARRAY (Ishika added after Preeti)
+  // 🔥 UPDATED TEAM DATA ARRAY (Ishika removed, only 4 members)
   const teamMembers = [
     { 
       name: "Manish Kumar", 
@@ -87,14 +87,6 @@ export default function FacilitatorPage() {
       initials: "P",
       linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331", 
       color: "bg-[#e6f4ea] text-[#137333] border-[#ceead6]" 
-    },
-    { 
-      name: "Ishika", 
-      role: "Communication Lead", 
-      image: "https://i.postimg.cc/cHnBKm3f/IMG-20260325-194350.png", 
-      initials: "I",
-      linkedin: "https://www.linkedin.com/in/ishika-gohil-219592334", 
-      color: "bg-[#f3e8fd] text-[#681da8] border-[#d7aefb]" 
     },
     { 
       name: "Rohit", 
@@ -428,7 +420,8 @@ export default function FacilitatorPage() {
                 <div className="h-0.5 w-40 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853] mx-auto rounded-full mt-6"></div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+              {/* 🔥 UPDATED GRID: grid-cols-4 for exactly 4 members 🔥 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {teamMembers.map((member, index) => (
                   <a 
                     key={index} 
