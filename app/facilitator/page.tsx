@@ -62,7 +62,7 @@ export default function FacilitatorPage() {
   // NEW: State for FAQ Accordion
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // 🔥 UPDATED TEAM DATA ARRAY (Ishika removed, only 4 members)
+  // 🔥 UPDATED TEAM DATA ARRAY (Only 3 members left)
   const teamMembers = [
     { 
       name: "Manish Kumar", 
@@ -81,14 +81,6 @@ export default function FacilitatorPage() {
       color: "bg-[#fef7e0] text-[#b06000] border-[#fde293]" 
     },
     { 
-      name: "Preeti", 
-      role: "Community Lead", 
-      image: "https://i.postimg.cc/xdBj8CVc/file-00000000ed287208a169cdbe1ea331c9.png", 
-      initials: "P",
-      linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331", 
-      color: "bg-[#e6f4ea] text-[#137333] border-[#ceead6]" 
-    },
-    { 
       name: "Rohit", 
       role: "Google Cloud Labs Lead", 
       image: "https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg",
@@ -98,190 +90,201 @@ export default function FacilitatorPage() {
     }
   ];
 
+  // 🔥 NEW: COORDINATORS DATA ARRAY (8 People)
+  const coordinatorsData = [
+    { name: "Disha Shukla", linkedin: "https://www.linkedin.com/in/disha-shukla-90a88a298", badges: "85+", points: "95", profileUrl: "https://www.skills.google/public_profiles/b2233758-bfb0-41e3-bc41-85d89d7bb1de" },
+    { name: "Preeti Patel", linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331", badges: "50+", points: "67", profileUrl: "https://www.skills.google/public_profiles/0db81977-a509-43bd-917f-e8e9d6611ac9" },
+    { name: "Vaibhav Raj", linkedin: "https://www.linkedin.com/in/vaibhav-raj-0a9477285", badges: "90+", points: "98", profileUrl: "https://www.skills.google/public_profiles/a0122dd1-ef1a-4092-9845-af2c6c7bb7d2" },
+    { name: "Milan Deori", linkedin: "https://www.linkedin.com/in/milan-deori-939a832a1", badges: "70+", points: "105", profileUrl: "https://www.cloudskillsboost.google/public_profiles/d0df0491-5dca-4c7b-9b0e-c8144752f0b5" },
+    { name: "Jayanta Ghosh", linkedin: "https://www.linkedin.com/in/jayantaghosh2004", badges: "120+", points: "100", profileUrl: " https://www.skills.google/public_profiles/4594551b-ab3b-4e2b-afe0-fd776ba8fd57" },
+    { name: "Rajiv Ranjan Malviya", linkedin: "https://www.linkedin.com/in/rajivmalviya", badges: "72+", points: "98", profileUrl: "https://www.skills.google/public_profiles/f270e397-82a1-4f30-88d1-484c46ab24f8" },
+    { name: "Ataul Rahman", linkedin: "https://www.linkedin.com/in/ataul-rahman", badges: "56+", points: "103", profileUrl: "https://www.skills.google/public_profiles/3b11619a-40bc-452f-ac49-6bcc2292010b" },
+    { name: "Santu Kumar", linkedin: "https://www.linkedin.com/in/santu-kumar-163a17279", badges: "125+", points: "92", profileUrl: "https://www.skills.google/public_profiles/b384c49b-874a-48a3-9c0f-a34b61f15a47" }
+  ];
+
   return (
-    <div className="min-h-screen bg-white text-[#202124] font-sans">
-      <Navbar />
+    <>
+      <div className="min-h-screen bg-white text-[#202124] font-sans">
+        <Navbar />
 
-      <main className="pt-20">
-        
-        {/* ================= HERO SECTION ================= */}
-        <section className="relative border-b border-[#dadce0] bg-[#f8f9fa] overflow-hidden">
-          <div className="max-w-4xl mx-auto px-6 py-20 md:py-24 flex flex-col items-center justify-center gap-10">
-            
-            {/* Centered Hero Content since graphic is removed */}
-            <div className="flex-1 text-center z-10 w-full">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-[#dadce0] text-[#5f6368] text-xs font-bold mb-6 uppercase tracking-widest rounded-sm shadow-sm hover:shadow-md transition-shadow">
-                <span className="w-2 h-2 bg-[#34a853] rounded-sm animate-pulse"></span>
-                Facilitator 2026
-              </div>
+        <main className="pt-20">
+          
+          {/* ================= HERO SECTION ================= */}
+          <section className="relative border-b border-[#dadce0] bg-[#f8f9fa] overflow-hidden">
+            <div className="max-w-4xl mx-auto px-6 py-20 md:py-24 flex flex-col items-center justify-center gap-10">
               
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-normal text-[#202124] tracking-tight mb-6 leading-[1.15]">
-                Google Cloud Arcade <br className="hidden sm:block" />
-                <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Facilitator Program</span>
-              </h1>
-              
-              <p className="text-[#5f6368] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8">
-                Kickstart your cloud journey, learn new skills on Google Cloud Platform, and win exciting exclusive Google Cloud swags by completing milestones.
-              </p>
-
-              {/* THREE BUTTONS IN A ROW */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
-                <a 
-                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-base font-medium rounded-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all text-center focus:outline-none"
-                >
-                  Enroll Now
-                </a>
-                <a 
-                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#dadce0] hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] text-[#5f6368] text-base font-medium rounded-sm shadow-sm hover:shadow-md transition-all text-center focus:outline-none"
-                >
-                  Points System
-                </a>
-                {/* NEW CALCULATOR BUTTON */}
-                <button 
-                  onClick={() => router.push("/calculator")}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#dadce0] hover:bg-[#e8f0fe] hover:border-[#1a73e8] text-[#1a73e8] text-base font-medium rounded-sm shadow-sm hover:shadow-md transition-all text-center focus:outline-none"
-                >
-                  Open Calculator
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ================= HOW IT WORKS / ABOUT ================= */}
-        <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
-          <div className="max-w-6xl mx-auto">
-            
-
-            {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
-            <div className="mb-10 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
-              
-              {/* Clean Single Blue Accent Line (Copyright Free) */}
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
-
-              <div className="text-center relative z-10">
-                <h2 className="text-3xl font-medium text-[#202124] tracking-tight mb-8">Arcade Facilitator Program ?</h2>
-
-
-                
-                {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
-                <div className="max-w-4xl mx-auto bg-[#e8f0fe]/60 border border-[#d2e3fc] rounded-xl p-6 md:p-8 mb-12 shadow-sm">
-                  <p className="text-[#3c4043] text-base md:text-lg leading-relaxed font-medium">
-                    The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
-                  </p>
+              {/* Centered Hero Content since graphic is removed */}
+              <div className="flex-1 text-center z-10 w-full">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-[#dadce0] text-[#5f6368] text-xs font-bold mb-6 uppercase tracking-widest rounded-sm shadow-sm hover:shadow-md transition-shadow">
+                  <span className="w-2 h-2 bg-[#34a853] rounded-sm animate-pulse"></span>
+                  Facilitator 2026
                 </div>
+                
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-normal text-[#202124] tracking-tight mb-6 leading-[1.15]">
+                  Google Cloud Arcade <br className="hidden sm:block" />
+                  <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Facilitator Program</span>
+                </h1>
+                
+                <p className="text-[#5f6368] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8">
+                  Kickstart your cloud journey, learn new skills on Google Cloud Platform, and win exciting exclusive Google Cloud swags by completing milestones.
+                </p>
 
-                {/* 🔥 NEW: PREMIUM FACILITATOR PORTFOLIO BOX 🔥 */}
-                <div className="max-w-4xl mx-auto bg-gradient-to-br from-white to-[#f4f7fd] border border-[#dadce0] rounded-2xl p-8 md:p-10 shadow-[0_8px_30px_rgba(26,115,232,0.05)] text-left hover:border-[#1a73e8] transition-colors duration-500">
-                  <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-                    
-                    {/* Facilitator Image & Title */}
-                    <div className="flex flex-col items-center flex-shrink-0">
-                      <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#e8f0fe] shadow-md mb-4">
-                        <img 
-                          src="https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg" 
-                          alt="Manish Kumar" 
-                          className="w-full h-full object-cover object-top"
-                        />
-                      </div>
-                      <h3 className="text-xl font-bold text-[#202124]">Manish Kumar</h3>
-                      <p className="text-sm font-semibold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full mt-1">Arcade Facilitator</p>
-                      
-                      <a 
-                        href="https://linkedin.com/in/manish-ui" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#5f6368] hover:text-[#1a73e8] transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                        Connect
-                      </a>
-                    </div>
+                {/* THREE BUTTONS IN A ROW */}
+                <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
+                  <a 
+                    href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-base font-medium rounded-sm shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all text-center focus:outline-none"
+                  >
+                    Enroll Now
+                  </a>
+                  <a 
+                    href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#dadce0] hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] text-[#5f6368] text-base font-medium rounded-sm shadow-sm hover:shadow-md transition-all text-center focus:outline-none"
+                  >
+                    Points System
+                  </a>
+                  {/* NEW CALCULATOR BUTTON */}
+                  <button 
+                    onClick={() => router.push("/calculator")}
+                    className="w-full sm:w-auto px-8 py-3.5 bg-white border border-[#dadce0] hover:bg-[#e8f0fe] hover:border-[#1a73e8] text-[#1a73e8] text-base font-medium rounded-sm shadow-sm hover:shadow-md transition-all text-center focus:outline-none"
+                  >
+                    Open Calculator
+                  </button>
+                </div>
+              </div>
 
-                    {/* Achievements & Description */}
-                    <div className="flex-1">
-                      <p className="text-[#3c4043] text-base md:text-lg leading-relaxed mb-6 text-center md:text-left">
-                        As a dedicated <strong className="text-[#202124]">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="text-[#1a73e8]">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
-                      </p>
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                          <div className="text-2xl mb-1">🏆</div>
-                          <div className="font-bold text-[#202124] text-sm">2x Ultimate</div>
-                          <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Cohort 1 & 2</div>
-                        </div>
-                        <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                          <div className="text-2xl mb-1">👥</div>
-                          <div className="font-bold text-[#202124] text-sm">2000+</div>
-                          <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">People Guided</div>
-                        </div>
-                        <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                          <div className="text-2xl mb-1">⭐</div>
-                          <div className="font-bold text-[#202124] text-sm">20+</div>
-                          <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Coordinators</div>
-                        </div>
-                        <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
-                          <div className="text-2xl mb-1">🎁</div>
-                          <div className="font-bold text-[#202124] text-sm">Gifts & Certs</div>
-                          <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Distributed</div>
-                        </div>
-                      </div>
-                    </div>
+            </div>
+          </section>
 
+          {/* ================= HOW IT WORKS / ABOUT ================= */}
+          <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
+            <div className="max-w-6xl mx-auto">
+              
+
+              {/* ================= PREMIUM RECTANGULAR INTRO BOX (RESTORED EXACTLY) ================= */}
+              <div className="mb-10 bg-gradient-to-b from-white to-[#f8f9fa] border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group hover:shadow-[0_8px_30px_rgba(26,115,232,0.08)] transition-shadow duration-500">
+                
+                {/* Clean Single Blue Accent Line (Copyright Free) */}
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
+
+                <div className="text-center relative z-10">
+                  <h2 className="text-3xl font-medium text-[#202124] tracking-tight mb-8">Arcade Facilitator Program ?</h2>
+
+                  
+                  {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
+                  <div className="max-w-4xl mx-auto bg-[#e8f0fe]/60 border border-[#d2e3fc] rounded-xl p-6 md:p-8 mb-12 shadow-sm">
+                    <p className="text-[#3c4043] text-base md:text-lg leading-relaxed font-medium">
+                      The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
+                    </p>
                   </div>
+
+                  {/* 🔥 NEW: PREMIUM FACILITATOR PORTFOLIO BOX 🔥 */}
+                  <div className="max-w-4xl mx-auto bg-gradient-to-br from-white to-[#f4f7fd] border border-[#dadce0] rounded-2xl p-8 md:p-10 shadow-[0_8px_30px_rgba(26,115,232,0.05)] text-left hover:border-[#1a73e8] transition-colors duration-500">
+                    <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                      
+                      {/* Facilitator Image & Title */}
+                      <div className="flex flex-col items-center flex-shrink-0">
+                        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#e8f0fe] shadow-md mb-4">
+                          <img 
+                            src="https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg" 
+                            alt="Manish Kumar" 
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                        <h3 className="text-xl font-bold text-[#202124]">Manish Kumar</h3>
+                        <p className="text-sm font-semibold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full mt-1">Arcade Facilitator</p>
+                        
+                        <a 
+                          href="https://linkedin.com/in/manish-ui" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#5f6368] hover:text-[#1a73e8] transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                          </svg>
+                          Connect
+                        </a>
+                      </div>
+
+                      {/* Achievements & Description */}
+                      <div className="flex-1">
+                        <p className="text-[#3c4043] text-base md:text-lg leading-relaxed mb-6 text-center md:text-left">
+                          As a dedicated <strong className="text-[#202124]">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="text-[#1a73e8]">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
+                        </p>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
+                            <div className="text-2xl mb-1">🏆</div>
+                            <div className="font-bold text-[#202124] text-sm">2x Ultimate</div>
+                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Cohort 1 & 2</div>
+                          </div>
+                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
+                            <div className="text-2xl mb-1">👥</div>
+                            <div className="font-bold text-[#202124] text-sm">2000+</div>
+                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">People Guided</div>
+                          </div>
+                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
+                            <div className="text-2xl mb-1">⭐</div>
+                            <div className="font-bold text-[#202124] text-sm">20+</div>
+                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Coordinators</div>
+                          </div>
+                          <div className="bg-white border border-[#dadce0] p-4 rounded-xl text-center shadow-sm">
+                            <div className="text-2xl mb-1">🎁</div>
+                            <div className="font-bold text-[#202124] text-sm">Gifts & Certs</div>
+                            <div className="text-[11px] text-[#5f6368] uppercase tracking-wide">Distributed</div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
                 </div>
-
               </div>
-            </div>
-            {/* ================= END PREMIUM INTRO BOX ================= */}
+              {/* ================= END PREMIUM INTRO BOX ================= */}
 
-            {/* ================= NEW: CONTACT FACILITATOR SECTION ================= */}
-            <div className="mb-16 bg-[#e8f0fe]/30 border border-[#d2e3fc] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
-              <div className="flex-1">
-                <h3 className="text-2xl font-medium text-[#202124] mb-3 flex items-center gap-2">
-                  Contact Facilitator
-                  <span className="relative flex h-2.5 w-2.5 ml-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
-                  </span>
-                </h3>
-                <p className="text-[#5f6368] text-sm md:text-base mb-5">Have questions? Get direct help regarding your Arcade progress.</p>
+              {/* ================= CONTACT FACILITATOR SECTION ================= */}
+              <div className="mb-16 bg-[#e8f0fe]/30 border border-[#d2e3fc] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-medium text-[#202124] mb-3 flex items-center gap-2">
+                    Contact Facilitator
+                    <span className="relative flex h-2.5 w-2.5 ml-1">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
+                    </span>
+                  </h3>
+                  <p className="text-[#5f6368] text-sm md:text-base mb-5">Have questions? Get direct help regarding your Arcade progress.</p>
+                  
+                  <ul className="text-[#3c4043] text-sm md:text-base space-y-2.5">
+                    <li className="flex items-start gap-2.5">
+                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      <span>Ask specific queries related to <strong>Labs, Swags, or Arcade Points</strong>.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      <span>Please keep your <strong>Google Cloud Skills Boost Public URL</strong> ready.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      <span>Kindly allow some time for a response due to high message volumes.</span>
+                    </li>
+                  </ul>
+                </div>
                 
-                <ul className="text-[#3c4043] text-sm md:text-base space-y-2.5">
-                  <li className="flex items-start gap-2.5">
-                    <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Ask specific queries related to <strong>Labs, Swags, or Arcade Points</strong>.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Please keep your <strong>Google Cloud Skills Boost Public URL</strong> ready.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Kindly allow some time for a response due to high message volumes.</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="w-full md:w-auto text-center">
-                <a 
-                  // URL Encoding added for auto-message text
-                  href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-[#25D366] hover:bg-[#128C7E] text-white text-base font-semibold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all focus:outline-none"
-                >
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                <div className="w-full md:w-auto text-center">
+                  <a 
+                    href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-[#25D366] hover:bg-[#128C7E] text-white text-base font-semibold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all focus:outline-none"
+                  >
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                     </svg>
                     Chat on WhatsApp
                   </a>
@@ -385,7 +388,7 @@ export default function FacilitatorPage() {
 
           {/* ================= TEAM SECTION ================= */}
           <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
-            <div className="max-w-[1350px] mx-auto relative z-10">
+            <div className="max-w-[1000px] mx-auto relative z-10">
 
               {/* Premium Animations */}
               <style>{`
@@ -420,15 +423,15 @@ export default function FacilitatorPage() {
                 <div className="h-0.5 w-40 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853] mx-auto rounded-full mt-6"></div>
               </div>
 
-              {/* 🔥 UPDATED GRID: grid-cols-4 for exactly 4 members 🔥 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* 🔥 UPDATED GRID */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
                 {teamMembers.map((member, index) => (
                   <a 
                     key={index} 
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative block rounded-2xl hover:shadow-[0_8px_30px_rgba(26,115,232,0.18)] transition-all duration-500 overflow-hidden pointer-events-auto"
+                    className="group relative block w-full max-w-[280px] rounded-2xl hover:shadow-[0_8px_30px_rgba(26,115,232,0.18)] transition-all duration-500 overflow-hidden pointer-events-auto"
                   >
                     <div className="absolute animate-gradient-rotate bg-[conic-gradient(from_0deg_at_50%_50%,#4285F4,#EA4335,#FBBC05,#34A853,#4285F4)] opacity-50 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
                     
@@ -448,11 +451,11 @@ export default function FacilitatorPage() {
                         )}
                       </div>
 
-                      <div className="px-5 pb-6 flex flex-col items-center">
+                      <div className="px-5 pb-6 flex flex-col items-center w-full">
                           <h3 className="text-lg font-bold text-[#202124] mb-2 group-hover:text-[#1a73e8] transition-colors">{member.name}</h3>
 
                           {member.role === "Arcade Facilitator" ? (
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#e8f0fe] border border-[#d2e3fc] rounded-md mb-5 shadow-sm">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#e8f0fe] border border-[#d2e3fc] rounded-md mb-2 shadow-sm">
                               <svg className="w-3.5 h-3.5 text-[#FBBC05] animate-pulse" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                               </svg>
@@ -461,7 +464,7 @@ export default function FacilitatorPage() {
                               </span>
                             </div>
                           ) : (
-                            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${member.color} text-[10px] font-bold uppercase tracking-widest rounded-md mb-5 text-center`}>
+                            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${member.color} text-[10px] font-bold uppercase tracking-widest rounded-md mb-2 text-center`}>
                               <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 flex-shrink-0"></span>
                               {member.role}
                             </div>
@@ -476,8 +479,85 @@ export default function FacilitatorPage() {
             </div>
           </section>
 
-          {/* ================= NEW: FREQUENTLY ASKED QUESTIONS ================= */}
+          {/* ================= NEW: CO-ORDINATORS TEAM SECTION (TABLE/LIST FORMAT) ================= */}
           <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
+            <div className="max-w-4xl mx-auto relative z-10">
+              <div className="text-center mb-16 relative z-10">
+                <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-4">Our Expert Co-ordinators</h2>
+                <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed">
+                  The dedicated individuals helping our community achieve their milestones.
+                </p>
+              </div>
+
+              <div className="bg-white border border-[#dadce0] rounded-sm shadow-sm overflow-hidden mb-6">
+                <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-[#f8f9fa] border-b border-[#dadce0] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
+                  <div className="col-span-5">Coordinators</div>
+                  <div className="col-span-3 text-center">Skill Badges</div>
+                  <div className="col-span-2 text-center">Arcade Points</div>
+                  <div className="col-span-2 text-right">Public Profile</div>
+                </div>
+
+                <div className="divide-y divide-[#dadce0]">
+                  {coordinatorsData.map((coord, index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
+                      
+                      {/* 🔥 UPDATED: Clickable Name & Tag (No LinkedIn Icon Here) 🔥 */}
+                      <div className="col-span-1 md:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                        <a 
+                          href={coord.linkedin} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="font-bold text-[#202124] hover:text-[#0a66c2] text-[17px] hover:underline underline-offset-4 transition-colors"
+                        >
+                          {coord.name}
+                        </a>
+                        <span className="text-[10px] font-semibold text-[#1a73e8] bg-[#e8f0fe] px-2 py-0.5 rounded-sm sm:ml-2 border border-[#d2e3fc]">Coordinator</span>
+                      </div>
+
+                      {/* Badges & Points */}
+                      <div className="col-span-1 md:col-span-5 grid grid-cols-2 gap-4 md:gap-0 mt-2 md:mt-0">
+                        <div className="md:col-span-1 flex flex-col md:items-center">
+                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-0.5">Skill Badges</span>
+                          <span className="font-semibold text-[#202124]">{coord.badges}</span>
+                        </div>
+                        <div className="md:col-span-1 flex flex-col md:items-center">
+                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-0.5">Arcade Pts</span>
+                          <span className="font-semibold text-[#b06000]">{coord.points}</span>
+                        </div>
+                      </div>
+
+                      {/* 🔥 UPDATED: Profile Button + Blue LinkedIn Icon Shifted to the End 🔥 */}
+                      <div className="col-span-1 md:col-span-2 flex items-center justify-start md:justify-end gap-3 mt-3 md:mt-0">
+                        <a 
+                          href={coord.profileUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="inline-block px-4 py-2 bg-white border border-[#dadce0] text-[#1a73e8] text-[13px] font-medium rounded-sm hover:bg-[#e8f0fe] hover:border-[#1a73e8] transition-colors shadow-sm"
+                        >
+                          Profile
+                        </a>
+                        <a 
+                          href={coord.linkedin} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-[#0a66c2] hover:text-[#004182] hover:scale-110 transition-transform flex-shrink-0"
+                          title="View LinkedIn Profile"
+                        >
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                          </svg>
+                        </a>
+                      </div>
+                      
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ================= FREQUENTLY ASKED QUESTIONS ================= */}
+          <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-normal text-[#202124] tracking-tight">Frequently Asked Questions</h2>
@@ -537,30 +617,36 @@ export default function FacilitatorPage() {
         </main>
 
         {/* ================= MINIMAL FOOTER ================= */}
-        <footer className="bg-white py-8">
+        <footer className="bg-white py-8 border-t border-[#dadce0]">
           <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-[#5f6368] text-sm text-center md:text-left">
               <p>© {new Date().getFullYear()} Arcade Nexus. Independent Community Tool.</p>
             </div>
             <div className="flex gap-4">
               
-              <div className="relative group">
-                <button onClick={() => router.push("/")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline focus:outline-none">
+              {/* HOME LINK WITH POP MODAL */}
+              <div className="relative group flex items-center justify-center">
+                <button onClick={() => router.push("/")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline focus:outline-none transition-colors">
                   Home
                 </button>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 bg-[#202124] text-white text-xs font-medium whitespace-nowrap rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-md">
-                  Go to Homepage
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-[#202124]"></div>
+                {/* Clean Pop Modal (Tooltip) */}
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#202124] text-white text-[11px] font-medium tracking-wide rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
+                  Return to Homepage
+                  {/* Little downward arrow */}
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-[#202124]"></div>
                 </div>
               </div>
 
-              <div className="relative group">
-                <button onClick={() => router.push("/calculator")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline focus:outline-none">
+              {/* CALCULATOR LINK WITH POP MODAL */}
+              <div className="relative group flex items-center justify-center">
+                <button onClick={() => router.push("/calculator")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline focus:outline-none transition-colors">
                   Calculator
                 </button>
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 bg-[#202124] text-white text-xs font-medium whitespace-nowrap rounded-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-md">
-                  Open Calculator
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-[#202124]"></div>
+                {/* Clean Pop Modal (Tooltip) */}
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#202124] text-white text-[11px] font-medium tracking-wide rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
+                  Calculate Arcade Points
+                  {/* Little downward arrow */}
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-[#202124]"></div>
                 </div>
               </div>
 
@@ -568,6 +654,6 @@ export default function FacilitatorPage() {
           </div>
         </footer>
       </div>
-    
+    </>
   );
 }
