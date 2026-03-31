@@ -178,7 +178,7 @@ export default function FacilitatorPage() {
             <div className="max-w-6xl mx-auto">
               
 
-              {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
+{/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
               <div className="mb-10 bg-white border border-[#dadce0] rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden group">
                 
                 {/* Clean Single Blue Accent Line */}
@@ -225,24 +225,26 @@ export default function FacilitatorPage() {
 
                       {/* Achievements & Description */}
                       <div className="flex-1">
-                        <p className="text-black text-base md:text-lg leading-relaxed mb-10 text-center md:text-left">
-                          As a dedicated <strong className="font-bold">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="text-[#1a73e8]">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
+                        
+                        {/* 🔥 STYLISH, ITALIC & BLACK PARAGRAPH 🔥 */}
+                        <p className="text-black text-[17px] md:text-[19px] leading-relaxed mb-8 text-center md:text-left italic font-serif tracking-wide">
+                          "As a dedicated <strong className="font-bold font-sans">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="font-bold font-sans">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags."
                         </p>
                         
-                        {/* 🔥 MODERN STATS SYMBOLS / BOXES 🔥 */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        {/* 🔥 CLEAN STATS SYMBOLS WITHOUT BOXES 🔥 */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4 mt-8 border-t border-[#dadce0] pt-8">
                           {[
                             { icon: "🏆", title: "2x Ultimate", subtitle: "Cohort 1 & 2" },
                             { icon: "👥", title: "2000+", subtitle: "People Guided" },
                             { icon: "⭐", title: "20+", subtitle: "Coordinators" },
                             { icon: "🎁", title: "Gifts & Certs", subtitle: "Distributed" }
                           ].map((stat, i) => (
-                            <div key={i} className="group p-5 rounded-2xl bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:shadow-[0_4px_16px_rgba(26,115,232,0.08)] transition-all duration-300 flex flex-col items-center justify-center text-center cursor-default">
-                              <div className="w-12 h-12 rounded-xl bg-[#f8f9fa] border border-[#e8eaed] group-hover:bg-[#e8f0fe] group-hover:border-[#d2e3fc] flex items-center justify-center text-2xl mb-3 transition-colors">
+                            <div key={i} className="flex flex-col items-center justify-center text-center group cursor-default">
+                              <div className="text-3xl mb-3 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
                                 {stat.icon}
                               </div>
-                              <div className="font-bold text-black text-[15px]">{stat.title}</div>
-                              <div className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
+                              <div className="font-bold text-black text-[16px]">{stat.title}</div>
+                              <div className="text-[11px] font-semibold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
                             </div>
                           ))}
                         </div>
@@ -517,20 +519,11 @@ export default function FacilitatorPage() {
 
                  {/* Description / Points & New WhatsApp Button */}
                  <div className="flex-1 mt-2 md:mt-0 w-full flex flex-col justify-between">
-                   <ul className="space-y-3 mb-6">
-                     <li className="flex items-start gap-2.5">
-                        <span className="text-[#34a853] mt-1">✔</span>
-                        <span className="text-[#3c4043] text-[15px] leading-relaxed">Spearheading community engagement and guiding peers through technical labs.</span>
-                     </li>
-                     <li className="flex items-start gap-2.5">
-                        <span className="text-[#34a853] mt-1">✔</span>
-                        <span className="text-[#3c4043] text-[15px] leading-relaxed">Actively resolving doubts and ensuring smooth completion of milestones.</span>
-                     </li>
-                     <li className="flex items-start gap-2.5">
-                        <span className="text-[#34a853] mt-1">✔</span>
-                        <span className="text-[#3c4043] text-[15px] leading-relaxed">Dedicated to fostering a collaborative and interactive learning environment.</span>
-                     </li>
-                   </ul>
+                   
+                   {/* 🔥 UPDATED: Single Professional Paragraph 🔥 */}
+                   <p className="text-[#3c4043] text-base leading-relaxed font-medium mb-6 text-center md:text-left">
+                     As the dedicated Community Lead, Preeti spearheads community engagement initiatives, seamlessly managing group dynamics and providing unwavering support to members navigating technical labs. She plays a pivotal role in resolving queries, participating in core strategy meetings, and fostering a highly collaborative environment to ensure the collective success of the program.
+                   </p>
 
                    {/* Separator Line */}
                    <div className="w-full h-[1px] bg-[#dadce0] my-4"></div>
@@ -538,7 +531,7 @@ export default function FacilitatorPage() {
                    {/* 🔥 NEW: Join Community WhatsApp Button 🔥 */}
                    <div className="w-full flex justify-center md:justify-start pt-2">
                       <a 
-                        href="https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY" // TUMHARA WHATSAPP GROUP LINK YAHAN DAAL DENA
+                        href="https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-semibold rounded-xl shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all w-full md:w-auto justify-center"
@@ -554,6 +547,8 @@ export default function FacilitatorPage() {
               </div>
             </div>
           </section>
+
+
           {/* ================= CO-ORDINATORS TEAM SECTION ================= */}
           <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
             <div className="max-w-4xl mx-auto relative z-10">
