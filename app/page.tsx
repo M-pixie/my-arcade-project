@@ -90,77 +90,120 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= HOW TO GET STARTED ================= */}
-        <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-16 tracking-tight">
-              How to Start Your <span className="text-[#1a73e8] font-medium">Journey</span>?
-            </h2>
+        {/* ================= HOW TO GET STARTED (PREMIUM RECTANGULAR BOX) ================= */}
+          <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0]">
+            <div className="max-w-4xl mx-auto px-6">
+              
+              <div className="text-center mb-12 relative z-10">
+                <h2 className="text-3xl md:text-4xl font-normal text-[#202124] tracking-tight mb-4">
+                  How to Start Your Journey?
+                </h2>
+                <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed">
+                  Follow these simple steps to kickstart your Google Cloud Arcade experience.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                { link: "https://share.google/mn0xUfmd49TA9RPc1", num: "01", title: "Create Account", desc: "Sign up on Cloud Skills Boost and set up your Arcade profile." },
-                { link: "https://share.google/45EC3J4RjWLzgbkGy", num: "02", title: "Subscribe", desc: "Enroll in Arcade to unlock labs, points and challenges." },
-                { link: "https://share.google/Ojw8FgQpGhPI1sXyt", num: "03", title: "Start Labs", desc: "Complete labs, earn points & Get Google Cloud rewards." },
-                { link: "https://share.google/JRMVQ9xd8tTwx8Mol", num: "04", title: "Facilitator Program", desc: "Join the program & Win Exclusive Points & rewards." },
-              ].map((step, idx) => (
-                <a
-                  key={idx}
-                  href={step.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative p-8 bg-white border border-[#dadce0] rounded-sm hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] hover:border-[#1a73e8] transition-all duration-200 flex flex-col h-full"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="w-10 h-10 bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] font-medium text-lg rounded-sm group-hover:bg-[#1a73e8] group-hover:text-white transition-colors">
-                      {idx + 1}
+              {/* 🔥 SINGLE LONG PREMIUM RECTANGULAR BOX (Curve Reduced) 🔥 */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden">
+                <div className="divide-y divide-[#dadce0]">
+                  {[
+                    { link: "https://share.google/mn0xUfmd49TA9RPc1", num: "01", title: "Create Account", desc: "Sign up on Cloud Skills Boost and set up your Arcade profile." },
+                    { link: "https://share.google/45EC3J4RjWLzgbkGy", num: "02", title: "Subscribe", desc: "Enroll in Arcade to unlock labs, points and challenges." },
+                    { link: "https://share.google/Ojw8FgQpGhPI1sXyt", num: "03", title: "Start Labs", desc: "Complete labs, earn points & Get Google Cloud rewards." },
+                    { link: "https://share.google/JRMVQ9xd8tTwx8Mol", num: "04", title: "Facilitator Program", desc: "Join the program & Win Exclusive Points & rewards." },
+                  ].map((step, idx) => (
+                    <div key={idx} className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6 hover:bg-[#f8f9fa] transition-colors duration-300 group">
+                      
+                      {/* Number Badge (Curve Reduced) */}
+                      <div className="flex-shrink-0">
+                        <div className="w-14 h-14 rounded-xl bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] flex items-center justify-center font-bold text-xl shadow-sm group-hover:scale-105 transition-transform duration-300">
+                          {step.num}
+                        </div>
+                      </div>
+
+                      {/* Text Content */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-[#202124] mb-2">{step.title}</h3>
+                        <p className="text-[#5f6368] text-[15px] leading-relaxed">{step.desc}</p>
+                      </div>
+
+                      {/* 🔥 LONG BLUE "CLICK HERE" BUTTON (Curve Reduced) 🔥 */}
+                      <div className="w-full md:w-auto mt-2 md:mt-0 flex-shrink-0">
+                        <a 
+                          href={step.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 w-full md:w-48 py-3.5 px-6 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-[15px] font-medium rounded-lg shadow-sm transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none"
+                        >
+                          Click Here
+                          <svg className="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                        </a>
+                      </div>
+
                     </div>
-                    <span className="text-3xl font-light text-[#f1f3f4] group-hover:text-[#e8f0fe] transition-colors">
-                      {step.num}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-medium text-[#202124] mb-2">{step.title}</h3>
-                  <p className="text-sm text-[#5f6368] leading-relaxed mt-auto">
-                    {step.desc}
-                  </p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ================= FEATURES ================= */}
-        <section className="relative z-10 py-24 bg-white border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-16 tracking-tight">
-              Everything you need to <span className="text-[#1a73e8] font-medium">Win Arcade</span>
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { title: "Accurate Calculator", icon: "🎯", desc: "Get reliable Arcade point calculation directly from your profile URL.", link: "/calculator" },
-                { title: "Smart Dashboard", icon: "📊", desc: "View total points, recent activity, rank and history cleanly.", link: "/dashboard" },
-                { title: "Live Leaderboard", icon: "🏆", desc: "Compete with others and track your position in real-time.", link: "/leaderboard" },
-              ].map((feature, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => router.push(feature.link)}
-                  className="group cursor-pointer p-8 bg-white border border-[#dadce0] rounded-sm hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] transition-all duration-200"
-                >
-                  <div className="text-3xl mb-6 w-14 h-14 bg-[#f8f9fa] border border-[#dadce0] rounded-sm flex items-center justify-center group-hover:bg-[#e8f0fe] group-hover:border-[#d2e3fc] transition-colors">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-medium text-[#202124] mb-3 group-hover:text-[#1a73e8] transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[#5f6368] text-sm leading-relaxed">
-                    {feature.desc}
-                  </p>
+                  ))}
                 </div>
-              ))}
+              </div>
+
             </div>
-          </div>
-        </section>
+          </section>
+
+      {/* ================= FEATURES (PREMIUM RECTANGULAR LIST DESIGN) ================= */}
+          <section className="relative z-10 py-24 bg-white border-b border-[#dadce0]">
+            <div className="max-w-4xl mx-auto px-6">
+              
+              <div className="text-center mb-12 relative z-10">
+                <h2 className="text-3xl md:text-4xl font-semibold text-[#202124] tracking-tight mb-4">
+                  Everything you need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Win Arcade</span>
+                </h2>
+                <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed">
+                  Powerful tools and resources designed to help you track, calculate, and boost your Arcade points.
+                </p>
+              </div>
+
+              {/* 🔥 SINGLE LONG PREMIUM RECTANGULAR BOX 🔥 */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden">
+                <div className="divide-y divide-[#dadce0]">
+                  {[
+                    { title: "Accurate Calculator", icon: "🎯", desc: "Get reliable Arcade point calculation directly from your profile URL.", link: "/calculator" },
+                    { title: "Smart Dashboard", icon: "📊", desc: "View total points, recent activity, rank and history cleanly.", link: "/dashboard" },
+                    { title: "Live Leaderboard", icon: "🏆", desc: "Compete with others and track your position in real-time.", link: "/leaderboard" },
+                    { title: "Facilitator Page", icon: "🤝", desc: "Get expert guidance, FAQs, and connect directly with community leads.", link: "/facilitator" },
+                  ].map((feature, idx) => (
+                    <div key={idx} className="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6 hover:bg-[#f8f9fa] transition-colors duration-300 group">
+                      
+                      {/* Icon Badge (Matches the Journey section style) */}
+                      <div className="flex-shrink-0">
+                        <div className="w-14 h-14 rounded-xl bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-2xl shadow-sm group-hover:scale-105 transition-transform duration-300">
+                          {feature.icon}
+                        </div>
+                      </div>
+
+                      {/* Text Content */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-[#202124] mb-2">{feature.title}</h3>
+                        <p className="text-[#5f6368] text-[15px] leading-relaxed">{feature.desc}</p>
+                      </div>
+
+                      {/* 🔥 LONG BLUE "TRY IT OUT" BUTTON 🔥 */}
+                      <div className="w-full md:w-auto mt-2 md:mt-0 flex-shrink-0">
+                        <button 
+                          onClick={() => router.push(feature.link)}
+                          className="flex items-center justify-center gap-2 w-full md:w-48 py-3.5 px-6 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-[15px] font-medium rounded-lg shadow-sm transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none"
+                        >
+                          Try it out
+                          <svg className="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                        </button>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+            </div>
+          </section>
+
 
         {/* ================= 🔥 PREMIUM REWARDS SECTION (UPDATED WITH PARTNERS & FORM) ================= */}
         <section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-gray-200 overflow-hidden">

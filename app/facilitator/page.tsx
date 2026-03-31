@@ -179,7 +179,7 @@ export default function FacilitatorPage() {
               
 
 {/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
-              <div className="mb-10 bg-white border border-[#dadce0] rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden group">
+              <div className="mb-10 bg-white border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-sm relative overflow-hidden group">
                 
                 {/* Clean Single Blue Accent Line */}
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
@@ -189,18 +189,18 @@ export default function FacilitatorPage() {
 
                   {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
                   <div className="max-w-4xl mx-auto text-left border-l-4 border-[#1a73e8] pl-6 md:pl-8 mb-16">
-                    <p className="text-black text-base md:text-lg leading-relaxed font-medium">
+                    <p className="text-black text-base md:text-lg leading-relaxed font-normal">
                       The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
                     </p>
                   </div>
 
-                  {/* 🔥 PREMIUM FACILITATOR PORTFOLIO BOX 🔥 */}
-                  <div className="max-w-4xl mx-auto bg-white border border-[#dadce0] rounded-[2rem] p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left hover:shadow-md transition-all duration-500">
+                  {/* 🔥 PREMIUM FACILITATOR PORTFOLIO BOX (Curve Reduced) 🔥 */}
+                  <div className="max-w-4xl mx-auto bg-white border border-[#dadce0] rounded-2xl p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left hover:shadow-md transition-all duration-500">
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
                       
                       {/* Facilitator Image & Title */}
                       <div className="flex flex-col items-center flex-shrink-0">
-                        <div className="w-32 h-40 rounded-[1.5rem] overflow-hidden shadow-sm border border-[#dadce0] mb-5 relative group/img">
+                        <div className="w-32 h-40 rounded-xl overflow-hidden shadow-sm border border-[#dadce0] mb-5 relative group/img">
                           <img 
                             src="https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg" 
                             alt="Manish Kumar" 
@@ -208,7 +208,7 @@ export default function FacilitatorPage() {
                           />
                         </div>
                         <h3 className="text-2xl font-bold text-black">Manish Kumar</h3>
-                        <p className="text-sm font-semibold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full mt-2">Arcade Facilitator</p>
+                        <p className="text-sm font-medium text-black mt-1">Arcade Facilitator</p>
                         
                         <a 
                           href="https://linkedin.com/in/manish-ui" 
@@ -226,9 +226,9 @@ export default function FacilitatorPage() {
                       {/* Achievements & Description */}
                       <div className="flex-1">
                         
-                        {/* 🔥 STYLISH, ITALIC & BLACK PARAGRAPH 🔥 */}
-                        <p className="text-black text-[17px] md:text-[19px] leading-relaxed mb-8 text-center md:text-left italic font-serif tracking-wide">
-                          "As a dedicated <strong className="font-bold font-sans">Google Cloud Arcade Facilitator</strong> in 2025, Manish has demonstrated exceptional leadership by securing the prestigious <strong className="font-bold font-sans">Ultimate Milestone Winner</strong> title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags."
+                        {/* 🔥 NORMAL, CLEAN PARAGRAPH 🔥 */}
+                        <p className="text-[#3c4043] text-base md:text-lg leading-relaxed mb-8 text-center md:text-left font-normal">
+                          As a dedicated Google Cloud Arcade Facilitator in 2025, Manish has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
                         </p>
                         
                         {/* 🔥 CLEAN STATS SYMBOLS WITHOUT BOXES 🔥 */}
@@ -243,7 +243,7 @@ export default function FacilitatorPage() {
                               <div className="text-3xl mb-3 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
                                 {stat.icon}
                               </div>
-                              <div className="font-bold text-black text-[16px]">{stat.title}</div>
+                              <div className="font-bold text-[#202124] text-[16px]">{stat.title}</div>
                               <div className="text-[11px] font-semibold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
                             </div>
                           ))}
