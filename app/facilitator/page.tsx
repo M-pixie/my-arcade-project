@@ -108,60 +108,66 @@ export default function FacilitatorPage() {
 
         <main className="pt-20">
           
-          {/* ================= HERO SECTION ================= */}
+       {/* ================= HERO SECTION ================= */}
           <section className="relative border-b border-[#dadce0] bg-[#f8f9fa] overflow-hidden">
             <div className="max-w-4xl mx-auto px-6 py-20 md:py-24 flex flex-col items-center justify-center gap-10">
               
-              {/* Centered Hero Content since graphic is removed */}
+              {/* Centered Hero Content */}
               <div className="flex-1 text-center z-10 w-full">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-[#dadce0] text-[#5f6368] text-xs font-bold mb-6 uppercase tracking-widest rounded-sm shadow-sm hover:shadow-md transition-shadow">
-                  <span className="w-2 h-2 bg-[#34a853] rounded-sm animate-pulse"></span>
-                  Facilitator 2026
+                
+               {/* 🔥 PREMIUM BADGE (Matched with April Labs typography) 🔥 */}
+                <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white rounded-full shadow-[0_4px_16px_rgba(26,115,232,0.12)] border border-[#dadce0] mb-8 cursor-default hover:shadow-[0_6px_20px_rgba(26,115,232,0.16)] transition-shadow">
+                  
+                  {/* Red Pulsing Dot */}
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ea4335]"></span>
+                  </span>
+                  
+                  {/* Premium Typography */}
+                  <span className="font-sans text-[13px] font-[900] text-[#202124] tracking-[0.5px] uppercase">
+                    FACILITATOR  <span className="text-[#1a73e8]">Coming Soon..</span>
+                  </span>
+                  
                 </div>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-normal text-[#202124] tracking-tight mb-6 leading-[1.15]">
-                  Google Cloud Arcade <br className="hidden sm:block" />
-                  <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Facilitator Program</span>
+                {/* 🔥 UPDATED MAIN HEADING (All Black & Bold) 🔥 */}
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold text-[#202124] tracking-tight mb-6 leading-[1.15]">
+                  
+                 Facilitator Program
                 </h1>
                 
                 <p className="text-[#5f6368] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
                   Kickstart your cloud journey, learn new skills on Google Cloud Platform, and win exciting exclusive Google Cloud swags by completing milestones.
                 </p>
 
-                {/* 🔥 PREMIUM GOOGLE SEARCH BOX STYLE BUTTONS 🔥 */}
-                <div className="w-full max-w-[750px] mx-auto bg-white border border-[#dfe1e5] rounded-2xl sm:rounded-full shadow-sm hover:shadow-[0_1px_6px_rgba(32,33,36,.28)] hover:border-transparent transition-all duration-300 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden">
+                {/* 🔥 PREMIUM PROFESSIONAL BUTTONS 🔥 */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                   
-                  {/* Google Search Icon (Left) */}
-                  <div className="hidden sm:flex items-center justify-center pl-6 pr-2 bg-transparent">
-                    <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 text-[#9aa0a6]">
-                      <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"></path>
-                    </svg>
-                  </div>
-
-                  {/* Button 1: Enroll Now */}
+                  {/* Button 1: Enroll Now (Blue Primary) */}
                   <a 
                     href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#3c4043] hover:text-[#1a73e8] hover:bg-[#f8f9fa] font-medium text-sm sm:text-base transition-colors border-b sm:border-b-0 sm:border-r border-[#dfe1e5] focus:outline-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-[15px] sm:text-base rounded-xl hover:bg-[#1557b0] hover:shadow-md transition-all duration-200 focus:outline-none flex items-center justify-center gap-2"
                   >
                     Enroll Now
                   </a>
                   
-                  {/* Button 2: Points System */}
+                  {/* Button 2: Points System (White Outline) */}
                   <a 
                     href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#3c4043] hover:text-[#1a73e8] hover:bg-[#f8f9fa] font-medium text-sm sm:text-base transition-colors border-b sm:border-b-0 sm:border-r border-[#dfe1e5] focus:outline-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#3c4043] border border-[#dadce0] font-medium text-[15px] sm:text-base rounded-xl hover:bg-[#f8f9fa] hover:border-[#d2e3fc] hover:text-[#1a73e8] transition-all duration-200 focus:outline-none flex items-center justify-center gap-2"
                   >
                     Points System
                   </a>
                   
-                  {/* Button 3: Calculator */}
+                  {/* Button 3: Calculator (Green Secondary) */}
                   <button 
                     onClick={() => router.push("/calculator")}
-                    className="flex-1 py-4 sm:py-3.5 px-4 text-center text-[#1a73e8] font-semibold hover:bg-[#f8f9fa] text-sm sm:text-base transition-colors focus:outline-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[#34a853] text-white font-medium text-[15px] sm:text-base rounded-xl hover:bg-[#2b8a44] hover:shadow-md transition-all duration-200 focus:outline-none flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     Open Calculator

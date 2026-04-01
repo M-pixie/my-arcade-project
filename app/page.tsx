@@ -34,61 +34,217 @@ export default function HomePage() {
 
       {/* PURE WHITE BACKGROUND, GOOGLE TEXT COLORS */}
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
+
+
+
+
+
         
-        {/* ================= HERO SECTION (CLEAN & MINIMAL) ================= */}
-        <section className="relative pt-36 pb-24 px-6 text-center border-b border-gray-200 bg-white overflow-hidden">
-          <div className="max-w-5xl mx-auto relative z-10">
+        
+ {/* ================= HERO SECTION (PREMIUM & ANIMATED) ================= */}
+<section className="relative pt-32 pb-24 px-6 border-b border-[#dadce0] bg-white overflow-hidden">
+  
+  {/* Custom Animations injected via standard style block */}
+  <style>{`
+    @keyframes float-robot {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    .animate-float-robot {
+      animation: float-robot 4s ease-in-out infinite;
+    }
+    @keyframes typing-left {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-8deg) translateY(6px); }
+    }
+    .animate-typing-left {
+      animation: typing-left 0.4s ease-in-out infinite;
+      transform-origin: top right;
+    }
+    @keyframes typing-right {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(8deg) translateY(6px); }
+    }
+    .animate-typing-right {
+      animation: typing-right 0.5s ease-in-out infinite;
+      transform-origin: top left;
+    }
+    @keyframes blink-eye {
+      0%, 45%, 55%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.1); }
+    }
+    .animate-blink {
+      animation: blink-eye 4s infinite;
+      transform-origin: center;
+    }
+    /* 🔥 NEW: Smooth Floating Animation for Premium Bubble 🔥 */
+    @keyframes smooth-float-bubble {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-smooth-bubble {
+      animation: smooth-float-bubble 3s ease-in-out infinite;
+    }
+  `}</style>
+
+  <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8 relative z-10">
+    
+    {/* ================= LEFT CONTENT ================= */}
+    <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start">
+      
+      {/* Animated APRIL LABS Badge */}
+      <div className="group relative inline-flex items-center gap-2.5 px-5 py-2 bg-[#fef7e0] border border-[#fde293] text-[#b06000] text-[13px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ea4335]"></span>
+        </span>
+        <span className="relative z-10">April Month Labs Live !</span>
+      </div>
+
+      {/* MAIN HEADING (bold, black, smaller) */}
+      <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-[#202124] mb-6 leading-[1.1]">
+        analyze when <br className="hidden md:block" />
+        <span className="relative inline-block mt-2">
+          you&apos;re ready
+        </span>
+      </h1>
+
+      {/* Subheading */}
+      <p className="text-lg md:text-xl text-[#5f6368] max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+        The professional dashboard to calculate your Google Cloud Arcade points, 
+        monitor leaderboard rankings & track your growth in real-time.
+      </p>
+
+      {/* Standard Action Buttons */}
+      <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
+        <button
+          onClick={() => router.push("/calculator")}
+          className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-base rounded-xl hover:bg-[#1557b0] hover:shadow-md transition-all duration-200 focus:outline-none"
+        >
+          Open Calculator
+        </button>
+        
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] border border-[#dadce0] font-medium text-base rounded-xl hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-all duration-200 focus:outline-none"
+        >
+          View Dashboard
+        </button>
+      </div>
+
+      {/* LONG BUTTON FOR ARCADE */}
+      <a
+        href="https://go.cloudskillsboost.google/arcade"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-6 w-full lg:w-max flex items-center justify-center gap-3 px-8 py-4 bg-[#34a853] hover:bg-[#2b8a44] text-white font-bold text-[15px] sm:text-base rounded-xl shadow-[0_4px_14px_rgba(52,168,83,0.3)] hover:shadow-[0_6px_20px_rgba(52,168,83,0.4)] transform hover:-translate-y-0.5 transition-all duration-300 focus:outline-none"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        Open Google Cloud Arcade Labs
+      </a>
+      
+      {/* Trust Badge */}
+      <p className="mt-12 text-[11px] font-bold text-[#80868b] tracking-widest uppercase">
+        Trusted by thousands of cloud enthusiasts
+      </p>
+    </div>
+
+    {/* ================= RIGHT CONTENT: ANIMATED ROBOT ================= */}
+    <div className="flex-1 w-full flex justify-center lg:justify-end items-center relative mt-12 lg:mt-0">
+      
+      {/* Soft background glow behind robot */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#e8f0fe] rounded-full blur-[80px] opacity-70 z-0 pointer-events-none"></div>
+
+      {/* SVG Robot Image */}
+      <div className="relative z-10 w-full max-w-[450px] animate-float-robot pointer-events-none">
+        
+        {/* 🔥 Added overflow-visible and adjusted viewBox so nothing cuts off 🔥 */}
+        <svg viewBox="0 -20 500 420" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto drop-shadow-2xl overflow-visible">
+          
+          <defs>
+            {/* Premium Soft Shadow for Bubble */}
+            <filter id="premium-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="8" stdDeviation="10" floodOpacity="0.12" floodColor="#1a73e8" />
+            </filter>
+          </defs>
+
+          {/* Table/Desk */}
+          <path d="M50 350 L450 350 L480 400 L20 400 Z" fill="#f1f3f4" stroke="#dadce0" strokeWidth="2" />
+          <rect x="20" y="400" width="460" height="15" fill="#dadce0" />
+
+          {/* Robot Body */}
+          <rect x="200" y="150" width="100" height="150" rx="30" fill="#f8f9fa" stroke="#dadce0" strokeWidth="4"/>
+
+          {/* Robot Head */}
+          <rect x="180" y="40" width="140" height="100" rx="20" fill="#ffffff" stroke="#dadce0" strokeWidth="4"/>
+          
+          {/* Antenna */}
+          <rect x="245" y="10" width="10" height="30" fill="#dadce0" />
+          <circle cx="250" cy="10" r="8" fill="#ea4335" className="animate-pulse" />
+          
+          {/* Eyes */}
+          <circle cx="220" cy="90" r="12" fill="#1a73e8" className="animate-blink" />
+          <circle cx="280" cy="90" r="12" fill="#1a73e8" className="animate-blink" />
+          
+          {/* Smile */}
+          <path d="M 230 115 Q 250 125 270 115" stroke="#5f6368" strokeWidth="4" fill="transparent" strokeLinecap="round" />
+
+          {/* 🔥 NEW: Premium Sleek Bubble on the LEFT side with Shadow 🔥 */}
+          <g className="animate-smooth-bubble" filter="url(#premium-shadow)"> 
+            {/* Pill Shape Background */}
+            <rect x="10" y="30" width="170" height="46" rx="23" fill="#ffffff" />
+            {/* Tail pointing exactly to Robot's cheek */}
+            <path d="M 145 68 L 175 85 L 155 60 Z" fill="#ffffff" />
             
-            {/* Animated Square Badge */}
-            <div className="group relative inline-flex items-center gap-2 px-4 py-1.5 bg-[#f8f9fa] border border-gray-200 text-[#5f6368] text-xs font-semibold mb-8 uppercase tracking-wider rounded-sm overflow-hidden transition-colors hover:border-[#1a73e8] hover:text-[#1a73e8] cursor-default">
-              {/* Shimmer Effect */}
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent group-hover:animate-[shimmer_1.5s_infinite]"></div>
-              
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full bg-[#1a73e8] rounded-sm opacity-50"></span>
-                <span className="relative inline-flex h-2 w-2 bg-[#1a73e8] rounded-sm shadow-[0_0_8px_#1a73e8]"></span>
-              </span>
-              <span className="relative z-10">Google Cloud Arcade</span>
-            </div>
-
-            {/* MAIN HEADING */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-[#202124] mb-6 leading-[1.1]">
-              analyze when <br className="hidden md:block" />
-              <span className="text-[#1a73e8] relative inline-block">
-                you&apos;re ready
-                
-              </span>
-            </h1>
-
-            {/* Subheading */}
-            <p className="text-lg md:text-xl text-[#5f6368] max-w-2xl mx-auto mb-10 leading-relaxed">
-              The professional dashboard to calculate your Google Cloud Arcade points, 
-              monitor leaderboard rankings & track your growth in real-time.
-            </p>
-
-            {/* Square/Slightly Rounded Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => router.push("/calculator")}
-                className="px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-base rounded-sm hover:bg-[#1557b0] hover:shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] transition-all duration-200"
-              >
-                Open Calculator
-              </button>
-              
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="px-8 py-3.5 bg-white text-[#1a73e8] border border-[#dadce0] font-medium text-base rounded-sm hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-all duration-200"
-              >
-                View Dashboard
-              </button>
-            </div>
+            {/* Red Live Indicator Dot */}
+            <circle cx="35" cy="53" r="4.5" fill="#ea4335" className="animate-pulse" />
             
-            {/* Trust Badge */}
-            <p className="mt-12 text-xs font-medium text-[#80868b] tracking-widest uppercase">
-              Trusted by thousands of cloud enthusiasts
-            </p>
-          </div>
-        </section>
+            {/* Premium Typography */}
+            <text x="50" y="58" fontFamily="sans-serif" fontSize="13" fontWeight="900" fill="#202124" letterSpacing="0.5">
+              APRIL LABS <tspan fill="#1a73e8">LIVE!</tspan>
+            </text>
+          </g>
+
+          {/* Laptop Screen (Back) */}
+          <rect x="120" y="200" width="260" height="150" rx="15" fill="#ffffff" stroke="#dadce0" strokeWidth="4"/>
+          {/* Laptop Base */}
+          <path d="M90 350 L410 350 L430 380 L70 380 Z" fill="#e8eaed" stroke="#dadce0" strokeWidth="2"/>
+          <rect x="70" y="380" width="360" height="8" rx="4" fill="#9aa0a6" />
+
+          {/* Laptop Logo (Google 'G') & Arcade Text */}
+          <circle cx="250" cy="250" r="28" fill="#e8f0fe" />
+          <g transform="translate(238, 238) scale(0.25)">
+            <path d="M96.06 50.51c0-3.37-.29-6.62-.83-9.76H50v18.47h25.83c-1.11 5.99-4.5 11.07-9.59 14.49v12.03h15.53c9.08-8.36 14.32-20.67 14.32-35.23z" fill="#4285F4"/>
+            <path d="M50 97c12.7 0 23.33-4.2 31.11-11.39L65.58 73.58c-4.33 2.9-9.87 4.61-15.58 4.61-12 0-22.16-8.11-25.79-19.01H8.16v12.43C16.03 87.32 32.08 97 50 97z" fill="#34A853"/>
+            <path d="M24.21 59.18c-.92-2.74-1.45-5.67-1.45-8.68s.53-5.94 1.45-8.68V29.39H8.16C4.41 36.9 2.29 45.41 2.29 50.5s2.12 13.6 5.87 21.11l16.05-12.43z" fill="#FBBC05"/>
+            <path d="M50 23.8c6.91 0 13.11 2.37 18 6.99l13.49-13.49C73.31 9.38 62.69 5 50 5 32.08 5 16.03 14.68 8.16 30.2l16.05 12.43C27.84 31.91 37.99 23.8 50 23.8z" fill="#EA4335"/>
+          </g>
+          <text x="250" y="310" textAnchor="middle" fontFamily="sans-serif" fontSize="16" fontWeight="900" fill="#1a73e8" letterSpacing="1.5">GOOGLE CLOUD</text>
+          <text x="250" y="330" textAnchor="middle" fontFamily="sans-serif" fontSize="18" fontWeight="900" fill="#ea4335" letterSpacing="2">ARCADE</text>
+          
+          {/* Floating Points/Badges Elements */}
+          <g className="animate-[pulse_3s_infinite]">
+            <circle cx="90" cy="140" r="18" fill="#fbbc04" opacity="0.9" />
+            <text x="90" y="146" textAnchor="middle" fontFamily="sans-serif" fontSize="16" fontWeight="bold" fill="#fff">+</text>
+          </g>
+          <g className="animate-[pulse_2s_infinite]" style={{ animationDelay: '1s' }}>
+            <circle cx="410" cy="110" r="24" fill="#34a853" opacity="0.9" />
+            <text x="410" y="117" textAnchor="middle" fontFamily="sans-serif" fontSize="18" fontWeight="bold" fill="#fff">⭐</text>
+          </g>
+          <g className="animate-[pulse_2.5s_infinite]" style={{ animationDelay: '0.5s' }}>
+            <circle cx="380" cy="220" r="14" fill="#ea4335" opacity="0.9" />
+          </g>
+
+        </svg>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
 
         {/* ================= HOW TO GET STARTED (PREMIUM RECTANGULAR BOX) ================= */}
           <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0]">
@@ -204,74 +360,95 @@ export default function HomePage() {
             </div>
           </section>
 
+          
 
-        {/* ================= 🔥 PREMIUM REWARDS SECTION (UPDATED WITH PARTNERS & FORM) ================= */}
-        <section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-gray-200 overflow-hidden">
+{/* ================= 🔥 PREMIUM REWARDS SECTION (UPDATED) 🔥 ================= */}
+        <section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-[#dadce0] overflow-hidden">
           <div className="max-w-6xl mx-auto px-6">
             
-            {/* Rewards Intro & Boxes */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#fff8e1] border border-[#ffeb3b] text-[#f57f17] text-xs font-bold mb-4 uppercase tracking-wider rounded-sm">
-                <span>⭐ Premium Swags</span>
+            {/* Rewards Intro */}
+            <div className="text-center mb-16 relative z-10">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#fef7e0] border border-[#fde293] text-[#b06000] text-[13px] font-extrabold mb-6 uppercase tracking-widest rounded-full shadow-sm">
+                <span className="text-lg">🎁</span>
+                <span>Premium Swags</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-normal text-[#202124] tracking-tight mb-4">
-                Redeem your <span className="text-[#1a73e8] font-medium">Self-Earned Arcade Points</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-6">
+                Redeem your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Self-Earned Points</span>
               </h2>
-              <p className="text-[#5f6368] text-base max-w-2xl mx-auto">
+              <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-medium">
                 Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            {/* Premium Rewards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
               
-              {/* Premium Box 1 */}
-              <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#34a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <div className="h-48 w-full flex items-center justify-center mb-8 p-4">
+              {/* Card 1: Milestone (Green Theme) */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-2xl p-8 hover:border-transparent hover:shadow-[0_20px_40px_-15px_rgba(52,168,83,0.3)] hover:-translate-y-2 transition-all duration-500 flex flex-col items-center text-center cursor-default overflow-hidden z-10">
+                {/* Glow Background on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#e6f4ea] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"></div>
+                
+                {/* Image Container */}
+                <div className="relative h-48 w-full flex items-center justify-center mb-8 p-4 z-10">
+                  <div className="absolute inset-0 bg-radial-gradient from-[#f8f9fa] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150"></div>
                   <img 
                     src="https://services.google.com/fh/files/misc/gcaf25_prizes_image4.png" 
                     alt="Standard Tier Rewards" 
-                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
+                    className="relative max-h-full object-contain group-hover:scale-110 drop-shadow-md group-hover:drop-shadow-xl transition-all duration-500 ease-out z-10"
                   />
                 </div>
-                <h3 className="text-xl font-medium text-[#202124] mb-2">Milestone Rewards</h3>
-                <p className="text-[#5f6368] text-sm leading-relaxed">
+                
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 group-hover:text-[#1e8e3e] transition-colors z-10">Milestone Rewards</h3>
+                <p className="text-[#5f6368] text-[15px] leading-relaxed z-10">
                   Kickstart your collection. Trade your initial points for essential Google Cloud standard gear.
                 </p>
               </div>
 
-              {/* Premium Box 2 */}
-              <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#1a73e8] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <div className="h-48 w-full flex items-center justify-center mb-8 p-4">
+              {/* Card 2: Advanced (Blue Theme) */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-2xl p-8 hover:border-transparent hover:shadow-[0_20px_40px_-15px_rgba(26,115,232,0.3)] hover:-translate-y-2 transition-all duration-500 flex flex-col items-center text-center cursor-default overflow-hidden z-10 md:mt-4">
+                {/* Glow Background on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#e8f0fe] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"></div>
+                
+                {/* Image Container */}
+                <div className="relative h-48 w-full flex items-center justify-center mb-8 p-4 z-10">
+                  <div className="absolute inset-0 bg-radial-gradient from-[#f8f9fa] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150"></div>
                   <img 
                     src="https://services.google.com/fh/files/misc/gcaf25_prizes_image5.png" 
                     alt="Advanced Tier Rewards" 
-                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
+                    className="relative max-h-full object-contain group-hover:scale-110 drop-shadow-md group-hover:drop-shadow-xl transition-all duration-500 ease-out z-10"
                   />
                 </div>
-                <h3 className="text-xl font-medium text-[#202124] mb-2">Advanced Collection</h3>
-                <p className="text-[#5f6368] text-sm leading-relaxed">
+                
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 group-hover:text-[#1a73e8] transition-colors z-10">Advanced Collection</h3>
+                <p className="text-[#5f6368] text-[15px] leading-relaxed z-10">
                   Step up your game. Unlock high-quality, exclusive merchandise crafted for true cloud enthusiasts.
                 </p>
               </div>
 
-              {/* Premium Box 3 */}
-              <div className="group relative bg-white border border-[#dadce0] rounded-sm p-8 hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center cursor-default">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#ea4335] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <div className="h-48 w-full flex items-center justify-center mb-8 p-4">
+              {/* Card 3: Champion (Red Theme) */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-2xl p-8 hover:border-transparent hover:shadow-[0_20px_40px_-15px_rgba(234,67,53,0.3)] hover:-translate-y-2 transition-all duration-500 flex flex-col items-center text-center cursor-default overflow-hidden z-10">
+                {/* Glow Background on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#fce8e6] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"></div>
+                
+                {/* Image Container */}
+                <div className="relative h-48 w-full flex items-center justify-center mb-8 p-4 z-10">
+                  <div className="absolute inset-0 bg-radial-gradient from-[#f8f9fa] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150"></div>
                   <img 
                     src="https://services.google.com/fh/files/misc/gcaf25_prizes_image6.png" 
                     alt="Champion Tier Rewards" 
-                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
+                    className="relative max-h-full object-contain group-hover:scale-110 drop-shadow-md group-hover:drop-shadow-xl transition-all duration-500 ease-out z-10"
                   />
                 </div>
-                <h3 className="text-xl font-medium text-[#202124] mb-2">Champion Elite</h3>
-                <p className="text-[#5f6368] text-sm leading-relaxed">
+                
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 group-hover:text-[#d93025] transition-colors z-10">Champion Elite</h3>
+                <p className="text-[#5f6368] text-[15px] leading-relaxed z-10">
                   The ultimate prize tier. Claim top-of-the-line flagship rewards reserved for Arcade champions.
                 </p>
               </div>
+
             </div>
+          
+        
 
             {/* ================= 🔥 NEW: OFFICIAL SWAG PARTNERS ================= */}
             <div className="pt-16 border-t border-[#dadce0]">
@@ -308,6 +485,8 @@ export default function HomePage() {
 
               </div>
             </div>
+
+
 
             {/* ================= 🔥 NEW: PREMIUM PROBLEM / MESSAGE BOX ================= */}
             <div className="mt-20 max-w-3xl mx-auto">
