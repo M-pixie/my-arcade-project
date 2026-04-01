@@ -76,6 +76,24 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f8f9fa] font-sans text-[#202124]">
       
+      {/* 🔥 NEW REAL 3D LOCK ANIMATION STYLES 🔥 */}
+      <style>{`
+        @keyframes real-lock-float {
+          0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0px 8px 12px rgba(26, 115, 232, 0.3)); }
+          50% { transform: translateY(-10px) scale(1.05); filter: drop-shadow(0px 18px 24px rgba(26, 115, 232, 0.5)); }
+        }
+        .animate-real-lock {
+          animation: real-lock-float 3s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(1.3); }
+        }
+        .animate-glow {
+          animation: glow-pulse 3s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* 1️⃣ REAL NAVBAR ADDED */}
       <Navbar />
 
@@ -109,17 +127,23 @@ export default function AdminPage() {
         <div className="w-full max-w-[450px] bg-white rounded-sm border border-[#dadce0] p-10 shadow-sm mb-12">
           
           <div className="text-center mb-10">
-            <div className="flex justify-center mb-6">
-               <svg className="w-12 h-12" viewBox="0 0 48 48">
-                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                 <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                 <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                 <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                 <path fill="none" d="M0 0h48v48H0z"></path>
-               </svg>
+            
+            {/* 🔥 ASLI 3D TALA (REAL LOCK) 🔥 */}
+            <div className="relative flex justify-center items-center mb-8 h-28">
+              {/* Background Blue Glow */}
+              <div className="absolute w-20 h-20 bg-[#1a73e8] rounded-full blur-2xl animate-glow z-0"></div>
+              
+              {/* Real 3D Lock Image */}
+              <div className="relative z-10 w-28 h-28 animate-real-lock">
+                <img 
+                  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Locked.png" 
+                  alt="Secure Lock" 
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
             
-            <h1 className="text-2xl font-normal text-[#202124] mb-2 tracking-tight">
+            <h1 className="text-3xl font-normal text-[#202124] mb-2 tracking-tight mt-4">
               Admin Console
             </h1>
             <p className="text-[#5f6368] text-sm">
@@ -142,7 +166,7 @@ export default function AdminPage() {
                  <div className="w-6 h-6 border-2 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></div>
               </div>
             ) : user ? (
-              // 🔥 NEW: CENTERED DASHBOARD & LOGOUT BUTTONS
+              // CENTERED DASHBOARD & LOGOUT BUTTONS
               <div className="text-center space-y-3">
                 <div className="px-4 py-3 mb-4 bg-[#e8f0fe] text-[#1a73e8] text-sm font-medium rounded-sm border border-[#d2e3fc]">
                   Logged in as <br/><span className="font-bold text-[#1557b0]">{user.email}</span>
@@ -157,7 +181,7 @@ export default function AdminPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
 
-                {/* ✅ BIG LOGOUT BUTTON INSIDE CARD */}
+                {/* BIG LOGOUT BUTTON INSIDE CARD */}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center justify-center gap-2 bg-white text-[#d93025] border border-[#dadce0] hover:bg-[#fce8e6] hover:border-[#fad2cf] rounded-sm px-6 py-3.5 text-sm font-medium transition-colors focus:outline-none"
