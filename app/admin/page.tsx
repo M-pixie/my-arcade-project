@@ -26,7 +26,7 @@ export default function AdminPage() {
     return () => unsubscribe();
   }, []);
 
-  // ✅ LOGIN FUNCTION
+  // ✅ OPTIMIZED SUPERFAST LOGIN FUNCTION
   const loginWithGoogle = async () => {
     try {
       setErrorMessage(null);
@@ -36,21 +36,22 @@ export default function AdminPage() {
       const result = await signInWithPopup(auth, provider);
       const loggedInUser = result.user;
 
-      // 📨 LOGIN SUCCESS API CALL
-      await fetch("/api/send-login-mail", {
+      // 📨 LOGIN SUCCESS API CALL (Background me chalega, user wait nahi karega)
+      fetch("/api/send-login-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: loggedInUser.email,
           userAgent: navigator.userAgent,
         }),
-      });
+      }).catch(err => console.error("Mail send error:", err));
 
       setSuccessMessage("Login Successful! Redirecting...");
       
+      // 🔥 Redirect speed fast kar di (2000ms se hata kar 500ms)
       setTimeout(() => {
         router.push("/dashboard");
-      }, 2000);
+      }, 500);
 
     } catch (error) {
       console.error("Login error:", error);
