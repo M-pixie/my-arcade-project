@@ -103,9 +103,9 @@ export default function HomePage() {
 
       {/* MAIN HEADING (bold, black, smaller) */}
       <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-[#202124] mb-6 leading-[1.1]">
-        analyze when <br className="hidden md:block" />
+        Arcade Points <br className="hidden md:block" />
         <span className="relative inline-block mt-2">
-          you&apos;re ready
+          Calculator
         </span>
       </h1>
 
@@ -560,135 +560,334 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ================= HOW IT WORKS ================= */}
-        <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-normal text-[#202124] mb-16 tracking-tight">How it works?</h2>
+       {/* ================= PREMIUM HOW IT WORKS (CLEAN & SLEEK THEME) ================= */}
+        <section className="relative z-10 py-32 bg-[#f8f9fa] border-b border-[#dadce0] overflow-hidden">
+          
+          {/* Subtle Background Animated Blobs */}
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+            <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[#e8f0fe] rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-[pulse_6s_ease-in-out_infinite]"></div>
+            <div className="absolute top-1/2 -right-32 w-[400px] h-[400px] bg-[#e6f4ea] rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-[pulse_5s_ease-in-out_infinite]" style={{ animationDelay: '2s' }}></div>
+          </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0 relative">
+          <style>{`
+            @keyframes float-card {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-8px); }
+            }
+            .animate-float-card {
+              animation: float-card 5s ease-in-out infinite;
+            }
+            .glass-panel {
+              background: rgba(255, 255, 255, 0.95);
+              backdrop-filter: blur(12px);
+            }
+          `}</style>
+
+          <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
+            
+            {/* Header - Clean, No Gradient, No Bold */}
+            <div className="inline-block mb-24">
+              <h2 className="text-3xl md:text-5xl font-medium text-[#202124] tracking-tight mb-4">
+                How it works?
+              </h2>
+              <p className="text-[#5f6368] text-lg max-w-xl mx-auto">
+                Get your Google Cloud Arcade points calculated in three simple, seamless steps.
+              </p>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-4 relative">
               
-              {/* STEP 1 */}
-              <div className="relative z-10 flex flex-col items-center group bg-[#f8f9fa] p-4 flex-1">
-                <div className="w-20 h-20 bg-white border border-[#dadce0] rounded-sm flex items-center justify-center mb-6 shadow-sm group-hover:border-[#1a73e8] transition-colors">
-                  <svg className="w-8 h-8" viewBox="0 0 48 48">
+              {/* ================= STEP 1 ================= */}
+              <div className="relative z-10 flex flex-col items-center group flex-1 w-full md:w-auto animate-float-card" style={{ animationDelay: '0s' }}>
+                {/* Changed rounded-3xl to rounded-xl (Halka curve) */}
+                <div className="glass-panel w-24 h-24 border border-[#dadce0] rounded-xl flex items-center justify-center mb-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] group-hover:shadow-[0_15px_30px_rgba(26,115,232,0.1)] group-hover:-translate-y-2 group-hover:border-[#1a73e8] transition-all duration-400 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#e8f0fe] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <svg className="w-10 h-10 relative z-10 transform group-hover:scale-110 transition-transform duration-400" viewBox="0 0 48 48">
                     <path fill="#EA4335" d="M24 9.5c3.54 0 6.72 1.22 9.22 3.22l6.85-6.85C35.9 1.84 30.3 0 24 0 14.64 0 6.51 5.38 2.56 13.22l7.98 6.19C12.4 13.4 17.74 9.5 24 9.5z" />
                     <path fill="#4285F4" d="M46.1 24.5c0-1.67-.15-3.27-.43-4.82H24v9.13h12.4c-.53 2.86-2.13 5.29-4.53 6.92l7.01 5.45C43.5 36.6 46.1 31.1 46.1 24.5z" />
                     <path fill="#FBBC05" d="M10.54 28.59c-.48-1.43-.76-2.95-.76-4.59s.28-3.16.76-4.59l-7.98-6.19C.92 16.36 0 20.04 0 24c0 3.96.92 7.64 2.56 10.78l7.98-6.19z" />
                     <path fill="#34A853" d="M24 48c6.3 0 11.6-2.08 15.47-5.67l-7.01-5.45c-1.95 1.31-4.45 2.08-8.46 2.08-6.26 0-11.6-3.9-13.46-9.26l-7.98 6.19C6.51 42.62 14.64 48 24 48z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-medium text-[#202124]">Login with Google</h3>
-                <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Securely sign in using your Google account to access.</p>
+                <div className="bg-white px-4 py-1 rounded-full border border-[#dadce0] text-xs font-bold text-[#1a73e8] mb-4 shadow-sm group-hover:bg-[#1a73e8] group-hover:text-white transition-colors duration-300">
+                  STEP 01
+                </div>
+                <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#1a73e8] transition-colors">Login with Google</h3>
+                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[220px]">Securely sign in using your Google account to access the tools.</p>
               </div>
 
-              {/* LONG ARROW 1 */}
-              <div className="hidden md:flex flex-col items-center justify-center w-24 lg:w-32 -mt-16 text-[#dadce0]">
-                <svg className="w-full h-8" fill="none" stroke="currentColor" viewBox="0 0 100 24" preserveAspectRatio="none">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M0 12h96M88 4l8 8-8 8" />
+              {/* ================= BOLD ARROW 1 ================= */}
+              <div className="hidden md:flex flex-col items-center justify-center w-16 lg:w-24 -mt-32 text-[#dadce0]">
+                <svg className="w-10 h-10 text-[#bdc1c6] drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </div>
 
-              {/* Down Arrow for Mobile */}
-              <div className="md:hidden text-[#dadce0] my-2">
-                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
-                 </svg>
-              </div>
-
-              {/* STEP 2 */}
-              <div className="relative z-10 flex flex-col items-center group bg-[#f8f9fa] p-4 flex-1">
-                <div className="w-20 h-20 bg-white border border-[#dadce0] rounded-sm flex items-center justify-center mb-6 shadow-sm text-2xl group-hover:border-[#1a73e8] transition-colors">
-                  📎
-                </div>
-                <h3 className="text-lg font-medium text-[#202124]">Paste Public URL</h3>
-                <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Add your Google Cloud Arcade profile link to calculate.</p>
-              </div>
-
-              {/* LONG ARROW 2 */}
-              <div className="hidden md:flex flex-col items-center justify-center w-24 lg:w-32 -mt-16 text-[#dadce0]">
-                <svg className="w-full h-8" fill="none" stroke="currentColor" viewBox="0 0 100 24" preserveAspectRatio="none">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M0 12h96M88 4l8 8-8 8" />
+              {/* Mobile Down Arrow */}
+              <div className="md:hidden text-[#bdc1c6] my-2">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
               </div>
 
-              {/* Down Arrow for Mobile */}
-              <div className="md:hidden text-[#dadce0] my-2">
-                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
-                 </svg>
+              {/* ================= STEP 2 ================= */}
+              <div className="relative z-10 flex flex-col items-center group flex-1 w-full md:w-auto animate-float-card" style={{ animationDelay: '0.2s' }}>
+                {/* Changed rounded-3xl to rounded-xl (Halka curve) */}
+                <div className="glass-panel w-24 h-24 border border-[#dadce0] rounded-xl flex items-center justify-center mb-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] group-hover:shadow-[0_15px_30px_rgba(52,168,83,0.1)] group-hover:-translate-y-2 group-hover:border-[#34a853] transition-all duration-400 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#e6f4ea] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <svg className="w-10 h-10 text-[#5f6368] group-hover:text-[#34a853] relative z-10 transform group-hover:scale-110 transition-transform duration-400" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                </div>
+                <div className="bg-white px-4 py-1 rounded-full border border-[#dadce0] text-xs font-bold text-[#34a853] mb-4 shadow-sm group-hover:bg-[#34a853] group-hover:text-white transition-colors duration-300">
+                  STEP 02
+                </div>
+                <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#34a853] transition-colors">Paste Public URL</h3>
+                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[220px]">Simply drop your Google Cloud Arcade profile link to analyze.</p>
               </div>
 
-              {/* STEP 3 */}
-              <div className="relative z-10 flex flex-col items-center group bg-[#f8f9fa] p-4 flex-1">
-                <div className="w-20 h-20 bg-white border border-[#dadce0] rounded-sm flex items-center justify-center mb-6 shadow-sm text-2xl group-hover:border-[#1a73e8] transition-colors">
-                  🏆
+              {/* ================= BOLD ARROW 2 ================= */}
+              <div className="hidden md:flex flex-col items-center justify-center w-16 lg:w-24 -mt-32 text-[#dadce0]">
+                <svg className="w-10 h-10 text-[#bdc1c6] drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+
+              {/* Mobile Down Arrow */}
+              <div className="md:hidden text-[#bdc1c6] my-2">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+
+              {/* ================= STEP 3 ================= */}
+              <div className="relative z-10 flex flex-col items-center group flex-1 w-full md:w-auto animate-float-card" style={{ animationDelay: '0.4s' }}>
+                {/* Changed rounded-3xl to rounded-xl (Halka curve) */}
+                <div className="glass-panel w-24 h-24 border border-[#dadce0] rounded-xl flex items-center justify-center mb-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] group-hover:shadow-[0_15px_30px_rgba(251,188,4,0.15)] group-hover:-translate-y-2 group-hover:border-[#fbbc04] transition-all duration-400 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#fef7e0] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <div className="text-4xl relative z-10 transform group-hover:scale-110 transition-transform duration-400">
+                    🏆
+                  </div>
                 </div>
-                <h3 className="text-lg font-medium text-[#202124]">Get Arcade Points.</h3>
-                <p className="mt-2 text-sm text-[#5f6368] leading-relaxed max-w-[200px]">Instantly view total points, history & leaderboard rank.</p>
+                <div className="bg-white px-4 py-1 rounded-full border border-[#dadce0] text-xs font-bold text-[#ea4335] mb-4 shadow-sm group-hover:bg-[#ea4335] group-hover:text-white transition-colors duration-300">
+                  STEP 03
+                </div>
+                <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#ea4335] transition-colors">Get Arcade Points</h3>
+                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[220px]">Instantly view your total points, history, and real-time rank.</p>
               </div>
               
             </div>
           </div>
         </section>
 
-        {/* ================= BASE POINTS SYSTEM ================= */}
-        <section className="relative z-10 py-24 bg-white border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="mb-12">
-              <h2 className="text-3xl font-normal text-[#202124]">Arcade Points System</h2>
-              <p className="text-[#5f6368] mt-2 text-sm">How your effort translates to score.</p>
+        {/* ================= PREMIUM BASE POINTS SYSTEM ================= */}
+        <section className="relative z-10 py-32 bg-[#f8f9fa] border-b border-[#dadce0]">
+          
+          {/* Subtle Background Pattern */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#202124 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+
+          <div className="max-w-5xl mx-auto px-6 relative z-10">
+            
+            {/* Header Section */}
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-medium text-[#202124] tracking-tight mb-4">
+                Arcade Points <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#34a853]">System</span>
+              </h2>
+              <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                Understand exactly how your effort translates to your final score. Collect badges across different tracks to maximize your rewards.
+              </p>
             </div>
 
-            <div className="border border-[#dadce0] rounded-sm bg-white divide-y divide-[#dadce0]">
+            {/* Stacked Premium Cards Container */}
+            <div className="flex flex-col gap-4">
               
-              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-1 h-10 bg-[#34a853] rounded-sm"></div>
+              {/* ================= CARD 1: ARCADE ADVENTURE ================= */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-[0_12px_30px_rgba(52,168,83,0.08)] hover:border-[#34a853]/40 transition-all duration-400 overflow-hidden cursor-default">
+                {/* Subtle Hover Background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#e6f4ea]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                {/* Left: Icon & Title */}
+                <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full bg-[#e6f4ea] text-[#137333] flex items-center justify-center border border-[#ceead6] group-hover:scale-110 transition-transform duration-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+                  </div>
                   <div>
-                    <h4 className="font-medium text-[#202124]">Arcade Adventure</h4>
-                    <p className="text-sm text-[#5f6368]">x1 game badge = 1 point</p>
+                    <h4 className="text-xl font-bold text-[#202124]">Arcade Adventure</h4>
+                    <p className="text-sm text-[#5f6368] mt-0.5">Standard track progression</p>
                   </div>
                 </div>
-                <div className="px-3 py-1 bg-[#e6f4ea] text-[#137333] border border-[#ceead6] text-xs font-bold rounded-sm uppercase tracking-wide">1 Point Each</div>
-              </div>
-              
-              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-1 h-10 bg-[#fbbc04] rounded-sm"></div>
-                  <div>
-                    <h4 className="font-medium text-[#202124]">Trivia & SPRINT</h4>
-                    <p className="text-sm text-[#5f6368]">x1 game badge = 1 point</p>
+
+                {/* Middle: Formula Box */}
+                <div className="relative z-10 w-full md:w-auto flex-1 flex justify-start md:justify-center">
+                  <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg px-5 py-2.5 group-hover:bg-white transition-colors duration-300 shadow-sm">
+                    <span className="text-[#5f6368] text-sm font-medium">x1 game badge</span>
+                    <svg className="w-4 h-4 text-[#dadce0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <span className="text-[#137333] text-sm font-bold">1 point</span>
                   </div>
                 </div>
-                <div className="px-3 py-1 bg-[#fef7e0] text-[#b06000] border border-[#fde293] text-xs font-bold rounded-sm uppercase tracking-wide">1 Point Each</div>
+
+                {/* Right: Final Tag */}
+                <div className="relative z-10 shrink-0 w-full md:w-auto text-left md:text-right">
+                  <div className="inline-block px-5 py-2.5 bg-[#137333] text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow">
+                    1 Point Each
+                  </div>
+                </div>
               </div>
 
-              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-1 h-10 bg-[#a142f4] rounded-sm"></div>
+              {/* ================= CARD 2: ARCADE VOYAGE ================= */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-[0_12px_30px_rgba(26,115,232,0.08)] hover:border-[#1a73e8]/40 transition-all duration-400 overflow-hidden cursor-default">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#e8f0fe]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full bg-[#e8f0fe] text-[#1a73e8] flex items-center justify-center border border-[#d2e3fc] group-hover:scale-110 transition-transform duration-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
                   <div>
-                    <h4 className="font-medium text-[#202124]">Skill Badges</h4>
-                    <p className="text-sm text-[#5f6368]">90+ Skills Badges available</p>
+                    <h4 className="text-xl font-bold text-[#202124]">Arcade Voyage</h4>
+                    <p className="text-sm text-[#5f6368] mt-0.5">Intermediate cloud challenges</p>
                   </div>
                 </div>
-                <div className="px-3 py-1 bg-[#f3e8fd] text-[#681da8] border border-[#d7aefb] text-xs font-bold rounded-sm uppercase tracking-wide">x2 = 1 Point</div>
+
+                <div className="relative z-10 w-full md:w-auto flex-1 flex justify-start md:justify-center">
+                  <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg px-5 py-2.5 group-hover:bg-white transition-colors duration-300 shadow-sm">
+                    <span className="text-[#5f6368] text-sm font-medium">x1 game badge</span>
+                    <svg className="w-4 h-4 text-[#dadce0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <span className="text-[#1a73e8] text-sm font-bold">1 point</span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 shrink-0 w-full md:w-auto text-left md:text-right">
+                  <div className="inline-block px-5 py-2.5 bg-[#1a73e8] text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow">
+                    1 Point Each
+                  </div>
+                </div>
               </div>
 
-              <div className="flex items-center justify-between p-5 hover:bg-[#f8f9fa] transition-colors bg-[#fce8e6]/30">
-                <div className="flex items-center gap-4">
-                  <div className="w-1 h-10 bg-[#ea4335] rounded-sm"></div>
+              {/* ================= CARD 3: ARCADE TRAIL ================= */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-[0_12px_30px_rgba(18,181,203,0.08)] hover:border-[#12b5cb]/40 transition-all duration-400 overflow-hidden cursor-default">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#e4f7fb]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full bg-[#e4f7fb] text-[#0d8293] flex items-center justify-center border border-[#cbf0f8] group-hover:scale-110 transition-transform duration-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  </div>
                   <div>
-                    <h4 className="font-medium text-[#202124]">Special Badges</h4>
-                    <p className="text-sm text-[#5f6368]">Limited-time exclusive Points</p>
+                    <h4 className="text-xl font-bold text-[#202124]">Arcade Trail</h4>
+                    <p className="text-sm text-[#5f6368] mt-0.5">Advanced guided paths</p>
                   </div>
                 </div>
-                <div className="px-3 py-1 bg-[#ea4335] text-white text-xs font-bold rounded-sm uppercase tracking-wide">2 Points</div>
+
+                <div className="relative z-10 w-full md:w-auto flex-1 flex justify-start md:justify-center">
+                  <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg px-5 py-2.5 group-hover:bg-white transition-colors duration-300 shadow-sm">
+                    <span className="text-[#5f6368] text-sm font-medium">x1 game badge</span>
+                    <svg className="w-4 h-4 text-[#dadce0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <span className="text-[#0d8293] text-sm font-bold">1 point</span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 shrink-0 w-full md:w-auto text-left md:text-right">
+                  <div className="inline-block px-5 py-2.5 bg-[#0d8293] text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow">
+                    1 Point Each
+                  </div>
+                </div>
+              </div>
+
+              {/* ================= CARD 4: TRIVIA & SPRINT ================= */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-[0_12px_30px_rgba(251,188,4,0.08)] hover:border-[#fbbc04]/40 transition-all duration-400 overflow-hidden cursor-default">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#fef7e0]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full bg-[#fef7e0] text-[#ea8600] flex items-center justify-center border border-[#fde293] group-hover:scale-110 transition-transform duration-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[#202124]">Trivia & SPRINT</h4>
+                    <p className="text-sm text-[#5f6368] mt-0.5">Quick knowledge tests</p>
+                  </div>
+                </div>
+
+                <div className="relative z-10 w-full md:w-auto flex-1 flex justify-start md:justify-center">
+                  <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg px-5 py-2.5 group-hover:bg-white transition-colors duration-300 shadow-sm">
+                    <span className="text-[#5f6368] text-sm font-medium">x1 game badge</span>
+                    <svg className="w-4 h-4 text-[#dadce0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <span className="text-[#ea8600] text-sm font-bold">1 point</span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 shrink-0 w-full md:w-auto text-left md:text-right">
+                  <div className="inline-block px-5 py-2.5 bg-[#ea8600] text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow">
+                    1 Point Each
+                  </div>
+                </div>
+              </div>
+
+              {/* ================= CARD 5: SKILL BADGES (UPDATED TO x2 = 1) ================= */}
+              <div className="group relative bg-white border border-[#dadce0] rounded-xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-[0_12px_30px_rgba(161,66,244,0.08)] hover:border-[#a142f4]/40 transition-all duration-400 overflow-hidden cursor-default">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#f3e8fd]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full bg-[#f3e8fd] text-[#8430ce] flex items-center justify-center border border-[#d7aefb] group-hover:scale-110 transition-transform duration-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[#202124]">Skill Badges</h4>
+                    <p className="text-sm text-[#5f6368] mt-0.5">90+ Skills Badges available</p>
+                  </div>
+                </div>
+
+                <div className="relative z-10 w-full md:w-auto flex-1 flex justify-start md:justify-center">
+                  <div className="flex items-center gap-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg px-5 py-2.5 group-hover:bg-white transition-colors duration-300 shadow-sm">
+                    <span className="text-[#5f6368] text-sm font-medium">x2 badges</span>
+                    <svg className="w-4 h-4 text-[#dadce0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <span className="text-[#8430ce] text-sm font-bold">1 point</span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 shrink-0 w-full md:w-auto text-left md:text-right">
+                  <div className="inline-block px-5 py-2.5 bg-[#8430ce] text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow">
+                    Needs 2 Badges
+                  </div>
+                </div>
+              </div>
+
+              {/* ================= CARD 6: SPECIAL BADGES ================= */}
+              <div className="group relative bg-[#fce8e6]/30 border border-[#dadce0] rounded-xl p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-[0_12px_30px_rgba(234,67,53,0.08)] hover:border-[#ea4335]/40 transition-all duration-400 overflow-hidden cursor-default">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#fce8e6]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full bg-[#fce8e6] text-[#c5221f] flex items-center justify-center border border-[#f8c1cb] group-hover:scale-110 transition-transform duration-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-[#202124]">Special Badges</h4>
+                    <p className="text-sm text-[#c5221f] font-medium mt-0.5">Limited-time exclusive</p>
+                  </div>
+                </div>
+
+                <div className="relative z-10 w-full md:w-auto flex-1 flex justify-start md:justify-center">
+                  <div className="flex items-center gap-3 bg-white border border-[#dadce0] rounded-lg px-5 py-2.5 shadow-sm">
+                    <span className="text-[#5f6368] text-sm font-medium">x1 game badge</span>
+                    <svg className="w-4 h-4 text-[#dadce0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    <span className="text-[#c5221f] text-sm font-bold">2 points</span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 shrink-0 w-full md:w-auto text-left md:text-right">
+                  <div className="inline-block px-5 py-2.5 bg-[#ea4335] text-white text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow animate-[pulse_3s_ease-in-out_infinite]">
+                    2 Points
+                  </div>
+                </div>
               </div>
 
             </div>
           </div>
         </section>
 
+        
         {/* ================= GOOGLE STYLE CTA SECTION ================= */}
         <section className="py-24 px-6 bg-[#f8f9fa] border-b border-gray-200">
           <div className="max-w-5xl mx-auto">
@@ -741,17 +940,18 @@ export default function HomePage() {
 
         <FAQ />
 
-        {/* ================= FOOTER ================= */}
-        <footer className="bg-white pt-20 pb-10">
+        {/* ================= PREMIUM FOOTER ================= */}
+        <footer className="bg-white pt-20 pb-10 border-t border-[#dadce0]">
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
               
+              {/* BRAND SECTION */}
               <div className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-sm bg-[#1a73e8] flex items-center justify-center text-white text-lg font-medium">
+                  <div className="w-10 h-10 rounded-sm bg-[#1a73e8] flex items-center justify-center text-white text-lg font-medium shadow-sm hover:bg-[#1557b0] transition-colors cursor-pointer" onClick={() => router.push("/")}>
                     A
                   </div>
-                  <span className="text-xl font-normal text-[#202124] tracking-tight">
+                  <span className="text-xl font-medium text-[#202124] tracking-tight hover:text-[#1a73e8] transition-colors cursor-pointer" onClick={() => router.push("/")}>
                     Arcade Nexus
                   </span>
                 </div>
@@ -759,7 +959,7 @@ export default function HomePage() {
                   This platform is independently designed and developed to help users track, 
                   analyze, and improve their Google Cloud Arcade progress efficiently.
                 </p>
-                <div className="p-4 rounded-sm bg-[#f8f9fa] border border-[#dadce0]">
+                <div className="p-4 rounded-sm bg-[#f8f9fa] border border-[#dadce0] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-shadow">
                   <p className="text-xs text-[#5f6368] leading-relaxed">
                     <strong className="text-[#202124]">Disclaimer:</strong> This website is an independent, community-built tool and is not 
                     an official website of Google Cloud Arcade or Google. All trademarks belong to their respective owners.
@@ -767,29 +967,61 @@ export default function HomePage() {
                 </div>
               </div>
 
+              {/* PLATFORM LINKS */}
               <div className="lg:col-span-1">
-                <h4 className="text-[#202124] font-medium mb-6 text-sm">Platform</h4>
+                <h4 className="text-[#202124] font-semibold mb-6 text-sm uppercase tracking-wider">Platform</h4>
                 <ul className="space-y-4">
-                  <li onClick={() => router.push("/calculator")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline cursor-pointer">Calculator</li>
-                  <li onClick={() => router.push("/dashboard")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline cursor-pointer">Dashboard</li>
-                  <li onClick={() => router.push("/leaderboard")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline cursor-pointer">Leaderboard</li>
+                  <li>
+                    <button onClick={() => router.push("/calculator")} className="text-[#5f6368] text-sm font-medium hover:text-[#1a73e8] hover:translate-x-1 transition-all flex items-center gap-2 group w-full text-left">
+                      Calculator <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => router.push("/dashboard")} className="text-[#5f6368] text-sm font-medium hover:text-[#1a73e8] hover:translate-x-1 transition-all flex items-center gap-2 group w-full text-left">
+                      Dashboard <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => router.push("/leaderboard")} className="text-[#5f6368] text-sm font-medium hover:text-[#1a73e8] hover:translate-x-1 transition-all flex items-center gap-2 group w-full text-left">
+                      Leaderboard <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </li>
                 </ul>
               </div>
 
+              {/* RESOURCES LINKS */}
               <div className="lg:col-span-1">
-                <h4 className="text-[#202124] font-medium mb-6 text-sm">Resources</h4>
+                <h4 className="text-[#202124] font-semibold mb-6 text-sm uppercase tracking-wider">Resources</h4>
                 <ul className="space-y-4">
-                  <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline block">Enrollment</a></li>
-                  <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline block">Points System</a></li>
-                  <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline block">Syllabus</a></li>
+                  <li>
+                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm font-medium hover:text-[#1a73e8] hover:translate-x-1 transition-all flex items-center gap-2 group w-full">
+                      Enrollment <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm font-medium hover:text-[#1a73e8] hover:translate-x-1 transition-all flex items-center gap-2 group w-full">
+                      Points System <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="text-[#5f6368] text-sm font-medium hover:text-[#1a73e8] hover:translate-x-1 transition-all flex items-center gap-2 group w-full">
+                      Syllabus <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
+                  </li>
                 </ul>
               </div>
 
+              {/* STAY CONNECTED SECTION */}
               <div className="lg:col-span-2">
-                <h4 className="text-[#202124] font-medium mb-6 text-sm">Stay Connected</h4>
+                <h4 className="text-[#202124] font-semibold mb-6 text-sm uppercase tracking-wider">Stay Connected</h4>
                 <p className="text-sm text-[#5f6368] mb-6">Join our community for the latest Arcade updates, hints, and support.</p>
-                <a href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#dadce0] bg-white hover:bg-[#f8f9fa] text-[#202124] text-sm font-medium rounded-sm transition-colors group">
-                  <svg className="w-5 h-5 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
+                <a 
+                  href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-flex items-center gap-3 px-6 py-3 border border-[#dadce0] bg-white hover:bg-[#f8f9fa] hover:border-[#25D366] text-[#202124] text-sm font-medium rounded-sm transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(37,211,102,0.15)] group"
+                >
+                  <svg className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/>
                   </svg>
                   <span>WhatsApp Community</span>
@@ -797,39 +1029,38 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* BOTTOM COPYRIGHT & SOCIALS */}
             <div className="h-px bg-[#dadce0] mb-6"></div>
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-[#5f6368] text-sm text-center md:text-left">
                 <p>© {new Date().getFullYear()} Arcade Nexus. All rights reserved.</p>
                 <p className="mt-1">
-                  Powered by: <span className="text-[#202124] font-medium">Manish Kumar & Anjali P.</span>
+                  Powered by: <span className="text-[#202124] font-medium hover:text-[#1a73e8] cursor-pointer transition-colors">Manish Kumar</span> & <span className="text-[#202124] font-medium hover:text-[#1a73e8] cursor-pointer transition-colors">Anjali P.</span>
                 </p>
                 <p className="mt-1 text-xs text-[#80868b]">
-                  Last Updated: March 28, 2026
+                  Last Updated: April 3, 2026
                 </p>
               </div>
 
+              {/* SHARP & INTERACTIVE SOCIAL ICONS */}
               <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
-                <a href="https://github.com/M-pixie" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
-                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <a href="https://github.com/M-pixie" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#202124] hover:border-[#202124] group transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-md">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                 </a>
                 
-                <a href="https://linkedin.com/in/manish-ui" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
-                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#0A66C2] hover:border-[#0A66C2] group transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-md">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                 </a>
 
-                <a href="https://instagram.com/pov.pixi" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
-                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-
-                <a href="https://wa.me/918538980608" target="_blank" className="w-9 h-9 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-[#f8f9fa] hover:border-[#1a73e8] transition-colors group">
-                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-[#1a73e8]" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/></svg>
+                <a href="https://instagram.com/pov.pixi" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-sm bg-white border border-[#dadce0] flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:border-transparent group transition-all duration-300 transform hover:-translate-y-1 shadow-sm hover:shadow-md">
+                  <svg className="w-4 h-4 fill-[#5f6368] group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
               </div>
             </div>
           </div>
         </footer>
+
       </main>
     </>
   );
