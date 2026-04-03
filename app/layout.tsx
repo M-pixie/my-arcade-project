@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Footer from "@/app/components/Footer";
 
 // ✅ 1. Yahan ChatBot import kiya
 import ChatBot from "./components/ChatBot";
@@ -80,6 +81,10 @@ export default function RootLayout({
 
         {/* ✅ 2. Yahan ChatBot laga diya (Body khatam hone se pehle) */}
         <ChatBot />
+
+        {/* 2. 🔥 FOOTER KO YAHAN LAGA DO 🔥 */}
+        <Footer />
+        
       </body>
     </html>
   );

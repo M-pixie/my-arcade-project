@@ -20,6 +20,7 @@ export default function Navbar() {
     { name: "Home", href: "/", tooltip: "Go to Homepage" },
     { name: "Calculator", href: "/calculator", tooltip: "Calculate your points" },
     { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
+    { name: "Skill Badges", href: "/resources", tooltip: "All Skill BAadges" },
     { name: "Dashboard", href: "/dashboard", tooltip: "View your dashboard" },
     { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
     { name: "Admin", href: "/admin", tooltip: "Admin console" },
