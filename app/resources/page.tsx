@@ -47,11 +47,11 @@ const initialBadgesData = [
   { id: "29", title: "Create Your First Gemini Enterprise Application", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1586" },
   { id: "30", title: "Engineer AI Agents with Agent Development Kit (ADK)", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1596" },
   { id: "31", title: "Build Global and Regional Load Balancing Solutions", duration: "270", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1558" },
-  { id: "32", title: "Google DeepMind: Train A Small Language Model", duration: "105", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/1453" },
+  { id: "32", title: "Google DeepMind: Train A Small Language Model", duration: "75", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/1453" },
 
   // PAGE 5
   { id: "33", title: "Build a Smart Cloud Application with Vibe Coding and MCP", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1459" },
-  { id: "34", title: "Deploy Multi-Agent Architectures", duration: "105", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/1445" },
+  { id: "34", title: "Deploy Multi-Agent Architectures", duration: "135", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/1445" },
   { id: "35", title: "Develop AI-Powered Prototypes in Google AI Studio", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1426" },
   { id: "36", title: "Kickstarting Application Development with Gemini Code Assist", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1399" },
   { id: "37", title: "Connecting Cloud Networks with NCC", duration: "135", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1364" },
