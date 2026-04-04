@@ -6,21 +6,21 @@ import Navbar from "@/app/components/Navbar";
 
 // ======================================================================
 // FINAL & COMPLETE 93 SKILL BADGES DATA ARRAY
-// Data untouched!
+// Pura data exact match kiya gaya hai images aur instructions ke hisaab se!
 // ======================================================================
 const initialBadgesData = [
   // PAGE 1
   { id: "01", title: "Manage Kubernetes in Google Cloud", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/783" },
   { id: "02", title: "Classify Images with TensorFlow on Google Cloud", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/646" },
   { id: "03", title: "Derive Insights from BigQuery Data", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/623" },
-  { id: "04", title: "Share Data Using Google Data Cloud", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/657" },
+  { id: "04", title: "Share Data Using Google Data Cloud", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/657" },
   { id: "05", title: "Get Started with Google Workspace Tools", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/676" },
   { id: "06", title: "Migrate MySQL Data to Cloud SQL Using Database Migration...", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/629" },
-  { id: "07", title: "Use Machine Learning APIs on Google Cloud", duration: "30", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/630" },
+  { id: "07", title: "Use Machine Learning APIs on Google Cloud", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/630" },
   { id: "08", title: "Mitigate Threats and Vulnerabilities with Security Command...", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/759" },
 
   // PAGE 2
-  { id: "09", title: "Monitor Environments with Google Cloud Managed Service for...", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/761" },
+  { id: "09", title: "Monitor Environments with Google Cloud Managed Service for...", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/761" },
   { id: "10", title: "Get Started with Dataplex", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/726" },
   { id: "11", title: "Prompt Design in Vertex AI", duration: "105", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/976" },
   { id: "12", title: "Configure Service Accounts and IAM Roles for Google Cloud", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/702" },
@@ -53,7 +53,7 @@ const initialBadgesData = [
   { id: "33", title: "Build a Smart Cloud Application with Vibe Coding and MCP", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1459" },
   { id: "34", title: "Deploy Multi-Agent Architectures", duration: "105", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/1445" },
   { id: "35", title: "Develop AI-Powered Prototypes in Google AI Studio", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1426" },
-  { id: "36", title: "Kickstarting Application Development with Gemini Code Assist", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1399" },
+  { id: "36", title: "Kickstarting Application Development with Gemini Code Assist", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1399" },
   { id: "37", title: "Connecting Cloud Networks with NCC", duration: "135", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1364" },
   { id: "38", title: "Privileged Access with IAM", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1337" },
   { id: "39", title: "Enhance Gemini Model Capabilities", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1241" },
@@ -61,7 +61,7 @@ const initialBadgesData = [
 
   // PAGE 6
   { id: "41", title: "Implement Multimodal Vector Search with BigQuery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1232" },
-  { id: "42", title: "Protect Cloud Traffic with Chrome Enterprise Premium Security", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/784" },
+  { id: "42", title: "Protect Cloud Traffic with Chrome Enterprise Premium Security", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/784" },
   { id: "43", title: "Discover and Protect Sensitive Data Across Your Ecosystem", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1177" },
   { id: "44", title: "Get Started with Pub/Sub", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/728" },
   { id: "45", title: "Secure Software Delivery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1164" },
@@ -75,7 +75,7 @@ const initialBadgesData = [
   { id: "51", title: "Explore Generative AI with the Gemini API in Vertex AI", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/959" },
   { id: "52", title: "Build LookML Objects in Looker", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/639" },
   { id: "53", title: "Create and Manage Cloud SQL for PostgreSQL Instances", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/652" },
-  { id: "54", title: "Deploy and Manage Apigee X", duration: "60", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/661" },
+  { id: "54", title: "Deploy and Manage Apigee X", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/661" },
   { id: "55", title: "Prepare Data for Looker Dashboards and Reports", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/628" },
   { id: "56", title: "Optimize Costs for Google Kubernetes Engine", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/655" },
 
@@ -90,8 +90,8 @@ const initialBadgesData = [
   { id: "64", title: "Engineer Data for Predictive Modeling with BigQuery ML", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/627" },
 
   // PAGE 9
-  { id: "65", title: "Build a Secure Google Cloud Network", duration: "75", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/654" },
-  { id: "66", title: "Cloud Architecture: Design, Implement, and Manage", duration: "135", labs: "Skill Badge", level: "Advanced", link: "https://www.skills.google/course_templates/640" },
+  { id: "65", title: "Build a Secure Google Cloud Network", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/654" },
+  { id: "66", title: "Cloud Architecture: Design, Implement, and Manage", duration: "135", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/640" },
   { id: "67", title: "Build a Website on Google Cloud", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/638" },
   { id: "68", title: "Implementing Cloud Load Balancing for Compute Engine", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/648" },
   { id: "69", title: "Develop Your Google Cloud Network", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/625" },
@@ -102,9 +102,9 @@ const initialBadgesData = [
   // PAGE 10
   { id: "73", title: "App Engine: 3 Ways", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/671" },
   { id: "74", title: "Get Started with Cloud Storage", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/725" },
-  { id: "75", title: "Create a Streaming Data Lake on Cloud Storage", duration: "90", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/705" },
+  { id: "75", title: "Create a Streaming Data Lake on Cloud Storage", duration: "90", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/705" },
   { id: "76", title: "Build Serverless Applications with Cloud Run Functions", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/696" },
-  { id: "77", title: "Streaming Analytics into BigQuery", duration: "60", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/752" },
+  { id: "77", title: "Streaming Analytics into BigQuery", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/752" },
   { id: "78", title: "Get Started with API Gateway", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/662" },
   { id: "79", title: "App Building with AppSheet", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/635" },
   { id: "80", title: "Store, Process, and Manage Data on Google Cloud - Console", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/658" },
@@ -290,9 +290,6 @@ export default function ResourcesPage() {
               return (
                 <div 
                   key={badge.id} 
-                  // ==========================================
-                  // NEW: PREMIUM PEARL GRADIENT FOR INCOMPLETE
-                  // ==========================================
                   className={`group rounded-md p-7 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border ${
                     isDone 
                       ? 'completed-blink-card shadow-[0_4px_12px_rgba(52,168,83,0.12)]' 
@@ -324,8 +321,22 @@ export default function ResourcesPage() {
                     </div>
                   )}
 
+                  {/* ==========================================
+                      NEW: SMALL ICON & TINY TEXT
+                      ========================================== */}
+                  <div className="flex flex-col items-start mb-4">
+                    <img 
+                      src="https://i.postimg.cc/bwX3MCMF/1775250377511.png" 
+                      alt="Badge Icon" 
+                      className="w-10 h-10 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <span className={`text-[9px] font-extrabold uppercase tracking-widest mt-1.5 ml-0.5 ${isDone ? 'text-[#0f5132]/80' : 'text-[#5f6368]'}`}>
+                      Skill Badge
+                    </span>
+                  </div>
+
                   {/* Header Meta */}
-                  <div className="flex items-center gap-3 mb-6 pr-24">
+                  <div className="flex items-center gap-3 mb-4 pr-24">
                     <span className="text-[10px] font-bold text-[#9aa0a6] uppercase tracking-[0.2em]">
                       BDG-{badge.id}
                     </span>
