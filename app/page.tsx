@@ -343,158 +343,59 @@ export default function HomePage() {
         </section>
 
           
-       {/* ================= 🔥 PREMIUM REWARDS SECTION (AUTO-ANIMATED) 🔥 ================= */}
-        <section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-[#dadce0] overflow-hidden">
-          
-          {/* 🔥 Local Styles for Auto-Animations 🔥 */}
-          <style>{`
-            @keyframes float-green {
-              0%, 100% { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-              50% { transform: translateY(-10px); box-shadow: 0 20px 40px -15px rgba(52,168,83,0.4); }
-            }
-            @keyframes float-blue {
-              0%, 100% { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-              50% { transform: translateY(-10px); box-shadow: 0 20px 40px -15px rgba(26,115,232,0.4); }
-            }
-            @keyframes float-red {
-              0%, 100% { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-              50% { transform: translateY(-10px); box-shadow: 0 20px 40px -15px rgba(234,67,53,0.4); }
-            }
-            @keyframes smooth-zoom {
-              0%, 100% { transform: scale(1); }
-              50% { transform: scale(1.08); }
-            }
-            @keyframes arrow-bounce-x {
-              0%, 100% { transform: translateX(0); }
-              50% { transform: translateX(6px); }
-            }
-            .animate-float-green { animation: float-green 4s ease-in-out infinite; }
-            .animate-float-blue { animation: float-blue 4s ease-in-out infinite 1.2s; }
-            .animate-float-red { animation: float-red 4s ease-in-out infinite 2.4s; }
-            .animate-smooth-zoom { animation: smooth-zoom 6s ease-in-out infinite; }
-            .animate-arrow-bounce { animation: arrow-bounce-x 1.5s ease-in-out infinite; }
-          `}</style>
+{/* ================= 🔥 PREMIUM REWARDS SECTION (CLEAR BORDER, NO ZOOM) 🔥 ================= */}
+<section className="relative z-10 py-24 bg-gradient-to-b from-white to-[#f8f9fa] border-b border-[#dadce0] overflow-hidden">
+  <div className="max-w-6xl mx-auto px-6">
+    
+    {/* 🔥 Updated Heading and Paragraph Intro (BADA ANTIMATED GIF) 🔥 */}
+    <div className="text-center mb-16 relative z-10 flex flex-col items-center">
+      
+      {/* Container holding icon and text, background aur border hata diya */}
+      <div className="inline-flex items-center gap-4 text-[#b06000] mb-8 cursor-default">
+        
+        {/* 🔥 FIXED: BADA GIF SYMBOL (6xl) + UNIQUE FLOAT/SPIN ANIMATION 🔥 */}
+        <span className="text-6xl block animate-[smooth-float-spin_3s_ease-in-out_infinite] origin-center">
+          🎁
+        </span>
+        
+        {/* Text styling updated to look good with the big icon */}
+        <span className="text-lg font-extrabold uppercase tracking-widest mt-1">
+          Google Swags
+        </span>
+      </div>
+      
+      {/* Baaki heading aur paragraph untouched */}
+      <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-5">
+        claim your google swags
+      </h2>
+      
+      <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+        Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
+      </p>
+    </div>
 
-          <div className="max-w-6xl mx-auto px-6">
-            
-            {/* Rewards Intro */}
-            <div className="text-center mb-16 relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#fef7e0] border border-[#fde293] text-[#b06000] text-[13px] font-extrabold mb-6 uppercase tracking-widest rounded-full shadow-sm">
-                <span className="text-lg">🎁</span>
-                <span>Premium Swags</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-6">
-                Redeem your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Self-Earned Points</span>
-              </h2>
-              <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-medium">
-                Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
-              </p>
-            </div>
+    {/* Single, Central Image Container */}
+    {/* 🔥 FIXED: p-[4px] kar diya taaki border ki motai badhe aur animation ekdum clear dikhe 🔥 */}
+    <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.4)] transition-all duration-500 ease-out p-[4px] bg-[#f8f9fa] mx-auto max-w-5xl">
+      
+      {/* Moving Border Animation background (Hamesha ghumega taaki clear dikhe) */}
+      <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_75%,#a855f7_100%)] animate-[spin_2.5s_linear_infinite] opacity-100 z-0 pointer-events-none"></div>
 
-            {/* Premium Rewards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-              
-              {/* Card 1: Milestone (Green Theme) */}
-              <div className="relative rounded-2xl flex flex-col items-center text-center cursor-default overflow-hidden z-10 p-[2px] bg-white border border-transparent animate-float-green">
-                
-                {/* 🔥 THIN PURPLE CONTINUOUS MOVING BORDER 🔥 */}
-                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_75%,#a855f7_100%)] animate-[spin_2.5s_linear_infinite] opacity-100 z-0 pointer-events-none"></div>
+      {/* Actual Content Wrapper (Andar wale edges round kiye taaki border smooth dikhe) */}
+      <div className="relative w-full h-full bg-white rounded-[13px] z-10 overflow-hidden">
+        
+        {/* 🔥 FIXED: Image ka scale/zoom aur dark overlay dono hata diya 🔥 */}
+        <img 
+          src="https://i.postimg.cc/MT50zzG8/1775382064372.png" 
+          alt="Premium Swags Showcase" 
+          className="w-full h-auto block"
+        />
 
-                {/* Card Inner Wrapper */}
-                <div className="relative w-full h-full bg-gradient-to-b from-white to-[#e6f4ea]/40 rounded-[14px] p-8 flex flex-col items-center z-10 overflow-hidden">
-                  
-                  {/* Image Container */}
-                  <div className="relative h-60 w-full flex items-center justify-center mb-8 z-10">
-                    <div className="absolute inset-0 bg-radial-gradient from-[#f8f9fa] to-transparent opacity-100 rounded-full scale-150"></div>
-                    
-                    {/* AUTO SCALING IMAGE */}
-                    <img 
-                      src="https://services.google.com/fh/files/misc/gcaf25_prizes_image4.png" 
-                      alt="Standard Tier Rewards" 
-                      className="relative max-h-full object-contain animate-smooth-zoom drop-shadow-xl z-10"
-                    />
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold text-[#1e8e3e] z-10">Milestone Rewards</h3>
-                  
-                  {/* 🔥 ANIMATED TEXT & ARROW 🔥 */}
-                  <div className="h-6 opacity-100 mt-2 flex items-center justify-center z-10 overflow-hidden">
-                    <span className="text-[13px] font-bold text-purple-600 tracking-wide uppercase flex items-center gap-1.5">
-                      Explore Rewards <span className="animate-arrow-bounce text-lg">→</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
+      </div>
+    </div>
 
-              {/* Card 2: Advanced (Blue Theme) */}
-              <div className="relative rounded-2xl flex flex-col items-center text-center cursor-default overflow-hidden z-10 p-[2px] bg-white border border-transparent animate-float-blue md:mt-4">
-                
-                {/* 🔥 THIN PURPLE CONTINUOUS MOVING BORDER 🔥 */}
-                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_75%,#a855f7_100%)] animate-[spin_2.5s_linear_infinite] opacity-100 z-0 pointer-events-none"></div>
-
-                {/* Card Inner Wrapper */}
-                <div className="relative w-full h-full bg-gradient-to-b from-white to-[#e8f0fe]/40 rounded-[14px] p-8 flex flex-col items-center z-10 overflow-hidden">
-                  
-                  {/* Image Container */}
-                  <div className="relative h-60 w-full flex items-center justify-center mb-8 z-10">
-                    <div className="absolute inset-0 bg-radial-gradient from-[#f8f9fa] to-transparent opacity-100 rounded-full scale-150"></div>
-                    
-                    {/* AUTO SCALING IMAGE */}
-                    <img 
-                      src="https://services.google.com/fh/files/misc/gcaf25_prizes_image5.png" 
-                      alt="Advanced Tier Rewards" 
-                      className="relative max-h-full object-contain animate-smooth-zoom drop-shadow-xl z-10"
-                      style={{ animationDelay: '0.8s' }}
-                    />
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold text-[#1a73e8] z-10">Advanced Collection</h3>
-                  
-                  {/* 🔥 ANIMATED TEXT & ARROW 🔥 */}
-                  <div className="h-6 opacity-100 mt-2 flex items-center justify-center z-10 overflow-hidden">
-                    <span className="text-[13px] font-bold text-purple-600 tracking-wide uppercase flex items-center gap-1.5">
-                      Explore Rewards <span className="animate-arrow-bounce text-lg">→</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 3: Champion (Red Theme) */}
-              <div className="relative rounded-2xl flex flex-col items-center text-center cursor-default overflow-hidden z-10 p-[2px] bg-white border border-transparent animate-float-red">
-                
-                {/* 🔥 THIN PURPLE CONTINUOUS MOVING BORDER 🔥 */}
-                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_75%,#a855f7_100%)] animate-[spin_2.5s_linear_infinite] opacity-100 z-0 pointer-events-none"></div>
-
-                {/* Card Inner Wrapper */}
-                <div className="relative w-full h-full bg-gradient-to-b from-white to-[#fce8e6]/40 rounded-[14px] p-8 flex flex-col items-center z-10 overflow-hidden">
-                  
-                  {/* Image Container */}
-                  <div className="relative h-60 w-full flex items-center justify-center mb-8 z-10">
-                    <div className="absolute inset-0 bg-radial-gradient from-[#f8f9fa] to-transparent opacity-100 rounded-full scale-150"></div>
-                    
-                    {/* AUTO SCALING IMAGE */}
-                    <img 
-                      src="https://services.google.com/fh/files/misc/gcaf25_prizes_image6.png" 
-                      alt="Champion Tier Rewards" 
-                      className="relative max-h-full object-contain animate-smooth-zoom drop-shadow-xl z-10"
-                      style={{ animationDelay: '1.6s' }}
-                    />
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold text-[#d93025] z-10">Champion Elite</h3>
-                  
-                  {/* 🔥 ANIMATED TEXT & ARROW 🔥 */}
-                  <div className="h-6 opacity-100 mt-2 flex items-center justify-center z-10 overflow-hidden">
-                    <span className="text-[13px] font-bold text-purple-600 tracking-wide uppercase flex items-center gap-1.5">
-                      Explore Rewards <span className="animate-arrow-bounce text-lg">→</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
+  </div>
+</section>
 
         {/* ================= 🔥 NEW: OFFICIAL SWAG PARTNERS ================= */}
         <div className="pt-16 border-t border-[#dadce0]">
