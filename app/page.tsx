@@ -35,208 +35,269 @@ export default function HomePage() {
       {/* PURE WHITE BACKGROUND, GOOGLE TEXT COLORS */}
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
-        {/* ================= HERO SECTION (PREMIUM & ANIMATED) ================= */}
-        <section className="relative pt-32 pb-24 px-6 border-b border-[#dadce0] bg-white overflow-hidden">
+
+
+
+  {/* ================= HERO SECTION (PREMIUM & ANIMATED) ================= */}
+<section className="relative pt-32 pb-24 px-6 border-b border-[#dadce0] bg-white overflow-hidden">
+  
+  {/* Custom Animations injected via standard style block */}
+  <style>{`
+    @keyframes float-cat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    .animate-float-cat {
+      animation: float-cat 5s ease-in-out infinite;
+    }
+    @keyframes typing-left-paw {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-10deg) translateY(5px); }
+    }
+    .animate-typing-left-paw {
+      animation: typing-left-paw 0.3s ease-in-out infinite alternate;
+      transform-origin: top right;
+    }
+    @keyframes typing-right-paw {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(10deg) translateY(5px); }
+    }
+    .animate-typing-right-paw {
+      animation: typing-right-paw 0.4s ease-in-out infinite alternate-reverse;
+      transform-origin: top left;
+    }
+    @keyframes blink-eye {
+      0%, 45%, 55%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.1); }
+    }
+    .animate-blink {
+      animation: blink-eye 4s infinite;
+      transform-origin: center;
+    }
+    /* Smooth Floating Animation for Premium Bubble */
+    @keyframes smooth-float-bubble {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-smooth-bubble {
+      animation: smooth-float-bubble 3s ease-in-out infinite;
+    }
+    /* Animated Text Scrolling on Screen */
+    @keyframes code-scroll-continuous {
+      0% { transform: translateY(0%); }
+      100% { transform: translateY(-50%); }
+    }
+    .animate-code-continuous {
+      animation: code-scroll-continuous 15s linear infinite; 
+    }
+  `}</style>
+
+  <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8 relative z-10">
+    
+    {/* ================= LEFT CONTENT ================= */}
+    <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start">
+      
+      {/* Animated APRIL LABS Badge */}
+      <div className="group relative inline-flex items-center gap-2.5 px-5 py-2 bg-[#fef7e0] border border-[#fde293] text-[#b06000] text-[13px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ea4335]"></span>
+        </span>
+        <span className="relative z-10">April Month Labs Live !</span>
+      </div>
+
+      {/* MAIN HEADING (bold, black, smaller) */}
+      <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-[#202124] mb-6 leading-[1.1]">
+        Arcade Points <br className="hidden md:block" />
+        <span className="relative inline-block mt-2">
+          Calculator
+        </span>
+      </h1>
+
+      {/* Subheading */}
+      <p className="text-lg md:text-xl text-[#5f6368] max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+        The professional dashboard to calculate your Google Cloud Arcade points, 
+        monitor leaderboard rankings & track your growth in real-time.
+      </p>
+
+      {/* Standard Action Buttons */}
+      <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
+        <button
+          onClick={() => router.push("/calculator")}
+          className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-base rounded-xl hover:bg-[#1557b0] hover:shadow-md transition-all duration-200 focus:outline-none"
+        >
+          Open Calculator
+        </button>
+        
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] border border-[#dadce0] font-medium text-base rounded-xl hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-all duration-200 focus:outline-none"
+        >
+          View Dashboard
+        </button>
+      </div>
+
+      {/* LONG BUTTON FOR ARCADE */}
+      <a
+        href="https://go.cloudskillsboost.google/arcade"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-6 w-full lg:w-max flex items-center justify-center gap-3 px-8 py-4 bg-[#34a853] hover:bg-[#2b8a44] text-white font-bold text-[15px] sm:text-base rounded-xl shadow-[0_4px_14px_rgba(52,168,83,0.3)] hover:shadow-[0_6px_20px_rgba(52,168,83,0.4)] transform hover:-translate-y-0.5 transition-all duration-300 focus:outline-none"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        Open Google Cloud Arcade Labs
+      </a>
+      
+      {/* Trust Badge */}
+      <p className="mt-12 text-[11px] font-bold text-[#80868b] tracking-widest uppercase">
+        Trusted by thousands of cloud enthusiasts
+      </p>
+    </div>
+
+    {/* ================= RIGHT CONTENT: ANIMATED CODING CAT ================= */}
+    <div className="flex-1 w-full flex justify-center lg:justify-end items-center relative mt-12 lg:mt-0">
+      
+      {/* Soft background glow behind cat */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#e8f0fe] rounded-full blur-[80px] opacity-70 z-0 pointer-events-none"></div>
+
+      {/* SVG Coding Cat Image */}
+      <div className="relative z-10 w-full max-w-[450px] animate-float-cat pointer-events-none drop-shadow-2xl">
+        
+        {/* Updated Cat SVG with terminal screen statements */}
+        <svg viewBox="0 -20 500 420" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto overflow-visible">
           
-          {/* Custom Animations injected via standard style block */}
-          <style>{`
-            @keyframes float-robot {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(-20px); }
-            }
-            .animate-float-robot {
-              animation: float-robot 4s ease-in-out infinite;
-            }
-            @keyframes typing-left {
-              0%, 100% { transform: rotate(0deg); }
-              50% { transform: rotate(-8deg) translateY(6px); }
-            }
-            .animate-typing-left {
-              animation: typing-left 0.4s ease-in-out infinite;
-              transform-origin: top right;
-            }
-            @keyframes typing-right {
-              0%, 100% { transform: rotate(0deg); }
-              50% { transform: rotate(8deg) translateY(6px); }
-            }
-            .animate-typing-right {
-              animation: typing-right 0.5s ease-in-out infinite;
-              transform-origin: top left;
-            }
-            @keyframes blink-eye {
-              0%, 45%, 55%, 100% { transform: scaleY(1); }
-              50% { transform: scaleY(0.1); }
-            }
-            .animate-blink {
-              animation: blink-eye 4s infinite;
-              transform-origin: center;
-            }
-            /* 🔥 NEW: Smooth Floating Animation for Premium Bubble 🔥 */
-            @keyframes smooth-float-bubble {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(-6px); }
-            }
-            .animate-smooth-bubble {
-              animation: smooth-float-bubble 3s ease-in-out infinite;
-            }
-          `}</style>
+          <defs>
+            {/* Premium Soft Shadow for Bubble */}
+            <filter id="premium-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="8" stdDeviation="10" floodOpacity="0.12" floodColor="#1a73e8" />
+            </filter>
+          </defs>
 
-          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-8 relative z-10">
+          {/* Table/Desk */}
+          <path d="M50 350 L450 350 L480 400 L20 400 Z" fill="#f1f3f4" stroke="#dadce0" strokeWidth="2" />
+          <rect x="20" y="400" width="460" height="15" fill="#dadce0" />
+
+          {/* 🔥 CAT TAIL REMOVED HERE 🔥 */}
+
+          {/* Cat Body (Sitting) */}
+          <path d="M 230 350 C 230 240 370 240 370 350 Z" fill="#3c4043"/>
+          <path d="M 260 350 C 260 280 340 280 340 350 Z" fill="#5f6368"/>
+
+          {/* Cat Head */}
+          <circle cx="300" cy="180" r="60" fill="#3c4043"/>
+          {/* Ears */}
+          <path d="M 255 150 L 240 100 L 285 135 Z" fill="#3c4043"/>
+          <path d="M 260 145 L 250 115 L 275 135 Z" fill="#f28b82"/>
+          <path d="M 345 150 L 360 100 L 315 135 Z" fill="#3c4043"/>
+          <path d="M 340 145 L 350 115 L 325 135 Z" fill="#f28b82"/>
+
+          {/* Cat Face Details */}
+          <g className="animate-blink">
+            {/* Eyes */}
+            <circle cx="275" cy="175" r="9" fill="#fbbc04"/>
+            <circle cx="275" cy="175" r="5" fill="#202124"/>
+            <circle cx="325" cy="175" r="9" fill="#fbbc04"/>
+            <circle cx="325" cy="175" r="5" fill="#202124"/>
+            {/* Geeky Glasses */}
+            <rect x="260" y="165" width="30" height="20" rx="4" fill="none" stroke="#fff" strokeWidth="3"/>
+            <rect x="310" y="165" width="30" height="20" rx="4" fill="none" stroke="#fff" strokeWidth="3"/>
+            <line x1="290" y1="175" x2="310" y2="175" stroke="#fff" strokeWidth="3"/>
+          </g>
+
+          {/* Nose & Mouth */}
+          <polygon points="295,190 305,190 300,195" fill="#f28b82"/>
+          <path d="M 290 200 Q 300 205 300 195 Q 300 205 310 200" stroke="#fff" strokeWidth="2" fill="transparent"/>
+
+          {/* Whiskers */}
+          <line x1="230" y1="185" x2="255" y2="190" stroke="#fff" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="230" y1="195" x2="255" y2="195" stroke="#fff" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="370" y1="185" x2="345" y2="190" stroke="#fff" strokeWidth="1.5" opacity="0.6"/>
+          <line x1="370" y1="195" x2="345" y2="195" stroke="#fff" strokeWidth="1.5" opacity="0.6"/>
+
+          {/* Premium Sleek Bubble on the LEFT side with Shadow */}
+          <g className="animate-smooth-bubble" filter="url(#premium-shadow)"> 
+            {/* Pill Shape Background */}
+            <rect x="10" y="30" width="170" height="46" rx="23" fill="#ffffff" />
+            {/* Tail pointing exactly to Cat's cheek */}
+            <path d="M 145 68 L 180 90 L 155 60 Z" fill="#ffffff" />
             
-            {/* ================= LEFT CONTENT ================= */}
-            <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start">
+            {/* Red Live Indicator Dot */}
+            <circle cx="35" cy="53" r="4.5" fill="#ea4335" className="animate-pulse" />
+            
+            {/* Premium Typography */}
+            <text x="50" y="58" fontFamily="sans-serif" fontSize="13" fontWeight="900" fill="#202124" letterSpacing="0.5">
+              APRIL LABS <tspan fill="#1a73e8">LIVE!</tspan>
+            </text>
+          </g>
+
+          {/* Open Laptop Facing Us */}
+          <rect x="110" y="150" width="160" height="110" rx="10" fill="#202124" />
+          
+          {/* Laptop Screen Content - Terminal-Style statements */}
+          <g clipPath="url(#screenClip)">
+            <clipPath id="screenClip">
+              <rect x="115" y="155" width="150" height="100"/>
+            </clipPath>
+            
+            <g className="animate-code-continuous">
+              {/* --- First set --- */}
+              <text x="190" y="170" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> Hi, I am a"}</text>
+              <text x="190" y="188" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ea4335">{"PIXI"}</text>
+              <text x="190" y="206" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> & I do"}</text>
+              <text x="190" y="224" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#4285f4">{"Google Cloud"}</text>
+              <text x="190" y="242" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fbbc04">{"Arcade Labs!"}</text>
               
-              {/* Animated APRIL LABS Badge */}
-              <div className="group relative inline-flex items-center gap-2.5 px-5 py-2 bg-[#fef7e0] border border-[#fde293] text-[#b06000] text-[13px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ea4335]"></span>
-                </span>
-                <span className="relative z-10">April Month Labs Live !</span>
-              </div>
+              {/* Spacing between sets */}
+              <text x="190" y="260" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{">"}</text>
 
-              {/* MAIN HEADING (bold, black, smaller) */}
-              <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-[#202124] mb-6 leading-[1.1]">
-                Arcade Points <br className="hidden md:block" />
-                <span className="relative inline-block mt-2">
-                  Calculator
-                </span>
-              </h1>
-
-              {/* Subheading */}
-              <p className="text-lg md:text-xl text-[#5f6368] max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
-                The professional dashboard to calculate your Google Cloud Arcade points, 
-                monitor leaderboard rankings & track your growth in real-time.
-              </p>
-
-              {/* Standard Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
-                <button
-                  onClick={() => router.push("/calculator")}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-base rounded-xl hover:bg-[#1557b0] hover:shadow-md transition-all duration-200 focus:outline-none"
-                >
-                  Open Calculator
-                </button>
-                
-                <button
-                  onClick={() => router.push("/dashboard")}
-                  className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] border border-[#dadce0] font-medium text-base rounded-xl hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-all duration-200 focus:outline-none"
-                >
-                  View Dashboard
-                </button>
-              </div>
-
-              {/* LONG BUTTON FOR ARCADE */}
-              <a
-                href="https://go.cloudskillsboost.google/arcade"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 w-full lg:w-max flex items-center justify-center gap-3 px-8 py-4 bg-[#34a853] hover:bg-[#2b8a44] text-white font-bold text-[15px] sm:text-base rounded-xl shadow-[0_4px_14px_rgba(52,168,83,0.3)] hover:shadow-[0_6px_20px_rgba(52,168,83,0.4)] transform hover:-translate-y-0.5 transition-all duration-300 focus:outline-none"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                Open Google Cloud Arcade Labs
-              </a>
+              {/* --- Second set (Exact duplicate for seamless loop) --- */}
+              <text x="190" y="278" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> Hi, I am a"}</text>
+              <text x="190" y="296" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ea4335">{"PIXI"}</text>
+              <text x="190" y="314" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> & I do"}</text>
+              <text x="190" y="332" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#4285f4">{"Google Cloud"}</text>
+              <text x="190" y="350" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fbbc04">{"Arcade Labs!"}</text>
               
-              {/* Trust Badge */}
-              <p className="mt-12 text-[11px] font-bold text-[#80868b] tracking-widest uppercase">
-                Trusted by thousands of cloud enthusiasts
-              </p>
-            </div>
+              {/* Spacing for next loop */}
+              <text x="190" y="368" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{">"}</text>
+            </g>
+          </g>
+          
+          {/* Laptop Keyboard Area */}
+          <path d="M 90 260 L 290 260 L 310 290 L 70 290 Z" fill="#9aa0a6" stroke="#5f6368" strokeWidth="2"/>
+          {/* Keypads detail */}
+          <path d="M 100 265 L 280 265 L 295 280 L 85 280 Z" fill="#3c4043"/>
 
-            {/* ================= RIGHT CONTENT: ANIMATED ROBOT ================= */}
-            <div className="flex-1 w-full flex justify-center lg:justify-end items-center relative mt-12 lg:mt-0">
-              
-              {/* Soft background glow behind robot */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#e8f0fe] rounded-full blur-[80px] opacity-70 z-0 pointer-events-none"></div>
+          {/* Typing Paws (Animated) */}
+          <g className="animate-typing-left-paw">
+            <path d="M 230 280 C 230 260 210 260 190 280 Z" fill="#3c4043"/>
+            <path d="M 230 280 C 230 265 215 265 200 280 Z" fill="#5f6368"/>
+          </g>
+          <g className="animate-typing-right-paw">
+            <path d="M 270 280 C 270 260 290 260 310 280 Z" fill="#3c4043"/>
+            <path d="M 270 280 C 270 265 285 265 300 280 Z" fill="#5f6368"/>
+          </g>
+          
+          {/* Floating Points/Badges Elements */}
+          <g className="animate-[pulse_3s_infinite]">
+            <circle cx="90" cy="140" r="18" fill="#fbbc04" opacity="0.9" />
+            <text x="90" y="146" textAnchor="middle" fontFamily="sans-serif" fontSize="16" fontWeight="bold" fill="#fff">+</text>
+          </g>
+          <g className="animate-[pulse_2s_infinite]" style={{ animationDelay: '1s' }}>
+            <circle cx="410" cy="110" r="24" fill="#34a853" opacity="0.9" />
+            <text x="410" y="117" textAnchor="middle" fontFamily="sans-serif" fontSize="18" fontWeight="bold" fill="#fff">⭐</text>
+          </g>
+          <g className="animate-[pulse_2.5s_infinite]" style={{ animationDelay: '0.5s' }}>
+            <circle cx="380" cy="220" r="14" fill="#ea4335" opacity="0.9" />
+          </g>
 
-              {/* SVG Robot Image */}
-              <div className="relative z-10 w-full max-w-[450px] animate-float-robot pointer-events-none">
-                
-                {/* 🔥 Added overflow-visible and adjusted viewBox so nothing cuts off 🔥 */}
-                <svg viewBox="0 -20 500 420" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto drop-shadow-2xl overflow-visible">
-                  
-                  <defs>
-                    {/* Premium Soft Shadow for Bubble */}
-                    <filter id="premium-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feDropShadow dx="0" dy="8" stdDeviation="10" floodOpacity="0.12" floodColor="#1a73e8" />
-                    </filter>
-                  </defs>
+        </svg>
+      </div>
 
-                  {/* Table/Desk */}
-                  <path d="M50 350 L450 350 L480 400 L20 400 Z" fill="#f1f3f4" stroke="#dadce0" strokeWidth="2" />
-                  <rect x="20" y="400" width="460" height="15" fill="#dadce0" />
-
-                  {/* Robot Body */}
-                  <rect x="200" y="150" width="100" height="150" rx="30" fill="#f8f9fa" stroke="#dadce0" strokeWidth="4"/>
-
-                  {/* Robot Head */}
-                  <rect x="180" y="40" width="140" height="100" rx="20" fill="#ffffff" stroke="#dadce0" strokeWidth="4"/>
-                  
-                  {/* Antenna */}
-                  <rect x="245" y="10" width="10" height="30" fill="#dadce0" />
-                  <circle cx="250" cy="10" r="8" fill="#ea4335" className="animate-pulse" />
-                  
-                  {/* Eyes */}
-                  <circle cx="220" cy="90" r="12" fill="#1a73e8" className="animate-blink" />
-                  <circle cx="280" cy="90" r="12" fill="#1a73e8" className="animate-blink" />
-                  
-                  {/* Smile */}
-                  <path d="M 230 115 Q 250 125 270 115" stroke="#5f6368" strokeWidth="4" fill="transparent" strokeLinecap="round" />
-
-                  {/* 🔥 NEW: Premium Sleek Bubble on the LEFT side with Shadow 🔥 */}
-                  <g className="animate-smooth-bubble" filter="url(#premium-shadow)"> 
-                    {/* Pill Shape Background */}
-                    <rect x="10" y="30" width="170" height="46" rx="23" fill="#ffffff" />
-                    {/* Tail pointing exactly to Robot's cheek */}
-                    <path d="M 145 68 L 175 85 L 155 60 Z" fill="#ffffff" />
-                    
-                    {/* Red Live Indicator Dot */}
-                    <circle cx="35" cy="53" r="4.5" fill="#ea4335" className="animate-pulse" />
-                    
-                    {/* Premium Typography */}
-                    <text x="50" y="58" fontFamily="sans-serif" fontSize="13" fontWeight="900" fill="#202124" letterSpacing="0.5">
-                      APRIL LABS <tspan fill="#1a73e8">LIVE!</tspan>
-                    </text>
-                  </g>
-
-                  {/* Laptop Screen (Back) */}
-                  <rect x="120" y="200" width="260" height="150" rx="15" fill="#ffffff" stroke="#dadce0" strokeWidth="4"/>
-                  {/* Laptop Base */}
-                  <path d="M90 350 L410 350 L430 380 L70 380 Z" fill="#e8eaed" stroke="#dadce0" strokeWidth="2"/>
-                  <rect x="70" y="380" width="360" height="8" rx="4" fill="#9aa0a6" />
-
-                  {/* Laptop Logo (Google 'G') & Arcade Text */}
-                  <circle cx="250" cy="250" r="28" fill="#e8f0fe" />
-                  <g transform="translate(238, 238) scale(0.25)">
-                    <path d="M96.06 50.51c0-3.37-.29-6.62-.83-9.76H50v18.47h25.83c-1.11 5.99-4.5 11.07-9.59 14.49v12.03h15.53c9.08-8.36 14.32-20.67 14.32-35.23z" fill="#4285F4"/>
-                    <path d="M50 97c12.7 0 23.33-4.2 31.11-11.39L65.58 73.58c-4.33 2.9-9.87 4.61-15.58 4.61-12 0-22.16-8.11-25.79-19.01H8.16v12.43C16.03 87.32 32.08 97 50 97z" fill="#34A853"/>
-                    <path d="M24.21 59.18c-.92-2.74-1.45-5.67-1.45-8.68s.53-5.94 1.45-8.68V29.39H8.16C4.41 36.9 2.29 45.41 2.29 50.5s2.12 13.6 5.87 21.11l16.05-12.43z" fill="#FBBC05"/>
-                    <path d="M50 23.8c6.91 0 13.11 2.37 18 6.99l13.49-13.49C73.31 9.38 62.69 5 50 5 32.08 5 16.03 14.68 8.16 30.2l16.05 12.43C27.84 31.91 37.99 23.8 50 23.8z" fill="#EA4335"/>
-                  </g>
-                  <text x="250" y="310" textAnchor="middle" fontFamily="sans-serif" fontSize="16" fontWeight="900" fill="#1a73e8" letterSpacing="1.5">GOOGLE CLOUD</text>
-                  <text x="250" y="330" textAnchor="middle" fontFamily="sans-serif" fontSize="18" fontWeight="900" fill="#ea4335" letterSpacing="2">ARCADE</text>
-                  
-                  {/* Floating Points/Badges Elements */}
-                  <g className="animate-[pulse_3s_infinite]">
-                    <circle cx="90" cy="140" r="18" fill="#fbbc04" opacity="0.9" />
-                    <text x="90" y="146" textAnchor="middle" fontFamily="sans-serif" fontSize="16" fontWeight="bold" fill="#fff">+</text>
-                  </g>
-                  <g className="animate-[pulse_2s_infinite]" style={{ animationDelay: '1s' }}>
-                    <circle cx="410" cy="110" r="24" fill="#34a853" opacity="0.9" />
-                    <text x="410" y="117" textAnchor="middle" fontFamily="sans-serif" fontSize="18" fontWeight="bold" fill="#fff">⭐</text>
-                  </g>
-                  <g className="animate-[pulse_2.5s_infinite]" style={{ animationDelay: '0.5s' }}>
-                    <circle cx="380" cy="220" r="14" fill="#ea4335" opacity="0.9" />
-                  </g>
-
-                </svg>
-              </div>
-
-            </div>
-          </div>
-        </section>
+    </div>
+  </div>
+</section>
 
 
         {/* ================= HOW TO GET STARTED (PREMIUM SLEEK RECTANGULAR BOX) ================= */}
