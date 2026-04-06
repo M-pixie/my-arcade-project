@@ -145,7 +145,7 @@ export default function AdminPage() {
             </div>
             
             <h1 className="text-3xl font-normal text-[#202124] mb-2 tracking-tight mt-4">
-              Admin Console
+              Sign in Arcade
             </h1>
             <p className="text-[#5f6368] text-sm">
               Secure access for Arcade Nexus Administrators

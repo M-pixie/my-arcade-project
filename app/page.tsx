@@ -107,12 +107,9 @@ export default function HomePage() {
       </div>
 
       {/* MAIN HEADING (bold, black, smaller) */}
-      <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-bold tracking-tight text-[#202124] mb-6 leading-[1.1]">
-        Arcade Points <br className="hidden md:block" />
-        <span className="relative inline-block mt-2">
-          Calculator
-        </span>
-      </h1>
+      <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#202124] mb-6 leading-tight">
+  The Arcade
+</h1>
 
       {/* Subheading */}
       <p className="text-lg md:text-xl text-[#5f6368] max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
@@ -147,7 +144,7 @@ export default function HomePage() {
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
         </svg>
-        Open Google Cloud Arcade Labs
+        Open Arcade Labs
       </a>
       
       {/* Trust Badge */}
@@ -244,7 +241,7 @@ export default function HomePage() {
             <g className="animate-code-continuous">
               {/* --- First set --- */}
               <text x="190" y="170" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> Hi, I am a"}</text>
-              <text x="190" y="188" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ea4335">{"PIXI"}</text>
+              <text x="190" y="188" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ea4335">{"मनीष"}</text>
               <text x="190" y="206" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> & I do"}</text>
               <text x="190" y="224" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#4285f4">{"Google Cloud"}</text>
               <text x="190" y="242" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fbbc04">{"Arcade Labs!"}</text>
@@ -254,7 +251,7 @@ export default function HomePage() {
 
               {/* --- Second set (Exact duplicate for seamless loop) --- */}
               <text x="190" y="278" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> Hi, I am a"}</text>
-              <text x="190" y="296" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ea4335">{"PIXI"}</text>
+              <text x="190" y="296" textAnchor="middle" fontFamily="monospace" fontSize="12" fill="#ea4335">{"मनीष"}</text>
               <text x="190" y="314" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fefefe">{"> & I do"}</text>
               <text x="190" y="332" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#4285f4">{"Google Cloud"}</text>
               <text x="190" y="350" textAnchor="middle" fontFamily="monospace" fontSize="11" fill="#fbbc04">{"Arcade Labs!"}</text>
@@ -419,15 +416,15 @@ export default function HomePage() {
           🎁
         </span>
         
-        {/* Text styling updated to look good with the big icon */}
-        <span className="text-lg font-extrabold uppercase tracking-widest mt-1">
-          Google Swags
-        </span>
-      </div>
+        {/* Alternative: Premium Slate Grey look */}
+<span className="text-sm font-medium text-[#5f6368] uppercase tracking-[0.3em] mt-2">
+  Google Swags
+</span>
+</div>
       
       {/* Baaki heading aur paragraph untouched */}
       <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-5">
-        claim your google swags
+        Arcade swags
       </h2>
       
       <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-medium">
@@ -576,124 +573,64 @@ export default function HomePage() {
         </div>
 
 
-        {/* ================= PREMIUM HOW IT WORKS (CLEAN & SLEEK THEME) ================= */}
-        <section className="relative z-10 py-32 bg-[#f8f9fa] border-b border-[#dadce0] overflow-hidden">
+       {/* ================= PREMIUM HOW IT WORKS (ULTRA CLEAN & MINIMAL THEME) ================= */}
+        <section className="relative z-10 py-32 bg-white border-b border-[#dadce0] overflow-hidden">
           
-          {/* Subtle Background Animated Blobs */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[#e8f0fe] rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-[pulse_6s_ease-in-out_infinite]"></div>
-            <div className="absolute top-1/2 -right-32 w-[400px] h-[400px] bg-[#e6f4ea] rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-[pulse_5s_ease-in-out_infinite]" style={{ animationDelay: '2s' }}></div>
-          </div>
-
-          <style>{`
-            @keyframes float-card {
-              0%, 100% { transform: translateY(0); }
-              50% { transform: translateY(-8px); }
-            }
-            .animate-float-card {
-              animation: float-card 5s ease-in-out infinite;
-            }
-            .glass-panel {
-              background: rgba(255, 255, 255, 0.95);
-              backdrop-filter: blur(12px);
-            }
-          `}</style>
-
           <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
             
-            {/* Header - Clean, No Gradient, No Bold */}
+            {/* Sleek Minimal Header */}
             <div className="inline-block mb-24">
-              <h2 className="text-3xl md:text-5xl font-medium text-[#202124] tracking-tight mb-4">
-                How it works?
+              <span className="text-[#1a73e8] font-bold text-sm tracking-[0.2em] uppercase block mb-3">Simple Process</span>
+              <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-5">
+                How it works
               </h2>
-              <p className="text-[#5f6368] text-lg max-w-xl mx-auto">
-                Get your Google Cloud Arcade points calculated in three simple, seamless steps.
+              <p className="text-[#5f6368] text-lg max-w-xl mx-auto font-normal">
+                Get your Google Cloud Arcade points calculated instantly in three seamless steps.
               </p>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-4 relative">
+            {/* Modern Clean Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 relative">
               
+              {/* Connector Line for Desktop */}
+              <div className="hidden md:block absolute top-[40px] left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-[#dadce0] to-transparent z-0"></div>
+
               {/* ================= STEP 1 ================= */}
-              <div className="relative z-10 flex flex-col items-center group flex-1 w-full md:w-auto animate-float-card" style={{ animationDelay: '0s' }}>
-                {/* Changed rounded-3xl to rounded-xl (Halka curve) */}
-                <div className="glass-panel w-24 h-24 border border-[#dadce0] rounded-xl flex items-center justify-center mb-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] group-hover:shadow-[0_15px_30px_rgba(26,115,232,0.1)] group-hover:-translate-y-2 group-hover:border-[#1a73e8] transition-all duration-400 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#e8f0fe] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <svg className="w-10 h-10 relative z-10 transform group-hover:scale-110 transition-transform duration-400" viewBox="0 0 48 48">
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.72 1.22 9.22 3.22l6.85-6.85C35.9 1.84 30.3 0 24 0 14.64 0 6.51 5.38 2.56 13.22l7.98 6.19C12.4 13.4 17.74 9.5 24 9.5z" />
-                    <path fill="#4285F4" d="M46.1 24.5c0-1.67-.15-3.27-.43-4.82H24v9.13h12.4c-.53 2.86-2.13 5.29-4.53 6.92l7.01 5.45C43.5 36.6 46.1 31.1 46.1 24.5z" />
-                    <path fill="#FBBC05" d="M10.54 28.59c-.48-1.43-.76-2.95-.76-4.59s.28-3.16.76-4.59l-7.98-6.19C.92 16.36 0 20.04 0 24c0 3.96.92 7.64 2.56 10.78l7.98-6.19z" />
-                    <path fill="#34A853" d="M24 48c6.3 0 11.6-2.08 15.47-5.67l-7.01-5.45c-1.95 1.31-4.45 2.08-8.46 2.08-6.26 0-11.6-3.9-13.46-9.26l-7.98 6.19C6.51 42.62 14.64 48 24 48z" />
-                  </svg>
+              <div className="relative z-10 flex flex-col items-center group">
+                {/* Halka curve (rounded-lg) aur andar halka bg tint */}
+                <div className="w-20 h-20 bg-[#e8f0fe] border border-[#d2e3fc] rounded-lg flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#1a73e8] group-hover:shadow-[0_8px_30px_rgba(26,115,232,0.2)] transition-all duration-300 transform group-hover:-translate-y-1">
+                  {/* Text pehle blue, hover pe white */}
+                  <span className="text-[#1a73e8] group-hover:text-white text-3xl font-black tracking-tight transition-colors duration-300">01</span>
                 </div>
-                <div className="bg-white px-4 py-1 rounded-full border border-[#dadce0] text-xs font-bold text-[#1a73e8] mb-4 shadow-sm group-hover:bg-[#1a73e8] group-hover:text-white transition-colors duration-300">
-                  STEP 01
-                </div>
-                <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#1a73e8] transition-colors">Login with Google</h3>
-                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[220px]">Securely sign in using your Google account to access the tools.</p>
-              </div>
-
-              {/* ================= BOLD ARROW 1 ================= */}
-              <div className="hidden md:flex flex-col items-center justify-center w-16 lg:w-24 -mt-32 text-[#dadce0]">
-                <svg className="w-10 h-10 text-[#bdc1c6] drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </div>
-
-              {/* Mobile Down Arrow */}
-              <div className="md:hidden text-[#bdc1c6] my-2">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
+                <div className="w-12 h-1 bg-[#1a73e8] rounded-full mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></div>
+                <h3 className="text-xl font-semibold text-[#202124] mb-3 group-hover:text-[#1a73e8] transition-colors">Login with Google</h3>
+                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[260px]">
+                  Securely sign in using your official Google account to access all platform tools.
+                </p>
               </div>
 
               {/* ================= STEP 2 ================= */}
-              <div className="relative z-10 flex flex-col items-center group flex-1 w-full md:w-auto animate-float-card" style={{ animationDelay: '0.2s' }}>
-                {/* Changed rounded-3xl to rounded-xl (Halka curve) */}
-                <div className="glass-panel w-24 h-24 border border-[#dadce0] rounded-xl flex items-center justify-center mb-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] group-hover:shadow-[0_15px_30px_rgba(52,168,83,0.1)] group-hover:-translate-y-2 group-hover:border-[#34a853] transition-all duration-400 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#e6f4ea] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <svg className="w-10 h-10 text-[#5f6368] group-hover:text-[#34a853] relative z-10 transform group-hover:scale-110 transition-transform duration-400" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                  </svg>
+              <div className="relative z-10 flex flex-col items-center group mt-12 md:mt-0">
+                <div className="w-20 h-20 bg-[#e6f4ea] border border-[#ceead6] rounded-lg flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#34a853] group-hover:shadow-[0_8px_30px_rgba(52,168,83,0.2)] transition-all duration-300 transform group-hover:-translate-y-1">
+                  <span className="text-[#34a853] group-hover:text-white text-3xl font-black tracking-tight transition-colors duration-300">02</span>
                 </div>
-                <div className="bg-white px-4 py-1 rounded-full border border-[#dadce0] text-xs font-bold text-[#34a853] mb-4 shadow-sm group-hover:bg-[#34a853] group-hover:text-white transition-colors duration-300">
-                  STEP 02
-                </div>
-                <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#34a853] transition-colors">Paste Public URL</h3>
-                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[220px]">Simply drop your Google Cloud Arcade profile link to analyze.</p>
-              </div>
-
-              {/* ================= BOLD ARROW 2 ================= */}
-              <div className="hidden md:flex flex-col items-center justify-center w-16 lg:w-24 -mt-32 text-[#dadce0]">
-                <svg className="w-10 h-10 text-[#bdc1c6] drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </div>
-
-              {/* Mobile Down Arrow */}
-              <div className="md:hidden text-[#bdc1c6] my-2">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
+                <div className="w-12 h-1 bg-[#34a853] rounded-full mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></div>
+                <h3 className="text-xl font-semibold text-[#202124] mb-3 group-hover:text-[#34a853] transition-colors">Paste Profile URL</h3>
+                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[260px]">
+                  Simply drop your public Cloud Skills Boost profile link into the search bar.
+                </p>
               </div>
 
               {/* ================= STEP 3 ================= */}
-              <div className="relative z-10 flex flex-col items-center group flex-1 w-full md:w-auto animate-float-card" style={{ animationDelay: '0.4s' }}>
-                {/* Changed rounded-3xl to rounded-xl (Halka curve) */}
-                <div className="glass-panel w-24 h-24 border border-[#dadce0] rounded-xl flex items-center justify-center mb-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] group-hover:shadow-[0_15px_30px_rgba(251,188,4,0.15)] group-hover:-translate-y-2 group-hover:border-[#fbbc04] transition-all duration-400 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#fef7e0] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <div className="text-4xl relative z-10 transform group-hover:scale-110 transition-transform duration-400">
-                    🏆
-                  </div>
+              <div className="relative z-10 flex flex-col items-center group mt-12 md:mt-0">
+                <div className="w-20 h-20 bg-[#fce8e6] border border-[#f8c1cb] rounded-lg flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#ea4335] group-hover:shadow-[0_8px_30px_rgba(234,67,53,0.2)] transition-all duration-300 transform group-hover:-translate-y-1">
+                  <span className="text-[#ea4335] group-hover:text-white text-3xl font-black tracking-tight transition-colors duration-300">03</span>
                 </div>
-                <div className="bg-white px-4 py-1 rounded-full border border-[#dadce0] text-xs font-bold text-[#ea4335] mb-4 shadow-sm group-hover:bg-[#ea4335] group-hover:text-white transition-colors duration-300">
-                  STEP 03
-                </div>
-                <h3 className="text-xl font-bold text-[#202124] mb-2 group-hover:text-[#ea4335] transition-colors">Get Arcade Points</h3>
-                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[220px]">Instantly view your total points, history, and real-time rank.</p>
+                <div className="w-12 h-1 bg-[#ea4335] rounded-full mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100"></div>
+                <h3 className="text-xl font-semibold text-[#202124] mb-3 group-hover:text-[#ea4335] transition-colors">Get Arcade Points</h3>
+                <p className="text-sm text-[#5f6368] leading-relaxed max-w-[260px]">
+                  Instantly view your total points, history, and track your real-time leaderboard rank.
+                </p>
               </div>
               
             </div>
@@ -904,47 +841,51 @@ export default function HomePage() {
         </section>
 
         
-        {/* ================= GOOGLE STYLE CTA SECTION ================= */}
-        <section className="py-24 px-6 bg-[#f8f9fa] border-b border-gray-200">
-          <div className="max-w-5xl mx-auto">
+       {/* ================= GOOGLE STYLE CTA SECTION ================= */}
+        <section className="py-16 px-6 bg-white border-b border-[#dadce0]">
+          <div className="max-w-4xl mx-auto">
             
-            <div className="bg-white rounded-sm border border-[#dadce0] shadow-sm flex flex-col md:flex-row">
+            <div className="bg-white rounded-2xl border border-[#dadce0] shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex flex-col md:flex-row overflow-hidden hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-400">
                 
-              <div className="flex-1 p-10 md:p-14 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-6">
-                   <div className="w-8 h-8 rounded-sm bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center">
+              {/* Left Side Info */}
+              <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-5">
+                   <div className="w-8 h-8 rounded-lg bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center">
                       <svg className="w-4 h-4 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                    </div>
-                   <span className="text-xs font-medium text-[#1a73e8] uppercase tracking-wider">Arcade Insights</span>
+                   <span className="text-xs font-bold text-[#1a73e8] uppercase tracking-widest">Arcade Insights</span>
                 </div>
                 
-                <h2 className="text-3xl font-normal text-[#202124] mb-4 leading-tight">
-                  Analyze your <span className="font-medium">Arcade Points</span>
+                <h2 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3 leading-tight">
+                  Analyze your <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285f4]">Arcade Points</span>
                 </h2>
                 
-                <p className="text-[#5f6368] text-base leading-relaxed max-w-lg">
+                <p className="text-[#5f6368] text-[15px] leading-relaxed max-w-md">
                   Join thousands of developers tracking their progress. Get your score instantly with our professional tool designed for accuracy.
                 </p>
               </div>
 
+              {/* Divider */}
               <div className="hidden md:block w-px bg-[#dadce0] self-stretch"></div>
               <div className="block md:hidden h-px w-full bg-[#dadce0]"></div>
 
-              <div className="p-10 md:p-14 bg-white md:w-[400px] flex flex-col justify-center items-center gap-6">
+              {/* Right Side Action Box */}
+              <div className="p-8 md:p-10 bg-[#f8f9fa] md:w-[320px] flex flex-col justify-center items-center gap-5">
                 
-                <div className="w-full bg-[#f8f9fa] p-5 rounded-sm border border-[#dadce0] flex flex-col items-center text-center">
+                {/* Visit Counter Box inside CTA */}
+                <div className="w-full bg-white p-4 rounded-xl border border-[#dadce0] shadow-sm flex flex-col items-center text-center transition-transform hover:-translate-y-1 duration-300">
                   <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-widest mb-1">Website Visit Count</span>
-                  <div className="text-4xl font-light text-[#202124] tabular-nums tracking-tight">
+                  <div className="text-3xl font-medium text-[#202124] tabular-nums tracking-tight">
                     <VisitCounter />
                   </div>
                 </div>
 
                 <button
                   onClick={() => router.push("/calculator")}
-                  className="w-full group relative inline-flex items-center justify-center px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 bg-[#1a73e8] rounded-sm hover:bg-[#1557b0] hover:shadow-md focus:outline-none"
+                  className="w-full group relative inline-flex items-center justify-center px-5 py-3 text-[14px] font-bold text-white transition-all duration-300 bg-[#1a73e8] rounded-xl hover:bg-[#1557b0] hover:shadow-[0_6px_15px_rgba(26,115,232,0.25)] focus:outline-none transform hover:-translate-y-0.5"
                 >
                   Calculate Now
-                  <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </button>

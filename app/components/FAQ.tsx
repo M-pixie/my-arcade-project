@@ -36,34 +36,54 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20 bg-white">
-      {/* Heading: Google UI Style (font-normal, dark grey text) */}
-      <h2 className="text-3xl md:text-4xl font-normal text-center text-[#202124] mb-12 tracking-tight">
-        Frequently Asked Questions
-      </h2>
+    <div className="max-w-4xl mx-auto px-6 py-24 bg-white relative z-10">
       
-      {/* Contiguous Box Style (Thin borders, square corners, split by thin lines) */}
-      <div className="border border-[#dadce0] rounded-sm bg-white divide-y divide-[#dadce0] shadow-sm">
+      {/* Premium Header Styling */}
+      <div className="text-center mb-14">
+        <span className="text-[#1a73e8] font-bold text-sm tracking-[0.2em] uppercase block mb-3">
+          Got Questions?
+        </span>
+        <h2 className="text-3xl md:text-5xl font-semibold text-[#202124] tracking-tight">
+          Frequently Asked Questions
+        </h2>
+      </div>
+      
+      {/* Contiguous Box Style with Soft Curve & Premium Shadow */}
+      <div className="border border-[#dadce0] rounded-2xl bg-white divide-y divide-[#dadce0] shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
         {faqs.map((faq, index) => (
-          <div key={index} className="overflow-hidden bg-white">
+          <div key={index} className="overflow-hidden bg-white group">
             <button
-              className="w-full flex justify-between items-center p-6 text-left bg-white hover:bg-[#f8f9fa] transition-colors gap-4 focus:outline-none"
+              className="w-full flex justify-between items-center px-6 md:px-8 py-5 md:py-6 text-left bg-white hover:bg-[#f8f9fa] transition-all duration-300 gap-4 focus:outline-none"
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
-              {/* Question Text */}
-              <span className="text-[#202124] font-medium text-base md:text-lg leading-snug">
+              {/* Question Text: Turns blue when active */}
+              <span 
+                className={`font-semibold text-base md:text-[17px] leading-snug transition-colors duration-300 ${
+                  openIndex === index ? "text-[#1a73e8]" : "text-[#202124]"
+                }`}
+              >
                 {faq.question}
               </span>
               
-              {/* Icon: Google Grey & Smooth Rotation */}
-              <svg 
-                className={`w-5 h-5 text-[#5f6368] flex-shrink-0 transform transition-transform duration-300 ease-in-out ${openIndex === index ? "rotate-180" : ""}`} 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
+              {/* Premium Icon Container with dynamic background & rotation */}
+              <div 
+                className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  openIndex === index 
+                    ? "bg-[#e8f0fe] text-[#1a73e8]" 
+                    : "bg-transparent text-[#5f6368] group-hover:bg-[#e8eaed]"
+                }`}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+                <svg 
+                  className={`w-5 h-5 transform transition-transform duration-300 ease-out ${
+                    openIndex === index ? "rotate-180" : ""
+                  }`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </button>
             
             {/* Answer Panel: Smooth Reveal */}
@@ -72,14 +92,15 @@ export default function FAQ() {
                 openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
               }`}
             >
-              {/* Answer Text: Light Grey Text, Pure White Background */}
-              <div className="p-6 pt-0 bg-white text-[#5f6368] text-base leading-relaxed">
+              {/* Answer Text: Extra padding for better readability */}
+              <div className="px-6 md:px-8 pb-6 pt-0 bg-white text-[#5f6368] text-[15px] leading-relaxed">
                 {faq.answer}
               </div>
             </div>
           </div>
         ))}
       </div>
+
     </div>
   );
 }

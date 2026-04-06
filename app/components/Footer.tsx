@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import VisitCounter from "@/app/components/VisitCounter"; // 🔥 ADDED: Import for the visit counter component
 
 export default function Footer() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function Footer() {
         {/* TOP SECTION: Links & Brand */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-x-12 gap-y-16 mb-20">
           
-          {/* BRAND INFO */}
+          {/* BRAND INFO & VISITOR COUNT & DISCLAIMER */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
               <div 
@@ -32,14 +33,31 @@ export default function Footer() {
               This platform is independently designed and developed to help users track, 
               analyze, and improve their Google Cloud Arcade progress efficiently.
             </p>
+
+            {/* 🔥 UPAR KI TARAF: NAYA PREMIUM WEBSITE VISITOR BOX 🔥 */}
+            <div className="flex items-center justify-between p-4 rounded-md bg-gradient-to-r from-[#f8f9fa] to-white border border-[#dadce0] shadow-[0_2px_4px_rgba(0,0,0,0.02)] mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center">
+                  <svg className="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                </div>
+                <span className="text-[12px] font-bold text-[#5f6368] uppercase tracking-wider">Website Visitors</span>
+              </div>
+              <div className="text-xl font-semibold text-[#202124] tabular-nums tracking-tight">
+                <VisitCounter />
+              </div>
+            </div>
+
+            {/* 🔥 NEECHE KI TARAF: TERA ORIGINAL DISCLAIMER BOX (Untouched) 🔥 */}
             <div className="p-4 rounded-md bg-[#f8f9fa] border border-[#dadce0] shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
               <p className="text-[13px] text-[#5f6368] leading-relaxed">
                 <strong className="text-[#202124]">Disclaimer:</strong> This website is an independent, community-built tool and is not 
                 an official website of Google Cloud Arcade or Google. All trademarks belong to their respective owners.
               </p>
             </div>
+
           </div>
 
+          
           {/* PLATFORM LINKS */}
           <div className="lg:col-span-1">
             <h4 className="text-[#202124] font-semibold mb-6 text-sm uppercase tracking-wider">Platform</h4>
@@ -56,12 +74,21 @@ export default function Footer() {
                   <svg className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </button>
               </li>
+
               <li>
                 <button onClick={() => router.push("/leaderboard")} className="text-[#5f6368] text-[15px] font-medium hover:text-[#1a73e8] transition-colors text-left flex items-center gap-2 group">
                   Leaderboard
                   <svg className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                 </button>
               </li>
+
+              <li>
+                <button onClick={() => router.push("/resources")} className="text-[#5f6368] text-[15px] font-medium hover:text-[#1a73e8] transition-colors text-left flex items-center gap-2 group">
+                  Skill Badges
+                  <svg className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </button>
+              </li>
+
             </ul>
           </div>
 
@@ -87,6 +114,8 @@ export default function Footer() {
                   <svg className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 </a>
               </li>
+              {/* 🔥 SKILL BADGES LINK 🔥 */}
+              
             </ul>
           </div>
 
@@ -108,38 +137,95 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* BOTTOM SECTION: Copyright & Socials */}
-        <div className="pt-8 border-t border-[#dadce0] flex flex-col md:flex-row items-center justify-between gap-6">
+     {/* BOTTOM SECTION: Copyright & Socials */}
+        <div className="pt-10 border-t border-[#dadce0] flex flex-col md:flex-row items-center justify-between gap-8 pb-8">
           
-          {/* Copyright & Info */}
-          <div className="flex flex-col text-center md:text-left gap-1">
-            <div className="text-[#5f6368] text-sm flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
-              <p>© {new Date().getFullYear()} Arcade Nexus. All rights reserved.</p>
-              <p className="hidden sm:block text-[#dadce0]">|</p>
-              <p>Designed & Built by <span className="text-[#202124] font-medium hover:text-[#1a73e8] cursor-pointer transition-colors">Manish Kumar</span> & <span className="text-[#202124] font-medium hover:text-[#1a73e8] cursor-pointer transition-colors">Anjali P.</span></p>
+          {/* Copyright & Designed By Info */}
+          <div className="flex flex-col items-center md:items-start gap-2.5">
+            
+            <div className="text-[#3c4043] text-[15px] flex flex-col sm:flex-row items-center gap-3">
+              <p className="font-semibold tracking-wide">
+                © {new Date().getFullYear()} Arcade Nexus
+              </p>
+              
+              {/* Divider Dot */}
+              <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#dadce0]"></div>
+              
+              {/* Premium Designed By Section */}
+              <p className="flex items-center justify-center gap-1.5 flex-wrap font-medium text-[#5f6368]">
+                Powered by 
+                <span className="font-bold text-[#202124] hover:text-[#1a73e8] cursor-pointer transition-colors duration-200 ml-0.5">
+                  Manish Kumar
+                </span> 
+                <span className="text-[#bdc1c6] font-normal text-sm px-0.5">&</span> 
+                <span className="font-bold text-[#202124] hover:text-[#1a73e8] cursor-pointer transition-colors duration-200">
+                  Anjali P.
+                </span>
+              </p>
             </div>
-            {/* LAST UPDATED TEXT - ADDED BACK */}
-            <p className="text-xs text-[#80868b] font-medium mt-1">
-              Last Updated: April 4, 2026
+            
+            {/* Last Updated */}
+            <p className="text-[12px] text-[#80868b] font-semibold tracking-[0.05em] uppercase mt-1">
+              Last Updated: April 7, 2026
             </p>
           </div>
 
-          {/* SOCIAL ICONS (Sharp & Minimal) */}
-          <div className="flex items-center gap-3">
-            <a href="https://github.com/M-pixie" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-md bg-[#f8f9fa] border border-[#dadce0] flex items-center justify-center hover:bg-[#202124] hover:border-[#202124] group transition-all duration-300">
-              <svg className="w-[18px] h-[18px] fill-[#5f6368] group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          {/* SOCIAL ICONS (No Borders, Only Clean Original Icons) */}
+          <div className="flex items-center gap-6">
+            
+            {/* GitHub - Real Black */}
+            <a 
+              href="https://github.com/M-pixie" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              aria-label="GitHub" 
+              className="hover:-translate-y-1 hover:scale-110 transition-all duration-300 drop-shadow-sm hover:drop-shadow-md"
+            >
+              <svg className="w-6 h-6 fill-[#24292e]" viewBox="0 0 24 24">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+              </svg>
             </a>
             
-            <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-md bg-[#f8f9fa] border border-[#dadce0] flex items-center justify-center hover:bg-[#0A66C2] hover:border-[#0A66C2] group transition-all duration-300">
-              <svg className="w-[18px] h-[18px] fill-[#5f6368] group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            {/* LinkedIn - Real Blue */}
+            <a 
+              href="https://linkedin.com/in/manish-ui" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              aria-label="LinkedIn" 
+              className="hover:-translate-y-1 hover:scale-110 transition-all duration-300 drop-shadow-sm hover:drop-shadow-md"
+            >
+              <svg className="w-6 h-6 fill-[#0A66C2]" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
             </a>
 
-            <a href="https://instagram.com/pov.pixi" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-md bg-[#f8f9fa] border border-[#dadce0] flex items-center justify-center hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:border-transparent group transition-all duration-300">
-              <svg className="w-[18px] h-[18px] fill-[#5f6368] group-hover:fill-white transition-colors" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            {/* Instagram - Real Gradient Fixed */}
+            <a 
+              href="https://instagram.com/pov.pixi" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              aria-label="Instagram" 
+              className="hover:-translate-y-1 hover:scale-110 transition-all duration-300 drop-shadow-sm hover:drop-shadow-md"
+            >
+              <svg className="w-6 h-6" fill="url(#ig-grad-fixed)" viewBox="0 0 24 24">
+                <defs>
+                  <linearGradient id="ig-grad-fixed" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#f09433" />
+                    <stop offset="25%" stopColor="#e6683c" />
+                    <stop offset="50%" stopColor="#dc2743" />
+                    <stop offset="75%" stopColor="#cc2366" />
+                    <stop offset="100%" stopColor="#bc1888" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
             </a>
+
           </div>
 
         </div>
+
+        
       </div>
     </footer>
   );
