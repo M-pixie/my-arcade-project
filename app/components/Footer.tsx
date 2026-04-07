@@ -123,17 +123,56 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-[#202124] font-semibold mb-6 text-sm uppercase tracking-wider">Stay Connected</h4>
             <p className="text-[15px] text-[#5f6368] mb-6 leading-relaxed">Join our community for the latest Arcade updates, hints, and support.</p>
-            <a 
-              href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-6 py-3.5 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#25D366] hover:text-[#25D366] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(37,211,102,0.12)] group"
-            >
-              <svg className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/>
-              </svg>
-              WhatsApp Community
-            </a>
+            
+            {/* Flex container added to stack the buttons nicely */}
+            <div className="flex flex-col gap-3.5 items-start">
+              
+              {/* WhatsApp Box (Untouched exact original styling) */}
+              <a 
+                href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-6 py-3.5 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#25D366] hover:text-[#25D366] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(37,211,102,0.12)] group"
+              >
+                <svg className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978zm11.374-5.483c-.28-.14-1.658-.817-1.914-.91-.256-.093-.442-.14-.628.14-.186.28-.721.91-.884 1.097-.163.187-.326.21-.605.07-.28-.14-1.182-.436-2.251-1.389-.828-.737-1.387-1.647-1.549-1.926-.163-.28-.017-.432.123-.571.127-.127.28-.327.419-.49.14-.163.186-.28.28-.465.093-.187.047-.35-.023-.49-.07-.14-.628-1.516-.86-2.073-.226-.543-.456-.468-.628-.477-.164-.009-.35-.011-.536-.011-.186 0-.488.07-.743.345-.256.275-.976.953-.976 2.324 0 1.372.999 2.698 1.139 2.883.14.186 1.966 3.001 4.761 4.208.665.287 1.185.459 1.587.587.671.213 1.282.183 1.767.11.542-.081 1.658-.677 1.892-1.33.232-.653.232-1.213.163-1.33-.07-.117-.256-.187-.536-.327z"/>
+                </svg>
+                WhatsApp Community
+              </a>
+
+              {/* Box 1: Google Cloud Community */}
+              <a 
+                href="https://discuss.google.dev/c/google-cloud/14" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center justify-start sm:justify-center gap-3 w-full sm:w-auto px-6 py-3 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(26,115,232,0.12)] group"
+              >
+                <svg className="w-5 h-5 text-[#1a73e8] group-hover:scale-110 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                </svg>
+                <div className="flex flex-col text-left">
+                  <span>Google Cloud Community</span>
+                  <span className="text-[12px] text-[#5f6368] font-normal group-hover:text-[#1a73e8] transition-colors leading-tight mt-0.5">Official forums</span>
+                </div>
+              </a>
+
+              {/* Box 2: Google Skills */}
+              <a 
+                href="https://www.skills.google/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center justify-start sm:justify-center gap-3 w-full sm:w-auto px-6 py-3 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(26,115,232,0.12)] group"
+              >
+                <svg className="w-5 h-5 text-[#1a73e8] group-hover:scale-110 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <div className="flex flex-col text-left">
+                  <span>Google Skills</span>
+                  <span className="text-[12px] text-[#5f6368] font-normal group-hover:text-[#1a73e8] transition-colors leading-tight mt-0.5">Learning platform</span>
+                </div>
+              </a>
+
+            </div>
           </div>
         </div>
 

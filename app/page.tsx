@@ -427,9 +427,9 @@ export default function HomePage() {
         Arcade swags
       </h2>
       
-      <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-medium">
-        Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
-      </p>
+      <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-normal">
+  Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
+</p>
     </div>
 
     {/* Single, Central Image Container */}
@@ -841,56 +841,71 @@ export default function HomePage() {
         </section>
 
         
-       {/* ================= GOOGLE STYLE CTA SECTION ================= */}
-        <section className="py-16 px-6 bg-white border-b border-[#dadce0]">
-          <div className="max-w-4xl mx-auto">
-            
-            <div className="bg-white rounded-2xl border border-[#dadce0] shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex flex-col md:flex-row overflow-hidden hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-400">
-                
-              {/* Left Side Info */}
-              <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-5">
-                   <div className="w-8 h-8 rounded-lg bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center">
-                      <svg className="w-4 h-4 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                   </div>
-                   <span className="text-xs font-bold text-[#1a73e8] uppercase tracking-widest">Arcade Insights</span>
-                </div>
-                
-                <h2 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3 leading-tight">
-                  Analyze your <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285f4]">Arcade Points</span>
-                </h2>
-                
-                <p className="text-[#5f6368] text-[15px] leading-relaxed max-w-md">
-                  Join thousands of developers tracking their progress. Get your score instantly with our professional tool designed for accuracy.
-                </p>
-              </div>
+       {/* ================= PREMIUM FACILITATOR PROGRAM SECTION ================= */}
+       <section className="relative z-10 py-24 bg-white border-b border-[#dadce0]">
+          <div className="max-w-3xl mx-auto px-6">
 
-              {/* Divider */}
-              <div className="hidden md:block w-px bg-[#dadce0] self-stretch"></div>
-              <div className="block md:hidden h-px w-full bg-[#dadce0]"></div>
+            <div className="text-center mb-12 relative z-10">
+              <h2 className="text-3xl md:text-4xl font-semibold text-[#202124] tracking-tight mb-4">
+                Arcade Facilitator <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Program</span>
+              </h2>
+              <p className="text-[#5f6368] text-base max-w-xl mx-auto leading-relaxed">
+                The Facilitator Program offers <span className="font-semibold text-[#202124]">bonus points</span> for participants. Complete required number of Games, Trivia, Skill Badges and Lab-free Courses to achieve Facilitator Milestones & get additional bonus points.
+              </p>
+            </div>
 
-              {/* Right Side Action Box */}
-              <div className="p-8 md:p-10 bg-[#f8f9fa] md:w-[320px] flex flex-col justify-center items-center gap-5">
-                
-                {/* Visit Counter Box inside CTA */}
-                <div className="w-full bg-white p-4 rounded-xl border border-[#dadce0] shadow-sm flex flex-col items-center text-center transition-transform hover:-translate-y-1 duration-300">
-                  <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-widest mb-1">Website Visit Count</span>
-                  <div className="text-3xl font-medium text-[#202124] tabular-nums tracking-tight">
-                    <VisitCounter />
+            <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden">
+              <div className="divide-y divide-[#dadce0]">
+                {/* Item 1 */}
+                <div className="px-6 py-5 md:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-[#f8f9fa] transition-colors duration-300 group">
+                  <div className="flex-1">
+                    <h3 className="text-[18px] md:text-xl font-bold text-[#202124] mb-1">Join under a Facilitator</h3>
+                    <p className="text-[#5f6368] text-[14px] md:text-[15px] leading-relaxed">Register your profile under an active facilitator to start earning.</p>
+                  </div>
+                  <div className="w-full md:w-auto mt-1 md:mt-0 flex-shrink-0">
+                    <span className="inline-block px-4 py-2 bg-[#e6f4ea] text-[#137333] text-sm font-bold rounded-lg uppercase tracking-wider border border-[#ceead6]">
+                      Bonus Points
+                    </span>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => router.push("/calculator")}
-                  className="w-full group relative inline-flex items-center justify-center px-5 py-3 text-[14px] font-bold text-white transition-all duration-300 bg-[#1a73e8] rounded-xl hover:bg-[#1557b0] hover:shadow-[0_6px_15px_rgba(26,115,232,0.25)] focus:outline-none transform hover:-translate-y-0.5"
-                >
-                  Calculate Now
-                  <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </button>
+                {/* Item 2 */}
+                <div className="px-6 py-5 md:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-[#f8f9fa] transition-colors duration-300 group">
+                  <div className="flex-1">
+                    <h3 className="text-[18px] md:text-xl font-bold text-[#202124] mb-1">Get support & guidance</h3>
+                    <p className="text-[#5f6368] text-[14px] md:text-[15px] leading-relaxed">Receive exclusive help and strategies from your community lead.</p>
+                  </div>
+                  <div className="w-full md:w-auto mt-1 md:mt-0 flex-shrink-0">
+                    <span className="inline-block px-4 py-2 bg-[#e6f4ea] text-[#137333] text-sm font-bold rounded-lg uppercase tracking-wider border border-[#ceead6]">
+                      Bonus Points
+                    </span>
+                  </div>
+                </div>
+
+                {/* Item 3 */}
+                <div className="px-6 py-5 md:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-[#f8f9fa] transition-colors duration-300 group">
+                  <div className="flex-1">
+                    <h3 className="text-[18px] md:text-xl font-bold text-[#202124] mb-1">Reach milestone targets</h3>
+                    <p className="text-[#5f6368] text-[14px] md:text-[15px] leading-relaxed">Hit specific lab completion goals to unlock massive point boosts.</p>
+                  </div>
+                  <div className="w-full md:w-auto mt-1 md:mt-0 flex-shrink-0">
+                    <span className="inline-block px-4 py-2 bg-[#e6f4ea] text-[#137333] text-sm font-bold rounded-lg uppercase tracking-wider border border-[#ceead6]">
+                      Bonus Points
+                    </span>
+                  </div>
+                </div>
               </div>
 
+              {/* Bottom CTA Link */}
+              <div className="bg-[#f8f9fa] p-6 border-t border-[#dadce0] flex justify-center">
+                <button
+                  onClick={() => router.push("/facilitator")}
+                  className="flex items-center justify-center gap-2 text-[#1a73e8] hover:text-[#1557b0] font-semibold text-base transition-colors group focus:outline-none"
+                >
+                  Learn More About the Arcade Facilitator Program
+                  <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </button>
+              </div>
             </div>
           </div>
         </section>

@@ -65,7 +65,7 @@ export default function FacilitatorPage() {
   // 🔥 UPDATED TEAM DATA ARRAY (Only 3 members left)
   const teamMembers = [
     { 
-      name: "Manish Kumar", 
+      name: "Manish", 
       role: "Arcade Facilitator", 
       image: "https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg", 
       initials: "M",
@@ -103,190 +103,354 @@ export default function FacilitatorPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-white text-[#202124] font-sans">
+      <div className="min-h-screen bg-[#fcfcfc] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8]">
         <Navbar />
 
         <main className="pt-20">
           
-       {/* ================= HERO SECTION ================= */}
-          <section className="relative border-b border-[#dadce0] bg-[#f8f9fa] overflow-hidden">
-            <div className="max-w-4xl mx-auto px-6 py-20 md:py-24 flex flex-col items-center justify-center gap-10">
+    {/* ================= PREMIUM HERO SECTION ================= */}
+          <section className="relative border-b border-[#dadce0] bg-gradient-to-b from-[#f0f4f8] to-[#ffffff] overflow-hidden">
+            {/* Soft Background Orbs */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.04] blur-[100px] rounded-full pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[50%] bg-[#34A853] opacity-[0.04] blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 flex flex-col items-center justify-center relative z-10">
               
-              {/* Centered Hero Content */}
-              <div className="flex-1 text-center z-10 w-full">
+              <div className="flex-1 text-center w-full max-w-5xl mx-auto mb-10">
                 
-               {/* 🔥 PREMIUM BADGE (Matched with April Labs typography) 🔥 */}
-                <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white rounded-full shadow-[0_4px_16px_rgba(26,115,232,0.12)] border border-[#dadce0] mb-8 cursor-default hover:shadow-[0_6px_20px_rgba(26,115,232,0.16)] transition-shadow">
-                  
-                  {/* Red Pulsing Dot */}
+               {/* 🔥 ULTRA PREMIUM BADGE 🔥 */}
+                <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/80 backdrop-blur-md rounded-lg shadow-sm border border-[#e8f0fe] mb-6 cursor-default hover:shadow-md hover:border-[#d2e3fc] transition-all duration-300">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ea4335]"></span>
                   </span>
-                  
-                  {/* Premium Typography */}
-                  <span className="font-sans text-[13px] font-[900] text-[#202124] tracking-[0.5px] uppercase">
-                    FACILITATOR  <span className="text-[#1a73e8]">Coming Soon..</span>
+                  <span className="font-sans text-xs font-bold text-[#202124] tracking-wide uppercase">
+                    FACILITATOR  <span className="text-[#1a73e8] font-semibold bg-gradient-to-r from-[#1a73e8] to-[#4285f4] bg-clip-text text-transparent">Coming Soon..</span>
                   </span>
-                  
                 </div>
                 
-                {/* 🔥 UPDATED MAIN HEADING (All Black & Bold) 🔥 */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold text-[#202124] tracking-tight mb-6 leading-[1.15]">
-                  
-                 Facilitator Program
+                {/* Main Heading */}
+                <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#1f2937] tracking-tight mb-6 leading-[1.1]">
+                  Facilitator <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] via-[#4285f4] to-[#1a73e8]">Program</span>
                 </h1>
                 
-                <p className="text-[#5f6368] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+                <p className="text-[#5f6368] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-8 font-medium">
                   Kickstart your cloud journey, learn new skills on Google Cloud Platform, and win exciting exclusive Google Cloud swags by completing milestones.
                 </p>
 
                 {/* 🔥 PREMIUM PROFESSIONAL BUTTONS 🔥 */}
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                   
-                  {/* Button 1: Enroll Now (Blue Primary) */}
                   <a 
                     href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-[15px] sm:text-base rounded-xl hover:bg-[#1557b0] hover:shadow-md transition-all duration-200 focus:outline-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-medium text-[15px] sm:text-base rounded-lg hover:bg-[#1557b0] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
                   >
                     Enroll Now
+                    <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                   </a>
                   
-                  {/* Button 2: Points System (White Outline) */}
                   <a 
                     href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#3c4043] border border-[#dadce0] font-medium text-[15px] sm:text-base rounded-xl hover:bg-[#f8f9fa] hover:border-[#d2e3fc] hover:text-[#1a73e8] transition-all duration-200 focus:outline-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#3c4043] border border-[#dadce0] font-medium text-[15px] sm:text-base rounded-lg hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
                   >
                     Points System
                   </a>
                   
-                  {/* Button 3: Calculator (Green Secondary) */}
                   <button 
                     onClick={() => router.push("/calculator")}
-                    className="w-full sm:w-auto px-8 py-3.5 bg-[#34a853] text-white font-medium text-[15px] sm:text-base rounded-xl hover:bg-[#2b8a44] hover:shadow-md transition-all duration-200 focus:outline-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-[#34a853] text-white font-medium text-[15px] sm:text-base rounded-lg hover:bg-[#2b8a44] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     Open Calculator
                   </button>
                   
                 </div>
               </div>
 
-            </div>
-          </section>
-
-          {/* ================= HOW IT WORKS / ABOUT ================= */}
-          <section className="py-24 px-6 border-b border-[#dadce0] bg-white">
-            <div className="max-w-6xl mx-auto">
-              
-
-{/* ================= PREMIUM RECTANGULAR INTRO BOX ================= */}
-              <div className="mb-10 bg-white border border-[#dadce0] rounded-2xl p-8 md:p-12 shadow-sm relative overflow-hidden group">
+              {/* 🔥 NEW: PREMIUM INFO BOXES (CUSTOM COLORS & BOLD TEXT) 🔥 */}
+              <div className="w-full flex flex-col gap-6 max-w-5xl mx-auto mt-6">
                 
-                {/* Clean Single Blue Accent Line */}
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
-
-                <div className="text-center relative z-10">
-                  <h2 className="text-3xl font-medium text-black tracking-tight mb-10">Arcade Facilitator Program ?</h2>
-
-                  {/* 🔥 HIGHLIGHTED PARAGRAPH BOX */}
-                  <div className="max-w-4xl mx-auto text-left border-l-4 border-[#1a73e8] pl-6 md:pl-8 mb-16">
-                    <p className="text-black text-base md:text-lg leading-relaxed font-normal">
-                      The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies. 
-                    </p>
+                {/* Row 1 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  {/* Box 1: Program Highlights */}
+                  <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <h2 className="text-xl sm:text-[22px] font-semibold text-[#202124] mb-6 tracking-tight">Facilitator Program Highlights</h2>
+                    <ul className="space-y-4">
+                      {/* 🔥 TEXT BOLD KIYA HAI */}
+                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
+                        No-cost gaming campaign
+                      </li>
+                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
+                        Learn in-demand cloud skills
+                      </li>
+                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#4285f4]"></span>
+                        Earn digital badges & points
+                      </li>
+                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#fbbc04]"></span>
+                        Claim swag & Google Cloud goodies
+                      </li>
+                    </ul>
                   </div>
 
-                  {/* 🔥 PREMIUM FACILITATOR PORTFOLIO BOX (Curve Reduced) 🔥 */}
-                  <div className="max-w-4xl mx-auto bg-white border border-[#dadce0] rounded-2xl p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.04)] text-left hover:shadow-md transition-all duration-500">
-                    <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
-                      
-                      {/* Facilitator Image & Title */}
-                      <div className="flex flex-col items-center flex-shrink-0">
-                        <div className="w-32 h-40 rounded-xl overflow-hidden shadow-sm border border-[#dadce0] mb-5 relative group/img">
-                          <img 
-                            src="https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg" 
-                            alt="Manish Kumar" 
-                            className="w-full h-full object-cover object-top transform group-hover/img:scale-105 transition-transform duration-500"
-                          />
-                        </div>
-                        <h3 className="text-2xl font-bold text-black">Manish Kumar</h3>
-                        <p className="text-sm font-medium text-black mt-1">Arcade Facilitator</p>
-                        
-                        <a 
-                          href="https://linkedin.com/in/manish-ui" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="mt-6 inline-flex items-center justify-center gap-2 text-sm font-medium text-black hover:text-[#1a73e8] hover:bg-[#f8f9fa] border border-[#dadce0] px-5 py-2.5 rounded-xl transition-colors w-full"
-                        >
-                          <svg className="w-5 h-5 text-[#0a66c2]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  {/* Box 2: Registration Status */}
+                  <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
+                    <h2 className="text-xl sm:text-[22px] font-semibold text-[#202124] mb-6 tracking-tight">Registration Status</h2>
+                    
+                    {/* Dark Grey changed to Sleek Premium Slate */}
+                    <div className="w-full bg-[#343a40] text-white text-center font-bold py-3.5 rounded-md mb-4 shadow-sm text-[15px]">
+                      Enrolments Opening Soon
+                    </div>
+                    
+                    {/* Italic removed, font-medium added */}
+                    <p className="text-[#5f6368] text-sm font-medium text-center mb-auto pb-4">
+                      Enrolments are expected to open in March 2026 in the Arcade Facilitator Program
+                    </p>
+
+                    {/* Purple changed to Classic Blue Gradient */}
+                    <a href="#" className="w-full bg-gradient-to-r from-[#1a73e8] to-[#1557b0] text-white flex items-center justify-center gap-2 py-3.5 rounded-md font-bold text-[15px] hover:shadow-md hover:-translate-y-0.5 transition-all shadow-sm">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                         <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                      </svg>
+                      Learn more about this program
+                    </a>
+                  </div>
+                </div>
+
+                {/* Row 2 */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  
+                  {/* Box 3: Facilitator Referral Code */}
+                  <div className="md:col-span-2 bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center">
+                    <h2 className="text-xl sm:text-[22px] font-semibold text-[#202124] mb-6 tracking-tight">Facilitator Referral Code</h2>
+                    
+                    {/* Simple Blue changed to Premium Dark Slate Gradient */}
+                    <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] rounded-lg p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+                      <div className="font-mono text-xl sm:text-[22px] text-white font-bold tracking-[0.1em]">
+                        ********-**-***-***
+                      </div>
+                      {/* Grey button inside banner changed to Sleek Glassmorphism style */}
+                      <button className="bg-white/10 text-white border border-white/20 font-semibold px-6 py-2.5 rounded-md text-sm cursor-not-allowed hover:bg-white/20 transition-colors backdrop-blur-sm">
+                        Coming Soon
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Box 4: Key Dates */}
+                  <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <h2 className="text-xl sm:text-[22px] font-semibold text-[#202124] mb-6 tracking-tight">Key Dates</h2>
+                    
+                    <div className="space-y-6">
+                      {/* Date 1 */}
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full border border-[#d2e3fc] bg-[#e8f0fe] flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                           </svg>
-                          Connect
-                        </a>
-                      </div>
-
-                      {/* Achievements & Description */}
-                      <div className="flex-1">
-                        
-                        {/* 🔥 NORMAL, CLEAN PARAGRAPH 🔥 */}
-                        <p className="text-[#3c4043] text-base md:text-lg leading-relaxed mb-8 text-center md:text-left font-normal">
-                          As a dedicated Google Cloud Arcade Facilitator in 2025, Manish has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
-                        </p>
-                        
-                        {/* 🔥 CLEAN STATS SYMBOLS WITHOUT BOXES 🔥 */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4 mt-8 border-t border-[#dadce0] pt-8">
-                          {[
-                            { icon: "🏆", title: "2x Ultimate", subtitle: "Cohort 1 & 2" },
-                            { icon: "👥", title: "2000+", subtitle: "People Guided" },
-                            { icon: "⭐", title: "20+", subtitle: "Coordinators" },
-                            { icon: "🎁", title: "Gifts & Certs", subtitle: "Distributed" }
-                          ].map((stat, i) => (
-                            <div key={i} className="flex flex-col items-center justify-center text-center group cursor-default">
-                              <div className="text-3xl mb-3 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
-                                {stat.icon}
-                              </div>
-                              <div className="font-bold text-[#202124] text-[16px]">{stat.title}</div>
-                              <div className="text-[11px] font-semibold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
-                            </div>
-                          ))}
                         </div>
-                        
+                        <div>
+                          <p className="text-[15px] font-bold text-[#202124]">Registration Opens</p>
+                          <p className="text-[13px] font-medium text-[#5f6368] mt-0.5">To be announced</p>
+                        </div>
                       </div>
-
+                      
+                      {/* Date 2 */}
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full border border-[#fad2cf] bg-[#fce8e6] flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-[#ea4335]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-[15px] font-bold text-[#202124]">Program Ends</p>
+                          <p className="text-[13px] font-medium text-[#5f6368] mt-0.5">To be announced</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                 </div>
               </div>
-              {/* ================= END PREMIUM INTRO BOX ================= */}
 
-              {/* ================= CONTACT FACILITATOR SECTION (UPDATED BG) ================= */}
-              <div className="mb-16 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
+            </div>
+          </section>
+
+          {/* ================= 🔥 NEW: REWARDS & POINTS SYSTEM SECTION 🔥 ================= */}
+          <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
+            <div className="max-w-6xl mx-auto">
+              
+              <div className="text-center mb-14 max-w-3xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight mb-4">Rewards & Points System</h2>
+                <p className="text-[#5f6368] text-base md:text-lg leading-relaxed">
+                  For the badges and milestones that you complete in the Facilitator program, you will earn several "Arcade + Bonus Points" that you can <span className="font-bold text-[#1a73e8]">REDEEM</span> for prizes and Google Cloud goodies at the Skills Boost Arcade prize counter.
+                </p>
+              </div>
+
+              {/* Grid for Point Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                
+                {/* Card 1: Game Badges */}
+                <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#e8f0fe] flex items-center justify-center text-2xl mb-4">
+                    🎮
+                  </div>
+                  <h3 className="text-lg font-bold text-[#202124] mb-2">Game Badges</h3>
+                  <p className="text-[#5f6368] text-sm leading-relaxed">
+                    For each "Game" badge you complete, you will be awarded with <strong className="text-[#202124]">1 Arcade point</strong>. (Note: You get <strong className="text-[#202124]">2 points</strong> for completing the monthly special Arcade game.)
+                  </p>
+                </div>
+
+                {/* Card 2: Trivia Badges */}
+                <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#fef7e0] flex items-center justify-center text-2xl mb-4">
+                    ⚡
+                  </div>
+                  <h3 className="text-lg font-bold text-[#202124] mb-2">Trivia Badges</h3>
+                  <p className="text-[#5f6368] text-sm leading-relaxed">
+                    For each "Trivia" badge you complete, you will be awarded with <strong className="text-[#202124]">1 Arcade Point</strong>. Complete more trivia to earn more points!
+                  </p>
+                </div>
+
+                {/* Card 3: Skill Badges */}
+                <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#e6f4ea] flex items-center justify-center text-2xl mb-4">
+                    🛡️
+                  </div>
+                  <h3 className="text-lg font-bold text-[#202124] mb-2">Skill Badges</h3>
+                  <p className="text-[#5f6368] text-sm leading-relaxed">
+                    For every <strong className="text-[#202124]">2 "Skill Badge"</strong> completions, you will be awarded with <strong className="text-[#202124]">1 Arcade Point</strong>. Build your skills and earn points!
+                  </p>
+                </div>
+
+                {/* Card 4: Lab-free Courses */}
+                <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <div className="w-12 h-12 rounded-full bg-[#fce8e6] flex items-center justify-center text-2xl mb-4">
+                    ⚠️
+                  </div>
+                  <h3 className="text-lg font-bold text-[#202124] mb-2">Lab-free Courses</h3>
+                  <p className="text-[#5f6368] text-sm leading-relaxed">
+                    For completing "Lab-free Courses", you will <strong className="text-[#ea4335]">not be awarded</strong> any Arcade Points. But they are essential to earn facilitator milestones!
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Important Note Box */}
+              <div className="bg-white border-l-4 border-[#ea4335] rounded-r-xl p-6 shadow-sm flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-[#fce8e6] flex items-center justify-center flex-shrink-0 text-xl text-[#ea4335] font-bold">
+                  !
+                </div>
+                <div>
+                  <h4 className="text-base font-bold text-[#202124] mb-1">Important Note</h4>
+                  <p className="text-[#5f6368] text-sm leading-relaxed">
+                    Earning any of the milestones below does <strong className="text-[#ea4335]">NOT</strong> make you eligible for any swags/prizes. In the facilitator program, you are mainly just earning "Bonus" points that you can accumulate and add to your "Arcade" points to reach the actual Skills Boost Arcade Player achievements and thus become eligible for swags/prizes.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          {/* ================= HOW IT WORKS / ABOUT (Now starts with Profile directly) ================= */}
+          <section className="py-24 px-6 border-b border-[#dadce0] bg-white relative">
+            <div className="max-w-6xl mx-auto">
+              
+              {/* ================= PREMIUM FACILITATOR PORTFOLIO BOX ================= */}
+              <div className="max-w-4xl mx-auto bg-white border border-[#e8eaed] rounded-xl p-8 md:p-12 shadow-sm hover:shadow-md transition-all duration-500 relative overflow-hidden group">
+                
+                {/* Vibrant Gradient Top Bar */}
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]"></div>
+
+                {/* Subtle bg decoration */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#e8f0fe] rounded-full blur-[80px] -z-10 opacity-30"></div>
+
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-10 z-10 relative pt-4">
+                  
+                  {/* Facilitator Image & Title */}
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-32 h-40 rounded-lg overflow-hidden border border-[#dadce0] mb-5 relative group/img cursor-pointer">
+                      <img 
+                        src="https://i.postimg.cc/L4tXVMs8/IMG-20241228-094816.jpg" 
+                        alt="Manish Kumar" 
+                        className="w-full h-full object-cover object-top transform group-hover/img:scale-105 transition-transform duration-500 ease-out"
+                      />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#202124]">Manish Kumar</h3>
+                    <p className="text-xs font-semibold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-md mt-2">Arcade Facilitator</p>
+                    
+                    <a 
+                      href="https://linkedin.com/in/manish-ui" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="mt-6 inline-flex items-center justify-center gap-2 text-sm font-medium text-white bg-[#0a66c2] hover:bg-[#004182] px-5 py-2.5 rounded-lg transition-colors w-full"
+                    >
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                      Connect
+                    </a>
+                  </div>
+
+                  {/* Achievements & Description */}
+                  <div className="flex-1">
+                    <p className="text-[#3c4043] text-base leading-relaxed mb-8 text-center md:text-left">
+                      As a dedicated Google Cloud Arcade Facilitator in 2025, Manish has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohort 1 and Cohort 2. He is passionate about empowering the community and has successfully helped individuals upskill, earn certifications, and claim official Google Cloud swags.
+                    </p>
+                    
+                    {/* 🔥 SLEEK STATS SYMBOLS 🔥 */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-4 mt-6 bg-[#f8f9fa] p-5 rounded-lg border border-[#e8eaed]">
+                      {[
+                        { icon: "🏆", title: "2x Ultimate", subtitle: "Cohort 1 & 2" },
+                        { icon: "👥", title: "2000+", subtitle: "People Guided" },
+                        { icon: "⭐", title: "20+", subtitle: "Coordinators" },
+                        { icon: "🎁", title: "Gifts & Certs", subtitle: "Distributed" }
+                      ].map((stat, i) => (
+                        <div key={i} className="flex flex-col items-center justify-center text-center group cursor-default">
+                          <div className="text-2xl mb-2 transform group-hover:-translate-y-1 transition-transform duration-300">
+                            {stat.icon}
+                          </div>
+                          <div className="font-bold text-[#202124] text-[15px]">{stat.title}</div>
+                          <div className="text-[10px] font-semibold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                  </div>
+
+                </div>
+              </div>
+
+              {/* ================= CONTACT FACILITATOR SECTION ================= */}
+              <div className="mt-16 bg-white border border-[#e8eaed] rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm hover:shadow-md transition-shadow duration-300">
                 <div className="flex-1">
-                  <h3 className="text-2xl font-medium text-[#202124] mb-3 flex items-center gap-2">
+                  <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
                     Contact Facilitator
                     <span className="relative flex h-2.5 w-2.5 ml-1">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
                     </span>
                   </h3>
-                  <p className="text-[#5f6368] text-sm md:text-base mb-5">Have questions? Get direct help regarding your Arcade progress.</p>
+                  <p className="text-[#5f6368] text-base mb-5">Have questions? Get direct help regarding your Arcade progress.</p>
                   
-                  <ul className="text-[#3c4043] text-sm md:text-base space-y-2.5">
-                    <li className="flex items-start gap-2.5">
-                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <ul className="text-[#3c4043] text-sm md:text-base space-y-2">
+                    <li className="flex items-start gap-2">
+                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                       <span>Ask specific queries related to <strong>Labs, Swags, or Arcade Points</strong>.</span>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <li className="flex items-start gap-2">
+                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                       <span>Please keep your <strong>Google Cloud Skills Boost Public URL</strong> ready.</span>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <li className="flex items-start gap-2">
+                      <svg className="w-5 h-5 text-[#1a73e8] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                       <span>Kindly allow some time for a response due to high message volumes.</span>
                     </li>
                   </ul>
@@ -297,9 +461,9 @@ export default function FacilitatorPage() {
                     href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-[#25D366] hover:bg-[#128C7E] text-white text-base font-semibold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all focus:outline-none"
+                    className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-6 py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-semibold rounded-lg shadow-sm hover:shadow-md transition-colors focus:outline-none"
                   >
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                     </svg>
                     Chat on WhatsApp
@@ -308,81 +472,66 @@ export default function FacilitatorPage() {
               </div>
               {/* ================= END CONTACT FACILITATOR SECTION ================= */}
 
-              <div className="grid md:grid-cols-3 gap-8">
-                {[
-                  { title: "Learn Google Cloud Skills", icon: "📚", color: "text-[#1a73e8]", bg: "bg-[#e8f0fe]", border: "border-[#d2e3fc]", desc: "Access free Qwiklabs credits and start learning Google Cloud basics, Gen AI, and Big Data." },
-                  { title: "Earn Cloud Skill Badges", icon: "🎖️", color: "text-[#fbbc04]", bg: "bg-[#fef7e0]", border: "border-[#fde293]", desc: "Complete quests and skill badges on Google Cloud Skills Boost to earn Arcade Points." },
-                  { title: "Win Google Cloud Swags", icon: "🎁", color: "text-[#34a853]", bg: "bg-[#e6f4ea]", border: "border-[#ceead6]", desc: "Accumulate points and redeem them at the prize counter for official Google Cloud swags." }
-                ].map((item, index) => (
-                  <div key={index} className="p-8 border border-[#dadce0] rounded-sm hover:shadow-sm transition-shadow bg-white">
-                    <div className={`w-14 h-14 ${item.bg} ${item.border} border rounded-sm flex items-center justify-center text-2xl mb-6`}>
-                      {item.icon}
-                    </div>
-                    <h3 className="text-xl font-medium text-[#202124] mb-3">{item.title}</h3>
-                    <p className="text-[#5f6368] text-sm leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
             </div>
           </section>
 
           {/* ================= MILESTONES & REWARDS ================= */}
           <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-10 text-center">Milestones & Swags</h2>
+              <h2 className="text-3xl font-bold text-[#202124] tracking-tight mb-8 text-center">Milestones & Swags</h2>
               
-              <div className="bg-white border border-[#dadce0] rounded-sm shadow-sm overflow-hidden mb-6">
-                <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#f8f9fa] border-b border-[#dadce0] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
-                  <div className="col-span-4">Users Milestone</div>
+              <div className="bg-white border border-[#e8eaed] rounded-xl shadow-sm overflow-hidden mb-6">
+                <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#f1f3f4] border-b border-[#e8eaed] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
+                  <div className="col-span-5">Users Milestone</div>
                   <div className="col-span-4 text-center">Required Points</div>
-                  <div className="col-span-4 text-right">Expected Rewards</div>
+                  <div className="col-span-3 text-right">Expected Rewards</div>
                 </div>
 
-                <div className="divide-y divide-[#dadce0]">
+                <div className="divide-y divide-[#e8eaed]">
                   {/* Premium Tier */}
                   <div className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-4 flex items-center gap-3">
-                      <span className="w-2 h-2 bg-[#1a73e8] rounded-sm"></span>
-                      <span className="font-medium text-[#202124]">Ultimate Milestone</span>
+                    <div className="col-span-5 flex items-center gap-3">
+                      <span className="w-2 h-2 bg-[#1a73e8] rounded-full"></span>
+                      <span className="font-semibold text-[#202124] text-base">Ultimate Milestone</span>
                     </div>
-                    <div className="col-span-4 text-center font-semibold text-[#1a73e8]">40+ Points</div>
-                    <div className="col-span-4 text-right text-sm text-[#5f6368]">Coming soon..</div>
+                    <div className="col-span-4 text-center font-bold text-[#1a73e8] text-base">40+ Points</div>
+                    <div className="col-span-3 text-right text-sm text-[#5f6368]">Coming soon</div>
                   </div>
 
-                  {/* Premium Tier */}
+                  {/* Tier 3 */}
                   <div className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-4 flex items-center gap-3">
-                      <span className="w-2 h-2 bg-[#fbbc04] rounded-sm"></span>
-                      <span className="font-medium text-[#202124]">Milestone 3</span>
+                    <div className="col-span-5 flex items-center gap-3">
+                      <span className="w-2 h-2 bg-[#fbbc04] rounded-full"></span>
+                      <span className="font-semibold text-[#202124] text-base">Milestone 3</span>
                     </div>
-                    <div className="col-span-4 text-center font-semibold text-[#fbbc04]">25 - 39 Points</div>
-                    <div className="col-span-4 text-right text-sm text-[#5f6368]">Coming soon..</div>
+                    <div className="col-span-4 text-center font-bold text-[#b06000] text-base">25 - 39 Points</div>
+                    <div className="col-span-3 text-right text-sm text-[#5f6368]">Coming soon</div>
                   </div>
 
-                  {/* Advanced Tier */}
+                  {/* Tier 2 */}
                   <div className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-4 flex items-center gap-3">
-                      <span className="w-2 h-2 bg-[#34a853] rounded-sm"></span>
-                      <span className="font-medium text-[#202124]">Milestone 2</span>
+                    <div className="col-span-5 flex items-center gap-3">
+                      <span className="w-2 h-2 bg-[#34a853] rounded-full"></span>
+                      <span className="font-semibold text-[#202124] text-base">Milestone 2</span>
                     </div>
-                    <div className="col-span-4 text-center font-semibold text-[#34a853]">15 - 24 Points</div>
-                    <div className="col-span-4 text-right text-sm text-[#5f6368]">Coming soon..</div>
+                    <div className="col-span-4 text-center font-bold text-[#2b8a44] text-base">15 - 24 Points</div>
+                    <div className="col-span-3 text-right text-sm text-[#5f6368]">Coming soon</div>
                   </div>
 
-                  {/* Standard Tier */}
+                  {/* Tier 1 */}
                   <div className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-4 flex items-center gap-3">
-                      <span className="w-2 h-2 bg-[#ea4335] rounded-sm"></span>
-                      <span className="font-medium text-[#202124]">Milestone 1</span>
+                    <div className="col-span-5 flex items-center gap-3">
+                      <span className="w-2 h-2 bg-[#ea4335] rounded-full"></span>
+                      <span className="font-semibold text-[#202124] text-base">Milestone 1</span>
                     </div>
-                    <div className="col-span-4 text-center font-semibold text-[#ea4335]">10 - 14 Points</div>
-                    <div className="col-span-4 text-right text-sm text-[#5f6368]">Coming soon..</div>
+                    <div className="col-span-4 text-center font-bold text-[#c5221f] text-base">10 - 14 Points</div>
+                    <div className="col-span-3 text-right text-sm text-[#5f6368]">Coming soon</div>
                   </div>
                 </div>
               </div>
               
               {/* MOVING MARQUEE TEXT */}
-              <div className="overflow-hidden bg-[#e8f0fe] border border-[#d2e3fc] rounded-sm py-2 mb-6 w-full whitespace-nowrap">
+              <div className="overflow-hidden bg-[#e8f0fe] border border-[#d2e3fc] rounded-lg py-2.5 w-full whitespace-nowrap">
                 <style>{`
                   @keyframes scroll-text {
                     0% { transform: translateX(100%); }
@@ -390,13 +539,13 @@ export default function FacilitatorPage() {
                   }
                   .animate-scroll-text {
                     display: inline-block;
-                    animation: scroll-text 15s linear infinite;
+                    animation: scroll-text 20s linear infinite;
                     will-change: transform;
                   }
                 `}</style>
                 
                 <div className="animate-scroll-text w-full text-sm font-medium text-[#1a73e8] px-4">
-                  * Rewards are subject to change and availability by Google Cloud. Points must be earned in the active cohort. Please refer to official guidelines.
+                  ⭐ Rewards are subject to change and availability by Google Cloud. Points must be earned in the active cohort. Please refer to official guidelines. ⭐
                 </div>
               </div>
             </div>
@@ -404,61 +553,33 @@ export default function FacilitatorPage() {
 
           {/* ================= TEAM SECTION ================= */}
           <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
-            <div className="max-w-[1000px] mx-auto relative z-10">
+            <div className="max-w-5xl mx-auto relative z-10">
 
-              {/* Premium Animations */}
-              <style>{`
-                @keyframes gradient-rotate {
-                  from { transform: rotate(0deg); }
-                  to { transform: rotate(360deg); }
-                }
-                .animate-gradient-rotate {
-                  animation: gradient-rotate 8s linear infinite;
-                  width: 200%; 
-                  height: 200%;
-                  top: -50%;
-                  left: -50%;
-                }
-                @keyframes shimmer-text {
-                  0% { background-position: 200% center; }
-                  100% { background-position: -200% center; }
-                }
-                .animate-shimmer-text {
-                  background-size: 200% auto;
-                  animation: shimmer-text 3s linear infinite;
-                }
-              `}</style>
-
-              <div className="text-center mb-20 relative z-10">
-                <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-4">
+              <div className="text-center mb-16 relative z-10">
+                <h2 className="text-3xl font-bold text-[#202124] tracking-tight mb-3">
                   Meet Our Arcade Team
                 </h2>
-                <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed">
                   Connect with the people driving the Arcade Facilitator Program in our community.
                 </p>
-                <div className="h-0.5 w-40 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853] mx-auto rounded-full mt-6"></div>
               </div>
 
               {/* 🔥 UPDATED GRID */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                 {teamMembers.map((member, index) => (
-                  <a 
-                    key={index} 
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative block w-full max-w-[280px] rounded-2xl hover:shadow-[0_8px_30px_rgba(26,115,232,0.18)] transition-all duration-500 overflow-hidden pointer-events-auto"
-                  >
-                    <div className="absolute animate-gradient-rotate bg-[conic-gradient(from_0deg_at_50%_50%,#4285F4,#EA4335,#FBBC05,#34A853,#4285F4)] opacity-50 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
-                    
-                    <div className="relative h-full bg-white rounded-[14px] text-center flex flex-col items-center justify-center z-10 m-[3px] pointer-events-none">
-                      
-                      <div className="w-full aspect-[3/4] object-cover rounded-t-[14px] mb-4 overflow-hidden border-b border-[#dadce0]">
+                  <div key={index} className="w-full max-w-[280px] bg-white border border-[#e8eaed] rounded-xl overflow-hidden hover:shadow-md transition-all duration-300">
+                    <a 
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block group"
+                    >
+                      <div className="w-full aspect-[4/5] overflow-hidden border-b border-[#e8eaed]">
                         {member.image ? (
                             <img 
                               src={member.image} 
                               alt={member.name} 
-                              className="w-full h-full object-cover object-top"
+                              className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-500"
                             />
                         ) : (
                             <div className={`w-full h-full flex items-center justify-center text-4xl font-bold ${member.color}`}>
@@ -466,29 +587,12 @@ export default function FacilitatorPage() {
                             </div>
                         )}
                       </div>
-
-                      <div className="px-5 pb-6 flex flex-col items-center w-full">
-                          <h3 className="text-lg font-bold text-[#202124] mb-2 group-hover:text-[#1a73e8] transition-colors">{member.name}</h3>
-
-                          {member.role === "Arcade Facilitator" ? (
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#e8f0fe] border border-[#d2e3fc] rounded-md mb-2 shadow-sm">
-                              <svg className="w-3.5 h-3.5 text-[#FBBC05] animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                              </svg>
-                              <span className="text-[10px] font-extrabold uppercase tracking-widest bg-gradient-to-r from-[#1a73e8] via-[#8ab4f8] to-[#1a73e8] animate-shimmer-text bg-clip-text text-transparent">
-                                {member.role}
-                              </span>
-                            </div>
-                          ) : (
-                            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${member.color} text-[10px] font-bold uppercase tracking-widest rounded-md mb-2 text-center`}>
-                              <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 flex-shrink-0"></span>
-                              {member.role}
-                            </div>
-                          )}
+                      <div className="p-5 text-center">
+                        <h3 className="text-lg font-bold text-[#202124] mb-1 group-hover:text-[#1a73e8] transition-colors">{member.name}</h3>
+                        <p className="text-sm font-medium text-[#5f6368]">{member.role}</p>
                       </div>
-
-                    </div>
-                  </a>
+                    </a>
+                  </div>
                 ))}
               </div>
 
@@ -496,51 +600,49 @@ export default function FacilitatorPage() {
           </section>
 
           {/* ================= 🔥 NEW: COMMUNITY LEAD SECTION 🔥 ================= */}
-          <section className="py-20 px-6 bg-white border-b border-[#dadce0]">
+          <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
             <div className="max-w-4xl mx-auto relative z-10">
               <div className="text-center mb-12 relative z-10">
-                <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-4">Arcade Community Lead</h2>
+                <h2 className="text-3xl font-bold text-[#202124] tracking-tight mb-3">Arcade Community Lead</h2>
                 <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed">
                   Driving our community forward with dedication and support.
                 </p>
               </div>
 
-              {/* 🔥 UPDATED: Curve reduced from rounded-[2rem] to rounded-2xl 🔥 */}
-              <div className="max-w-3xl mx-auto bg-white border border-[#dadce0] rounded-2xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-md hover:border-[#1a73e8] transition-all duration-500 flex flex-col md:flex-row items-center md:items-start gap-8">
+              {/* 🔥 UPDATED: Minimal Box 🔥 */}
+              <div className="max-w-3xl mx-auto bg-white border border-[#e8eaed] rounded-xl p-8 shadow-sm flex flex-col md:flex-row items-center md:items-start gap-8">
+                 
                  {/* Profile Info */}
                  <div className="flex flex-col items-center flex-shrink-0 text-center md:text-left md:items-start">
-                    <div className="w-24 h-24 rounded-full bg-[#fef7e0] text-[#b06000] border-4 border-[#fde293] flex items-center justify-center text-3xl font-bold mb-4 shadow-sm">
+                    <div className="w-24 h-24 rounded-full bg-[#fef7e0] text-[#b06000] border border-[#fde293] flex items-center justify-center text-3xl font-bold mb-4">
                       P
                     </div>
-                    <h3 className="text-2xl font-bold text-black">Preeti Patel</h3>
-                    <span className="text-[11px] font-bold text-[#b06000] bg-[#fef7e0] px-3 py-1 rounded-full mt-2 border border-[#fde293]">Community Lead</span>
+                    <h3 className="text-2xl font-bold text-[#202124]">Preeti Patel</h3>
+                    <span className="text-xs font-semibold text-[#b06000] bg-[#fef7e0] px-3 py-1 rounded-md mt-2">Community Lead</span>
 
-                    <div className="flex items-center gap-3 mt-5">
-                      <a href="https://www.linkedin.com/in/preeti-patel-a91406331" target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] hover:scale-110 transition-transform">
+                    <div className="flex items-center gap-3 mt-4">
+                      <a href="https://www.linkedin.com/in/preeti-patel-a91406331" target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors">
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                       </a>
-                      <a href="https://www.skills.google/public_profiles/0db81977-a509-43bd-917f-e8e9d6611ac9" target="_blank" rel="noopener noreferrer" className="text-[13px] font-medium text-[#1a73e8] hover:underline">View Profile</a>
+                      <a href="https://www.skills.google/public_profiles/0db81977-a509-43bd-917f-e8e9d6611ac9" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-[#1a73e8] hover:underline">View Profile</a>
                     </div>
                  </div>
 
                  {/* Description / Points & New WhatsApp Button */}
                  <div className="flex-1 mt-2 md:mt-0 w-full flex flex-col justify-between">
                    
-                   {/* 🔥 UPDATED: Single Professional Paragraph 🔥 */}
-                   <p className="text-[#3c4043] text-base leading-relaxed font-medium mb-6 text-center md:text-left">
+                   <p className="text-[#3c4043] text-base leading-relaxed text-center md:text-left">
                      As the dedicated Community Lead, Preeti spearheads community engagement initiatives, seamlessly managing group dynamics and providing unwavering support to members navigating technical labs. She plays a pivotal role in resolving queries, participating in core strategy meetings, and fostering a highly collaborative environment to ensure the collective success of the program.
                    </p>
 
-                   {/* Separator Line */}
-                   <div className="w-full h-[1px] bg-[#dadce0] my-4"></div>
+                   <div className="w-full h-[1px] bg-[#e8eaed] my-5"></div>
 
-                   {/* 🔥 NEW: Join Community WhatsApp Button 🔥 */}
-                   <div className="w-full flex justify-center md:justify-start pt-2">
+                   <div className="w-full flex justify-center md:justify-start">
                       <a 
                         href="https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-semibold rounded-xl shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all w-full md:w-auto justify-center"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-semibold rounded-lg shadow-sm transition-colors w-full md:w-auto justify-center"
                       >
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
@@ -556,47 +658,47 @@ export default function FacilitatorPage() {
 
 
           {/* ================= CO-ORDINATORS TEAM SECTION ================= */}
-          <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
-            <div className="max-w-4xl mx-auto relative z-10">
+          <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
+            <div className="max-w-5xl mx-auto relative z-10">
               <div className="text-center mb-16 relative z-10">
-                <h2 className="text-3xl font-normal text-[#202124] tracking-tight mb-4">Our Expert Co-ordinators</h2>
+                <h2 className="text-3xl font-bold text-[#202124] tracking-tight mb-3">Our Expert Co-ordinators</h2>
                 <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed">
                   The dedicated individuals helping our community achieve their milestones.
                 </p>
               </div>
 
-              <div className="bg-white border border-[#dadce0] rounded-sm shadow-sm overflow-hidden mb-6">
-                <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-[#f8f9fa] border-b border-[#dadce0] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
+              <div className="bg-white border border-[#e8eaed] rounded-xl shadow-sm overflow-hidden mb-6">
+                <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-[#f8f9fa] border-b border-[#e8eaed] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
                   <div className="col-span-5">Coordinators</div>
                   <div className="col-span-3 text-center">Skill Badges</div>
                   <div className="col-span-2 text-center">Arcade Points</div>
-                  <div className="col-span-2 text-right">Public Profile</div>
+                  <div className="col-span-2 text-right">Connect</div>
                 </div>
 
-                <div className="divide-y divide-[#dadce0]">
+                <div className="divide-y divide-[#e8eaed]">
                   {coordinatorsData.map((coord, index) => (
                     <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
                       
-                      <div className="col-span-1 md:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                      <div className="col-span-1 md:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-3">
                         <a 
                           href={coord.linkedin} 
                           target="_blank" 
                           rel="noopener noreferrer" 
-                          className="font-bold text-[#202124] hover:text-[#0a66c2] text-[17px] hover:underline underline-offset-4 transition-colors"
+                          className="font-semibold text-[#202124] hover:text-[#1a73e8] text-base transition-colors"
                         >
                           {coord.name}
                         </a>
-                        <span className="text-[10px] font-semibold text-[#1a73e8] bg-[#e8f0fe] px-2 py-0.5 rounded-sm sm:ml-2 border border-[#d2e3fc]">Coordinator</span>
+                        <span className="text-[10px] font-medium text-[#1a73e8] bg-[#e8f0fe] px-2 py-0.5 rounded-md border border-[#d2e3fc] uppercase tracking-wide">Coordinator</span>
                       </div>
 
-                      <div className="col-span-1 md:col-span-5 grid grid-cols-2 gap-4 md:gap-0 mt-2 md:mt-0">
+                      <div className="col-span-1 md:col-span-5 grid grid-cols-2 gap-4 md:gap-0 mt-3 md:mt-0">
                         <div className="md:col-span-1 flex flex-col md:items-center">
-                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-0.5">Skill Badges</span>
-                          <span className="font-semibold text-[#202124]">{coord.badges}</span>
+                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-1">Skill Badges</span>
+                          <span className="font-semibold text-[#202124] text-base">{coord.badges}</span>
                         </div>
                         <div className="md:col-span-1 flex flex-col md:items-center">
-                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-0.5">Arcade Pts</span>
-                          <span className="font-semibold text-[#b06000]">{coord.points}</span>
+                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-1">Arcade Pts</span>
+                          <span className="font-semibold text-[#b06000] text-base">{coord.points}</span>
                         </div>
                       </div>
 
@@ -605,7 +707,7 @@ export default function FacilitatorPage() {
                           href={coord.profileUrl} 
                           target="_blank" 
                           rel="noopener noreferrer" 
-                          className="inline-block px-4 py-2 bg-white border border-[#dadce0] text-[#1a73e8] text-[13px] font-medium rounded-sm hover:bg-[#e8f0fe] hover:border-[#1a73e8] transition-colors shadow-sm"
+                          className="inline-flex items-center justify-center px-4 py-2 bg-white border border-[#dadce0] text-[#1a73e8] text-sm font-medium rounded-lg hover:bg-[#f8f9fa] transition-colors"
                         >
                           Profile
                         </a>
@@ -613,7 +715,7 @@ export default function FacilitatorPage() {
                           href={coord.linkedin} 
                           target="_blank" 
                           rel="noopener noreferrer" 
-                          className="text-[#0a66c2] hover:text-[#004182] hover:scale-110 transition-transform flex-shrink-0"
+                          className="text-[#0a66c2] hover:text-[#004182] transition-colors"
                           title="View LinkedIn Profile"
                         >
                           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -630,25 +732,25 @@ export default function FacilitatorPage() {
           </section>
 
           {/* ================= FREQUENTLY ASKED QUESTIONS ================= */}
-          <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
-            <div className="max-w-4xl mx-auto">
+          <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
+            <div className="max-w-3xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-normal text-[#202124] tracking-tight">Frequently Asked Questions</h2>
-                <p className="text-[#5f6368] mt-2 text-sm">Find answers to common questions about the Arcade Facilitator Program.</p>
+                <h2 className="text-3xl font-bold text-[#202124] tracking-tight">Frequently Asked Questions</h2>
+                <p className="text-[#5f6368] mt-3 text-base">Find answers to common questions about the Arcade Facilitator Program.</p>
               </div>
               
-              <div className="border border-[#dadce0] rounded-sm bg-white divide-y divide-[#dadce0] shadow-sm">
+              <div className="border border-[#e8eaed] rounded-xl bg-white divide-y divide-[#e8eaed] shadow-sm">
                 {officialFaqs.map((faq, index) => (
                   <div key={index} className="overflow-hidden bg-white">
                     <button
-                      className="w-full flex justify-between items-center p-6 text-left bg-white hover:bg-[#f8f9fa] transition-colors gap-4 focus:outline-none"
+                      className="w-full flex justify-between items-center p-6 text-left hover:bg-[#f8f9fa] transition-colors gap-4 focus:outline-none"
                       onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                     >
-                      <span className="text-[#202124] font-medium text-base md:text-lg leading-snug">
+                      <span className="font-semibold text-base text-[#202124]">
                         {faq.question}
                       </span>
                       <svg 
-                        className={`w-5 h-5 text-[#5f6368] flex-shrink-0 transform transition-transform duration-300 ease-in-out ${openFaqIndex === index ? "rotate-180" : ""}`} 
+                        className={`w-5 h-5 text-[#5f6368] flex-shrink-0 transform transition-transform duration-300 ${openFaqIndex === index ? "rotate-180" : ""}`} 
                         fill="none" 
                         stroke="currentColor" 
                         viewBox="0 0 24 24"
@@ -662,7 +764,7 @@ export default function FacilitatorPage() {
                         openFaqIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                       }`}
                     >
-                      <div className="p-6 pt-0 bg-white text-[#5f6368] text-base leading-relaxed">
+                      <div className="p-6 pt-0 text-[#5f6368] text-base leading-relaxed">
                         {faq.answer}
                       </div>
                     </div>
@@ -676,11 +778,11 @@ export default function FacilitatorPage() {
                    href="https://rsvp.withgoogle.com/events/arcade-facilitator/faqs" 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   className="inline-flex items-center gap-2 text-sm font-medium text-[#1a73e8] bg-white border border-[#dadce0] px-6 py-3.5 rounded-xl hover:shadow-md hover:border-[#1a73e8] hover:bg-[#f8f9fa] transition-all duration-300 group"
+                   className="inline-flex items-center gap-2 text-sm font-medium text-[#1a73e8] hover:text-[#1557b0] transition-colors group"
                  >
                    View all FAQs on official site
                    <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                    </svg>
                  </a>
               </div>
@@ -689,44 +791,10 @@ export default function FacilitatorPage() {
 
         </main>
 
-        {/* ================= MINIMAL FOOTER ================= */}
-        <footer className="bg-white py-8 border-t border-[#dadce0]">
-          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-[#5f6368] text-sm text-center md:text-left">
-              <p>© {new Date().getFullYear()} Arcade Nexus. Independent Community Tool.</p>
-            </div>
-            <div className="flex gap-4">
-              
-              {/* HOME LINK WITH POP MODAL */}
-              <div className="relative group flex items-center justify-center">
-                <button onClick={() => router.push("/")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline focus:outline-none transition-colors">
-                  Home
-                </button>
-                {/* Clean Pop Modal (Tooltip) */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#202124] text-white text-[11px] font-medium tracking-wide rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
-                  Return to Homepage
-                  {/* Little downward arrow */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-[#202124]"></div>
-                </div>
-              </div>
-
-              {/* CALCULATOR LINK WITH POP MODAL */}
-              <div className="relative group flex items-center justify-center">
-                <button onClick={() => router.push("/calculator")} className="text-[#5f6368] text-sm hover:text-[#1a73e8] hover:underline focus:outline-none transition-colors">
-                  Calculator
-                </button>
-                {/* Clean Pop Modal (Tooltip) */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-[#202124] text-white text-[11px] font-medium tracking-wide rounded shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
-                  Calculate Arcade Points
-                  {/* Little downward arrow */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-[#202124]"></div>
-                </div>
-              </div>
-
-            </div>
+            
           </div>
-        </footer>
-      </div>
+        
+      
     </>
   );
 }
