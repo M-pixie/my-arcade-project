@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/app/components/Footer";
 
-// ✅ 1. Yahan ChatBot import kiya
+// ✅ 1. Yahan Navbar aur ChatBot import kiya
+import Navbar from "@/app/components/Navbar";
 import ChatBot from "./components/ChatBot";
 
 const geistSans = Geist({
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     images: [
       {
         // 🔥 Social media pe share karne pe ye mst image dikhegi
-        url: "https://services.google.com/fh/files/misc/gcaf25_prizes_image5.png", // Image 5 (Premium swags) kar diya jisse zyada clicks aayen
+        url: "https://i.postimg.cc/tTSsd8kS/Snapinsta-app-437737395-25411276401819535-1259610102401518116-n-1080.jpg", // Image 5 (Premium swags) kar diya jisse zyada clicks aayen
         width: 1200,
         height: 630,
         alt: "Google Cloud Arcade Swags & Dashboard Preview",
@@ -56,7 +57,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Calculate Google Cloud Arcade Points 2026",
     description: "Check your Arcade Points and Leaderboard rank instantly.",
-    images: ["https://services.google.com/fh/files/misc/gcaf25_prizes_image5.png"], // 🔥 Twitter pe link daloge toh image aayegi
+    images: ["https://i.postimg.cc/tTSsd8kS/Snapinsta-app-437737395-25411276401819535-1259610102401518116-n-1080.jpg"], // 🔥 Twitter pe link daloge toh image aayegi
   },
   icons: {
     icon: '/icon.png', 
@@ -76,6 +77,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* ✅ NAVBAR YAHAN LAGA DIYA (Ab ye har page pe aayega) */}
+        <Navbar />
+
         {/* Main Content */}
         {children}
 

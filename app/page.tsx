@@ -12,19 +12,28 @@ export default function HomePage() {
 
   // 🔥 NEW: State for Premium Problem Box Form
   const [formName, setFormName] = useState("");
-  const [formCategory, setFormCategory] = useState("Swags");
+  const [formCategory, setFormCategory] = useState("Swags Delivery / Issue");
+  const [formSubCategory, setFormSubCategory] = useState(""); // 🔥 NEW STATE ADDED HERE
   const [formMessage, setFormMessage] = useState("");
 
   // Handler to send form data directly to your WhatsApp!
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const text = `Hi Manish, I am ${formName}.\n\nI have a query regarding: *${formCategory}*\n\nMessage:\n${formMessage}`;
+    let text = `Hi Manish, I am ${formName}.\n\nI have a query regarding: *${formCategory}*`;
+    
+    // Add Sub-category to the message if it exists
+    if (formSubCategory) {
+      text += `\nSpecifics: *${formSubCategory}*`;
+    }
+    
+    text += `\n\nMessage:\n${formMessage}`;
     const whatsappUrl = `https://wa.me/918538980608?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
     
     // Optional: Clear form after sending
     setFormName("");
     setFormMessage("");
+    setFormSubCategory("");
   };
 
   return (
@@ -36,9 +45,7 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
 
-
-
- {/* ================= HERO SECTION (PREMIUM & ANIMATED) ================= */}
+{/* ================= HERO SECTION (PREMIUM & ANIMATED) ================= */}
 <section className="relative pt-32 pb-24 px-6 border-b border-[#dadce0] bg-white overflow-hidden">
   
   {/* Custom Animations injected via standard style block */}
@@ -304,8 +311,12 @@ export default function HomePage() {
                   Google Skills Arcade 2026: Prize Counter Update
                 </a>
               </h3>
-              <p className="text-xs text-[#5f6368] font-medium mt-0.5">
-                Official update : A new cadence for the 2026 Prize Counter.
+              
+              {/* 🔥 Premium Red Highlighter Alert 🔥 */}
+              <p className="text-xs mt-2.5">
+                <span className="bg-[#fce8e6] text-[#c5221f] px-2.5 py-1 rounded-md font-bold inline-block shadow-sm">
+                  Official update : A new cadence for the 2026 Prize Counter.
+                </span>
               </p>
             </div>
           </div>
@@ -339,19 +350,24 @@ export default function HomePage() {
         </div>
 
         {/* Content Body */}
-        <div className="text-[#3c4043] text-[15px] leading-relaxed space-y-4 bg-[#f8f9fa] p-5 rounded-lg border border-[#e8eaed]">
-          <p>
+        <div className="text-[15px] leading-relaxed space-y-4 bg-[#f8f9fa] p-5 rounded-lg border border-[#e8eaed]">
+          
+          <p className="bg-[#fce8e6] text-[#c5221f] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full">
             If you've been part of our Google Skills Arcade family for a while, you know the rhythm we've shared: the excitement of two Prize Counter openings every year. It's been our favorite way to celebrate the miles you've covered.
           </p>
-          <p className="font-bold text-[#1a73e8]">
+          
+          <p className="bg-[#fce8e6] text-[#c5221f] px-3 py-2.5 rounded-md font-bold shadow-sm border-l-4 border-[#c5221f] inline-block w-full text-base">
             This year, the road has a bit of a detour.
           </p>
-          <p>
-            Due to some <strong className="text-[#202124]">persistent shipping constraints that are out of our hands</strong>, we're moving to a <strong className="text-[#202124]">single, unified Prize Counter opening</strong> at the end of this year. Instead of two windows, we'll have one focused moment to redeem your points and grab your swag.
+          
+          <p className="bg-[#fce8e6] text-[#c5221f] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full">
+            Due to some <strong className="text-[#991b1b] font-extrabold">persistent shipping constraints that are out of our hands</strong>, we're moving to a <strong className="text-[#991b1b] font-extrabold">single, unified Prize Counter opening</strong> at the end of this year. Instead of two windows, we'll have one focused moment to redeem your points and grab your swag.
           </p>
-          <p>
+          
+          <p className="bg-[#fce8e6] text-[#c5221f] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full">
             We know this feels like a big shift. Having only one chance to claim your rewards is a change we didn't take lightly, and we truly understand if it feels a little bittersweet. Your patience means the world to us while we navigate these logistics to make sure your rewards actually reach you.
           </p>
+
         </div>
 
       </div>
@@ -568,9 +584,11 @@ export default function HomePage() {
               {/* Clean Single Blue Accent Line (Copyright Free) */}
               <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
               
-              <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Facing Any Issues?</h3>
-              <p className="text-[#5f6368] text-base">
-                Drop a message regarding your Swags, Labs, or Arcade Points. Our community team will look into it directly.
+              <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Problem Submission Form</h3>
+              <p className="text-base mt-2">
+                <span className="bg-[#fce8e6] text-[#c5221f] px-3 py-1 rounded-md font-medium inline-block">
+                  Drop a message regarding your Swags, Labs, or Arcade Points. Our community team will look into it directly.
+                </span>
               </p>
             </div>
 
@@ -578,6 +596,8 @@ export default function HomePage() {
             <form onSubmit={handleFormSubmit} className="p-8 md:p-10 flex flex-col gap-6">
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* Name Input */}
                 <div className="flex flex-col gap-2.5">
                   <label className="text-sm font-semibold text-[#3c4043]">Your Name</label>
                   <input 
@@ -590,12 +610,16 @@ export default function HomePage() {
                   />
                 </div>
                 
+                {/* Main Category Dropdown */}
                 <div className="flex flex-col gap-2.5">
                   <label className="text-sm font-semibold text-[#3c4043]">Issue Category</label>
                   <div className="relative">
                     <select 
                       value={formCategory} 
-                      onChange={(e) => setFormCategory(e.target.value)} 
+                      onChange={(e) => {
+                        setFormCategory(e.target.value);
+                        setFormSubCategory(""); // Reset sub-category on change
+                      }} 
                       className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer"
                     >
                       <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
@@ -606,7 +630,39 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+
+              {/* Conditional Sub-Category Dropdown (Dyanmic) */}
+              {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue") && (
+                <div className="flex flex-col gap-2.5">
+                  <label className="text-sm font-semibold text-[#3c4043]">
+                    {formCategory === "Swags Delivery / Issue" ? "Select Vendor" : "Select Lab Type"}
+                  </label>
+                  <div className="relative">
+                    <select 
+                      required
+                      value={formSubCategory} 
+                      onChange={(e) => setFormSubCategory(e.target.value)} 
+                      className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer"
+                    >
+                      <option value="" disabled hidden>Select an option</option>
+                      {formCategory === "Swags Delivery / Issue" && (
+                        <>
+                          <option value="Printos">Printos Services</option>
+                          <option value="Whitesquare">Whitesquare International</option>
+                        </>
+                      )}
+                      {formCategory === "Labs Completion Issue" && (
+                        <>
+                          <option value="Skill Badges">Skill Badges</option>
+                          <option value="Arcade Labs">Arcade Labs</option>
+                        </>
+                      )}
+                    </select>
+                  </div>
+                </div>
+              )}
               
+              {/* Message Textarea */}
               <div className="flex flex-col gap-2.5">
                 <label className="text-sm font-semibold text-[#3c4043]">Describe Your Problem</label>
                 <textarea 
