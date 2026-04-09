@@ -23,7 +23,7 @@ export default function Navbar() {
     { name: "Skill Badges", href: "/resources", tooltip: "All Skill BAadges" },
     { name: "Dashboard", href: "/dashboard", tooltip: "View your dashboard" },
     { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
-    { name: "Admin", href: "/admin", tooltip: "Admin console" },
+    { name: "About Arcade", href: "/about", tooltip: "Explore About Arcade" },
   ];
 
   useEffect(() => {
