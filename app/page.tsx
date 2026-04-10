@@ -5,7 +5,7 @@ import VisitCounter from "@/app/components/VisitCounter";
 import { useRouter } from "next/navigation";
 import FAQ from "@/app/components/FAQ";
 import PopupModal from "@/app/components/PopupModal";
-import { useState } from "react"; // ADDED For Message Box State
+import { useState, useEffect } from "react"; 
 
 export default function HomePage() {
   const router = useRouter();
@@ -13,8 +13,21 @@ export default function HomePage() {
   // 🔥 NEW: State for Premium Problem Box Form
   const [formName, setFormName] = useState("");
   const [formCategory, setFormCategory] = useState("Swags Delivery / Issue");
-  const [formSubCategory, setFormSubCategory] = useState(""); // 🔥 NEW STATE ADDED HERE
+  const [formSubCategory, setFormSubCategory] = useState(""); 
   const [formMessage, setFormMessage] = useState("");
+
+  // 🔥 NEW: State for Smart Auto Scroll Button
+  const [isAtTop, setIsAtTop] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Agar 300px se zyada scroll ho gaya hai, toh matlab hum neeche hain (upar ka teer dikhao)
+      setIsAtTop(window.scrollY < 300);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Handler to send form data directly to your WhatsApp!
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -36,10 +49,133 @@ export default function HomePage() {
     setFormSubCategory("");
   };
 
+  // 🔥 FULL 12 EVENTS LIST REORDERED (Arcade #1, GSA #6)
+  const googleEvents = [
+    { 
+      title: "Google Cloud Arcade", icon: "🎮", 
+      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
+      date: "All Year Round", 
+      desc: "Gamified cloud skills learning platform with hands-on labs, trivia, and standard tier point progression.", 
+      swags: "Premium Hoodies, Backpacks, Mugs & Cloud Gear", 
+      link: "https://go.cloudskillsboost.google/arcade" 
+    },
+    { 
+      title: "Google DevFest", icon: "🎪", 
+      theme: { bg: "bg-[#fce8e6]/20", text: "text-[#c5221f]", border: "border-[#f8c1cb]" }, 
+      date: "Oct - Dec (Annually)", 
+      desc: "The largest annual decentralized tech conference hosted by local Google Developer Groups.", 
+      swags: "Official T-shirts, Badges, Stickers & Tech Gadgets", 
+      link: "https://developers.google.com/community/devfest" 
+    },
+    { 
+      title: "Google I/O Extended", icon: "🌐", 
+      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
+      date: "May - July", 
+      desc: "Community-led technical sessions bringing the magic of Google I/O global announcements to local cities and GDSCs.", 
+      swags: "Exclusive I/O T-shirts, Developer Stickers & Pins", 
+      link: "https://developers.google.com/community/gdg/io-extended" 
+    },
+    { 
+      title: "Solution Challenge", icon: "🌍", 
+      theme: { bg: "bg-[#e6f4ea]/20", text: "text-[#137333]", border: "border-[#ceead6]" }, 
+      date: "Jan - May", 
+      desc: "Global hackathon to solve UN Sustainable Development Goals using Google tech to build real-world software solutions.", 
+      swags: "Heavy Cash Prizes, Mentorship & Premium Gadgets", 
+      link: "https://developers.google.com/community/gdsc-solution-challenge" 
+    },
+    { 
+      title: "Study Jams (Cloud/Android)", icon: "📚", 
+      theme: { bg: "bg-[#fef7e0]/20", text: "text-[#b06000]", border: "border-[#fde293]" }, 
+      date: "Aug - Sep", 
+      desc: "Month-long campus campaigns for hands-on technical learning and course completions.", 
+      swags: "Verified Certificates, Badges & Official T-shirts", 
+      link: "https://developers.google.com/community/gdsc" 
+    },
+    { 
+      title: "Google Student Ambassador (GSA)", icon: "🎓", 
+      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" },
+      date: "April - June", 
+      desc: "A flagship program for university students to act as official liaisons between Google and their campus, hosting workshops and building developer communities.", 
+      swags: "Premium Lead Jackets, Backpacks, Medals & Mentorship", 
+      link: "https://developers.google.com/community/gdg" 
+    },
+    { 
+      title: "Cloud Next (Innovators Hive)", icon: "☁️", 
+      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
+      date: "April / October", 
+      desc: "Google Cloud's flagship global event featuring developer quests and online challenges.", 
+      swags: "Digital Badges, Vouchers & Physical Swags", 
+      link: "https://cloud.withgoogle.com/next" 
+    },
+    { 
+      title: "Build with AI", icon: "🤖", 
+      theme: { bg: "bg-[#f3e8fd]/20", text: "text-[#8430ce]", border: "border-[#d7aefb]" }, 
+      date: "Feb - May", 
+      desc: "Global campaign teaching developers how to build real-world apps using Gemini and AI tools.", 
+      swags: "Build with AI T-shirts, Cloud Credits & Prize Kits", 
+      link: "https://developers.google.com/community/build-with-ai" 
+    },
+    { 
+      title: "WTM IWD Events", icon: "👩‍💻", 
+      theme: { bg: "bg-[#fce8e6]/20", text: "text-[#c5221f]", border: "border-[#f8c1cb]" }, 
+      date: "March - May", 
+      desc: "Technical workshops highlighting Women in Tech (International Women's Day), open to all.", 
+      swags: "Aesthetic WTM T-shirts, Notebooks & Tote Bags", 
+      link: "https://developers.google.com/womentechmakers" 
+    },
+    { 
+      title: "Google Summer of Code", icon: "☀️", 
+      theme: { bg: "bg-[#fef7e0]/20", text: "text-[#b06000]", border: "border-[#fde293]" }, 
+      date: "Jan - August", 
+      desc: "Prestigious global program writing code for open-source organizations during summer.", 
+      swags: "Heavy Stipend ($1.5k-$3k+), Certificates & T-shirts", 
+      link: "https://summerofcode.withgoogle.com/" 
+    },
+    { 
+      title: "Gemini API Competition", icon: "🏆", 
+      theme: { bg: "bg-[#f3e8fd]/20", text: "text-[#8430ce]", border: "border-[#d7aefb]" }, 
+      date: "Mid-Year", 
+      desc: "Global online hackathons to build innovative applications using the latest Gemini models.", 
+      swags: "Custom Trophies, Cash Prizes & Pixel Devices", 
+      link: "https://ai.google.dev/competition" 
+    },
+    { 
+      title: "GenAI Exchange Program", icon: "🧠", 
+      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
+      date: "April - September", 
+      desc: "Joint initiative by Google Cloud & Hack2skill featuring AI training and a national hackathon.", 
+      swags: "₹65 Lakh Prize Pool, Cloud Swags & Certificates", 
+      link: "https://vision.hack2skill.com/event/genaiexchange" 
+    }
+  ];
+
   return (
     <>
       <PopupModal />
       <Navbar />
+
+      {/* ================= FIXED SCROLL BUTTON (SMART AUTO-CHANGE & POSITION FIXED) ================= */}
+      <div className="fixed bottom-24 right-6 md:right-8 z-[100] flex flex-col gap-3">
+        <button 
+          onClick={() => {
+            if (isAtTop) {
+              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            } else {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+          className="w-12 h-12 bg-white text-[#1a73e8] rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#e8f0fe] hover:scale-110 transition-all border border-[#dadce0]"
+          title={isAtTop ? "Scroll to Bottom" : "Scroll to Top"}
+        >
+          {isAtTop ? (
+            // Down Arrow (Jab user upar ho)
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+          ) : (
+            // Up Arrow (Jab user neeche ho)
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 15l7-7 7 7" /></svg>
+          )}
+        </button>
+      </div>
 
       {/* PURE WHITE BACKGROUND, GOOGLE TEXT COLORS */}
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
@@ -96,6 +232,15 @@ export default function HomePage() {
     }
     .animate-code-continuous {
       animation: code-scroll-continuous 15s linear infinite; 
+    }
+    
+    /* 🔥 NEW: PREMIUM DEEP ROYAL BLUE/INDIGO BLINK ANIMATION 🔥 */
+    @keyframes blink-dark-box {
+      0%, 100% { background-color: #111827; border-color: rgba(99, 102, 241, 0.1); }
+      50% { background-color: #1E293B; border-color: rgba(99, 102, 241, 0.4); }
+    }
+    .animate-blink-dark {
+      animation: blink-dark-box 5s ease-in-out infinite;
     }
   `}</style>
 
@@ -160,10 +305,20 @@ export default function HomePage() {
           Open Arcade Labs
         </a>
         
-        {/* Trust Badge */}
-        <p className="mt-12 text-[11px] font-bold text-[#80868b] tracking-widest uppercase">
-          Trusted by thousands of cloud enthusiasts
-        </p>
+        {/* 🔥 CLICKABLE RED HIGHLIGHT NOTE WITH DOWN ARROW 🔥 */}
+        <button 
+          onClick={() => document.getElementById('google-events')?.scrollIntoView({ behavior: 'smooth' })}
+          className="mt-10 inline-flex items-center text-left gap-3 px-5 py-3 bg-[#fce8e6] hover:bg-[#fad2ce] border border-[#f8c1cb] rounded-xl shadow-sm transition-colors duration-300 cursor-pointer group"
+        >
+          <span className="text-[#c5221f] font-extrabold text-sm md:text-base tracking-wide">
+            NOTE: All Google Events & Programs are available at the bottom
+          </span>
+          <div className="bg-[#c5221f] text-white p-1.5 rounded-full animate-bounce group-hover:bg-[#991b1b] transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </div>
+        </button>
       </div>
 
       {/* ================= RIGHT CONTENT: ANIMATED CODING CAT ================= */}
@@ -330,9 +485,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 px-5 py-2 bg-[#1a73e8] text-white text-sm font-bold rounded-lg shadow-[0_2px_10px_rgba(26,115,232,0.15)] hover:bg-[#1557b0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.3)] transform hover:-translate-y-0.5 transition-all duration-300 group whitespace-nowrap"
             >
               View Yugali Post
-              <svg className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+              <svg className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </a>
           </div>
 
@@ -517,8 +670,7 @@ export default function HomePage() {
     {/* 🔥 FIXED: p-[4px] kar diya taaki border ki motai badhe aur animation ekdum clear dikhe 🔥 */}
     <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.4)] transition-all duration-500 ease-out p-[4px] bg-[#f8f9fa] mx-auto max-w-5xl">
       
-      {/* Moving Border Animation background (Hamesha ghumega taaki clear dikhe) */}
-      <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_75%,#a855f7_100%)] animate-[spin_2.5s_linear_infinite] opacity-100 z-0 pointer-events-none"></div>
+     
 
       {/* Actual Content Wrapper (Andar wale edges round kiye taaki border smooth dikhe) */}
       <div className="relative w-full h-full bg-white rounded-[13px] z-10 overflow-hidden">
@@ -1001,6 +1153,74 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ================= 🔥 NEW: GLOBAL GOOGLE EVENTS SECTION (DEEP MIDNIGHT BLUE THEME) 🔥 ================= */}
+        <section id="google-events" className="relative z-10 py-24 bg-[#0B1121] border-b border-[#dadce0] overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            
+            {/* Soft background glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#3b82f6] rounded-full blur-[160px] opacity-10 z-0 pointer-events-none"></div>
+
+            <div className="text-center mb-16 relative z-10">
+              <span className="inline-block px-4 py-1.5 bg-[#1e293b] text-indigo-400 text-xs font-extrabold uppercase tracking-widest rounded-full mb-4 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                Google Opportunities
+              </span>
+              <h2 className="text-4xl md:text-5xl font-semibold text-white tracking-tight mb-5">
+                Top Google Events & Programs
+              </h2>
+              <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                Unlock exclusive swags, professional badges, standard tier points, cash prizes and official recognition by participating in these flagship campaigns throughout the year.
+              </p>
+            </div>
+
+            {/* Events Grid with Dark Blinking Boxes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+              {googleEvents.map((event, idx) => (
+                <div key={idx} className="bg-[#131B2F] border border-[rgba(99,102,241,0.15)] rounded-2xl p-6 flex flex-col hover:shadow-[0_20px_40px_-15px_rgba(99,102,241,0.3)] hover:border-[rgba(99,102,241,0.5)] transition-all duration-300 group animate-blink-dark relative overflow-hidden">
+                  
+                  {/* Internal Icon & Date */}
+                  <div className="flex justify-between items-start mb-4 relative z-10">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl border transition-transform duration-300 group-hover:scale-110 ${event.theme.bg} ${event.theme.border} ${event.theme.text}`}>
+                      {event.icon}
+                    </div>
+                    <span className="bg-[#1E293B] text-slate-300 text-[11px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wider border border-slate-700/50">
+                      {event.date}
+                    </span>
+                  </div>
+
+                  {/* Title & Description (Legible on Dark) */}
+                  <h3 className="text-xl font-bold text-white mb-2 relative z-10 group-hover:text-indigo-300 transition-colors">{event.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-5 flex-1 relative z-10">
+                    {event.desc}
+                  </p>
+
+                  {/* Swags Box (Darkened) */}
+                  <div className="bg-[#1A233A] border border-[rgba(99,102,241,0.1)] rounded-lg p-3.5 mb-5 flex items-start gap-3 relative z-10 transition-colors group-hover:bg-[#222E4D]">
+                    <span className="text-lg">🎁</span>
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-indigo-400 tracking-wider mb-0.5">Swags & Perks</p>
+                      <p className="text-sm font-semibold text-slate-200">{event.swags}</p>
+                    </div>
+                  </div>
+
+                  {/* Bottom Link (Inverted Color) */}
+                  <a 
+                    href={event.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="mt-auto pt-4 border-t border-slate-700/50 flex items-center justify-between text-indigo-400 font-bold text-sm group-hover:text-white transition-colors relative z-10"
+                  >
+                    Explore Program
+                    <svg className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  </a>
+                  
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </section>
+
 
         <FAQ />
 
