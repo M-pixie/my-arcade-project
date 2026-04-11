@@ -22,13 +22,39 @@ export default function CalculatorPage() {
   // 👇 GUARANTEED BLINK STATE 👇
   const [hideRedLine, setHideRedLine] = useState(false);
 
+  // 🔥 NEW: State for Recent URLs History
+  const [recentUrls, setRecentUrls] = useState<string[]>([]);
+
   useEffect(() => {
     const savedUrl = localStorage.getItem("arcade_url");
     if (savedUrl) {
       setProfileUrl(savedUrl);
       setRememberMe(true);
     }
+    
+    // Load Recent URLs from LocalStorage
+    const savedRecentUrls = localStorage.getItem("recent_arcade_urls");
+    if (savedRecentUrls) {
+      setRecentUrls(JSON.parse(savedRecentUrls));
+    }
   }, []);
+
+  // Function to save URL to history
+  const saveToHistory = (urlToSave: string) => {
+    setRecentUrls((prevUrls) => {
+      // Remove if already exists to bring it to top, limit to last 5 URLs
+      const filtered = prevUrls.filter((u) => u !== urlToSave);
+      const updatedUrls = [urlToSave, ...filtered].slice(0, 5); 
+      localStorage.setItem("recent_arcade_urls", JSON.stringify(updatedUrls));
+      return updatedUrls;
+    });
+  };
+
+  // Clear History
+  const clearHistory = () => {
+    setRecentUrls([]);
+    localStorage.removeItem("recent_arcade_urls");
+  };
 
   // 👇 100% WORKING ASYNC BLINK LOGIC 👇
   const triggerBlink = async () => {
@@ -65,6 +91,9 @@ export default function CalculatorPage() {
       triggerBlink(); 
       return;
     }
+
+    // Save to history on successful validation
+    saveToHistory(profileUrl.trim());
 
     setLoading(true);
     setPoints(null);
@@ -113,27 +142,60 @@ export default function CalculatorPage() {
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans">
       <Navbar />
 
-      <main className="max-w-3xl mx-auto px-6 py-16">
+      {/* 🔥 FIX: Increased Top Padding (py-16 to pt-24 pb-16) so icon doesn't stick to navbar */}
+      <main className="max-w-3xl mx-auto px-6 pt-24 pb-16">
         
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-3 bg-[#e8f0fe] border border-[#d2e3fc] rounded-sm mb-6">
+          
+          {/* Enhanced Icon Box */}
+          <div className="inline-flex items-center justify-center p-3.5 bg-gradient-to-br from-[#e8f0fe] to-[#f3e8fd] border border-[#d2e3fc] rounded-2xl mb-6 shadow-sm transform hover:scale-105 transition-transform duration-300">
             <svg className="w-8 h-8 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H5v-4h9v4zM5 11V7h9v4H5zm12 6h-2v-4h2v4zm0-6h-2V7h2v4z"/>
             </svg>
           </div>
-          <h1 className="text-3xl md:text-4xl font-normal text-[#202124] tracking-tight mb-3">
-            Arcade Points Calculator
+          
+          {/* 🔥 FIX: Premium Heading UI */}
+          <h1 className="text-3xl md:text-5xl font-extrabold text-[#202124] tracking-tight mb-4">
+            Arcade Points <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#a142f4]">Calculator</span>
           </h1>
-          <p className="text-[#5f6368] text-base md:text-lg">
-            Calculate your points from Google cloud skills public profile URL.
+          <p className="text-[#5f6368] text-base md:text-lg mb-8 font-medium">
+            Calculate your exact points from Google Cloud Skills Boost public profile URL.
           </p>
+
+          {/* ================= 🔥 NEW: HOW TO USE INSTRUCTIONS (RED HIGHLIGHT) 🔥 ================= */}
+          <div className="bg-[#fce8e6] border border-[#f8c1cb] rounded-xl p-5 mb-2 text-left shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-[#c5221f] font-extrabold text-[17px] mb-3 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              How to use Arcade Points Calculator?
+            </h3>
+            <ul className="list-disc pl-5 space-y-2 text-[#991b1b] text-[14px] md:text-[15px] font-bold">
+              <li>Your Google Cloud Skills Boost profile <span className="bg-[#c5221f] text-white px-1.5 py-0.5 rounded text-xs uppercase tracking-wider mx-1 shadow-sm">must be public</span> to fetch your data.</li>
+              <li>Copy your complete profile URL (e.g., <code className="bg-[#fad2ce] px-1.5 py-0.5 rounded text-[#991b1b]">https://www.skills.google/public_profiles/...</code>).</li>
+              <li>Paste the exact URL in the input box below and click Calculate.</li>
+              <li><span className="underline decoration-[#c5221f]/40 underline-offset-2">Invalid, broken, or private URLs will not work</span> and will return an error.</li>
+            </ul>
+          </div>
+          {/* ================= END HOW TO USE SECTION ================= */}
+
         </div>
 
         <div className="bg-white rounded-sm border border-[#dadce0] shadow-sm overflow-hidden">
           
+          {/* ================= FAST SEARCHING/LOADING ANIMATION ================= */}
           {loading && (
-            <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden">
-              <div className="h-full bg-[#1a73e8] animate-progress origin-left-right w-full"></div>
+            <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden relative">
+              <style>{`
+                @keyframes fast-loading {
+                  0% { left: -40%; width: 30%; }
+                  50% { left: 30%; width: 70%; }
+                  100% { left: 100%; width: 30%; }
+                }
+                .animate-fast-loading {
+                  animation: fast-loading 0.8s infinite ease-in-out;
+                  position: absolute;
+                }
+              `}</style>
+              <div className="h-full bg-[#1a73e8] animate-fast-loading rounded-full"></div>
             </div>
           )}
 
@@ -208,79 +270,137 @@ export default function CalculatorPage() {
             >
               {loading ? "Analyzing profile..." : "Calculate Points"}
             </button>
+
+            {/* ================= 🔥 RECENT URLS HISTORY SECTION 🔥 ================= */}
+            {recentUrls.length > 0 && (
+              <div className="mt-8 border-t border-[#dadce0] pt-6 animate-fade-in-up">
+                <div className="flex items-center justify-between mb-5">
+                  <p className="text-sm font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Recent Profiles
+                  </p>
+                  <button 
+                    onClick={clearHistory} 
+                    className="flex items-center gap-1.5 text-sm text-[#d93025] bg-[#fce8e6] hover:bg-[#fad2ce] px-4 py-2 rounded-md font-bold transition-colors shadow-sm"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    Clear History
+                  </button>
+                </div>
+                
+                <div className="flex flex-wrap gap-3">
+                  {recentUrls.map((url, idx) => {
+                    const shortId = url.split("/").pop()?.substring(0, 15) || "Profile";
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setProfileUrl(url);
+                          setError(null);
+                          setHideRedLine(false);
+                        }}
+                        className="px-4 py-2 bg-white hover:bg-[#e8f0fe] border-2 border-[#dadce0] hover:border-[#1a73e8] text-[#202124] hover:text-[#1a73e8] text-sm font-bold rounded-lg transition-all flex items-center gap-2 shadow-sm"
+                        title={url} // Full URL on hover
+                      >
+                        <svg className="w-4 h-4 text-[#5f6368] opacity-70" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
+                        {shortId}...
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {/* ================= END OF RECENT URLS SECTION ================= */}
+
           </div>
 
-          {/* ================= RESULTS SECTION ================= */}
+          {/* ================= 🔥 PREMIUM RESULTS SECTION 🔥 ================= */}
           {points !== null && (
-            <div className="bg-[#f8f9fa] border-t border-[#dadce0] p-8 md:p-12 animate-fade-in-up">
+            <div className="bg-[#f8f9fa] border-t border-[#dadce0] p-8 md:p-12 animate-fade-in-up rounded-b-sm">
               
-              <div className="flex items-center gap-5 mb-10 bg-white p-5 rounded-sm border border-[#dadce0]">
-                {userAvatar ? (
-                  <img 
-                    src={userAvatar} 
-                    alt="Profile" 
-                    className="w-14 h-14 rounded-full border border-[#dadce0] object-cover"
-                  />
-                ) : (
-                  <div className="w-14 h-14 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] font-medium text-xl border border-[#d2e3fc]">
-                    {userName ? userName.charAt(0).toUpperCase() : "U"}
-                  </div>
-                )}
+              {/* Premium Profile Section */}
+              <div className="flex items-center gap-5 mb-10 bg-white p-4 md:px-6 md:py-4 rounded-2xl border border-[#dadce0] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow">
+                <div className="relative shrink-0">
+                  {userAvatar ? (
+                    <img 
+                      src={userAvatar} 
+                      alt="Profile" 
+                      className="w-16 h-16 rounded-full border-2 border-white shadow-md object-cover ring-2 ring-[#e8f0fe]"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#1a73e8] to-[#6ab0ff] flex items-center justify-center text-white font-bold text-2xl shadow-md border-2 border-white ring-2 ring-[#e8f0fe]">
+                      {userName ? userName.charAt(0).toUpperCase() : "U"}
+                    </div>
+                  )}
+                  {/* Verified Green Dot */}
+                  <div className="absolute bottom-0 right-0 w-4 h-4 bg-[#00A859] border-2 border-white rounded-full" title="Verified Public Profile"></div>
+                </div>
                 
-                <div className="flex flex-col">
-                  <h3 className="text-lg font-medium text-[#202124] leading-tight">
+                <div className="flex flex-col overflow-hidden">
+                  <h3 className="text-xl font-bold text-[#202124] leading-tight truncate">
                     {userName || "Arcade Player"}
                   </h3>
-                  <p className="text-sm text-[#5f6368] mt-0.5">Google Cloud Skills Boost Profile</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                
-                <div className="text-center md:text-left flex-shrink-0">
-                  <p className="text-xs font-bold text-[#5f6368] uppercase tracking-wider">Total Points</p>
-                  <p className="text-7xl font-light text-[#1a73e8] tracking-tight mt-1">
-                    {points}
+                  <p className="text-xs md:text-sm text-[#5f6368] mt-1 font-medium flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-[#1a73e8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span className="truncate">Google Cloud Skills Boost Profile</span>
                   </p>
                 </div>
+              </div>
 
-                <div className="hidden md:block w-px h-20 bg-[#dadce0]"></div>
-                <div className="block md:hidden h-px w-full bg-[#dadce0]"></div>
+              <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+                
+                {/* Total Points (Premium Dark Green) */}
+                <div className="text-center md:text-left flex-shrink-0">
+                  <p className="text-sm font-extrabold text-[#5f6368] uppercase tracking-widest mb-2">Total Points Earned</p>
+                  <div className="flex items-baseline justify-center md:justify-start gap-2">
+                    <p className="text-7xl md:text-8xl font-black text-[#137333] tracking-tighter drop-shadow-sm">
+                      {points}
+                    </p>
+                    <span className="text-2xl font-bold text-[#137333] opacity-80">pts</span>
+                  </div>
+                </div>
 
-                <div className="flex-1 w-full grid grid-cols-3 gap-3">
+                <div className="hidden md:block w-px h-24 bg-gradient-to-b from-transparent via-[#dadce0] to-transparent"></div>
+                <div className="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-[#dadce0] to-transparent"></div>
+
+                {/* Breakdown (2 Compact Premium Boxes - No Top Icons) */}
+                <div className="flex-1 w-full grid grid-cols-2 gap-4">
                   
-                  <div className="bg-white p-4 rounded-sm border border-[#dadce0] flex flex-col items-center justify-center">
-                    <span className="w-2 h-2 rounded-sm bg-[#fbbc04] mb-3"></span>
-                    <span className="text-2xl font-normal text-[#202124] leading-none mb-1">{breakdown?.trivia}</span>
-                    <span className="text-[11px] text-[#5f6368] font-medium uppercase tracking-wider text-center">Trivia & Sprint</span>
+                  {/* All Games Box (Trivia + Games Sum) */}
+                  <div className="bg-white px-4 py-3.5 rounded-lg border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#34a853] hover:shadow transition-all relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-[#34a853] group-hover:w-1.5 transition-all"></div>
+                    <span className="text-2xl font-black text-[#202124] leading-none mb-1.5">
+                      {(breakdown?.trivia || 0) + (breakdown?.games || 0)}
+                    </span>
+                    <span className="text-[11px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
                   </div>
 
-                  <div className="bg-white p-4 rounded-sm border border-[#dadce0] flex flex-col items-center justify-center">
-                    <span className="w-2 h-2 rounded-sm bg-[#34a853] mb-3"></span>
-                    <span className="text-2xl font-normal text-[#202124] leading-none mb-1">{breakdown?.games}</span>
-                    <span className="text-[11px] text-[#5f6368] font-medium uppercase tracking-wider text-center">All Games</span>
-                  </div>
-
-                  <div className="bg-white p-4 rounded-sm border border-[#dadce0] flex flex-col items-center justify-center">
-                    <span className="w-2 h-2 rounded-sm bg-[#a142f4] mb-3"></span>
-                    <span className="text-2xl font-normal text-[#202124] leading-none mb-1">{breakdown?.skills}</span>
-                    <span className="text-[11px] text-[#5f6368] font-medium uppercase tracking-wider text-center">Skill Badges</span>
+                  {/* Skill Badges Box */}
+                  <div className="bg-white px-4 py-3.5 rounded-lg border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#a142f4] hover:shadow transition-all relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-[#a142f4] group-hover:w-1.5 transition-all"></div>
+                    <span className="text-2xl font-black text-[#202124] leading-none mb-1.5">
+                      {breakdown?.skills || 0}
+                    </span>
+                    <span className="text-[11px] text-[#5f6368] font-bold uppercase tracking-wider text-center">Skill Badges</span>
                   </div>
                   
                 </div>
               </div>
 
-              <div className="mt-8 text-center md:text-left">
-                <p className="text-xs text-[#80868b]">
+              <div className="mt-10 text-center md:text-left flex items-center justify-center md:justify-start gap-2">
+                <svg className="w-4 h-4 text-[#00A859]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p className="text-xs font-semibold text-[#80868b]">
                   Data verified securely from your public profile.
                 </p>
               </div>
 
             </div>
           )}
+          {/* ================= END OF RESULTS SECTION ================= */}
+
         </div>
         
-        {/* ================= FOOTER SECTION START (Sirf Ye Change Hai) ================= */}
+        {/* ================= FOOTER SECTION START ================= */}
         <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4 text-sm w-full">
           
           {/* Button 1: Arcade Page */}

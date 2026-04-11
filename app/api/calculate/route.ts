@@ -87,7 +87,8 @@ export async function POST(req: Request) {
           title.includes('certification zone') || 
           title.includes('journeys made easy') || 
           title.includes('metrics in motion') || // Ye naya 1 point game add kiya
-          title.includes('game')          
+          title.includes('game') ||
+          title.includes('dialogue design') // 🔥 Naya 1 point game add kiya jaisa tumne bola
         ) {
           gamePoints += 1;
         }
