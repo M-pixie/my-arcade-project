@@ -466,7 +466,61 @@ export default function CalculatorPage() {
           )}
         </div>
 
-        {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR 🔥 ================= */}
+        {/* ================= 🔥 WIDER BADGE COMPLETION HISTORY BOX (MOVED UP) 🔥 ================= */}
+        {points !== null && (
+          <div className="mt-12 animate-fade-in-up md:-mx-12">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4 px-4 md:px-0">
+              <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
+                <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Badge Completion History
+              </h4>
+              
+              <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all w-full sm:w-auto">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                Export CSV Report
+              </button>
+            </div>
+            
+            <div className="bg-white border border-[#dadce0] rounded-2xl overflow-hidden shadow-md">
+              <div className="max-h-[500px] overflow-y-auto">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                  <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
+                    <tr>
+                      <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center w-12 border-r border-[#f1f3f4]">#</th>
+                      <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Lab / Badge Name</th>
+                      <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
+                      <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center border-l border-[#f1f3f4]">Points</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#f1f3f4]">
+                    {history.length > 0 ? (
+                      history.map((item, i) => (
+                        <tr key={i} className="hover:bg-[#f8f9fa] transition-colors group">
+                          <td className="px-5 py-5 text-base font-bold text-[#80868b] text-center border-r border-[#f1f3f4]">{i + 1}</td>
+                          <td className="px-6 py-5"><p className="text-lg font-bold text-[#202124] group-hover:text-[#1a73e8] transition-colors">{item.name}</p></td>
+                          <td className="px-6 py-5 whitespace-nowrap border-l border-[#f1f3f4]"><p className="text-base text-[#5f6368] font-semibold">{item.date}</p></td>
+                          <td className="px-6 py-5 text-center border-l border-[#f1f3f4]">
+                            <span className={`inline-block px-4 py-2 rounded-xl text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : item.points === 1 ? 'bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]' : 'bg-[#f3e8fd] text-[#8430ce] border border-[#d7aefb]'}`}>
+                              +{item.points}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
+                          No valid 2026 badges found for this profile.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR (MOVED DOWN) 🔥 ================= */}
         {points !== null && (
         <div className="mt-12 bg-white border border-[#dadce0] rounded-2xl shadow-md overflow-hidden md:-mx-12 animate-fade-in-up">
           <div className="bg-[#f8f9fa] border-b border-[#dadce0] px-6 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -528,7 +582,7 @@ export default function CalculatorPage() {
                 {/* Right Col: PREMIUM UI CARD & Actions */}
                 <div className="w-full lg:w-2/3 flex flex-col items-center">
                   
-                  {/* ====== THE ULTIMATE ANTI-CRASH PREMIUM WHITE CARD UI ====== */}
+                  {/* ====== EXACT SCREEN-TO-CANVAS LAYOUT UI ====== */}
                   <div className="w-full overflow-x-auto pb-4 flex justify-center">
                     <div 
                       ref={cardRef} 
@@ -541,7 +595,7 @@ export default function CalculatorPage() {
                       className="w-full max-w-[550px] mx-auto p-8 rounded-xl shadow-sm relative overflow-hidden border border-[#dadce0] flex flex-col"
                     >
                       
-                      {/* Background Accents */}
+                      {/* Background Accents (Giant emoji properly centered) */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-[0.08] pointer-events-none select-none z-0">
                         <span style={{ fontSize: '16rem', display: 'block', lineHeight: 1 }}>{flexEmoji}</span>
                       </div>
@@ -549,7 +603,7 @@ export default function CalculatorPage() {
                       {/* Top Google Colors Bar */}
                       <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#4285f4] via-[#34a853] via-[#fbbc04] to-[#ea4335] z-10"></div>
 
-                      {/* Top Header */}
+                      {/* Top Header - Using Explicit Inline CSS to stop canvas chopping */}
                       <div className="flex justify-between items-start relative z-10 mb-6 pt-2">
                         <div className="flex items-center gap-4">
                           <div className="w-14 h-14 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold text-2xl ring-2 ring-[#e8f0fe] shrink-0">
@@ -575,7 +629,7 @@ export default function CalculatorPage() {
                         </div>
                       </div>
 
-                      {/* Main Score Area */}
+                      {/* Main Score Area - Fixed Alignment and Spacing */}
                       <div style={{ textAlign: 'center', padding: '24px 0', position: 'relative', zIndex: 10 }}>
                         <p style={{ fontSize: '13px', fontWeight: '800', color: '#5f6368', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 12px 0' }}>
                           Total Arcade Points
@@ -588,6 +642,7 @@ export default function CalculatorPage() {
                           <span style={{ fontSize: '28px', fontWeight: 'bold', color: '#1a73e8' }}>pts</span>
                         </div>
                         
+                        {/* Huge Margin top to prevent overlapping text */}
                         <div style={{ marginTop: '32px' }}>
                           <span style={{ display: 'inline-block', fontSize: '16px', fontWeight: 'bold', color: '#137333', backgroundColor: '#e6f4ea', padding: '10px 20px', borderRadius: '12px', border: '1px solid #ceead6' }}>
                             {flexMilestone || "Leveling up my cloud skills!"}
@@ -621,7 +676,7 @@ export default function CalculatorPage() {
                   </div>
                   {/* ====== END OF PREMIUM CARD ====== */}
 
-                  {/* 🔥 FIX: WhatsApp and LinkedIn Share Buttons Restored 🔥 */}
+                  {/* Share/Download Buttons - RESTORED TO WHATSAPP/LINKEDIN */}
                   <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-2">
                     <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
@@ -645,60 +700,6 @@ export default function CalculatorPage() {
             )}
           </div>
         </div>
-        )}
-
-        {/* ================= 🔥 WIDER BADGE COMPLETION HISTORY BOX (BOTTOM) 🔥 ================= */}
-        {points !== null && (
-          <div className="mt-12 animate-fade-in-up md:-mx-12">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4 px-4 md:px-0">
-              <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
-                <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                Badge Completion Ledger
-              </h4>
-              
-              <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all w-full sm:w-auto">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                Export CSV Report
-              </button>
-            </div>
-            
-            <div className="bg-white border border-[#dadce0] rounded-2xl overflow-hidden shadow-md">
-              <div className="max-h-[500px] overflow-y-auto">
-                <table className="w-full text-left border-collapse min-w-[600px]">
-                  <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
-                    <tr>
-                      <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center w-12 border-r border-[#f1f3f4]">#</th>
-                      <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Lab / Badge Name</th>
-                      <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
-                      <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center border-l border-[#f1f3f4]">Points</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#f1f3f4]">
-                    {history.length > 0 ? (
-                      history.map((item, i) => (
-                        <tr key={i} className="hover:bg-[#f8f9fa] transition-colors group">
-                          <td className="px-5 py-5 text-base font-bold text-[#80868b] text-center border-r border-[#f1f3f4]">{i + 1}</td>
-                          <td className="px-6 py-5"><p className="text-lg font-bold text-[#202124] group-hover:text-[#1a73e8] transition-colors">{item.name}</p></td>
-                          <td className="px-6 py-5 whitespace-nowrap border-l border-[#f1f3f4]"><p className="text-base text-[#5f6368] font-semibold">{item.date}</p></td>
-                          <td className="px-6 py-5 text-center border-l border-[#f1f3f4]">
-                            <span className={`inline-block px-4 py-2 rounded-xl text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : item.points === 1 ? 'bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]' : 'bg-[#f3e8fd] text-[#8430ce] border border-[#d7aefb]'}`}>
-                              +{item.points}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={4} className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
-                          No valid 2026 badges found for this profile.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
         )}
         
         <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4 text-sm w-full">
