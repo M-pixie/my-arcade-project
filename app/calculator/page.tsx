@@ -157,43 +157,8 @@ export default function CalculatorPage() {
     window.open(linkedInUrl, "_blank");
   };
 
-  // ================= 🔥 FIXED LOGIC: DOWNLOAD & COPY POSTER 🔥 =================
-  
-  // 1. Download Poster
-  const downloadCardImage = async () => {
-    if (!cardRef.current) return;
-    setIsGeneratingImg(true);
-
-    try {
-      cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      await new Promise(resolve => setTimeout(resolve, 800)); // wait for scroll
-
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2, 
-        useCORS: true, 
-        backgroundColor: "#ffffff",
-        logging: false
-      });
-
-      const dataUrl = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.download = "Arcade_Milestone_Poster.png";
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      alert("🖼️ Poster Downloaded successfully! Now attach it and share anywhere.");
-    } catch (err) {
-      console.error("Canvas generation failed", err);
-      alert("Oops! Could not download the poster. Please try again.");
-    } finally {
-      setIsGeneratingImg(false);
-    }
-  };
-
-  // 2. Copy Poster
-  const copyCardImage = async () => {
+  // ================= 🔥 RESTORED & FIXED: DIRECT SHARE IMAGE LOGIC 🔥 =================
+  const shareCardAsImage = async (platform: 'whatsapp' | 'linkedin') => {
     if (!cardRef.current) return;
     setIsGeneratingImg(true);
 
@@ -202,29 +167,73 @@ export default function CalculatorPage() {
       await new Promise(resolve => setTimeout(resolve, 800));
 
       const canvas = await html2canvas(cardRef.current, {
-        scale: 2, 
+        scale: 3, 
         useCORS: true, 
         backgroundColor: "#ffffff",
-        logging: false
-      });
-
-      canvas.toBlob(async (blob) => {
-        if (blob) {
-          try {
-            const item = new ClipboardItem({ "image/png": blob });
-            await navigator.clipboard.write([item]);
-            alert("✅ Poster Copied to Clipboard! You can now 'Paste' it directly in WhatsApp or LinkedIn.");
-          } catch (clipboardErr) {
-            console.error("Clipboard error", clipboardErr);
-            alert("Your browser blocks direct image copying. Please use the 'Download Poster' button instead! 📥");
+        logging: false,
+        onclone: (clonedDoc) => {
+          const card = clonedDoc.getElementById("celebration-card");
+          if (card) {
+            card.style.width = "500px";
+            card.style.maxWidth = "500px";
+            card.style.height = "auto";
           }
         }
+      });
+
+      const dataUrl = canvas.toDataURL("image/png");
+      const textForPost = `${flexEmoji} Just hit ${points || 0} points on Google Cloud Arcade 2026! \n\nCalculate your points here: ${websiteUrl}`;
+
+      // Check for Mobile Native Share first
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "Arcade_Milestone.png", { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              title: "My Arcade Milestone",
+              text: textForPost,
+              files: [file]
+            });
+            setIsGeneratingImg(false);
+            return;
+          } catch (e: any) {
+            if (e.name === 'AbortError') {
+              setIsGeneratingImg(false);
+              return;
+            }
+          }
+        }
+
+        // Fallback for PC/Desktop - Copy Image to Clipboard & Open Platform
+        try {
+          const item = new ClipboardItem({ "image/png": blob });
+          await navigator.clipboard.write([item]);
+          alert(`✅ Poster Copied! Opening ${platform}... Just Paste (Ctrl+V) it to share!`);
+        } catch (clipboardErr) {
+          // Absolute Fallback - Download
+          const link = document.createElement("a");
+          link.download = "Arcade_Milestone.png";
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          alert(`🖼️ Poster Downloaded! Opening ${platform}... Please attach the downloaded image.`);
+        }
+
+        if (platform === 'whatsapp') {
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textForPost)}`, "_blank");
+        } else if (platform === 'linkedin') {
+          window.open("https://www.linkedin.com/feed/", "_blank");
+        }
+        setIsGeneratingImg(false);
+
       }, "image/png");
 
     } catch (err) {
       console.error("Canvas generation failed", err);
-      alert("Oops! Could not copy the poster. Please try again.");
-    } finally {
+      alert("Oops! Could not generate the poster. Please try again.");
       setIsGeneratingImg(false);
     }
   };
@@ -457,7 +466,7 @@ export default function CalculatorPage() {
           )}
         </div>
 
-        {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR (UP) 🔥 ================= */}
+        {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR 🔥 ================= */}
         {points !== null && (
         <div className="mt-12 bg-white border border-[#dadce0] rounded-2xl shadow-md overflow-hidden md:-mx-12 animate-fade-in-up">
           <div className="bg-[#f8f9fa] border-b border-[#dadce0] px-6 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -471,7 +480,7 @@ export default function CalculatorPage() {
           
           <div className="p-6 md:p-10 flex flex-col items-center gap-6">
             {!isCardGenerated ? (
-              <button onClick={() => setIsCardGenerated(true)} className="px-8 py-4 bg-gradient-to-r from-[#1a73e8] to-[#a142f4] text-white font-extrabold text-lg rounded-xl shadow-[0_10px_20px_-10px_rgba(26,115,232,0.5)] hover:shadow-[0_15px_30px_-10px_rgba(161,66,244,0.6)] transform hover:-translate-y-1 transition-all flex items-center gap-3">
+              <button onClick={() => setIsCardGenerated(true)} className="px-8 py-4 bg-gradient-to-r from-[#1a73e8] to-[#a142f4] text-white font-extrabold text-lg rounded-xl shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all flex items-center gap-3">
                 ✨ Generate My Poster
               </button>
             ) : (
@@ -486,7 +495,7 @@ export default function CalculatorPage() {
                         <button 
                           key={emoji} 
                           onClick={() => setFlexEmoji(emoji)}
-                          className={`flex-1 min-w-[40px] py-2 text-xl rounded-lg transition-all ${flexEmoji === emoji ? 'bg-white shadow-md scale-110 border border-[#dadce0] z-10' : 'hover:bg-[#e8f0fe] grayscale-[50%] opacity-70'}`}
+                          className={`flex-1 min-w-[40px] py-2 text-xl rounded-lg transition-all ${flexEmoji === emoji ? 'bg-white shadow-sm scale-110 border border-[#dadce0] z-10' : 'hover:bg-[#e8f0fe] grayscale-[50%] opacity-70'}`}
                         >
                           {emoji}
                         </button>
@@ -519,89 +528,114 @@ export default function CalculatorPage() {
                 {/* Right Col: PREMIUM UI CARD & Actions */}
                 <div className="w-full lg:w-2/3 flex flex-col items-center">
                   
-                  {/* ====== THE ULTIMATE PREMIUM WHITE CARD UI ====== */}
-                  <div ref={cardRef} className="w-full max-w-lg bg-[#ffffff] p-6 rounded-xl shadow-[0_10px_30px_-15px_rgba(0,0,0,0.15)] relative overflow-hidden border border-[#dadce0] flex flex-col">
-                    
-                    {/* Background Accents (Giant subtle emoji) */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none select-none z-0 overflow-hidden">
-                      <span className="text-[18rem] leading-none transform -rotate-12">{flexEmoji}</span>
-                    </div>
+                  {/* ====== THE ULTIMATE ANTI-CRASH PREMIUM WHITE CARD UI ====== */}
+                  <div className="w-full overflow-x-auto pb-4 flex justify-center">
+                    <div 
+                      ref={cardRef} 
+                      id="celebration-card"
+                      style={{ 
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                        minWidth: '550px',
+                        backgroundColor: '#ffffff'
+                      }}
+                      className="w-full max-w-[550px] mx-auto p-8 rounded-xl shadow-sm relative overflow-hidden border border-[#dadce0] flex flex-col"
+                    >
+                      
+                      {/* Background Accents */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-[0.08] pointer-events-none select-none z-0">
+                        <span style={{ fontSize: '16rem', display: 'block', lineHeight: 1 }}>{flexEmoji}</span>
+                      </div>
 
-                    {/* Top Google Colors Bar */}
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#4285f4] via-[#34a853] via-[#fbbc04] to-[#ea4335] z-10"></div>
+                      {/* Top Google Colors Bar */}
+                      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#4285f4] via-[#34a853] via-[#fbbc04] to-[#ea4335] z-10"></div>
 
-                    {/* Top Header */}
-                    <div className="flex justify-between items-start relative z-10 mb-4">
-                      <div className="flex items-center gap-3">
-                        {userAvatar ? (
-                          <img src={userAvatar} crossOrigin="anonymous" className="w-12 h-12 rounded-full border-2 border-white shadow-sm ring-2 ring-[#e8f0fe] object-cover" alt="Avatar"/>
-                        ) : (
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#1a73e8] to-[#6ab0ff] flex items-center justify-center text-white font-bold text-xl shadow-sm ring-2 ring-[#e8f0fe]">
+                      {/* Top Header */}
+                      <div className="flex justify-between items-start relative z-10 mb-6 pt-2">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold text-2xl ring-2 ring-[#e8f0fe] shrink-0">
                             {userName ? userName.charAt(0).toUpperCase() : "U"}
                           </div>
-                        )}
-                        <div className="flex flex-col">
-                          <h3 className="text-lg font-black text-[#202124] leading-tight truncate max-w-[180px] drop-shadow-sm">{userName || "Arcade Player"}</h3>
-                          <p className="text-[10px] font-bold text-[#1a73e8] uppercase tracking-wider bg-[#e8f0fe]/90 inline-block px-2 py-0.5 rounded-full mt-1 border border-[#d2e3fc] w-max shadow-sm">
-                            Cloud Verified
+                          <div className="flex flex-col justify-center">
+                            <h3 style={{ fontSize: '22px', fontWeight: '900', color: '#202124', margin: 0, padding: 0, lineHeight: '1.2' }}>
+                              {userName || "Arcade Player"}
+                            </h3>
+                            <div style={{ marginTop: '6px' }}>
+                              <span style={{ display: 'inline-block', fontSize: '10px', fontWeight: 'bold', color: '#1a73e8', backgroundColor: '#e8f0fe', padding: '4px 10px', borderRadius: '99px', border: '1px solid #d2e3fc', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Cloud Verified
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* 🔥 FIX: Emoji added next to Achievement badge 🔥 */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '10px', fontWeight: '900', color: '#b06000', backgroundColor: '#fff8e1', border: '1px solid #fde293', padding: '6px 12px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            Achievement
+                          </span>
+                          <span style={{ fontSize: '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}>{flexEmoji}</span>
+                        </div>
+                      </div>
+
+                      {/* Main Score Area */}
+                      <div style={{ textAlign: 'center', padding: '24px 0', position: 'relative', zIndex: 10 }}>
+                        <p style={{ fontSize: '13px', fontWeight: '800', color: '#5f6368', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 12px 0' }}>
+                          Total Arcade Points
+                        </p>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '8px' }}>
+                          <span style={{ fontSize: '110px', fontWeight: '900', color: '#1a73e8', lineHeight: '0.8', margin: 0, padding: 0 }}>
+                            {points}
+                          </span>
+                          <span style={{ fontSize: '28px', fontWeight: 'bold', color: '#1a73e8' }}>pts</span>
+                        </div>
+                        
+                        <div style={{ marginTop: '32px' }}>
+                          <span style={{ display: 'inline-block', fontSize: '16px', fontWeight: 'bold', color: '#137333', backgroundColor: '#e6f4ea', padding: '10px 20px', borderRadius: '12px', border: '1px solid #ceead6' }}>
+                            {flexMilestone || "Leveling up my cloud skills!"}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Footer / Branding Area */}
+                      <div className="flex justify-between items-end pt-6 mt-4 border-t border-[#dadce0] relative z-10">
+                        <div className="flex flex-col gap-1">
+                          <p style={{ fontSize: '10px', fontWeight: 'bold', color: '#80868b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+                            Facilitated By
                           </p>
+                          <div className="flex items-center gap-2" style={{ marginTop: '4px' }}>
+                            <span style={{ fontSize: '14px', backgroundColor: '#e6f4ea', color: '#137333', padding: '2px 6px', borderRadius: '4px', border: '1px solid #ceead6' }}>👨‍🏫</span>
+                            <p style={{ fontSize: '16px', fontWeight: '900', color: '#202124', margin: 0 }}>
+                              Manish Kumar
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <span className="inline-block px-3 py-1 bg-[#fff8e1]/90 border border-[#fde293] text-[#b06000] text-[10px] font-black uppercase tracking-widest rounded-md shadow-sm">
-                        Achievement
-                      </span>
-                    </div>
-
-                    {/* Main Score Area - Transparent to see emoji */}
-                    <div className="relative z-10 text-center py-4 my-2">
-                      <p className="text-xs font-extrabold text-[#5f6368] uppercase tracking-[0.15em] mb-1 drop-shadow-md">Total Arcade Points</p>
-                      
-                      <div className="flex justify-center items-baseline gap-1 drop-shadow-md">
-                        <p className="text-8xl font-black text-[#1a73e8]">
-                          {points}
-                        </p>
-                        <span className="text-2xl font-bold text-[#1a73e8]">pts</span>
-                      </div>
-                      
-                      <div className="mt-3">
-                        <p className="text-sm font-bold text-[#137333] bg-[#e6f4ea]/90 backdrop-blur-sm inline-block px-4 py-1.5 rounded-lg border border-[#ceead6] shadow-sm">
-                          {flexMilestone || "Leveling up my cloud skills!"}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Footer / Branding Area */}
-                    <div className="flex justify-between items-end pt-4 border-t border-[#dadce0]/80 relative z-10 mt-2">
-                      <div className="flex flex-col gap-1">
-                        <p className="text-[9px] font-bold text-[#80868b] uppercase tracking-wider">Facilitated By</p>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs bg-[#e6f4ea] text-[#137333] p-1 rounded border border-[#ceead6] leading-none shadow-sm">👨‍🏫</span>
-                          <p className="text-xs font-black text-[#202124] tracking-wide drop-shadow-sm">Manish Kumar</p>
+                        <div className="text-right">
+                          <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#80868b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, marginBottom: '6px' }}>
+                            Season 2026
+                          </p>
+                          <span style={{ fontSize: '12px', fontWeight: '900', color: '#5f6368', backgroundColor: '#f8f9fa', padding: '6px 10px', borderRadius: '6px', border: '1px solid #dadce0' }}>
+                            Arcade Nexus
+                          </span>
                         </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[8px] font-bold text-[#80868b] uppercase tracking-widest mb-1">Season 2026</p>
-                        <p className="text-[10px] font-black text-[#5f6368] bg-[#f8f9fa]/90 px-2 py-1 rounded border border-[#dadce0] shadow-sm">Arcade Nexus</p>
                       </div>
                     </div>
                   </div>
                   {/* ====== END OF PREMIUM CARD ====== */}
 
-                  {/* 🔥 REPLACED: Download and Copy Buttons 🔥 */}
-                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-6">
-                    <button onClick={downloadCardImage} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
+                  {/* 🔥 FIX: WhatsApp and LinkedIn Share Buttons Restored 🔥 */}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-2">
+                    <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
                         <>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> 
-                          Download Poster
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                          Share on WhatsApp
                         </>
                       )}
                     </button>
-                    <button onClick={copyCardImage} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-xl transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
+                    <button onClick={() => shareCardAsImage('linkedin')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-xl transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
                         <>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012-2" /></svg> 
-                          Copy Poster
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> 
+                          Share on LinkedIn
                         </>
                       )}
                     </button>
