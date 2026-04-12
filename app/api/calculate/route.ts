@@ -38,17 +38,25 @@ export async function POST(req: Request) {
     let gamePoints = 0;   
     let skillBadgesCount = 0; 
 
+    // 🔥 SIRF YE EK NAYA VARIABLE ADD KIYA HAI 🔥
+    const completionHistory: any[] = []; 
+
     // 5. Main Logic Loop
     $('.profile-badge').each((index, element) => {
       const card = $(element);
       const dateText = card.find('.ql-body-medium').text();
       const title = card.find('.ql-title-medium').text().toLowerCase(); // Sab lowercase me check karenge
+      const originalTitle = card.find('.ql-title-medium').text().trim(); // Original title history ke liye
 
       // 📅 Date Filter (Sirf 2026 ka data chahiye)
       if (!dateText.includes('2026')) return; 
       
       // Optional: Agar Jan ke starting days skip karne the
       if (/Jan (1|2|3|4),/.test(dateText)) return;
+
+      // 🔥 Naye variables history push karne ke liye
+      let earned = 0;
+      let type = "Game";
 
       // ==========================================
       // 🚀 UPDATED LOGIC FOR 2026 NAMES
@@ -57,11 +65,15 @@ export async function POST(req: Request) {
       // CATEGORY 1: Trivia & Sprints (1 Point each)
       if (title.includes('trivia') || title.includes('sprint')) {
         triviaPoints++;
+        earned = 1;
+        type = "Trivia";
       } 
       
       // CATEGORY 2: Skill Badges (0.5 Point each)
       else if (title.includes('skill badge')) {
         skillBadgesCount++;
+        earned = 0.5;
+        type = "Skill Badge";
       } 
       
       // CATEGORY 3: Games & Milestones
@@ -70,11 +82,13 @@ export async function POST(req: Request) {
         // 🔥 NEW: 3 POINTS GAMES (Ye naya add kiya hai)
         if (title.includes('skills at the pitch') || title.includes('from foundations to wonders')) {
           gamePoints += 3;
+          earned = 3;
         }
 
         // A. Special Games (2 Points)
         else if (title.includes('work life refresh') || title.includes('holi-istic infrastructures')) {
           gamePoints += 2; 
+          earned = 2;
         } 
         
         // B. Standard Games & Levels (1 Point)
@@ -91,7 +105,18 @@ export async function POST(req: Request) {
           title.includes('dialogue design') // 🔥 Naya 1 point game add kiya jaisa tumne bola
         ) {
           gamePoints += 1;
+          earned = 1;
         }
+      }
+
+      // 🔥 SIRF YE HISTORY PUSH LOGIC ADD KIYA HAI 🔥
+      if (earned > 0) {
+        completionHistory.push({
+          name: originalTitle,
+          date: dateText.replace('Completed ', '').trim(),
+          points: earned,
+          type: type
+        });
       }
     });
 
@@ -107,6 +132,7 @@ export async function POST(req: Request) {
         games: gamePoints, 
         skills: skillBadgesCount 
       },
+      completionHistory, // 🔥 AUR YE LINE ADD KI HAI FRONTEND KE LIYE 🔥
       userName,
       userAvatar
     });
