@@ -22,7 +22,7 @@ export default function CalculatorPage() {
   const [hideRedLine, setHideRedLine] = useState(false);
   const [recentUrls, setRecentUrls] = useState<string[]>([]);
 
-  // ================= 🔥 NEW: CELEBRATION GENERATOR STATES 🔥 =================
+  // ================= 🔥 CELEBRATION GENERATOR STATES 🔥 =================
   const [flexName, setFlexName] = useState("");
   const [flexPoints, setFlexPoints] = useState("");
   const [flexMilestone, setFlexMilestone] = useState("");
@@ -144,7 +144,7 @@ export default function CalculatorPage() {
     }
   };
 
-  const websiteUrl = "https://yourwebsite.com"; 
+  const websiteUrl = "https://arcade-calculator.vercel.app/calculator"; 
 
   const shareToWhatsApp = () => {
     const text = `🔥 Yooo! I just reached *${points} points* on the Google Cloud Arcade 2026! 🚀\n\nCheck your own points and track your swags easily using this awesome Calculator:\n${websiteUrl}`;
@@ -157,50 +157,86 @@ export default function CalculatorPage() {
     window.open(linkedInUrl, "_blank");
   };
 
+  // ================= 🔥 FIXED BULLETPROOF SHARE LOGIC 🔥 =================
   const shareCardAsImage = async (platform: 'whatsapp' | 'linkedin') => {
     if (!cardRef.current) return;
     setIsGeneratingImg(true);
 
     try {
+      // Step 1: Scroll to card taaki image cut/blank na aaye
+      cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise(resolve => setTimeout(resolve, 500)); // Thoda wait taaki scroll ruk jaye
+
+      // Step 2: Generate High Quality Canvas
       const canvas = await html2canvas(cardRef.current, {
-        scale: 3, // Increased scale for even better text clarity
+        scale: 2, // Stable resolution for mobile
         useCORS: true, 
-        backgroundColor: null // Transparent so border radius works well
+        backgroundColor: "#ffffff",
+        logging: false
       });
 
       const dataUrl = canvas.toDataURL("image/png");
       const blob = await (await fetch(dataUrl)).blob();
       const file = new File([blob], "Arcade_Milestone.png", { type: "image/png" });
-
+      
       const textForPost = `${flexEmoji} Just hit ${flexPoints || 0} points on Google Cloud Arcade 2026! \n\nCalculate your points here: ${websiteUrl}`;
 
+      // Step 3: Try to use Native Phone Share Menu
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: "My Arcade Milestone",
-          text: textForPost,
-          files: [file]
-        });
+        try {
+          await navigator.share({
+            title: "My Arcade Milestone",
+            text: textForPost,
+            files: [file]
+          });
+          setIsGeneratingImg(false);
+          return; // Agar share success hua toh yahan se wapas laut jao
+        } catch (shareErr: any) {
+          // Agar user back button daba kar share menu close kare, toh error mat do
+          if (shareErr.name === 'AbortError') {
+            setIsGeneratingImg(false);
+            return;
+          }
+          console.warn("Share API failed, falling back to download...");
+          throw new Error("Native share blocked"); // Error throw karo taaki niche fallback chal jaye
+        }
       } else {
+        throw new Error("Share API not supported on this device");
+      }
+
+    } catch (err) {
+      console.log("Using Fallback Download due to error:", err);
+      
+      // ================= 🚀 FALLBACK (PC OR FAILED PHONES) 🚀 =================
+      try {
+        // Agar pehla capture fail hua toh bina scroll ke fir se try karo
+        const canvas = await html2canvas(cardRef.current!, { scale: 2, useCORS: true });
+        const dataUrl = canvas.toDataURL("image/png");
+        
+        // Auto-Download the image
         const link = document.createElement("a");
         link.download = "Arcade_Milestone.png";
         link.href = dataUrl;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         
-        alert("🖼️ Celebration Card Downloaded! You can now attach it to your post.");
+        alert("🖼️ Image Downloaded! Phone block kar raha tha isliye seedha gallery me save kar diya. Ab direct WhatsApp/LinkedIn par attach kar lo!");
         
+        // Open platform
         if (platform === 'whatsapp') {
-          window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(textForPost)}`, "_blank");
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Just hit ' + flexPoints + ' points on Arcade! Check it out: ' + websiteUrl)}`, "_blank");
         } else if (platform === 'linkedin') {
           window.open("https://www.linkedin.com/feed/", "_blank");
         }
+      } catch (fallbackErr) {
+        alert("Oops! Device issue generating image. Try taking a manual screenshot instead!");
       }
-    } catch (err) {
-      console.error("Failed to generate image", err);
-      alert("Oops! Could not generate the card image. Try again.");
     } finally {
       setIsGeneratingImg(false);
     }
   };
+  // =========================================================================
 
   const downloadCSV = () => {
     if (history.length === 0) return;
@@ -429,7 +465,7 @@ export default function CalculatorPage() {
           )}
         </div>
 
-        {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR 🔥 ================= */}
+        {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR (UP) 🔥 ================= */}
         {points !== null && (
         <div className="mt-12 bg-white border border-[#dadce0] rounded-2xl shadow-md overflow-hidden md:-mx-12 animate-fade-in-up">
           <div className="bg-[#f8f9fa] border-b border-[#dadce0] px-6 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -437,7 +473,7 @@ export default function CalculatorPage() {
               <h4 className="text-lg font-extrabold text-[#202124] flex items-center gap-2">
                 🎉 Celebration Card Generator
               </h4>
-              <p className="text-sm text-[#5f6368] font-medium mt-0.5">Create a stunning achievement poster to flex your hard work!</p>
+              <p className="text-sm text-[#5f6368] font-medium mt-0.5">Create a premium achievement poster to flex your hard work!</p>
             </div>
           </div>
           
@@ -488,83 +524,79 @@ export default function CalculatorPage() {
                   </div>
                 </div>
 
-                {/* Right Col: PREMIUM LIVE CARD & Actions */}
+                {/* Right Col: PREMIUM UI CARD & Actions */}
                 <div className="w-full lg:w-2/3 flex flex-col items-center">
                   
-                  {/* ================= THE PREMIUM CARD UI ================= */}
-                  <div ref={cardRef} className="w-full max-w-md bg-gradient-to-br from-[#0B1121] via-[#15234b] to-[#2D1B4E] p-8 rounded-[2rem] shadow-2xl relative overflow-hidden text-white border border-white/10">
+                  {/* ====== THE ULTIMATE PREMIUM WHITE CARD UI ====== */}
+                  <div ref={cardRef} className="w-full max-w-lg bg-[#ffffff] p-6 rounded-xl shadow-[0_10px_30px_-15px_rgba(0,0,0,0.15)] relative overflow-hidden border border-[#dadce0] flex flex-col">
                     
-                    {/* Decorative Elements */}
-                    <div className="absolute -right-12 -top-12 text-[12rem] opacity-5 rotate-12 pointer-events-none select-none">{flexEmoji}</div>
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#4285f4] via-[#34a853] via-[#fbbc04] to-[#ea4335]"></div>
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#4285f4] rounded-full blur-[80px] opacity-30"></div>
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#a142f4] rounded-full blur-[80px] opacity-30"></div>
-                    
-                    {/* Top Header: Achievement Label */}
-                    <div className="flex justify-between items-start mb-8 relative z-10">
-                      <div>
-                        <span className="inline-block px-3 py-1 bg-white/10 border border-white/20 text-[#8ab4f8] text-[10px] font-black uppercase tracking-widest rounded-full mb-3 backdrop-blur-sm shadow-sm">
-                          Achievement Unlocked
-                        </span>
-                        <div className="flex items-center gap-3">
-                          {userAvatar ? (
-                            <img src={userAvatar} crossOrigin="anonymous" className="w-14 h-14 rounded-full border-2 border-[#8ab4f8] shadow-[0_0_15px_rgba(138,180,248,0.4)] object-cover" alt="Avatar"/>
-                          ) : (
-                            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#1a73e8] to-[#8ab4f8] flex items-center justify-center text-white font-bold text-2xl border-2 border-white/20 shadow-lg">
-                              {userName ? userName.charAt(0).toUpperCase() : "U"}
-                            </div>
-                          )}
-                          <div className="flex flex-col">
-                            <h3 className="text-xl font-black text-white leading-tight drop-shadow-md truncate max-w-[180px]">{userName || "Arcade Player"}</h3>
-                            <p className="text-[11px] font-medium text-[#9aa0a6] mt-0.5">Google Cloud Skills Boost</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Floating Emoji Badge */}
-                      <div className="w-14 h-14 bg-gradient-to-br from-white/20 to-white/5 border border-white/30 rounded-full flex items-center justify-center text-3xl shadow-xl backdrop-blur-md transform rotate-12">
-                        {flexEmoji}
-                      </div>
+                    {/* Background Accents (Giant subtle emoji) */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-15 pointer-events-none select-none z-0 overflow-hidden">
+                      <span className="text-[18rem] leading-none transform -rotate-12">{flexEmoji}</span>
                     </div>
 
-                    {/* Main Score Area */}
-                    <div className="mb-8 relative z-10 text-center bg-white/5 py-8 rounded-2xl border border-white/10 backdrop-blur-sm shadow-inner overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 to-transparent"></div>
-                      <p className="text-[11px] font-black text-[#8ab4f8] uppercase tracking-[0.2em] mb-2 relative z-10 drop-shadow-md">Season 2026 Arcade Points</p>
+                    {/* Top Google Colors Bar */}
+                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#4285f4] via-[#34a853] via-[#fbbc04] to-[#ea4335] z-10"></div>
+
+                    {/* Top Header */}
+                    <div className="flex justify-between items-start relative z-10 mb-4">
+                      <div className="flex items-center gap-3">
+                        {userAvatar ? (
+                          <img src={userAvatar} crossOrigin="anonymous" className="w-12 h-12 rounded-full border-2 border-white shadow-sm ring-2 ring-[#e8f0fe] object-cover" alt="Avatar"/>
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#1a73e8] to-[#6ab0ff] flex items-center justify-center text-white font-bold text-xl shadow-sm ring-2 ring-[#e8f0fe]">
+                            {userName ? userName.charAt(0).toUpperCase() : "U"}
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <h3 className="text-lg font-black text-[#202124] leading-tight truncate max-w-[180px] drop-shadow-sm">{userName || "Arcade Player"}</h3>
+                          <p className="text-[10px] font-bold text-[#1a73e8] uppercase tracking-wider bg-[#e8f0fe]/90 inline-block px-2 py-0.5 rounded-full mt-1 border border-[#d2e3fc] w-max shadow-sm">
+                            Cloud Verified
+                          </p>
+                        </div>
+                      </div>
+                      <span className="inline-block px-3 py-1 bg-[#fff8e1]/90 border border-[#fde293] text-[#b06000] text-[10px] font-black uppercase tracking-widest rounded-md shadow-sm">
+                        Achievement
+                      </span>
+                    </div>
+
+                    {/* Main Score Area - Transparent to see emoji */}
+                    <div className="relative z-10 text-center py-4 my-2">
+                      <p className="text-xs font-extrabold text-[#5f6368] uppercase tracking-[0.15em] mb-1 drop-shadow-md">Total Arcade Points</p>
                       
-                      <div className="flex justify-center items-baseline gap-2 relative z-10">
-                        <p className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-[#e8f0fe] drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]">
+                      <div className="flex justify-center items-baseline gap-1 drop-shadow-md">
+                        <p className="text-8xl font-black text-[#1a73e8]">
                           {points}
                         </p>
-                        <span className="text-2xl font-bold text-[#8ab4f8]">pts</span>
+                        <span className="text-2xl font-bold text-[#1a73e8]">pts</span>
                       </div>
                       
-                      <div className="mt-4 inline-block">
-                        <p className="text-sm font-bold text-[#fbbc04] bg-[#fbbc04]/10 px-4 py-1.5 rounded-lg border border-[#fbbc04]/30 shadow-sm">
+                      <div className="mt-3">
+                        <p className="text-sm font-bold text-[#137333] bg-[#e6f4ea]/90 backdrop-blur-sm inline-block px-4 py-1.5 rounded-lg border border-[#ceead6] shadow-sm">
                           {flexMilestone || "Leveling up my cloud skills!"}
                         </p>
                       </div>
                     </div>
 
                     {/* Footer / Branding Area */}
-                    <div className="flex justify-between items-end pt-4 border-t border-white/10 relative z-10">
+                    <div className="flex justify-between items-end pt-4 border-t border-[#dadce0]/80 relative z-10 mt-2">
                       <div className="flex flex-col gap-1">
-                        <p className="text-[10px] font-bold text-[#9aa0a6] uppercase tracking-wider">Facilitated By</p>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs bg-[#34a853]/20 text-[#34a853] p-1 rounded-md border border-[#34a853]/30">👨‍🏫</span>
-                          <p className="text-sm font-black text-white tracking-wide">Manish Kumar</p>
+                        <p className="text-[9px] font-bold text-[#80868b] uppercase tracking-wider">Facilitated By</p>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs bg-[#e6f4ea] text-[#137333] p-1 rounded border border-[#ceead6] leading-none shadow-sm">👨‍🏫</span>
+                          <p className="text-xs font-black text-[#202124] tracking-wide drop-shadow-sm">Manish Kumar</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest mb-1">Generated On</p>
-                        <p className="text-[11px] font-black text-white/70 bg-white/5 px-2 py-1 rounded border border-white/10">Arcade Nexus</p>
+                        <p className="text-[8px] font-bold text-[#80868b] uppercase tracking-widest mb-1">Season 2026</p>
+                        <p className="text-[10px] font-black text-[#5f6368] bg-[#f8f9fa]/90 px-2 py-1 rounded border border-[#dadce0] shadow-sm">Arcade Nexus</p>
                       </div>
                     </div>
                   </div>
-                  {/* ================= END OF PREMIUM CARD ================= */}
+                  {/* ====== END OF PREMIUM CARD ====== */}
 
                   {/* Share as Image Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md mt-6">
+                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-6">
                     <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Generating..." : (
                         <><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Share Photo</>
@@ -583,7 +615,7 @@ export default function CalculatorPage() {
         </div>
         )}
 
-        {/* ================= 🔥 BADGE COMPLETION HISTORY BOX (BOTTOM) 🔥 ================= */}
+        {/* ================= 🔥 WIDER BADGE COMPLETION HISTORY BOX (BOTTOM) 🔥 ================= */}
         {points !== null && (
           <div className="mt-12 animate-fade-in-up md:-mx-12">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4 px-4 md:px-0">
