@@ -157,81 +157,73 @@ export default function CalculatorPage() {
     window.open(linkedInUrl, "_blank");
   };
 
-  // ================= 🔥 FIXED BULLETPROOF SHARE LOGIC 🔥 =================
-  const shareCardAsImage = async (platform: 'whatsapp' | 'linkedin') => {
+  // ================= 🔥 FIXED LOGIC: DOWNLOAD & COPY POSTER 🔥 =================
+  
+  // 1. Download Poster
+  const downloadCardImage = async () => {
     if (!cardRef.current) return;
     setIsGeneratingImg(true);
 
     try {
-      // Step 1: Scroll to card taaki image cut/blank na aaye
       cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      await new Promise(resolve => setTimeout(resolve, 500)); // Thoda wait taaki scroll ruk jaye
+      await new Promise(resolve => setTimeout(resolve, 800)); // wait for scroll
 
-      // Step 2: Generate High Quality Canvas
       const canvas = await html2canvas(cardRef.current, {
-        scale: 2, // Stable resolution for mobile
+        scale: 2, 
         useCORS: true, 
         backgroundColor: "#ffffff",
         logging: false
       });
 
       const dataUrl = canvas.toDataURL("image/png");
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], "Arcade_Milestone.png", { type: "image/png" });
+      const link = document.createElement("a");
+      link.download = "Arcade_Milestone_Poster.png";
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       
-      const textForPost = `${flexEmoji} Just hit ${flexPoints || 0} points on Google Cloud Arcade 2026! \n\nCalculate your points here: ${websiteUrl}`;
+      alert("🖼️ Poster Downloaded successfully! Now attach it and share anywhere.");
+    } catch (err) {
+      console.error("Canvas generation failed", err);
+      alert("Oops! Could not download the poster. Please try again.");
+    } finally {
+      setIsGeneratingImg(false);
+    }
+  };
 
-      // Step 3: Try to use Native Phone Share Menu
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            title: "My Arcade Milestone",
-            text: textForPost,
-            files: [file]
-          });
-          setIsGeneratingImg(false);
-          return; // Agar share success hua toh yahan se wapas laut jao
-        } catch (shareErr: any) {
-          // Agar user back button daba kar share menu close kare, toh error mat do
-          if (shareErr.name === 'AbortError') {
-            setIsGeneratingImg(false);
-            return;
+  // 2. Copy Poster
+  const copyCardImage = async () => {
+    if (!cardRef.current) return;
+    setIsGeneratingImg(true);
+
+    try {
+      cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      const canvas = await html2canvas(cardRef.current, {
+        scale: 2, 
+        useCORS: true, 
+        backgroundColor: "#ffffff",
+        logging: false
+      });
+
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          try {
+            const item = new ClipboardItem({ "image/png": blob });
+            await navigator.clipboard.write([item]);
+            alert("✅ Poster Copied to Clipboard! You can now 'Paste' it directly in WhatsApp or LinkedIn.");
+          } catch (clipboardErr) {
+            console.error("Clipboard error", clipboardErr);
+            alert("Your browser blocks direct image copying. Please use the 'Download Poster' button instead! 📥");
           }
-          console.warn("Share API failed, falling back to download...");
-          throw new Error("Native share blocked"); // Error throw karo taaki niche fallback chal jaye
         }
-      } else {
-        throw new Error("Share API not supported on this device");
-      }
+      }, "image/png");
 
     } catch (err) {
-      console.log("Using Fallback Download due to error:", err);
-      
-      // ================= 🚀 FALLBACK (PC OR FAILED PHONES) 🚀 =================
-      try {
-        // Agar pehla capture fail hua toh bina scroll ke fir se try karo
-        const canvas = await html2canvas(cardRef.current!, { scale: 2, useCORS: true });
-        const dataUrl = canvas.toDataURL("image/png");
-        
-        // Auto-Download the image
-        const link = document.createElement("a");
-        link.download = "Arcade_Milestone.png";
-        link.href = dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        alert("🖼️ Image Downloaded! Phone block kar raha tha isliye seedha gallery me save kar diya. Ab direct WhatsApp/LinkedIn par attach kar lo!");
-        
-        // Open platform
-        if (platform === 'whatsapp') {
-          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent('Just hit ' + flexPoints + ' points on Arcade! Check it out: ' + websiteUrl)}`, "_blank");
-        } else if (platform === 'linkedin') {
-          window.open("https://www.linkedin.com/feed/", "_blank");
-        }
-      } catch (fallbackErr) {
-        alert("Oops! Device issue generating image. Try taking a manual screenshot instead!");
-      }
+      console.error("Canvas generation failed", err);
+      alert("Oops! Could not copy the poster. Please try again.");
     } finally {
       setIsGeneratingImg(false);
     }
@@ -595,16 +587,22 @@ export default function CalculatorPage() {
                   </div>
                   {/* ====== END OF PREMIUM CARD ====== */}
 
-                  {/* Share as Image Buttons */}
+                  {/* 🔥 REPLACED: Download and Copy Buttons 🔥 */}
                   <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-6">
-                    <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
-                      {isGeneratingImg ? "Generating..." : (
-                        <><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Share Photo</>
+                    <button onClick={downloadCardImage} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
+                      {isGeneratingImg ? "Processing..." : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> 
+                          Download Poster
+                        </>
                       )}
                     </button>
-                    <button onClick={() => shareCardAsImage('linkedin')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-xl transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
-                      {isGeneratingImg ? "Generating..." : (
-                        <><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> Share Photo</>
+                    <button onClick={copyCardImage} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-xl transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
+                      {isGeneratingImg ? "Processing..." : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012-2" /></svg> 
+                          Copy Poster
+                        </>
                       )}
                     </button>
                   </div>
