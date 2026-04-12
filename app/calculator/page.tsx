@@ -174,6 +174,7 @@ export default function CalculatorPage() {
         onclone: (clonedDoc) => {
           const card = clonedDoc.getElementById("celebration-card");
           if (card) {
+            // 🔥 Dono widths perfect match taaki koi overlap na ho 🔥
             card.style.width = "500px";
             card.style.maxWidth = "500px";
             card.style.height = "auto";
@@ -472,7 +473,7 @@ export default function CalculatorPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4 px-4 md:px-0">
               <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
                 <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                Badge Completion History
+                Badge Completion Ledger
               </h4>
               
               <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all w-full sm:w-auto">
@@ -582,20 +583,21 @@ export default function CalculatorPage() {
                 {/* Right Col: PREMIUM UI CARD & Actions */}
                 <div className="w-full lg:w-2/3 flex flex-col items-center">
                   
-                  {/* ====== EXACT SCREEN-TO-CANVAS LAYOUT UI ====== */}
+                  {/* ====== THE ULTIMATE ANTI-CRASH PREMIUM WHITE CARD UI ====== */}
                   <div className="w-full overflow-x-auto pb-4 flex justify-center">
                     <div 
                       ref={cardRef} 
                       id="celebration-card"
                       style={{ 
                         fontFamily: 'Arial, Helvetica, sans-serif',
-                        minWidth: '550px',
+                        width: '500px', // 🔥 FIXED: Match exact pixel width to stop overlap! 🔥
+                        minWidth: '500px',
                         backgroundColor: '#ffffff'
                       }}
-                      className="w-full max-w-[550px] mx-auto p-8 rounded-xl shadow-sm relative overflow-hidden border border-[#dadce0] flex flex-col"
+                      className="w-full max-w-[500px] mx-auto p-8 rounded-xl shadow-sm relative overflow-hidden border border-[#dadce0] flex flex-col"
                     >
                       
-                      {/* Background Accents (Giant emoji properly centered) */}
+                      {/* Background Accents */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-[0.08] pointer-events-none select-none z-0">
                         <span style={{ fontSize: '16rem', display: 'block', lineHeight: 1 }}>{flexEmoji}</span>
                       </div>
@@ -603,7 +605,7 @@ export default function CalculatorPage() {
                       {/* Top Google Colors Bar */}
                       <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#4285f4] via-[#34a853] via-[#fbbc04] to-[#ea4335] z-10"></div>
 
-                      {/* Top Header - Using Explicit Inline CSS to stop canvas chopping */}
+                      {/* Top Header */}
                       <div className="flex justify-between items-start relative z-10 mb-6 pt-2">
                         <div className="flex items-center gap-4">
                           <div className="w-14 h-14 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold text-2xl ring-2 ring-[#e8f0fe] shrink-0">
@@ -620,30 +622,28 @@ export default function CalculatorPage() {
                             </div>
                           </div>
                         </div>
-                        {/* 🔥 FIX: Emoji added next to Achievement badge 🔥 */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           <span style={{ fontSize: '10px', fontWeight: '900', color: '#b06000', backgroundColor: '#fff8e1', border: '1px solid #fde293', padding: '6px 12px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                             Achievement
                           </span>
-                          <span style={{ fontSize: '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}>{flexEmoji}</span>
+                          <span style={{ fontSize: '32px' }}>{flexEmoji}</span>
                         </div>
                       </div>
 
-                      {/* Main Score Area - Fixed Alignment and Spacing */}
+                      {/* Main Score Area - 🔥 FIXED LINE HEIGHT AND MARGINS 🔥 */}
                       <div style={{ textAlign: 'center', padding: '24px 0', position: 'relative', zIndex: 10 }}>
                         <p style={{ fontSize: '13px', fontWeight: '800', color: '#5f6368', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 12px 0' }}>
                           Total Arcade Points
                         </p>
                         
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '8px' }}>
-                          <span style={{ fontSize: '110px', fontWeight: '900', color: '#1a73e8', lineHeight: '0.8', margin: 0, padding: 0 }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}>
+                          <span style={{ fontSize: '110px', fontWeight: '900', color: '#1a73e8', lineHeight: '1', margin: 0, padding: 0 }}>
                             {points}
                           </span>
                           <span style={{ fontSize: '28px', fontWeight: 'bold', color: '#1a73e8' }}>pts</span>
                         </div>
                         
-                        {/* Huge Margin top to prevent overlapping text */}
-                        <div style={{ marginTop: '32px' }}>
+                        <div style={{ marginTop: '24px' }}>
                           <span style={{ display: 'inline-block', fontSize: '16px', fontWeight: 'bold', color: '#137333', backgroundColor: '#e6f4ea', padding: '10px 20px', borderRadius: '12px', border: '1px solid #ceead6' }}>
                             {flexMilestone || "Leveling up my cloud skills!"}
                           </span>
@@ -676,7 +676,7 @@ export default function CalculatorPage() {
                   </div>
                   {/* ====== END OF PREMIUM CARD ====== */}
 
-                  {/* Share/Download Buttons - RESTORED TO WHATSAPP/LINKEDIN */}
+                  {/* Share Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-2">
                     <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
@@ -689,7 +689,7 @@ export default function CalculatorPage() {
                     <button onClick={() => shareCardAsImage('linkedin')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-xl transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
                         <>
-                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> 
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                           Share on LinkedIn
                         </>
                       )}
