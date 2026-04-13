@@ -2,7 +2,7 @@
 
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // 🔥 UPDATED: Official FAQ Data from Google Cloud Arcade Site
 const officialFaqs = [
@@ -205,17 +205,15 @@ export default function FacilitatorPage() {
                   <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
                     <h2 className="text-xl sm:text-[22px] font-semibold text-[#202124] mb-6 tracking-tight">Registration Status</h2>
                     
-                    {/* Dark Grey changed to Sleek Premium Slate */}
-                    <div className="w-full bg-[#343a40] text-white text-center font-bold py-3.5 rounded-md mb-4 shadow-sm text-[15px]">
+                    {/* 🔥 FIXED: Black changed to Premium Blue! 🔥 */}
+                    <div className="w-full bg-[#1a73e8] text-white text-center font-bold py-3.5 rounded-md mb-4 shadow-sm text-[15px]">
                       Enrolments Opening Soon
                     </div>
                     
-                    {/* Italic removed, font-medium added */}
                     <p className="text-[#5f6368] text-sm font-medium text-center mb-auto pb-4">
                       Enrolments are expected to open in March 2026 in the Arcade Facilitator Program
                     </p>
 
-                    {/* Purple changed to Classic Blue Gradient */}
                     <a href="#" className="w-full bg-gradient-to-r from-[#1a73e8] to-[#1557b0] text-white flex items-center justify-center gap-2 py-3.5 rounded-md font-bold text-[15px] hover:shadow-md hover:-translate-y-0.5 transition-all shadow-sm">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                          <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
@@ -232,13 +230,12 @@ export default function FacilitatorPage() {
                   <div className="md:col-span-2 bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center">
                     <h2 className="text-xl sm:text-[22px] font-semibold text-[#202124] mb-6 tracking-tight">Facilitator Referral Code</h2>
                     
-                    {/* Simple Blue changed to Premium Dark Slate Gradient */}
-                    <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] rounded-lg p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+                    {/* 🔥 FIXED: Dark Black changed to Premium Blue Gradient! 🔥 */}
+                    <div className="bg-gradient-to-r from-[#1a73e8] to-[#1557b0] rounded-lg p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
                       <div className="font-mono text-xl sm:text-[22px] text-white font-bold tracking-[0.1em]">
                         ********-**-***-***
                       </div>
-                      {/* Grey button inside banner changed to Sleek Glassmorphism style */}
-                      <button className="bg-white/10 text-white border border-white/20 font-semibold px-6 py-2.5 rounded-md text-sm cursor-not-allowed hover:bg-white/20 transition-colors backdrop-blur-sm">
+                      <button className="bg-white/20 text-white border border-white/30 font-semibold px-6 py-2.5 rounded-md text-sm cursor-not-allowed hover:bg-white/30 transition-colors backdrop-blur-sm">
                         Coming Soon
                       </button>
                     </div>
@@ -294,8 +291,8 @@ export default function FacilitatorPage() {
                 </p>
               </div>
 
-              {/* Grid for Point Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {/* 🔥 FIXED: 3 Cards Grid Instead of 4 (Trivia Removed) 🔥 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 
                 {/* Card 1: Game Badges */}
                 <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
@@ -308,18 +305,7 @@ export default function FacilitatorPage() {
                   </p>
                 </div>
 
-                {/* Card 2: Trivia Badges */}
-                <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-                  <div className="w-12 h-12 rounded-full bg-[#fef7e0] flex items-center justify-center text-2xl mb-4">
-                    ⚡
-                  </div>
-                  <h3 className="text-lg font-bold text-[#202124] mb-2">Trivia Badges</h3>
-                  <p className="text-[#5f6368] text-sm leading-relaxed">
-                    For each "Trivia" badge you complete, you will be awarded with <strong className="text-[#202124]">1 Arcade Point</strong>. Complete more trivia to earn more points!
-                  </p>
-                </div>
-
-                {/* Card 3: Skill Badges */}
+                {/* Card 2: Skill Badges */}
                 <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
                   <div className="w-12 h-12 rounded-full bg-[#e6f4ea] flex items-center justify-center text-2xl mb-4">
                     🛡️
@@ -330,7 +316,7 @@ export default function FacilitatorPage() {
                   </p>
                 </div>
 
-                {/* Card 4: Lab-free Courses */}
+                {/* Card 3: Lab-free Courses */}
                 <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
                   <div className="w-12 h-12 rounded-full bg-[#fce8e6] flex items-center justify-center text-2xl mb-4">
                     ⚠️
@@ -739,9 +725,10 @@ export default function FacilitatorPage() {
                 <p className="text-[#5f6368] mt-3 text-base">Find answers to common questions about the Arcade Facilitator Program.</p>
               </div>
               
-              <div className="border border-[#e8eaed] rounded-xl bg-white divide-y divide-[#e8eaed] shadow-sm">
+              {/* 🔥 FIXED: Curved borders added here 🔥 */}
+              <div className="border border-[#e8eaed] rounded-[1.5rem] bg-white divide-y divide-[#e8eaed] shadow-sm">
                 {officialFaqs.map((faq, index) => (
-                  <div key={index} className="overflow-hidden bg-white">
+                  <div key={index} className={`overflow-hidden bg-white ${index === 0 ? 'rounded-t-[1.5rem]' : ''} ${index === officialFaqs.length - 1 ? 'rounded-b-[1.5rem]' : ''}`}>
                     <button
                       className="w-full flex justify-between items-center p-6 text-left hover:bg-[#f8f9fa] transition-colors gap-4 focus:outline-none"
                       onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
