@@ -10,7 +10,7 @@ export default function AboutPage() {
 
       <main className="pt-28 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto relative z-10 space-y-24">
         
-      {/* ================= 1. HERO SECTION (INDIGO THEME) ================= */}
+    {/* ================= 1. HERO SECTION (PREMIUM DARK THEME) ================= */}
         <section className="pt-8"> {/* Thoda upar se gap de diya pt-8 */}
           
           {/* HEADING SECTION: Thoda aur space bottom me (mb-16) */}
@@ -23,38 +23,38 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* COMPACT DARK PINK/PURPLE BENTO CARD */}
-          <div className="relative bg-gradient-to-br from-[#3b0731] to-[#1f031a] rounded-[2rem] p-1 border border-[#6e1e5b] shadow-[0_20px_40px_rgba(219,39,119,0.15)] overflow-hidden group hover:border-[#9d2b82] transition-colors duration-500 max-w-5xl mx-auto elevation-hero">
+          {/* COMPACT PREMIUM DARK BENTO CARD */}
+          <div className="relative bg-[#1e1e1e] rounded-[2rem] p-1 border border-[#333] shadow-[0_20px_40px_rgba(0,0,0,0.15)] overflow-hidden group hover:border-[#555] transition-colors duration-500 max-w-5xl mx-auto elevation-hero">
             
-            {/* Dark Pink Ambient inner glow */}
-            <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[80%] bg-[#db2777]/30 blur-[120px] rounded-full pointer-events-none transition-all duration-700 group-hover:bg-[#ec4899]/40"></div>
+            {/* Subtle blue/indigo ambient inner glow for dark theme */}
+            <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[80%] bg-[#8ab4f8]/20 blur-[120px] rounded-full pointer-events-none transition-all duration-700 group-hover:bg-[#8ab4f8]/30"></div>
             
             {/* Inner div with reduced padding (p-8 md:p-10 instead of p-14) */}
-            <div className="bg-[#280421]/90 backdrop-blur-md rounded-[1.8rem] p-8 md:p-10 relative z-10 border border-white/5 transition-colors duration-300 group-hover:bg-[#310629]">
+            <div className="bg-[#2d2d2d]/90 backdrop-blur-md rounded-[1.8rem] p-8 md:p-10 relative z-10 border border-[#444] transition-colors duration-300 group-hover:bg-[#333]">
               <div className="flex flex-col lg:flex-row gap-8 items-start">
                 
                 
                 <div>
-                  <p className="text-[#f472b6] font-bold tracking-widest text-xs uppercase mb-2">About Arcade Program</p>
+                  <p className="text-[#8ab4f8] font-bold tracking-widest text-xs uppercase mb-2">About Arcade Program</p>
                   <h2 className="text-3xl font-bold text-white mb-4 leading-tight">
-                    Master Cloud Skills. <span className="text-[#f472b6] marker-swags">Earn Swags.</span>
+                    Master Cloud Skills. <span className="text-[#8ab4f8] marker-swags">Earn Swags.</span>
                   </h2>
-                  <p className="text-[#fbcfe8] opacity-80 text-base leading-relaxed mb-6 max-w-3xl">
+                  <p className="text-[#aaa] text-base leading-relaxed mb-6 max-w-3xl">
                     Join an always-on, no-cost gaming campaign where technical practitioners of all levels learn computing, application development, big data & AI/ML. Earn digital badges and convert them into official Google Cloud goodies.
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-6 border-t border-[#6e1e5b] separator-pink">
-                    <div className="bg-[#3b0a31] p-4 rounded-xl border border-[#6e1e5b] transition-colors group-hover:bg-[#4a0d3e] group-hover:shadow-[0_4px_12px_rgba(219,39,119,0.2)] hover:-translate-y-0.5">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-6 border-t border-[#444] separator-pink">
+                    <div className="bg-[#1e1e1e] p-4 rounded-xl border border-[#333] transition-colors group-hover:bg-[#2d2d2d] group-hover:shadow-[0_4px_12px_rgba(138,180,248,0.1)] hover:-translate-y-0.5">
                       <h3 className="text-white font-bold text-base mb-1.5">1. Digital Badges</h3>
-                      <p className="text-[#fbcfe8] opacity-70 text-sm">Showcase Google Cloud-hosted badges on your LinkedIn & resume.</p>
+                      <p className="text-[#aaa] text-sm">Showcase Google Cloud-hosted badges on your LinkedIn & resume.</p>
                     </div>
-                    <div className="bg-[#3b0a31] p-4 rounded-xl border border-[#6e1e5b] transition-colors group-hover:bg-[#4a0d3e] group-hover:shadow-[0_4px_12px_rgba(219,39,119,0.2)] hover:-translate-y-0.5">
+                    <div className="bg-[#1e1e1e] p-4 rounded-xl border border-[#333] transition-colors group-hover:bg-[#2d2d2d] group-hover:shadow-[0_4px_12px_rgba(138,180,248,0.1)] hover:-translate-y-0.5">
                       <h3 className="text-white font-bold text-base mb-1.5">2. Hands-on XP</h3>
-                      <p className="text-[#fbcfe8] opacity-70 text-sm">Move beyond theory. Practice in real-world cloud environments.</p>
+                      <p className="text-[#aaa] text-sm">Move beyond theory. Practice in real-world cloud environments.</p>
                     </div>
-                    <div className="bg-[#3b0a31] p-4 rounded-xl border border-[#6e1e5b] transition-colors group-hover:bg-[#4a0d3e] group-hover:shadow-[0_4px_12px_rgba(219,39,119,0.2)] hover:-translate-y-0.5">
+                    <div className="bg-[#1e1e1e] p-4 rounded-xl border border-[#333] transition-colors group-hover:bg-[#2d2d2d] group-hover:shadow-[0_4px_12px_rgba(138,180,248,0.1)] hover:-translate-y-0.5">
                       <h3 className="text-white font-bold text-base mb-1.5">3. Claim Prizes</h3>
-                      <p className="text-[#fbcfe8] opacity-70 text-sm">Earn Arcade points for every skill badge and claim official merchandise.</p>
+                      <p className="text-[#aaa] text-sm">Earn Arcade points for every skill badge and claim official merchandise.</p>
                     </div>
                   </div>
                 </div>
