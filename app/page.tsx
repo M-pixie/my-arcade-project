@@ -105,39 +105,64 @@ export default function HomePage() {
     setFormSubCategory("");
   };
 
-  // 🔥 PUSH VOTES TO FIREBASE 🔥
+  // 🔥 PUSH VOTES TO FIREBASE (Fixed Bug: SetDoc with merge so it never fails) 🔥
   const handlePrintoVoteClick = async (vote: "received" | "not_received") => {
-    if (printoVote) return; // Prevent multi-voting
+    if (printoVote === vote) return; // Prevent clicking the same vote again
+    
+    const previousVote = printoVote;
     setPrintoVote(vote);
     localStorage.setItem("printoVote", vote);
 
     const statsRef = doc(db, "swagStats", "cohort2");
-    await updateDoc(statsRef, {
+    const updates: any = {
       [vote === "received" ? "printoReceived" : "printoNotReceived"]: increment(1)
-    });
+    };
+    
+    // If they changed their vote, remove the old one
+    if (previousVote) {
+      updates[previousVote === "received" ? "printoReceived" : "printoNotReceived"] = increment(-1);
+    }
+    
+    await setDoc(statsRef, updates, { merge: true });
   };
 
   const handleWhiteSquareVoteClick = async (vote: "received" | "not_received") => {
-    if (whiteSquareVote) return; // Prevent multi-voting
+    if (whiteSquareVote === vote) return; 
+
+    const previousVote = whiteSquareVote;
     setWhiteSquareVote(vote);
     localStorage.setItem("whiteSquareVote", vote);
 
     const statsRef = doc(db, "swagStats", "cohort2");
-    await updateDoc(statsRef, {
+    const updates: any = {
       [vote === "received" ? "wsReceived" : "wsNotReceived"]: increment(1)
-    });
+    };
+    
+    if (previousVote) {
+      updates[previousVote === "received" ? "wsReceived" : "wsNotReceived"] = increment(-1);
+    }
+    
+    await setDoc(statsRef, updates, { merge: true });
   };
 
-  // 🔥 PUSH LIKES TO FIREBASE 🔥
+  // 🔥 PUSH LIKES TO FIREBASE (Fixed Bug: No -1) 🔥
   const handleLikeClick = async () => {
     const newHasLiked = !hasLiked;
+    
+    // Prevent dropping below 0 locally
+    if (!newHasLiked && likes <= 0) {
+      setHasLiked(newHasLiked);
+      localStorage.setItem("swagHasLiked", newHasLiked.toString());
+      return;
+    }
+
     setHasLiked(newHasLiked);
     localStorage.setItem("swagHasLiked", newHasLiked.toString());
 
     const statsRef = doc(db, "swagStats", "cohort2");
-    await updateDoc(statsRef, {
+    await setDoc(statsRef, {
       likes: increment(newHasLiked ? 1 : -1)
-    });
+    }, { merge: true });
   };
 
   // 🔥 PUSH REVIEWS TO FIREBASE 🔥
@@ -333,7 +358,7 @@ export default function HomePage() {
         </div>
 
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#202124] mb-6 leading-tight">
-          Arcade'26
+          Arcade Program
         </h1>
 
         <div className="w-full mb-4">
@@ -642,7 +667,7 @@ export default function HomePage() {
                   className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${hasLiked ? 'bg-[#fce8e6] border-[#f8c1cb] text-[#c5221f]' : 'bg-white border-[#dadce0] text-[#5f6368] hover:bg-[#f8f9fa]'}`}
                 >
                   <svg className={`w-5 h-5 ${hasLiked ? 'fill-current' : 'fill-none stroke-current'}`} viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                  <span className="font-bold">{likes}</span>
+                  <span className="font-bold">{Math.max(0, likes)}</span>
                 </button>
               </div>
 
@@ -1001,6 +1026,197 @@ export default function HomePage() {
           </div>
         </section>
 
+{/* ================= FREE CREDITS GUIDE ================= */}
+<section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0] overflow-hidden">
+  <div className="max-w-4xl mx-auto px-6 relative z-10">
+    
+    {/* Purple Header Banner */}
+    <div className="bg-gradient-to-r from-[#6b3cb0] to-[#8430ce] rounded-3xl p-10 md:p-14 text-center shadow-xl mb-12 relative overflow-hidden">
+      {/* Decorative bg elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+         <div className="absolute -top-20 -right-20 w-64 h-64 bg-white rounded-full blur-[80px]"></div>
+         <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#d7aefb] rounded-full blur-[80px]"></div>
+      </div>
+      
+      <div className="relative z-10">
+        <div className="w-16 h-16 mx-auto bg-white/20 rounded-2xl flex items-center justify-center text-4xl mb-6 backdrop-blur-sm border border-white/30 text-white">
+          🎁
+        </div>
+        <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
+          How to Claim Google Skills Credits<br/><span className="text-[#fde293]">Worth $309 for FREE</span>
+        </h2>
+        <p className="text-white/90 text-lg max-w-2xl mx-auto font-medium">
+          Follow these simple steps to successfully claim your 309 free credits
+        </p>
+      </div>
+    </div>
+
+    {/* Special Link Box (Dark Theme - Matched with Pro Tips) */}
+    <div className="bg-[#1e1e1e] border border-[#333] rounded-2xl p-6 md:p-8 mb-8 shadow-lg relative overflow-hidden transition-all">
+      <div className="absolute top-6 right-6 bg-[#2d2d2d] text-[#34a853] px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-2 border border-[#444] shadow-sm">
+        <span className="w-2 h-2 rounded-full bg-[#34a853] animate-pulse"></span>
+        ✓ Working
+      </div>
+      
+      <div className="flex items-start gap-4 mb-6">
+        <div className="w-12 h-12 rounded-full bg-[#2d2d2d] text-[#fde293] flex items-center justify-center text-xl shrink-0 border border-[#444]">
+          🔗
+        </div>
+        <div className="pr-24">
+          <h3 className="text-xl md:text-2xl font-bold text-[#fde293] mb-2">Special Credit Link</h3>
+          <p className="text-[#aaa] text-sm md:text-base font-medium">
+            Use this exclusive link to receive your <strong className="text-[#34a853]">309 credits</strong>
+          </p>
+          <p className="text-[#8ab4f8] text-xs font-bold mt-2 flex items-center gap-1.5">
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+            Last updated & verified: February 2026
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-[#2d2d2d] border border-[#444] rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex-1 w-full overflow-hidden">
+          <p className="text-xs text-[#888] font-bold uppercase mb-1">Special Link:</p>
+          <code className="text-sm md:text-base text-[#8ab4f8] block truncate w-full">
+            https://www.skills.google/catalog?<span className="bg-[#3c2a00] text-[#fde293] px-1 rounded font-bold">qlcampaign=6m-ctsdq-27</span>
+          </code>
+        </div>
+        <a 
+          href="https://www.skills.google/catalog?qlcampaign=6m-ctsdq-27" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="w-full md:w-auto px-6 py-3 bg-[#d94a11] hover:bg-[#c03f0c] text-white font-bold text-sm rounded-lg shadow-sm transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2 whitespace-nowrap"
+        >
+          Open Link
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    {/* What You'll Get Box */}
+    <div className="bg-[#f8faff] border-2 border-[#e8f0fe] rounded-2xl p-6 md:p-8 mb-16 shadow-sm transition-all hover:shadow-md">
+      <h3 className="text-xl md:text-2xl font-bold text-[#1a73e8] mb-6 flex items-center gap-2">
+        <span className="text-2xl">💡</span> What You'll Get
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="bg-white border border-[#dadce0] rounded-xl py-6 px-4 text-center shadow-sm">
+          <div className="text-4xl font-black text-[#8430ce] mb-1">9</div>
+          <div className="text-[#5f6368] text-sm font-semibold uppercase tracking-wider">Initial Credits</div>
+        </div>
+        <div className="bg-white border border-[#dadce0] rounded-xl py-6 px-4 text-center shadow-sm">
+          <div className="text-4xl font-black text-[#34a853] mb-1">300</div>
+          <div className="text-[#5f6368] text-sm font-semibold uppercase tracking-wider">Bonus Credits</div>
+        </div>
+        <div className="bg-[#e8f0fe] border border-[#d2e3fc] rounded-xl py-6 px-4 text-center shadow-sm transform md:scale-105 relative">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1a73e8] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">Total Value</div>
+          <div className="text-4xl font-black text-[#1a73e8] mb-1 mt-2">309</div>
+          <div className="text-[#1a73e8] text-sm font-bold uppercase tracking-wider">Total Credits</div>
+        </div>
+      </div>
+    </div>
+
+    {/* Steps List */}
+    <div className="mb-16">
+      <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
+      
+      <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-[#1a73e8] before:via-[#8430ce] before:to-[#34a853] before:opacity-30">
+        
+        {/* Step Items Array Mapping */}
+        {[
+          { 
+            title: "Sign Out of Your Google Skills Account", 
+            desc: "Before starting, make sure you log out of your Google Skills account. This is important to ensure the credits are applied correctly.", 
+            alert: { type: "important", text: "Important: This step is crucial! Credits may not apply if you're already logged in." }
+          },
+          { 
+            title: "Open the Special Credit Link", 
+            desc: "Visit the exclusive link provided above or in the video description.", 
+            alert: { type: "important", text: "Important: This link contains a special code at the end of the URL, which is required to activate the credits." }
+          },
+          { 
+            title: "Sign In to Your Google Skills Account", 
+            desc: "Once the link opens, sign in using your Google account, or your email and password manually.", 
+            alert: { type: "tip", text: "Tip: Use the same account you plan to complete Skill Badges." }
+          },
+          { 
+            title: "Receive Initial Credits", 
+            desc: "After signing in through the special link, you will automatically receive 9 credits in your account.", 
+            alert: null,
+            badge: "9 Credits"
+          },
+          { 
+            title: "Complete One Lab from the Catalog", 
+            desc: "To unlock the remaining credits, from the Google Skills Catalog, search for 'hands on'. Select 'A Tour of Google Cloud Hands-on Labs' (recommended for beginners).", 
+            alert: { type: "tip", text: "Tip: This lab is perfect for beginners and takes about 3-5 minutes." }
+          },
+          { 
+            title: "Finish the Lab with 100% Score", 
+            desc: "Complete the selected lab and ensure you achieve a 100/100 score. This may include opening the Google Cloud Console, assigning permissions to a principal, and enabling a required API.", 
+            alert: { type: "important", text: "Important: Partial completion will not unlock the remaining credits." }
+          },
+          { 
+            title: "Verify Your Total Credits", 
+            desc: "After ending the lab, visit the Billing / Payments page of your Google Skills Account and confirm that 300 additional credits have been added.", 
+            alert: null,
+            badge: "309 Total Credits"
+          }
+        ].map((step, index) => (
+          <div key={index} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            {/* Timeline dot */}
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#1a73e8] text-white font-bold text-sm shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 relative">
+              {index + 1}
+            </div>
+            {/* Content Card */}
+            <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-white border border-[#dadce0] shadow-sm hover:shadow-md hover:border-[#1a73e8] transition-all duration-300">
+              <h4 className="text-lg font-bold text-[#202124] mb-2">{step.title}</h4>
+              <p className="text-[#5f6368] text-[15px] leading-relaxed mb-3">{step.desc}</p>
+              
+              {step.badge && (
+                <div className="inline-block mt-1 mb-2 px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc]">
+                  {step.badge}
+                </div>
+              )}
+
+              {step.alert && (
+                <div className={`mt-3 p-3 rounded-lg text-sm font-medium border ${step.alert.type === 'important' ? 'bg-[#fce8e6] text-[#c5221f] border-[#f8c1cb]' : 'bg-[#e6f4ea] text-[#137333] border-[#ceead6]'}`}>
+                  {step.alert.text}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Pro Tips Box */}
+    <div className="bg-[#1e1e1e] rounded-2xl p-8 md:p-10 shadow-lg text-white border border-[#333]">
+      <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-[#fde293]">
+        <span className="text-3xl">⚡</span> Pro Tips for Success
+      </h3>
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[
+          { title: "Always sign out first", desc: "This is the most common reason credits don't apply." },
+          { title: "Use the special link", desc: "The code at the end of the URL is essential." },
+          { title: "Complete the lab 100%", desc: "Follow all instructions carefully for full credit." },
+          { title: "Check your billing page", desc: "Verify credits are added after completing the lab." },
+          { title: "Be patient", desc: "Sometimes credits take a few minutes to appear." }
+        ].map((tip, i) => (
+          <li key={i} className="flex items-start gap-3 bg-[#2d2d2d] p-4 rounded-xl border border-[#444]">
+             <div className="mt-0.5 text-[#34a853]">
+               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+             </div>
+             <div>
+               <strong className="text-white block mb-0.5 text-[15px]">{tip.title}</strong>
+               <span className="text-[#aaa] text-sm">{tip.desc}</span>
+             </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+  </div>
+</section>
+
        {/* ================= 🔥 NEW: GLOBAL GOOGLE EVENTS SECTION (DARK THEME + FAST DARK PURPLE BLINK CARDS) 🔥 ================= */}
        <section id="google-events" className="relative z-10 py-24 bg-white border-b border-[#dadce0] overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -1107,4 +1323,4 @@ export default function HomePage() {
       </main>
     </>
   );
-}  
+}
