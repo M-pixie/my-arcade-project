@@ -324,185 +324,193 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
 {/* ================= HERO SECTION ================= */}
-<section className="relative pt-32 pb-24 px-6 border-b border-[#dadce0] bg-white overflow-hidden">
+{/* ✨ pt-32 ko pt-24 kar diya taaki box thoda upar shift ho jaye ✨ */}
+<section className="relative pt-24 pb-20 px-6 border-b border-[#dadce0] bg-white overflow-hidden">
   
-  <style>{`
-    @keyframes float-element {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-    }
-    .animate-float {
-      animation: float-element 5s ease-in-out infinite;
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.1); }
-    }
-    .animate-glow {
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-  `}</style>
-
-  <div className="max-w-7xl mx-auto flex flex-col items-center relative z-10">
-    <div className="w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-8 mb-20">
+  <div className="max-w-[90rem] mx-auto relative z-10">
+    {/* ✨ PREMIUM PURPLE BANNER (Hero Content + Yugali Box) ✨ */}
+    {/* ✨ rounded-[2.5rem] ko rounded-2xl kiya gaya taaki halka aur premium curve aaye ✨ */}
+    <div className="bg-gradient-to-r from-[#6b3cb0] to-[#8430ce] rounded-2xl p-8 md:p-12 lg:p-16 shadow-[0_20px_50px_rgba(107,60,176,0.3)] relative overflow-hidden flex flex-col gap-12 w-full mx-auto">
       
-      <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start w-full">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+         <div className="absolute -top-32 -right-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
+         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-[#d7aefb] rounded-full blur-[100px]"></div>
+      </div>
+
+      {/* === TOP ROW: Text, Buttons & Quick Links === */}
+      <div className="flex flex-col lg:flex-row items-center gap-12 w-full relative z-10">
         
-        <div className="group relative inline-flex items-center gap-2.5 px-5 py-2 bg-[#fef7e0] border border-[#fde293] text-[#b06000] text-[13px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default">
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ea4335] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ea4335]"></span>
-          </span>
-          <span className="relative z-10">April Month Labs Live !</span>
-        </div>
-
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#202124] mb-6 leading-tight">
-          Arcade Program
-        </h1>
-
-        <div className="w-full mb-4">
-          <p className="text-[#5f6368] text-sm md:text-base leading-relaxed text-center lg:text-left">
-            The professional dashboard to calculate your Google Cloud Arcade points, 
-            monitor leaderboard rankings & track your growth in real-time.
-          </p>
-        </div>
-
-        <div className="w-full mb-8">
-          <p className="text-[#202124] text-sm md:text-base leading-relaxed text-center lg:text-left">
-            The Arcade Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards claiming swag prizes and Google Cloud goodies.
-          </p>
-        </div>
-
-        {/* Buttons Section (Long layout) */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full mt-4">
-          <button
-            onClick={() => router.push("/calculator")}
-            className="flex-1 w-full px-8 py-4 bg-[#1a73e8] text-white font-bold text-base rounded-xl hover:bg-[#1557b0] hover:shadow-md transition-all duration-200 focus:outline-none"
-          >
-            Open Calculator
-          </button>
+        {/* LEFT COLUMN: Text & Buttons */}
+        <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
           
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="flex-1 w-full px-8 py-4 bg-white text-[#1a73e8] border border-[#dadce0] font-bold text-base rounded-xl hover:bg-[#f8f9fa] hover:border-[#d2e3fc] transition-all duration-200 focus:outline-none"
-          >
-            View Dashboard
-          </button>
-        </div>
-      </div>
-
-      <div className="flex-1 w-full flex flex-col justify-center items-center lg:items-end relative mt-12 lg:mt-0">
-        <div className="absolute top-4 left-10 w-6 h-6 bg-[#34a853] rounded-full animate-glow opacity-60 z-0"></div>
-        <div className="absolute bottom-32 left-4 w-10 h-10 bg-[#ea4335] rounded-full animate-float delay-150 opacity-50 z-0"></div>
-        <div className="absolute top-1/3 right-4 w-8 h-8 bg-[#fbbc04] rounded-full animate-glow delay-75 opacity-70 z-0"></div>
-        <div className="absolute -top-6 right-20 w-12 h-12 bg-[#1a73e8] rounded-full animate-float opacity-40 z-0"></div>
-
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] bg-[#e8f0fe] rounded-full blur-[80px] opacity-80 z-0 pointer-events-none"></div>
-
-        <div className="relative z-10 w-full max-w-[560px] animate-float drop-shadow-[0_20px_40px_rgba(0,0,0,0.12)] p-2 -mt-4">
-          <img 
-            src="https://i.postimg.cc/RhgP45n8/1776073780417.png" 
-            alt="Google Cloud Arcade Experience" 
-            className="w-full h-auto object-contain rounded-2xl transform scale-105 transition-transform duration-500 hover:scale-110"
-          />
-        </div>
-
-        <div className="relative z-10 w-full max-w-[560px] flex flex-col gap-3 mt-6 px-2">
-          <a
-            href="https://go.cloudskillsboost.google/arcade"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-[#34a853] hover:bg-[#2b8a44] text-white font-bold text-[15px] sm:text-base rounded-xl shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-300 focus:outline-none"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-            Open Arcade Labs
-          </a>
-
-          <button 
-            onClick={() => document.getElementById('google-events')?.scrollIntoView({ behavior: 'smooth' })}
-            className="w-full inline-flex items-center justify-between gap-3 px-5 py-3.5 bg-white hover:bg-[#f8f9fa] border border-[#dadce0] rounded-xl shadow-sm transition-all duration-300 cursor-pointer group"
-          >
-            <span className="text-[#202124] font-extrabold text-[13px] sm:text-sm tracking-wide w-full text-center">
-              NOTE: All Google Events & Programs are available at the bottom
+          <div className="group relative inline-flex items-center gap-2.5 px-5 py-2 bg-white/10 border border-white/20 text-[#fde293] text-[13px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default backdrop-blur-sm">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#34a853]"></span>
             </span>
-            <div className="bg-[#202124] group-hover:bg-[#1a73e8] text-white p-1.5 rounded-full animate-bounce shadow-sm transition-colors duration-300 shrink-0">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </div>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div className="w-full max-w-5xl bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden flex flex-col md:flex-row relative z-20 mt-20">
-      <div className="w-full md:w-1.5 h-1.5 md:h-auto bg-gradient-to-b from-[#1a73e8] via-[#8ab4f8] to-[#1a73e8]"></div>
-      <div className="p-6 md:p-8 flex-1 w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b border-[#f1f3f4] pb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#e8f0fe] flex items-center justify-center text-lg shadow-sm border border-[#d2e3fc]">
-              📢
-            </div>
-            <div>
-              <h3 className="font-bold text-[#1a73e8] text-lg">
-                <a 
-                  href="https://discuss.google.dev/t/google-skills-arcade-2026-prize-counter-update/347189?u=npoojithareddy2" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:underline cursor-pointer"
-                >
-                  Google Skills Arcade 2026: Prize Counter Update
-                </a>
-              </h3>
-              
-              <p className="text-xs mt-2.5">
-                <span className="bg-[#e8f0fe] text-[#1a73e8] px-2.5 py-1 rounded-md font-bold inline-block shadow-sm border border-[#d2e3fc]">
-                  Official update : A new cadence for the 2026 Prize Counter.
-                </span>
-              </p>
-            </div>
+            <span className="relative z-10">April Month Labs Live !</span>
           </div>
-          <div className="flex-shrink-0 mt-2 sm:mt-0">
-            <a 
-              href="https://discuss.google.dev/t/google-skills-arcade-2026-prize-counter-update/347189?u=npoojithareddy2" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2 bg-[#1a73e8] text-white text-sm font-bold rounded-lg shadow-[0_2px_10px_rgba(26,115,232,0.15)] hover:bg-[#1557b0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.3)] transform hover:-translate-y-0.5 transition-all duration-300 group whitespace-nowrap"
+
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
+            Arcade<span className="text-[#fde293]"> Program</span>
+          </h1>
+
+          <p className="text-white/90 text-lg md:text-xl max-w-2xl font-medium leading-relaxed mb-10">
+            The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
+          </p>
+
+          {/* Premium Stylish Buttons Row (All Equal & Long Width) */}
+          <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full">
+            <button
+              onClick={() => router.push("/calculator")}
+              className="flex-1 w-full px-6 py-4 bg-white text-[#6b3cb0] font-black text-[15px] sm:text-base rounded-xl hover:scale-105 hover:shadow-[0_10px_20px_rgba(255,255,255,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
             >
-              View Yugali Post
-              <svg className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+              <span className="whitespace-nowrap">Open Calculator</span>
+            </button>
+            
+            <a
+              href="https://go.cloudskillsboost.google/arcade"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 w-full px-6 py-4 bg-[#fde293] hover:bg-[#fbc02d] text-[#6b3cb0] font-black text-[15px] sm:text-base rounded-xl hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.15)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              <span className="whitespace-nowrap">Start Labs</span>
             </a>
+
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="flex-1 w-full px-6 py-4 bg-white/10 text-white border border-white/20 font-bold text-[15px] sm:text-base rounded-xl hover:bg-white/20 hover:border-white/40 shadow-sm backdrop-blur-md transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+              <span className="whitespace-nowrap">Dashboard</span>
+            </button>
+          </div>
+
+          {/* Animated Events Button */}
+          <div className="w-full flex justify-center lg:justify-start mt-10">
+            <button 
+              onClick={() => document.getElementById('google-events')?.scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center gap-3 px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-bold transition-all group animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(253,226,147,0.3)] hover:shadow-[0_0_30px_rgba(253,226,147,0.5)] transform hover:-translate-y-1"
+            >
+              All Google Events & Programs Below
+              <div className="bg-[#fde293] text-[#6b3cb0] p-1.5 rounded-full group-hover:scale-110 transition-transform">
+                <svg className="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
+              </div>
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-             <div className="w-8 h-8 rounded-full bg-[#34a853] text-white flex items-center justify-center font-bold text-sm">Y</div>
-             <div className="flex flex-col">
-               <span className="text-sm font-bold text-[#202124]">Yugali <span className="bg-[#e8f0fe] text-[#1a73e8] text-[10px] px-1.5 py-0.5 rounded ml-1 border border-[#d2e3fc]">Google Staff</span></span>
-               <span className="text-[11px] text-[#5f6368]">Apr 7 • 2026</span>
-             </div>
+        {/* RIGHT COLUMN: Premium Quick Links (Bullets) */}
+        <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-3">
+          <div className="flex items-center gap-2 mb-2 justify-center lg:justify-start">
+            <span className="w-2 h-2 rounded-full bg-[#fde293] animate-pulse"></span>
+            <h3 className="text-[#fde293] font-bold text-lg uppercase tracking-wider">Quick Actions Open</h3>
           </div>
-        </div>
 
-        <div className="text-[15px] leading-relaxed space-y-4 bg-[#f8f9fa] p-5 rounded-lg border border-[#e8eaed]">
-          <p className="bg-[#e8f0fe] text-[#1a73e8] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full border border-[#d2e3fc]">
-            If you've been part of our Google Skills Arcade family for a while, you know the rhythm we've shared: the excitement of two Prize Counter openings every year. It's been our favorite way to celebrate the miles you've covered.
-          </p>
-          <p className="bg-white text-[#202124] px-3 py-2.5 rounded-md font-bold shadow-sm border-l-4 border-[#1a73e8] inline-block w-full text-base">
-            This year, the road has a bit of a detour.
-          </p>
-          <p className="bg-[#e8f0fe] text-[#1a73e8] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full border border-[#d2e3fc]">
-            Due to some <strong className="text-[#1557b0] font-extrabold">persistent shipping constraints that are out of our hands</strong>, we're moving to a <strong className="text-[#1557b0] font-extrabold">single, unified Prize Counter opening</strong> at the end of this year. Instead of two windows, we'll have one focused moment to redeem your points and grab your swag.
-          </p>
-          <p className="bg-white text-[#5f6368] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full border border-[#dadce0]">
-            We know this feels like a big shift. Having only one chance to claim your rewards is a change we didn't take lightly, and we truly understand if it feels a little bittersweet. Your patience means the world to us while we navigate these logistics to make sure your rewards actually reach you.
-          </p>
+          {[
+            { name: "Skill Badges List", icon: "🏅", link: "/resources" },
+            { name: "Facilitator Program", icon: "🌟", link: "/facilitator" },
+            { name: "Live Leaderboard", icon: "🏆", link: "/leaderboard" },
+            { name: "Swags & Rewards", icon: "🎁", link: "#swags" },
+            { name: "View Points System", icon: "📊", link: "#points-system" }
+          ].map((item, idx) => (
+            <a
+              key={idx}
+              href={item.link}
+              onClick={(e) => {
+                if(item.link.startsWith('#')) {
+                  e.preventDefault();
+                  document.getElementById(item.link.substring(1))?.scrollIntoView({ behavior: 'smooth' });
+                } else if (item.link.startsWith('/')) {
+                  e.preventDefault();
+                  router.push(item.link);
+                }
+              }}
+              className="flex items-center justify-between p-4 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 rounded-xl transition-all duration-300 text-white font-semibold backdrop-blur-md group shadow-sm cursor-pointer transform hover:-translate-x-1"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
+                <span>{item.name}</span>
+              </div>
+              <span className="text-[#fde293] opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
+                →
+              </span>
+            </a>
+          ))}
         </div>
       </div>
+
+      {/* === BOTTOM ROW: Yugali Announcement (Inside Header) === */}
+      <div className="w-full max-w-5xl mx-auto bg-white border border-[#dadce0] rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col md:flex-row relative z-20">
+        <div className="w-full md:w-1.5 h-1.5 md:h-auto bg-gradient-to-b from-[#1a73e8] via-[#8ab4f8] to-[#1a73e8]"></div>
+        <div className="p-6 md:p-8 flex-1 w-full text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b border-[#f1f3f4] pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#e8f0fe] flex items-center justify-center text-lg shadow-sm border border-[#d2e3fc]">
+                📢
+              </div>
+              <div>
+                <h3 className="font-bold text-[#1a73e8] text-lg">
+                  <a 
+                    href="https://discuss.google.dev/t/google-skills-arcade-2026-prize-counter-update/347189?u=npoojithareddy2" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:underline cursor-pointer"
+                  >
+                    Google Skills Arcade 2026: Prize Counter Update
+                  </a>
+                </h3>
+                
+                <p className="text-xs mt-2.5">
+                  <span className="bg-[#e8f0fe] text-[#1a73e8] px-2.5 py-1 rounded-md font-bold inline-block shadow-sm border border-[#d2e3fc]">
+                    Official update : A new cadence for the 2026 Prize Counter.
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="flex-shrink-0 mt-2 sm:mt-0">
+              <a 
+                href="https://discuss.google.dev/t/google-skills-arcade-2026-prize-counter-update/347189?u=npoojithareddy2" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2 bg-[#1a73e8] text-white text-sm font-bold rounded-lg shadow-[0_2px_10px_rgba(26,115,232,0.15)] hover:bg-[#1557b0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.3)] transform hover:-translate-y-0.5 transition-all duration-300 group whitespace-nowrap"
+              >
+                View Yugali Post
+                <svg className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+               <div className="w-8 h-8 rounded-full bg-[#34a853] text-white flex items-center justify-center font-bold text-sm">Y</div>
+               <div className="flex flex-col">
+                 <span className="text-sm font-bold text-[#202124]">Yugali <span className="bg-[#e8f0fe] text-[#1a73e8] text-[10px] px-1.5 py-0.5 rounded ml-1 border border-[#d2e3fc]">Google Staff</span></span>
+                 <span className="text-[11px] text-[#5f6368]">Apr 7 • 2026</span>
+               </div>
+            </div>
+          </div>
+
+          <div className="text-[15px] leading-relaxed space-y-4 bg-[#f8f9fa] p-5 rounded-lg border border-[#e8eaed]">
+            <p className="bg-[#e8f0fe] text-[#1a73e8] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full border border-[#d2e3fc]">
+              If you've been part of our Google Skills Arcade family for a while, you know the rhythm we've shared: the excitement of two Prize Counter openings every year. It's been our favorite way to celebrate the miles you've covered.
+            </p>
+            <p className="bg-white text-[#202124] px-3 py-2.5 rounded-md font-bold shadow-sm border-l-4 border-[#1a73e8] inline-block w-full text-base">
+              This year, the road has a bit of a detour.
+            </p>
+            <p className="bg-[#e8f0fe] text-[#1a73e8] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full border border-[#d2e3fc]">
+              Due to some <strong className="text-[#1557b0] font-extrabold">persistent shipping constraints that are out of our hands</strong>, we're moving to a <strong className="text-[#1557b0] font-extrabold">single, unified Prize Counter opening</strong> at the end of this year. Instead of two windows, we'll have one focused moment to redeem your points and grab your swag.
+            </p>
+            <p className="bg-white text-[#5f6368] px-3 py-2.5 rounded-md font-medium shadow-sm inline-block w-full border border-[#dadce0]">
+              We know this feels like a big shift. Having only one chance to claim your rewards is a change we didn't take lightly, and we truly understand if it feels a little bittersweet. Your patience means the world to us while we navigate these logistics to make sure your rewards actually reach you.
+            </p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -604,22 +612,48 @@ export default function HomePage() {
 
           
 {/* ================= PREMIUM REWARDS SECTION ================= */}
-<section className="relative z-10 py-24 bg-gradient-to-b from-[#f8f9fa] to-white border-b border-[#dadce0] overflow-hidden">
-  <div className="max-w-6xl mx-auto px-6">
-    <div className="text-center mb-16 relative z-10 flex flex-col items-center">
-      <div className="inline-flex items-center gap-4 text-[#b06000] mb-8 cursor-default">
-        <span className="text-6xl block animate-[smooth-float-spin_3s_ease-in-out_infinite] origin-center">🎁</span>
-        <span className="text-sm font-medium text-[#5f6368] uppercase tracking-[0.3em] mt-2">Google Swags</span>
+{/* ✨ yahan bas id="swags" add kiya hai taaki button click se yahan scroll ho jaye ✨ */}
+<section id="swags" className="relative z-10 py-24 bg-white border-b border-[#dadce0] overflow-hidden">
+  <div className="max-w-[90rem] mx-auto px-6 relative z-10">
+    
+    {/* ✨ PREMIUM PURPLE BANNER (Matched with Hero Section) ✨ */}
+    <div className="bg-gradient-to-r from-[#6b3cb0] to-[#8430ce] rounded-2xl p-8 md:p-12 lg:p-16 shadow-[0_20px_50px_rgba(107,60,176,0.3)] relative overflow-hidden flex flex-col items-center w-full max-w-6xl mx-auto">
+      
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+         <div className="absolute -top-32 -left-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
+         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#d7aefb] rounded-full blur-[100px]"></div>
       </div>
-      <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-5">Arcade swags</h2>
-      <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed font-normal">
-        Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
-      </p>
-    </div>
-    <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-[0_20px_40px_-15px_rgba(168,85,247,0.4)] transition-all duration-500 ease-out p-[4px] bg-white mx-auto max-w-5xl">
-      <div className="relative w-full h-full bg-white rounded-[13px] z-10 overflow-hidden border border-[#dadce0]">
-        <img src="https://i.postimg.cc/MT50zzG8/1775382064372.png" alt="Premium Swags Showcase" className="w-full h-auto block" />
+
+      <div className="text-center mb-12 relative z-10 flex flex-col items-center">
+        
+        {/* ✨ Premium Google Swags Badge (Glassmorphism design) ✨ */}
+        <div className="group relative inline-flex items-center gap-3 px-6 py-2.5 bg-white/10 border border-white/20 text-[#fde293] text-[15px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default backdrop-blur-sm transition-all hover:bg-white/20">
+          <span className="text-2xl block animate-[smooth-float-spin_3s_ease-in-out_infinite] origin-center drop-shadow-md">🎁</span>
+          <span className="relative z-10 drop-shadow-sm">Google Swags</span>
+        </div>
+        
+        {/* ✨ Dark Yellow / Gold Font for Heading ✨ */}
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#fde293] tracking-tight mb-6 drop-shadow-sm">
+          Arcade Swags
+        </h2>
+        
+        <p className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium mb-4">
+          Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
+        </p>
       </div>
+      
+      {/* ✨ Image Container with Premium Golden Border Effect ✨ */}
+      <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 ease-out p-1 md:p-1.5 bg-gradient-to-br from-[#fde293] via-white/40 to-[#fbc02d] w-full max-w-5xl z-10 hover:scale-[1.02] group">
+        <div className="relative w-full h-full bg-white rounded-xl z-10 overflow-hidden">
+          <img 
+            src="https://i.postimg.cc/MT50zzG8/1775382064372.png" 
+            alt="Premium Swags Showcase" 
+            className="w-full h-auto block transition-transform duration-700 group-hover:scale-105" 
+          />
+        </div>
+      </div>
+      
     </div>
   </div>
 </section>
@@ -879,7 +913,7 @@ export default function HomePage() {
         </div>
 
 {/* ================= PREMIUM BASE POINTS SYSTEM ================= */}
-        <section className="relative z-10 py-24 bg-white border-b border-[#dadce0]">
+        <section id="points-system" className="relative z-10 py-24 bg-white border-b border-[#dadce0]">
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#202124 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
           <div className="max-w-5xl mx-auto px-6 relative z-10">
             <div className="text-center mb-14">

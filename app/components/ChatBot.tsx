@@ -132,21 +132,38 @@ export default function ChatBot() {
         </div>
       )}
 
-      {/* 🔵 Floating Button (Pulse Effect) */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="group relative w-14 h-14 bg-[#1a73e8] text-white rounded-full shadow-xl hover:bg-blue-700 transition-all flex items-center justify-center hover:scale-110 active:scale-95"
-      >
-        {/* Notification Dot if closed */}
-        {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-ping"></span>}
-        {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white"></span>}
-
-        {isOpen ? (
-          <svg className="w-6 h-6 rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-        ) : (
-          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+      {/* ✨ Floating Button & Tooltip Container (Flex Row) ✨ */}
+      <div className="flex items-center gap-3">
+        
+        {/* Animated "Need Help?" Tooltip (On the LEFT) */}
+        {!isOpen && (
+          <div 
+            onClick={() => setIsOpen(true)}
+            className="cursor-pointer animate-bounce bg-white text-[#1a73e8] font-bold text-sm px-4 py-2.5 rounded-2xl shadow-[0_10px_25px_rgba(26,115,232,0.25)] border border-[#d2e3fc] relative flex items-center gap-2 hover:bg-[#f8f9fa] transition-colors"
+          >
+            <span>Any help? 🤖</span>
+            {/* Tail/Arrow pointing RIGHT towards the button */}
+            <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-inherit border-t border-r border-[#d2e3fc] transform rotate-45"></div>
+          </div>
         )}
-      </button>
+
+        {/* 🔵 Floating Chat Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="group relative w-14 h-14 bg-[#1a73e8] text-white rounded-full shadow-xl hover:bg-blue-700 transition-all flex items-center justify-center hover:scale-110 active:scale-95"
+        >
+          {/* Notification Dot if closed */}
+          {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-ping"></span>}
+          {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-white"></span>}
+
+          {isOpen ? (
+            <svg className="w-6 h-6 rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          ) : (
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+          )}
+        </button>
+        
+      </div>
     </div>
   );
 }

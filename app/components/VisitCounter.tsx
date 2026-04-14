@@ -11,12 +11,8 @@ export default function VisitCounter() {
     const docRef = doc(db, "siteStats", "visits");
 
     const updateCount = async () => {
-      // Ek user ek hi baar count ho (Refresh par baar-baar na badhe)
-      const hasVisited = sessionStorage.getItem("visit_counted");
-      if (!hasVisited) {
-        await setDoc(docRef, { count: increment(1) }, { merge: true });
-        sessionStorage.setItem("visit_counted", "true");
-      }
+      // Ab har refresh par count badhega kyunki sessionStorage check hata diya hai
+      await setDoc(docRef, { count: increment(1) }, { merge: true });
     };
 
     updateCount();
