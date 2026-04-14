@@ -46,7 +46,8 @@ export default function ChatBot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end font-sans">
+      {/* ✨ z-[9999] kiya taaki kisi overlay ke piche input block na ho ✨ */}
       
       {/* 🟢 Chat Window */}
       {isOpen && (
@@ -116,14 +117,15 @@ export default function ChatBot() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              onKeyDown={(e) => e.key === "Enter" && !loading && input.trim() && sendMessage()}
+              disabled={loading} // ✨ Disable input while loading
               placeholder="Type your question..."
-              className="flex-1 px-4 py-3 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8] focus:bg-white transition-all"
+              className="flex-1 px-4 py-3 bg-gray-100 text-gray-900 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8] focus:bg-white transition-all"
             />
             <button 
               onClick={sendMessage} 
               disabled={loading || !input.trim()}
-              className="p-3 bg-[#1a73e8] text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105 shadow-md"
+              className="p-3 mr-1 bg-[#1a73e8] text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105 shadow-md"
             >
               {/* Send Icon */}
               <svg className="w-5 h-5 translate-x-[1px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" /></svg>
@@ -132,18 +134,18 @@ export default function ChatBot() {
         </div>
       )}
 
-      {/* ✨ Floating Button & Tooltip Container (Flex Row) ✨ */}
-      <div className="flex items-center gap-3">
+      {/* ✨ Floating Button & Tooltip Container (Flex Col for TOP positioning) ✨ */}
+      <div className="flex flex-col items-center gap-3">
         
-        {/* Animated "Need Help?" Tooltip (On the LEFT) */}
+        {/* Animated "Need Help?" Tooltip (Ab Button ke UPAR hai) */}
         {!isOpen && (
           <div 
             onClick={() => setIsOpen(true)}
             className="cursor-pointer animate-bounce bg-white text-[#1a73e8] font-bold text-sm px-4 py-2.5 rounded-2xl shadow-[0_10px_25px_rgba(26,115,232,0.25)] border border-[#d2e3fc] relative flex items-center gap-2 hover:bg-[#f8f9fa] transition-colors"
           >
             <span>Any help? 🤖</span>
-            {/* Tail/Arrow pointing RIGHT towards the button */}
-            <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-inherit border-t border-r border-[#d2e3fc] transform rotate-45"></div>
+            {/* Tail/Arrow pointing DOWN towards the button */}
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-inherit border-b border-r border-[#d2e3fc] transform rotate-45"></div>
           </div>
         )}
 

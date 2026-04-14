@@ -301,7 +301,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* ================= FIXED SCROLL BUTTON ================= */}
-      <div className="fixed bottom-24 right-6 md:right-8 z-[100] flex flex-col gap-3">
+      <div className="fixed bottom-24 left-6 md:right-8 z-[100] flex flex-col gap-3">
         <button 
           onClick={() => {
             if (isAtTop) {
@@ -693,7 +693,7 @@ export default function HomePage() {
               {/* Header with Like Button */}
               <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#202124]">Google Cloud Arcade Cohort 2 (2025) Swags Review</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#202124]">Google Arcade Swags Review</h3>
                   <p className="text-[#5f6368] text-sm mt-1">Live tracking and community feedback</p>
                 </div>
                 <button 
@@ -706,82 +706,6 @@ export default function HomePage() {
               </div>
 
               <div className="p-6 sm:p-8">
-                {/* Voting Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                  
-                  {/* Printo Poll */}
-                  <div className="bg-[#f8f9fa] border border-[#e8eaed] p-5 rounded-xl">
-                    <div className="flex justify-between items-center mb-4">
-                      <h4 className="font-bold text-[#1a73e8] text-lg">Printo</h4>
-                      <span className="text-xs bg-white border border-[#dadce0] px-2 py-1 rounded-md text-[#5f6368] font-semibold">{printoTotal} Votes</span>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {/* Received Bar */}
-                      <div>
-                        <div className="flex justify-between text-sm mb-1.5 font-medium">
-                          <span className="text-[#137333]">Received ({printoStats.received}%)</span>
-                        </div>
-                        <div className="w-full bg-[#ceead6] rounded-full h-2.5 cursor-pointer group" onClick={() => handlePrintoVoteClick('received')}>
-                          <div className="bg-[#34a853] h-2.5 rounded-full transition-all duration-500 group-hover:brightness-110" style={{ width: `${printoStats.received}%` }}></div>
-                        </div>
-                      </div>
-                      
-                      {/* Not Received Bar */}
-                      <div>
-                        <div className="flex justify-between text-sm mb-1.5 font-medium">
-                          <span className="text-[#c5221f]">Not Received Yet ({printoStats.not_received}%)</span>
-                        </div>
-                        <div className="w-full bg-[#fad2cf] rounded-full h-2.5 cursor-pointer group" onClick={() => handlePrintoVoteClick('not_received')}>
-                          <div className="bg-[#ea4335] h-2.5 rounded-full transition-all duration-500 group-hover:brightness-110" style={{ width: `${printoStats.not_received}%` }}></div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-5 flex gap-3">
-                      <button onClick={() => handlePrintoVoteClick('received')} className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all ${printoVote === 'received' ? 'bg-[#e6f4ea] text-[#137333] border-[#ceead6]' : 'bg-white text-[#5f6368] border-[#dadce0] hover:bg-[#f8f9fa]'}`}>Yes, I received</button>
-                      <button onClick={() => handlePrintoVoteClick('not_received')} className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all ${printoVote === 'not_received' ? 'bg-[#fce8e6] text-[#c5221f] border-[#f8c1cb]' : 'bg-white text-[#5f6368] border-[#dadce0] hover:bg-[#f8f9fa]'}`}>Not yet</button>
-                    </div>
-                  </div>
-
-                  {/* Whitesquare Poll */}
-                  <div className="bg-[#f8f9fa] border border-[#e8eaed] p-5 rounded-xl">
-                    <div className="flex justify-between items-center mb-4">
-                      <h4 className="font-bold text-[#1a73e8] text-lg">Whitesquare</h4>
-                      <span className="text-xs bg-white border border-[#dadce0] px-2 py-1 rounded-md text-[#5f6368] font-semibold">{wsTotal} Votes</span>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {/* Received Bar */}
-                      <div>
-                        <div className="flex justify-between text-sm mb-1.5 font-medium">
-                          <span className="text-[#137333]">Received ({whiteSquareStats.received}%)</span>
-                        </div>
-                        <div className="w-full bg-[#ceead6] rounded-full h-2.5 cursor-pointer group" onClick={() => handleWhiteSquareVoteClick('received')}>
-                          <div className="bg-[#34a853] h-2.5 rounded-full transition-all duration-500 group-hover:brightness-110" style={{ width: `${whiteSquareStats.received}%` }}></div>
-                        </div>
-                      </div>
-                      
-                      {/* Not Received Bar */}
-                      <div>
-                        <div className="flex justify-between text-sm mb-1.5 font-medium">
-                          <span className="text-[#c5221f]">Not Received Yet ({whiteSquareStats.not_received}%)</span>
-                        </div>
-                        <div className="w-full bg-[#fad2cf] rounded-full h-2.5 cursor-pointer group" onClick={() => handleWhiteSquareVoteClick('not_received')}>
-                          <div className="bg-[#ea4335] h-2.5 rounded-full transition-all duration-500 group-hover:brightness-110" style={{ width: `${whiteSquareStats.not_received}%` }}></div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-5 flex gap-3">
-                      <button onClick={() => handleWhiteSquareVoteClick('received')} className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all ${whiteSquareVote === 'received' ? 'bg-[#e6f4ea] text-[#137333] border-[#ceead6]' : 'bg-white text-[#5f6368] border-[#dadce0] hover:bg-[#f8f9fa]'}`}>Yes, I received</button>
-                      <button onClick={() => handleWhiteSquareVoteClick('not_received')} className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all ${whiteSquareVote === 'not_received' ? 'bg-[#fce8e6] text-[#c5221f] border-[#f8c1cb]' : 'bg-white text-[#5f6368] border-[#dadce0] hover:bg-[#f8f9fa]'}`}>Not yet</button>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="w-full h-px bg-[#e8eaed] mb-8"></div>
 
                 {/* Review Input */}
                 <div className="mb-8">
