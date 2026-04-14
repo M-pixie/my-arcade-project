@@ -26,7 +26,6 @@ export default function HomePage() {
   // 🔥 LOCAL STATES (To prevent user from voting/liking twice on the same device) 🔥
   const [printoVote, setPrintoVote] = useState<"received" | "not_received" | null>(null);
   const [whiteSquareVote, setWhiteSquareVote] = useState<"received" | "not_received" | null>(null);
-  const [hasLiked, setHasLiked] = useState(false);
   
   // 🔥 Review Inputs
   const [reviewName, setReviewName] = useState("");
@@ -34,7 +33,6 @@ export default function HomePage() {
   const [reviewText, setReviewText] = useState("");
 
   // 🔥 GLOBAL FIREBASE STATES (Sabko Real-time yahi dikhega) 🔥
-  const [likes, setLikes] = useState(0); 
   const [reviews, setReviews] = useState<{name: string, time: string, text: string, vendor: string}[]>([]); 
   const [globalPrinto, setGlobalPrinto] = useState({ received: 0, not_received: 0 });
   const [globalWs, setGlobalWs] = useState({ received: 0, not_received: 0 });
@@ -48,9 +46,6 @@ export default function HomePage() {
     const savedWhiteSquareVote = localStorage.getItem("whiteSquareVote") as "received" | "not_received" | null;
     if (savedWhiteSquareVote) setWhiteSquareVote(savedWhiteSquareVote);
 
-    const savedHasLiked = localStorage.getItem("swagHasLiked");
-    if (savedHasLiked) setHasLiked(savedHasLiked === "true");
-
     // 2. Fetch Global Reviews from Firebase
     const q = query(collection(db, "swagReviews"), orderBy("createdAt", "desc"));
     const unsubReviews = onSnapshot(q, (snapshot) => {
@@ -58,17 +53,16 @@ export default function HomePage() {
       setReviews(fetchedReviews);
     });
 
-    // 3. Fetch Global Likes & Votes from Firebase
+    // 3. Fetch Global Stats from Firebase
     const statsRef = doc(db, "swagStats", "cohort2");
     const unsubStats = onSnapshot(statsRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setLikes(data.likes || 0);
         setGlobalPrinto({ received: data.printoReceived || 0, not_received: data.printoNotReceived || 0 });
         setGlobalWs({ received: data.wsReceived || 0, not_received: data.wsNotReceived || 0 });
       } else {
         // Initialize database if it's completely empty
-        setDoc(statsRef, { likes: 0, printoReceived: 0, printoNotReceived: 0, wsReceived: 0, wsNotReceived: 0 });
+        setDoc(statsRef, { printoReceived: 0, printoNotReceived: 0, wsReceived: 0, wsNotReceived: 0 });
       }
     });
 
@@ -143,26 +137,6 @@ export default function HomePage() {
     }
     
     await setDoc(statsRef, updates, { merge: true });
-  };
-
-  // 🔥 PUSH LIKES TO FIREBASE (Fixed Bug: No -1) 🔥
-  const handleLikeClick = async () => {
-    const newHasLiked = !hasLiked;
-    
-    // Prevent dropping below 0 locally
-    if (!newHasLiked && likes <= 0) {
-      setHasLiked(newHasLiked);
-      localStorage.setItem("swagHasLiked", newHasLiked.toString());
-      return;
-    }
-
-    setHasLiked(newHasLiked);
-    localStorage.setItem("swagHasLiked", newHasLiked.toString());
-
-    const statsRef = doc(db, "swagStats", "cohort2");
-    await setDoc(statsRef, {
-      likes: increment(newHasLiked ? 1 : -1)
-    }, { merge: true });
   };
 
   // 🔥 PUSH REVIEWS TO FIREBASE 🔥
@@ -658,51 +632,18 @@ export default function HomePage() {
   </div>
 </section>
 
-        {/* ================= OFFICIAL SWAG PARTNERS ================= */}
-        <div className="pt-16 border-b border-[#dadce0] pb-10 bg-white">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Official Google Swags Partners</h3>
-            <p className="text-[#5f6368] text-base max-w-xl mx-auto">
-              Having trouble tracking your rewards? Connect with the official dispatch partners directly for faster resolution.
-            </p>
-          </div>
-          <div className="flex flex-col md:flex-row justify-center gap-6 px-6">
-            <a href="mailto:printose@printo.in" className="flex items-center gap-5 p-6 bg-[#f8f9fa] border border-[#dadce0] rounded-xl hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgba(26,115,232,0.1)] transition-all group w-full md:w-[360px]">
-              <div className="w-14 h-14 bg-white text-[#5f6368] rounded-full border border-[#dadce0] flex items-center justify-center text-2xl group-hover:bg-[#1a73e8] group-hover:text-white group-hover:border-[#1a73e8] transition-colors">📦</div>
-              <div className="text-left">
-                <h4 className="text-[#202124] font-semibold text-lg mb-0.5">Printo Support</h4>
-                <p className="text-[#1a73e8] text-sm group-hover:underline">printose@printo.in</p>
-              </div>
-            </a>
-            <a href="mailto:support@whitesquarein.com" className="flex items-center gap-5 p-6 bg-[#f8f9fa] border border-[#dadce0] rounded-xl hover:border-[#1a73e8] hover:shadow-[0_8px_30px_rgba(26,115,232,0.1)] transition-all group w-full md:w-[360px]">
-              <div className="w-14 h-14 bg-white text-[#5f6368] rounded-full border border-[#dadce0] flex items-center justify-center text-2xl group-hover:bg-[#1a73e8] group-hover:text-white group-hover:border-[#1a73e8] transition-colors">📦</div>
-              <div className="text-left">
-                <h4 className="text-[#202124] font-semibold text-lg mb-0.5">Whitesquare Int.</h4>
-                <p className="text-[#1a73e8] text-sm group-hover:underline">support@whitesquarein.com</p>
-              </div>
-            </a>
-          </div>
-        </div>
-
         {/* ================= 🔥 NEW: LIVE SWAG POLL & REVIEW TRACKER 🔥 ================= */}
         <div className="pb-24 pt-10 bg-white border-b border-[#dadce0]">
           <div className="max-w-4xl mx-auto px-6">
             
             <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
               
-              {/* Header with Like Button */}
+              {/* Header without Like Button */}
               <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                   <h3 className="text-xl sm:text-2xl font-bold text-[#202124]">Google Arcade Swags Review</h3>
                   <p className="text-[#5f6368] text-sm mt-1">Live tracking and community feedback</p>
                 </div>
-                <button 
-                  onClick={handleLikeClick}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${hasLiked ? 'bg-[#fce8e6] border-[#f8c1cb] text-[#c5221f]' : 'bg-white border-[#dadce0] text-[#5f6368] hover:bg-[#f8f9fa]'}`}
-                >
-                  <svg className={`w-5 h-5 ${hasLiked ? 'fill-current' : 'fill-none stroke-current'}`} viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                  <span className="font-bold">{Math.max(0, likes)}</span>
-                </button>
               </div>
 
               <div className="p-6 sm:p-8">
@@ -772,6 +713,28 @@ export default function HomePage() {
                       </div>
                     ))
                   )}
+                </div>
+
+                {/* 🔥 NEW: COMMUNITY & WEBSITE FEEDBACK BOX + OFFICIAL SUPPORT 🔥 */}
+                <div className="mt-8 flex flex-col gap-4">
+                  {/* Official Support Emails Mini-Box */}
+                  <div className="bg-[#f8f9fa] border border-[#dadce0] rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <span className="text-[#3c4043] font-semibold text-sm flex items-center gap-2"><span className="text-xl">🛠️</span> Official Swags Support:</span>
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm">
+                      <a href="mailto:printose@printo.in" className="text-[#1a73e8] hover:underline font-medium flex items-center gap-1.5"><span className="text-base">📦</span> printose@printo.in</a>
+                      <a href="mailto:support@whitesquarein.com" className="text-[#1a73e8] hover:underline font-medium flex items-center gap-1.5"><span className="text-base">📦</span> support@whitesquarein.com</a>
+                    </div>
+                  </div>
+
+                  {/* Feedback Box (Professional English) */}
+                  <div className="bg-gradient-to-r from-[#e8f0fe] to-[#f3e8fd] border border-[#d2e3fc] rounded-xl p-6 sm:p-8 text-center shadow-sm">
+                    <h4 className="text-[18px] sm:text-xl font-bold text-[#1a73e8] mb-3 flex items-center justify-center gap-2">
+                      <span className="text-2xl">🌟</span> Share Your Community Experience!
+                    </h4>
+                    <p className="text-[#5f6368] text-[14px] sm:text-[15px] font-medium leading-relaxed max-w-2xl mx-auto">
+                      How much did this platform and our community guidance help you? Please share your valuable feedback and support using the review box above. Your feedback keeps us motivated!
+                    </p>
+                  </div>
                 </div>
 
               </div>

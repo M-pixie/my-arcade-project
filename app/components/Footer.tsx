@@ -205,7 +205,7 @@ export default function Footer() {
             
             {/* Last Updated */}
             <p className="text-[12px] text-[#80868b] font-semibold tracking-[0.05em] uppercase mt-1">
-              Last Updated: April 7, 2026
+              Last Updated: April 15, 2026
             </p>
           </div>
 
