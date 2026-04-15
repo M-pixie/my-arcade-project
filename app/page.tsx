@@ -20,6 +20,25 @@ export default function HomePage() {
   const [formSubCategory, setFormSubCategory] = useState(""); 
   const [formMessage, setFormMessage] = useState("");
 
+  // 🔥 NEW: State for Coordinator Application Form 🔥
+  const [cFirstName, setCFirstName] = useState("");
+  const [cLastName, setCLastName] = useState("");
+  const [cEmail, setCEmail] = useState(""); // ✉️ ADDED EMAIL
+  const [cRole, setCRole] = useState(""); // 🎓 ADDED ROLE (Student/Professional)
+  const [cGender, setCGender] = useState(""); // 👤 ADDED GENDER
+  const [cGithub, setCGithub] = useState("");
+  const [cLinkedin, setCLinkedin] = useState("");
+  const [cMemberSince, setCMemberSince] = useState("");
+  const [cFresher, setCFresher] = useState("Yes");
+  const [cProfileUrl, setCProfileUrl] = useState("");
+  const [cHighestPoints, setCHighestPoints] = useState(""); // 🏆 ADDED HIGHEST POINTS
+  const [cSwagTier, setCSwagTier] = useState(""); // 🎁 ADDED SWAG TIER
+  const [cSource, setCSource] = useState("");
+  const [cResume, setCResume] = useState(""); // 📄 ADDED RESUME LINK (OPTIONAL)
+  const [cReason, setCReason] = useState("");
+  const [isSubmittingCoordinator, setIsSubmittingCoordinator] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // ✨ ADDED SUCCESS MODAL STATE
+
   // 🔥 NEW: State for Smart Auto Scroll Button
   const [isAtTop, setIsAtTop] = useState(true);
 
@@ -97,6 +116,57 @@ export default function HomePage() {
     setFormName("");
     setFormMessage("");
     setFormSubCategory("");
+  };
+
+  // 🔥 NEW: Handler for Coordinator Application Form to Firebase 🔥
+  const handleCoordinatorSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingCoordinator(true);
+    try {
+      await addDoc(collection(db, "coordinatorApplications"), {
+        firstName: cFirstName,
+        lastName: cLastName,
+        email: cEmail,
+        role: cRole, 
+        gender: cGender, 
+        githubLink: cGithub,
+        linkedinUrl: cLinkedin,
+        memberSince: cMemberSince,
+        isFresher: cFresher,
+        publicProfileUrl: cFresher === "No" ? cProfileUrl : "N/A",
+        highestPoints: cFresher === "No" ? cHighestPoints : "N/A", 
+        swagTier: cFresher === "No" ? cSwagTier : "N/A", 
+        sourceInfo: cSource,
+        resumeLink: cResume || "N/A", // ✨ Syncing Optional Resume Link
+        reasonToJoin: cReason,
+        createdAt: new Date().getTime() // For easy sorting in Firebase Console
+      });
+      
+      // ✨ SHOW SUCCESS MODAL ✨
+      setShowSuccessModal(true);
+      
+      // Reset Form
+      setCFirstName("");
+      setCLastName("");
+      setCEmail("");
+      setCRole("");
+      setCGender("");
+      setCGithub("");
+      setCLinkedin("");
+      setCMemberSince("");
+      setCFresher("Yes");
+      setCProfileUrl("");
+      setCHighestPoints("");
+      setCSwagTier("");
+      setCSource("");
+      setCResume("");
+      setCReason("");
+    } catch (error) {
+      console.error("Error submitting application: ", error);
+      alert("Something went wrong! Please try again later.");
+    } finally {
+      setIsSubmittingCoordinator(false);
+    }
   };
 
   // 🔥 PUSH VOTES TO FIREBASE (Fixed Bug: SetDoc with merge so it never fails) 🔥
@@ -272,6 +342,28 @@ export default function HomePage() {
   return (
     <>
       <PopupModal />
+      
+      {/* ✨ SUCCESS MODAL FOR COORDINATOR APPLICATION ✨ */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-[#202124]/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl text-center relative animate-[popIn_0.3s_ease-out]">
+            <div className="w-16 h-16 mx-auto bg-[#e6f4ea] rounded-full flex items-center justify-center text-[#34a853] mb-5 border border-[#ceead6]">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <h3 className="text-2xl font-bold text-[#202124] mb-3 tracking-tight">Application Submitted!</h3>
+            <p className="text-[#5f6368] text-[15px] leading-relaxed mb-8">
+              Thank you for applying. Our Facilitator will review your application. If you are selected, you will also receive an email from us.
+            </p>
+            <button 
+              onClick={() => setShowSuccessModal(false)}
+              className="w-full px-6 py-3.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold rounded-xl transition-all shadow-sm transform hover:-translate-y-0.5"
+            >
+              Done & Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <Navbar />
 
       {/* ================= FIXED SCROLL BUTTON ================= */}
@@ -363,13 +455,23 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Animated Events Button */}
-          <div className="w-full flex justify-center lg:justify-start mt-10">
+          {/* ✨ NEW: Animated Action Buttons Container ✨ */}
+          <div className="w-full flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-10">
             <button 
               onClick={() => document.getElementById('google-events')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center gap-3 px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-bold transition-all group animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(253,226,147,0.3)] hover:shadow-[0_0_30px_rgba(253,226,147,0.5)] transform hover:-translate-y-1"
+              className="inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-bold transition-all group animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(253,226,147,0.3)] hover:shadow-[0_0_30px_rgba(253,226,147,0.5)] transform hover:-translate-y-1 w-full sm:w-auto"
             >
-              All Google Events & Programs Below
+              All Google Events & Programs
+              <div className="bg-[#fde293] text-[#6b3cb0] p-1.5 rounded-full group-hover:scale-110 transition-transform">
+                <svg className="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
+              </div>
+            </button>
+
+            <button 
+              onClick={() => document.getElementById('coordinator-form')?.scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-bold transition-all group animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(253,226,147,0.3)] hover:shadow-[0_0_30px_rgba(253,226,147,0.5)] transform hover:-translate-y-1 w-full sm:w-auto"
+            >
+              Apply for Co Ordinator Role
               <div className="bg-[#fde293] text-[#6b3cb0] p-1.5 rounded-full group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
               </div>
@@ -799,76 +901,254 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* ================= 🔥 NEW: COORDINATOR APPLICATION FORM 🔥 ================= */}
+        <section id="coordinator-form" className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0]">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden transition-shadow hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
+              
+              <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-8 md:p-10 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
+                <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Apply for Coordinator Role</h3>
+                <p className="text-[#5f6368] text-base max-w-2xl mx-auto">
+                  Join our core team! Help guide the community, manage arcade initiatives, and grow your leadership skills with us.
+                </p>
+              </div>
+
+              <form onSubmit={handleCoordinatorSubmit} className="p-8 md:p-10 flex flex-col gap-6">
+                
+                {/* Name & Email Row (Now 3 Columns) */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">First Name</label>
+                    <input type="text" required value={cFirstName} onChange={(e) => setCFirstName(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="E.g., Manish" />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Last Name</label>
+                    <input type="text" required value={cLastName} onChange={(e) => setCLastName(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="E.g., Kumar" />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Email Address</label>
+                    <input type="email" required value={cEmail} onChange={(e) => setCEmail(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="mail@example.com" />
+                  </div>
+                </div>
+
+                {/* Role & Gender Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Current Status</label>
+                    <select required value={cRole} onChange={(e) => setCRole(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                      <option value="" disabled hidden>Select your status</option>
+                      <option value="Student">Student</option>
+                      <option value="Working Professional">Working Professional</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Gender</label>
+                    <select required value={cGender} onChange={(e) => setCGender(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                      <option value="" disabled hidden>Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Social Links Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">GitHub Profile Link</label>
+                    <input type="url" required value={cGithub} onChange={(e) => setCGithub(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="https://github.com/..." />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">LinkedIn Profile Link</label>
+                    <input type="url" required value={cLinkedin} onChange={(e) => setCLinkedin(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="https://linkedin.com/in/..." />
+                  </div>
+                </div>
+
+                {/* Arcade Experience Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Member Since (Start Date)</label>
+                    <input type="month" required value={cMemberSince} onChange={(e) => setCMemberSince(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Are you a Fresher to Google Cloud?</label>
+                    <select required value={cFresher} onChange={(e) => setCFresher(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                      <option value="Yes">Yes, I am a Fresher</option>
+                      <option value="No">No, I have experience</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Conditional Field: Non-Fresher Options (Profile URL, Highest Points, Swag Tier) */}
+                {cFresher === "No" && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fadeIn p-5 bg-[#f8f9fa] border border-[#e8eaed] rounded-xl mt-2">
+                    <div className="flex flex-col gap-2.5">
+                      <label className="text-sm font-semibold text-[#3c4043]">Google Skills Public Profile URL</label>
+                      <input type="url" required value={cProfileUrl} onChange={(e) => setCProfileUrl(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="https://cloudskillsboost.google/..." />
+                    </div>
+                    <div className="flex flex-col gap-2.5">
+                      <label className="text-sm font-semibold text-[#3c4043]">Highest Arcade Points Earned</label>
+                      <input type="number" required value={cHighestPoints} onChange={(e) => setCHighestPoints(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="E.g., 45" />
+                    </div>
+                    <div className="flex flex-col gap-2.5">
+                      <label className="text-sm font-semibold text-[#3c4043]">Which Tier Swags Claimed?</label>
+                      <select required value={cSwagTier} onChange={(e) => setCSwagTier(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                        <option value="" disabled hidden>Select Swag Tier</option>
+                        <option value="Premium Tier">Premium Tier</option>
+                        <option value="Advanced Tier">Advanced Tier</option>
+                        <option value="Standard Tier">Standard Tier</option>
+                        <option value="None">None Yet</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {/* Dropdown: Source & Resume */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">How did you hear about our community/website?</label>
+                    <select required value={cSource} onChange={(e) => setCSource(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                      <option value="" disabled hidden>Select an option</option>
+                      <option value="Friends / Colleagues">Friends / Colleagues</option>
+                      <option value="Google Search">Google Search</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="Other Social Media">Other Social Media</option>
+                    </select>
+                  </div>
+                  {/* ✨ NEW: Optional Resume Link ✨ */}
+                  <div className="flex flex-col gap-2.5">
+                    <label className="text-sm font-semibold text-[#3c4043]">Resume Link <span className="text-[#80868b] font-normal">(Optional)</span></label>
+                    <input type="url" value={cResume} onChange={(e) => setCResume(e.target.value)} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124]" placeholder="Google Drive or Portfolio link..." />
+                  </div>
+                </div>
+
+                {/* Reason Textarea */}
+                <div className="flex flex-col gap-2.5">
+                  <label className="text-sm font-semibold text-[#3c4043]">Why do you want to become a Coordinator?</label>
+                  <textarea required value={cReason} onChange={(e) => setCReason(e.target.value)} rows={4} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] resize-none" placeholder="Share your motivation and how you can contribute..."></textarea>
+                </div>
+
+                {/* ✨ NEW: Benefits Section ✨ */}
+                <div className="mt-2 mb-4 bg-[#f8faff] border border-[#d2e3fc] rounded-xl p-6 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#1a73e8]"></div>
+                  <h4 className="text-[17px] font-bold text-[#1a73e8] mb-4 flex items-center gap-2">
+                    <span className="text-xl">✨</span> Benefits of Becoming a Coordinator
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
+                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">🎓</div>
+                      Special Appreciation Certificate
+                    </div>
+                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
+                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">🚀</div>
+                      Develop Leadership Skills
+                    </div>
+                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
+                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">🎁</div>
+                      Win Premium Google Swags
+                    </div>
+                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
+                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">☁️</div>
+                      Build Google Cloud Skills
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <button type="submit" disabled={isSubmittingCoordinator} className={`mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 rounded-lg shadow-sm font-semibold text-white transition-all ${isSubmittingCoordinator ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1a73e8] hover:bg-[#1557b0] hover:-translate-y-0.5 hover:shadow-md'}`}>
+                  {isSubmittingCoordinator ? (
+                    "Submitting Application..."
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      Submit Application
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
 {/* ================= PREMIUM BASE POINTS SYSTEM ================= */}
         <section id="points-system" className="relative z-10 py-24 bg-white border-b border-[#dadce0]">
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#202124 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
           <div className="max-w-5xl mx-auto px-6 relative z-10">
             <div className="text-center mb-14">
-              <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-4">Arcade Points <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#34a853]">System</span></h2>
-              <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium">Understand exactly how your effort translates to your final score. Collect badges across different tracks to maximize your rewards.</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-4">
+                Arcade Points <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fbc02d] to-[#fde293]">System</span>
+              </h2>
+              <p className="text-[#5f6368] text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+                Understand exactly how your effort translates to your final score. Collect badges across different tracks to maximize your rewards.
+              </p>
             </div>
             
-            {/* Wrapper for Dark Theme (Matched with Pro Tips) */}
-            <div className="bg-[#1e1e1e] border border-[#333] rounded-[1.5rem] shadow-2xl p-3 flex flex-col gap-1">
+            {/* Wrapper for Premium Dark Purple Theme */}
+            <div className="bg-[#1A0B2E] border border-[#422575] rounded-2xl shadow-[0_20px_50px_rgba(107,60,176,0.15)] p-4 flex flex-col gap-2 relative overflow-hidden">
               
+              {/* Decorative Glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#8430ce] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#d7aefb] rounded-full blur-[120px] opacity-10 pointer-events-none"></div>
+
               {/* Arcade Adventure */}
-              <div className="group relative rounded-xl py-4 px-5 md:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2d2d2d] hover:bg-[#333] transition-colors duration-300 cursor-default border border-[#444] hover:border-[#81c995]/50">
+              <div className="group relative rounded-xl py-5 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2D1B4E]/80 hover:bg-[#422575]/80 transition-all duration-300 cursor-default border border-[#6b3cb0]/40 hover:border-[#fde293]/60 z-10 backdrop-blur-sm shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-5 relative w-full md:w-auto">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-[#1e3a29] text-[#81c995] flex items-center justify-center group-hover:scale-105 transition-transform duration-300"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg></div>
-                  <div><h4 className="text-[17px] md:text-lg font-bold text-white">Arcade Adventure</h4><p className="text-[13px] md:text-sm font-medium text-[#aaa] mt-0.5">Standard track progression</p></div>
+                  <div className="w-12 h-12 shrink-0 rounded-lg bg-[#fde293]/10 text-[#fde293] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#fde293]/20"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg></div>
+                  <div><h4 className="text-[17px] md:text-lg font-bold text-white group-hover:text-[#fde293] transition-colors">Arcade Adventure</h4><p className="text-[13px] md:text-sm font-medium text-[#d7aefb] mt-0.5">Standard track progression</p></div>
                 </div>
                 <div className="relative w-full md:w-auto flex-1 flex justify-start md:justify-center">
-                  <div className="flex items-center gap-3 bg-[#1e1e1e] rounded-lg px-4 py-2 border border-[#444] group-hover:border-[#81c995]/30 transition-all duration-300"><span className="text-[#aaa] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg><span className="text-[#81c995] text-[13px] md:text-sm font-bold">1 point</span></div>
+                  <div className="flex items-center gap-3 bg-[#1A0B2E] rounded-md px-4 py-2 border border-[#6b3cb0]/50 group-hover:border-[#fde293]/40 transition-all duration-300 shadow-inner"><span className="text-[#a8a2b5] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#8430ce]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg><span className="text-[#fde293] text-[13px] md:text-sm font-bold">1 point</span></div>
                 </div>
-                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-4 py-2 bg-[#1e3a29] text-[#81c995] text-[13px] md:text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow border border-[#81c995]/20">1 Point Each</div></div>
+                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-5 py-2 bg-[#fde293]/10 text-[#fde293] text-[13px] md:text-sm font-bold rounded-md uppercase tracking-wider shadow-sm transition-all border border-[#fde293]/30 group-hover:bg-[#fde293]/20">1 Point Each</div></div>
               </div>
 
               {/* Arcade Voyage */}
-              <div className="group relative rounded-xl py-4 px-5 md:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2d2d2d] hover:bg-[#333] transition-colors duration-300 cursor-default border border-[#444] hover:border-[#8ab4f8]/50">
+              <div className="group relative rounded-xl py-5 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2D1B4E]/80 hover:bg-[#422575]/80 transition-all duration-300 cursor-default border border-[#6b3cb0]/40 hover:border-[#fde293]/60 z-10 backdrop-blur-sm shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-5 relative w-full md:w-auto">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-[#1c2e4a] text-[#8ab4f8] flex items-center justify-center group-hover:scale-105 transition-transform duration-300"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
-                  <div><h4 className="text-[17px] md:text-lg font-bold text-white">Arcade Voyage</h4><p className="text-[13px] md:text-sm font-medium text-[#aaa] mt-0.5">Intermediate cloud challenges</p></div>
+                  <div className="w-12 h-12 shrink-0 rounded-lg bg-[#fde293]/10 text-[#fde293] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#fde293]/20"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                  <div><h4 className="text-[17px] md:text-lg font-bold text-white group-hover:text-[#fde293] transition-colors">Arcade Voyage</h4><p className="text-[13px] md:text-sm font-medium text-[#d7aefb] mt-0.5">Intermediate cloud challenges</p></div>
                 </div>
                 <div className="relative w-full md:w-auto flex-1 flex justify-start md:justify-center">
-                  <div className="flex items-center gap-3 bg-[#1e1e1e] rounded-lg px-4 py-2 border border-[#444] group-hover:border-[#8ab4f8]/30 transition-all duration-300"><span className="text-[#aaa] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg><span className="text-[#8ab4f8] text-[13px] md:text-sm font-bold">1 point</span></div>
+                  <div className="flex items-center gap-3 bg-[#1A0B2E] rounded-md px-4 py-2 border border-[#6b3cb0]/50 group-hover:border-[#fde293]/40 transition-all duration-300 shadow-inner"><span className="text-[#a8a2b5] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#8430ce]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg><span className="text-[#fde293] text-[13px] md:text-sm font-bold">1 point</span></div>
                 </div>
-                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-4 py-2 bg-[#1c2e4a] text-[#8ab4f8] text-[13px] md:text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow border border-[#8ab4f8]/20">1 Point Each</div></div>
+                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-5 py-2 bg-[#fde293]/10 text-[#fde293] text-[13px] md:text-sm font-bold rounded-md uppercase tracking-wider shadow-sm transition-all border border-[#fde293]/30 group-hover:bg-[#fde293]/20">1 Point Each</div></div>
               </div>
 
               {/* Arcade Trail */}
-              <div className="group relative rounded-xl py-4 px-5 md:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2d2d2d] hover:bg-[#333] transition-colors duration-300 cursor-default border border-[#444] hover:border-[#4fd1c5]/50">
+              <div className="group relative rounded-xl py-5 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2D1B4E]/80 hover:bg-[#422575]/80 transition-all duration-300 cursor-default border border-[#6b3cb0]/40 hover:border-[#fde293]/60 z-10 backdrop-blur-sm shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-5 relative w-full md:w-auto">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-[#143a3d] text-[#4fd1c5] flex items-center justify-center group-hover:scale-105 transition-transform duration-300"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
-                  <div><h4 className="text-[17px] md:text-lg font-bold text-white">Arcade Trail</h4><p className="text-[13px] md:text-sm font-medium text-[#aaa] mt-0.5">Advanced guided paths</p></div>
+                  <div className="w-12 h-12 shrink-0 rounded-lg bg-[#fde293]/10 text-[#fde293] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#fde293]/20"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                  <div><h4 className="text-[17px] md:text-lg font-bold text-white group-hover:text-[#fde293] transition-colors">Arcade Trail</h4><p className="text-[13px] md:text-sm font-medium text-[#d7aefb] mt-0.5">Advanced guided paths</p></div>
                 </div>
                 <div className="relative w-full md:w-auto flex-1 flex justify-start md:justify-center">
-                  <div className="flex items-center gap-3 bg-[#1e1e1e] rounded-lg px-4 py-2 border border-[#444] group-hover:border-[#4fd1c5]/30 transition-all duration-300"><span className="text-[#aaa] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg><span className="text-[#4fd1c5] text-[13px] md:text-sm font-bold">1 point</span></div>
+                  <div className="flex items-center gap-3 bg-[#1A0B2E] rounded-md px-4 py-2 border border-[#6b3cb0]/50 group-hover:border-[#fde293]/40 transition-all duration-300 shadow-inner"><span className="text-[#a8a2b5] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#8430ce]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg><span className="text-[#fde293] text-[13px] md:text-sm font-bold">1 point</span></div>
                 </div>
-                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-4 py-2 bg-[#143a3d] text-[#4fd1c5] text-[13px] md:text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow border border-[#4fd1c5]/20">1 Point Each</div></div>
+                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-5 py-2 bg-[#fde293]/10 text-[#fde293] text-[13px] md:text-sm font-bold rounded-md uppercase tracking-wider shadow-sm transition-all border border-[#fde293]/30 group-hover:bg-[#fde293]/20">1 Point Each</div></div>
               </div>
 
               {/* Skill Badges */}
-              <div className="group relative rounded-xl py-4 px-5 md:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2d2d2d] hover:bg-[#333] transition-colors duration-300 cursor-default border border-[#444] hover:border-[#d7aefb]/50">
+              <div className="group relative rounded-xl py-5 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#2D1B4E]/80 hover:bg-[#422575]/80 transition-all duration-300 cursor-default border border-[#6b3cb0]/40 hover:border-[#fde293]/60 z-10 backdrop-blur-sm shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-5 relative w-full md:w-auto">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-[#2a1c3d] text-[#d7aefb] flex items-center justify-center group-hover:scale-105 transition-transform duration-300"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg></div>
-                  <div><h4 className="text-[17px] md:text-lg font-bold text-white">Skill Badges</h4><p className="text-[13px] md:text-sm font-medium text-[#aaa] mt-0.5">90+ Skills Badges available</p></div>
+                  <div className="w-12 h-12 shrink-0 rounded-lg bg-[#fde293]/10 text-[#fde293] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#fde293]/20"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg></div>
+                  <div><h4 className="text-[17px] md:text-lg font-bold text-white group-hover:text-[#fde293] transition-colors">Skill Badges</h4><p className="text-[13px] md:text-sm font-medium text-[#d7aefb] mt-0.5">90+ Skills Badges available</p></div>
                 </div>
                 <div className="relative w-full md:w-auto flex-1 flex justify-start md:justify-center">
-                  <div className="flex items-center gap-3 bg-[#1e1e1e] rounded-lg px-4 py-2 border border-[#444] group-hover:border-[#d7aefb]/30 transition-all duration-300"><span className="text-[#aaa] text-[13px] md:text-sm font-semibold">x2 badges</span><svg className="w-4 h-4 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg><span className="text-[#d7aefb] text-[13px] md:text-sm font-bold">1 point</span></div>
+                  <div className="flex items-center gap-3 bg-[#1A0B2E] rounded-md px-4 py-2 border border-[#6b3cb0]/50 group-hover:border-[#fde293]/40 transition-all duration-300 shadow-inner"><span className="text-[#a8a2b5] text-[13px] md:text-sm font-semibold">x2 badges</span><svg className="w-4 h-4 text-[#8430ce]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg><span className="text-[#fde293] text-[13px] md:text-sm font-bold">1 point</span></div>
                 </div>
-                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-4 py-2 bg-[#2a1c3d] text-[#d7aefb] text-[13px] md:text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow border border-[#d7aefb]/20">Needs 2 Badges</div></div>
+                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-5 py-2 bg-[#fde293]/10 text-[#fde293] text-[13px] md:text-sm font-bold rounded-md uppercase tracking-wider shadow-sm transition-all border border-[#fde293]/30 group-hover:bg-[#fde293]/20">Needs 2 Badges</div></div>
               </div>
 
               {/* Special Badges */}
-              <div className="group relative rounded-xl py-4 px-5 md:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#3a1d1d] hover:bg-[#4a2424] transition-colors duration-300 cursor-default border border-[#5a2a2a] hover:border-[#f28b82]/50">
+              <div className="group relative rounded-xl py-5 px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 bg-[#422575]/60 hover:bg-[#6b3cb0]/60 transition-all duration-300 cursor-default border border-[#8430ce]/50 hover:border-[#fde293]/80 z-10 backdrop-blur-sm shadow-md hover:shadow-lg">
                 <div className="flex items-center gap-5 relative w-full md:w-auto">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-[#5a2a2a] text-[#f28b82] flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shadow-sm"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
-                  <div><h4 className="text-[17px] md:text-lg font-bold text-white">Special Badges</h4><p className="text-[13px] md:text-sm font-medium text-[#f28b82] mt-0.5">Limited-time exclusive</p></div>
+                  <div className="w-12 h-12 shrink-0 rounded-lg bg-[#fde293]/20 text-[#fde293] flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm border border-[#fde293]/40"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                  <div><h4 className="text-[17px] md:text-lg font-extrabold text-[#fde293]">Special Badges</h4><p className="text-[13px] md:text-sm font-semibold text-[#fde293]/80 mt-0.5">Limited-time exclusive</p></div>
                 </div>
                 <div className="relative w-full md:w-auto flex-1 flex justify-start md:justify-center">
-                  <div className="flex items-center gap-3 bg-[#1e1e1e] rounded-lg px-4 py-2 shadow-sm border border-[#5a2a2a]"><span className="text-[#aaa] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#666]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg><span className="text-[#f28b82] text-[13px] md:text-sm font-bold">2 points</span></div>
+                  <div className="flex items-center gap-3 bg-[#1A0B2E] rounded-md px-4 py-2 shadow-inner border border-[#8430ce]/60 group-hover:border-[#fde293]/50 transition-all duration-300"><span className="text-[#a8a2b5] text-[13px] md:text-sm font-semibold">x1 game badge</span><svg className="w-4 h-4 text-[#d7aefb]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg><span className="text-[#fde293] text-[13px] md:text-sm font-extrabold">2 points</span></div>
                 </div>
-                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-4 py-2 bg-[#5a2a2a] text-[#f28b82] text-[13px] md:text-sm font-bold rounded-lg uppercase tracking-wider shadow-sm group-hover:shadow-md transition-shadow border border-[#f28b82]/20">2 Points</div></div>
+                <div className="relative shrink-0 w-full md:w-auto text-left md:text-right"><div className="inline-block px-5 py-2 bg-[#fde293] text-[#422575] text-[13px] md:text-sm font-extrabold rounded-md uppercase tracking-wider shadow-[0_0_15px_rgba(253,226,147,0.4)] transition-all hover:scale-105">2 Points</div></div>
               </div>
               
             </div>
