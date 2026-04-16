@@ -157,6 +157,9 @@ export default function CalculatorPage() {
     window.open(linkedInUrl, "_blank");
   };
 
+  const whatsappHelpMessage = encodeURIComponent("Hello Facilitator Manish! 👋\n\nI am reaching out regarding the Google Cloud Arcade program. I need some guidance with my profile and points calculation. Could you please help me out?");
+  const whatsappHelpUrl = `https://api.whatsapp.com/send?phone=918538980608&text=${whatsappHelpMessage}`;
+
   // ================= 🔥 RESTORED & FIXED: DIRECT SHARE IMAGE LOGIC 🔥 =================
   const shareCardAsImage = async (platform: 'whatsapp' | 'linkedin') => {
     if (!cardRef.current) return;
@@ -264,34 +267,92 @@ export default function CalculatorPage() {
       <main className="max-w-4xl mx-auto px-6 pt-24 pb-16">
         
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-3.5 bg-gradient-to-br from-[#e8f0fe] to-[#f3e8fd] border border-[#d2e3fc] rounded-2xl mb-6 shadow-sm transform hover:scale-105 transition-transform duration-300">
+          <div className="inline-flex items-center justify-center p-3.5 bg-[#e8f0fe] border border-[#d2e3fc] rounded-xl mb-6 shadow-sm transform hover:scale-105 transition-transform duration-300">
             <svg className="w-8 h-8 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H5v-4h9v4zM5 11V7h9v4H5zm12 6h-2v-4h2v4zm0-6h-2V7h2v4z"/>
             </svg>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-extrabold text-[#202124] tracking-tight mb-4">
-            Arcade Points <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#a142f4]">Calculator</span>
-          </h1>
+          <h1 className="text-4xl md:text-6xl font-bold text-[#202124] tracking-tight mb-4 leading-tight">
+  Arcade Points <span className="text-[#1a73e8]">Calculator</span>
+</h1>
           <p className="text-[#5f6368] text-base md:text-lg mb-8 font-medium">
             Calculate your exact points from Google Cloud Skills Boost public profile URL.
           </p>
 
-          <div className="bg-[#fce8e6] border border-[#f8c1cb] rounded-xl p-5 mb-2 text-left shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-[#c5221f] font-extrabold text-[17px] mb-3 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              How to use Arcade Points Calculator?
-            </h3>
-            <ul className="list-disc pl-5 space-y-2 text-[#202124] text-[14px] md:text-[15px] font-bold">
-              <li>Your Google Cloud Skills Boost profile <span className="bg-[#c5221f] text-white px-1.5 py-0.5 rounded text-xs uppercase tracking-wider mx-1 shadow-sm">must be public</span> to fetch your data.</li>
-              <li>Copy your complete profile URL (e.g., <code className="bg-[#fad2ce] px-1.5 py-0.5 rounded text-[#202124]">https://www.skills.google/public_profiles/...</code>).</li>
-              <li>Paste the exact URL in the input box below and click Calculate.</li>
-              <li><span className="underline decoration-[#c5221f]/40 underline-offset-2">Invalid, broken, or private URLs will not work</span> and will return an error.</li>
-            </ul>
+          <div className="grid md:grid-cols-2 gap-6 mb-8 text-left items-stretch">
+            {/* How to Use Box - Highlighted & Professional */}
+            <div className="bg-[#f8fbff] border border-[#aecbfa] rounded-lg p-6 shadow-md flex flex-col hover:shadow-lg transition-shadow">
+              <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-2 border-b border-[#d2e3fc] pb-3">
+                <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                How to use Calculator?
+              </h3>
+              <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
+                <li>Your profile <span className="bg-[#e8eaed] text-[#202124] px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider mx-1 border border-[#dadce0]">must be public</span> to fetch data.</li>
+                <li>Copy your complete profile URL (e.g., <code className="bg-[#ffffff] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#d2e3fc] shadow-sm">https://www.skills.google/public_profiles/...</code>).</li>
+                <li>Paste the exact URL in the input box below and click Calculate.</li>
+                <li>Invalid, broken, or private URLs will return an error.</li>
+              </ul>
+              
+              <div className="mt-6 pt-4 border-t border-[#d2e3fc] mt-auto">
+                <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] px-4 py-3 rounded-lg text-sm font-bold transition-colors border border-[#ceead6] shadow-sm hover:shadow">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                  Need Help? Ask Facilitator
+                </a>
+              </div>
+            </div>
+
+            {/* How to Setup Profile Box - Highlighted & Step by Step */}
+            <div className="bg-[#f8fbff] border border-[#aecbfa] rounded-lg p-6 shadow-md flex flex-col hover:shadow-lg transition-shadow">
+              <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-2 border-b border-[#d2e3fc] pb-3">
+                <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                How to make Profile Public?
+              </h3>
+              
+              <div className="space-y-4 text-[15px] text-[#3c4043] font-medium flex-grow overflow-y-auto pr-2 custom-scrollbar max-h-56">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] flex items-center justify-center text-sm font-extrabold shadow-sm">1</span>
+                  <p>Go to <a href="https://www.skills.google/" target="_blank" rel="noreferrer" className="text-[#1a73e8] hover:underline font-bold">skills.google</a></p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] flex items-center justify-center text-sm font-extrabold shadow-sm">2</span>
+                  <p>Top right corner: Click <strong>Sign in</strong> or the blue <strong>Join now</strong> button.</p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] flex items-center justify-center text-sm font-extrabold shadow-sm">3</span>
+                  <p>Select <strong>Continue with Google</strong> using your lab email.</p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] flex items-center justify-center text-sm font-extrabold shadow-sm">4</span>
+                  <p>After login, click your <strong>profile avatar</strong> (top right) and select <strong>Settings</strong>.</p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc] flex items-center justify-center text-sm font-extrabold shadow-sm">5</span>
+                  <p>Under Public visibility, check <strong>Make profile public</strong> and click <strong>Update settings</strong>.</p>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-[#d2e3fc] mt-auto">
+                <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] px-4 py-3 rounded-lg text-sm font-bold transition-colors border border-[#ceead6] shadow-sm hover:shadow">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                  Need Help? Ask Facilitator
+                </a>
+              </div>
+            </div>
           </div>
+          
+          {/* Mandatory Warning Note */}
+          <div className="bg-[#fef7e0] border border-[#fce8b2] p-4 mb-8 rounded-lg text-left shadow-sm flex gap-3 items-start">
+            <svg className="w-6 h-6 text-[#f29900] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+              <p className="text-sm text-[#b06000] font-extrabold mb-1">Mandatory for New & Existing Members</p>
+              <p className="text-sm text-[#b06000] font-medium">If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.</p>
+            </div>
+          </div>
+
         </div>
 
-        <div className="bg-white rounded-2xl border border-[#dadce0] shadow-md overflow-hidden">
+        <div className="bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden">
           
           {loading && (
             <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden relative">
@@ -313,8 +374,8 @@ export default function CalculatorPage() {
           <div className="p-8 md:p-12">
             
             <div className="mb-6 mt-3">
-              <div className={`relative border-2 rounded-xl transition-colors duration-75 ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#00A859] focus-within:border-[#007b41]"}`}>
-                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#00A859]"}`}>
+              <div className={`relative border-2 rounded-lg transition-colors duration-75 ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}>
+                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url
                 </label>
                 <input
@@ -326,7 +387,7 @@ export default function CalculatorPage() {
                     setError(null);
                     setHideRedLine(false); 
                   }}
-                  className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-xl"
+                  className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-lg"
                 />
               </div>
 
@@ -345,7 +406,7 @@ export default function CalculatorPage() {
               <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember my url for next time</label>
             </div>
 
-            <button onClick={calculatePoints} disabled={loading} className="w-full bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-lg font-bold py-4 rounded-xl transition-all disabled:bg-[#f1f3f4] disabled:text-[#9aa0a6] flex justify-center items-center gap-2 shadow-sm">
+            <button onClick={calculatePoints} disabled={loading} className="w-full bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-lg font-bold py-4 rounded-lg transition-all disabled:bg-[#f1f3f4] disabled:text-[#9aa0a6] flex justify-center items-center gap-2 shadow-sm">
               {loading ? "Analyzing profile..." : "Calculate Points"}
             </button>
 
@@ -366,7 +427,7 @@ export default function CalculatorPage() {
                   {recentUrls.map((url, idx) => {
                     const shortId = url.split("/").pop()?.substring(0, 15) || "Profile";
                     return (
-                      <button key={idx} onClick={() => { setProfileUrl(url); setError(null); setHideRedLine(false); }} className="px-4 py-2 bg-white hover:bg-[#e8f0fe] border-2 border-[#dadce0] hover:border-[#1a73e8] text-[#202124] hover:text-[#1a73e8] text-sm font-bold rounded-lg transition-all flex items-center gap-2 shadow-sm" title={url}>
+                      <button key={idx} onClick={() => { setProfileUrl(url); setError(null); setHideRedLine(false); }} className="px-4 py-2 bg-white hover:bg-[#e8f0fe] border border-[#dadce0] hover:border-[#1a73e8] text-[#202124] hover:text-[#1a73e8] text-sm font-bold rounded-lg transition-all flex items-center gap-2 shadow-sm" title={url}>
                         <svg className="w-4 h-4 text-[#5f6368] opacity-70" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
                         {shortId}...
                       </button>
@@ -379,19 +440,19 @@ export default function CalculatorPage() {
 
           {/* ================= 🔥 PREMIUM RESULTS SECTION 🔥 ================= */}
           {points !== null && (
-            <div className="bg-[#f8f9fa] border-t border-[#dadce0] p-8 md:p-12 animate-fade-in-up rounded-b-2xl">
+            <div className="bg-[#f8f9fa] border-t border-[#dadce0] p-8 md:p-12 animate-fade-in-up rounded-b-xl">
               
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 mb-10 bg-white p-5 md:px-6 md:py-5 rounded-2xl border border-[#dadce0] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 mb-10 bg-white p-5 md:px-6 md:py-5 rounded-lg border border-[#dadce0] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow">
                 <div className="flex items-center gap-5 w-full md:w-auto">
                   <div className="relative shrink-0">
                     {userAvatar ? (
                       <img src={userAvatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white shadow-md object-cover ring-2 ring-[#e8f0fe]" />
                     ) : (
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#1a73e8] to-[#6ab0ff] flex items-center justify-center text-white font-bold text-2xl shadow-md border-2 border-white ring-2 ring-[#e8f0fe]">
+                      <div className="w-16 h-16 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold text-2xl shadow-md border-2 border-white ring-2 ring-[#e8f0fe]">
                         {userName ? userName.charAt(0).toUpperCase() : "U"}
                       </div>
                     )}
-                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-[#00A859] border-2 border-white rounded-full" title="Verified Public Profile"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-[#34a853] border-2 border-white rounded-full" title="Verified Public Profile"></div>
                   </div>
                   
                   <div className="flex flex-col overflow-hidden w-full">
@@ -437,16 +498,16 @@ export default function CalculatorPage() {
                 <div className="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-[#dadce0] to-transparent"></div>
 
                 <div className="flex-1 w-full grid grid-cols-2 gap-5">
-                  <div className="bg-white px-5 py-4 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#34a853] hover:shadow-md transition-all relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-1.5 h-full bg-[#34a853] group-hover:w-2 transition-all"></div>
+                  <div className="bg-white px-5 py-4 rounded-lg border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#34a853] hover:shadow-md transition-all relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-[#34a853] group-hover:w-1.5 transition-all"></div>
                     <span className="text-3xl font-black text-[#202124] leading-none mb-1.5">
                       {history.filter(item => item.type !== 'Skill Badge').length}
                     </span>
                     <span className="text-[12px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
                   </div>
 
-                  <div className="bg-white px-5 py-4 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#a142f4] hover:shadow-md transition-all relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-1.5 h-full bg-[#a142f4] group-hover:w-2 transition-all"></div>
+                  <div className="bg-white px-5 py-4 rounded-lg border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#a142f4] hover:shadow-md transition-all relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-[#a142f4] group-hover:w-1.5 transition-all"></div>
                     <span className="text-3xl font-black text-[#202124] leading-none mb-1.5">
                       {breakdown?.skills || 0}
                     </span>
@@ -456,7 +517,7 @@ export default function CalculatorPage() {
               </div>
 
               <div className="mt-10 text-center md:text-left flex items-center justify-center md:justify-start gap-2">
-                <svg className="w-4 h-4 text-[#00A859]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <p className="text-xs font-semibold text-[#80868b]">
                   Data verified securely from your public profile.
                 </p>
@@ -475,13 +536,13 @@ export default function CalculatorPage() {
                 Badge Completion History
               </h4>
               
-              <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all w-full sm:w-auto">
+              <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                 Export CSV Report
               </button>
             </div>
             
-            <div className="bg-white border border-[#dadce0] rounded-2xl overflow-hidden shadow-md">
+            <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
               <div className="max-h-[500px] overflow-y-auto">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
@@ -500,7 +561,7 @@ export default function CalculatorPage() {
                           <td className="px-6 py-5"><p className="text-lg font-bold text-[#202124] group-hover:text-[#1a73e8] transition-colors">{item.name}</p></td>
                           <td className="px-6 py-5 whitespace-nowrap border-l border-[#f1f3f4]"><p className="text-base text-[#5f6368] font-semibold">{item.date}</p></td>
                           <td className="px-6 py-5 text-center border-l border-[#f1f3f4]">
-                            <span className={`inline-block px-4 py-2 rounded-xl text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : item.points === 1 ? 'bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]' : 'bg-[#f3e8fd] text-[#8430ce] border border-[#d7aefb]'}`}>
+                            <span className={`inline-block px-4 py-2 rounded-lg text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : item.points === 1 ? 'bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]' : 'bg-[#f3e8fd] text-[#8430ce] border border-[#d7aefb]'}`}>
                               +{item.points}
                             </span>
                           </td>
@@ -522,7 +583,7 @@ export default function CalculatorPage() {
 
         {/* ================= 🔥 SMART 1-CLICK CELEBRATION GENERATOR (MOVED DOWN) 🔥 ================= */}
         {points !== null && (
-        <div className="mt-12 bg-white border border-[#dadce0] rounded-2xl shadow-md overflow-hidden md:-mx-12 animate-fade-in-up">
+        <div className="mt-12 bg-white border border-[#dadce0] rounded-lg shadow-sm overflow-hidden md:-mx-12 animate-fade-in-up">
           <div className="bg-[#f8f9fa] border-b border-[#dadce0] px-6 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
               <h4 className="text-lg font-extrabold text-[#202124] flex items-center gap-2">
@@ -534,7 +595,7 @@ export default function CalculatorPage() {
           
           <div className="p-6 md:p-10 flex flex-col items-center gap-6">
             {!isCardGenerated ? (
-              <button onClick={() => setIsCardGenerated(true)} className="px-8 py-4 bg-gradient-to-r from-[#1a73e8] to-[#a142f4] text-white font-extrabold text-lg rounded-xl shadow-sm hover:shadow-md transform hover:-translate-y-1 transition-all flex items-center gap-3">
+              <button onClick={() => setIsCardGenerated(true)} className="px-8 py-4 bg-[#1a73e8] text-white font-extrabold text-lg rounded-lg shadow-sm hover:bg-[#1557b0] transition-all flex items-center gap-3">
                 ✨ Generate My Poster
               </button>
             ) : (
@@ -544,12 +605,12 @@ export default function CalculatorPage() {
                 <div className="w-full lg:w-1/3 space-y-6">
                   <div>
                     <label className="block text-xs font-bold text-[#5f6368] uppercase tracking-wider mb-2">1. Choose Your Vibe</label>
-                    <div className="flex flex-wrap gap-2 bg-[#f8f9fa] border border-[#dadce0] p-2 rounded-xl">
+                    <div className="flex flex-wrap gap-2 bg-[#f8f9fa] border border-[#dadce0] p-2 rounded-lg">
                       {['🚀', '🏆', '🔥', '🎉', '😎', '☁️', '🥳', '❤️', '🥰', '😍', '🤩'].map((emoji) => (
                         <button 
                           key={emoji} 
                           onClick={() => setFlexEmoji(emoji)}
-                          className={`flex-1 min-w-[40px] py-2 text-xl rounded-lg transition-all ${flexEmoji === emoji ? 'bg-white shadow-sm scale-110 border border-[#dadce0] z-10' : 'hover:bg-[#e8f0fe] grayscale-[50%] opacity-70'}`}
+                          className={`flex-1 min-w-[40px] py-2 text-xl rounded-md transition-all ${flexEmoji === emoji ? 'bg-white shadow-sm scale-110 border border-[#dadce0] z-10' : 'hover:bg-[#e8f0fe] grayscale-[50%] opacity-70'}`}
                         >
                           {emoji}
                         </button>
@@ -563,13 +624,13 @@ export default function CalculatorPage() {
                       type="text" 
                       value={flexMilestone} 
                       onChange={(e) => setFlexMilestone(e.target.value)} 
-                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-xl text-[#202124] font-semibold outline-none focus:border-[#1a73e8] focus:bg-white transition-all text-sm"
+                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[#202124] font-semibold outline-none focus:border-[#1a73e8] focus:bg-white transition-all text-sm"
                       placeholder="e.g., Leveling up my skills!"
                       maxLength={40}
                     />
                   </div>
                   
-                  <div className="bg-[#e8f0fe] p-5 rounded-xl border border-[#d2e3fc]">
+                  <div className="bg-[#e8f0fe] p-5 rounded-lg border border-[#d2e3fc]">
                     <p className="text-xs text-[#1a73e8] font-extrabold uppercase tracking-wider">Locked Stats:</p>
                     <ul className="text-sm font-bold text-[#202124] mt-3 space-y-2">
                       <li className="flex items-center gap-2"><span className="text-lg">👤</span> <span className="truncate">{userName || "Arcade Player"}</span></li>
@@ -592,7 +653,7 @@ export default function CalculatorPage() {
                         minWidth: '550px',
                         backgroundColor: '#ffffff'
                       }}
-                      className="w-full max-w-[550px] mx-auto p-8 rounded-xl shadow-sm relative overflow-hidden border border-[#dadce0] flex flex-col"
+                      className="w-full max-w-[550px] mx-auto p-8 rounded-lg shadow-sm relative overflow-hidden border border-[#dadce0] flex flex-col"
                     >
                       
                       {/* Background Accents (Giant emoji properly centered) */}
@@ -622,7 +683,7 @@ export default function CalculatorPage() {
                         </div>
                         {/* 🔥 FIX: Emoji added next to Achievement badge 🔥 */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '10px', fontWeight: '900', color: '#b06000', backgroundColor: '#fff8e1', border: '1px solid #fde293', padding: '6px 12px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          <span style={{ fontSize: '10px', fontWeight: '900', color: '#b06000', backgroundColor: '#fff8e1', border: '1px solid #fde293', padding: '6px 12px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                             Achievement
                           </span>
                           <span style={{ fontSize: '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}>{flexEmoji}</span>
@@ -644,7 +705,7 @@ export default function CalculatorPage() {
                         
                         {/* Huge Margin top to prevent overlapping text */}
                         <div style={{ marginTop: '32px' }}>
-                          <span style={{ display: 'inline-block', fontSize: '16px', fontWeight: 'bold', color: '#137333', backgroundColor: '#e6f4ea', padding: '10px 20px', borderRadius: '12px', border: '1px solid #ceead6' }}>
+                          <span style={{ display: 'inline-block', fontSize: '16px', fontWeight: 'bold', color: '#137333', backgroundColor: '#e6f4ea', padding: '10px 20px', borderRadius: '8px', border: '1px solid #ceead6' }}>
                             {flexMilestone || "Leveling up my cloud skills!"}
                           </span>
                         </div>
@@ -667,7 +728,7 @@ export default function CalculatorPage() {
                           <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#80868b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, marginBottom: '6px' }}>
                             Season 2026
                           </p>
-                          <span style={{ fontSize: '12px', fontWeight: '900', color: '#5f6368', backgroundColor: '#f8f9fa', padding: '6px 10px', borderRadius: '6px', border: '1px solid #dadce0' }}>
+                          <span style={{ fontSize: '12px', fontWeight: '900', color: '#5f6368', backgroundColor: '#f8f9fa', padding: '6px 10px', borderRadius: '4px', border: '1px solid #dadce0' }}>
                             Arcade Nexus
                           </span>
                         </div>
@@ -678,7 +739,7 @@ export default function CalculatorPage() {
 
                   {/* Share/Download Buttons - RESTORED TO WHATSAPP/LINKEDIN */}
                   <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-2">
-                    <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-xl transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
+                    <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-lg transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
                         <>
                           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
@@ -686,7 +747,7 @@ export default function CalculatorPage() {
                         </>
                       )}
                     </button>
-                    <button onClick={() => shareCardAsImage('linkedin')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-xl transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
+                    <button onClick={() => shareCardAsImage('linkedin')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-lg transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
                       {isGeneratingImg ? "Processing..." : (
                         <>
                           <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> 
@@ -704,13 +765,13 @@ export default function CalculatorPage() {
         
         <div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4 text-sm w-full">
           <div className="relative group w-full sm:w-auto flex justify-center">
-            <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-48 px-4 py-3 bg-[#00A859] text-white text-center rounded-xl font-bold transition-colors hover:bg-[#008c4a] shadow-sm">Arcade Page</a>
+            <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-48 px-4 py-3 bg-[#34a853] text-white text-center rounded-lg font-bold transition-colors hover:bg-[#1e8e3e] shadow-sm border border-[#34a853]">Arcade Page</a>
           </div>
           <div className="relative group w-full sm:w-auto flex justify-center">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-48 px-4 py-3 bg-[#00A859] text-white text-center rounded-xl font-bold transition-colors hover:bg-[#008c4a] shadow-sm">Subscribe here!</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-48 px-4 py-3 bg-[#34a853] text-white text-center rounded-lg font-bold transition-colors hover:bg-[#1e8e3e] shadow-sm border border-[#34a853]">Subscribe here!</a>
           </div>
           <div className="relative group w-full sm:w-auto flex justify-center">
-            <a href="http://qwiklab.zendesk.com/hc/requests/4774945" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-48 px-4 py-3 bg-[#00A859] text-white text-center rounded-xl font-bold transition-colors hover:bg-[#008c4a] shadow-sm">Arcade Support</a>
+            <a href="http://qwiklab.zendesk.com/hc/requests/4774945" target="_blank" rel="noopener noreferrer" className="block w-full sm:w-48 px-4 py-3 bg-[#34a853] text-white text-center rounded-lg font-bold transition-colors hover:bg-[#1e8e3e] shadow-sm border border-[#34a853]">Arcade Support</a>
           </div>
         </div>
 
