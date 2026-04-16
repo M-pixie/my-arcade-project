@@ -289,7 +289,7 @@ export default function CalculatorPage() {
               </h3>
               <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
                 <li>Your profile <span className="bg-[#e8eaed] text-[#202124] px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider mx-1 border border-[#dadce0]">must be public</span> to fetch data.</li>
-                <li>Copy your complete profile URL (e.g., <code className="bg-[#ffffff] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#d2e3fc] shadow-sm">https://www.skills.google/public_profiles/...</code>).</li>
+                <li>Copy your complete profile URL (e.g., <code className="bg-[#ffffff] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#d2e3fc] shadow-sm">https://www.skills.google/public_profiles/...</code></li>
                 <li>Paste the exact URL in the input box below and click Calculate.</li>
                 <li>Invalid, broken, or private URLs will return an error.</li>
               </ul>
