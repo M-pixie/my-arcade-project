@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { auth } from "@/lib/firebase";
-import { saveUserPoints } from "@/lib/leaderboard";
+import { saveUserPoints, subscribeLeaderboard } from "@/lib/leaderboard"; 
 import Navbar from "@/app/components/Navbar";
 import html2canvas from "html2canvas"; 
+import { useRouter } from "next/navigation"; 
+import { onAuthStateChanged, User, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // UPDATED IMPORT
 
 export default function CalculatorPage() {
   const [profileUrl, setProfileUrl] = useState("");
@@ -22,6 +24,13 @@ export default function CalculatorPage() {
   const [hideRedLine, setHideRedLine] = useState(false);
   const [recentUrls, setRecentUrls] = useState<string[]>([]);
 
+  // ================= 🔥 NEW PREMIUM CARD STATES 🔥 =================
+  const router = useRouter();
+  const [copied, setCopied] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [realRank, setRealRank] = useState<number | null>(null);
+  const [loginToast, setLoginToast] = useState(false); // LOGIN SUCCESS TOAST STATE
+
   // ================= 🔥 CELEBRATION GENERATOR STATES 🔥 =================
   const [flexName, setFlexName] = useState("");
   const [flexPoints, setFlexPoints] = useState("");
@@ -32,9 +41,45 @@ export default function CalculatorPage() {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Listen to Auth State for Sign-in Button & Real Rank
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, setCurrentUser);
+    return () => unsub();
+  }, []);
+
+  // ================= 🔥 DIRECT GOOGLE LOGIN LOGIC 🔥 =================
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      setLoginToast(true);
+      setTimeout(() => setLoginToast(false), 3500); // Hide toast after 3.5s
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+
+  // ================= 🔥 LEADERBOARD RANK FETCHING 🔥 =================
+  useEffect(() => {
+    if (!currentUser) {
+      setRealRank(null);
+      return;
+    }
+    // Fetch actual rank from leaderboard if user is logged in
+    const unsub = subscribeLeaderboard((leaders: any[]) => {
+      const me = leaders.find((l: any) => l.id === currentUser.uid);
+      if (me && me.rank) {
+        setRealRank(me.rank);
+      }
+    });
+    return () => unsub();
+  }, [currentUser]);
+
   useEffect(() => {
     if (userName) setFlexName(userName);
-    if (points !== null) setFlexPoints(points.toString());
+    if (points !== null) {
+      setFlexPoints(points.toString());
+    }
   }, [userName, points]);
   // ===========================================================================
 
@@ -144,10 +189,24 @@ export default function CalculatorPage() {
     }
   };
 
+  // Helper function to calculate 'Member Since' year
+  const getMemberSinceYear = () => {
+    if (!history || history.length === 0) return "2026";
+    const years = history.map(h => new Date(h.date).getFullYear()).filter(y => !isNaN(y));
+    return years.length > 0 ? Math.min(...years).toString() : "2026";
+  };
+
+  const handleCopyProfile = () => {
+    navigator.clipboard.writeText(profileUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const websiteUrl = "https://arcade-calculator.vercel.app/calculator"; 
 
+  // ================= UPDATED WHATSAPP SHARE LOGIC =================
   const shareToWhatsApp = () => {
-    const text = `🔥 Yooo! I just reached *${points} points* on the Google Cloud Arcade 2026! 🚀\n\nCheck your own points and track your swags easily using this awesome Calculator:\n${websiteUrl}`;
+    const text = `🔥 Yooo! I just reached *${points} points* on the Google Cloud Arcade 2026! 🚀\n\n👤 *Name:* ${userName || "Arcade Player"}\n🎯 *Points:* ${points}\n🔗 *My Public Profile:* ${profileUrl}\n\nCheck your own points and track your swags easily using this awesome Calculator:\n${websiteUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
   };
 
@@ -240,7 +299,6 @@ export default function CalculatorPage() {
       setIsGeneratingImg(false);
     }
   };
-  // =========================================================================
 
   const downloadCSV = () => {
     if (history.length === 0) return;
@@ -261,7 +319,16 @@ export default function CalculatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans">
+    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
+      
+      {/* LOGIN SUCCESS TOAST */}
+      {loginToast && (
+        <div className="fixed top-24 right-5 bg-[#34a853] text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 z-50 font-bold transition-all duration-500 transform translate-y-0 opacity-100">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
+          Login Successful!
+        </div>
+      )}
+
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-6 pt-24 pb-16">
@@ -274,8 +341,8 @@ export default function CalculatorPage() {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold text-[#202124] tracking-tight mb-4 leading-tight">
-  Arcade Points <span className="text-[#1a73e8]">Calculator</span>
-</h1>
+            Arcade Points <span className="text-[#1a73e8]">Calculator</span>
+          </h1>
           <p className="text-[#5f6368] text-base md:text-lg mb-8 font-medium">
             Calculate your exact points from Google Cloud Skills Boost public profile URL.
           </p>
@@ -438,91 +505,175 @@ export default function CalculatorPage() {
             )}
           </div>
 
-          {/* ================= 🔥 PREMIUM RESULTS SECTION 🔥 ================= */}
+          {/* ================= 🔥 NEW PREMIUM RESULTS SECTION 🔥 ================= */}
           {points !== null && (
-            <div className="bg-[#f8f9fa] border-t border-[#dadce0] p-8 md:p-12 animate-fade-in-up rounded-b-xl">
-              
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 mb-10 bg-white p-5 md:px-6 md:py-5 rounded-lg border border-[#dadce0] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow">
-                <div className="flex items-center gap-5 w-full md:w-auto">
-                  <div className="relative shrink-0">
-                    {userAvatar ? (
-                      <img src={userAvatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white shadow-md object-cover ring-2 ring-[#e8f0fe]" />
-                    ) : (
-                      <div className="w-16 h-16 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold text-2xl shadow-md border-2 border-white ring-2 ring-[#e8f0fe]">
-                        {userName ? userName.charAt(0).toUpperCase() : "U"}
-                      </div>
-                    )}
-                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-[#34a853] border-2 border-white rounded-full" title="Verified Public Profile"></div>
+            <div className="bg-[#f4f7fb] border-t border-[#dadce0] p-6 md:p-10 animate-fade-in-up rounded-b-xl">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                {/* LEFT: Premium Profile Card */}
+                <div className="lg:col-span-5 bg-white rounded-xl shadow-md border border-[#e8eaed] overflow-hidden relative flex flex-col group transition-shadow duration-300">
+                  {/* Banner */}
+                  <div className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] py-5 text-center shadow-inner relative overflow-hidden">
+                    <div className="absolute inset-0 bg-white/10 opacity-30 transform -skew-x-12"></div>
+                    <h3 className="text-white font-black text-2xl tracking-wide shadow-sm relative z-10">
+                      Arcade Points: {points}
+                    </h3>
                   </div>
                   
-                  <div className="flex flex-col overflow-hidden w-full">
-                    <div className="flex justify-between items-start w-full">
-                      <h3 className="text-xl font-bold text-[#202124] leading-tight truncate">{userName || "Arcade Player"}</h3>
+                  {/* Content */}
+                  <div className="px-8 pt-8 pb-6 flex flex-col items-center relative bg-gradient-to-b from-[#f8f9fa] to-transparent flex-grow">
+                    
+                    {/* Avatar */}
+                    <div className="w-28 h-28 rounded-full border-[5px] border-white shadow-md flex items-center justify-center overflow-hidden mb-5 relative bg-[#137333] ring-4 ring-[#e6f4ea] transform transition-transform hover:scale-105">
+                      {userAvatar ? (
+                        <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-5xl text-white font-bold">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                      )}
                     </div>
-                    <p className="text-xs md:text-sm text-[#5f6368] mt-1 font-medium flex items-center gap-1.5">
-                      <svg className="w-4 h-4 text-[#1a73e8] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      <span className="truncate">Google Cloud Skills Boost Profile</span>
-                    </p>
-                  </div>
-                </div>
+                    
+                    {/* Name */}
+                    <h2 className="text-[26px] font-black text-[#202124] mb-4 text-center tracking-tight leading-tight">
+                      {userName || "Arcade Player"}
+                    </h2>
 
-                <div className="flex flex-col items-start md:items-end w-full md:w-auto mt-2 md:mt-0 pt-4 md:pt-0 border-t border-[#f1f3f4] md:border-none shrink-0">
-                  <p className="text-[11px] font-extrabold text-[#80868b] uppercase tracking-wider mb-2.5">Share your points</p>
-                  <div className="flex items-center gap-2">
-                    <button onClick={shareToWhatsApp} className="flex items-center gap-1.5 px-4 py-2 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-xs font-bold rounded-lg transition-colors border border-[#ceead6]">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                      WhatsApp
+                    {/* Copy Public Profile Button */}
+                    <button 
+                      onClick={handleCopyProfile}
+                      className={`text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm hover:shadow-md flex items-center gap-2 mb-7 ${copied ? 'bg-[#34a853] text-white ring-2 ring-[#ceead6]' : 'bg-gradient-to-r from-[#8ab4f8] to-[#4285f4] hover:from-[#669df6] hover:to-[#1a73e8] text-white'}`}
+                    >
+                      {copied ? (
+                        <>Copied! <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg></>
+                      ) : (
+                        <>Public Profile <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></>
+                      )}
                     </button>
-                    <button onClick={shareToLinkedIn} className="flex items-center gap-1.5 px-4 py-2 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-xs font-bold rounded-lg transition-colors border border-[#d2e3fc]">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                      LinkedIn
+
+                    {/* Badge (Ribbon style SVG) */}
+                    <div className="mb-6 drop-shadow-sm">
+                      <svg width="75" height="75" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 85L50 70L75 85V45H25V85Z" fill="#d35400"/>
+                        <circle cx="50" cy="40" r="34" fill="#f39c12"/>
+                        <circle cx="50" cy="40" r="26" fill="#e67e22"/>
+                        <path d="M50 22L54 32.5H65L56 39L59.5 49L50 43L40.5 49L44 39L35 32.5H46L50 22Z" fill="#fffaf0"/>
+                      </svg>
+                    </div>
+
+                    {/* ================= 🔥 UPDATED RANK PILL & TOOLTIP 🔥 ================= */}
+                    <div className="relative group w-full mb-5">
+                      {currentUser ? (
+                        <div className="w-full bg-gradient-to-r from-[#fbbc04] to-[#f29900] text-white font-extrabold text-xl py-3 px-8 rounded-full shadow-sm text-center tracking-wide">
+                          Rank # {realRank || "-"}
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={handleGoogleLogin}
+                          className="w-full bg-gradient-to-r from-[#fbbc04] to-[#f29900] text-white font-extrabold text-[15px] py-3 px-8 rounded-full shadow-sm text-center tracking-wide hover:shadow-md transition-all cursor-pointer"
+                        >
+                          Sign in for rank
+                        </button>
+                      )}
+                      
+                      {/* Tooltip for non-logged in users */}
+                      {!currentUser && (
+                        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-[#202124] text-white text-xs font-bold py-1.5 px-3 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                          Sign in to unlock Leaderboard
+                          <div className="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-[#202124] rotate-45"></div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* User Progress Report Title */}
+                    <div className="text-[13px] font-extrabold text-[#1a73e8] bg-[#e8f0fe] px-5 py-1.5 rounded-full uppercase tracking-wider mb-6 text-center border border-[#d2e3fc]">
+                      User Progress Report
+                    </div>
+
+                    {/* Member Since */}
+                    <div className="text-sm font-bold text-[#80868b] border-t border-[#e8eaed] pt-5 w-full text-center mt-auto tracking-wide uppercase">
+                      Member since <span className="text-[#3c4043]">{getMemberSinceYear()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RIGHT: Stats & Navigation Buttons */}
+                <div className="lg:col-span-7 flex flex-col justify-center gap-8 pl-0 lg:pl-4 mt-8 lg:mt-0">
+                  
+                  {/* ====== PREMIUM SIGN IN BLOCK (NEW) ====== */}
+                  {!currentUser && (
+                    <div className="bg-white p-6 rounded-xl border border-[#dadce0] shadow-sm flex flex-col justify-center items-center gap-4 mb-2">
+                      <div>
+                         <p className="text-sm font-black text-[#5f6368] uppercase tracking-wider mb-1 text-center">Save Your Progress</p>
+                         <p className="text-xs font-medium text-[#80868b] text-center">Sign in with Google to track your rank and points</p>
+                      </div>
+                      <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center gap-3 px-6 py-3.5 bg-white hover:bg-[#f8f9fa] text-[#3c4043] text-base font-bold rounded-xl transition-all border border-[#dadce0] shadow-sm hover:shadow-md">
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Sign in with Google
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Share Actions Area (WhatsApp Only) */}
+                  <div className="bg-white p-6 rounded-xl border border-[#dadce0] shadow-sm flex flex-col justify-center items-center gap-4">
+                    <div>
+                       <p className="text-sm font-black text-[#5f6368] uppercase tracking-wider mb-1 text-center">Share your points</p>
+                    </div>
+                    <button onClick={shareToWhatsApp} className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white text-base font-bold rounded-xl transition-all shadow-sm hover:shadow-md">
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/>
+                      </svg>
+                      Share your points
                     </button>
                   </div>
+
+                  {/* Summary Blocks (Clean Border) */}
+                  <div className="grid grid-cols-2 gap-5 w-full">
+                    <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
+                      <span className="text-4xl font-black text-[#202124] leading-none mb-2">
+                        {history.filter(item => item.type !== 'Skill Badge').length}
+                      </span>
+                      <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
+                    </div>
+
+                    <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
+                      <span className="text-4xl font-black text-[#202124] leading-none mb-2">
+                        {breakdown?.skills || 0}
+                      </span>
+                      <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">Skill Badges</span>
+                    </div>
+                  </div>
+
+                  {/* HUGE Action Buttons (Less Curve) */}
+                  <div className="flex flex-col gap-4 w-full">
+                    <button 
+                      onClick={() => router.push('/dashboard')} 
+                      className="w-full group bg-gradient-to-r from-[#1a73e8] to-[#4285f4] hover:from-[#1557b0] hover:to-[#1a73e8] text-white font-black py-4 px-6 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-between text-lg outline-none"
+                    >
+                      <span className="flex items-center gap-3">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                        Go to Dashboard
+                      </span>
+                      <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </button>
+                    
+                    <button 
+                      onClick={() => router.push('/leaderboard')} 
+                      className="w-full group bg-white hover:bg-[#f8fbff] text-[#1a73e8] border-2 border-[#1a73e8] font-black py-4 px-6 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-between text-lg outline-none"
+                    >
+                      <span className="flex items-center gap-3">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                        Check your rank status
+                      </span>
+                      <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                    </button>
+                  </div>
+
                 </div>
               </div>
-
-              <div className="flex flex-col md:flex-row items-center justify-between gap-10">
-                <div className="text-center md:text-left flex-shrink-0 w-full md:w-auto">
-                  <div className="flex justify-between md:flex-col items-center md:items-start mb-2">
-                    <p className="text-sm font-extrabold text-[#5f6368] uppercase tracking-widest">Total Points Earned</p>
-                  </div>
-                  <div className="flex items-baseline justify-center md:justify-start gap-2">
-                    <p className="text-7xl md:text-8xl font-extrabold text-[#1a73e8] tracking-tight drop-shadow-sm pb-1">
-                      {points}
-                    </p>
-                    <span className="text-2xl font-bold text-[#1a73e8] opacity-90">pts</span>
-                  </div>
-                </div>
-
-                <div className="hidden md:block w-px h-24 bg-gradient-to-b from-transparent via-[#dadce0] to-transparent"></div>
-                <div className="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-[#dadce0] to-transparent"></div>
-
-                <div className="flex-1 w-full grid grid-cols-2 gap-5">
-                  <div className="bg-white px-5 py-4 rounded-lg border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#34a853] hover:shadow-md transition-all relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-[#34a853] group-hover:w-1.5 transition-all"></div>
-                    <span className="text-3xl font-black text-[#202124] leading-none mb-1.5">
-                      {history.filter(item => item.type !== 'Skill Badge').length}
-                    </span>
-                    <span className="text-[12px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
-                  </div>
-
-                  <div className="bg-white px-5 py-4 rounded-lg border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#a142f4] hover:shadow-md transition-all relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-[#a142f4] group-hover:w-1.5 transition-all"></div>
-                    <span className="text-3xl font-black text-[#202124] leading-none mb-1.5">
-                      {breakdown?.skills || 0}
-                    </span>
-                    <span className="text-[12px] text-[#5f6368] font-bold uppercase tracking-wider text-center">Skill Badges</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-10 text-center md:text-left flex items-center justify-center md:justify-start gap-2">
-                <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <p className="text-xs font-semibold text-[#80868b]">
-                  Data verified securely from your public profile.
-                </p>
-              </div>
-
             </div>
           )}
         </div>
@@ -737,25 +888,6 @@ export default function CalculatorPage() {
                   </div>
                   {/* ====== END OF PREMIUM CARD ====== */}
 
-                  {/* Share/Download Buttons - RESTORED TO WHATSAPP/LINKEDIN */}
-                  <div className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mt-2">
-                    <button onClick={() => shareCardAsImage('whatsapp')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] text-sm font-bold rounded-lg transition-all border border-[#ceead6] shadow-sm hover:shadow-md disabled:opacity-50">
-                      {isGeneratingImg ? "Processing..." : (
-                        <>
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                          Share on WhatsApp
-                        </>
-                      )}
-                    </button>
-                    <button onClick={() => shareCardAsImage('linkedin')} disabled={isGeneratingImg} className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 bg-[#e8f0fe] hover:bg-[#d2e3fc] text-[#1a73e8] text-sm font-bold rounded-lg transition-all border border-[#d2e3fc] shadow-sm hover:shadow-md disabled:opacity-50">
-                      {isGeneratingImg ? "Processing..." : (
-                        <>
-                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> 
-                          Share on LinkedIn
-                        </>
-                      )}
-                    </button>
-                  </div>
                 </div>
               </div>
             )}
