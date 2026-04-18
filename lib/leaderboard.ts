@@ -79,7 +79,7 @@ export function subscribeLeaderboard(
   const q = query(
     collection(db, "leaderboard"),
     orderBy("points", "desc"),
-    limit(50) // Top 50 players dikhayega
+    limit(500) // Top 500 players dikhayega
   );
 
   return onSnapshot(q, (snapshot) => {

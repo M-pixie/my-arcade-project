@@ -278,8 +278,7 @@ export default function DashboardPage() {
               <div className="w-14 h-14 border-4 border-blue-50 rounded-full"></div>
               {/* Sleek spinner */}
               <div className="w-14 h-14 border-4 border-[#1a73e8] border-r-transparent border-t-transparent rounded-full animate-spin absolute"></div>
-              {/* Minimalist dot inside instead of Emoji */}
-              <div className="w-2 h-2 bg-[#1a73e8] rounded-full absolute animate-pulse"></div>
+              
             </div>
             
             <h2 className="text-2xl font-bold text-[#202124] tracking-tight">Searching Profile...</h2>
