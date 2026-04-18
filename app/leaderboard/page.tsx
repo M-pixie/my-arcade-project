@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import AuthGuard from "@/app/components/AuthGuard";
+// 🚀 AuthGuard yahan se hata diya hai taaki page public ho jaye
 import Navbar from "@/app/components/Navbar";
 import { subscribeLeaderboard } from "@/lib/leaderboard";
 
@@ -36,7 +36,8 @@ export default function LeaderboardPage() {
   );
 
   return (
-    <AuthGuard>
+    // 🚀 AuthGuard wrapper hata diya, ab direct UI render hoga (Public access)
+    <>
       {/* 🌌 PREMIUM NAVY BLUE BACKGROUND 🌌 */}
       <div className="min-h-screen bg-gradient-to-b from-[#050b14] via-[#0a1229] to-[#050b14] text-white font-sans pt-16 pb-12 relative overflow-hidden">
         
@@ -261,7 +262,7 @@ export default function LeaderboardPage() {
 
         </main>
       </div>
-    </AuthGuard>
+    </>
   );
 }
 
