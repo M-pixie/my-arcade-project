@@ -286,7 +286,7 @@ export default function DashboardPage() {
             
             {/* Professional Source Text */}
             <p className="text-sm font-medium text-[#5f6368] mt-2 text-center">
-              Fetching data securely from Google Cloud servers
+              fetching data securely from your public profile url
             </p>
 
             {/* Status indicator with sharper edges (rounded-md) */}
