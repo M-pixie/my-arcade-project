@@ -396,7 +396,7 @@ export default function HomePage() {
   <div className="max-w-[90rem] mx-auto relative z-10">
     {/* ✨ PREMIUM PURPLE BANNER (Hero Content + Yugali Box) ✨ */}
     {/* ✨ rounded-[2.5rem] ko rounded-2xl kiya gaya taaki halka aur premium curve aaye ✨ */}
-    <div className="bg-gradient-to-r from-[#6b3cb0] to-[#8430ce] rounded-2xl p-8 md:p-12 lg:p-16 shadow-[0_20px_50px_rgba(107,60,176,0.3)] relative overflow-hidden flex flex-col gap-12 w-full mx-auto">
+    <div className="bg-gradient-to-r bg-[#0d47a1] rounded-2xl p-8 md:p-12 lg:p-16 shadow-[0_20px_50px_rgba(107,60,176,0.3)] relative overflow-hidden flex flex-col gap-12 w-full mx-auto">
       
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
@@ -687,53 +687,31 @@ export default function HomePage() {
         </section>
 
           
-{/* ================= PREMIUM REWARDS SECTION ================= */}
-{/* ✨ yahan bas id="swags" add kiya hai taaki button click se yahan scroll ho jaye ✨ */}
-<section id="swags" className="relative z-10 py-24 bg-white border-b border-[#dadce0] overflow-hidden">
-  <div className="max-w-[90rem] mx-auto px-6 relative z-10">
-    
-    {/* ✨ PREMIUM PURPLE BANNER (Matched with Hero Section) ✨ */}
-    <div className="bg-gradient-to-r from-[#6b3cb0] to-[#8430ce] rounded-2xl p-8 md:p-12 lg:p-16 shadow-[0_20px_50px_rgba(107,60,176,0.3)] relative overflow-hidden flex flex-col items-center w-full max-w-6xl mx-auto">
-      
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-         <div className="absolute -top-32 -left-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
-         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#d7aefb] rounded-full blur-[100px]"></div>
-      </div>
+{/* ================= REWARDS SECTION (Updated Color) ================= */}
 
-      <div className="text-center mb-12 relative z-10 flex flex-col items-center">
-        
-        {/* ✨ Premium Google Swags Badge (Glassmorphism design) ✨ */}
-        <div className="group relative inline-flex items-center gap-3 px-6 py-2.5 bg-white/10 border border-white/20 text-[#fde293] text-[15px] font-extrabold mb-8 uppercase tracking-widest rounded-full shadow-sm cursor-default backdrop-blur-sm transition-all hover:bg-white/20">
-          <span className="text-2xl block animate-[smooth-float-spin_3s_ease-in-out_infinite] origin-center drop-shadow-md">🎁</span>
-          <span className="relative z-10 drop-shadow-sm">Google Swags</span>
-        </div>
-        
-        {/* ✨ Dark Yellow / Gold Font for Heading ✨ */}
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#fde293] tracking-tight mb-6 drop-shadow-sm">
-          Arcade Swags
-        </h2>
-        
-        <p className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium mb-4">
-          Level up your cloud skills and unlock exclusive, premium Google Cloud gear. The more badges you collect, the bigger the rewards.
-        </p>
-      </div>
-      
-      {/* ✨ Image Container with Premium Golden Border Effect ✨ */}
-      <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 ease-out p-1 md:p-1.5 bg-gradient-to-br from-[#fde293] via-white/40 to-[#fbc02d] w-full max-w-5xl z-10 hover:scale-[1.02] group">
-        <div className="relative w-full h-full bg-white rounded-xl z-10 overflow-hidden">
-          <img 
-            src="https://i.postimg.cc/MT50zzG8/1775382064372.png" 
-            alt="Premium Swags Showcase" 
-            className="w-full h-auto block transition-transform duration-700 group-hover:scale-105" 
-          />
-        </div>
-      </div>
-      
-    </div>
-  </div>
-</section>
 
+        <section id="swags" className="relative z-10 py-24 bg-white border-b border-[#dadce0]">
+          <div className="max-w-[90rem] mx-auto px-6 relative z-10">
+            {/* ✨ CHANGE: Rewards section background changed from Purple to Deep Blue ✨ */}
+            <div className="bg-[#0d47a1] rounded-2xl p-8 md:p-12 lg:p-16 shadow-[0_20px_50px_rgba(13,71,161,0.3)] relative overflow-hidden flex flex-col items-center w-full max-w-6xl mx-auto">
+              <div className="text-center mb-12 relative z-10 flex flex-col items-center">
+                <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-white/10 border border-white/20 text-[#fde293] font-extrabold mb-8 uppercase tracking-widest rounded-full backdrop-blur-sm">
+                  <span className="text-2xl">🎁</span><span>Previous Google Swags</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#fde293] tracking-tight mb-6">Arcade Swags</h2>
+                <p className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">Master Google Cloud skills through hands-on labs, accumulate Arcade points, and redeem them for exclusive premium swags.</p>
+              </div>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl p-1 bg-gradient-to-br from-[#fde293] to-[#fbc02d] w-full max-w-5xl z-10">
+                <div className="relative w-full h-full bg-white rounded-xl overflow-hidden">
+                  <img src="https://i.postimg.cc/MT50zzG8/1775382064372.png" alt="Swags" className="w-full h-auto block" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        
         {/* ================= 🔥 NEW: LIVE SWAG POLL & REVIEW TRACKER 🔥 ================= */}
         <div className="pb-24 pt-10 bg-white border-b border-[#dadce0]">
           <div className="max-w-4xl mx-auto px-6">
