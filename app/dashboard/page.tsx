@@ -97,7 +97,7 @@ export default function DashboardPage() {
       }
     });
     return () => unsub();
-  }, [userUniqueId]);
+  }, [userUniqueId, points]);
 
   // ================= 🔥 API CALL & SCRAPE LOGIC 🔥 =================
   const fetchDataAndCalculate = async (url: string) => {
@@ -148,9 +148,6 @@ export default function DashboardPage() {
           profileUrl: url.trim()
         });
 
-        const rankQuery = query(collection(db, "leaderboard"), where("points", ">", data.totalPoints));
-        const snapshot = await getCountFromServer(rankQuery);
-        setRealRank(snapshot.data().count + 1);
       } catch (saveErr) {
         console.error("Leaderboard Auto-Save Failed:", saveErr);
       }
@@ -528,7 +525,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-             {/* RIGHT: Stats & Share Buttons */}
+              {/* RIGHT: Stats & Share Buttons */}
               <div className="lg:col-span-7 flex flex-col justify-center gap-6 pl-0 lg:pl-4 mt-8 lg:mt-0">
                 
                 {/* --- NEW ACTION BUTTONS BOX --- */}
