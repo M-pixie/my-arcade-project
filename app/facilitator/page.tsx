@@ -152,8 +152,7 @@ export default function FacilitatorPage() {
                 </h1>
                 
                 <p className="text-[#5f6368] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-8 font-medium">
-                  Kickstart your cloud journey, learn new skills on Google Cloud Platform, and win exciting exclusive Google Cloud swags by completing milestones.
-                </p>
+all levels learn computing, application development, big data & AI/ML. Earn digital badges and convert them into official Google Cloud goodies.                </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                   <a 
@@ -220,12 +219,12 @@ export default function FacilitatorPage() {
                     <p className="text-[#5f6368] text-sm font-medium text-center mb-auto pb-4">
                       Enrolments are expected to open in March 2026 in the Arcade Facilitator Program
                     </p>
-                    <a href="#" className="w-full bg-gradient-to-r from-[#1a73e8] to-[#1557b0] text-white flex items-center justify-center gap-2 py-3.5 rounded-md font-bold text-[15px] hover:shadow-md hover:-translate-y-0.5 transition-all shadow-sm">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                         <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                      </svg>
-                      Learn more about this program
-                    </a>
+                    <a href="#" className="w-full bg-white border border-[#dadce0] text-[#202124] flex items-center justify-center gap-2 py-3.5 rounded-md font-bold text-[15px] hover:shadow-md hover:-translate-y-0.5 transition-all shadow-sm">
+  <svg className="w-5 h-5 text-[#FF0000]" fill="currentColor" viewBox="0 0 24 24">
+     <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </svg>
+  Learn more about this program
+</a>
                   </div>
                 </div>
 

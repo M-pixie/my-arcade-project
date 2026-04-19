@@ -260,111 +260,143 @@ export default function DashboardPage() {
     }
   };
 
-  // ================= 🔥 LOADING SCREEN (FAST TINTED SKELETON + MICROSOFT STYLE OVERLAY) 🔥 =================
+ // ================= 🔥 LOADING SCREEN (PREMIUM RECTANGULAR BOX + BLURRY BLINK SKELETON) 🔥 =================
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f8f9fa] font-sans relative">
         <Navbar />
 
-        {/* --- PREMIUM CENTER SEARCHING OVERLAY (Professional / Microsoft Style) --- */}
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none bg-white/50 backdrop-blur-sm transition-all duration-300">
-          {/* Sharper edges (rounded-lg), wider box (max-w-md), crisp shadow */}
-          <div className="bg-white w-[90%] max-w-md px-10 py-10 rounded-lg shadow-2xl border border-[#dadce0] flex flex-col items-center transform transition-all">
+        {/* --- PREMIUM CENTER SEARCHING OVERLAY (Dark Green/Blue Rectangular Theme) --- */}
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none bg-[#0a192f]/60 backdrop-blur-sm transition-all duration-300">
+          
+          {/* Rectangular Box: wider (max-w-lg), premium dark gradient */}
+          <div className="bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] w-[90%] max-w-lg px-12 py-10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-[#3e606f] flex flex-col items-center transform transition-all relative overflow-hidden">
             
-            <div className="relative flex justify-center items-center mb-6">
-              <div className="w-14 h-14 border-4 border-blue-50 rounded-full"></div>
-              {/* Sleek spinner */}
-              <div className="w-14 h-14 border-4 border-[#1a73e8] border-r-transparent border-t-transparent rounded-full animate-spin absolute"></div>
-              
+            {/* Premium Tech/Glowing Spinner */}
+            <div className="relative flex justify-center items-center mb-8 h-16 w-16">
+              <div className="absolute inset-0 rounded-full border-[3px] border-[#3e606f]"></div>
+              <div className="absolute inset-0 rounded-full border-[3px] border-[#00ffcc] border-t-transparent border-r-transparent animate-spin drop-shadow-[0_0_8px_rgba(0,255,204,0.8)]"></div>
+              <div className="absolute inset-2 rounded-full border-[3px] border-[#3b82f6] border-b-transparent border-l-transparent animate-[spin_1.5s_linear_infinite_reverse] drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div>
+              <div className="w-6 h-6 bg-gradient-to-tr from-[#00ffcc] to-[#3b82f6] rounded-full animate-pulse shadow-[0_0_15px_rgba(0,255,204,0.6)]"></div>
             </div>
             
-            <h2 className="text-2xl font-bold text-[#202124] tracking-tight">Searching Profile...</h2>
+            {/* WAVE ANIMATED TEXT (Only Bounce, Clean White) */}
+            <h2 className="text-2xl font-black text-white tracking-wide flex justify-center mb-1">
+              {"Searching Profile...".split("").map((char, index) => (
+                <span 
+                  key={index} 
+                  className="animate-text-wave"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              ))}
+            </h2>
             
             {/* Professional Source Text */}
-            <p className="text-sm font-medium text-[#5f6368] mt-2 text-center">
-              fetching data securely from your public profile url
+            <p className="text-sm font-medium text-[#8892b0] mt-1 text-center">
+              Fetching data securely from public url
             </p>
 
-            {/* Status indicator with sharper edges (rounded-md) */}
-            <div className="mt-6 flex items-center gap-2 bg-[#f8f9fa] px-5 py-2 rounded-md border border-[#dadce0]">
-              <div className="w-2 h-2 bg-[#34a853] rounded-full animate-pulse"></div>
-              <p className="text-[11px] font-extrabold text-[#3c4043] uppercase tracking-widest">Calculating Points</p>
+            {/* DYNAMIC STATUS INDICATOR - LONG PREMIUM BOX */}
+            <div className="mt-8 w-full bg-[#0a192f]/80 px-6 py-5 rounded-xl border border-[#3e606f] shadow-inner flex flex-col gap-3">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-3">
+                  <div className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00ffcc]"></span>
+                  </div>
+                  <p className="text-xs font-extrabold text-[#ccd6f6] uppercase tracking-widest flex items-center">
+                    Calculating Points
+                    <span className="animate-bounce ml-1 text-[#00ffcc]" style={{ animationDelay: '0ms' }}>.</span>
+                    <span className="animate-bounce text-[#00ffcc]" style={{ animationDelay: '150ms' }}>.</span>
+                    <span className="animate-bounce text-[#00ffcc]" style={{ animationDelay: '300ms' }}>.</span>
+                  </p>
+                </div>
+                <span className="text-[11px] font-bold text-[#3b82f6] animate-pulse uppercase tracking-wider">Please Wait</span>
+              </div>
+              
+              {/* Premium Mini Progress Bar */}
+              <div className="w-full h-2 bg-[#0f2027] rounded-full overflow-hidden border border-[#1e293b]">
+                <div className="h-full bg-gradient-to-r from-[#00ffcc] to-[#3b82f6] rounded-full animate-progress-slide"></div>
+              </div>
             </div>
+
           </div>
         </div>
 
-        {/* --- SKELETON BACKGROUND --- */}
-        <main className="max-w-6xl mx-auto px-6 pt-24 pb-16 space-y-10 opacity-40 select-none pointer-events-none">
+        {/* --- SKELETON BACKGROUND (Solid visible colors with blurry blinking) --- */}
+        <main className="max-w-6xl mx-auto px-6 pt-24 pb-16 space-y-10 select-none pointer-events-none">
           
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div className="h-10 w-64 bg-blue-100/60 rounded-md animate-fast-pulse"></div>
-            <div className="h-10 w-40 bg-blue-200/50 rounded-lg animate-fast-pulse"></div>
+            <div className="h-10 w-64 bg-[#cbd5e1] rounded-md animate-premium-pulse"></div>
+            <div className="h-10 w-40 bg-[#94a3b8] rounded-lg animate-premium-pulse" style={{animationDelay: '0.1s'}}></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="h-48 bg-blue-50 border border-blue-100 rounded-2xl shadow-sm animate-fast-pulse p-8 flex flex-col justify-center items-center">
-              <div className="h-6 w-48 bg-blue-200/60 rounded mb-4"></div>
-              <div className="h-4 w-32 bg-blue-200/40 rounded mb-6"></div>
-              <div className="w-full max-w-sm h-3 bg-blue-100/50 rounded-full mb-3"></div>
-              <div className="h-3 w-40 bg-blue-200/50 rounded"></div>
+            <div className="h-48 bg-[#e2e8f0] border border-[#cbd5e1] rounded-2xl shadow-sm animate-premium-pulse p-8 flex flex-col justify-center items-center" style={{animationDelay: '0.2s'}}>
+              <div className="h-6 w-48 bg-[#94a3b8] rounded mb-4"></div>
+              <div className="h-4 w-32 bg-[#cbd5e1] rounded mb-6"></div>
+              <div className="w-full max-w-sm h-4 bg-[#94a3b8] rounded-full mb-3"></div>
+              <div className="h-3 w-40 bg-[#cbd5e1] rounded"></div>
             </div>
-            <div className="h-48 bg-indigo-50 border border-indigo-100 rounded-2xl shadow-sm animate-fast-pulse p-8 flex flex-col justify-center items-center">
-              <div className="h-6 w-56 bg-indigo-200/60 rounded mb-6"></div>
-              <div className="h-16 w-16 bg-indigo-200/50 rounded-full mb-4"></div>
-              <div className="h-8 w-40 bg-indigo-200/40 rounded-full"></div>
+            <div className="h-48 bg-[#e2e8f0] border border-[#cbd5e1] rounded-2xl shadow-sm animate-premium-pulse p-8 flex flex-col justify-center items-center" style={{animationDelay: '0.3s'}}>
+              <div className="h-6 w-56 bg-[#94a3b8] rounded mb-6"></div>
+              <div className="h-16 w-16 bg-[#64748b] rounded-full mb-4"></div>
+              <div className="h-8 w-40 bg-[#94a3b8] rounded-full"></div>
             </div>
           </div>
 
-          <div className="bg-[#f4f7fb] border border-[#dadce0] p-6 md:p-10 rounded-xl shadow-sm">
+          <div className="bg-[#f1f5f9] border border-[#cbd5e1] p-6 md:p-10 rounded-xl shadow-sm">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              <div className="lg:col-span-5 bg-white rounded-xl shadow-md border border-[#e8eaed] overflow-hidden flex flex-col h-[500px] animate-fast-pulse">
-                <div className="h-20 bg-gradient-to-r from-indigo-100 to-purple-100 w-full"></div>
+              <div className="lg:col-span-5 bg-white rounded-xl shadow-md border border-[#cbd5e1] overflow-hidden flex flex-col h-[500px] animate-premium-pulse" style={{animationDelay: '0.4s'}}>
+                <div className="h-20 bg-[#94a3b8] w-full"></div>
                 <div className="flex-grow flex flex-col items-center pt-8 px-8 pb-6">
-                  <div className="w-28 h-28 bg-green-50 rounded-full border-4 border-white mb-6"></div>
-                  <div className="h-6 w-48 bg-[#e8f0fe] rounded mb-6"></div>
-                  <div className="h-10 w-36 bg-blue-100/50 rounded-full mb-8"></div>
-                  <div className="h-20 w-20 bg-yellow-50 rounded-full mb-8"></div>
-                  <div className="h-12 w-full bg-yellow-100/50 rounded-full mb-6"></div>
-                  <div className="h-8 w-full bg-[#e8f0fe] rounded-full mt-auto"></div>
+                  <div className="w-28 h-28 bg-[#64748b] rounded-full border-4 border-white mb-6"></div>
+                  <div className="h-6 w-48 bg-[#cbd5e1] rounded mb-6"></div>
+                  <div className="h-10 w-36 bg-[#94a3b8] rounded-full mb-8"></div>
+                  <div className="h-20 w-20 bg-[#cbd5e1] rounded-full mb-8"></div>
+                  <div className="h-12 w-full bg-[#cbd5e1] rounded-full mb-6"></div>
+                  <div className="h-8 w-full bg-[#e2e8f0] rounded-full mt-auto"></div>
                 </div>
               </div>
 
               <div className="lg:col-span-7 flex flex-col gap-6 lg:pl-4 mt-8 lg:mt-0">
-                <div className="bg-white p-6 rounded-xl border border-[#dadce0] shadow-sm animate-fast-pulse h-32 flex flex-col items-center justify-center">
-                  <div className="h-4 w-32 bg-gray-100 rounded mb-4"></div>
-                  <div className="h-12 w-full bg-green-50 rounded-xl"></div>
+                <div className="bg-white p-6 rounded-xl border border-[#cbd5e1] shadow-sm animate-premium-pulse h-32 flex flex-col items-center justify-center" style={{animationDelay: '0.5s'}}>
+                  <div className="h-4 w-32 bg-[#cbd5e1] rounded mb-4"></div>
+                  <div className="h-12 w-full bg-[#94a3b8] rounded-xl"></div>
                 </div>
                 <div className="grid grid-cols-2 gap-5 w-full">
-                  <div className="bg-white px-6 py-8 rounded-xl border border-[#dadce0] shadow-sm animate-fast-pulse flex flex-col items-center justify-center h-32">
-                    <div className="h-10 w-16 bg-[#e8f0fe] rounded mb-3"></div>
-                    <div className="h-4 w-24 bg-gray-100 rounded"></div>
+                  <div className="bg-white px-6 py-8 rounded-xl border border-[#cbd5e1] shadow-sm animate-premium-pulse flex flex-col items-center justify-center h-32" style={{animationDelay: '0.6s'}}>
+                    <div className="h-10 w-16 bg-[#94a3b8] rounded mb-3"></div>
+                    <div className="h-4 w-24 bg-[#cbd5e1] rounded"></div>
                   </div>
-                  <div className="bg-white px-6 py-8 rounded-xl border border-[#dadce0] shadow-sm animate-fast-pulse flex flex-col items-center justify-center h-32">
-                    <div className="h-10 w-16 bg-[#e8f0fe] rounded mb-3"></div>
-                    <div className="h-4 w-24 bg-gray-100 rounded"></div>
+                  <div className="bg-white px-6 py-8 rounded-xl border border-[#cbd5e1] shadow-sm animate-premium-pulse flex flex-col items-center justify-center h-32" style={{animationDelay: '0.7s'}}>
+                    <div className="h-10 w-16 bg-[#94a3b8] rounded mb-3"></div>
+                    <div className="h-4 w-24 bg-[#cbd5e1] rounded"></div>
                   </div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-[#dadce0] shadow-sm animate-fast-pulse h-16 w-full border-2 border-blue-50"></div>
+                <div className="bg-[#e2e8f0] p-4 rounded-xl border border-[#cbd5e1] shadow-sm animate-premium-pulse h-16 w-full" style={{animationDelay: '0.8s'}}></div>
               </div>
             </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-5">
-              <div className="h-6 w-56 bg-blue-100/60 rounded animate-fast-pulse"></div>
-              <div className="h-10 w-36 bg-blue-200/50 rounded-lg animate-fast-pulse"></div>
+              <div className="h-6 w-56 bg-[#94a3b8] rounded animate-premium-pulse"></div>
+              <div className="h-10 w-36 bg-[#cbd5e1] rounded-lg animate-premium-pulse"></div>
             </div>
-            <div className="bg-white border border-[#dadce0] rounded-lg shadow-sm animate-fast-pulse">
-              <div className="h-12 border-b border-[#dadce0] bg-[#f8f9fa] flex items-center px-6">
-                <div className="h-4 w-8 bg-gray-200 rounded mr-4"></div>
-                <div className="h-4 w-64 bg-gray-200 rounded"></div>
+            <div className="bg-white border border-[#cbd5e1] rounded-lg shadow-sm animate-premium-pulse">
+              <div className="h-12 border-b border-[#cbd5e1] bg-[#f1f5f9] flex items-center px-6">
+                <div className="h-4 w-8 bg-[#cbd5e1] rounded mr-4"></div>
+                <div className="h-4 w-64 bg-[#94a3b8] rounded"></div>
               </div>
               {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="h-16 border-b border-[#f1f3f4] flex items-center px-6">
-                  <div className="h-4 w-8 bg-blue-50 rounded mr-4"></div>
-                  <div className="h-5 w-1/2 bg-blue-50 rounded mr-auto"></div>
-                  <div className="h-4 w-24 bg-gray-100 rounded mr-10"></div>
-                  <div className="h-8 w-16 bg-blue-100/40 rounded-lg"></div>
+                <div key={item} className="h-16 border-b border-[#f1f5f9] flex items-center px-6">
+                  <div className="h-4 w-8 bg-[#e2e8f0] rounded mr-4"></div>
+                  <div className="h-5 w-1/2 bg-[#cbd5e1] rounded mr-auto"></div>
+                  <div className="h-4 w-24 bg-[#e2e8f0] rounded mr-10"></div>
+                  <div className="h-8 w-16 bg-[#94a3b8] rounded-lg"></div>
                 </div>
               ))}
             </div>
@@ -373,18 +405,40 @@ export default function DashboardPage() {
         </main>
         
         <style jsx>{`
-          @keyframes fast-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+          /* NEW PREMIUM BLURRY BLINK ANIMATION */
+          @keyframes premium-pulse {
+            0%, 100% { opacity: 1; filter: blur(0px); }
+            50% { opacity: 0.45; filter: blur(2px); }
           }
-          .animate-fast-pulse {
-            animation: fast-pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          .animate-premium-pulse {
+            animation: premium-pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
+
+          /* NEW WAVE TEXT ANIMATION (Clean White) */
+          @keyframes text-wave {
+            0%, 40%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-4px); }
+          }
+          .animate-text-wave {
+            display: inline-block;
+            animation: text-wave 1.5s infinite;
+          }
+
+          /* NEW PROGRESS BAR ANIMATION */
+          @keyframes progress-slide {
+            0% { width: 10%; transform: translateX(-10%); }
+            50% { width: 60%; transform: translateX(20%); }
+            100% { width: 10%; transform: translateX(900%); }
+          }
+          .animate-progress-slide {
+            animation: progress-slide 1.5s ease-in-out infinite;
           }
         `}</style>
       </div>
     );
   }
 
+  
   // ================= 🔥 ERROR SCREEN 🔥 =================
   if (error) {
     return (
