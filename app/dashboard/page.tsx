@@ -24,6 +24,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [realRank, setRealRank] = useState<number | null>(null);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null); // For Access Codes
 
   // Celebration States
   const [flexName, setFlexName] = useState("");
@@ -34,6 +35,90 @@ export default function DashboardPage() {
   const [isGeneratingImg, setIsGeneratingImg] = useState(false); 
 
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // ================= 🔥 APRIL ARCADE LABS DATA 🔥 =================
+  const aprilLabs = [
+    {
+      id: 'voyage',
+      title: 'Arcade Voyage',
+      subtitle: 'Practice as you go.',
+      image: 'https://services.google.com/fh/files/misc/arcade_img2.png',
+      accessCode: '1q-appsdev-01996',
+      points: 1,
+      deadline: '30/04/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7109',
+      matchStrings: ['arcade voyage: modern application development']
+    },
+    {
+      id: 'adventure',
+      title: 'Arcade Adventure',
+      subtitle: 'Play. Explore. Learn.',
+      image: 'https://services.google.com/fh/files/misc/arcade_img4.png',
+      accessCode: '1q-operations-0529',
+      points: 1,
+      deadline: '30/04/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7107',
+      matchStrings: ['arcade adventure: gke operations and networking']
+    },
+    {
+      id: 'trail',
+      title: 'Arcade Trail',
+      subtitle: 'Build through hands-on.',
+      image: 'https://services.google.com/fh/files/misc/arcade-img1.png',
+      accessCode: '1q-datamgr-30424',
+      points: 1,
+      deadline: '30/04/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7110',
+      matchStrings: ['arcade trail: data migration']
+    },
+    {
+      id: 'basecamp',
+      title: 'Arcade Base Camp',
+      subtitle: 'Gain essential Google Cloud skills',
+      image: 'https://services.google.com/fh/files/misc/arcade_bc_apr.png',
+      accessCode: '1q-basecamp-40139',
+      points: 1,
+      deadline: '30/04/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7112',
+      matchStrings: ['arcade base camp april 2026']
+    },
+    {
+      id: 'skills_spawn',
+      title: 'Works Meet Play',
+      subtitle: 'Skills Spawn',
+      image: 'https://services.google.com/fh/files/misc/arcade_img3.png',
+      accessCode: '1q-worknplay-95172',
+      points: 1,
+      deadline: '30/04/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7114',
+      matchStrings: ['works meet play: skills spawn']
+    },
+    {
+      id: 'dialogue',
+      title: 'Dialogue Design',
+      subtitle: 'Google Skills',
+      image: 'https://services.google.com/fh/files/misc/arcade_img5.png',
+      accessCode: '1q-webhook-92154',
+      points: 1,
+      deadline: '30/04/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7113',
+      matchStrings: ['dialogue design']
+    }
+  ];
+
+  const isLabCompleted = (matchStrings: string[]) => {
+    if (!history || history.length === 0) return false;
+    return history.some(item =>
+      matchStrings.some(match => item.name.toLowerCase().includes(match.toLowerCase()))
+    );
+  };
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
+
 
   // ================= 🔥 CACHE LOAD HELPER 🔥 =================
   const loadDataFromCache = (data: any) => {
@@ -260,28 +345,34 @@ export default function DashboardPage() {
     }
   };
 
- // ================= 🔥 LOADING SCREEN (PREMIUM RECTANGULAR BOX + BLURRY BLINK SKELETON) 🔥 =================
+// ================= 🔥 LOADING SCREEN (PREMIUM RECTANGULAR WHITE BOX + SLEEK BLACK MSFT DOT LOADER) 🔥 =================
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] font-sans relative">
+      <div className="min-h-screen bg-[#f3f4f6] font-sans relative">
         <Navbar />
 
-        {/* --- PREMIUM CENTER SEARCHING OVERLAY (Dark Green/Blue Rectangular Theme) --- */}
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none bg-[#0a192f]/60 backdrop-blur-sm transition-all duration-300">
+        {/* --- PREMIUM MSFT-STYLE SEARCHING OVERLAY (Wide Rectangular White Box + Sleek Black Circle Dot Animation) --- */}
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none bg-[#1f2937]/40 backdrop-blur-lg transition-all duration-300">
           
-          {/* Rectangular Box: wider (max-w-lg), premium dark gradient */}
-          <div className="bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] w-[90%] max-w-lg px-12 py-10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-[#3e606f] flex flex-col items-center transform transition-all relative overflow-hidden">
+          {/* Rectangular Box: WIDER (max-w-2xl), less tall (py-8), Premium White, Elegant Shadows */}
+          <div className="bg-white/95 w-[95%] max-w-2xl px-16 py-8 rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] border border-[#e2e8f0] flex flex-col items-center transform transition-all relative overflow-hidden">
             
-            {/* Premium Tech/Glowing Spinner */}
-            <div className="relative flex justify-center items-center mb-8 h-16 w-16">
-              <div className="absolute inset-0 rounded-full border-[3px] border-[#3e606f]"></div>
-              <div className="absolute inset-0 rounded-full border-[3px] border-[#00ffcc] border-t-transparent border-r-transparent animate-spin drop-shadow-[0_0_8px_rgba(0,255,204,0.8)]"></div>
-              <div className="absolute inset-2 rounded-full border-[3px] border-[#3b82f6] border-b-transparent border-l-transparent animate-[spin_1.5s_linear_infinite_reverse] drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]"></div>
-              <div className="w-6 h-6 bg-gradient-to-tr from-[#00ffcc] to-[#3b82f6] rounded-full animate-pulse shadow-[0_0_15px_rgba(0,255,204,0.6)]"></div>
+            {/* MICROSOFT-STYLE CIRCULAR DOT LOADER (Authentic Orbiting Dots - Sleek Black) */}
+            <div className="relative flex justify-center items-center mb-8 h-12 w-12">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div 
+                  key={i} 
+                  className="absolute inset-0 animate-ms-circle-spin"
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                >
+                  {/* Dots are thin/sleek (w-1.5 h-1.5) and pure black for a minimalist premium look */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-black rounded-full"></div>
+                </div>
+              ))}
             </div>
             
-            {/* WAVE ANIMATED TEXT (Only Bounce, Clean White) */}
-            <h2 className="text-2xl font-black text-white tracking-wide flex justify-center mb-1">
+            {/* CLEAN DARK TEXT (Professional Slate) */}
+            <h2 className="text-2xl font-black text-[#374151] tracking-wide flex justify-center mb-1">
               {"Searching Profile...".split("").map((char, index) => (
                 <span 
                   key={index} 
@@ -294,31 +385,31 @@ export default function DashboardPage() {
             </h2>
             
             {/* Professional Source Text */}
-            <p className="text-sm font-medium text-[#8892b0] mt-1 text-center">
+            <p className="text-sm font-medium text-[#6b7280] mt-1 text-center">
               Fetching data securely from public url
             </p>
 
-            {/* DYNAMIC STATUS INDICATOR - LONG PREMIUM BOX */}
-            <div className="mt-8 w-full bg-[#0a192f]/80 px-6 py-5 rounded-xl border border-[#3e606f] shadow-inner flex flex-col gap-3">
+            {/* DYNAMIC STATUS INDICATOR - LONG CLEAN BOX */}
+            <div className="mt-8 w-full bg-[#f8f9fa]/80 px-8 py-4 rounded-xl border border-[#e2e8f0] shadow-inner flex flex-col gap-3">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-3">
                   <div className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ffcc] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00ffcc]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#10b981]"></span>
                   </div>
-                  <p className="text-xs font-extrabold text-[#ccd6f6] uppercase tracking-widest flex items-center">
+                  <p className="text-xs font-extrabold text-[#1f2937] uppercase tracking-widest flex items-center">
                     Calculating Points
-                    <span className="animate-bounce ml-1 text-[#00ffcc]" style={{ animationDelay: '0ms' }}>.</span>
-                    <span className="animate-bounce text-[#00ffcc]" style={{ animationDelay: '150ms' }}>.</span>
-                    <span className="animate-bounce text-[#00ffcc]" style={{ animationDelay: '300ms' }}>.</span>
+                    <span className="animate-bounce ml-1 text-[#60a5fa]" style={{ animationDelay: '0ms' }}>.</span>
+                    <span className="animate-bounce text-[#60a5fa]" style={{ animationDelay: '150ms' }}>.</span>
+                    <span className="animate-bounce text-[#60a5fa]" style={{ animationDelay: '300ms' }}>.</span>
                   </p>
                 </div>
                 <span className="text-[11px] font-bold text-[#3b82f6] animate-pulse uppercase tracking-wider">Please Wait</span>
               </div>
               
-              {/* Premium Mini Progress Bar */}
-              <div className="w-full h-2 bg-[#0f2027] rounded-full overflow-hidden border border-[#1e293b]">
-                <div className="h-full bg-gradient-to-r from-[#00ffcc] to-[#3b82f6] rounded-full animate-progress-slide"></div>
+              {/* Premium Mini Progress Bar (MSFT Blue) */}
+              <div className="w-full h-2 bg-[#e2e8f0] rounded-full overflow-hidden border border-[#d1d5db]">
+                <div className="h-full bg-gradient-to-r from-[#60a5fa] to-[#3b82f6] rounded-full animate-progress-slide"></div>
               </div>
             </div>
 
@@ -405,7 +496,19 @@ export default function DashboardPage() {
         </main>
         
         <style jsx>{`
-          /* NEW PREMIUM BLURRY BLINK ANIMATION */
+          /* MSFT AUTHENTIC ORBITING DOTS ANIMATION */
+          @keyframes ms-circle-spin {
+            0% { transform: rotate(0deg); opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { transform: rotate(720deg); opacity: 0; }
+          }
+          .animate-ms-circle-spin {
+            /* The cubic-bezier is what gives it that authentic fast-then-slow Microsoft look */
+            animation: ms-circle-spin 2.5s infinite cubic-bezier(0.53, 0.21, 0.29, 0.67);
+          }
+
+          /* PREMIUM BLURRY BLINK ANIMATION */
           @keyframes premium-pulse {
             0%, 100% { opacity: 1; filter: blur(0px); }
             50% { opacity: 0.45; filter: blur(2px); }
@@ -414,7 +517,7 @@ export default function DashboardPage() {
             animation: premium-pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
           }
 
-          /* NEW WAVE TEXT ANIMATION (Clean White) */
+          /* WAVE TEXT ANIMATION */
           @keyframes text-wave {
             0%, 40%, 100% { transform: translateY(0); }
             20% { transform: translateY(-4px); }
@@ -424,7 +527,7 @@ export default function DashboardPage() {
             animation: text-wave 1.5s infinite;
           }
 
-          /* NEW PROGRESS BAR ANIMATION */
+          /* PROGRESS BAR ANIMATION */
           @keyframes progress-slide {
             0% { width: 10%; transform: translateX(-10%); }
             50% { width: 60%; transform: translateX(20%); }
@@ -438,7 +541,7 @@ export default function DashboardPage() {
     );
   }
 
-  
+
   // ================= 🔥 ERROR SCREEN 🔥 =================
   if (error) {
     return (
@@ -583,7 +686,6 @@ export default function DashboardPage() {
               <div className="lg:col-span-7 flex flex-col justify-center gap-6 pl-0 lg:pl-4 mt-8 lg:mt-0">
                 
                 {/* --- NEW ACTION BUTTONS BOX --- */}
-                {/* White border aur background hata diya hai, aur gap ko 5 kar diya hai thode extra space ke liye */}
                 <div className="flex flex-col justify-center gap-5">
                   
                   {/* Clean Normal Heading */}
@@ -671,9 +773,105 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {/* ================= 🔥 APRIL ARCADE LABS LIVE (PREMIUM CARDS) 🔥 ================= */}
+        {points !== null && (
+          <div className="animate-fade-in-up mt-12" style={{ animationDelay: '0.25s' }}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-[#dadce0] pb-3">
+              <h4 className="text-xl font-extrabold text-[#202124] tracking-tight flex items-center gap-2">
+                <span className="text-2xl">🎮</span> April Labs Live !
+              </h4>
+              <span className="bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-[#d2e3fc]">
+                Your Labs Status
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {aprilLabs.map((lab) => {
+                const isCompleted = isLabCompleted(lab.matchStrings);
+                return (
+                  <div key={lab.id} className="bg-white border border-[#dadce0] rounded-xl flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+                    {/* Top Image Section - Stretched Height (h-56) & Dark Background */}
+                    <div className="h-56 bg-[#202124] border-b border-[#dadce0] p-5 flex items-center justify-center relative overflow-hidden">
+                      <img src={lab.image} alt={lab.title} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    
+                    {/* Content Section */}
+                    <div className="p-5 flex flex-col flex-grow">
+                      <h5 className="text-lg font-bold text-[#202124] leading-tight mb-1">{lab.title}</h5>
+                      <p className="text-xs text-[#5f6368] font-medium mb-4">{lab.subtitle}</p>
+
+                      {/* Access Code Box */}
+                      <div className="mt-auto">
+                        <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1">Access Code</p>
+                        <div className="flex items-center gap-2 mb-4">
+                          <code className="text-[#1a73e8] bg-[#e8f0fe] px-2 py-1 rounded text-sm font-bold tracking-wide border border-[#d2e3fc]">
+                            {lab.accessCode}
+                          </code>
+                          <button 
+                            onClick={() => handleCopyCode(lab.accessCode)}
+                            className="p-1.5 text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#f1f3f4] rounded-md transition-colors"
+                            title="Copy Code"
+                          >
+                            {copiedCode === lab.accessCode ? (
+                              <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Info Row Stacked with Calendar */}
+                      <div className="flex flex-col gap-2 text-xs font-bold text-[#5f6368] border-t border-[#f1f3f4] pt-3 mb-4">
+                        <div className="flex items-center gap-1.5">
+                          <svg className="w-4 h-4 text-[#ea4335]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                          Deadline: {lab.deadline}
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <svg className="w-4 h-4 text-[#fbbc04]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 
+                          Arcade Point: {lab.points}
+                        </div>
+                        {lab.id === 'skills_spawn' && (
+                          <div className="flex items-center gap-1.5 text-[#fbbc04]">
+                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" /></svg>
+                             Important Info »
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Button - Solid Green for Completed AND Link Clickable */}
+                      {isCompleted ? (
+                        <a 
+                          href={lab.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full text-center py-2.5 rounded-lg text-sm font-bold bg-[#137333] text-white hover:bg-[#0d5023] transition-colors flex items-center justify-center gap-2 shadow-sm"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                          Completed
+                        </a>
+                      ) : (
+                        <a 
+                          href={lab.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full text-center py-2.5 rounded-lg text-sm font-bold bg-[#1a73e8] text-white hover:bg-[#1557b0] transition-colors flex items-center justify-center gap-2 shadow-sm"
+                        >
+                          Start Learning
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* ================= 🔥 BADGE COMPLETION HISTORY BOX 🔥 ================= */}
         {points !== null && (
-          <div className="animate-fade-in-up" style={{animationDelay: '0.3s'}}>
+          <div className="animate-fade-in-up mt-12" style={{animationDelay: '0.3s'}}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4">
               <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
                 <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>

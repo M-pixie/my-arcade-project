@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search, ExternalLink, Clock, Layers, ChevronDown, CheckCircle2, Circle } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
+import { useRouter } from "next/navigation"; 
 
 // ======================================================================
 // FINAL & COMPLETE 93 SKILL BADGES DATA ARRAY
@@ -128,33 +129,45 @@ const initialBadgesData = [
 ];
 
 export default function ResourcesPage() {
+  const router = useRouter(); // Router Setup
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [sortBy, setSortBy] = useState("ID");
   
-  const [completedIds, setCompletedIds] = useState<string[]>([]);
+  const [autoCompletedIds, setAutoCompletedIds] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    const savedData = localStorage.getItem("myLocalBadges");
-    if (savedData) {
-      setCompletedIds(JSON.parse(savedData));
-    }
-  }, []);
-
-  const toggleComplete = (id: string) => {
-    setCompletedIds((prev) => {
-      let updatedIds;
-      if (prev.includes(id)) {
-        updatedIds = prev.filter((item) => item !== id);
-      } else {
-        updatedIds = [...prev, id];
+    
+    // =========================================================
+    // 🔥 PURE AUTO-SYNC LOGIC: Match calculated history from dashboard
+    // =========================================================
+    let autoCompleted: string[] = [];
+    const arcadeData = localStorage.getItem("arcade_user_data");
+    
+    if (arcadeData) {
+      try {
+        const parsed = JSON.parse(arcadeData);
+        const history = parsed.history || [];
+        
+        initialBadgesData.forEach(badge => {
+          const isMatch = history.some((h: any) => 
+            h.name.toLowerCase().includes(badge.title.toLowerCase()) || 
+            badge.title.toLowerCase().includes(h.name.toLowerCase())
+          );
+          if (isMatch) {
+            autoCompleted.push(badge.id);
+          }
+        });
+      } catch (e) {
+        console.error("Error parsing arcade_user_data", e);
       }
-      localStorage.setItem("myLocalBadges", JSON.stringify(updatedIds));
-      return updatedIds;
-    });
-  };
+    }
+
+    setAutoCompletedIds(autoCompleted);
+    
+  }, []);
 
   const processedData = useMemo(() => {
     let filtered = initialBadgesData.filter((badge) => {
@@ -177,19 +190,17 @@ export default function ResourcesPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pt-20"> 
-      {/* ============================================================
-        FASTER BLINK ANIMATION & PREMIUM GRADIENT (NEW CHANGES)
-        ============================================================
-      */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes premiumFastBlink {
           0%   { background-color: #d1e7dd; border-color: #a3cfbb; }
-          50%  { background-color: #a3cfbb; border-color: #75b798; } /* Darker contrast point */
+          50%  { background-color: #a3cfbb; border-color: #75b798; }
           100% { background-color: #d1e7dd; border-color: #a3cfbb; }
         }
         .completed-blink-card {
-          animation: premiumFastBlink 1.5s infinite ease-in-out; /* FASTER BLINK: 1.5s */
+          animation: premiumFastBlink 1.5s infinite ease-in-out;
         }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
 
       <Navbar />
@@ -198,24 +209,20 @@ export default function ResourcesPage() {
       <section className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#dadce0] shadow-sm pt-4">
         <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-6 py-5">
           
-          {/* Main Filter Buttons */}
-          <div className="flex items-center gap-4 md:gap-6 overflow-x-auto no-scrollbar w-full lg:w-auto pb-2 lg:pb-0">
+          {/* Main Filter Premium Blue Buttons (Now Inline & Pushed Left) */}
+          <div className="flex flex-nowrap items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto pb-1">
             {["All", "Introductory", "Intermediate", "Advanced"].map((f) => (
-              <div key={f} className="relative group/filter">
-                <button
-                  onClick={() => setActiveFilter(f)}
-                  className={`text-sm font-medium transition-all whitespace-nowrap border-b-2 py-1 outline-none ${
-                    activeFilter === f 
-                      ? "text-[#1a73e8] border-[#1a73e8]" 
-                      : "text-[#5f6368] border-transparent hover:text-[#202124]"
-                  }`}
-                >
-                  {f === "All" ? "All Labs" : f}
-                </button>
-                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-[#202124] text-white text-[11px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover/filter:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                  {f === "All" ? "View all available labs" : `Filter by ${f} level`}
-                </div>
-              </div>
+              <button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                className={`px-4 py-2 text-[13px] md:text-sm font-bold rounded-full transition-all shadow-sm whitespace-nowrap ${
+                  activeFilter === f 
+                    ? "bg-[#1a73e8] text-white border border-[#1a73e8]" 
+                    : "bg-white text-[#5f6368] border border-[#dadce0] hover:bg-[#f8f9fa] hover:text-[#1a73e8] hover:border-[#1a73e8]"
+                }`}
+              >
+                {f === "All" ? "All Labs" : f}
+              </button>
             ))}
           </div>
 
@@ -228,12 +235,12 @@ export default function ResourcesPage() {
                   <div className="px-3 py-2.5 text-[#1e8e3e] font-bold border-r border-[#dadce0] bg-[#e6f4ea]/60 flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto">
                     <CheckCircle2 size={16} /> 
                     <span className="hidden xl:inline">Completed:</span> 
-                    {completedIds.length}
+                    {autoCompletedIds.length}
                   </div>
                   <div className="px-3 py-2.5 text-[#5f6368] font-bold bg-[#f8f9fa] flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto">
                     <Circle size={16} /> 
                     <span className="hidden xl:inline">Pending:</span> 
-                    {initialBadgesData.length - completedIds.length}
+                    {initialBadgesData.length - autoCompletedIds.length}
                   </div>
                 </div>
                 <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-[#202124] text-white text-[11px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover/tracker:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
@@ -273,62 +280,75 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {/* ================= CARDS GRID (93 BOXES) ================= */}
-      <section className="py-12 px-6 bg-[#f8f9fa] min-h-[600px]">
+      {/* ================= CARDS GRID & HEADER BUTTONS ================= */}
+      <section className="py-10 px-6 bg-[#f8f9fa] min-h-[600px]">
         <div className="max-w-7xl mx-auto">
           
-          <div className="mb-10 flex items-center gap-3 border-l-4 border-[#1a73e8] pl-4">
-            <h2 className="text-xl font-bold text-[#202124]">
-              {processedData.length} <span className="font-normal text-[#5f6368]">Skill Badges Available</span>
-            </h2>
+          {/* Header & Premium Action Buttons Row (Now with 4 Buttons) */}
+          <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-8 gap-4">
+            <div className="flex items-center gap-3 border-l-4 border-[#1a73e8] pl-4">
+              <h2 className="text-xl font-bold text-[#202124]">
+                {processedData.length} <span className="font-normal text-[#5f6368]">Skill Badges Available</span>
+              </h2>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-3 justify-start xl:justify-end">
+              <button 
+                onClick={() => router.push('/calculator')} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+              >
+                Calculate Points
+              </button>
+              <button 
+                onClick={() => router.push('/leaderboard')} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+              >
+                Leaderboard
+              </button>
+              <button 
+                onClick={() => router.push('/facilitator')} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+              >
+                Facilitator Program
+              </button>
+              <button 
+                onClick={() => router.push('/dashboard')} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[#1a73e8] text-white hover:bg-[#1557b0] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+              >
+                Open Dashboard
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {processedData.map((badge) => {
-              const isDone = completedIds.includes(badge.id);
+              const isDone = autoCompletedIds.includes(badge.id);
 
               return (
                 <div 
                   key={badge.id} 
-                  className={`group rounded-md p-7 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border ${
+                  className={`group rounded-md p-5 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border ${
                     isDone 
                       ? 'completed-blink-card shadow-[0_4px_12px_rgba(52,168,83,0.12)]' 
                       : 'bg-gradient-to-br from-[#f8f9fa] to-[#e8eaed] border-[#dadce0] hover:border-[#1a73e8]' 
                   }`}
                 >
                   
-                  {/* PURE CHECKBOX with Premium Tooltip */}
-                  {isMounted && (
-                    <div className="absolute top-4 right-4 z-10 group/btn">
-                      <button 
-                        onClick={() => toggleComplete(badge.id)}
-                        className="transition-transform active:scale-95 outline-none hover:scale-105"
-                      >
-                        {isDone ? (
-                          <div className="flex items-center gap-1.5 text-[#0f5132] bg-[#d1e7dd] border border-[#0f5132]/30 px-2 py-1 rounded-sm text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                            <CheckCircle2 size={14} /> Done
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1.5 text-[#5f6368] bg-white border border-[#dadce0] px-2 py-1 rounded-sm text-[10px] font-bold uppercase tracking-wider hover:border-[#1a73e8] hover:text-[#1a73e8] transition-colors shadow-sm">
-                            <Circle size={14} /> Mark Done
-                          </div>
-                        )}
-                      </button>
-                      
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#202124] text-white text-[10px] px-2.5 py-1.5 rounded opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md">
-                        {isDone ? "Mark as Pending" : "Mark as Completed"}
+                  {/* AUTO-SYNCED BADGE - No manual mark done toggle */}
+                  {isMounted && isDone && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <div className="flex items-center gap-1.5 text-[#137333] bg-[#e6f4ea] border border-[#ceead6] px-2.5 py-1 rounded-sm text-[10px] font-bold uppercase tracking-wider shadow-sm" title="Auto-verified from Profile">
+                        <CheckCircle2 size={14} /> Completed
                       </div>
                     </div>
                   )}
 
-                  {/* ==========================================
-                      NEW: SMALL ICON & TINY TEXT
-                      ========================================== */}
-                  <div className="flex flex-col items-start mb-4">
+                  {/* Small Icon & Tiny Text */}
+                  <div className="flex flex-col items-start mb-3">
                     <img 
                       src="https://i.postimg.cc/bwX3MCMF/1775250377511.png" 
                       alt="Badge Icon" 
-                      className="w-10 h-10 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                      className="w-8 h-8 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
                     />
                     <span className={`text-[9px] font-extrabold uppercase tracking-widest mt-1.5 ml-0.5 ${isDone ? 'text-[#0f5132]/80' : 'text-[#5f6368]'}`}>
                       Skill Badge
@@ -336,7 +356,7 @@ export default function ResourcesPage() {
                   </div>
 
                   {/* Header Meta */}
-                  <div className="flex items-center gap-3 mb-4 pr-24">
+                  <div className="flex items-center gap-3 mb-3 pr-24">
                     <span className="text-[10px] font-bold text-[#9aa0a6] uppercase tracking-[0.2em]">
                       BDG-{badge.id}
                     </span>
@@ -349,38 +369,45 @@ export default function ResourcesPage() {
                     </span>
                   </div>
 
-                  {/* Title */}
-                  <h3 className={`text-[19px] font-bold leading-snug mb-8 min-h-[56px] line-clamp-2 transition-colors pr-2 ${
+                  {/* Title (Reduced Height) */}
+                  <h3 className={`text-[16px] font-bold leading-snug mb-3 min-h-[40px] line-clamp-2 transition-colors pr-2 ${
                     isDone ? 'text-[#0f5132]' : 'text-[#202124] group-hover:text-[#1a73e8]'
                   }`}>
                     {badge.title}
                   </h3>
                   
                   {/* Specs */}
-                  <div className="mt-auto pt-6 border-t border-[#dadce0]/50 space-y-4 mb-8">
+                  <div className="mt-auto pt-3 border-t border-[#dadce0]/50 space-y-2 mb-4">
                     <div className="flex items-center text-sm font-medium group/info">
-                      <Clock className={`w-4 h-4 mr-3 transition-colors ${isDone ? 'text-[#0f5132]/70' : 'text-[#9aa0a6] group-hover/info:text-[#1a73e8]'}`} />
+                      <Clock className={`w-3.5 h-3.5 mr-3 transition-colors ${isDone ? 'text-[#0f5132]/70' : 'text-[#9aa0a6] group-hover/info:text-[#1a73e8]'}`} />
                       <span className={isDone ? 'text-[#0f5132]' : 'text-[#5f6368]'}>Duration: {badge.duration} mins</span>
                     </div>
                     <div className="flex items-center text-sm font-medium group/info">
-                      <Layers className={`w-4 h-4 mr-3 transition-colors ${isDone ? 'text-[#0f5132]/70' : 'text-[#9aa0a6] group-hover/info:text-[#34a853]'}`} />
+                      <Layers className={`w-3.5 h-3.5 mr-3 transition-colors ${isDone ? 'text-[#0f5132]/70' : 'text-[#9aa0a6] group-hover/info:text-[#34a853]'}`} />
                       <span className={isDone ? 'text-[#0f5132]' : 'text-[#5f6368]'}>{badge.labs}</span>
                     </div>
                   </div>
 
-                  {/* Action Button (Premium Sharp) */}
+                  {/* Action Button - Solid Blue for Pending, Green for Complete */}
                   <a 
                     href={badge.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className={`w-full flex items-center justify-center gap-2 py-3.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border ${
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border ${
                       isDone 
-                        ? 'bg-[#198754] text-white border-[#198754] hover:bg-[#157347]' 
-                        : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#1a73e8] hover:text-white hover:border-[#1a73e8]'
+                        ? 'bg-[#137333] text-white border-[#137333] hover:bg-[#0d5023]' 
+                        : 'bg-[#1a73e8] text-white border-[#1a73e8] hover:bg-[#1557b0]'
                     }`}
                   >
-                    {isDone ? "Review Course" : "Start Learning"}
-                    <ExternalLink className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    {isDone ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4" /> Completed
+                      </>
+                    ) : (
+                      <>
+                        Start Learning <ExternalLink className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </>
+                    )}
                   </a>
                 </div>
               );
@@ -389,7 +416,7 @@ export default function ResourcesPage() {
 
           {/* No Data State */}
           {processedData.length === 0 && (
-            <div className="text-center py-32 bg-white border border-dashed border-[#dadce0] rounded-md mt-8">
+            <div className="text-center py-20 bg-white border border-dashed border-[#dadce0] rounded-md mt-8">
               <Search className="w-12 h-12 text-[#dadce0] mx-auto mb-4" />
               <p className="text-[#5f6368] font-medium text-lg">No badges match your criteria.</p>
               <button onClick={() => {setSearchTerm(""); setActiveFilter("All");}} className="mt-4 text-[#1a73e8] font-bold hover:underline">Clear all filters</button>
