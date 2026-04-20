@@ -307,7 +307,7 @@ export default function FacilitatorPage() {
 
     {/* 2. Slim Premium Assistance / Help Box */}
     <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center">
-      <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight">Need Lab Assistance ?</h2>
+      <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight">May i help you ?</h2>
       
       <div className="flex flex-col gap-3">
         {/* Co-ordinator Button */}
@@ -563,12 +563,12 @@ export default function FacilitatorPage() {
 
                 <div className="p-6 space-y-5">
                   <div>
-                    <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">Full Name (Labs)</label>
+                    <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">Enter Labs Name</label>
                     <input 
                       type="text" 
                       value={coordinatorForm.name}
                       onChange={(e) => setCoordinatorForm({...coordinatorForm, name: e.target.value})}
-                      placeholder="Enter your registered name"
+                      placeholder="e.g. Share Data Using Google Data Cloud"
                       className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors"
                     />
                   </div>
