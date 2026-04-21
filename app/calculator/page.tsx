@@ -89,15 +89,10 @@ export default function CalculatorPage() {
 
       <main className="max-w-4xl mx-auto px-6 pt-24 pb-16">
         
-        {/* HEADER SECTION */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-3.5 bg-[#e8f0fe] border border-[#d2e3fc] rounded-xl mb-6 shadow-sm transform hover:scale-105 transition-transform duration-300">
-            <svg className="w-8 h-8 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H5v-4h9v4zM5 11V7h9v4H5zm12 6h-2v-4h2v4zm0-6h-2V7h2v4z"/>
-            </svg>
-          </div>
+        {/* HEADER SECTION (Left Aligned, No Logo) */}
+        <div className="text-left mb-8">
           <h1 className="text-3xl md:text-5xl font-bold text-[#202124] tracking-tight mb-4 leading-tight">
-            Arcade Points <span className="text-[#1a73e8]">Calculator</span>
+            Arcade <span className="text-[#1a73e8]">Calculator</span>
           </h1>
           <p className="text-[#5f6368] text-base md:text-lg font-medium">
             Calculate your exact points from Google Cloud Skills Boost public profile URL.
@@ -199,26 +194,30 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 3. INFO BOXES (How to use & Profile Public) */}
-        <div className="grid md:grid-cols-2 gap-8 mb-10 text-left items-start">
-          {/* How to Use Area */}
-          <div className="flex flex-col bg-transparent">
-            <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-2 border-b border-[#d2e3fc] pb-3">
-              <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {/* 3. PREMIUM INFO BOXES (How to use & Profile Public) */}
+        <div className="grid md:grid-cols-2 gap-6 mb-10 text-left items-stretch">
+          {/* How to Use Box */}
+          <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-3 border-b border-[#f1f3f4] pb-4">
+              <div className="bg-[#e8f0fe] p-2 rounded-lg">
+                <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              </div>
               How to use Calculator?
             </h3>
             <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
-              <li>Your profile <span className="bg-[#e8eaed] text-[#202124] px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider mx-1 border border-[#dadce0]">must be public</span> to fetch data.</li>
-              <li>Copy your complete profile URL (e.g., <code className="bg-[#ffffff] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#d2e3fc] shadow-sm">https://www.skills.google/public_profiles/...</code></li>
+              <li>Your profile <span className="bg-[#f1f3f4] text-[#202124] px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider mx-1 border border-[#dadce0]">must be public</span> to fetch data.</li>
+              <li>Copy your complete profile URL (e.g., <code className="bg-[#f8f9fa] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#dadce0] shadow-sm">https://www.skills.google/...</code>)</li>
               <li>Paste the exact URL in the input box above and click Calculate.</li>
               <li>Invalid, broken, or private URLs will return an error.</li>
             </ul>
           </div>
 
-          {/* How to Setup Profile Area */}
-          <div className="flex flex-col bg-transparent">
-            <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-2 border-b border-[#d2e3fc] pb-3">
-              <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+          {/* How to Setup Profile Box */}
+          <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-3 border-b border-[#f1f3f4] pb-4">
+              <div className="bg-[#e8f0fe] p-2 rounded-lg">
+                <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </div>
               How to make Profile Public?
             </h3>
             <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">

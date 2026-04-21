@@ -345,72 +345,43 @@ export default function DashboardPage() {
     }
   };
 
-// ================= 🔥 LOADING SCREEN (PREMIUM RECTANGULAR WHITE BOX + SLEEK BLACK MSFT DOT LOADER) 🔥 =================
+// ================= 🔥 LOADING SCREEN (PREMIUM BLUE THEME - CLEAN & SAFE) 🔥 =================
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f3f4f6] font-sans relative">
         <Navbar />
 
-        {/* --- PREMIUM MSFT-STYLE SEARCHING OVERLAY (Wide Rectangular White Box + Sleek Black Circle Dot Animation) --- */}
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none bg-[#1f2937]/40 backdrop-blur-lg transition-all duration-300">
+        {/* --- BLUE THEME SEARCHING OVERLAY --- */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none bg-[#1f2937]/20 backdrop-blur-sm transition-all duration-300">
           
-          {/* Rectangular Box: WIDER (max-w-2xl), less tall (py-8), Premium White, Elegant Shadows */}
-          <div className="bg-white/95 w-[95%] max-w-2xl px-16 py-8 rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] border border-[#e2e8f0] flex flex-col items-center transform transition-all relative overflow-hidden">
+          {/* Card: Compact, Minimal Curves (rounded-md), Soft Shadow */}
+          <div className="bg-white w-[90%] max-w-[340px] px-6 py-6 rounded-md shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-gray-100 flex flex-col relative overflow-hidden transform transition-all">
             
-            {/* MICROSOFT-STYLE CIRCULAR DOT LOADER (Authentic Orbiting Dots - Sleek Black) */}
-            <div className="relative flex justify-center items-center mb-8 h-12 w-12">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <div 
-                  key={i} 
-                  className="absolute inset-0 animate-ms-circle-spin"
-                  style={{ animationDelay: `${i * 0.15}s` }}
-                >
-                  {/* Dots are thin/sleek (w-1.5 h-1.5) and pure black for a minimalist premium look */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-black rounded-full"></div>
-                </div>
-              ))}
-            </div>
-            
-            {/* CLEAN DARK TEXT (Professional Slate) */}
-            <h2 className="text-2xl font-black text-[#374151] tracking-wide flex justify-center mb-1">
-              {"Searching Profile...".split("").map((char, index) => (
-                <span 
-                  key={index} 
-                  className="animate-text-wave"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              ))}
-            </h2>
-            
-            {/* Professional Source Text */}
-            <p className="text-sm font-medium text-[#6b7280] mt-1 text-center">
-              Fetching data securely from public url
-            </p>
-
-            {/* DYNAMIC STATUS INDICATOR - LONG CLEAN BOX */}
-            <div className="mt-8 w-full bg-[#f8f9fa]/80 px-8 py-4 rounded-xl border border-[#e2e8f0] shadow-inner flex flex-col gap-3">
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-3">
-                  <div className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#10b981]"></span>
-                  </div>
-                  <p className="text-xs font-extrabold text-[#1f2937] uppercase tracking-widest flex items-center">
-                    Calculating Points
-                    <span className="animate-bounce ml-1 text-[#60a5fa]" style={{ animationDelay: '0ms' }}>.</span>
-                    <span className="animate-bounce text-[#60a5fa]" style={{ animationDelay: '150ms' }}>.</span>
-                    <span className="animate-bounce text-[#60a5fa]" style={{ animationDelay: '300ms' }}>.</span>
-                  </p>
-                </div>
-                <span className="text-[11px] font-bold text-[#3b82f6] animate-pulse uppercase tracking-wider">Please Wait</span>
+            <div className="flex items-center gap-5 mb-5">
+              {/* Sleek Blue Spinner */}
+              <div className="relative flex justify-center items-center h-9 w-9">
+                {/* Background Ring */}
+                <div className="absolute inset-0 rounded-full border-[3px] border-blue-50 opacity-100"></div>
+                {/* Rotating Blue Part */}
+                <div className="absolute inset-0 rounded-full border-[3px] border-blue-500 border-t-transparent animate-spin"></div>
               </div>
               
-              {/* Premium Mini Progress Bar (MSFT Blue) */}
-              <div className="w-full h-2 bg-[#e2e8f0] rounded-full overflow-hidden border border-[#d1d5db]">
-                <div className="h-full bg-gradient-to-r from-[#60a5fa] to-[#3b82f6] rounded-full animate-progress-slide"></div>
+              {/* Clean Text with Shimmer and Animating Dots */}
+              <div className="flex items-baseline">
+                <span className="text-lg font-medium tracking-wide animate-text-shimmer">
+                  Searching Profile
+                </span>
+                <span className="text-lg font-medium text-[#5f6368] tracking-widest ml-1 flex">
+                  <span className="animate-dot-1">.</span>
+                  <span className="animate-dot-2">.</span>
+                  <span className="animate-dot-3">.</span>
+                </span>
               </div>
+            </div>
+            
+            {/* Indeterminate Progress Bar (Blue Only) */}
+            <div className="w-full h-1.5 bg-blue-50 rounded-full overflow-hidden">
+              <div className="h-full bg-blue-500 rounded-full animate-progress-slide"></div>
             </div>
 
           </div>
@@ -496,36 +467,29 @@ export default function DashboardPage() {
         </main>
         
         <style jsx>{`
-          /* MSFT AUTHENTIC ORBITING DOTS ANIMATION */
-          @keyframes ms-circle-spin {
-            0% { transform: rotate(0deg); opacity: 0; }
-            5% { opacity: 1; }
-            95% { opacity: 1; }
-            100% { transform: rotate(720deg); opacity: 0; }
+          /* TEXT SHIMMER EFFECT (BLUE TONE) */
+          @keyframes text-shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
           }
-          .animate-ms-circle-spin {
-            /* The cubic-bezier is what gives it that authentic fast-then-slow Microsoft look */
-            animation: ms-circle-spin 2.5s infinite cubic-bezier(0.53, 0.21, 0.29, 0.67);
-          }
-
-          /* PREMIUM BLURRY BLINK ANIMATION */
-          @keyframes premium-pulse {
-            0%, 100% { opacity: 1; filter: blur(0px); }
-            50% { opacity: 0.45; filter: blur(2px); }
-          }
-          .animate-premium-pulse {
-            animation: premium-pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          .animate-text-shimmer {
+            background: linear-gradient(90deg, #202124 0%, #3b82f6 50%, #202124 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: text-shimmer 2.5s linear infinite;
           }
 
-          /* WAVE TEXT ANIMATION */
-          @keyframes text-wave {
-            0%, 40%, 100% { transform: translateY(0); }
-            20% { transform: translateY(-4px); }
+          /* ANIMATING DOTS EFFECT */
+          @keyframes dot-blink {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            100% { opacity: 0; }
           }
-          .animate-text-wave {
-            display: inline-block;
-            animation: text-wave 1.5s infinite;
-          }
+          .animate-dot-1 { animation: dot-blink 1.5s infinite 0s; }
+          .animate-dot-2 { animation: dot-blink 1.5s infinite 0.2s; }
+          .animate-dot-3 { animation: dot-blink 1.5s infinite 0.4s; }
 
           /* PROGRESS BAR ANIMATION */
           @keyframes progress-slide {
@@ -536,11 +500,19 @@ export default function DashboardPage() {
           .animate-progress-slide {
             animation: progress-slide 1.5s ease-in-out infinite;
           }
+
+          /* PREMIUM BLURRY BLINK ANIMATION */
+          @keyframes premium-pulse {
+            0%, 100% { opacity: 1; filter: blur(0px); }
+            50% { opacity: 0.45; filter: blur(2px); }
+          }
+          .animate-premium-pulse {
+            animation: premium-pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
         `}</style>
       </div>
     );
   }
-
 
   // ================= 🔥 ERROR SCREEN 🔥 =================
   if (error) {
