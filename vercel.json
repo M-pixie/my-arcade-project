@@ -1,0 +1,9 @@
+﻿{
+  "redirects": [
+    {
+      "source": "/download",
+      "destination": "https://expo.dev/artifacts/eas/nF22gXpteB4mmPXLyBjttS.apk",
+      "permanent": false
+    }
+  ]
+}
