@@ -591,7 +591,7 @@ export default function HomePage() {
 
                 {/* 📱 Share on WhatsApp Button */}
                 <a 
-                  href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Google%20Arcade%20App%20here:%20https://arcade-calculator.vercel.app/download" 
+                  href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-[#25D366]/10 border border-[#25D366]/30 text-[#128C7E] font-bold text-sm rounded-xl hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all duration-300 w-full sm:w-auto"
