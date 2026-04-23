@@ -1,10 +1,28 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import VisitCounter from "@/app/components/VisitCounter"; // 🔥 ADDED: Import for the visit counter component
+import { useEffect, useState } from "react"; // 🔥 ADDED: State & Effect for auto-date
+import VisitCounter from "@/app/components/VisitCounter";
 
 export default function Footer() {
   const router = useRouter();
+  
+  // 🔥 ADDED: State to hold the dynamic last updated date
+  const [lastUpdated, setLastUpdated] = useState("Loading...");
+
+  // 🔥 ADDED: Automatically fetch the last modified date with Timezone
+  useEffect(() => {
+    const date = new Date(document.lastModified);
+    const formattedDate = date.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+    setLastUpdated(formattedDate);
+  }, []);
 
   return (
     <footer className="bg-white pt-24 pb-12 border-t border-[#dadce0] font-sans">
@@ -164,7 +182,7 @@ export default function Footer() {
                 className="inline-flex items-center justify-start sm:justify-center gap-3 w-full sm:w-auto px-6 py-3 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(26,115,232,0.12)] group"
               >
                 <svg className="w-5 h-5 text-[#1a73e8] group-hover:scale-110 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
                 <div className="flex flex-col text-left">
                   <span>Google Skills</span>
@@ -203,9 +221,9 @@ export default function Footer() {
               </p>
             </div>
             
-            {/* Last Updated */}
+            {/* 🔥 UPDATED: Dynamic Last Updated */}
             <p className="text-[12px] text-[#80868b] font-semibold tracking-[0.05em] uppercase mt-1">
-              Last Updated: April 15, 2026
+              Last Updated: {lastUpdated}
             </p>
           </div>
 
@@ -240,7 +258,7 @@ export default function Footer() {
 
             {/* Instagram - Real Gradient Fixed */}
             <a 
-              href="https://instagram.com/pov.pixi" 
+              href="https://instagram.com/pov.pixii" 
               target="_blank" 
               rel="noopener noreferrer" 
               aria-label="Instagram" 
