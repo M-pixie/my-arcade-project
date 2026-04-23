@@ -102,7 +102,9 @@ export async function POST(req: Request) {
           title.includes('journeys made easy') || 
           title.includes('metrics in motion') || // Ye naya 1 point game add kiya
           title.includes('game') ||
-          title.includes('dialogue design') // 🔥 Naya 1 point game add kiya jaisa tumne bola
+          title.includes('dialogue design') || // 🔥 Naya 1 point game add kiya jaisa tumne bola
+          title.includes('works meet play') //  New add badges
+          
         ) {
           gamePoints += 1;
           earned = 1;
