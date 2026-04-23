@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 // 👇 🔥 HEAVY PRO-LEVEL METADATA (ULTIMATE SEO BOMB) 🔥
 export const metadata: Metadata = {
-  title: "Arcade Calculator 2026 | Google Arcade Nexus ",
+  title: "Arcade Points Calculator | Google Arcade Nexus ",
   description: "Calculate your Google Cloud Arcade points and track skills  badges instantly. Monitor your leaderboard rank to claim premium GCP swags for 2026",
   keywords: [
     // 🔥 Core Keywords (Main search terms)
