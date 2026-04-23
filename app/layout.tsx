@@ -19,11 +19,11 @@ const geistMono = Geist_Mono({
 
 // 👇 🔥 HEAVY PRO-LEVEL METADATA (ULTIMATE SEO BOMB) 🔥
 export const metadata: Metadata = {
-  title: "Arcade Points Calculator | Google Arcade Nexus ",
+  title: "Google Arcade Points Calculator 2026 | Google Arcade Nexus ",
   description: "Calculate your Google Cloud Arcade points and track skills  badges instantly. Monitor your leaderboard rank to claim premium GCP swags for 2026",
   keywords: [
     // 🔥 Core Keywords (Main search terms)
-    "Google Cloud Arcade", "Arcade Points Calculator", "GCP Arcade 2026", "Arcade Nexus", "Google arcade", "Google Arcade" , "Arcade 2026" , "Arcade Facilittaor" , "Arcade Points" , "points", "Arcade hub" , "Google Arcade Swags" , "Facilitator Program" , "Google Cloud" , "calculator" , "points arcade" , "game" , "gcp" , "arcade program 2026" , "arcade event" , "arcade swags" , "Google arcade swags" , "cloud " , 
+    "Google Cloud Arcade", "Arcade Points Calculator", "GCP Arcade 2026", "Arcade Nexus", "Google arcade", "Google Arcade" , "Arcade 2026" , "Arcade Facilittaor" , "Arcade Points" , "points", "Arcade hub" , "Google Arcade Swags" , "Facilitator Program" , "Google Cloud" , "calculator" , "points arcade" , "game" , "gcp" , "arcade program 2026" , "arcade event" , "arcade swags" , "Google arcade swags" , "cloud " , "arcade prize counter 2026" , "arcade swags 2026" , "prize counter" , "google swags" , "credit" , "check arcade points " , "how to check arcade points " , "check points" , 
     // 🔥 Program Specific & Communities (Log ye bahut search karte hain)
     "Google Cloud Skills Boost", "Qwiklabs Badges", "Arcade Facilitator Program", "Cloud Hero", "GDG", "Google Developer Groups", "GDSC", "Arcade Cohort", "Facilitator 2026",
     // 🔥 Rewards & Action (Lalach wale words - Highest Traffic)
