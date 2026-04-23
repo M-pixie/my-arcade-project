@@ -19,11 +19,11 @@ const geistMono = Geist_Mono({
 
 // 👇 🔥 HEAVY PRO-LEVEL METADATA (ULTIMATE SEO BOMB) 🔥
 export const metadata: Metadata = {
-  title: "Google Cloud Arcade Calculator 2026 | Arcade Nexus Points Tracker",
-  description: "Instantly calculate your Google Cloud Arcade points, track Qwiklabs skill badges, trivia, and leaderboard rank. Claim your premium GCP swags and milestone rewards for 2026.",
+  title: "Arcade Calculator 2026 | Google Arcade Nexus ",
+  description: "Calculate your Google Cloud Arcade points and track skills  badges instantly. Monitor your leaderboard rank to claim premium GCP swags for 2026",
   keywords: [
     // 🔥 Core Keywords (Main search terms)
-    "Google Cloud Arcade", "Arcade Points Calculator", "GCP Arcade 2026", "Arcade Nexus", "Google arcade", 
+    "Google Cloud Arcade", "Arcade Points Calculator", "GCP Arcade 2026", "Arcade Nexus", "Google arcade", "Google Arcade" , "Arcade 2026" , "Arcade Facilittaor" , "Arcade Points" , "points", "Arcade hub" , "Google Arcade Swags" , "Facilitator Program" , "Google Cloud" , "calculator" , "points arcade" , "game" , "gcp" , "arcade program 2026" , "arcade event" , "arcade swags" , "Google arcade swags" , "cloud " , 
     // 🔥 Program Specific & Communities (Log ye bahut search karte hain)
     "Google Cloud Skills Boost", "Qwiklabs Badges", "Arcade Facilitator Program", "Cloud Hero", "GDG", "Google Developer Groups", "GDSC", "Arcade Cohort", "Facilitator 2026",
     // 🔥 Rewards & Action (Lalach wale words - Highest Traffic)
@@ -47,8 +47,8 @@ export const metadata: Metadata = {
       {
         // 🔥 Social media pe share karne pe ye mst image dikhegi
         url: "https://i.postimg.cc/tTSsd8kS/Snapinsta-app-437737395-25411276401819535-1259610102401518116-n-1080.jpg", // Image 5 (Premium swags) kar diya jisse zyada clicks aayen
-        width: 1200,
-        height: 630,
+        width: 800,
+        height: 420,
         alt: "Google Cloud Arcade Swags & Dashboard Preview",
       },
     ],
