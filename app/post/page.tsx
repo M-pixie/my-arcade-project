@@ -5,7 +5,8 @@ import Navbar from "@/app/components/Navbar";
 import CreateSwagPost from "@/app/components/CreateSwagPost";
 // ================= FIREBASE IMPORTS =================
 import { db } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy } from "firebase/firestore";
+// getDocs hata kar onSnapshot add kiya gaya hai live feed ke liye
+import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "firebase/firestore";
 
 function timeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -40,21 +41,22 @@ export default function PostFeedPage() {
   // Edit feature ke liye state
   const [postToEdit, setPostToEdit] = useState<any>(null);
 
-  // ================= FIREBASE FETCH =================
+  // ================= FIREBASE FETCH (LIVE SYNC ADDED) =================
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const q = query(collection(db, "swag_posts"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(q);
-        const fetchedPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setPosts(fetchedPosts);
-      } catch (error) {
-        console.error("Firebase fetch error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
+    const q = query(collection(db, "swag_posts"), orderBy("createdAt", "desc"));
+    
+    // onSnapshot Firebase se live data lata hai
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setPosts(fetchedPosts);
+      setLoading(false);
+    }, (error) => {
+      console.error("Firebase fetch error:", error);
+      setLoading(false);
+    });
+
+    // Cleanup function
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -87,9 +89,6 @@ export default function PostFeedPage() {
         // Firebase Update
         const postRef = doc(db, "swag_posts", postData.id);
         await updateDoc(postRef, postData);
-        
-        // UI Update
-        setPosts(prev => prev.map(p => p.id === postData.id ? { ...p, ...postData } : p));
         setSystemAlert("Post updated successfully!");
       } else {
         // Formatted completely new post for Firebase
@@ -106,11 +105,8 @@ export default function PostFeedPage() {
         };
         
         // Firebase Add
-        const docRef = await addDoc(collection(db, "swag_posts"), newDbPost);
-        
-        // UI Update
-        const finalPost = { id: docRef.id, ...newDbPost, hasLiked: false, hasReposted: false };
-        setPosts(prev => [finalPost, ...prev]);
+        await addDoc(collection(db, "swag_posts"), newDbPost);
+        // Yahan se manual UI update (setPosts) hata diya kyunki ab onSnapshot khud update kar dega
       }
     } catch (error) {
       console.error("Firebase save error:", error);
@@ -124,7 +120,6 @@ export default function PostFeedPage() {
   const deletePost = async (id: string) => {
     try {
       await deleteDoc(doc(db, "swag_posts", id));
-      setPosts(prev => prev.filter(post => post.id !== id));
       setSystemAlert("Post deleted successfully.");
     } catch (error) {
       console.error("Firebase delete error:", error);
@@ -421,7 +416,6 @@ export default function PostFeedPage() {
                     </div>
                   </div>
                 )}
-
               </div>
             ))
           )}
@@ -430,9 +424,9 @@ export default function PostFeedPage() {
 
       {isModalOpen && (
         <CreateSwagPost 
-          editData={postToEdit} // Pass existing data if editing
+          editData={postToEdit} 
           onClose={() => setIsModalOpen(false)} 
-          onSuccess={handleNewOrEditPost} // Call updated Firebase function
+          onSuccess={handleNewOrEditPost} 
         />
       )}
     </div>
