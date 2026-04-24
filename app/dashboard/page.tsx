@@ -660,10 +660,19 @@ export default function DashboardPage() {
                 {/* --- NEW ACTION BUTTONS BOX --- */}
                 <div className="flex flex-col justify-center gap-5">
                   
-                  {/* Clean Normal Heading */}
-                  <h4 className="text-sm font-semibold text-[#5f6368] uppercase tracking-wide">
-                    Quick Actions
-                  </h4>
+                  <div className="flex flex-col gap-2">
+                    <button 
+                      onClick={() => {
+                        localStorage.removeItem("arcade_user_data");
+                        router.push('/calculator');
+                      }}
+                      className="relative w-full group bg-white border border-[#dadce0] hover:bg-[#f8f9fa] text-[#202124] font-bold py-3.5 px-6 rounded-md shadow-sm transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
+                    >
+                      <svg className="w-5 h-5 mr-2 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      Refresh Dashboard
+                    </button>
+                    <p className="text-[11px] text-[#80868b] font-medium text-center">If points show invalid, refresh and calculate again.</p>
+                  </div>
 
                   {/* Celebration Card Button */}
                   <button 
@@ -673,7 +682,7 @@ export default function DashboardPage() {
                         document.getElementById('celebration-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                       }, 100);
                     }}
-                    className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
+                    className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
                   >
                     <span>✨ Generate Celebration Achievements Card</span>
                     <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
@@ -686,7 +695,7 @@ export default function DashboardPage() {
                   {/* Skill Badges Button */}
                   <button 
                     onClick={() => router.push('/resources')}
-                    className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
+                    className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
                   >
                     <span>Skill badges List here</span>
                     <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
@@ -697,7 +706,7 @@ export default function DashboardPage() {
                   </button>
 
                   {/* WhatsApp Share Button */}
-                  <button onClick={shareToWhatsApp} className="relative w-full group bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3.5 px-6 rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide">
+                  <button onClick={shareToWhatsApp} className="relative w-full group bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide">
                     <span className="flex items-center gap-2">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/>
@@ -728,7 +737,7 @@ export default function DashboardPage() {
 
                  <button 
                   onClick={() => router.push('/leaderboard')} 
-                  className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-full shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
+                  className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
                 >
                   <span>View Full Leaderboard</span>
                   
