@@ -133,7 +133,7 @@ export default function PostFeedPage() {
     setTimeout(() => setSystemAlert(null), 3000);
   };
 
-  // ================= FIREBASE DELETE =================
+  // ================= FIREBASE DELETE POST =================
   const deletePost = async (id: string) => {
     try {
       await deleteDoc(doc(db, "swag_posts", id));
@@ -152,7 +152,7 @@ export default function PostFeedPage() {
     setActiveMenuId(null);
   };
 
-  // ================= FIREBASE GLOBAL LIKE / REPOST =================
+  // ================= FIREBASE GLOBAL LIKE / REPOST (CLONE ADDED) =================
   const handleAction = async (id: string, action: 'like' | 'repost') => {
     const postRef = doc(db, "swag_posts", id);
     const postIndex = posts.findIndex(p => p.id === id);
@@ -179,19 +179,48 @@ export default function PostFeedPage() {
     }
 
     if (action === 'repost') {
-      const isReposted = post.hasReposted;
-      
+      if (post.hasReposted) {
+        setSystemAlert("You have already reposted this!");
+        setTimeout(() => setSystemAlert(null), 3000);
+        return;
+      }
+
+      // Prompt for name before reposting
+      let reposterName = localStorage.getItem('arcade_guest_name');
+      if (!reposterName) {
+        const userInput = window.prompt("Enter your name to repost this:");
+        if (!userInput || userInput.trim() === "") return;
+        reposterName = userInput.trim();
+        localStorage.setItem('arcade_guest_name', reposterName);
+      }
+
       setPosts(prevPosts => prevPosts.map(p => {
-        if (p.id === id) return { ...p, reposts: isReposted ? Math.max(0, p.reposts - 1) : p.reposts + 1, hasReposted: !isReposted };
+        if (p.id === id) return { ...p, reposts: p.reposts + 1, hasReposted: true };
         return p;
       }));
 
       try {
-        if (isReposted) {
-          await updateDoc(postRef, { repostedBy: arrayRemove(currentDeviceId), reposts: increment(-1) });
-        } else {
-          await updateDoc(postRef, { repostedBy: arrayUnion(currentDeviceId), reposts: increment(1) });
-        }
+        // Increment count on original post
+        await updateDoc(postRef, { repostedBy: arrayUnion(currentDeviceId), reposts: increment(1) });
+        
+        // Naya clone post create kar rahe hain feed ke liye
+        const clonedPost = {
+          name: reposterName,
+          title: `♻️ Reposted: ${post.title}`,
+          about: post.about,
+          image: post.image,
+          createdAt: new Date().toISOString(),
+          likes: 0,
+          reposts: 0,
+          shares: 0,
+          commentsData: [],
+          authorId: currentDeviceId,
+          likedBy: [],
+          repostedBy: []
+        };
+        await addDoc(collection(db, "swag_posts"), clonedPost);
+        setSystemAlert("Repost successful! Check your feed.");
+        setTimeout(() => setSystemAlert(null), 3000);
       } catch (err) {
          console.error("Action update failed", err);
       }
@@ -203,19 +232,42 @@ export default function PostFeedPage() {
     setReplyingTo(null); 
   };
 
-  // ================= FIREBASE COMMENT (SMART GUEST PROMPT ADDED) =================
+  // ================= FIREBASE COMMENT DELETE (NAYA FUNCTION) =================
+  const deleteComment = async (postId: string, commentId: string, isReply: boolean = false, parentCommentId?: string) => {
+    const postIndex = posts.findIndex(p => p.id === postId);
+    if (postIndex === -1) return;
+    const post = posts[postIndex];
+
+    let updatedComments = [...post.commentsData];
+
+    if (isReply && parentCommentId) {
+      const parentIndex = updatedComments.findIndex(c => c.id === parentCommentId);
+      if (parentIndex > -1) {
+        updatedComments[parentIndex].replies = updatedComments[parentIndex].replies.filter((r: any) => r.id !== commentId);
+      }
+    } else {
+      updatedComments = updatedComments.filter((c: any) => c.id !== commentId);
+    }
+
+    setPosts(prev => prev.map(p => p.id === postId ? { ...p, commentsData: updatedComments } : p));
+
+    try {
+      await updateDoc(doc(db, "swag_posts", postId), { commentsData: updatedComments });
+    } catch (err) {
+      console.error("Delete comment failed", err);
+    }
+  };
+
+  // ================= FIREBASE COMMENT SUBMIT =================
   const submitComment = async (postId: string) => {
     const text = commentInputs[postId]?.trim();
     if (!text) return;
 
-    // Smart logic: Check if user already entered their name before
     let commenterName = localStorage.getItem('arcade_guest_name');
-    
-    // Agar nahi hai, toh ek baar prompt karenge
     if (!commenterName) {
       const userInput = window.prompt("Enter your name to post this comment:");
       if (!userInput || userInput.trim() === "") {
-        return; // Agar user ne naam cancel kar diya, toh comment nahi hoga
+        return; 
       }
       commenterName = userInput.trim();
       localStorage.setItem('arcade_guest_name', commenterName);
@@ -231,17 +283,19 @@ export default function PostFeedPage() {
           if (commentIndex > -1) {
             updatedComments[commentIndex].replies.push({ 
               id: Date.now().toString(), 
-              name: commenterName, // Yahan ab asil naam jayega
+              name: commenterName, 
               text: text, 
-              time: new Date().toISOString() 
+              time: new Date().toISOString(),
+              deviceId: currentDeviceId // Device ID taaki delete kar sake
             });
           }
         } else {
           updatedComments.push({ 
             id: Date.now().toString(), 
-            name: commenterName, // Yahan ab asil naam jayega
+            name: commenterName, 
             text: text, 
             time: new Date().toISOString(), 
+            deviceId: currentDeviceId, // Device ID taaki delete kar sake
             replies: [] 
           });
         }
@@ -254,7 +308,6 @@ export default function PostFeedPage() {
     setCommentInputs(prev => ({ ...prev, [postId]: "" }));
     setReplyingTo(null);
 
-    // Save comments to DB
     try {
       const postRef = doc(db, "swag_posts", postId);
       await updateDoc(postRef, { commentsData: updatedCommentsArray });
@@ -308,7 +361,6 @@ export default function PostFeedPage() {
 
       <main className="max-w-[540px] mx-auto px-4 pt-24 space-y-5">
         
-        {/* CREATE POST BANNER */}
         <div className="bg-white/90 backdrop-blur-sm p-4 border border-[#dadce0] rounded-xl shadow-sm flex items-center gap-3">
            <div className="w-10 h-10 rounded-full bg-[#1a73e8] flex items-center justify-center text-white font-bold shrink-0">M</div>
            <button 
@@ -349,7 +401,6 @@ export default function PostFeedPage() {
                     <span className="text-[#80868b] text-[12px] font-medium mt-0.5">{timeAgo(post.createdAt)} • Community</span>
                   </div>
                   
-                  {/* EDIT/DELETE MENU */}
                   {post.authorId === currentDeviceId && (
                     <div className="ml-auto relative menu-container">
                        <button onClick={() => setActiveMenuId(prev => prev === post.id ? null : post.id)} className="text-[#80868b] hover:bg-[#f1f3f4] p-1.5 rounded-full transition-colors">
@@ -379,32 +430,29 @@ export default function PostFeedPage() {
                 </div>
 
                 <div className="px-3 py-1.5 flex items-center justify-between gap-1 border-b border-[#f1f3f4]">
-                  {/* RED HEART LIKE BUTTON */}
                   <button onClick={() => handleAction(post.id, 'like')} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg transition-colors font-bold text-[13px] ${post.hasLiked ? 'text-[#ea4335] bg-[#fce8e6]' : 'text-[#5f6368] hover:bg-[#f1f3f4]'}`}>
                     <svg className="w-5 h-5" fill={post.hasLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    Like {post.likes > 0 && post.likes}
+                    Like ({post.likes || 0})
                   </button>
 
                   <button onClick={() => toggleComments(post.id)} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg transition-colors font-bold text-[13px] comment-button ${expandedComments[post.id] ? 'text-[#1a73e8] bg-[#e8f0fe]' : 'text-[#5f6368] hover:bg-[#f1f3f4]'}`}>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                    Comment {post.commentsData?.length > 0 && post.commentsData.length}
+                    Comment ({post.commentsData?.length || 0})
                   </button>
                   
                   <button onClick={() => handleAction(post.id, 'repost')} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg transition-colors font-bold text-[13px] ${post.hasReposted ? 'text-[#34a853] bg-[#e6f4ea]' : 'text-[#5f6368] hover:bg-[#f1f3f4]'}`}>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    Repost {post.reposts > 0 && post.reposts}
+                    Repost ({post.reposts || 0})
                   </button>
 
-                  {/* NATIVE SHARE BUTTON */}
                   <button onClick={() => shareToAll(post)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg transition-colors font-bold text-[13px] text-[#5f6368] hover:bg-[#f1f3f4]">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                    Share {post.shares > 0 && post.shares}
+                    Share ({post.shares || 0})
                   </button>
                 </div>
 
-                {/* EXPANDABLE COMMENTS SECTION */}
                 {expandedComments[post.id] && (
                   <div className="bg-[#f8f9fa] px-4 py-4 rounded-b-xl comments-section">
                     
@@ -445,6 +493,10 @@ export default function PostFeedPage() {
                             <div className="flex items-center gap-4 mt-1 pl-2 text-[11px] font-bold text-[#80868b]">
                               <span>{timeAgo(comment.time)}</span>
                               <button onClick={() => setReplyingTo({postId: post.id, commentId: comment.id, name: comment.name})} className="hover:text-[#202124] transition-colors">Reply</button>
+                              {/* DELETE BUTTON FOR MAIN COMMENT */}
+                              {comment.deviceId === currentDeviceId && (
+                                <button onClick={() => deleteComment(post.id, comment.id)} className="text-[#ea4335] hover:underline transition-colors ml-2">Delete</button>
+                              )}
                             </div>
 
                             {comment.replies && comment.replies.length > 0 && (
@@ -456,11 +508,15 @@ export default function PostFeedPage() {
                                     </div>
                                     <div className="flex-grow">
                                       <div className="bg-white px-3 py-2 rounded-xl rounded-tl-none border border-[#dadce0] shadow-sm inline-block max-w-[95%]">
-                                        <h5 className="font-bold text-[#202124] text-[12px]">{reply.name} <span className="text-[#1a73e8] ml-1 bg-[#e8f0fe] px-1 rounded text-[9px]">Author</span></h5>
+                                        <h5 className="font-bold text-[#202124] text-[12px]">{reply.name}</h5>
                                         <p className="text-[#3c4043] text-[13px] mt-0.5">{reply.text}</p>
                                       </div>
                                       <div className="flex items-center gap-4 mt-1 pl-2 text-[11px] font-bold text-[#80868b]">
                                         <span>{timeAgo(reply.time)}</span>
+                                        {/* DELETE BUTTON FOR REPLY */}
+                                        {reply.deviceId === currentDeviceId && (
+                                          <button onClick={() => deleteComment(post.id, reply.id, true, comment.id)} className="text-[#ea4335] hover:underline transition-colors ml-2">Delete</button>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
