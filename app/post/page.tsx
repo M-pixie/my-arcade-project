@@ -5,8 +5,22 @@ import Navbar from "@/app/components/Navbar";
 import CreateSwagPost from "@/app/components/CreateSwagPost";
 // ================= FIREBASE IMPORTS =================
 import { db } from "@/lib/firebase";
-// getDocs hata kar onSnapshot add kiya gaya hai live feed ke liye
-import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "firebase/firestore";
+// Global Likes ke liye arrayUnion, arrayRemove, aur increment add kiya gaya hai
+import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, arrayUnion, arrayRemove, increment } from "firebase/firestore";
+
+// ================= DEVICE ID GENERATOR =================
+// Ye function har user ke browser ko ek secret ID dega bina login ke
+function getDeviceId() {
+  if (typeof window !== 'undefined') {
+    let id = localStorage.getItem('arcade_device_id');
+    if (!id) {
+      id = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now();
+      localStorage.setItem('arcade_device_id', id);
+    }
+    return id;
+  }
+  return 'server';
+}
 
 function timeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -41,13 +55,25 @@ export default function PostFeedPage() {
   // Edit feature ke liye state
   const [postToEdit, setPostToEdit] = useState<any>(null);
 
+  // Current User ki Device ID
+  const currentDeviceId = getDeviceId();
+
   // ================= FIREBASE FETCH (LIVE SYNC ADDED) =================
   useEffect(() => {
     const q = query(collection(db, "swag_posts"), orderBy("createdAt", "desc"));
     
     // onSnapshot Firebase se live data lata hai
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const fetchedPosts = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { 
+          id: doc.id, 
+          ...data,
+          // Check if current user liked/reposted this globally
+          hasLiked: data.likedBy ? data.likedBy.includes(currentDeviceId) : false,
+          hasReposted: data.repostedBy ? data.repostedBy.includes(currentDeviceId) : false
+        };
+      });
       setPosts(fetchedPosts);
       setLoading(false);
     }, (error) => {
@@ -101,7 +127,10 @@ export default function PostFeedPage() {
           likes: 0,
           reposts: 0,
           shares: 0,
-          commentsData: []
+          commentsData: [],
+          authorId: currentDeviceId, // Ownership assign kar rahe hain
+          likedBy: [], // Array to store user IDs who liked
+          repostedBy: [] // Array to store user IDs who reposted
         };
         
         // Firebase Add
@@ -135,33 +164,53 @@ export default function PostFeedPage() {
     setActiveMenuId(null);
   };
 
-  // ================= FIREBASE LIKE / REPOST =================
+  // ================= FIREBASE GLOBAL LIKE / REPOST =================
   const handleAction = async (id: string, action: 'like' | 'repost') => {
-    // Optimistic UI Update
-    let newLikeCount = 0;
-    let newRepostCount = 0;
+    const postRef = doc(db, "swag_posts", id);
+    const postIndex = posts.findIndex(p => p.id === id);
+    if (postIndex === -1) return;
+    const post = posts[postIndex];
 
-    setPosts(prevPosts => prevPosts.map(post => {
-      if (post.id === id) {
-        if (action === 'like') {
-          newLikeCount = post.hasLiked ? post.likes - 1 : post.likes + 1;
-          return { ...post, likes: newLikeCount, hasLiked: !post.hasLiked };
+    if (action === 'like') {
+      const isLiked = post.hasLiked;
+      
+      // Optimistic UI Update instantly
+      setPosts(prevPosts => prevPosts.map(p => {
+        if (p.id === id) return { ...p, likes: isLiked ? Math.max(0, p.likes - 1) : p.likes + 1, hasLiked: !isLiked };
+        return p;
+      }));
+
+      // Firebase Update (Global sync)
+      try {
+        if (isLiked) {
+          await updateDoc(postRef, { likedBy: arrayRemove(currentDeviceId), likes: increment(-1) });
+        } else {
+          await updateDoc(postRef, { likedBy: arrayUnion(currentDeviceId), likes: increment(1) });
         }
-        if (action === 'repost') {
-          newRepostCount = post.hasReposted ? post.reposts - 1 : post.reposts + 1;
-          return { ...post, reposts: newRepostCount, hasReposted: !post.hasReposted };
-        }
+      } catch (err) {
+         console.error("Action update failed", err);
       }
-      return post;
-    }));
+    }
 
-    // Update real DB quietly
-    try {
-      const postRef = doc(db, "swag_posts", id);
-      if (action === 'like') await updateDoc(postRef, { likes: newLikeCount });
-      if (action === 'repost') await updateDoc(postRef, { reposts: newRepostCount });
-    } catch (err) {
-       console.error("Action update failed", err);
+    if (action === 'repost') {
+      const isReposted = post.hasReposted;
+      
+      // Optimistic UI Update instantly
+      setPosts(prevPosts => prevPosts.map(p => {
+        if (p.id === id) return { ...p, reposts: isReposted ? Math.max(0, p.reposts - 1) : p.reposts + 1, hasReposted: !isReposted };
+        return p;
+      }));
+
+      // Firebase Update (Global sync)
+      try {
+        if (isReposted) {
+          await updateDoc(postRef, { repostedBy: arrayRemove(currentDeviceId), reposts: increment(-1) });
+        } else {
+          await updateDoc(postRef, { repostedBy: arrayUnion(currentDeviceId), reposts: increment(1) });
+        }
+      } catch (err) {
+         console.error("Action update failed", err);
+      }
     }
   };
 
@@ -294,22 +343,24 @@ export default function PostFeedPage() {
                     <span className="text-[#80868b] text-[12px] font-medium mt-0.5">{timeAgo(post.createdAt)} • Community</span>
                   </div>
                   
-                  {/* Menu */}
-                  <div className="ml-auto relative menu-container">
-                     <button onClick={() => setActiveMenuId(prev => prev === post.id ? null : post.id)} className="text-[#80868b] hover:bg-[#f1f3f4] p-1.5 rounded-full transition-colors">
-                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
-                     </button>
-                     {activeMenuId === post.id && (
-                        <div className="absolute right-0 mt-1 w-32 bg-white rounded-lg shadow-[0_10px_25px_rgba(0,0,0,0.15)] border border-[#dadce0] py-1 z-20 overflow-hidden">
-                           <button onClick={() => editPost(post)} className="w-full text-left px-4 py-2.5 text-[13px] font-bold text-[#5f6368] hover:bg-[#f8f9fa] border-b border-[#f1f3f4] transition-colors">
-                             Edit Post
-                           </button>
-                           <button onClick={() => deletePost(post.id)} className="w-full text-left px-4 py-2.5 text-[13px] font-bold text-[#ea4335] hover:bg-[#fce8e6] transition-colors">
-                             Delete Post
-                           </button>
-                        </div>
-                     )}
-                  </div>
+                  {/* EDIT/DELETE MENU - AB SIRF AUTHOR KO DIKHEGA */}
+                  {post.authorId === currentDeviceId && (
+                    <div className="ml-auto relative menu-container">
+                       <button onClick={() => setActiveMenuId(prev => prev === post.id ? null : post.id)} className="text-[#80868b] hover:bg-[#f1f3f4] p-1.5 rounded-full transition-colors">
+                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
+                       </button>
+                       {activeMenuId === post.id && (
+                          <div className="absolute right-0 mt-1 w-32 bg-white rounded-lg shadow-[0_10px_25px_rgba(0,0,0,0.15)] border border-[#dadce0] py-1 z-20 overflow-hidden">
+                             <button onClick={() => editPost(post)} className="w-full text-left px-4 py-2.5 text-[13px] font-bold text-[#5f6368] hover:bg-[#f8f9fa] border-b border-[#f1f3f4] transition-colors">
+                               Edit Post
+                             </button>
+                             <button onClick={() => deletePost(post.id)} className="w-full text-left px-4 py-2.5 text-[13px] font-bold text-[#ea4335] hover:bg-[#fce8e6] transition-colors">
+                               Delete Post
+                             </button>
+                          </div>
+                       )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="px-4 pb-3">
