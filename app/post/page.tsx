@@ -5,11 +5,9 @@ import Navbar from "@/app/components/Navbar";
 import CreateSwagPost from "@/app/components/CreateSwagPost";
 // ================= FIREBASE IMPORTS =================
 import { db } from "@/lib/firebase";
-// Global Likes ke liye arrayUnion, arrayRemove, aur increment add kiya gaya hai
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, arrayUnion, arrayRemove, increment } from "firebase/firestore";
 
 // ================= DEVICE ID GENERATOR =================
-// Ye function har user ke browser ko ek secret ID dega bina login ke
 function getDeviceId() {
   if (typeof window !== 'undefined') {
     let id = localStorage.getItem('arcade_device_id');
@@ -52,24 +50,20 @@ export default function PostFeedPage() {
   const [replyingTo, setReplyingTo] = useState<{postId: string, commentId: string, name: string} | null>(null);
   const [systemAlert, setSystemAlert] = useState<string | null>(null);
 
-  // Edit feature ke liye state
   const [postToEdit, setPostToEdit] = useState<any>(null);
 
-  // Current User ki Device ID
   const currentDeviceId = getDeviceId();
 
-  // ================= FIREBASE FETCH (LIVE SYNC ADDED) =================
+  // ================= FIREBASE FETCH (LIVE SYNC) =================
   useEffect(() => {
     const q = query(collection(db, "swag_posts"), orderBy("createdAt", "desc"));
     
-    // onSnapshot Firebase se live data lata hai
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetchedPosts = snapshot.docs.map(doc => {
         const data = doc.data();
         return { 
           id: doc.id, 
           ...data,
-          // Check if current user liked/reposted this globally
           hasLiked: data.likedBy ? data.likedBy.includes(currentDeviceId) : false,
           hasReposted: data.repostedBy ? data.repostedBy.includes(currentDeviceId) : false
         };
@@ -81,7 +75,6 @@ export default function PostFeedPage() {
       setLoading(false);
     });
 
-    // Cleanup function
     return () => unsubscribe();
   }, []);
 
@@ -90,7 +83,6 @@ export default function PostFeedPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Click outside handler for comments and menus
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -112,30 +104,26 @@ export default function PostFeedPage() {
   const handleNewOrEditPost = async (postData: any, isEdit: boolean) => {
     try {
       if (isEdit) {
-        // Firebase Update
         const postRef = doc(db, "swag_posts", postData.id);
         await updateDoc(postRef, postData);
         setSystemAlert("Post updated successfully!");
       } else {
-        // Formatted completely new post for Firebase
         const newDbPost = {
           name: postData.name,
           title: postData.title,
           about: postData.about,
-          image: postData.image, // Base64 string
+          image: postData.image, 
           createdAt: postData.createdAt,
           likes: 0,
           reposts: 0,
           shares: 0,
           commentsData: [],
-          authorId: currentDeviceId, // Ownership assign kar rahe hain
-          likedBy: [], // Array to store user IDs who liked
-          repostedBy: [] // Array to store user IDs who reposted
+          authorId: currentDeviceId, 
+          likedBy: [], 
+          repostedBy: [] 
         };
         
-        // Firebase Add
         await addDoc(collection(db, "swag_posts"), newDbPost);
-        // Yahan se manual UI update (setPosts) hata diya kyunki ab onSnapshot khud update kar dega
       }
     } catch (error) {
       console.error("Firebase save error:", error);
@@ -174,13 +162,11 @@ export default function PostFeedPage() {
     if (action === 'like') {
       const isLiked = post.hasLiked;
       
-      // Optimistic UI Update instantly
       setPosts(prevPosts => prevPosts.map(p => {
         if (p.id === id) return { ...p, likes: isLiked ? Math.max(0, p.likes - 1) : p.likes + 1, hasLiked: !isLiked };
         return p;
       }));
 
-      // Firebase Update (Global sync)
       try {
         if (isLiked) {
           await updateDoc(postRef, { likedBy: arrayRemove(currentDeviceId), likes: increment(-1) });
@@ -195,13 +181,11 @@ export default function PostFeedPage() {
     if (action === 'repost') {
       const isReposted = post.hasReposted;
       
-      // Optimistic UI Update instantly
       setPosts(prevPosts => prevPosts.map(p => {
         if (p.id === id) return { ...p, reposts: isReposted ? Math.max(0, p.reposts - 1) : p.reposts + 1, hasReposted: !isReposted };
         return p;
       }));
 
-      // Firebase Update (Global sync)
       try {
         if (isReposted) {
           await updateDoc(postRef, { repostedBy: arrayRemove(currentDeviceId), reposts: increment(-1) });
@@ -219,10 +203,23 @@ export default function PostFeedPage() {
     setReplyingTo(null); 
   };
 
-  // ================= FIREBASE COMMENT =================
+  // ================= FIREBASE COMMENT (SMART GUEST PROMPT ADDED) =================
   const submitComment = async (postId: string) => {
     const text = commentInputs[postId]?.trim();
     if (!text) return;
+
+    // Smart logic: Check if user already entered their name before
+    let commenterName = localStorage.getItem('arcade_guest_name');
+    
+    // Agar nahi hai, toh ek baar prompt karenge
+    if (!commenterName) {
+      const userInput = window.prompt("Enter your name to post this comment:");
+      if (!userInput || userInput.trim() === "") {
+        return; // Agar user ne naam cancel kar diya, toh comment nahi hoga
+      }
+      commenterName = userInput.trim();
+      localStorage.setItem('arcade_guest_name', commenterName);
+    }
 
     let updatedCommentsArray: any[] = [];
 
@@ -232,10 +229,21 @@ export default function PostFeedPage() {
         if (replyingTo && replyingTo.postId === postId) {
           const commentIndex = updatedComments.findIndex(c => c.id === replyingTo.commentId);
           if (commentIndex > -1) {
-            updatedComments[commentIndex].replies.push({ id: Date.now().toString(), name: "Manish Kumar", text: text, time: new Date().toISOString() });
+            updatedComments[commentIndex].replies.push({ 
+              id: Date.now().toString(), 
+              name: commenterName, // Yahan ab asil naam jayega
+              text: text, 
+              time: new Date().toISOString() 
+            });
           }
         } else {
-          updatedComments.push({ id: Date.now().toString(), name: "Manish Kumar", text: text, time: new Date().toISOString(), replies: [] });
+          updatedComments.push({ 
+            id: Date.now().toString(), 
+            name: commenterName, // Yahan ab asil naam jayega
+            text: text, 
+            time: new Date().toISOString(), 
+            replies: [] 
+          });
         }
         updatedCommentsArray = updatedComments;
         return { ...post, commentsData: updatedComments };
@@ -268,7 +276,6 @@ export default function PostFeedPage() {
           url: urlToShare
         });
         
-        // Increment share count in DB
         const newShares = (post.shares || 0) + 1;
         setPosts(prev => prev.map(p => p.id === post.id ? { ...p, shares: newShares } : p));
         await updateDoc(doc(db, "swag_posts", post.id), { shares: newShares });
@@ -277,7 +284,6 @@ export default function PostFeedPage() {
         console.log('Share canceled or failed', err);
       }
     } else {
-      // Fallback if browser doesn't support native share
       navigator.clipboard.writeText(urlToShare);
       setSystemAlert("Link copied to clipboard!");
       setTimeout(() => setSystemAlert(null), 3000);
@@ -343,7 +349,7 @@ export default function PostFeedPage() {
                     <span className="text-[#80868b] text-[12px] font-medium mt-0.5">{timeAgo(post.createdAt)} • Community</span>
                   </div>
                   
-                  {/* EDIT/DELETE MENU - AB SIRF AUTHOR KO DIKHEGA */}
+                  {/* EDIT/DELETE MENU */}
                   {post.authorId === currentDeviceId && (
                     <div className="ml-auto relative menu-container">
                        <button onClick={() => setActiveMenuId(prev => prev === post.id ? null : post.id)} className="text-[#80868b] hover:bg-[#f1f3f4] p-1.5 rounded-full transition-colors">
