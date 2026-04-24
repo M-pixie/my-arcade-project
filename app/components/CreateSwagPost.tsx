@@ -5,9 +5,7 @@ import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import Confetti from 'react-confetti';
 
-// editData prop add kiya hai for editing existing posts
 export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClose: () => void, onSuccess: (post: any, isEdit: boolean) => void, editData?: any }) {
-  // Agar edit mode hai, to purana data load karo
   const [name, setName] = useState(editData ? editData.name : "");
   const [title, setTitle] = useState(editData ? editData.title : "");
   const [about, setAbout] = useState(editData ? editData.about : "");
@@ -17,7 +15,6 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   
-  // Agar edit hai to purani image load hogi
   const [croppedImageBase64, setCroppedImageBase64] = useState<string | null>(editData ? editData.image : null); 
   
   const [isCropping, setIsCropping] = useState(false); 
@@ -27,8 +24,6 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
   const [isPublishing, setIsPublishing] = useState(false);
   const [postSuccess, setPostSuccess] = useState(false); 
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 }); 
-
-  const [newPostData, setNewPostData] = useState<any>(null);
 
   useEffect(() => {
     setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
@@ -60,21 +55,94 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
     setImageRemovedPop(true);
   };
 
+  // ==========================================================
+  // SMART COMPRESSOR LOGIC (Target: ~800KB to 900KB max limit)
+  // ==========================================================
   const getCroppedImg = (image: HTMLImageElement, crop: PixelCrop): string => {
     const canvas = document.createElement('canvas');
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
+
+    // HD Resolution maintain karne ke liye 1920px
+    const MAX_WIDTH = 1920;
+    let finalWidth = crop.width * scaleX;
+    let finalHeight = crop.height * scaleY;
+
+    if (finalWidth > MAX_WIDTH) {
+      const ratio = MAX_WIDTH / finalWidth;
+      finalWidth *= ratio;
+      finalHeight *= ratio;
+    }
+
+    canvas.width = finalWidth;
+    canvas.height = finalHeight;
     const ctx = canvas.getContext('2d');
     if (!ctx) return "";
-    ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, crop.width, crop.height);
-    return canvas.toDataURL('image/png'); 
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, finalWidth, finalHeight);
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0, 0, finalWidth, finalHeight
+    );
+    
+    // Initial max quality (95%)
+    let quality = 0.95;
+    let dataUrl = canvas.toDataURL('image/jpeg', quality);
+    
+    // Agar image 1MB (approx 1,200,000 base64 chars) se zyada hai, 
+    // tab tak loop chalega jab tak wo 800-900KB ki range me na aa jaye.
+    while (dataUrl.length > 1200000 && quality > 0.3) {
+      quality -= 0.1;
+      dataUrl = canvas.toDataURL('image/jpeg', quality);
+    }
+    
+    return dataUrl; 
   };
 
   const handleSkipCrop = () => {
-    setCroppedImageBase64(imageSrc); 
-    setIsCropping(false); 
+    if (imgRef.current) {
+      const canvas = document.createElement('canvas');
+      let width = imgRef.current.naturalWidth;
+      let height = imgRef.current.naturalHeight;
+      const MAX_WIDTH = 1920;
+
+      if (width > MAX_WIDTH) {
+        const ratio = MAX_WIDTH / width;
+        width *= ratio;
+        height *= ratio;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(imgRef.current, 0, 0, width, height);
+        
+        let quality = 0.95;
+        let dataUrl = canvas.toDataURL('image/jpeg', quality);
+        
+        // Skip crop me bhi same 800-900KB limit maintain karega
+        while (dataUrl.length > 1200000 && quality > 0.3) {
+          quality -= 0.1;
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
+        
+        setCroppedImageBase64(dataUrl);
+      } else {
+        setCroppedImageBase64(imageSrc);
+      }
+    } else {
+      setCroppedImageBase64(imageSrc);
+    }
+    setIsCropping(false);
   };
 
   const handleConfirmCrop = useCallback(() => {
@@ -96,9 +164,8 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
     setErrorMsg(null);
     setIsPublishing(true);
     
-    // Naya data object banaya
     const postObj = {
-      ...(editData ? editData : {}), // Purana data retain karo
+      ...(editData ? editData : {}), 
       name: name,
       title: title,
       about: about,
@@ -106,20 +173,14 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
       createdAt: editData ? editData.createdAt : new Date().toISOString(), 
     };
     
-    setNewPostData(postObj);
-    
-    // Simulate UI processing
     setTimeout(() => {
       setIsPublishing(false);
       setPostSuccess(true); 
-      
-      // Success modal ke 3 seconds baad band kardo aur data pass kardo
       setTimeout(() => {
         setPostSuccess(false);
         onClose();
-        onSuccess(postObj, !!editData); // Batao ki ye Naya post tha ya Edit hua hai
+        onSuccess(postObj, !!editData); 
       }, 3000);
-
     }, 1000);
   };
 
@@ -127,7 +188,6 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#202124]/60 backdrop-blur-sm p-4 transition-opacity duration-300">
         
-        {/* Transparent Modal */}
         <div className="bg-white/95 backdrop-blur-xl w-full max-w-xl border border-white/50 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] flex flex-col max-h-[90vh] overflow-hidden relative">
           
           <div className="flex justify-between items-center border-b border-[#dadce0]/50 px-6 py-4 bg-white/50">
