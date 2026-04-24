@@ -18,7 +18,9 @@
     "next": "16.1.1",
     "nodemailer": "^7.0.12",
     "react": "19.2.3",
+    "react-confetti": "^6.4.0",
     "react-dom": "19.2.3",
+    "react-image-crop": "^11.0.10",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1"
   },

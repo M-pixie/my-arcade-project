@@ -18,6 +18,7 @@ export default function Navbar() {
     { name: "Skill Badges", href: "/resources", tooltip: "All Skill Badges" },
     { name: "Dashboard", href: "/dashboard", tooltip: "your dashboard" },
     { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
+    { name: "Swags Post", href: "/post", tooltip: "See User Swags Post" },
     { name: "About Arcade", href: "/about", tooltip: "Explore About Arcade" },
   ];
 
