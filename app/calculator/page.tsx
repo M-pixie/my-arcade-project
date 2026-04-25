@@ -4,6 +4,23 @@ import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 
+function timeAgo(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (seconds < 60) return "Just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo`;
+  return `${Math.floor(months / 12)}y`;
+}
+
 export default function CalculatorPage() {
   const [profileUrl, setProfileUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,7 +28,10 @@ export default function CalculatorPage() {
   
   const [rememberMe, setRememberMe] = useState(false);
   const [hideRedLine, setHideRedLine] = useState(false);
-  const [recentUrls, setRecentUrls] = useState<string[]>([]);
+  
+  // History me url ke sath time bhi store karenge ab
+  const [recentUrls, setRecentUrls] = useState<{url: string, time: string}[]>([]);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null); // For history copy feedback
 
   const router = useRouter();
 
@@ -24,7 +44,7 @@ export default function CalculatorPage() {
       setProfileUrl(savedUrl);
       setRememberMe(true);
     }
-    const savedRecentUrls = localStorage.getItem("recent_arcade_urls");
+    const savedRecentUrls = localStorage.getItem("recent_arcade_urls_v2"); // New key for object structure
     if (savedRecentUrls) {
       setRecentUrls(JSON.parse(savedRecentUrls));
     }
@@ -32,16 +52,16 @@ export default function CalculatorPage() {
 
   const saveToHistory = (urlToSave: string) => {
     setRecentUrls((prevUrls) => {
-      const filtered = prevUrls.filter((u) => u !== urlToSave);
-      const updatedUrls = [urlToSave, ...filtered].slice(0, 5); 
-      localStorage.setItem("recent_arcade_urls", JSON.stringify(updatedUrls));
+      const filtered = prevUrls.filter((u) => u.url !== urlToSave);
+      const updatedUrls = [{ url: urlToSave, time: new Date().toISOString() }, ...filtered].slice(0, 5); 
+      localStorage.setItem("recent_arcade_urls_v2", JSON.stringify(updatedUrls));
       return updatedUrls;
     });
   };
 
   const clearHistory = () => {
     setRecentUrls([]);
-    localStorage.removeItem("recent_arcade_urls");
+    localStorage.removeItem("recent_arcade_urls_v2");
   };
 
   const triggerBlink = async () => {
@@ -83,26 +103,35 @@ export default function CalculatorPage() {
     router.push("/dashboard");
   };
 
+  const handleHistoryClick = (url: string, index: number) => {
+    setProfileUrl(url);
+    setError(null);
+    setHideRedLine(false);
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(url);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-6 pt-24 pb-16">
         
-        {/* HEADER SECTION (Left Aligned, No Logo) */}
-        <div className="text-left mb-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-[#202124] tracking-tight mb-4 leading-tight">
+        {/* HEADER SECTION (Center Aligned, Subtitle Moved) */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl md:text-6xl font-bold text-[#202124] tracking-tight leading-tight">
             Arcade <span className="text-[#1a73e8]">Calculator</span>
           </h1>
-          <p className="text-[#5f6368] text-base md:text-lg font-medium">
-            Calculate your exact points from Google Cloud Skills Boost public profile URL.
-          </p>
         </div>
 
         {/* 1. INPUT BOX AREA (MAIN CALCULATOR) */}
-        <div className="bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8">
+        <div className="bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
+          
           {loading && (
-            <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden relative">
+            <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden absolute top-0 left-0">
               <style>{`
                 @keyframes fast-loading {
                   0% { left: -40%; width: 30%; }
@@ -119,7 +148,13 @@ export default function CalculatorPage() {
           )}
 
           <div className="p-8 md:p-12">
-            <div className="mb-6 mt-3">
+            
+            {/* Subtitle moved right above the input box */}
+            <p className="text-[#5f6368] text-sm md:text-base font-semibold mb-4 text-left">
+              Calculate your exact points from Google Cloud Skills Boost public profile URL.
+            </p>
+
+            <div className="mb-6">
               <div className={`relative border-2 rounded-lg transition-colors duration-75 ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}>
                 <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url
@@ -169,13 +204,30 @@ export default function CalculatorPage() {
                   </button>
                 </div>
                 
-                <div className="flex flex-wrap gap-3">
-                  {recentUrls.map((url, idx) => {
-                    const shortId = url.split("/").pop()?.substring(0, 15) || "Profile";
+                <div className="flex flex-col gap-3">
+                  {recentUrls.map((item, idx) => {
+                    const shortId = item.url.split("/").pop()?.substring(0, 15) || "Profile";
                     return (
-                      <button key={idx} onClick={() => { setProfileUrl(url); setError(null); setHideRedLine(false); }} className="px-4 py-2 bg-white hover:bg-[#e8f0fe] border border-[#dadce0] hover:border-[#1a73e8] text-[#202124] hover:text-[#1a73e8] text-sm font-bold rounded-lg transition-all flex items-center gap-2 shadow-sm" title={url}>
-                        <svg className="w-4 h-4 text-[#5f6368] opacity-70" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
-                        {shortId}...
+                      <button 
+                        key={idx} 
+                        onClick={() => handleHistoryClick(item.url, idx)} 
+                        className={`w-full md:w-auto self-start px-4 py-2.5 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124] hover:text-[#1a73e8] text-sm font-bold rounded-lg transition-all flex items-center justify-between gap-4 shadow-sm ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea] text-[#137333] hover:text-[#137333] hover:border-[#34a853] hover:bg-[#e6f4ea]' : ''}`}
+                        title={item.url}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          {copiedIndex === idx ? (
+                            <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                          ) : (
+                            <svg className="w-4 h-4 text-[#5f6368] opacity-70 group-hover:text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
+                          )}
+                          <span className="truncate max-w-[120px]">{shortId}...</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 border-l border-[#dadce0] pl-3">
+                          <span className="text-[11px] font-semibold text-[#80868b] bg-[#f8f9fa] px-2 py-0.5 rounded">
+                            {timeAgo(item.time)}
+                          </span>
+                        </div>
                       </button>
                     );
                   })}

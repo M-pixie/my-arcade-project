@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { subscribeLeaderboard, savePublicUserToLeaderboard } from "@/lib/leaderboard"; 
 import { collection, query, where, getCountFromServer } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+// ================= 🔥 CONFETTI IMPORTED 🔥 =================
+import Confetti from 'react-confetti';
 
 export default function DashboardPage() {
   const [profileUrl, setProfileUrl] = useState("");
@@ -35,6 +37,23 @@ export default function DashboardPage() {
   const [isGeneratingImg, setIsGeneratingImg] = useState(false); 
 
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // ================= 🔥 WELCOME CELEBRATION STATES 🔥 =================
+  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
+  const [showWelcomeCelebration, setShowWelcomeCelebration] = useState(false);
+
+  useEffect(() => {
+    setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
+  }, []);
+
+  // Jab dashboard load ho jaye aur points mil jayein, tab celebration trigger hoga
+  useEffect(() => {
+    if (!loading && points !== null) {
+      setShowWelcomeCelebration(true);
+      const timer = setTimeout(() => setShowWelcomeCelebration(false), 10000); // 5 seconds baad auto gayab
+      return () => clearTimeout(timer);
+    }
+  }, [loading, points]);
 
   // ================= 🔥 APRIL ARCADE LABS DATA 🔥 =================
   const aprilLabs = [
@@ -533,6 +552,19 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
+
+      {/* ================= 🔥 WELCOME CONFETTI CELEBRATION 🔥 ================= */}
+      {showWelcomeCelebration && (
+        <div className="fixed inset-0 z-[100] pointer-events-none">
+          <Confetti 
+            width={windowDimensions.width} 
+            height={windowDimensions.height} 
+            numberOfPieces={300} 
+            gravity={0.15} 
+            opacity={0.9} 
+          />
+        </div>
+      )}
 
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16 space-y-10">
         
