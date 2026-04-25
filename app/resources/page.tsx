@@ -284,7 +284,7 @@ export default function ResourcesPage() {
       <section className="py-10 px-6 bg-[#f8f9fa] min-h-[600px]">
         <div className="max-w-7xl mx-auto">
           
-          {/* Header & Premium Action Buttons Row (Now with 4 Buttons) */}
+          {/* Header & Premium Action Buttons Row */}
           <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-8 gap-4">
             <div className="flex items-center gap-3 border-l-4 border-[#1a73e8] pl-4">
               <h2 className="text-xl font-bold text-[#202124]">
@@ -299,6 +299,15 @@ export default function ResourcesPage() {
               >
                 Calculate Points
               </button>
+              
+              {/* === NEW BUTTON ADDED HERE === */}
+              <button 
+                onClick={() => router.push('/credits')} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+              >
+                Required Credits
+              </button>
+
               <button 
                 onClick={() => router.push('/leaderboard')} 
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
