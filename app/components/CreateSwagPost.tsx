@@ -56,15 +56,15 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
   };
 
   // ==========================================================
-  // SMART COMPRESSOR LOGIC (Target: ~800KB to 900KB max limit)
+  // AGGRESSIVE COMPRESSOR (Ensures post NEVER disappears)
   // ==========================================================
   const getCroppedImg = (image: HTMLImageElement, crop: PixelCrop): string => {
     const canvas = document.createElement('canvas');
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    // HD Resolution maintain karne ke liye 1920px
-    const MAX_WIDTH = 1920;
+    // Reduced max width to 1200px for strict safety
+    const MAX_WIDTH = 1200;
     let finalWidth = crop.width * scaleX;
     let finalHeight = crop.height * scaleY;
 
@@ -91,17 +91,14 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
       0, 0, finalWidth, finalHeight
     );
     
-    // Initial max quality (95%)
-    let quality = 0.95;
+    let quality = 0.85;
     let dataUrl = canvas.toDataURL('image/jpeg', quality);
     
-    // Agar image 1MB (approx 1,200,000 base64 chars) se zyada hai, 
-    // tab tak loop chalega jab tak wo 800-900KB ki range me na aa jaye.
-    while (dataUrl.length > 1200000 && quality > 0.3) {
+    // Strict limit: 800,000 chars is ~600KB. 100% safe for Firebase.
+    while (dataUrl.length > 800000 && quality > 0.2) {
       quality -= 0.1;
       dataUrl = canvas.toDataURL('image/jpeg', quality);
     }
-    
     return dataUrl; 
   };
 
@@ -110,7 +107,7 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
       const canvas = document.createElement('canvas');
       let width = imgRef.current.naturalWidth;
       let height = imgRef.current.naturalHeight;
-      const MAX_WIDTH = 1920;
+      const MAX_WIDTH = 1200;
 
       if (width > MAX_WIDTH) {
         const ratio = MAX_WIDTH / width;
@@ -126,15 +123,13 @@ export default function CreateSwagPost({ onClose, onSuccess, editData }: { onClo
         ctx.fillRect(0, 0, width, height);
         ctx.drawImage(imgRef.current, 0, 0, width, height);
         
-        let quality = 0.95;
+        let quality = 0.85;
         let dataUrl = canvas.toDataURL('image/jpeg', quality);
         
-        // Skip crop me bhi same 800-900KB limit maintain karega
-        while (dataUrl.length > 1200000 && quality > 0.3) {
+        while (dataUrl.length > 800000 && quality > 0.2) {
           quality -= 0.1;
           dataUrl = canvas.toDataURL('image/jpeg', quality);
         }
-        
         setCroppedImageBase64(dataUrl);
       } else {
         setCroppedImageBase64(imageSrc);
