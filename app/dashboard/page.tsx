@@ -50,7 +50,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading && points !== null) {
       setShowWelcomeCelebration(true);
-      const timer = setTimeout(() => setShowWelcomeCelebration(false), 10000); // 5 seconds baad auto gayab
+      const timer = setTimeout(() => setShowWelcomeCelebration(false), 5000); // 5 seconds baad auto gayab
       return () => clearTimeout(timer);
     }
   }, [loading, points]);
