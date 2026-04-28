@@ -302,11 +302,11 @@ export default function ResourcesPage() {
               
               {/* === NEW BUTTON ADDED HERE === */}
               <button 
-                onClick={() => router.push('/home')} 
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
-              >
-                Required Credits
-              </button>
+  onClick={() => window.open('https://cloud.google.com/free', '_blank')} 
+  className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+>
+  Required Credits
+</button>
 
               <button 
                 onClick={() => router.push('/leaderboard')} 

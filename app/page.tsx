@@ -431,7 +431,7 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1]">
-              Arcade<span className="text-[#fde293]"> Program</span>
+              The Arcade<span className="text-[#fde293]"> Program</span>
             </h1>
 
             <p className="text-white/90 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
@@ -473,7 +473,7 @@ export default function HomePage() {
                 onClick={() => document.getElementById('google-events')?.scrollIntoView({ behavior: 'smooth' })}
                 className="inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-bold transition-all group animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(253,226,147,0.3)] hover:shadow-[0_0_30px_rgba(253,226,147,0.5)] transform hover:-translate-y-1 w-full sm:w-auto text-sm"
               >
-                All Google Events & Programs
+                All Events & Programs
                 <div className="bg-[#fde293] text-[#6b3cb0] p-1.5 rounded-full group-hover:scale-110 transition-transform">
                   <svg className="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
                 </div>
@@ -483,7 +483,7 @@ export default function HomePage() {
                 onClick={() => document.getElementById('coordinator-form')?.scrollIntoView({ behavior: 'smooth' })}
                 className="inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/30 rounded-full text-white font-bold transition-all group animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_20px_rgba(253,226,147,0.3)] hover:shadow-[0_0_30px_rgba(253,226,147,0.5)] transform hover:-translate-y-1 w-full sm:w-auto text-sm"
               >
-                Apply for Co Ordinator Role
+                Help Arcade Community !
                 <div className="bg-[#fde293] text-[#6b3cb0] p-1.5 rounded-full group-hover:scale-110 transition-transform">
                   <svg className="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
                 </div>
@@ -531,75 +531,52 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* === BOTTOM ROW: Contained Mobile App Download UI === */}
-        {/* Adjusted max-width to make the box smaller and less bulky */}
-        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col md:flex-row relative z-20">
+        {/* === BOTTOM ROW: Disclaimer & Actions Container === */}
+        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] overflow-hidden relative z-20">
           
-          {/* Reduced padding to keep things tight and compact */}
-          <div className="p-5 md:p-6 flex-1 w-full flex flex-col lg:flex-row items-center gap-6">
+          <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
             
-            {/* 📱 Sleek Android Phone Mockup - Size Reduced */}
-            <div className="relative w-[160px] aspect-[9/20] bg-black border-[3px] border-black rounded-[1.5rem] shadow-[0_15px_30px_rgba(0,0,0,0.3)] flex-shrink-0 mx-auto lg:mx-0">
-              
-              {/* Fake Hardware Side Buttons */}
-              <div className="absolute top-[60px] -right-[4px] w-[2px] h-[30px] bg-gray-800 rounded-r-md"></div>
-              <div className="absolute top-[100px] -right-[4px] w-[2px] h-[20px] bg-gray-800 rounded-r-md"></div>
+            {/* Disclaimer in place of old text */}
+            <p className="text-sm md:text-base text-[#5f6368] font-medium leading-relaxed max-w-3xl mx-auto bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+              <strong className="text-[#202124]">Disclaimer:</strong> This website is an independent, community-built tool and is not an official website of Google Cloud Arcade or Google ,  community-built tool designed simply to help you calculate your Arcade points and learn Google Cloud skills together with the community.
+            </p>
 
-              {/* Screen Inner Container */}
-              <div className="relative w-full h-full bg-white rounded-[1.2rem] overflow-hidden">
-                
-                {/* Android Punch-Hole Camera */}
-                <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rounded-full z-20 shadow-inner"></div>
-                
-                {/* App Screenshot */}
-                <img 
-                  src="https://i.postimg.cc/qBL8pJY1/Screenshot-20260422-150453.jpg" 
-                  alt="Arcade App Mobile View" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* 📝 Download Text & Actions */}
-            <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+            {/* Action Buttons Container */}
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 w-full">
               
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#e6f4ea] text-[#137333] border border-[#ceead6] rounded-full text-xs font-bold mb-3 shadow-sm tracking-wide">
-                <span>Now on Mobile</span>
-              </div>
-              
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#202124] mb-2 leading-snug">
-                Get the Arcade App
-              </h2>
-              
-              <p className="text-[#5f6368] text-sm md:text-base font-medium leading-relaxed mb-5 max-w-md">
-                Calculate points, check live leaderboards, and get instant updates about the Google Cloud Arcade directly from your Android device.
-              </p>
+              {/* ✨ Animated Download Button ✨ */}
+              <a 
+                href="https://expo.dev/artifacts/eas/nF22gXpteB4mmPXLyBjttS.apk" 
+                className="group relative inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-xl shadow-[0_8px_20px_rgba(26,115,232,0.3)] hover:shadow-[0_12px_25px_rgba(26,115,232,0.4)] transition-all duration-300 w-full sm:w-auto"
+              >
+                <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Download App (apk)</span>
+              </a>
 
-              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center lg:justify-start">
-                
-                {/* ✨ Animated Download Button ✨ */}
-                <a 
-                  href="https://expo.dev/artifacts/eas/nF22gXpteB4mmPXLyBjttS.apk" 
-                  className="group relative inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-xl shadow-[0_8px_20px_rgba(26,115,232,0.3)] hover:shadow-[0_12px_25px_rgba(26,115,232,0.4)] transition-all duration-300 w-full sm:w-auto"
-                >
-                  <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                  <span>Download App (apk)</span>
-                </a>
+              {/* 🎁 See Google Swags Post Button (Now routes to /post) */}
+              <button 
+                onClick={() => router.push('/post')}
+                className="group inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#fbbc04]/10 border border-[#fbbc04]/30 text-[#ea4335] font-bold text-sm rounded-xl hover:bg-[#fbbc04] hover:text-white hover:border-[#fbbc04] transition-all duration-300 w-full sm:w-auto"
+              >
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                </svg>
+                <span>See Google Swags Post</span>
+              </button>
 
-                {/* 📱 Share on WhatsApp Button */}
-                <a 
-                  href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#25D366]/10 border border-[#25D366]/30 text-[#128C7E] font-bold text-sm rounded-xl hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all duration-300 w-full sm:w-auto"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                  Share on WhatsApp
-                </a>
-              </div>
+              {/* 📱 Share on WhatsApp Button */}
+              <a 
+                href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#25D366]/10 border border-[#25D366]/30 text-[#128C7E] font-bold text-sm rounded-xl hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all duration-300 w-full sm:w-auto"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                Share on WhatsApp
+              </a>
+
             </div>
           </div>
         </div>
@@ -608,6 +585,7 @@ export default function HomePage() {
     </div>
   </div>
 </section>
+
 
         {/* ================= 🔥 PREMIUM COMBINED SECTION: HOW TO START & FEATURES 🔥 ================= */}
         <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0]">
@@ -904,7 +882,7 @@ export default function HomePage() {
               
               <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-8 md:p-10 text-center relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
-                <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Apply for Coordinator Role</h3>
+                <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Apply for Coordinator</h3>
                 <p className="text-[#5f6368] text-base max-w-2xl mx-auto">
                   Join our core team! Help guide the community, manage arcade initiatives, and grow your leadership skills with us.
                 </p>
@@ -1025,31 +1003,18 @@ export default function HomePage() {
                   <textarea required value={cReason} onChange={(e) => setCReason(e.target.value)} rows={4} className="px-4 py-3 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] resize-none" placeholder="Share your motivation and how you can contribute..."></textarea>
                 </div>
 
-                {/* ✨ NEW: Benefits Section ✨ */}
-                <div className="mt-2 mb-4 bg-[#f8faff] border border-[#d2e3fc] rounded-xl p-6 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#1a73e8]"></div>
-                  <h4 className="text-[17px] font-bold text-[#1a73e8] mb-4 flex items-center gap-2">
-                    <span className="text-xl">✨</span> Benefits of Becoming a Coordinator
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
-                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">🎓</div>
-                      Special Appreciation Certificate
-                    </div>
-                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
-                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">🚀</div>
-                      Develop Leadership Skills
-                    </div>
-                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
-                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">🎁</div>
-                      Win Premium Google Swags
-                    </div>
-                    <div className="flex items-center gap-3 text-[#3c4043] font-medium text-sm">
-                      <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center text-[#1a73e8] shrink-0 text-base shadow-sm">☁️</div>
-                      Build Google Cloud Skills
-                    </div>
-                  </div>
-                </div>
+                {/* ✨ Important Note Section ✨ */}
+<div className="mt-2 mb-4 bg-[#f8faff] border border-[#d2e3fc] rounded-xl p-6 relative overflow-hidden">
+  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#1a73e8]"></div>
+  
+  <h4 className="text-[17px] font-bold text-[#1a73e8] mb-3 flex items-center gap-2">
+    <span className="text-xl">📌</span> Important Note
+  </h4>
+  
+  <p className="text-[#3c4043] text-sm font-medium leading-relaxed">
+    This is <strong className="text-[#202124]">not</strong> an official Google Arcade Coordinator role. You are being appointed by your Arcade Facilitator to help and guide users within the community. At the end of the program, you will receive a certificate of appreciation directly from your Facilitator.
+  </p>
+</div>
 
                 {/* Submit Button */}
                 <button type="submit" disabled={isSubmittingCoordinator} className={`mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 rounded-lg shadow-sm font-semibold text-white transition-all ${isSubmittingCoordinator ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1a73e8] hover:bg-[#1557b0] hover:-translate-y-0.5 hover:shadow-md'}`}>
@@ -1597,7 +1562,7 @@ export default function HomePage() {
                   Google Opportunities
                 </span>
                 <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-5">
-                  Top Google Events & Programs
+                  Explore Events & Programs
                 </h2>
                 <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed">
                   Unlock exclusive swags, professional badges, standard tier points, cash prizes and official recognition by participating in these flagship campaigns throughout the year.
