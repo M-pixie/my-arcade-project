@@ -143,7 +143,7 @@ export default function ChatBot() {
             onClick={() => setIsOpen(true)}
             className="cursor-pointer animate-bounce bg-white text-[#1a73e8] font-bold text-sm px-4 py-2.5 rounded-2xl shadow-[0_10px_25px_rgba(26,115,232,0.25)] border border-[#d2e3fc] relative flex items-center gap-2 hover:bg-[#f8f9fa] transition-colors"
           >
-            <span>Any help? 🤖</span>
+            <span>Any help?</span>
             {/* Tail/Arrow pointing DOWN towards the button */}
             <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-inherit border-b border-r border-[#d2e3fc] transform rotate-45"></div>
           </div>
