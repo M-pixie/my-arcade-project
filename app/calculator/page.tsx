@@ -94,13 +94,46 @@ export default function CalculatorPage() {
     }
 
     saveToHistory(profileUrl.trim());
+    setLoading(true); // Spinner start ho jayega
     
-    // URL ko local storage me save karke dashboard par bhej denge
-    localStorage.setItem("current_processing_url", profileUrl.trim());
-    setLoading(true);
-    
-    // Redirect to Dashboard
-    router.push("/dashboard");
+    try {
+      // Calculator page par hi points calculate kar rahe hain ab
+      const res = await fetch("/api/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: profileUrl.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to calculate points. Check URL.");
+        setLoading(false);
+        return;
+      }
+
+      // Calculation done, ab cache me save kar denge jisse dashboard direct load ho jaye
+      const extractedId = profileUrl.trim().split('/').pop() || null;
+      const cacheObj = {
+        profileUrl: profileUrl.trim(),
+        points: data.totalPoints,
+        breakdown: data.breakdown,
+        history: data.completionHistory || [],
+        userName: data.userName || null,
+        userAvatar: data.userAvatar || null,
+        userUniqueId: extractedId
+      };
+      
+      localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
+      localStorage.setItem("current_processing_url", profileUrl.trim());
+      
+      // Ab Data aa chuka hai, seedha dashboard open karenge!
+      router.push("/dashboard");
+
+    } catch (err) {
+      setError("Backend server connection failed. Please try again.");
+      setLoading(false);
+    }
   };
 
   const handleHistoryClick = (url: string, index: number) => {
@@ -130,33 +163,36 @@ export default function CalculatorPage() {
         {/* 1. INPUT BOX AREA (MAIN CALCULATOR) */}
         <div className="bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
           
+          <style>{`
+            @keyframes real-loading {
+              0% { left: -30%; width: 10%; }
+              50% { left: 30%; width: 60%; }
+              100% { left: 100%; width: 10%; }
+            }
+            .animate-real-loading {
+              animation: real-loading 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+              position: absolute;
+            }
+          `}</style>
+
+          {/* 🔥 PREMIUM THIN DARK GREY LINE AT THE VERY TOP */}
           {loading && (
-            <div className="h-1 w-full bg-[#e8f0fe] overflow-hidden absolute top-0 left-0">
-              <style>{`
-                @keyframes fast-loading {
-                  0% { left: -40%; width: 30%; }
-                  50% { left: 30%; width: 70%; }
-                  100% { left: 100%; width: 30%; }
-                }
-                .animate-fast-loading {
-                  animation: fast-loading 0.8s infinite ease-in-out;
-                  position: absolute;
-                }
-              `}</style>
-              <div className="h-full bg-[#1a73e8] animate-fast-loading rounded-full"></div>
+            <div className="absolute top-0 left-0 h-[2px] w-full bg-[#f1f3f4] overflow-hidden z-50">
+              <div className="h-full bg-[#5f6368] animate-real-loading rounded-full"></div>
             </div>
           )}
 
-          <div className="p-8 md:p-12">
+          <div className="p-8 md:p-12 mt-1">
             
-            {/* Subtitle moved right above the input box */}
-            <p className="text-[#5f6368] text-sm md:text-base font-semibold mb-4 text-left">
+            {/* Subtitle moved right above the input box (mb-8 for extra spacing so it doesn't look sticky) */}
+            <p className="text-[#5f6368] text-sm md:text-base font-semibold mb-8 text-left">
               Calculate your exact points from Google Cloud Skills Boost public profile URL.
             </p>
 
             <div className="mb-6">
               <div className={`relative border-2 rounded-lg transition-colors duration-75 ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}>
-                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
+                
+                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 z-10 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url
                 </label>
                 <input
@@ -168,7 +204,7 @@ export default function CalculatorPage() {
                     setError(null);
                     setHideRedLine(false); 
                   }}
-                  className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-lg"
+                  className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-lg relative z-10"
                 />
               </div>
 
@@ -187,9 +223,25 @@ export default function CalculatorPage() {
               <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember my url for next time</label>
             </div>
 
-            <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-lg font-bold py-4 rounded-lg transition-all disabled:bg-[#f1f3f4] disabled:text-[#9aa0a6] flex justify-center items-center gap-2 shadow-sm">
-              {loading ? "Preparing Dashboard..." : "Calculate Points"}
+            {/* 🔄 Button Spinner & Green Color (Premium Look with less curve: rounded-md) */}
+            <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-lg font-bold py-4 rounded-md transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Preparing Dashboard...
+                </>
+              ) : (
+                "Calculate Points"
+              )}
             </button>
+
+            {/* Premium Dark Brown Text Below Button */}
+            <p className="text-[13.5px] font-bold text-[#5d4037] text-center mt-5 leading-snug tracking-wide">
+              If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.
+            </p>
 
             {recentUrls.length > 0 && (
               <div className="mt-8 border-t border-[#dadce0] pt-6 animate-fade-in-up">
@@ -237,28 +289,16 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 2. MANDATORY WARNING BOX */}
-        <div className="bg-[#e8f0fe] border border-[#d2e3fc] p-4 mb-10 rounded-lg text-left shadow-sm flex gap-3 items-start">
-          <svg className="w-6 h-6 text-[#1a73e8] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-          <div>
-            <p className="text-sm text-[#1557b0] font-extrabold mb-1">Mandatory for New & Existing Members</p>
-            <p className="text-sm text-[#1557b0] font-medium">If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.</p>
-          </div>
-        </div>
-
-        {/* 3. PREMIUM INFO BOXES (How to use & Profile Public) */}
+        {/* 2. PREMIUM INFO BOXES (How to use & Profile Public) */}
         <div className="grid md:grid-cols-2 gap-6 mb-10 text-left items-stretch">
           {/* How to Use Box */}
           <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-3 border-b border-[#f1f3f4] pb-4">
-              <div className="bg-[#e8f0fe] p-2 rounded-lg">
-                <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              </div>
-              How to use Calculator?
+            <h3 className="text-[#202124] font-medium text-lg mb-4 border-b border-[#f1f3f4] pb-4">
+              How to use Calculator ?
             </h3>
             <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
               <li>Your profile <span className="bg-[#f1f3f4] text-[#202124] px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider mx-1 border border-[#dadce0]">must be public</span> to fetch data.</li>
-              <li>Copy your complete profile URL (e.g., <code className="bg-[#f8f9fa] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#dadce0] shadow-sm">https://www.skills.google/...</code>)</li>
+              <li>Copy your complete profile URL  <code className="bg-[#f8f9fa] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#dadce0] shadow-sm">https://www.skills.google/...</code></li>
               <li>Paste the exact URL in the input box above and click Calculate.</li>
               <li>Invalid, broken, or private URLs will return an error.</li>
             </ul>
@@ -266,11 +306,8 @@ export default function CalculatorPage() {
 
           {/* How to Setup Profile Box */}
           <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <h3 className="text-[#202124] font-extrabold text-[18px] mb-4 flex items-center gap-3 border-b border-[#f1f3f4] pb-4">
-              <div className="bg-[#e8f0fe] p-2 rounded-lg">
-                <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-              </div>
-              How to make Profile Public?
+            <h3 className="text-[#202124] font-medium text-lg mb-4 border-b border-[#f1f3f4] pb-4">
+              How to make Profile Public ?
             </h3>
             <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
               <li>Go to <a href="https://www.skills.google/" target="_blank" rel="noreferrer" className="text-[#1a73e8] hover:underline font-bold">skills.google</a></li>
@@ -282,9 +319,9 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 4. NEED HELP BUTTON */}
-        <div className="flex justify-center">
-          <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#e6f4ea] hover:bg-[#ceead6] text-[#137333] px-6 py-3 rounded-lg text-sm font-bold transition-colors border border-[#ceead6] shadow-sm hover:shadow">
+        {/* 3. NEED HELP BUTTON */}
+        <div className="w-full mt-2">
+          <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full gap-2.5 bg-[#ecfdf5] hover:bg-[#d1fae5] text-[#047857] border border-[#6ee7b7] px-6 py-4 rounded-xl text-base font-extrabold transition-all shadow-sm hover:shadow">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
             Need Help? Ask Facilitator
           </a>
