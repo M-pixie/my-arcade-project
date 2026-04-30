@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 
+// 🔥 TIME AGO UPDATED: "14m" -> "14 mins ago"
 function timeAgo(dateString: string) {
   const date = new Date(dateString);
   const now = new Date();
@@ -11,14 +12,22 @@ function timeAgo(dateString: string) {
 
   if (seconds < 60) return "Just now";
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m`;
+  if (minutes < 60) return `${minutes} mins ago`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h`;
+  if (hours < 24) return `${hours} hours ago`;
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d`;
+  if (days < 30) return `${days} days ago`;
   const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo`;
-  return `${Math.floor(months / 12)}y`;
+  if (months < 12) return `${months} months ago`;
+  return `${Math.floor(months / 12)} years ago`;
+}
+
+// Interface for History Objects
+interface RecentProfile {
+  url: string;
+  time: string;
+  name?: string;
+  avatar?: string | null;
 }
 
 export default function CalculatorPage() {
@@ -29,9 +38,8 @@ export default function CalculatorPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [hideRedLine, setHideRedLine] = useState(false);
   
-  // History me url ke sath time bhi store karenge ab
-  const [recentUrls, setRecentUrls] = useState<{url: string, time: string}[]>([]);
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null); // For history copy feedback
+  const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -44,24 +52,30 @@ export default function CalculatorPage() {
       setProfileUrl(savedUrl);
       setRememberMe(true);
     }
-    const savedRecentUrls = localStorage.getItem("recent_arcade_urls_v2"); // New key for object structure
+    const savedRecentUrls = localStorage.getItem("recent_arcade_urls_v3"); 
     if (savedRecentUrls) {
       setRecentUrls(JSON.parse(savedRecentUrls));
     }
   }, []);
 
-  const saveToHistory = (urlToSave: string) => {
+  const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null) => {
     setRecentUrls((prevUrls) => {
       const filtered = prevUrls.filter((u) => u.url !== urlToSave);
-      const updatedUrls = [{ url: urlToSave, time: new Date().toISOString() }, ...filtered].slice(0, 5); 
-      localStorage.setItem("recent_arcade_urls_v2", JSON.stringify(updatedUrls));
+      const newItem: RecentProfile = { 
+        url: urlToSave, 
+        time: new Date().toISOString(),
+        name: name || "Arcade Player",
+        avatar: avatar || null
+      };
+      const updatedUrls = [newItem, ...filtered].slice(0, 5); 
+      localStorage.setItem("recent_arcade_urls_v3", JSON.stringify(updatedUrls));
       return updatedUrls;
     });
   };
 
   const clearHistory = () => {
     setRecentUrls([]);
-    localStorage.removeItem("recent_arcade_urls_v2");
+    localStorage.removeItem("recent_arcade_urls_v3");
   };
 
   const triggerBlink = async () => {
@@ -93,11 +107,9 @@ export default function CalculatorPage() {
       return;
     }
 
-    saveToHistory(profileUrl.trim());
-    setLoading(true); // Spinner start ho jayega
+    setLoading(true); 
     
     try {
-      // Calculator page par hi points calculate kar rahe hain ab
       const res = await fetch("/api/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -112,7 +124,8 @@ export default function CalculatorPage() {
         return;
       }
 
-      // Calculation done, ab cache me save kar denge jisse dashboard direct load ho jaye
+      saveToHistory(profileUrl.trim(), data.userName, data.userAvatar);
+
       const extractedId = profileUrl.trim().split('/').pop() || null;
       const cacheObj = {
         profileUrl: profileUrl.trim(),
@@ -127,7 +140,6 @@ export default function CalculatorPage() {
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
       localStorage.setItem("current_processing_url", profileUrl.trim());
       
-      // Ab Data aa chuka hai, seedha dashboard open karenge!
       router.push("/dashboard");
 
     } catch (err) {
@@ -141,7 +153,6 @@ export default function CalculatorPage() {
     setError(null);
     setHideRedLine(false);
     
-    // Copy to clipboard
     navigator.clipboard.writeText(url);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 2000);
@@ -153,14 +164,12 @@ export default function CalculatorPage() {
 
       <main className="max-w-4xl mx-auto px-6 pt-24 pb-16">
         
-        {/* HEADER SECTION (Center Aligned, Subtitle Moved) */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-6xl font-bold text-[#202124] tracking-tight leading-tight">
             Arcade <span className="text-[#1a73e8]">Calculator</span>
           </h1>
         </div>
 
-        {/* 1. INPUT BOX AREA (MAIN CALCULATOR) */}
         <div className="bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
           
           <style>{`
@@ -173,9 +182,29 @@ export default function CalculatorPage() {
               animation: real-loading 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
               position: absolute;
             }
+
+            /* 🔥 NEW AVATAR FLOATING ANIMATION */
+            @keyframes float-avatar {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-5px); }
+            }
+            .animate-float-avatar {
+              animation: float-avatar 3s ease-in-out infinite;
+            }
+
+            /* 🔥 PREMIUM GOOGLE-STYLE INLINE TOOLTIP ANIMATION */
+            @keyframes tooltip-pop {
+              0% { opacity: 0; transform: translate(-50%, 10px) scale(0.95); }
+              15% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+              85% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+              100% { opacity: 0; transform: translate(-50%, -5px) scale(0.95); }
+            }
+            .animate-tooltip-pop {
+              animation: tooltip-pop 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+              pointer-events: none;
+            }
           `}</style>
 
-          {/* 🔥 PREMIUM THIN DARK GREY LINE AT THE VERY TOP */}
           {loading && (
             <div className="absolute top-0 left-0 h-[2px] w-full bg-[#f1f3f4] overflow-hidden z-50">
               <div className="h-full bg-[#5f6368] animate-real-loading rounded-full"></div>
@@ -184,7 +213,6 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12 mt-1">
             
-            {/* Subtitle moved right above the input box (mb-8 for extra spacing so it doesn't look sticky) */}
             <p className="text-[#5f6368] text-sm md:text-base font-semibold mb-8 text-left">
               Calculate your exact points from Google Cloud Skills Boost public profile URL.
             </p>
@@ -223,7 +251,6 @@ export default function CalculatorPage() {
               <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember my url for next time</label>
             </div>
 
-            {/* 🔄 Button Spinner & Green Color (Premium Look with less curve: rounded-md) */}
             <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-lg font-bold py-4 rounded-md transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
               {loading ? (
                 <>
@@ -238,14 +265,14 @@ export default function CalculatorPage() {
               )}
             </button>
 
-            {/* Premium Dark Brown Text Below Button */}
             <p className="text-[13.5px] font-bold text-[#5d4037] text-center mt-5 leading-snug tracking-wide">
               If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.
             </p>
 
+            {/* 🔥 RECENT PROFILES */}
             {recentUrls.length > 0 && (
               <div className="mt-8 border-t border-[#dadce0] pt-6 animate-fade-in-up">
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center justify-between mb-6">
                   <p className="text-sm font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
                     <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Recent Profiles
@@ -256,27 +283,48 @@ export default function CalculatorPage() {
                   </button>
                 </div>
                 
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap gap-x-8 gap-y-5 ml-5">
                   {recentUrls.map((item, idx) => {
-                    const shortId = item.url.split("/").pop()?.substring(0, 15) || "Profile";
+                    const shortId = item.url.split("/").pop()?.substring(0, 16) || "Profile";
                     return (
                       <button 
                         key={idx} 
                         onClick={() => handleHistoryClick(item.url, idx)} 
-                        className={`w-full md:w-auto self-start px-4 py-2.5 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124] hover:text-[#1a73e8] text-sm font-bold rounded-lg transition-all flex items-center justify-between gap-4 shadow-sm ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea] text-[#137333] hover:text-[#137333] hover:border-[#34a853] hover:bg-[#e6f4ea]' : ''}`}
+                        className={`relative w-auto min-w-[270px] inline-flex items-center justify-between gap-4 py-2.5 pr-6 pl-10 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#f8f9fa] rounded-xl transition-all shadow-sm hover:shadow-md ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea]' : ''}`}
                         title={item.url}
                       >
-                        <div className="flex items-center gap-2.5">
-                          {copiedIndex === idx ? (
-                            <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                          ) : (
-                            <svg className="w-4 h-4 text-[#5f6368] opacity-70 group-hover:text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
-                          )}
-                          <span className="truncate max-w-[120px]">{shortId}...</span>
+                        {/* 🔥 PREMIUM GOOGLE-STYLE INLINE TOOLTIP */}
+                        {copiedIndex === idx && (
+                          <div className="absolute -top-11 left-1/2 z-50 bg-white border border-[#dadce0] shadow-[0_4px_12px_rgba(0,0,0,0.12)] rounded-md px-3 py-1.5 flex items-center gap-1.5 animate-tooltip-pop whitespace-nowrap">
+                            <svg className="w-3.5 h-3.5 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                            <span className="text-[#3c4043] text-[12px] font-bold">Profile Copied</span>
+                          </div>
+                        )}
+
+                        {/* OUT-OF-BOUNDS AVATAR CONTAINER */}
+                        <div className="absolute -left-6 top-1/2 -translate-y-1/2 z-10">
+                          <div className="w-12 h-12 rounded-full bg-white border-[3px] border-[#f1f3f4] overflow-hidden flex items-center justify-center animate-float-avatar shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                            {copiedIndex === idx ? (
+                               <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                            ) : item.avatar ? (
+                              <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-[17px] font-black text-[#1a73e8]">
+                                {item.name ? item.name.charAt(0).toUpperCase() : "U"}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         
-                        <div className="flex items-center gap-2 border-l border-[#dadce0] pl-3">
-                          <span className="text-[11px] font-semibold text-[#80868b] bg-[#f8f9fa] px-2 py-0.5 rounded">
+                        {/* NAME AND ID */}
+                        <div className="flex flex-col items-start leading-tight text-left">
+                          <span className="text-[15px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
+                          <span className="text-[11px] text-[#5f6368] font-bold opacity-90 mt-0.5">ID: {shortId}...</span>
+                        </div>
+                        
+                        {/* TIME AGO */}
+                        <div className="border-l border-[#dadce0] pl-3.5 flex items-center">
+                          <span className="text-[10px] font-extrabold text-[#80868b] bg-[#f1f3f4] px-2 py-1 rounded tracking-wide">
                             {timeAgo(item.time)}
                           </span>
                         </div>
@@ -291,7 +339,6 @@ export default function CalculatorPage() {
 
         {/* 2. PREMIUM INFO BOXES (How to use & Profile Public) */}
         <div className="grid md:grid-cols-2 gap-6 mb-10 text-left items-stretch">
-          {/* How to Use Box */}
           <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <h3 className="text-[#202124] font-medium text-lg mb-4 border-b border-[#f1f3f4] pb-4">
               How to use Calculator ?
@@ -304,7 +351,6 @@ export default function CalculatorPage() {
             </ul>
           </div>
 
-          {/* How to Setup Profile Box */}
           <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <h3 className="text-[#202124] font-medium text-lg mb-4 border-b border-[#f1f3f4] pb-4">
               How to make Profile Public ?
@@ -321,7 +367,7 @@ export default function CalculatorPage() {
 
         {/* 3. NEED HELP BUTTON */}
         <div className="w-full mt-2">
-          <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full gap-2.5 bg-[#ecfdf5] hover:bg-[#d1fae5] text-[#047857] border border-[#6ee7b7] px-6 py-4 rounded-xl text-base font-extrabold transition-all shadow-sm hover:shadow">
+          <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full gap-2.5 bg-[#ecfdf5] hover:bg-[#d1fae5] text-[#047857] border border-[#6ee7b7] px-6 py-3.5 rounded-xl text-base font-extrabold transition-all shadow-sm hover:shadow">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
             Need Help? Ask Facilitator
           </a>
