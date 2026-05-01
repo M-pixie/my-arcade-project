@@ -381,7 +381,7 @@ export default function FacilitatorPage() {
             <div className="max-w-6xl mx-auto relative z-10">
               
               <div className="text-center mb-16">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight">Contact Arcade Facilitator</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight">Arcade Facilitator & Team</h2>
                 <div className="w-16 h-1.5 bg-[#1a73e8] mx-auto mt-4 rounded-full"></div>
               </div>
 
