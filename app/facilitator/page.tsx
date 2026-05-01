@@ -382,7 +382,7 @@ export default function FacilitatorPage() {
               
               <div className="text-center mb-16">
                 <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight">Arcade Facilitator & Team</h2>
-                <div className="w-16 h-1.5 bg-[#1a73e8] mx-auto mt-4 rounded-full"></div>
+                
               </div>
 
               {/* 🔥 REMOVED THE BOX, BORDERS AND BACKGROUND! Content flows directly on the section 🔥 */}
@@ -455,7 +455,7 @@ export default function FacilitatorPage() {
                 {/* Right Column: Normal Bio, Stats & Compact Dual Buttons (REMOVED vertical line too!) */}
                 <div className="flex-1 flex flex-col justify-center">
                   <p className="text-[#3c4043] text-[17px] leading-relaxed mb-8 text-center md:text-left font-normal">
-                    As a dedicated Google Cloud Arcade Facilitator in 2026, Manish has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts. He is passionate about empowering the community to upskill, earn certifications, and claim official Google Cloud swags.
+                    As a dedicated Google Cloud Arcade Facilitator in 2025 & 26, Manish & Anjali Patel has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts. He is passionate about empowering the community to upskill, earn certifications, and claim official Google Cloud swags.
                   </p>
 
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-5 rounded-xl border border-[#e8eaed] shadow-sm mb-8">
@@ -509,11 +509,11 @@ export default function FacilitatorPage() {
           <section id="contact-coordinators" className="py-24 px-6 bg-[#f8fbff] border-b border-[#d2e3fc] relative">
             <div className="max-w-6xl mx-auto z-10 relative">
               <div className="text-center mb-16">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-3">Get Help from Co-ordinators</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-3">Need help ?</h2>
                 <p className="text-[#5f6368] text-base max-w-2xl mx-auto font-bold">
                   Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly on WhatsApp.
                 </p>
-                <div className="w-16 h-1 bg-[#1a73e8] mx-auto mt-6 rounded-full"></div>
+                
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
