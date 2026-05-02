@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
       {/* 🌌 PREMIUM NAVY BLUE BACKGROUND 🌌 */}
       <div className="min-h-screen bg-gradient-to-b from-[#050b14] via-[#0a1229] to-[#050b14] text-white font-sans pt-16 pb-12 relative overflow-hidden">
         
-        {/* Custom Animations for Ribbons & Cup */}
+        {/* Custom Animations for Ribbons, Cup & Avatars */}
         <style>{`
           @keyframes float-ribbon-1 {
             0%, 100% { transform: translate(0, 0) rotate(-15deg) scale(1); opacity: 0.85; }
@@ -55,9 +55,14 @@ export default function LeaderboardPage() {
             0%, 100% { transform: translateY(0px) scale(1); }
             50% { transform: translateY(-8px) scale(1.02); }
           }
+          @keyframes float-avatar {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+          }
           .animate-ribbon-1 { animation: float-ribbon-1 4s ease-in-out infinite; }
           .animate-ribbon-2 { animation: float-ribbon-2 5s ease-in-out infinite; }
           .animate-cup { animation: float-cup 4s ease-in-out infinite; }
+          .animate-avatar { animation: float-avatar 3s ease-in-out infinite; }
         `}</style>
 
         {/* Ambient Glowing Background Effects */}
@@ -182,7 +187,7 @@ export default function LeaderboardPage() {
                         <img
                           src={user.photoURL || "/avatar.png"}
                           alt={user.name}
-                          className={`rounded-full object-cover border-4 bg-[#0a1229]
+                          className={`rounded-full object-cover border-4 bg-[#0a1229] animate-avatar
                             ${isFirst ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 border-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.6)]" : ""}
                             ${isSecond ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-slate-300 shadow-[0_0_15px_rgba(203,213,225,0.4)]" : ""}
                             ${isThird ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : ""}
@@ -285,7 +290,7 @@ function LeaderRow({ user, highlight = false }: { user: Leader; highlight?: bool
         <img
           src={user.photoURL || "/avatar.png"}
           alt={user.name}
-          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border object-cover transition-colors ${highlight ? "border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" : "border-white/10 group-hover:border-blue-400"}`}
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border object-cover transition-colors animate-avatar ${highlight ? "border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" : "border-white/10 group-hover:border-blue-400"}`}
         />
         <span className={`text-sm sm:text-lg font-semibold truncate max-w-[120px] sm:max-w-[250px] md:max-w-[400px] transition-colors ${highlight ? "text-white" : "text-slate-200 group-hover:text-white"}`}>
           {user.name || "Anonymous"}
