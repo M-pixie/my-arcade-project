@@ -427,7 +427,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
               </span>
-              <span className="relative z-10">April Month Labs Live !</span>
+              <span className="relative z-10">April Month Labs End !</span>
             </div>
 
             <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1]">
@@ -438,33 +438,31 @@ export default function HomePage() {
               The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
             </p>
 
-            {/* Premium Stylish Buttons Row */}
+            {/* Premium Stylish Buttons Row - Modified as per your instructions */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full">
               <button
                 onClick={() => router.push("/calculator")}
-                className="flex-1 w-full px-5 py-3.5 bg-white text-[#6b3cb0] font-black text-[14px] sm:text-base rounded-xl hover:scale-105 hover:shadow-[0_10px_20px_rgba(255,255,255,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
+                className="relative flex-1 w-full px-5 py-3.5 bg-white text-[#6b3cb0] font-black text-[14px] sm:text-base rounded-none hover:scale-105 hover:bg-gray-50 hover:shadow-[0_10px_20px_rgba(255,255,255,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
               >
+                {/* Auto Blinking Green Indicator for Main Button */}
+                <span className="absolute top-2 right-2 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#34a853]"></span>
+                </span>
+                
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                <span className="whitespace-nowrap">Open Calculator</span>
+                <span className="whitespace-nowrap">ARCADE POINTS CALCULATOR</span>
               </button>
               
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 w-full px-5 py-3.5 bg-[#fde293] hover:bg-[#fbc02d] text-[#6b3cb0] font-black text-[14px] sm:text-base rounded-xl hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.15)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
+                className="flex-1 w-full px-5 py-3.5 bg-white hover:bg-gray-50 text-[#6b3cb0] font-black text-[14px] sm:text-base rounded-none hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.15)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 <span className="whitespace-nowrap">Start Labs</span>
               </a>
-
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="flex-1 w-full px-5 py-3.5 bg-white/10 text-white border border-white/20 font-bold text-[14px] sm:text-base rounded-xl hover:bg-white/20 hover:border-white/40 shadow-sm backdrop-blur-md transition-all duration-300 focus:outline-none flex items-center justify-center gap-2"
-              >
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span className="whitespace-nowrap">Dashboard</span>
-              </button>
             </div>
 
             {/* Animated Action Buttons Container */}
@@ -517,13 +515,13 @@ export default function HomePage() {
                     router.push(item.link);
                   }
                 }}
-                className="flex items-center justify-between p-3.5 bg-[#1a73e8] hover:bg-[#1557b0] border border-[#1a73e8] rounded-xl transition-all duration-300 text-white font-semibold shadow-md group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base"
+                className="flex items-center justify-between p-3.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-none transition-all duration-300 text-[#0d47a1] font-semibold shadow-md group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
                   <span>{item.name}</span>
                 </div>
-                <span className="text-white opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
+                <span className="text-[#0d47a1] opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
                   →
                 </span>
               </a>
