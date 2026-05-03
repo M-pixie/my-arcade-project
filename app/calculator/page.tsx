@@ -40,6 +40,9 @@ export default function CalculatorPage() {
   
   const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  
+  // 🔥 NEW STATE FOR 3-SECOND AUTO CHANGE HINT
+  const [showCopyHint, setShowCopyHint] = useState(false);
 
   const router = useRouter();
 
@@ -56,6 +59,12 @@ export default function CalculatorPage() {
     if (savedRecentUrls) {
       setRecentUrls(JSON.parse(savedRecentUrls));
     }
+
+    // 🔥 SETTING INTERVAL FOR 3 SECONDS COPY HINT
+    const interval = setInterval(() => {
+      setShowCopyHint((prev) => !prev);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null) => {
@@ -316,10 +325,21 @@ export default function CalculatorPage() {
                           </div>
                         </div>
                         
-                        {/* NAME AND ID */}
-                        <div className="flex flex-col items-start leading-tight text-left">
+                        {/* 🔥 UPDATED NAME AND ID WITH AUTO COPY HINT */}
+                        <div className="flex flex-col items-start leading-tight text-left min-w-[130px]">
                           <span className="text-[15px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
-                          <span className="text-[11px] text-[#5f6368] font-bold opacity-90 mt-0.5">ID: {shortId}...</span>
+                          
+                          <div className="relative w-full h-[18px] mt-0.5 overflow-hidden">
+                            {/* Original ID Text */}
+                            <span className={`absolute left-0 top-0 text-[11px] text-[#5f6368] font-bold opacity-90 transition-all duration-500 ease-in-out flex items-center h-full ${showCopyHint ? 'opacity-0 translate-y-full' : 'opacity-100 translate-y-0'}`}>
+                              ID: {shortId}...
+                            </span>
+                            {/* Copy Indicator Text (with Icon) */}
+                            <span className={`absolute left-0 top-0 text-[11px] text-[#1a73e8] font-bold transition-all duration-500 ease-in-out flex items-center gap-1 h-full ${showCopyHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}>
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                              Copy Profile
+                            </span>
+                          </div>
                         </div>
                         
                         {/* TIME AGO */}
