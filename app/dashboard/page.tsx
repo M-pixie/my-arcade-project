@@ -50,7 +50,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading && points !== null) {
       setShowWelcomeCelebration(true);
-      const timer = setTimeout(() => setShowWelcomeCelebration(false), 8000); // 5 seconds baad auto gayab
+      const timer = setTimeout(() => setShowWelcomeCelebration(false), 5000); // 5 seconds baad auto gayab
       return () => clearTimeout(timer);
     }
   }, [loading, points]);
@@ -131,6 +131,9 @@ export default function DashboardPage() {
       matchStrings.some(match => item.name.toLowerCase().includes(match.toLowerCase()))
     );
   };
+
+  // 🔥 NEW: CALCULATE PENDING LABS FOR SUGGESTIONS
+  const pendingLabs = aprilLabs.filter(lab => !isLabCompleted(lab.matchStrings));
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -612,6 +615,63 @@ export default function DashboardPage() {
                   </span>
                 </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================= 🔥 NEW FEATURE: BOOST YOUR POINTS (SMART SUGGESTIONS) 🔥 ================= */}
+        {points !== null && pendingLabs.length > 0 && (
+          <div className="animate-fade-in-up mt-12 bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{animationDelay: '0.22s'}}>
+            {/* Subtle Background Accent */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#fbbc04]/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div className="relative z-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-[#f1f3f4] pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#fff8e1] rounded-full flex items-center justify-center border border-[#fde293]">
+                    <span className="text-xl">⚡</span>
+                  </div>
+                  <div>
+                    <h2 className="text-xl md:text-2xl font-extrabold text-[#202124] tracking-tight">Boost Your Points</h2>
+                    <p className="text-[#5f6368] text-sm font-medium mt-0.5">
+                      Smart suggestions based on your completion history
+                    </p>
+                  </div>
+                </div>
+                <span className="bg-[#e8f0fe] text-[#1a73e8] text-[11px] font-black px-3 py-1.5 rounded-md uppercase tracking-widest border border-[#d2e3fc]">
+                  {pendingLabs.length} Labs Pending
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {pendingLabs.map((lab) => (
+                  <div key={`boost-${lab.id}`} className="flex flex-col justify-between p-5 border border-[#dadce0] rounded-xl hover:border-[#1a73e8] hover:shadow-md transition-all bg-[#f8f9fa] group">
+                    <div>
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="inline-block px-2.5 py-1 bg-white text-[#1a73e8] text-[10px] font-black uppercase tracking-widest rounded-md border border-[#dadce0] shadow-sm">
+                          Active Quest
+                        </span>
+                        <span className="text-[#137333] font-black text-xs flex items-center gap-1 bg-[#e6f4ea] px-2 py-0.5 rounded border border-[#ceead6]">
+                          +{lab.points} Pt
+                        </span>
+                      </div>
+                      <h3 className="text-[#202124] font-bold text-lg leading-tight mb-2 group-hover:text-[#1a73e8] transition-colors">
+                        {lab.title}
+                      </h3>
+                      <code className="text-[#5f6368] text-[11px] font-bold bg-[#e8eaed] px-1.5 py-0.5 rounded">
+                        Code: {lab.accessCode}
+                      </code>
+                    </div>
+                    
+                    <div className="mt-5 pt-4 border-t border-[#dadce0]">
+                      <a href={lab.link} target="_blank" rel="noopener noreferrer" className="w-full text-sm font-bold text-white bg-[#1a73e8] hover:bg-[#1557b0] px-5 py-2.5 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2">
+                        Play Now
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
