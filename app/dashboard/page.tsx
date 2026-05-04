@@ -42,6 +42,10 @@ export default function DashboardPage() {
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const [showWelcomeCelebration, setShowWelcomeCelebration] = useState(false);
 
+  // ================= 🔥 NEW MODAL STATES 🔥 =================
+  const [showZeroLabsModal, setShowZeroLabsModal] = useState(false);
+  const [showAllCompletedModal, setShowAllCompletedModal] = useState(false);
+
   useEffect(() => {
     setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
   }, []);
@@ -54,6 +58,21 @@ export default function DashboardPage() {
       return () => clearTimeout(timer);
     }
   }, [loading, points]);
+
+  // ================= 🔥 AUTO-CLOSE BANNERS LOGIC (5 SECONDS) 🔥 =================
+  useEffect(() => {
+    if (showZeroLabsModal) {
+      const timer = setTimeout(() => setShowZeroLabsModal(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showZeroLabsModal]);
+
+  useEffect(() => {
+    if (showAllCompletedModal) {
+      const timer = setTimeout(() => setShowAllCompletedModal(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAllCompletedModal]);
 
   // ================= 🔥 APRIL ARCADE LABS DATA 🔥 =================
   const aprilLabs = [
@@ -132,8 +151,20 @@ export default function DashboardPage() {
     );
   };
 
-  // 🔥 NEW: CALCULATE PENDING LABS FOR SUGGESTIONS
+  // 🔥 CALCULATE PENDING & COMPLETED LABS
   const pendingLabs = aprilLabs.filter(lab => !isLabCompleted(lab.matchStrings));
+  const completedLabs = aprilLabs.filter(lab => isLabCompleted(lab.matchStrings));
+
+  // Modals Trigger Logic
+  useEffect(() => {
+    if (!loading && points !== null && history) {
+      if (completedLabs.length === 0) {
+        setShowZeroLabsModal(true);
+      } else if (completedLabs.length === aprilLabs.length) {
+        setShowAllCompletedModal(true);
+      }
+    }
+  }, [loading, points, history]);
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -387,6 +418,46 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
+      {/* ================= 🔥 TOP BANNER ALERTS (PREMIUM LONG) 🔥 ================= */}
+      
+      {/* 1. Zero Completed Labs Banner (Red) */}
+      {showZeroLabsModal && (
+        <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
+          <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
+            <span className="text-white font-medium text-sm md:text-base">
+              You have not completed any labs yet. Complete the active challenges to earn Arcade points and unlock premium rewards.
+            </span>
+            <button
+              onClick={() => setShowZeroLabsModal(false)}
+              className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors flex-shrink-0 ml-4"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 2. All Labs Completed Banner (Blue) */}
+      {showAllCompletedModal && (
+        <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
+          <div className="w-full max-w-[1100px] bg-[#1a73e8] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#1557b0]">
+            <span className="text-white font-medium text-sm md:text-base">
+              Congratulations! 🎉 You have successfully completed all labs for this month. Stay tuned for the upcoming challenges!
+            </span>
+            <button
+              onClick={() => setShowAllCompletedModal(false)}
+              className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors flex-shrink-0 ml-4"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ================= 🔥 WELCOME CONFETTI CELEBRATION 🔥 ================= */}
       {showWelcomeCelebration && (
         <div className="fixed inset-0 z-[100] pointer-events-none">
@@ -620,141 +691,67 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ================= 🔥 NEW FEATURE: BOOST YOUR POINTS (SMART SUGGESTIONS) 🔥 ================= */}
-        {points !== null && pendingLabs.length > 0 && (
-          <div className="animate-fade-in-up mt-12 bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{animationDelay: '0.22s'}}>
-            {/* Subtle Background Accent */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#fbbc04]/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div className="relative z-10">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-[#f1f3f4] pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#fff8e1] rounded-full flex items-center justify-center border border-[#fde293]">
-                    <span className="text-xl">⚡</span>
-                  </div>
-                  <div>
-                    <h2 className="text-xl md:text-2xl font-extrabold text-[#202124] tracking-tight">Boost Your Points</h2>
-                    <p className="text-[#5f6368] text-sm font-medium mt-0.5">
-                      Smart suggestions based on your completion history
-                    </p>
-                  </div>
-                </div>
-                <span className="bg-[#e8f0fe] text-[#1a73e8] text-[11px] font-black px-3 py-1.5 rounded-md uppercase tracking-widest border border-[#d2e3fc]">
-                  {pendingLabs.length} Labs Pending
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {pendingLabs.map((lab) => (
-                  <div key={`boost-${lab.id}`} className="flex flex-col justify-between p-5 border border-[#dadce0] rounded-xl hover:border-[#1a73e8] hover:shadow-md transition-all bg-[#f8f9fa] group">
-                    <div>
-                      <div className="flex justify-between items-start mb-3">
-                        <span className="inline-block px-2.5 py-1 bg-white text-[#1a73e8] text-[10px] font-black uppercase tracking-widest rounded-md border border-[#dadce0] shadow-sm">
-                          Active Quest
-                        </span>
-                        <span className="text-[#137333] font-black text-xs flex items-center gap-1 bg-[#e6f4ea] px-2 py-0.5 rounded border border-[#ceead6]">
-                          +{lab.points} Pt
-                        </span>
-                      </div>
-                      <h3 className="text-[#202124] font-bold text-lg leading-tight mb-2 group-hover:text-[#1a73e8] transition-colors">
-                        {lab.title}
-                      </h3>
-                      <code className="text-[#5f6368] text-[11px] font-bold bg-[#e8eaed] px-1.5 py-0.5 rounded">
-                        Code: {lab.accessCode}
-                      </code>
-                    </div>
-                    
-                    <div className="mt-5 pt-4 border-t border-[#dadce0]">
-                      <a href={lab.link} target="_blank" rel="noopener noreferrer" className="w-full text-sm font-bold text-white bg-[#1a73e8] hover:bg-[#1557b0] px-5 py-2.5 rounded-lg transition-all shadow-sm flex items-center justify-center gap-2">
-                        Play Now
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* ================= 🔥 APRIL ARCADE LABS LIVE (PREMIUM CARDS) 🔥 ================= */}
         {points !== null && (
-          <div className="animate-fade-in-up mt-12" style={{ animationDelay: '0.25s' }}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-[#dadce0] pb-3">
-              <h4 className="text-xl font-extrabold text-[#202124] tracking-tight flex items-center gap-2">
-                <span className="text-2xl">🎮</span> April Labs Live !
+          <div className="animate-fade-in-up mt-12 bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
+              <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
+                <span className="text-3xl">🎮</span> April Labs Live !
               </h4>
-              <span className="bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-[#d2e3fc]">
+              <span className="bg-[#e8f0fe] text-[#1a73e8] text-xs font-black px-4 py-1.5 rounded-md uppercase tracking-widest border border-[#d2e3fc]">
                 Your Labs Status
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {aprilLabs.map((lab) => {
-                const isCompleted = isLabCompleted(lab.matchStrings);
-                return (
-                  <div key={lab.id} className="bg-white border border-[#dadce0] rounded-xl flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
-                    {/* Top Image Section - Stretched Height (h-56) & Dark Background */}
-                    <div className="h-56 bg-[#202124] border-b border-[#dadce0] p-5 flex items-center justify-center relative overflow-hidden">
-                      <img src={lab.image} alt={lab.title} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
-                    </div>
-                    
-                    {/* Content Section */}
-                    <div className="p-5 flex flex-col flex-grow">
-                      <h5 className="text-lg font-bold text-[#202124] leading-tight mb-1">{lab.title}</h5>
-                      <p className="text-xs text-[#5f6368] font-medium mb-4">{lab.subtitle}</p>
-
-                      {/* Access Code Box */}
-                      <div className="mt-auto">
-                        <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1">Access Code</p>
-                        <div className="flex items-center gap-2 mb-4">
-                          <code className="text-[#1a73e8] bg-[#e8f0fe] px-2 py-1 rounded text-sm font-bold tracking-wide border border-[#d2e3fc]">
-                            {lab.accessCode}
-                          </code>
-                          <button 
-                            onClick={() => handleCopyCode(lab.accessCode)}
-                            className="p-1.5 text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#f1f3f4] rounded-md transition-colors"
-                            title="Copy Code"
-                          >
-                            {copiedCode === lab.accessCode ? (
-                              <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                            ) : (
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                            )}
-                          </button>
-                        </div>
+            {/* --- SECTION 1: PENDING LABS --- */}
+            {pendingLabs.length > 0 && (
+              <div className="mb-10">
+                <h5 className="text-sm font-black text-[#5f6368] uppercase tracking-widest mb-5 flex items-center gap-2">
+                   <span className="w-2 h-2 rounded-full bg-[#ea4335]"></span>
+                   Pending Labs ({pendingLabs.length})
+                </h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {pendingLabs.map((lab) => (
+                    <div key={`pending-${lab.id}`} className="bg-[#f8f9fa] border border-[#dadce0] rounded-xl flex flex-col overflow-hidden shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all group">
+                      <div className="h-48 bg-[#202124] border-b border-[#dadce0] p-4 flex items-center justify-center relative overflow-hidden">
+                        <img src={lab.image} alt={lab.title} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
                       </div>
+                      
+                      <div className="p-5 flex flex-col flex-grow">
+                        <h5 className="text-lg font-bold text-[#202124] leading-tight mb-1">{lab.title}</h5>
+                        <p className="text-xs text-[#5f6368] font-medium mb-4">{lab.subtitle}</p>
 
-                      {/* Info Row Stacked with Calendar */}
-                      <div className="flex flex-col gap-2 text-xs font-bold text-[#5f6368] border-t border-[#f1f3f4] pt-3 mb-4">
-                        <div className="flex items-center gap-1.5">
-                          <svg className="w-4 h-4 text-[#ea4335]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                          Deadline: {lab.deadline}
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <svg className="w-4 h-4 text-[#fbbc04]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 
-                          Arcade Point: {lab.points}
-                        </div>
-                        {lab.id === 'skills_spawn' && (
-                          <div className="flex items-center gap-1.5 text-[#fbbc04]">
-                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" /></svg>
-                             Important Info »
+                        <div className="mt-auto">
+                          <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1">Access Code</p>
+                          <div className="flex items-center gap-2 mb-4">
+                            <code className="text-[#1a73e8] bg-white px-2 py-1 rounded text-sm font-bold tracking-wide border border-[#dadce0]">
+                              {lab.accessCode}
+                            </code>
+                            <button 
+                              onClick={() => handleCopyCode(lab.accessCode)}
+                              className="p-1.5 text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe] rounded-md transition-colors"
+                              title="Copy Code"
+                            >
+                              {copiedCode === lab.accessCode ? (
+                                <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                              ) : (
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                              )}
+                            </button>
                           </div>
-                        )}
-                      </div>
+                        </div>
 
-                      {/* Action Button - Solid Green for Completed AND Link Clickable */}
-                      {isCompleted ? (
-                        <a 
-                          href={lab.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full text-center py-2.5 rounded-lg text-sm font-bold bg-[#137333] text-white hover:bg-[#0d5023] transition-colors flex items-center justify-center gap-2 shadow-sm"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                          Completed
-                        </a>
-                      ) : (
+                        <div className="flex flex-col gap-2 text-xs font-bold text-[#5f6368] border-t border-[#dadce0] pt-3 mb-4">
+                          <div className="flex items-center gap-1.5">
+                            <svg className="w-4 h-4 text-[#ea4335]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Deadline: {lab.deadline}
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <svg className="w-4 h-4 text-[#fbbc04]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 
+                            Arcade Point: {lab.points}
+                          </div>
+                        </div>
+
                         <a 
                           href={lab.link}
                           target="_blank"
@@ -764,12 +761,72 @@ export default function DashboardPage() {
                           Start Learning
                           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                         </a>
-                      )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* --- SECTION 2: COMPLETED LABS --- */}
+            {completedLabs.length > 0 && (
+              <div>
+                <h5 className="text-sm font-black text-[#137333] uppercase tracking-widest mb-5 flex items-center gap-2 pt-6 border-t border-[#f1f3f4]">
+                  <span className="w-2 h-2 rounded-full bg-[#34a853]"></span>
+                  Completed Labs ({completedLabs.length})
+                </h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {completedLabs.map((lab) => (
+                    <div key={`completed-${lab.id}`} className="bg-white border border-[#ceead6] rounded-xl flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow group opacity-90">
+                      <div className="h-48 bg-[#202124] border-b border-[#dadce0] p-4 flex items-center justify-center relative overflow-hidden">
+                         {/* Checkmark overlay with Blinking Animation (animate-pulse) */}
+                         <div className="absolute inset-0 bg-black/40 z-20 flex items-center justify-center">
+                            <div className="w-14 h-14 bg-[#137333] rounded-full flex items-center justify-center border-2 border-white shadow-[0_0_15px_rgba(19,115,51,0.8)] animate-pulse">
+                               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                            </div>
+                         </div>
+                        <img src={lab.image} alt={lab.title} className="max-h-full object-contain z-10 opacity-60" />
+                      </div>
+                      
+                      <div className="p-5 flex flex-col flex-grow">
+                        <h5 className="text-lg font-bold text-[#202124] leading-tight mb-1">{lab.title}</h5>
+                        <p className="text-xs text-[#5f6368] font-medium mb-4">{lab.subtitle}</p>
+
+                        <div className="mt-auto">
+                          <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1">Access Code</p>
+                          <div className="flex items-center gap-2 mb-4 opacity-70">
+                            <code className="text-[#5f6368] bg-[#f8f9fa] px-2 py-1 rounded text-sm font-bold tracking-wide border border-[#dadce0]">
+                              {lab.accessCode}
+                            </code>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2 text-xs font-bold text-[#5f6368] border-t border-[#f1f3f4] pt-3 mb-4">
+                          <div className="flex items-center gap-1.5">
+                            <svg className="w-4 h-4 text-[#ea4335]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Deadline: {lab.deadline}
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <svg className="w-4 h-4 text-[#fbbc04]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> 
+                            Arcade Point: {lab.points}
+                          </div>
+                        </div>
+
+                        <a 
+                          href={lab.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full text-center py-2.5 rounded-lg text-sm font-bold bg-[#137333] text-white hover:bg-[#0d5023] transition-colors flex items-center justify-center gap-2 shadow-sm"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                          Completed
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -789,7 +846,8 @@ export default function DashboardPage() {
             </div>
             
             <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
-              <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
+              {/* HEIGHT INCREASED: max-h-[650px] so it shows ~10 items */}
+              <div className="max-h-[650px] overflow-y-auto custom-scrollbar">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
                     <tr>
@@ -1009,6 +1067,14 @@ export default function DashboardPage() {
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e2e8f0; border-radius: 20px; }
+        
+        .banner-slide-down {
+          animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideDown {
+          0% { transform: translateY(-30px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
       `}</style>
     </div>
   );
