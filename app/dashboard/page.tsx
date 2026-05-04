@@ -80,67 +80,67 @@ export default function DashboardPage() {
       id: 'voyage',
       title: 'Arcade Voyage',
       subtitle: 'Practice as you go.',
-      image: 'https://services.google.com/fh/files/misc/arcade_img2.png',
-      accessCode: '1q-appsdev-01996',
+      image: 'https://services.google.com/fh/files/misc/voyage-may.png',
+      accessCode: '1q-firebase-29238',
       points: 1,
-      deadline: '30/04/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7109',
-      matchStrings: ['arcade voyage: modern application development']
+      deadline: '31/05/26, 10:59 PM',
+      link: 'https://www.skills.google/games/7172',
+      matchStrings: ['Arcade Voyage: Data Governance and Firebase Foundations']
     },
     {
       id: 'adventure',
       title: 'Arcade Adventure',
       subtitle: 'Play. Explore. Learn.',
-      image: 'https://services.google.com/fh/files/misc/arcade_img4.png',
-      accessCode: '1q-operations-0529',
+      image: 'https://services.google.com/fh/files/misc/arcade-adv.png',
+      accessCode: '1q-appdeploy-84713',
       points: 1,
-      deadline: '30/04/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7107',
-      matchStrings: ['arcade adventure: gke operations and networking']
+      deadline: '31/05/26, 10:59 PM',
+      link: 'https://www.skills.google/games/7171',
+      matchStrings: ['Arcade Adventure: Modern App Deployment']
     },
     {
       id: 'trail',
       title: 'Arcade Trail',
       subtitle: 'Build through hands-on.',
-      image: 'https://services.google.com/fh/files/misc/arcade-img1.png',
-      accessCode: '1q-datamgr-30424',
+      image: 'https://services.google.com/fh/files/misc/trail-may.png',
+      accessCode: '1q-devops-95082',
       points: 1,
-      deadline: '30/04/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7110',
-      matchStrings: ['arcade trail: data migration']
+      deadline: '31/05/26, 11:09 PM',
+      link: 'https://www.skills.google/games/7173',
+      matchStrings: ['Arcade Trail: Cloud Security and DevOps Foundations']
     },
     {
       id: 'basecamp',
       title: 'Arcade Base Camp',
       subtitle: 'Gain essential Google Cloud skills',
-      image: 'https://services.google.com/fh/files/misc/arcade_bc_apr.png',
-      accessCode: '1q-basecamp-40139',
+      image: 'https://services.google.com/fh/files/misc/arcade-bc-may.png',
+      accessCode: '1q-basecamp-05059',
       points: 1,
-      deadline: '30/04/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7112',
-      matchStrings: ['arcade base camp april 2026']
+      deadline: '31/05/26, 10:59 PM',
+      link: 'https://www.skills.google/games/7174',
+      matchStrings: ['Arcade Base Camp May 2026']
     },
     {
-      id: 'skills_spawn',
-      title: 'Works Meet Play',
-      subtitle: 'Skills Spawn',
-      image: 'https://services.google.com/fh/files/misc/arcade_img3.png',
-      accessCode: '1q-worknplay-95172',
+      id: 'Expressive',
+      title: 'Expressive Efficiency',
+      subtitle: 'Precision in Expression!',
+      image: 'https://services.google.com/fh/files/misc/wmp-may.png',
+      accessCode: '1q-worknplay-35206',
       points: 1,
-      deadline: '30/04/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7114',
-      matchStrings: ['works meet play: skills spawn']
+      deadline: '31/05/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7176',
+      matchStrings: ['Work Meets Play: Expressive Efficiency']
     },
     {
-      id: 'dialogue',
-      title: 'Dialogue Design',
+      id: 'Skillup',
+      title: 'Skillup Summer',
       subtitle: 'Google Skills',
-      image: 'https://services.google.com/fh/files/misc/arcade_img5.png',
-      accessCode: '1q-webhook-92154',
+      image: 'https://services.google.com/fh/files/misc/specialgame-may.png',
+      accessCode: '1q-summer-06031',
       points: 1,
-      deadline: '30/04/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7113',
-      matchStrings: ['dialogue design']
+      deadline: '31/05/26, 10:59 PM',
+      link: 'https://www.skills.google/games/7175',
+      matchStrings: ['Skill Up Summer']
     }
   ];
 
@@ -425,7 +425,7 @@ export default function DashboardPage() {
         <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
           <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
             <span className="text-white font-medium text-sm md:text-base">
-              You have not completed any April labs yet. Complete challenges, earn points & unlock rewards.
+              You have not completed any May labs yet. Complete challenges, earn points & unlock rewards.
             </span>
             <button
               onClick={() => setShowZeroLabsModal(false)}
@@ -696,7 +696,7 @@ export default function DashboardPage() {
           <div className="animate-fade-in-up mt-12 bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
               <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
-                <span className="text-3xl">🎮</span> April Labs Live !
+                <span className="text-3xl">🎮</span> May Labs Live !
               </h4>
               <span className="bg-[#e8f0fe] text-[#1a73e8] text-xs font-black px-4 py-1.5 rounded-md uppercase tracking-widest border border-[#d2e3fc]">
                 Your Labs Status

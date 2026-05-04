@@ -427,7 +427,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
               </span>
-              <span className="relative z-10">April Month Labs End !</span>
+              <span className="relative z-10">May Month Labs Live !</span>
             </div>
 
             <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1]">

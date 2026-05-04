@@ -207,7 +207,7 @@ export default function Footer() {
             
             {/* 🔥 FIX: Dark text (text-[#202124]) aur issue fixed */}
             <p className="text-[13px] text-[#202124] font-bold tracking-[0.05em] uppercase mt-2">
-              Last Updated: {lastUpdated}
+              Last Updated: 05 May 2026 01:22 am IST
             </p>
           </div>
 
@@ -242,7 +242,7 @@ export default function Footer() {
 
             {/* Instagram */}
             <a 
-              href="https://instagram.com/pov.pixii" 
+              href="https://instagram.com/am.pixi" 
               target="_blank" 
               rel="noopener noreferrer" 
               aria-label="Instagram" 
