@@ -164,7 +164,7 @@ export default function CalculatorPage() {
     
     navigator.clipboard.writeText(url);
     setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
+    setTimeout(() => setCopiedIndex(null), 1000);
   };
 
   return (
