@@ -425,7 +425,7 @@ export default function DashboardPage() {
         <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
           <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
             <span className="text-white font-medium text-sm md:text-base">
-              You have not completed any labs yet. Complete the active challenges to earn Arcade points and unlock premium rewards.
+              You have not completed any April labs yet. Complete challenges, earn points & unlock rewards.
             </span>
             <button
               onClick={() => setShowZeroLabsModal(false)}

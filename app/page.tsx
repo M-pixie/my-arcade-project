@@ -544,7 +544,7 @@ export default function HomePage() {
               
               {/* ✨ Animated Download Button ✨ */}
               <a 
-                href="https://expo.dev/artifacts/eas/i8Tj4At782J3rpEBy15vyU.apk" 
+                href="https://expo.dev/artifacts/eas/mw6RYtdftR4dn57i4gSUKM.apk" 
                 className="group relative inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-xl shadow-[0_8px_20px_rgba(26,115,232,0.3)] hover:shadow-[0_12px_25px_rgba(26,115,232,0.4)] transition-all duration-300 w-full sm:w-auto"
               >
                 <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
