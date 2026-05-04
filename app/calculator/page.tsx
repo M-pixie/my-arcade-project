@@ -152,7 +152,7 @@ export default function CalculatorPage() {
       router.push("/dashboard");
 
     } catch (err) {
-      setError("Backend server connection failed. Please try again.");
+      setError("Connection failed. Check your internet and retry.");
       setLoading(false);
     }
   };
@@ -257,7 +257,7 @@ export default function CalculatorPage() {
 
             <div className="flex items-center mb-8">
               <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-              <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember my url for next time</label>
+              <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember me</label>
             </div>
 
             <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-lg font-bold py-4 rounded-md transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
