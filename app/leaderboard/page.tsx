@@ -73,13 +73,17 @@ export default function LeaderboardPage() {
 
         {/* ================= HEADER SECTION (FLEX LAYOUT) ================= */}
         <header className="pt-12 pb-6 px-6 relative z-20 max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:p-8 rounded-3xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)]">
+          {/* 🚀 CHANGED: rounded-3xl se rounded-xl kar diya for premium look */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:p-8 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)]">
             
             {/* Left Side: Animated Cup + Title */}
             <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left w-full lg:w-auto">
               
               {/* 🏆 REALISTIC ANIMATED CUP WITH FLYING RIBBONS 🏆 */}
               <div className="relative inline-flex items-center justify-center w-32 h-32 md:w-36 md:h-36 shrink-0">
+                
+                {/* 🚀 CHANGED: Blue glow background added so stars and cup pop even more */}
+                <div className="absolute inset-[-20px] bg-blue-500/20 blur-[25px] rounded-full pointer-events-none"></div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/40 via-yellow-400/20 to-transparent blur-2xl rounded-full animate-pulse"></div>
 
                 {/* Flying Ribbon 1 (Red/Gold) */}
@@ -179,11 +183,16 @@ export default function LeaderboardPage() {
                     <div key={user.id} className={`relative flex flex-col items-center w-28 sm:w-36 md:w-56 group ${isFirst ? 'z-20' : 'z-10'}`}>
                       
                       <div className="relative mb-[-30px] md:mb-[-40px] z-30 flex flex-col items-center transition-transform duration-300 group-hover:-translate-y-2">
-                        {isFirst && (
-                          <div className="absolute -top-10 md:-top-12 text-3xl md:text-5xl animate-pulse drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]">
+                        
+                        {/* 🚀 CHANGED: Crowns for Rank 1, 2 & 3 added and shifted higher */}
+                        {(isFirst || isSecond || isThird) && (
+                          <div className={`absolute z-40 animate-pulse drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]
+                            ${isFirst ? "-top-16 md:-top-[75px] text-4xl md:text-5xl" : "-top-12 md:-top-[60px] text-3xl md:text-4xl"}
+                          `}>
                             👑
                           </div>
                         )}
+                        
                         <img
                           src={user.photoURL || "/avatar.png"}
                           alt={user.name}
@@ -193,7 +202,7 @@ export default function LeaderboardPage() {
                             ${isThird ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : ""}
                           `}
                         />
-                        <div className={`absolute -bottom-3 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-sm md:text-base border-2 shadow-lg
+                        <div className={`absolute -bottom-3 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-sm md:text-base border-2 shadow-lg z-30
                           ${isFirst ? "bg-gradient-to-br from-yellow-300 to-yellow-500 text-yellow-900 border-yellow-200" : ""}
                           ${isSecond ? "bg-gradient-to-br from-slate-200 to-slate-400 text-slate-900 border-white" : ""}
                           ${isThird ? "bg-gradient-to-br from-orange-400 to-orange-600 text-orange-950 border-orange-200" : ""}

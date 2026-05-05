@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
+import { savePublicUserToLeaderboard } from "@/lib/leaderboard"; // 🔥 ADDED THIS IMPORT 🔥
 
 // 🔥 TIME AGO UPDATED: "14m" -> "14 mins ago"
 function timeAgo(dateString: string) {
@@ -148,6 +149,19 @@ export default function CalculatorPage() {
       
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
       localStorage.setItem("current_processing_url", profileUrl.trim());
+
+      // 🔥 NAYA CODE YAHAN ADD HUA HAI 🔥
+      try {
+        await savePublicUserToLeaderboard({
+          name: data.userName || "Arcade Player",
+          photoURL: data.userAvatar || "/avatar.png",
+          points: data.totalPoints,
+          profileUrl: profileUrl.trim()
+        });
+      } catch (saveErr) {
+        console.error("Leaderboard Save Error:", saveErr);
+      }
+      // 🔥 YAHAN TAK 🔥
       
       router.push("/dashboard");
 

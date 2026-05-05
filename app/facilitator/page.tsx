@@ -62,14 +62,6 @@ export default function FacilitatorPage() {
   // State for FAQ Accordion
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // State for Community Lead WhatsApp Form
-  const [showLeadForm, setShowLeadForm] = useState(false);
-  const [leadForm, setLeadForm] = useState({
-    name: "",
-    email: "",
-    issue: "Community / Group Issue"
-  });
-
   // State for Co-ordinator Contact Form
   const [selectedCoordinator, setSelectedCoordinator] = useState<{name: string, phone: string} | null>(null);
   const [coordinatorForm, setCoordinatorForm] = useState({
@@ -78,16 +70,6 @@ export default function FacilitatorPage() {
     query: ""
   });
   const [showTooltip, setShowTooltip] = useState(false);
-
-  const handleLeadWhatsAppSubmit = () => {
-    if (!leadForm.name || !leadForm.email) {
-      alert("Please fill your Name and Email.");
-      return;
-    }
-    const message = `Hello Preeti Patel,%0A%0A*Name:* ${leadForm.name}%0A*Email:* ${leadForm.email}%0A*Issue Type:* ${leadForm.issue}%0A%0AI need some help regarding this. Please guide me.`;
-    window.open(`https://wa.me/917080203742?text=${message}`, "_blank");
-    setShowLeadForm(false);
-  };
 
   const handleCoordinatorSubmit = () => {
     if (!coordinatorForm.name || !coordinatorForm.gsp || !coordinatorForm.query) {
@@ -120,7 +102,7 @@ export default function FacilitatorPage() {
   // Contact Co-ordinators Data
   const contactCoordinators = [
     { name: "Raman Rimpy", phone: "917696732471", linkedin: "https://www.linkedin.com/in/ramandeep-rimpy-175b123a5" },
-    { name: "Seikh Madiha", phone: "919912099181", linkedin: "#" },
+    { name: "Preeti Patel", phone: "917080203742", linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331" },
     { name: "Milan Deori", phone: "919083231422", linkedin: "https://www.linkedin.com/in/milan-deori-939a832a1" },
     { name: "Jayanta", phone: "919832724535", linkedin: "https://www.linkedin.com/in/jayantaghosh2004" },
     { name: "Ataul Rahman", phone: "918936868890", linkedin: "https://www.linkedin.com/in/ataul-rahman" },
@@ -149,90 +131,104 @@ export default function FacilitatorPage() {
 
             <div className="max-w-6xl mx-auto px-6 pt-10 pb-16 md:pt-12 md:pb-20 flex flex-col items-center justify-center relative z-10">
               
-              <div className="flex-1 text-center w-full max-w-5xl mx-auto mb-4">
+              <div className="flex-1 text-center w-full max-w-6xl mx-auto mb-4">
                 
-                {/* 🔥 Simple & Clean Heading */}
-                <h1 className="text-3xl sm:text-4xl md:text-[42px] font-extrabold text-[#1a73e8] tracking-tight uppercase text-center mb-10 mt-4">
-                  Arcade Facilitator 2026
+                {/* 🔥 Sleek & Clean Heading (Less Bulky) */}
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1a73e8] tracking-tight text-center mb-8 mt-4">
+                  Facilitator Program '26
                 </h1>
 
-                {/* Premium Long Layout for Highlights and Registration */}
-                <div className="flex flex-col gap-6 text-left mb-10 w-full">
-                  {/* Highlights Box */}
-                  <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight">Facilitator Program Highlights</h2>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
-                        No-cost gaming campaign
-                      </li>
-                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
-                        Learn in-demand cloud skills
-                      </li>
-                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#4285f4]"></span>
-                        Earn digital badges & points
-                      </li>
-                      <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#fbbc04]"></span>
-                        Claim swag & goodies
-                      </li>
-                    </ul>
-                  </div>
+                {/* NEW GRID LAYOUT: Left (Highlights & Status) | Right (Quick Actions Buttons) */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-left mb-10 w-full">
+                  
+                  {/* LEFT COLUMN: Highlights and Registration Status */}
+                  <div className="lg:col-span-2 flex flex-col gap-6 w-full">
+                    
+                    {/* Highlights Box */}
+                    <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+                      <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight">Facilitator Program Highlights</h2>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
+                          No-cost gaming campaign
+                        </li>
+                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
+                          Learn in-demand cloud skills
+                        </li>
+                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#4285f4]"></span>
+                          Earn digital badges & points
+                        </li>
+                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#fbbc04]"></span>
+                          Claim swag & goodies
+                        </li>
+                      </ul>
+                    </div>
 
-                  {/* Long Premium Registration Status Box */}
-                  <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 w-full flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex-1">
-                        <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-2 tracking-tight">Registration Status</h2>
-                        <p className="text-[#5f6368] text-sm font-bold">
+                    {/* Long Premium Registration Status Box */}
+                    <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 w-full flex flex-col md:flex-row items-center justify-between gap-6 h-full">
+                      <div className="flex-1">
+                          <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-2 tracking-tight">Registration Status</h2>
+                          <p className="text-[#5f6368] text-sm font-bold">
                             Enrolments are expected to open in March 2026 in the Arcade Facilitator Program.
-                        </p>
+                          </p>
+                      </div>
+                      <div className="w-full md:w-auto bg-[#1a73e8] text-white text-center font-bold px-10 py-4 rounded-md shadow-sm text-[15px] animate-pulse flex-shrink-0">
+                        Enrolments Opening Soon
+                      </div>
                     </div>
-                    <div className="w-full md:w-auto bg-[#1a73e8] text-white text-center font-bold px-10 py-4 rounded-md shadow-sm text-[15px] animate-pulse flex-shrink-0">
-                      Enrolments Opening Soon
+
+                  </div>
+
+                  {/* RIGHT COLUMN: Quick Actions (Buttons) */}
+                  <div className="lg:col-span-1 bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight flex items-center gap-2">
+                      <svg className="w-5 h-5 text-[#fbbc04]" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" /><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" /></svg>
+                      Quick Actions
+                    </h2>
+                    
+                    <div className="flex flex-col gap-3.5 mt-auto">
+                      <button 
+                        onClick={() => router.push("/calculator")}
+                        className="w-full px-6 py-4 bg-[#34a853] text-white font-bold text-[15px] rounded-lg hover:bg-[#2b8a44] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
+                      >
+                        <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        Calculate Points
+                      </button>
+
+                      <button 
+                        onClick={() => router.push("/leaderboard")}
+                        className="w-full px-6 py-4 bg-white text-[#1a73e8] border border-[#dadce0] font-bold text-[15px] rounded-lg hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
+                      >
+                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        Leaderboard
+                      </button>
+
+                      <button 
+                        onClick={() => router.push("/resources")}
+                        className="w-full px-6 py-4 bg-[#fbbc04] text-[#202124] font-bold text-[15px] rounded-lg hover:bg-[#f2a900] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
+                      >
+                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        Skill Badges List
+                      </button>
+
+                      <button 
+                        onClick={() => router.push("/dashboard")}
+                        className="w-full px-6 py-4 bg-[#1a73e8] text-white font-bold text-[15px] rounded-lg hover:bg-[#1557b0] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
+                      >
+                        <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                        Dashboard
+                      </button>
                     </div>
                   </div>
-                </div>
 
-                {/* Updated Buttons Container with Leaderboard */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full flex-wrap mb-10">
-                  <button 
-                    onClick={() => router.push("/calculator")}
-                    className="w-full sm:w-auto min-w-[180px] px-8 py-4 bg-[#34a853] text-white font-bold text-[15px] sm:text-base rounded-lg hover:bg-[#2b8a44] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                  >
-                    <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    Calculate Points
-                  </button>
-
-                  <button 
-                    onClick={() => router.push("/leaderboard")}
-                    className="w-full sm:w-auto min-w-[180px] px-8 py-4 bg-white text-[#1a73e8] border border-[#dadce0] font-bold text-[15px] sm:text-base rounded-lg hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                  >
-                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                    Leaderboard
-                  </button>
-
-                  <button 
-                    onClick={() => router.push("/resources")}
-                    className="w-full sm:w-auto min-w-[180px] px-8 py-4 bg-[#fbbc04] text-[#202124] font-bold text-[15px] sm:text-base rounded-lg hover:bg-[#f2a900] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                  >
-                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    Skill Badges List
-                  </button>
-
-                  <button 
-                    onClick={() => router.push("/dashboard")}
-                    className="w-full sm:w-auto min-w-[180px] px-8 py-4 bg-[#1a73e8] text-white font-bold text-[15px] sm:text-base rounded-lg hover:bg-[#1557b0] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                  >
-                    <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                    Dashboard
-                  </button>
                 </div>
               </div>
 
               {/* SLIM & PREMIUM Assistance & Support Block */}
-              <div className="w-full flex flex-col gap-6 max-w-5xl mx-auto text-left mb-10">
+              <div className="w-full flex flex-col gap-6 max-w-6xl mx-auto text-left mb-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* 1. Slim Premium Referral Code Box */}
                   <div className="md:col-span-2 bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center relative overflow-hidden">
@@ -511,7 +507,7 @@ export default function FacilitatorPage() {
               <div className="text-center mb-16">
                 <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-3">Need help ?</h2>
                 <p className="text-[#5f6368] text-base max-w-2xl mx-auto font-bold">
-                  Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly on WhatsApp.
+                  Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly.
                 </p>
                 
               </div>
@@ -531,10 +527,9 @@ export default function FacilitatorPage() {
                     
                     <button 
                       onClick={() => setSelectedCoordinator(coord)}
-                      className="w-full py-3 bg-[#25D366] border border-[#20b954] text-white font-bold rounded-lg hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2"
+                      className="w-full py-2 bg-[#1a73e8] text-white font-bold text-sm rounded-md hover:bg-[#1557b0] transition-all shadow-sm flex items-center justify-center tracking-wide"
                     >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                      Contact via WhatsApp
+                      Contact
                     </button>
                   </div>
                 ))}
@@ -550,7 +545,7 @@ export default function FacilitatorPage() {
                 
                 <div className="bg-[#f8f9fa] border-b border-[#e8eaed] p-5 flex justify-between items-center">
                   <h3 className="font-bold text-[#202124] text-lg flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 bg-[#25D366] rounded-full"></span>
+                    <span className="w-2.5 h-2.5 bg-[#1a73e8] rounded-full"></span>
                     Contact {selectedCoordinator.name}
                   </h3>
                   <button onClick={() => setSelectedCoordinator(null)} className="text-[#5f6368] hover:text-[#202124] transition-colors focus:outline-none">
@@ -591,120 +586,14 @@ export default function FacilitatorPage() {
                   </div>
                   <button 
                     onClick={handleCoordinatorSubmit}
-                    className="w-full py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 mt-2"
+                    className="w-full py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-md shadow-sm transition-colors flex items-center justify-center mt-2 tracking-wide"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                    Send to WhatsApp
+                    Send Message
                   </button>
                 </div>
               </div>
             </div>
           )}
-
-          {/* ================= COMMUNITY LEAD SECTION ================= */}
-          <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
-            <div className="max-w-4xl mx-auto relative z-10">
-              <div className="text-center mb-12 relative z-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-3">Arcade Community Lead</h2>
-                <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed font-bold">
-                  Driving our community forward with dedication and support.
-                </p>
-              </div>
-
-              <div className="max-w-3xl mx-auto bg-white border border-[#e8eaed] rounded-xl p-8 shadow-sm flex flex-col md:flex-row items-center md:items-start gap-8 hover:shadow-md transition-shadow">
-                 
-                 <div className="flex flex-col items-center flex-shrink-0 text-center md:text-left md:items-start">
-                    <div className="w-24 h-24 rounded-full bg-[#fef7e0] text-[#b06000] border border-[#fde293] flex items-center justify-center text-3xl font-bold mb-4 shadow-sm">
-                      P
-                    </div>
-                    <h3 className="text-2xl font-bold text-[#202124]">Preeti Patel</h3>
-                    <span className="text-xs font-bold text-[#b06000] bg-[#fef7e0] px-3 py-1 rounded-md mt-2 uppercase tracking-wide border border-[#fde293]">Community Lead</span>
-
-                    <div className="flex items-center gap-3 mt-4">
-                      <a href="https://www.linkedin.com/in/preeti-patel-a91406331" target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors">
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                      </a>
-                      <a href="https://www.skills.google/public_profiles/0db81977-a509-43bd-917f-e8e9d6611ac9" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-[#1a73e8] hover:underline">View Profile</a>
-                    </div>
-                 </div>
-
-                 <div className="flex-1 mt-2 md:mt-0 w-full flex flex-col justify-between">
-                   <p className="text-[#3c4043] text-[15px] font-bold leading-relaxed text-center md:text-left">
-                     As the dedicated Community Lead, Preeti spearheads community engagement initiatives, seamlessly managing group dynamics and providing unwavering support to members navigating technical labs. She plays a pivotal role in resolving queries and fostering a collaborative environment.
-                   </p>
-
-                   <div className="w-full flex flex-col sm:flex-row gap-3 mt-6">
-                      <a 
-                        href="https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-white border-2 border-[#1a73e8] text-[#1a73e8] hover:bg-[#e8f0fe] text-sm font-bold rounded-lg shadow-sm transition-colors"
-                      >
-                        Join WhatsApp Group
-                      </a>
-                      
-                      <button 
-                        onClick={() => setShowLeadForm(!showLeadForm)}
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-sm font-bold rounded-lg shadow-sm transition-colors"
-                      >
-                        {showLeadForm ? "Close Form" : "Contact Lead"}
-                      </button>
-                   </div>
-                 </div>
-              </div>
-
-              {showLeadForm && (
-                <div className="max-w-3xl mx-auto mt-4 bg-white border border-[#dadce0] rounded-xl p-6 shadow-md transition-all duration-300 transform origin-top animate-fade-in-up">
-                  <h4 className="text-lg font-bold text-[#202124] mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                    Send Query via WhatsApp
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-xs font-bold text-[#5f6368] uppercase mb-1">Your Name</label>
-                      <input 
-                        type="text" 
-                        value={leadForm.name}
-                        onChange={(e) => setLeadForm({...leadForm, name: e.target.value})}
-                        placeholder="Enter your name"
-                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-sm text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#5f6368] uppercase mb-1">Your Email</label>
-                      <input 
-                        type="email" 
-                        value={leadForm.email}
-                        onChange={(e) => setLeadForm({...leadForm, email: e.target.value})}
-                        placeholder="Enter your email"
-                        className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-sm text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors font-bold"
-                      />
-                    </div>
-                  </div>
-                  <div className="mb-5">
-                    <label className="block text-xs font-bold text-[#5f6368] uppercase mb-1">Issue / Query Type</label>
-                    <select 
-                      value={leadForm.issue}
-                      onChange={(e) => setLeadForm({...leadForm, issue: e.target.value})}
-                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-sm text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors cursor-pointer font-bold"
-                    >
-                      <option value="Community / Group Issue">Community / Group Issue</option>
-                      <option value="Lab & Technical Issue">Lab & Technical Issue</option>
-                      <option value="Arcade Points & Swags">Arcade Points & Swags</option>
-                      <option value="General Program Query">General Program Query</option>
-                    </select>
-                  </div>
-                  <button 
-                    onClick={handleLeadWhatsAppSubmit}
-                    className="w-full py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
-                  >
-                    Submit via WhatsApp
-                  </button>
-                </div>
-              )}
-
-            </div>
-          </section>
 
           {/* ================= TOP PERFORMERS SECTION ================= */}
           <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
@@ -781,15 +670,15 @@ export default function FacilitatorPage() {
 
           {/* ================= FREQUENTLY ASKED QUESTIONS ================= */}
           <section className="py-24 px-6 bg-white border-b border-[#dadce0]">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight">Frequently Asked Questions</h2>
                 <p className="text-[#5f6368] mt-3 text-lg font-bold">Find answers to common questions about the Arcade Facilitator Program.</p>
               </div>
               
-              <div className="border border-[#e8eaed] rounded-[1.5rem] bg-white divide-y divide-[#e8eaed] shadow-sm">
+              <div className="border border-[#e8eaed] rounded-lg bg-white divide-y divide-[#e8eaed] shadow-sm">
                 {officialFaqs.map((faq, index) => (
-                  <div key={index} className={`overflow-hidden bg-white ${index === 0 ? 'rounded-t-[1.5rem]' : ''} ${index === officialFaqs.length - 1 ? 'rounded-b-[1.5rem]' : ''}`}>
+                  <div key={index} className={`overflow-hidden bg-white ${index === 0 ? 'rounded-t-lg' : ''} ${index === officialFaqs.length - 1 ? 'rounded-b-lg' : ''}`}>
                     <button
                       className="w-full flex justify-between items-center p-6 sm:p-8 text-left hover:bg-[#f8f9fa] transition-colors gap-6 focus:outline-none"
                       onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
