@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-// 🚀 AuthGuard yahan se hata diya hai taaki page public ho jaye
+import { useEffect, useState, useRef } from "react"; // 🔥 useRef ADD KIYA HAI AUTO-SCROLL KE LIYE
 import Navbar from "@/app/components/Navbar";
 import { subscribeLeaderboard } from "@/lib/leaderboard";
 
@@ -16,13 +15,40 @@ type Leader = {
 export default function LeaderboardPage() {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // 🔥 NEW STATE FOR CURRENT USER HIGHLIGHT
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
+  const currentUserRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const unsub = subscribeLeaderboard((data) => {
       setLeaders(data);
     });
+
+    // 🔥 LOCALSTORAGE SE CURRENT USER FETCH KAR RAHE HAIN
+    try {
+      const savedData = localStorage.getItem("arcade_user_data");
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        if (parsed && parsed.userName) {
+          setCurrentUserName(parsed.userName);
+        }
+      }
+    } catch (e) {
+      console.error("Error reading user data", e);
+    }
+
     return () => unsub();
   }, []);
+
+  // 🔥 AUTO SCROLL EFFECT LOGIC
+  useEffect(() => {
+    if (currentUserRef.current && leaders.length > 0) {
+      setTimeout(() => {
+        currentUserRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 600); // 600ms delay taaki page pehle pura render ho jaye
+    }
+  }, [leaders, currentUserName]);
 
   // ================= LOGIC: SORT & SEARCH =================
   const isSearching = searchTerm.trim().length > 0;
@@ -127,11 +153,11 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* Right Side: Premium Search Box */}
+            {/* 🔥 Right Side: Premium Search Box (Updated Style like Image) 🔥 */}
             <div className="w-full lg:w-80 shrink-0">
               <div className="relative group w-full">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="w-5 h-5 text-blue-400 group-focus-within:text-blue-300 transition-colors drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-slate-400 group-focus-within:text-white transition-colors drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                   </svg>
                 </div>
@@ -140,14 +166,14 @@ export default function LeaderboardPage() {
                   placeholder="Search player name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-[#0a1229]/80 border-2 border-blue-500/40 text-white placeholder-blue-300/50 rounded-2xl py-3.5 pl-12 pr-12 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-500/20 backdrop-blur-xl transition-all shadow-[0_4px_20px_rgba(59,130,246,0.15)] hover:shadow-[0_6px_25px_rgba(59,130,246,0.25)] text-base font-semibold"
+                  className="w-full bg-[#151f32]/90 border border-[#2a3855] text-white placeholder-slate-400/70 rounded-lg py-3.5 pl-12 pr-12 focus:outline-none focus:border-blue-500/70 focus:bg-[#1a253c] focus:ring-1 focus:ring-blue-500/50 transition-all shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)] text-sm font-medium tracking-wide"
                 />
                 {searchTerm && (
                   <button 
                     onClick={() => setSearchTerm("")}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-400 hover:text-red-400 transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white transition-colors"
                   >
-                    <svg className="w-6 h-6 bg-blue-500/10 hover:bg-red-500/20 rounded-full p-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 bg-white/5 hover:bg-white/10 rounded-full p-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                   </button>
@@ -173,6 +199,7 @@ export default function LeaderboardPage() {
                   const isFirst = user.rank === 1;
                   const isSecond = user.rank === 2;
                   const isThird = user.rank === 3;
+                  const isCurrentUser = user.name === currentUserName; // 🔥 CHECK IF PODIUM USER IS CURRENT USER
 
                   let heightClass = "";
                   if (isFirst) heightClass = "h-[240px] sm:h-[280px] md:h-[340px]";
@@ -180,14 +207,24 @@ export default function LeaderboardPage() {
                   else heightClass = "h-[170px] sm:h-[200px] md:h-[240px]";
 
                   return (
-                    <div key={user.id} className={`relative flex flex-col items-center w-28 sm:w-36 md:w-56 group ${isFirst ? 'z-20' : 'z-10'}`}>
+                    <div 
+                      key={user.id} 
+                      ref={isCurrentUser ? currentUserRef : null} // 🔥 ATTACH REF FOR SCROLL IF APPLICABLE
+                      className={`relative flex flex-col items-center w-28 sm:w-36 md:w-56 group ${isFirst ? 'z-20' : 'z-10'}`}
+                    >
+                      {/* 🔥 CURRENT USER BADGE FOR PODIUM 🔥 */}
+                      {isCurrentUser && (
+                        <div className="absolute -top-16 md:-top-20 bg-blue-500 border border-blue-300 text-white text-[10px] sm:text-xs font-black px-3 py-1 rounded-full animate-bounce shadow-[0_0_15px_rgba(59,130,246,0.8)] z-50 tracking-wider">
+                          YOU
+                        </div>
+                      )}
                       
                       <div className="relative mb-[-30px] md:mb-[-40px] z-30 flex flex-col items-center transition-transform duration-300 group-hover:-translate-y-2">
                         
-                        {/* 🚀 CHANGED: Crowns for Rank 1, 2 & 3 added and shifted higher */}
+                        {/* 🚀 CHANGED: Crowns shifted down and size increased */}
                         {(isFirst || isSecond || isThird) && (
                           <div className={`absolute z-40 animate-pulse drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]
-                            ${isFirst ? "-top-16 md:-top-[75px] text-4xl md:text-5xl" : "-top-12 md:-top-[60px] text-3xl md:text-4xl"}
+                            ${isFirst ? "-top-10 md:-top-[75px] text-5xl md:text-6xl" : "-top-10 md:-top-[60px] text-4xl md:text-5xl"}
                           `}>
                             👑
                           </div>
@@ -200,6 +237,7 @@ export default function LeaderboardPage() {
                             ${isFirst ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 border-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.6)]" : ""}
                             ${isSecond ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-slate-300 shadow-[0_0_15px_rgba(203,213,225,0.4)]" : ""}
                             ${isThird ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : ""}
+                            ${isCurrentUser ? "ring-4 ring-blue-500 ring-offset-2 ring-offset-[#0a1229]" : ""} 
                           `}
                         />
                         <div className={`absolute -bottom-3 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-sm md:text-base border-2 shadow-lg z-30
@@ -216,12 +254,13 @@ export default function LeaderboardPage() {
                         ${isFirst ? "bg-gradient-to-b from-yellow-500/30 via-yellow-700/10 to-transparent border-yellow-400/50 shadow-[0_-10px_30px_rgba(250,204,21,0.15)]" : ""}
                         ${isSecond ? "bg-gradient-to-b from-slate-400/30 via-slate-600/10 to-transparent border-slate-300/50 shadow-[0_-10px_20px_rgba(203,213,225,0.1)]" : ""}
                         ${isThird ? "bg-gradient-to-b from-orange-600/30 via-orange-800/10 to-transparent border-orange-500/50 shadow-[0_-10px_20px_rgba(249,115,22,0.1)]" : ""}
+                        ${isCurrentUser ? "before:absolute before:inset-0 before:bg-blue-500/10 before:animate-pulse" : ""}
                       `}>
                         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
-                        <h3 className="text-xs sm:text-sm md:text-lg font-bold text-white truncate w-full drop-shadow-md mb-1 px-1">
+                        <h3 className="text-xs sm:text-sm md:text-lg font-bold text-white truncate w-full drop-shadow-md mb-1 px-1 relative z-10">
                           {user.name || "Anonymous"}
                         </h3>
-                        <p className={`text-base sm:text-xl md:text-3xl font-black drop-shadow-[0_0_10px_currentColor] 
+                        <p className={`text-base sm:text-xl md:text-3xl font-black drop-shadow-[0_0_10px_currentColor] relative z-10
                           ${isFirst ? "text-yellow-400" : ""}
                           ${isSecond ? "text-slate-200" : ""}
                           ${isThird ? "text-orange-400" : ""}
@@ -238,7 +277,12 @@ export default function LeaderboardPage() {
               {/* ================= THE LIST (RANK 4+) ================= */}
               <div className="mt-16 space-y-3">
                 {restLeaders.map((user) => (
-                  <LeaderRow key={user.id} user={user} />
+                  <LeaderRow 
+                    key={user.id} 
+                    user={user} 
+                    isCurrentUser={user.name === currentUserName} 
+                    innerRef={user.name === currentUserName ? currentUserRef : null} 
+                  />
                 ))}
                 {restLeaders.length === 0 && (
                   <div className="p-12 text-center bg-[#121c38]/60 border border-white/5 rounded-xl backdrop-blur-sm">
@@ -255,7 +299,12 @@ export default function LeaderboardPage() {
               </h2>
               {searchResults.length > 0 ? (
                 searchResults.map((user) => (
-                  <LeaderRow key={user.id} user={user} highlight={true} />
+                  <LeaderRow 
+                    key={user.id} 
+                    user={user} 
+                    highlight={true} 
+                    isCurrentUser={user.name === currentUserName} 
+                  />
                 ))
               ) : (
                 <div className="p-16 text-center bg-[#121c38]/60 border border-white/5 rounded-xl backdrop-blur-sm">
@@ -281,36 +330,54 @@ export default function LeaderboardPage() {
 }
 
 // Reusable component for the list rows
-function LeaderRow({ user, highlight = false }: { user: Leader; highlight?: boolean }) {
+function LeaderRow({ user, highlight = false, isCurrentUser = false, innerRef = null }: { user: Leader; highlight?: boolean; isCurrentUser?: boolean; innerRef?: any }) {
   return (
     <div
-      className={`group flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border rounded-xl backdrop-blur-sm transition-all duration-300
-        ${highlight 
-          ? "bg-[#1a264a]/80 border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.25)] scale-[1.01]" 
-          : "bg-[#121c38]/60 border-white/5 hover:bg-[#1a264a] hover:border-blue-400/40 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"}
+      ref={innerRef}
+      className={`group flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border rounded-xl backdrop-blur-sm transition-all duration-300 relative overflow-hidden
+        ${isCurrentUser 
+          ? "bg-[#1d4ed8]/20 border-blue-400/80 shadow-[0_0_20px_rgba(59,130,246,0.3)] animate-[pulse_2.5s_infinite] scale-[1.01] z-10" 
+          : highlight 
+            ? "bg-[#1a264a]/80 border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.25)] scale-[1.01]" 
+            : "bg-[#121c38]/60 border-white/5 hover:bg-[#1a264a] hover:border-blue-400/40 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"}
       `}
     >
-      <div className="flex items-center gap-3 sm:gap-5">
+      {/* 🔥 CURRENT USER LEFT GLOWING BAR 🔥 */}
+      {isCurrentUser && (
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"></div>
+      )}
+
+      <div className="flex items-center gap-3 sm:gap-5 pl-1">
         <div className="w-8 sm:w-10 text-center">
-          <span className={`text-lg sm:text-xl font-black transition-colors ${highlight ? "text-blue-400" : "text-white/30 group-hover:text-blue-400"}`}>
+          <span className={`text-lg sm:text-xl font-black transition-colors ${isCurrentUser ? "text-blue-300" : highlight ? "text-blue-400" : "text-white/30 group-hover:text-blue-400"}`}>
             #{user.rank}
           </span>
         </div>
         <img
           src={user.photoURL || "/avatar.png"}
           alt={user.name}
-          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border object-cover transition-colors animate-avatar ${highlight ? "border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" : "border-white/10 group-hover:border-blue-400"}`}
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border object-cover transition-colors animate-avatar 
+            ${isCurrentUser ? "border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]" : highlight ? "border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]" : "border-white/10 group-hover:border-blue-400"}
+          `}
         />
-        <span className={`text-sm sm:text-lg font-semibold truncate max-w-[120px] sm:max-w-[250px] md:max-w-[400px] transition-colors ${highlight ? "text-white" : "text-slate-200 group-hover:text-white"}`}>
+        <span className={`text-sm sm:text-lg font-semibold truncate max-w-[120px] sm:max-w-[250px] md:max-w-[400px] transition-colors ${isCurrentUser ? "text-white" : highlight ? "text-white" : "text-slate-200 group-hover:text-white"}`}>
           {user.name || "Anonymous"}
         </span>
       </div>
 
-      <div className="text-right">
-        <span className={`text-lg sm:text-xl font-bold transition-colors ${highlight ? "text-blue-400" : "text-blue-300 group-hover:text-blue-400"}`}>
-          {user.points?.toLocaleString() ?? 0}
-        </span>
-        <span className="text-[10px] sm:text-xs text-slate-400 ml-1 font-medium uppercase">pts</span>
+      <div className="text-right flex items-center gap-3">
+        {/* 🔥 "YOU" TEXT BADGE FOR ROW 🔥 */}
+        {isCurrentUser && (
+          <span className="hidden sm:inline-block bg-blue-500/20 border border-blue-400/50 text-blue-300 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest">
+            You
+          </span>
+        )}
+        <div>
+          <span className={`text-lg sm:text-xl font-bold transition-colors ${isCurrentUser ? "text-blue-300" : highlight ? "text-blue-400" : "text-blue-300 group-hover:text-blue-400"}`}>
+            {user.points?.toLocaleString() ?? 0}
+          </span>
+          <span className="text-[10px] sm:text-xs text-slate-400 ml-1 font-medium uppercase">pts</span>
+        </div>
       </div>
     </div>
   );
