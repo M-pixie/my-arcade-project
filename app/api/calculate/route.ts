@@ -12,10 +12,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'URL required' }, { status: 400 });
     }
 
+    // 🔥 1. NAYA STRICT REGEX CHECK (Kachra URL yahi block ho jayega) 🔥
+    const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
+    if (!urlPattern.test(url.trim())) {
+      return NextResponse.json({ error: 'Invalid Profile URL format.' }, { status: 400 });
+    }
+
     console.log(" Fetching Profile (2026 Logic Updated with 3 Point Games)...");
 
     // 1. HTML Download
-    const response = await axios.get(url, {
+    const response = await axios.get(url.trim(), {
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -28,6 +34,12 @@ export async function POST(req: Request) {
     // 3. Name & Avatar Dhoondo
     let userName = $('.ql-display-small').text().trim();
     if (!userName) userName = $('h1').text().trim();
+
+    // 🔥 2. NAYA CHECK: Agar galat page scrape ho gaya ("Build AI skills...") toh fauran rok do 🔥
+    if (userName.toLowerCase().includes("build ai skills")) {
+      return NextResponse.json({ error: 'Invalid User Profile. Please check the URL.' }, { status: 400 });
+    }
+
     if (!userName) userName = "Arcade Player";
 
     let userAvatar = $('ql-avatar').attr('src');

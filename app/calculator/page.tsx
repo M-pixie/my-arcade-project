@@ -108,10 +108,9 @@ export default function CalculatorPage() {
       localStorage.removeItem("arcade_url");
     }
 
-    if (
-      !profileUrl.trim() ||
-      !profileUrl.includes("https://www.skills.google/public_profiles/")
-    ) {
+    // 🔥 YAHAN STRICT REGEX ADD KIYA HAI 🔥
+    const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
+    if (!profileUrl.trim() || !urlPattern.test(profileUrl.trim())) {
       setError("Please enter a valid Public Profile URL.");
       triggerBlink(); 
       return;
@@ -255,6 +254,12 @@ export default function CalculatorPage() {
                     setError(null);
                     setHideRedLine(false); 
                   }}
+                  // 🔥 YAHAN ENTER/RETURN BUTTON KA SUPPORT ADD KIYA HAI 🔥
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      proceedToDashboard();
+                    }
+                  }}
                   className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-lg relative z-10"
                 />
               </div>
@@ -355,7 +360,7 @@ export default function CalculatorPage() {
                             </span>
                             {/* Copy Indicator Text (with Icon) */}
                             <span className={`absolute left-0 top-0 text-[11px] text-[#1a73e8] font-bold transition-all duration-500 ease-in-out flex items-center gap-1 h-full ${showCopyHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}>
-                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                               Copy Profile
                             </span>
                           </div>
