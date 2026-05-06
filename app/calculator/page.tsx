@@ -237,7 +237,7 @@ export default function CalculatorPage() {
           <div className="p-8 md:p-12 mt-1">
             
             <p className="text-[#5f6368] text-sm md:text-base font-semibold mb-8 text-left">
-              Calculate your exact points from Google Cloud Skills Boost public profile URL.
+              Calculate your arcade points from Google Cloud Skills Boost public profile URL.
             </p>
 
             <div className="mb-6">
@@ -269,9 +269,14 @@ export default function CalculatorPage() {
               )}
             </div>
 
-            <div className="flex items-center mb-8">
-              <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-              <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember me</label>
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center">
+                <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember me</label>
+              </div>
+              <div className="text-sm font-medium text-[#5f6368]">
+                Last update: 06 May 2026 at 1:12 pm IST
+              </div>
             </div>
 
             <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-lg font-bold py-4 rounded-md transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
@@ -281,7 +286,7 @@ export default function CalculatorPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Preparing Dashboard...
+                  Preparing your dashboard...
                 </>
               ) : (
                 "Calculate Points"
@@ -296,7 +301,7 @@ export default function CalculatorPage() {
             {recentUrls.length > 0 && (
               <div className="mt-8 border-t border-[#dadce0] pt-6 animate-fade-in-up">
                 <div className="flex items-center justify-between mb-6">
-                  <p className="text-sm font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
+                  <p className="text-sm font-extrabold text-[#3c4043] tracking-wider flex items-center gap-2">
                     <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Recent Profiles
                   </p>
