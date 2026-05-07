@@ -45,6 +45,9 @@ export default function CalculatorPage() {
   // 🔥 NEW STATE FOR 3-SECOND AUTO CHANGE HINT
   const [showCopyHint, setShowCopyHint] = useState(false);
 
+  // 🔥 SHAKE KE LIYE NAYA STATE (Sirf ye add kiya hai)
+  const [isShaking, setIsShaking] = useState(false);
+
   const router = useRouter();
 
   const whatsappHelpMessage = encodeURIComponent("Hello Facilitator Manish! 👋\n\nI am reaching out regarding the Google Cloud Arcade program. I need some guidance with my profile and points calculation. Could you please help me out?");
@@ -98,6 +101,17 @@ export default function CalculatorPage() {
     setHideRedLine(false); 
   };
 
+  // 🔥 SHAKE TRIGGER FUNCTION (Vibrate ke sath)
+  const triggerShake = () => {
+    setIsShaking(false);
+    setTimeout(() => {
+      setIsShaking(true);
+      if (typeof window !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate([100, 50, 100]); // Mobile vibrate karega
+      }
+    }, 10);
+  };
+
   const proceedToDashboard = async () => {
     setError(null);
     setHideRedLine(false);
@@ -112,6 +126,7 @@ export default function CalculatorPage() {
     const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
     if (!profileUrl.trim() || !urlPattern.test(profileUrl.trim())) {
       setError("Please enter a valid Public Profile URL.");
+      triggerShake(); // 🔥 ERROR PE SHAKE HOGA
       triggerBlink(); 
       return;
     }
@@ -130,6 +145,7 @@ export default function CalculatorPage() {
       if (!res.ok) {
         setError(data.error || "Failed to calculate points. Check URL.");
         setLoading(false);
+        triggerShake(); // 🔥 BACKEND ERROR PE BHI SHAKE HOGA
         return;
       }
 
@@ -167,6 +183,7 @@ export default function CalculatorPage() {
     } catch (err) {
       setError("Connection failed. Check your internet and retry.");
       setLoading(false);
+      triggerShake(); // 🔥 NETWORK ERROR PE BHI SHAKE HOGA
     }
   };
 
@@ -225,6 +242,18 @@ export default function CalculatorPage() {
               animation: tooltip-pop 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
               pointer-events: none;
             }
+
+            /* 🔥 FAST SHAKE ANIMATION 🔥 */
+            @keyframes fast-shake {
+              0%, 100% { transform: translateX(0); }
+              20% { transform: translateX(-8px); }
+              40% { transform: translateX(8px); }
+              60% { transform: translateX(-8px); }
+              80% { transform: translateX(8px); }
+            }
+            .animate-fast-shake {
+              animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+            }
           `}</style>
 
           {loading && (
@@ -240,7 +269,11 @@ export default function CalculatorPage() {
             </p>
 
             <div className="mb-6">
-              <div className={`relative border-2 rounded-lg transition-colors duration-75 ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}>
+              {/* 🔥 SHAKE CLASS AUR onAnimationEnd YAHAN ADD KIYA HAI 🔥 */}
+              <div 
+                onAnimationEnd={() => setIsShaking(false)}
+                className={`relative border-2 rounded-lg transition-colors duration-75 ${isShaking ? 'animate-fast-shake' : ''} ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}
+              >
                 
                 <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 z-10 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url

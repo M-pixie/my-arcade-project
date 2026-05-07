@@ -397,10 +397,22 @@ export default function DashboardPage() {
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16 space-y-10">
         
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-fade-in-up">
-           {/* NAME DISPLAYED INSTEAD OF "Your Dashboard" WITH SAME EXACT STYLING */}
-           <h1 className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight">
-             {userName || "Your Dashboard"}
-           </h1>
+           
+           {/* 🔥 YAHAN AVATAR AUR NAME DONO SAATH ME HAIN (W/ FLOATING ANIMATION) 🔥 */}
+           <div className="flex items-center gap-3 md:gap-4">
+             {userName && (
+               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden shadow-sm border border-[#dadce0] flex items-center justify-center bg-[#1a73e8] text-white font-bold text-xl shrink-0 animate-header-avatar">
+                 {userAvatar ? (
+                   <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover" />
+                 ) : (
+                   userName.charAt(0).toUpperCase()
+                 )}
+               </div>
+             )}
+             <h1 className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight">
+               {userName || "Your Dashboard"}
+             </h1>
+           </div>
            
            <div className="flex flex-col sm:flex-row gap-3">
              <button 
@@ -490,7 +502,24 @@ export default function DashboardPage() {
               {/* RIGHT: Stats & Share Buttons */}
               <div className="lg:col-span-7 flex flex-col justify-center gap-6 pl-0 lg:pl-4 mt-8 lg:mt-0">
                 
-                {/* --- NEW ACTION BUTTONS BOX --- */}
+                {/* --- STATS BOXES MOVED TO TOP --- */}
+                <div className="grid grid-cols-2 gap-5 w-full">
+                  <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
+                    <span className="text-4xl font-black text-[#202124] leading-none mb-2">
+                      {history.filter(item => item.type !== 'Skill Badge').length}
+                    </span>
+                    <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
+                  </div>
+
+                  <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
+                    <span className="text-4xl font-black text-[#202124] leading-none mb-2">
+                      {breakdown?.skills || 0}
+                    </span>
+                    <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">Skill Badges</span>
+                  </div>
+                </div>
+
+                {/* --- ACTION BUTTONS BOX MOVED BELOW --- */}
                 <div className="flex flex-col justify-center gap-5">
                   
                   <div className="flex flex-col gap-2">
@@ -543,22 +572,6 @@ export default function DashboardPage() {
                     </span>
                   </button>
 
-                </div>
-
-                <div className="grid grid-cols-2 gap-5 w-full">
-                  <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
-                    <span className="text-4xl font-black text-[#202124] leading-none mb-2">
-                      {history.filter(item => item.type !== 'Skill Badge').length}
-                    </span>
-                    <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
-                  </div>
-
-                  <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
-                    <span className="text-4xl font-black text-[#202124] leading-none mb-2">
-                      {breakdown?.skills || 0}
-                    </span>
-                    <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">Skill Badges</span>
-                  </div>
                 </div>
 
                 <div className="flex flex-col gap-4 w-full">
@@ -626,7 +639,7 @@ export default function DashboardPage() {
                               {copiedCode === lab.accessCode ? (
                                 <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                               ) : (
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                               )}
                             </button>
                           </div>
@@ -857,6 +870,14 @@ export default function DashboardPage() {
         @keyframes slideDown {
           0% { transform: translateY(-30px); opacity: 0; }
           100% { transform: translateY(0); opacity: 1; }
+        }
+        /* 🔥 AVATAR FLOATING ANIMATION 🔥 */
+        @keyframes header-avatar-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+        .animate-header-avatar {
+          animation: header-avatar-float 3s ease-in-out infinite;
         }
       `}</style>
     </div>
