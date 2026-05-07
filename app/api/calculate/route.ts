@@ -117,7 +117,7 @@ export async function POST(req: Request) {
           title.includes('dialogue design') || // 🔥 Naya 1 point game add kiya jaisa tumne bola
           title.includes('works meet play') || //  New add badges
 
-          title.includes('skillup summer') || //  New add badges 
+          title.includes('skill up summer') || //  New add badges 
 
           title.includes('work meets play: expressive efficiency')  //  New add badges 
           
