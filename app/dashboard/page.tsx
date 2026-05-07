@@ -124,7 +124,7 @@ export default function DashboardPage() {
     },
     {
       id: 'Skillup',
-      title: 'Skillup Summer',
+      title: 'Skill Up Summer',
       subtitle: 'Google Skills',
       image: 'https://services.google.com/fh/files/misc/specialgame-may.png',
       accessCode: '1q-summer-06031',
