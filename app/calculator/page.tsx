@@ -112,19 +112,27 @@ export default function CalculatorPage() {
     }, 10);
   };
 
-  const proceedToDashboard = async () => {
+  // 🔥 YAHAN overrideUrl PARAMETER ADD KIYA TAKI DIRECT URL SE START HO SAKE 🔥
+  const proceedToDashboard = async (overrideUrl?: string | any) => {
+    const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
+
     setError(null);
     setHideRedLine(false);
 
+    // Agar hum history se directly aa rahe hain to input field me url set kar dete hain
+    if (typeof overrideUrl === 'string') {
+      setProfileUrl(targetUrl);
+    }
+
     if (rememberMe) {
-      localStorage.setItem("arcade_url", profileUrl.trim());
+      localStorage.setItem("arcade_url", targetUrl);
     } else {
       localStorage.removeItem("arcade_url");
     }
 
     // 🔥 YAHAN STRICT REGEX ADD KIYA HAI 🔥
     const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
-    if (!profileUrl.trim() || !urlPattern.test(profileUrl.trim())) {
+    if (!targetUrl || !urlPattern.test(targetUrl)) {
       setError("Please enter a valid Public Profile URL.");
       triggerShake(); // 🔥 ERROR PE SHAKE HOGA
       triggerBlink(); 
@@ -137,7 +145,7 @@ export default function CalculatorPage() {
       const res = await fetch("/api/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: profileUrl.trim() }),
+        body: JSON.stringify({ url: targetUrl }),
       });
 
       const data = await res.json();
@@ -149,11 +157,11 @@ export default function CalculatorPage() {
         return;
       }
 
-      saveToHistory(profileUrl.trim(), data.userName, data.userAvatar);
+      saveToHistory(targetUrl, data.userName, data.userAvatar);
 
-      const extractedId = profileUrl.trim().split('/').pop() || null;
+      const extractedId = targetUrl.split('/').pop() || null;
       const cacheObj = {
-        profileUrl: profileUrl.trim(),
+        profileUrl: targetUrl,
         points: data.totalPoints,
         breakdown: data.breakdown,
         history: data.completionHistory || [],
@@ -163,7 +171,7 @@ export default function CalculatorPage() {
       };
       
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
-      localStorage.setItem("current_processing_url", profileUrl.trim());
+      localStorage.setItem("current_processing_url", targetUrl);
 
       // 🔥 NAYA CODE YAHAN ADD HUA HAI 🔥
       try {
@@ -171,7 +179,7 @@ export default function CalculatorPage() {
           name: data.userName || "Arcade Player",
           photoURL: data.userAvatar || "/avatar.png",
           points: data.totalPoints,
-          profileUrl: profileUrl.trim()
+          profileUrl: targetUrl
         });
       } catch (saveErr) {
         console.error("Leaderboard Save Error:", saveErr);
@@ -192,9 +200,13 @@ export default function CalculatorPage() {
     setError(null);
     setHideRedLine(false);
     
+    // Purana wala kaam (Copy karna) abhi bhi hoga
     navigator.clipboard.writeText(url);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 1000);
+
+    // 🔥 AUR SATH ME DIRECT DASHBOARD PROCESS BHI START HO JAYEGA 🔥
+    proceedToDashboard(url);
   };
 
   return (
@@ -313,7 +325,7 @@ export default function CalculatorPage() {
                 <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember me</label>
               </div>
               <div className="text-sm font-medium text-[#5f6368]">
-                Last update: 06 May 2026 at 1:12 pm IST
+                Last update: 08 May 2026 at 1:29 am IST
               </div>
             </div>
 
