@@ -209,19 +209,21 @@ export default function CalculatorPage() {
     proceedToDashboard(url);
   };
 
+  // ✨ FULL PAGE BACKGROUND COLOR CHANGED TO #d2fcb6 ✨
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
+    <div className="min-h-screen bg-[#d2fcb6] text-[#202124] font-sans relative">
       <Navbar />
 
-      <main className="max-w-4xl mx-auto px-6 pt-24 pb-16">
+      <main className="max-w-6xl mx-auto px-6 pt-24 pb-16">
         
         <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-6xl font-bold text-[#202124] tracking-tight leading-tight">
+          <h1 className="text-4xl md:text-6xl font-medium text-[#202124] tracking-tight leading-tight">
             Arcade <span className="text-[#1a73e8]">Calculator</span>
           </h1>
         </div>
 
-        <div className="bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
+        {/* ✨ CALCULATOR BOX COLOR CHANGED BACK TO WHITE ✨ */}
+        <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
           
           <style>{`
             @keyframes real-loading {
@@ -276,8 +278,8 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12 mt-1">
             
-            <p className="text-[#5f6368] text-sm md:text-base font-semibold mb-8 text-left">
-              Calculate your arcade points from Google Cloud Skills Boost public profile URL.
+            <p className="text-[#3c4043] text-sm md:text-base font-semibold mb-8 text-left">
+              Paste your public profile URL to calculate arcade points.
             </p>
 
             <div className="mb-6">
@@ -287,6 +289,7 @@ export default function CalculatorPage() {
                 className={`relative border-2 rounded-lg transition-colors duration-75 ${isShaking ? 'animate-fast-shake' : ''} ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}
               >
                 
+                {/* ✨ LABEL BACKGROUND CHANGED BACK TO WHITE ✨ */}
                 <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 z-10 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url
                 </label>
@@ -319,13 +322,24 @@ export default function CalculatorPage() {
               )}
             </div>
 
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center">
-                <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#5f6368] cursor-pointer select-none">Remember me</label>
+            {/* ✨ NEED HELP MOVED NEXT TO REMEMBER ME ✨ */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="flex items-center">
+                  <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                  <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Remember me</label>
+                </div>
+                
+                {/* Image matching exactly with User's Need Help snippet */}
+                <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[#2563eb] hover:text-[#1d4ed8] transition-colors group">
+                  <svg className="w-[22px] h-[22px] transition-transform group-hover:scale-105" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8.29 13.29L6 11.59l1.41-1.41 3.29 3.29 5.88-5.88L18 9l-7.29 7.29z"/>
+                  </svg>
+                  <span className="text-[16px] font-semibold">Need help?</span>
+                </a>
               </div>
-              <div className="text-sm font-medium text-[#5f6368]">
-                Last update: 08 May 2026 at 1:29 am IST
+              <div className="text-sm font-medium text-[#3c4043]">
+                Last update: 09 May 2026 at 09:35 pm IST
               </div>
             </div>
 
@@ -344,7 +358,7 @@ export default function CalculatorPage() {
             </button>
 
             <p className="text-[13.5px] font-bold text-[#5d4037] text-center mt-5 leading-snug tracking-wide">
-              If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.
+             NOTE :- If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.
             </p>
 
             {/* 🔥 RECENT PROFILES */}
@@ -355,13 +369,16 @@ export default function CalculatorPage() {
                     <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Recent Profiles
                   </p>
-                  <button onClick={clearHistory} className="flex items-center gap-1.5 text-sm text-[#d93025] bg-[#fce8e6] hover:bg-[#fad2ce] px-4 py-2 rounded-lg font-bold transition-colors shadow-sm">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  
+                  {/* ✨ CLEAR HISTORY BUTTON MODIFIED (No Red BG, Black Text, Bigger Icon) ✨ */}
+                  <button onClick={clearHistory} className="flex items-center gap-2 text-sm text-[#202124] hover:text-black hover:bg-[#f1f3f4] bg-transparent px-4 py-2 rounded-lg font-bold transition-colors">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     Clear History
                   </button>
                 </div>
                 
-                <div className="flex flex-wrap gap-x-8 gap-y-5 ml-5">
+                {/* ✨ INCREASED GAP (gap-x-12) FOR BETTER SPACING ✨ */}
+                <div className="flex flex-wrap gap-x-12 gap-y-6 ml-5">
                   {recentUrls.map((item, idx) => {
                     const shortId = item.url.split("/").pop()?.substring(0, 16) || "Profile";
                     return (
@@ -403,10 +420,10 @@ export default function CalculatorPage() {
                             <span className={`absolute left-0 top-0 text-[11px] text-[#5f6368] font-bold opacity-90 transition-all duration-500 ease-in-out flex items-center h-full ${showCopyHint ? 'opacity-0 translate-y-full' : 'opacity-100 translate-y-0'}`}>
                               ID: {shortId}...
                             </span>
-                            {/* Copy Indicator Text (with Icon) */}
+                            {/* ✨ Copy & Open Profile Indicator Text ✨ */}
                             <span className={`absolute left-0 top-0 text-[11px] text-[#1a73e8] font-bold transition-all duration-500 ease-in-out flex items-center gap-1 h-full ${showCopyHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}>
-                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                              Copy Profile
+                              <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                              Copy <span className="text-[#dadce0] font-normal mx-0.5">•</span> Open Profile
                             </span>
                           </div>
                         </div>
@@ -454,13 +471,7 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 3. NEED HELP BUTTON */}
-        <div className="w-full mt-2">
-          <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full gap-2.5 bg-[#ecfdf5] hover:bg-[#d1fae5] text-[#047857] border border-[#6ee7b7] px-6 py-3.5 rounded-xl text-base font-extrabold transition-all shadow-sm hover:shadow">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.387-.885-.719-1.484-1.608-1.658-1.906-.173-.298-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-            Need Help? Ask Facilitator
-          </a>
-        </div>
+        {/* BOTTOM NEED HELP BUTTON REMOVED AS REQUESTED */}
 
       </main>
     </div>
