@@ -440,12 +440,16 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               
               <div className="lg:col-span-5 bg-white rounded-xl shadow-md border border-[#e8eaed] overflow-hidden relative flex flex-col group transition-shadow duration-300">
-                <div className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] py-5 text-center shadow-inner relative overflow-hidden">
-                  <div className="absolute inset-0 bg-white/10 opacity-30 transform -skew-x-12"></div>
-                  <h3 className="text-white font-black text-2xl tracking-wide shadow-sm relative z-10">
-                    Arcade Points: {points}
-                  </h3>
-                </div>
+  
+  {/* 👇 Is baar 'shadow-inner' bhi hata diya hai ekdum clean flat banner ke liye */}
+  <div className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] py-5 text-center relative overflow-hidden">
+    
+    {/* 👇 Text se 'shadow-sm' bhi hata diya aur size bada rakha hai */}
+    <h3 className="text-white font-black text-3xl sm:text-4xl tracking-wide relative z-10">
+      Arcade Points: {points}
+    </h3>
+    
+  </div>
                 
                 <div className="px-8 pt-8 pb-6 flex flex-col items-center relative bg-gradient-to-b from-[#f8f9fa] to-transparent flex-grow">
                   <div className="w-28 h-28 rounded-full border-[5px] border-white shadow-md flex items-center justify-center overflow-hidden mb-5 relative bg-[#137333] ring-4 ring-[#e6f4ea] transform transition-transform hover:scale-105">
@@ -607,7 +611,11 @@ export default function DashboardPage() {
               </span>
             </div>
 
+
+
             {/* --- SECTION 1: PENDING LABS --- */}
+
+            
             {pendingLabs.length > 0 && (
               <div className="mb-10">
                 <h5 className="text-sm font-black text-[#5f6368] uppercase tracking-widest mb-5 flex items-center gap-2">
@@ -626,20 +634,25 @@ export default function DashboardPage() {
                         <p className="text-xs text-[#5f6368] font-medium mb-4">{lab.subtitle}</p>
 
                         <div className="mt-auto">
-                          <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1">Access Code</p>
-                          <div className="flex items-center gap-2 mb-4">
-                            <code className="text-[#1a73e8] bg-white px-2 py-1 rounded text-sm font-bold tracking-wide border border-[#dadce0]">
+                          <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1.5">Access Code</p>
+                          
+                          {/* 🔥 YAHAN FIX KIYA HAI: Unified Input Box Style & New Icon 🔥 */}
+                          <div className="flex items-center justify-between bg-white border border-[#dadce0] rounded-md overflow-hidden mb-4 shadow-sm">
+                            <code className="text-[#1a73e8] px-3 py-2 text-[15px] font-bold tracking-wide flex-1">
                               {lab.accessCode}
                             </code>
                             <button 
                               onClick={() => handleCopyCode(lab.accessCode)}
-                              className="p-1.5 text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe] rounded-md transition-colors"
+                              className="p-2.5 bg-[#f8f9fa] border-l border-[#dadce0] text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe] transition-colors flex-shrink-0"
                               title="Copy Code"
                             >
                               {copiedCode === lab.accessCode ? (
-                                <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                               ) : (
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" strokeWidth="2"></rect>
+                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" strokeWidth="2"></path>
+                                </svg>
                               )}
                             </button>
                           </div>
@@ -671,6 +684,9 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
+
+
+
 
             {/* --- SECTION 2: COMPLETED LABS --- */}
             {completedLabs.length > 0 && (
@@ -789,36 +805,42 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ================= 🔥 MOVED CARDS (ARCADE 2026 & FACILITATOR) 🔥 ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up mt-12" style={{animationDelay: '0.4s'}}>
-          
-          <div className="bg-white border border-blue-200 rounded-2xl p-8 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden transition-all hover:shadow-md hover:border-blue-300">
-            <div className="mb-6">
-              <h3 className="text-2xl font-black text-blue-600 tracking-tight">Arcade Program 2026</h3>
-              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mt-2">January 2026 - Dec 2026</p>
-            </div>
-            <div className="w-full max-w-sm h-3 bg-gray-100 rounded-full flex overflow-hidden mb-3 shadow-inner">
-              <div className="bg-blue-500 h-full w-[60%] animate-[pulse_2s_ease-in-out_infinite]"></div>
-              <div className="bg-purple-500 h-full w-[40%]"></div>
-            </div>
-            <p className="text-xs text-gray-400 font-medium">Season is currently active</p>
-          </div>
+       {/* ================= 🔥 MOVED CARDS (ARCADE 2026 & FACILITATOR) 🔥 ================= */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up mt-12" style={{animationDelay: '0.4s'}}>
+  
+  {/* Card 1: Slim Arcade Program */}
+  <div className="bg-white border border-blue-200 rounded-xl py-5 px-6 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden transition-all hover:shadow-md hover:border-blue-300">
+    <div className="mb-4">
+      <h3 className="text-[20px] font-black text-blue-600 tracking-tight">Arcade Program 2026</h3>
+      <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mt-1">January 2026 - Dec 2026</p>
+    </div>
+    <div className="w-full max-w-sm h-2.5 bg-gray-100 rounded-full flex overflow-hidden mb-2.5 shadow-inner">
+      <div className="bg-blue-500 h-full w-[60%] animate-[pulse_2s_ease-in-out_infinite]"></div>
+      <div className="bg-purple-500 h-full w-[40%]"></div>
+    </div>
+    <p className="text-[11px] text-gray-400 font-bold">Season is currently active</p>
+  </div>
 
-          <div 
-            onClick={() => router.push('/facilitator')}
-            className="cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-700 border border-indigo-800 rounded-2xl p-8 shadow-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-            <h3 className="text-xl font-black text-white mb-6 z-10 tracking-tight">Facilitator Program 2026</h3>
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-4 border border-white/30 shadow-inner z-10">
-              <span className="text-2xl drop-shadow-md">🎓</span>
-            </div>
-            <p className="text-sm font-bold text-blue-100 z-10 bg-white/10 px-5 py-2 rounded-full border border-white/10 backdrop-blur-sm uppercase tracking-wider">
-              Enrolments Opening Soon
-            </p>
-          </div>
-        </div>
+  {/* Card 2: Slim Facilitator Program */}
+  <div 
+    onClick={() => router.push('/facilitator')}
+    className="cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-700 border border-indigo-800 rounded-xl py-5 px-6 shadow-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all"
+  >
+    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
+    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+    
+    <div className="flex items-center gap-3 mb-4 z-10">
+      <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-inner">
+        <span className="text-lg drop-shadow-md">🎓</span>
+      </div>
+      <h3 className="text-[19px] font-black text-white tracking-tight">Facilitator Program 2026</h3>
+    </div>
+    
+    <p className="text-[11px] font-bold text-blue-100 z-10 bg-white/10 px-5 py-1.5 rounded-full border border-white/10 backdrop-blur-sm uppercase tracking-wider">
+      Enrolments Opening Soon
+    </p>
+  </div>
+</div>
 
         {/* ================= PREMIUM REWARDS (SWAGS) SECTION ================= */}
         <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
