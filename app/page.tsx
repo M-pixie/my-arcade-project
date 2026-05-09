@@ -250,106 +250,6 @@ export default function HomePage() {
     not_received: wsTotal > 0 ? Math.round((globalWs.not_received / wsTotal) * 100) : 0 
   };
 
-  // 🔥 FULL 12 EVENTS LIST REORDERED (Arcade #1, GSA #6)
-  const googleEvents = [
-    { 
-      title: "Google Cloud Arcade", icon: "🎮", 
-      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
-      date: "All Year Round", 
-      desc: "Gamified cloud skills learning platform with hands-on labs, trivia, and standard tier point progression.", 
-      swags: "Premium Hoodies, Backpacks, Mugs & Cloud Gear", 
-      link: "https://go.cloudskillsboost.google/arcade" 
-    },
-    { 
-      title: "Google DevFest", icon: "🎪", 
-      theme: { bg: "bg-[#fce8e6]/20", text: "text-[#c5221f]", border: "border-[#f8c1cb]" }, 
-      date: "Oct - Dec (Annually)", 
-      desc: "The largest annual decentralized tech conference hosted by local Google Developer Groups.", 
-      swags: "Official T-shirts, Badges, Stickers & Tech Gadgets", 
-      link: "https://developers.google.com/community/devfest" 
-    },
-    { 
-      title: "Google I/O Extended", icon: "🌐", 
-      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
-      date: "May - July", 
-      desc: "Community-led technical sessions bringing the magic of Google I/O global announcements to local cities and GDSCs.", 
-      swags: "Exclusive I/O T-shirts, Developer Stickers & Pins", 
-      link: "https://developers.google.com/community/gdg/io-extended" 
-    },
-    { 
-      title: "Solution Challenge", icon: "🌍", 
-      theme: { bg: "bg-[#e6f4ea]/20", text: "text-[#137333]", border: "border-[#ceead6]" }, 
-      date: "Jan - May", 
-      desc: "Global hackathon to solve UN Sustainable Development Goals using Google tech to build real-world software solutions.", 
-      swags: "Heavy Cash Prizes, Mentorship & Premium Gadgets", 
-      link: "https://developers.google.com/community/gdsc-solution-challenge" 
-    },
-    { 
-      title: "Study Jams (Cloud/Android)", icon: "📚", 
-      theme: { bg: "bg-[#fef7e0]/20", text: "text-[#b06000]", border: "border-[#fde293]" }, 
-      date: "Aug - Sep", 
-      desc: "Month-long campus campaigns for hands-on technical learning and course completions.", 
-      swags: "Verified Certificates, Badges & Official T-shirts", 
-      link: "https://developers.google.com/community/gdsc" 
-    },
-    { 
-      title: "Google Student Ambassador (GSA)", icon: "🎓", 
-      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" },
-      date: "April - June", 
-      desc: "A flagship program for university students to act as official liaisons between Google and their campus, hosting workshops and building developer communities.", 
-      swags: "Premium Lead Jackets, Backpacks, Medals & Mentorship", 
-      link: "https://developers.google.com/community/gdg" 
-    },
-    { 
-      title: "Cloud Next (Innovators Hive)", icon: "☁️", 
-      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
-      date: "April / October", 
-      desc: "Google Cloud's flagship global event featuring developer quests and online challenges.", 
-      swags: "Digital Badges, Vouchers & Physical Swags", 
-      link: "https://cloud.withgoogle.com/next" 
-    },
-    { 
-      title: "Build with AI", icon: "🤖", 
-      theme: { bg: "bg-[#f3e8fd]/20", text: "text-[#8430ce]", border: "border-[#d7aefb]" }, 
-      date: "Feb - May", 
-      desc: "Global campaign teaching developers how to build real-world apps using Gemini and AI tools.", 
-      swags: "Build with AI T-shirts, Cloud Credits & Prize Kits", 
-      link: "https://developers.google.com/community/build-with-ai" 
-    },
-    { 
-      title: "WTM IWD Events", icon: "👩‍💻", 
-      theme: { bg: "bg-[#fce8e6]/20", text: "text-[#c5221f]", border: "border-[#f8c1cb]" }, 
-      date: "March - May", 
-      desc: "Technical workshops highlighting Women in Tech (International Women's Day), open to all.", 
-      swags: "Aesthetic WTM T-shirts, Notebooks & Tote Bags", 
-      link: "https://developers.google.com/womentechmakers" 
-    },
-    { 
-      title: "Google Summer of Code", icon: "☀️", 
-      theme: { bg: "bg-[#fef7e0]/20", text: "text-[#b06000]", border: "border-[#fde293]" }, 
-      date: "Jan - August", 
-      desc: "Prestigious global program writing code for open-source organizations during summer.", 
-      swags: "Heavy Stipend ($1.5k-$3k+), Certificates & T-shirts", 
-      link: "https://summerofcode.withgoogle.com/" 
-    },
-    { 
-      title: "Gemini API Competition", icon: "🏆", 
-      theme: { bg: "bg-[#f3e8fd]/20", text: "text-[#8430ce]", border: "border-[#d7aefb]" }, 
-      date: "Mid-Year", 
-      desc: "Global online hackathons to build innovative applications using the latest Gemini models.", 
-      swags: "Custom Trophies, Cash Prizes & Pixel Devices", 
-      link: "https://ai.google.dev/competition" 
-    },
-    { 
-      title: "GenAI Exchange Program", icon: "🧠", 
-      theme: { bg: "bg-[#e8f0fe]/20", text: "text-[#1a73e8]", border: "border-[#d2e3fc]" }, 
-      date: "April - September", 
-      desc: "Joint initiative by Google Cloud & Hack2skill featuring AI training and a national hackathon.", 
-      swags: "₹65 Lakh Prize Pool, Cloud Swags & Certificates", 
-      link: "https://vision.hack2skill.com/event/genaiexchange" 
-    }
-  ];
-
   return (
     <>
       <PopupModal />
@@ -401,19 +301,19 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
 {/* ================= HERO SECTION ================= */}
-{/* ✨ We've direct outer section a tighter, smaller overall box for a premium contained look. ✨ */}
-<section className="relative pt-20 pb-16 bg-[#18181b] overflow-hidden">
+{/* ✨ Matching Exact Background Image Color & Adjusted Text For Visibility ✨ */}
+<section className="relative pt-20 pb-16 bg-[#d2fcb6] overflow-hidden">
   
   <div className="w-full relative z-10">
     <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
       
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-30 pointer-events-none">
          <div className="absolute -top-32 -right-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
-         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-[#d7aefb] rounded-full blur-[100px]"></div>
+         <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
       </div>
 
-      {/* Inner Contained Container - Made tighter and more contained */}
+      {/* Inner Contained Container */}
       <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10">
         
         {/* === TOP ROW: Text, Buttons & Quick Links === */}
@@ -422,7 +322,7 @@ export default function HomePage() {
           {/* LEFT COLUMN: Text & Buttons */}
           <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            <div className="group relative inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 text-[#fde293] text-[12px] font-extrabold mb-6 uppercase tracking-widest rounded-full shadow-sm cursor-default backdrop-blur-sm">
+            <div className="group relative inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-[#dadce0] text-[#137333] text-[12px] font-extrabold mb-6 uppercase tracking-widest rounded-full shadow-sm cursor-default">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
@@ -430,73 +330,54 @@ export default function HomePage() {
               <span className="relative z-10">May Month Labs Live !</span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1]">
-              The Arcade<span className="text-white"> Program</span>
+            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-[#202124] mb-5 leading-[1.1]">
+              The Arcade<span className="text-[#1a73e8]"> Program</span>
             </h1>
 
-            <p className="text-white/80 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
+            <p className="text-[#3c4043] text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
               The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
             </p>
 
-            {/* 🔥 Premium Stylish Buttons Row - White Theme Applied 🔥 */}
+            {/* 🔥 2 Buttons Setup On Left (As Requested) 🔥 */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full">
-              <button
-                onClick={() => router.push("/calculator")}
-                className="relative w-full sm:w-auto px-7 py-3.5 bg-white text-zinc-900 font-bold text-[14px] sm:text-base rounded-xl hover:scale-105 hover:bg-gray-50 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] shadow-[0_4px_14px_rgba(0,0,0,0.1)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
-              >
-                {/* Auto Blinking Green Indicator for Main Button */}
-                <span className="absolute top-2 right-2 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#34a853]"></span>
-                </span>
-                
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                <span className="whitespace-nowrap">Arcade Points Calculator</span>
-              </button>
               
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-7 py-3.5 bg-white text-zinc-900 font-bold text-[14px] sm:text-base rounded-xl hover:scale-105 hover:bg-gray-50 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] shadow-[0_4px_14px_rgba(0,0,0,0.1)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
+                className="w-full sm:w-auto px-7 py-3.5 bg-white text-zinc-900 font-bold text-[14px] sm:text-base rounded-xl hover:scale-105 hover:bg-gray-50 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.1)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
               >
+                {/* Auto Blinking Green Indicator */}
+                <span className="absolute top-2 right-2 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#34a853]"></span>
+                </span>
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                <span className="whitespace-nowrap">Start Arcade Labs !</span>
+                <span className="whitespace-nowrap">Start Arcade Labs 2026 </span>
               </a>
-            </div>
-
-            {/* 🔥 Animated Action Buttons Container - Premium White Style 🔥 */}
-            <div className="w-full flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 mt-6">
-              <button 
-                onClick={() => document.getElementById('google-events')?.scrollIntoView({ behavior: 'smooth' })}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white text-zinc-900 rounded-xl hover:bg-gray-50 font-bold transition-all group shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transform hover:-translate-y-1 w-full sm:w-auto text-sm"
-              >
-                All Events & Programs
-                <div className="bg-zinc-100 text-zinc-900 p-1.5 rounded-full group-hover:scale-110 transition-transform">
-                  <svg className="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
-                </div>
-              </button>
 
               <button 
                 onClick={() => document.getElementById('coordinator-form')?.scrollIntoView({ behavior: 'smooth' })}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white text-zinc-900 rounded-xl hover:bg-gray-50 font-bold transition-all group shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transform hover:-translate-y-1 w-full sm:w-auto text-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#1a73e8] text-white rounded-xl hover:bg-[#1557b0] font-bold transition-all group shadow-[0_4px_14px_rgba(26,115,232,0.3)] transform hover:-translate-y-1 text-sm sm:text-base"
               >
                 Help Arcade Community !
-                <div className="bg-zinc-100 text-zinc-900 p-1.5 rounded-full group-hover:scale-110 transition-transform">
+                <div className="bg-white/20 text-white p-1.5 rounded-full group-hover:scale-110 transition-transform">
                   <svg className="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 14l-7 7m0 0l-7-7m7-7V3" /></svg>
                 </div>
               </button>
+
             </div>
           </div>
 
-          {/* 🔥 RIGHT COLUMN: Premium Quick Links (White Mode Match) 🔥 */}
+          {/* 🔥 RIGHT COLUMN: Premium Quick Links (With Calculator at Top) 🔥 */}
           <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-2.5">
             <div className="flex items-center gap-2 mb-1.5 justify-center lg:justify-start">
-              <span className="w-2 h-2 rounded-full bg-[#fde293] animate-pulse"></span>
-              <h3 className="text-[#fde293] font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
+              <span className="w-2 h-2 rounded-full bg-[#ea4335] animate-pulse"></span>
+              <h3 className="text-[#202124] font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
             </div>
 
             {[
+              { name: "Arcade Points Calculator", icon: "🧮", link: "/calculator" }, // ✨ ADDED AT TOP ✨
               { name: "Skill Badges List", icon: "🏅", link: "/resources" },
               { name: "Facilitator Program", icon: "🌟", link: "/facilitator" },
               { name: "Live Leaderboard", icon: "🏆", link: "/leaderboard" },
@@ -515,7 +396,7 @@ export default function HomePage() {
                     router.push(item.link);
                   }
                 }}
-                className="flex items-center justify-between p-3.5 bg-white hover:bg-gray-50 border border-transparent rounded-xl transition-all duration-300 text-zinc-900 font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base"
+                className="flex items-center justify-between p-3.5 bg-white hover:bg-gray-50 border border-[#dadce0] rounded-xl transition-all duration-300 text-zinc-900 font-semibold shadow-sm hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
@@ -530,7 +411,7 @@ export default function HomePage() {
         </div>
 
         {/* === BOTTOM ROW: Disclaimer & Actions Container === */}
-        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] overflow-hidden relative z-20 mt-4">
+        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] overflow-hidden relative z-20 mt-4">
           
           <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
             
@@ -1543,93 +1424,6 @@ export default function HomePage() {
 
   </div>
 </section>
-
-       {/* ================= 🔥 NEW: GLOBAL GOOGLE EVENTS SECTION (PREMIUM WHITE CARDS) 🔥 ================= */}
-       <section id="google-events" className="relative z-10 py-24 bg-white border-b border-[#dadce0] overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 relative z-10">
-            
-            {/* Wrapper for Light Premium Theme */}
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-[#dadce0] relative overflow-hidden">
-              
-              <div className="text-center mb-16 relative z-10">
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#e8f0fe] text-[#1a73e8] text-xs font-extrabold uppercase tracking-widest rounded-full mb-4 border border-[#d2e3fc]">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1a73e8] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1a73e8]"></span>
-                  </span>
-                  Google Opportunities
-                </span>
-                <h2 className="text-4xl md:text-5xl font-semibold text-[#202124] tracking-tight mb-5">
-                  Explore Events & Programs
-                </h2>
-                <p className="text-[#5f6368] text-lg max-w-2xl mx-auto leading-relaxed">
-                  Unlock exclusive swags, professional badges, standard tier points, cash prizes and official recognition by participating in these flagship campaigns throughout the year.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-                {googleEvents.map((event, idx) => {
-                  
-                  let statusTag = "🟢 Active";
-                  if(idx % 3 === 1) statusTag = "⏳ Upcoming";
-                  if(idx % 3 === 2) statusTag = "🔥 Live Now";
-
-                  return (
-                    <div key={idx} className="bg-white border border-[#dadce0] rounded-lg p-6 flex flex-col transition-all duration-300 group relative overflow-hidden transform hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.08)] hover:border-[#1a73e8]">
-                      
-                      <div className="flex justify-between items-start mb-5 relative z-10">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl border transition-transform duration-500 group-hover:rotate-6 ${event.theme.bg} ${event.theme.border} ${event.theme.text} bg-opacity-90`}>
-                            {event.icon}
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-col items-end gap-1.5">
-                          <span className="bg-[#e8f0fe] text-[#1a73e8] text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border border-[#d2e3fc]">
-                            {statusTag}
-                          </span>
-                          <span className="bg-[#f8f9fa] text-[#5f6368] text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border border-[#dadce0]">
-                            {event.date}
-                          </span>
-                        </div>
-                      </div>
-
-                      <h3 className="text-xl font-bold text-[#202124] mb-2.5 relative z-10 group-hover:text-[#1a73e8] transition-colors">{event.title}</h3>
-                      <p className="text-[#5f6368] text-sm leading-relaxed mb-6 flex-1 relative z-10 font-medium">
-                        {event.desc}
-                      </p>
-
-                      <div className="bg-[#f8f9fa] border border-[#dadce0] rounded-xl p-4 mb-6 flex items-start gap-3.5 relative z-10 transition-colors group-hover:bg-[#e8f0fe]">
-                        <div className="w-8 h-8 rounded-full bg-white border border-[#dadce0] flex items-center justify-center text-lg shrink-0">
-                          🎁
-                        </div>
-                        <div>
-                          <p className="text-[10px] uppercase font-bold text-[#1a73e8] tracking-widest mb-1">Rewards & Perks</p>
-                          <p className="text-[13px] font-bold text-[#202124] leading-snug">{event.swags}</p>
-                        </div>
-                      </div>
-
-                      <a 
-                        href={event.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="mt-auto pt-4 border-t border-[#dadce0] flex items-center justify-between text-[#1a73e8] font-bold text-sm group-hover:text-[#1557b0] transition-all relative z-10"
-                      >
-                        <span>Explore Campaign</span>
-                        <div className="w-8 h-8 rounded-full bg-[#e8f0fe] flex items-center justify-center group-hover:bg-[#1a73e8] group-hover:text-white text-[#1a73e8] transition-colors">
-                          <svg className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                        </div>
-                      </a>
-                      
-                    </div>
-                  );
-                })}
-              </div>
-
-            </div>
-          </div>
-        </section>
-
 
         <FAQ />
 
