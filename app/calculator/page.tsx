@@ -209,9 +209,9 @@ export default function CalculatorPage() {
     proceedToDashboard(url);
   };
 
-  // ✨ FULL PAGE BACKGROUND COLOR CHANGED TO #d2fcb6 ✨
+  {/* ✨ FULL PAGE BACKGROUND COLOR DEFAULT WHITE/LIGHT GRAY ✨ */}
   return (
-    <div className="min-h-screen bg-[#d2fcb6] text-[#202124] font-sans relative">
+    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16">
@@ -222,7 +222,7 @@ export default function CalculatorPage() {
           </h1>
         </div>
 
-        {/* ✨ CALCULATOR BOX COLOR CHANGED BACK TO WHITE ✨ */}
+        {/* ✨ CALCULATOR BOX COLOR WHITE ✨ */}
         <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
           
           <style>{`
@@ -330,7 +330,6 @@ export default function CalculatorPage() {
                   <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Remember me</label>
                 </div>
                 
-                {/* Image matching exactly with User's Need Help snippet */}
                 <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[#2563eb] hover:text-[#1d4ed8] transition-colors group">
                   <svg className="w-[22px] h-[22px] transition-transform group-hover:scale-105" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8.29 13.29L6 11.59l1.41-1.41 3.29 3.29 5.88-5.88L18 9l-7.29 7.29z"/>
@@ -358,7 +357,7 @@ export default function CalculatorPage() {
             </button>
 
             <p className="text-[13.5px] font-bold text-[#5d4037] text-center mt-5 leading-snug tracking-wide">
-             NOTE :- If your account is not completely public, Google will not be able to see your progress, and you cannot calculate your points here.
+              NOTE :- Make sure your profile is set to public so the calculator can access your badge information.
             </p>
 
             {/* 🔥 RECENT PROFILES */}
@@ -443,35 +442,126 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 2. PREMIUM INFO BOXES (How to use & Profile Public) */}
-        <div className="grid md:grid-cols-2 gap-6 mb-10 text-left items-stretch">
-          <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <h3 className="text-[#202124] font-medium text-lg mb-4 border-b border-[#f1f3f4] pb-4">
-              How to use Calculator ?
-            </h3>
-            <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
-              <li>Your profile <span className="bg-[#f1f3f4] text-[#202124] px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider mx-1 border border-[#dadce0]">must be public</span> to fetch data.</li>
-              <li>Copy your complete profile URL  <code className="bg-[#f8f9fa] px-1.5 py-0.5 rounded text-[#1a73e8] font-mono text-sm border border-[#dadce0] shadow-sm">https://www.skills.google/...</code></li>
-              <li>Paste the exact URL in the input box above and click Calculate.</li>
-              <li>Invalid, broken, or private URLs will return an error.</li>
-            </ul>
+        {/* ✨ STEP-BY-STEP GUIDE (3 Steps) ✨ */}
+        <div className="mt-12 mb-10 max-w-[55rem] mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
+              Public Profile Guide Format
+            </h2>
+            <p className="text-[#5f6368] mt-2 text-[15px]">Follow these simple steps to find your public profile URL</p>
           </div>
 
-          <div className="flex flex-col bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <h3 className="text-[#202124] font-medium text-lg mb-4 border-b border-[#f1f3f4] pb-4">
-              How to make Profile Public ?
-            </h3>
-            <ul className="list-disc pl-5 space-y-3.5 text-[#3c4043] text-[15px] font-medium flex-grow">
-              <li>Go to <a href="https://www.skills.google/" target="_blank" rel="noreferrer" className="text-[#1a73e8] hover:underline font-bold">skills.google</a></li>
-              <li>Top right corner: Click <strong>Sign in</strong> or the blue <strong>Join now</strong> button.</li>
-              <li>Select <strong>Continue with Google</strong> using your lab email.</li>
-              <li>After login, click your <strong>profile avatar</strong> (top right) and select <strong>Settings</strong>.</li>
-              <li>Under Public visibility, check <strong>Make profile public</strong> and click <strong>Update settings</strong>.</li>
-            </ul>
+          <div className="relative">
+            {/* Vertical Connecting Line (Hidden on mobile) */}
+            <div className="hidden md:block absolute left-6 top-10 bottom-10 w-[2px] bg-[#e8eaed]"></div>
+
+            {/* Step 1 */}
+            <div className="relative flex flex-col md:flex-row gap-6 mb-12">
+              {/* Circular Number Badge */}
+              <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
+                1
+              </div>
+              
+              {/* Step Content Box */}
+              <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
+                  <span className="text-[#3b82f6] text-xl font-extrabold">➔</span> Sign in to Google Skills
+                </h3>
+                <p className="text-[#5f6368] mb-5 text-[15px] leading-relaxed">
+                  Access the Google Skills platform and sign in with your Google account.<br className="hidden md:block"/>
+                  Navigate to the Google Skills website and sign in with your Google account to access your profile.
+                </p>
+                <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg font-medium transition-colors mb-8 shadow-sm">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  Go to Google Skills
+                </a>
+                
+                {/* Step 1 Screenshot Image */}
+                <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]">
+                  <img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-[102%] max-w-none h-auto object-cover -mb-[5%]" />
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative flex flex-col md:flex-row gap-6 mb-12">
+              {/* Circular Number Badge */}
+              <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
+                2
+              </div>
+
+              {/* Step Content Box */}
+              <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
+                  <span className="text-[#10b981] text-lg flex items-center justify-center w-7 h-7 rounded-full border-2 border-[#10b981]">👤</span> Access Your Public Profile
+                </h3>
+                <p className="text-[#5f6368] mb-5 text-[15px] leading-relaxed">
+                  After logging in navigate to the following link to access your Google Skills account settings.<br className="hidden md:block"/>
+                  On this Account Settings page scroll down to 'Public Profile' section.
+                </p>
+                <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg font-medium transition-colors mb-8 shadow-sm">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  Go to Account Settings
+                </a>
+
+                {/* Step 2 Screenshot Image */}
+                <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]">
+                  <img src="https://i.ibb.co/99DTpv3Q/find-ppu-ss-s-2.png" alt="Step 2 Guide" className="w-full h-auto object-cover" />
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3 (Newly Added) */}
+            <div className="relative flex flex-col md:flex-row gap-6">
+              {/* Circular Number Badge */}
+              <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
+                3
+              </div>
+
+              {/* Step Content Box */}
+              <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
+                  <span className="text-[#a855f7] text-2xl"></span> Copy Your Profile URL
+                </h3>
+                <p className="text-[#5f6368] mb-6 text-[15px] leading-relaxed">
+                  Select and copy the URL - this is your public profile URL.
+                </p>
+
+                {/* Important Alert Box */}
+                <div className="bg-[#fff9e6] border border-[#ffecb3] rounded-xl p-4 flex gap-3 items-start">
+                  <svg className="w-5 h-5 text-[#b06000] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <div>
+                    <span className="font-bold text-[#b06000] block mb-1">Important:</span>
+                    <span className="text-[#b06000] text-[14px]">Make sure your profile is set to <strong className="font-bold">public</strong> so the calculator can access your badge information.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* BOTTOM NEED HELP BUTTON REMOVED AS REQUESTED */}
+        {/* ✨ URL FORMAT EXAMPLE SECTION ✨ */}
+        <div className="mt-16 max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
+              Public profile Format
+            </h2>
+          </div>
+          
+          <div className="bg-white border border-[#dadce0] rounded-2xl p-6 md:p-10 shadow-sm text-center">
+            <h4 className="text-lg font-bold text-[#202124] mb-6">Your URL should look like this:</h4>
+            
+            <div className="bg-[#f8f9fa] rounded-xl p-4 md:p-5 border border-[#e8eaed] mb-6 inline-block w-full overflow-hidden">
+              <p className="text-[#1a73e8] font-mono text-sm md:text-base break-all">
+                https://www.skills.google/public_profiles/<span className="text-[#34a853] font-bold">PROFILE_ID</span>
+              </p>
+            </div>
+            
+            <p className="text-[#5f6368] text-[15px] leading-relaxed max-w-2xl mx-auto">
+              The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
+            </p>
+          </div>
+        </div>
 
       </main>
     </div>
