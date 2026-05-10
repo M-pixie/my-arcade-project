@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Search, ExternalLink, Clock, Layers, ChevronDown, CheckCircle2, Circle } from "lucide-react";
+import { Search, ExternalLink, Clock, Layers, ChevronDown, CheckCircle2, Circle, Check } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 
@@ -188,6 +188,18 @@ export default function ResourcesPage() {
     });
   }, [searchTerm, activeFilter, sortBy]);
 
+  // Splitting data into Pending and Completed for separate sections
+  const pendingBadges = processedData.filter(badge => !autoCompletedIds.includes(badge.id));
+  const completedBadges = processedData.filter(badge => autoCompletedIds.includes(badge.id));
+
+  // Function to smoothly scroll to a specific section
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pt-20"> 
       <style dangerouslySetInnerHTML={{__html: `
@@ -209,7 +221,7 @@ export default function ResourcesPage() {
       <section className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#dadce0] shadow-sm pt-4">
         <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-6 py-5">
           
-          {/* Main Filter Premium Blue Buttons (Now Inline & Pushed Left) */}
+          {/* Main Filter Premium Blue Buttons (Restored to Inline without wrapping) */}
           <div className="flex flex-nowrap items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto pb-1">
             {["All", "Introductory", "Intermediate", "Advanced"].map((f) => (
               <button
@@ -228,23 +240,29 @@ export default function ResourcesPage() {
 
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
             
-            {/* LIVE TRACKER BOX */}
+            {/* LIVE TRACKER BOX (Clickable for Navigation) */}
             {isMounted && (
               <div className="relative group/tracker">
-                <div className="flex bg-white border border-[#dadce0] rounded-md overflow-hidden text-sm w-full sm:w-auto shadow-sm cursor-help hover:border-[#1a73e8] transition-colors">
-                  <div className="px-3 py-2.5 text-[#1e8e3e] font-bold border-r border-[#dadce0] bg-[#e6f4ea]/60 flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto">
+                <div className="flex bg-white border border-[#dadce0] rounded-md overflow-hidden text-sm w-full sm:w-auto shadow-sm hover:border-[#1a73e8] transition-colors">
+                  <div 
+                    onClick={() => scrollToSection('completed-section')}
+                    className="px-3 py-2.5 text-[#1e8e3e] font-bold border-r border-[#dadce0] bg-[#e6f4ea]/60 flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#e6f4ea] transition-colors"
+                  >
                     <CheckCircle2 size={16} /> 
                     <span className="hidden xl:inline">Completed:</span> 
                     {autoCompletedIds.length}
                   </div>
-                  <div className="px-3 py-2.5 text-[#5f6368] font-bold bg-[#f8f9fa] flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto">
+                  <div 
+                    onClick={() => scrollToSection('pending-section')}
+                    className="px-3 py-2.5 text-[#5f6368] font-bold bg-[#f8f9fa] flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#e8eaed] transition-colors"
+                  >
                     <Circle size={16} /> 
                     <span className="hidden xl:inline">Pending:</span> 
                     {initialBadgesData.length - autoCompletedIds.length}
                   </div>
                 </div>
                 <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-[#202124] text-white text-[11px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover/tracker:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                  Track your overall progress
+                  Click to scroll to section
                 </div>
               </div>
             )}
@@ -300,13 +318,12 @@ export default function ResourcesPage() {
                 Calculate Points
               </button>
               
-              {/* === NEW BUTTON ADDED HERE === */}
               <button 
-  onClick={() => window.open('https://cloud.google.com/free', '_blank')} 
-  className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
->
-  Required Credits
-</button>
+                onClick={() => window.open('https://cloud.google.com/free', '_blank')} 
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white border border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
+              >
+                Required Credits
+              </button>
 
               <button 
                 onClick={() => router.push('/leaderboard')} 
@@ -329,99 +346,154 @@ export default function ResourcesPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {processedData.map((badge) => {
-              const isDone = autoCompletedIds.includes(badge.id);
+          {/* ================= SECTION 1: PENDING BADGES ================= */}
+          {pendingBadges.length > 0 && (
+            <div id="pending-section" className="mb-12 scroll-mt-32">
+              <h5 className="text-sm font-black text-[#5f6368] uppercase tracking-widest mb-6 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
+                Pending Skill Badges ({pendingBadges.length})
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {pendingBadges.map((badge) => (
+                  <div 
+                    key={badge.id} 
+                    className="group rounded-md p-5 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border bg-gradient-to-br from-[#f8f9fa] to-[#e8eaed] border-[#dadce0] hover:border-[#1a73e8]"
+                  >
+                    {/* Small Icon & Tiny Text */}
+                    <div className="flex flex-col items-start mb-3">
+                      <img 
+                        src="https://i.postimg.cc/bwX3MCMF/1775250377511.png" 
+                        alt="Badge Icon" 
+                        className="w-8 h-8 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <span className="text-[9px] font-extrabold uppercase tracking-widest mt-1.5 ml-0.5 text-[#5f6368]">
+                        Skill Badge
+                      </span>
+                    </div>
 
-              return (
-                <div 
-                  key={badge.id} 
-                  className={`group rounded-md p-5 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border ${
-                    isDone 
-                      ? 'completed-blink-card shadow-[0_4px_12px_rgba(52,168,83,0.12)]' 
-                      : 'bg-gradient-to-br from-[#f8f9fa] to-[#e8eaed] border-[#dadce0] hover:border-[#1a73e8]' 
-                  }`}
-                >
-                  
-                  {/* AUTO-SYNCED BADGE - No manual mark done toggle */}
-                  {isMounted && isDone && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <div className="flex items-center gap-1.5 text-[#137333] bg-[#e6f4ea] border border-[#ceead6] px-2.5 py-1 rounded-sm text-[10px] font-bold uppercase tracking-wider shadow-sm" title="Auto-verified from Profile">
-                        <CheckCircle2 size={14} /> Completed
+                    {/* Header Meta */}
+                    <div className="flex items-center gap-3 mb-3 pr-24">
+                      <span className="text-[10px] font-bold text-[#9aa0a6] uppercase tracking-[0.2em]">
+                        BDG-{badge.id}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-[#dadce0]"></span>
+                      <span className={`text-[10px] font-bold uppercase tracking-wider ${
+                        badge.level === "Introductory" ? "text-[#1e8e3e]" : 
+                        badge.level === "Intermediate" ? "text-[#1a73e8]" : "text-[#d93025]"
+                      }`}>
+                        {badge.level}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-[16px] font-bold leading-snug mb-3 min-h-[40px] line-clamp-2 transition-colors pr-2 text-[#202124] group-hover:text-[#1a73e8]">
+                      {badge.title}
+                    </h3>
+                    
+                    {/* Specs */}
+                    <div className="mt-auto pt-3 border-t border-[#dadce0]/50 space-y-2 mb-4">
+                      <div className="flex items-center text-sm font-medium group/info">
+                        <Clock className="w-3.5 h-3.5 mr-3 transition-colors text-[#9aa0a6] group-hover/info:text-[#1a73e8]" />
+                        <span className="text-[#5f6368]">Duration: {badge.duration} mins</span>
+                      </div>
+                      <div className="flex items-center text-sm font-medium group/info">
+                        <Layers className="w-3.5 h-3.5 mr-3 transition-colors text-[#9aa0a6] group-hover/info:text-[#34a853]" />
+                        <span className="text-[#5f6368]">{badge.labs}</span>
                       </div>
                     </div>
-                  )}
 
-                  {/* Small Icon & Tiny Text */}
-                  <div className="flex flex-col items-start mb-3">
-                    <img 
-                      src="https://i.postimg.cc/bwX3MCMF/1775250377511.png" 
-                      alt="Badge Icon" 
-                      className="w-8 h-8 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <span className={`text-[9px] font-extrabold uppercase tracking-widest mt-1.5 ml-0.5 ${isDone ? 'text-[#0f5132]/80' : 'text-[#5f6368]'}`}>
-                      Skill Badge
-                    </span>
+                    {/* Action Button */}
+                    <a 
+                      href={badge.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border bg-[#1a73e8] text-white border-[#1a73e8] hover:bg-[#1557b0]"
+                    >
+                      Start Learning <ExternalLink className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-                  {/* Header Meta */}
-                  <div className="flex items-center gap-3 mb-3 pr-24">
-                    <span className="text-[10px] font-bold text-[#9aa0a6] uppercase tracking-[0.2em]">
-                      BDG-{badge.id}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-[#dadce0]"></span>
-                    <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                      badge.level === "Introductory" ? "text-[#1e8e3e]" : 
-                      badge.level === "Intermediate" ? "text-[#1a73e8]" : "text-[#d93025]"
-                    }`}>
-                      {badge.level}
-                    </span>
-                  </div>
-
-                  {/* Title (Reduced Height) */}
-                  <h3 className={`text-[16px] font-bold leading-snug mb-3 min-h-[40px] line-clamp-2 transition-colors pr-2 ${
-                    isDone ? 'text-[#0f5132]' : 'text-[#202124] group-hover:text-[#1a73e8]'
-                  }`}>
-                    {badge.title}
-                  </h3>
-                  
-                  {/* Specs */}
-                  <div className="mt-auto pt-3 border-t border-[#dadce0]/50 space-y-2 mb-4">
-                    <div className="flex items-center text-sm font-medium group/info">
-                      <Clock className={`w-3.5 h-3.5 mr-3 transition-colors ${isDone ? 'text-[#0f5132]/70' : 'text-[#9aa0a6] group-hover/info:text-[#1a73e8]'}`} />
-                      <span className={isDone ? 'text-[#0f5132]' : 'text-[#5f6368]'}>Duration: {badge.duration} mins</span>
-                    </div>
-                    <div className="flex items-center text-sm font-medium group/info">
-                      <Layers className={`w-3.5 h-3.5 mr-3 transition-colors ${isDone ? 'text-[#0f5132]/70' : 'text-[#9aa0a6] group-hover/info:text-[#34a853]'}`} />
-                      <span className={isDone ? 'text-[#0f5132]' : 'text-[#5f6368]'}>{badge.labs}</span>
-                    </div>
-                  </div>
-
-                  {/* Action Button - Solid Blue for Pending, Green for Complete */}
-                  <a 
-                    href={badge.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border ${
-                      isDone 
-                        ? 'bg-[#137333] text-white border-[#137333] hover:bg-[#0d5023]' 
-                        : 'bg-[#1a73e8] text-white border-[#1a73e8] hover:bg-[#1557b0]'
-                    }`}
+          {/* ================= SECTION 2: COMPLETED BADGES ================= */}
+          {completedBadges.length > 0 && (
+            <div id="completed-section" className="scroll-mt-32">
+              <h5 className="text-sm font-black text-[#137333] uppercase tracking-widest mb-6 flex items-center gap-2 pt-8 border-t border-[#dadce0]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
+                Completed Skill Badges ({completedBadges.length})
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {completedBadges.map((badge) => (
+                  <div 
+                    key={badge.id} 
+                    className="group rounded-md p-5 flex flex-col hover:shadow-[0_4px_12px_rgba(52,168,83,0.12)] transition-all duration-400 relative border completed-blink-card shadow-sm opacity-95"
                   >
-                    {isDone ? (
-                      <>
-                        <CheckCircle2 className="w-4 h-4" /> Completed
-                      </>
-                    ) : (
-                      <>
-                        Start Learning <ExternalLink className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </>
+                    
+                    {/* Solid Single Circle Pulsing Green Tick Overlay */}
+                    {isMounted && (
+                      <div className="absolute top-4 right-4 z-10 flex flex-col items-center">
+                        <div className="w-10 h-10 bg-[#137333] rounded-full flex items-center justify-center border-2 border-white shadow-[0_0_12px_rgba(19,115,51,0.8)] animate-pulse">
+                          <Check className="w-6 h-6 text-white stroke-[3]" />
+                        </div>
+                      </div>
                     )}
-                  </a>
-                </div>
-              );
-            })}
-          </div>
+
+                    {/* Small Icon & Tiny Text */}
+                    <div className="flex flex-col items-start mb-3 opacity-80">
+                      <img 
+                        src="https://i.postimg.cc/bwX3MCMF/1775250377511.png" 
+                        alt="Badge Icon" 
+                        className="w-8 h-8 object-contain drop-shadow-sm"
+                      />
+                      <span className="text-[9px] font-extrabold uppercase tracking-widest mt-1.5 ml-0.5 text-[#0f5132]/80">
+                        Skill Badge
+                      </span>
+                    </div>
+
+                    {/* Header Meta */}
+                    <div className="flex items-center gap-3 mb-3 pr-24 opacity-80">
+                      <span className="text-[10px] font-bold text-[#0f5132]/70 uppercase tracking-[0.2em]">
+                        BDG-{badge.id}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-[#a3cfbb]"></span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#0f5132]">
+                        {badge.level}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-[16px] font-bold leading-snug mb-3 min-h-[40px] line-clamp-2 pr-2 text-[#0f5132]">
+                      {badge.title}
+                    </h3>
+                    
+                    {/* Specs */}
+                    <div className="mt-auto pt-3 border-t border-[#a3cfbb]/50 space-y-2 mb-4 opacity-90">
+                      <div className="flex items-center text-sm font-medium">
+                        <Clock className="w-3.5 h-3.5 mr-3 text-[#0f5132]/70" />
+                        <span className="text-[#0f5132]">Duration: {badge.duration} mins</span>
+                      </div>
+                      <div className="flex items-center text-sm font-medium">
+                        <Layers className="w-3.5 h-3.5 mr-3 text-[#0f5132]/70" />
+                        <span className="text-[#0f5132]">{badge.labs}</span>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <a 
+                      href={badge.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border bg-[#137333] text-white border-[#137333] hover:bg-[#0d5023]"
+                    >
+                      <CheckCircle2 className="w-4 h-4" /> Completed
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* No Data State */}
           {processedData.length === 0 && (

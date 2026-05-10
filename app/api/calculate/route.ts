@@ -4,6 +4,51 @@ import * as cheerio from 'cheerio';
 
 export const dynamic = 'force-dynamic';
 
+// ==========================================
+// 🔥 MASTER LIST OF 93 SKILL BADGES 🔥
+// ==========================================
+const skillBadgesMasterList = [
+  "Manage Kubernetes in Google Cloud", "Classify Images with TensorFlow on Google Cloud", "Derive Insights from BigQuery Data",
+  "Share Data Using Google Data Cloud", "Get Started with Google Workspace Tools", "Migrate MySQL Data to Cloud SQL Using Database Migration...",
+  "Use Machine Learning APIs on Google Cloud", "Mitigate Threats and Vulnerabilities with Security Command...",
+  "Monitor Environments with Google Cloud Managed Service for...", "Get Started with Dataplex", "Prompt Design in Vertex AI",
+  "Configure Service Accounts and IAM Roles for Google Cloud", "Integrate BigQuery Data and Google Workspace using Apps Script",
+  "Cloud Speech API: 3 Ways", "Build a Data Mesh with Dataplex", "Analyze Sentiment with Natural Language API",
+  "Develop with Apps Script and AppSheet", "Using the Google Cloud Speech API", "Use APIs to Work with Cloud Storage",
+  "The Basics of Google Cloud Compute", "Get Started with Sensitive Data Protection", "Analyze Images with the Cloud Vision API",
+  "Secure BigLake Data", "Enrich Metadata and Discovery of BigLake Data", "Create a Secure Data Lake on Cloud Storage",
+  "Analyze Speech and Language with Google APIs", "Monitoring in Google Cloud", "Get Started with Eventarc",
+  "Create Your First Gemini Enterprise Application", "Engineer AI Agents with Agent Development Kit (ADK)",
+  "Build Global and Regional Load Balancing Solutions", "Google DeepMind: Train A Small Language Model",
+  "Build a Smart Cloud Application with Vibe Coding and MCP", "Deploy Multi-Agent Architectures",
+  "Develop AI-Powered Prototypes in Google AI Studio", "Kickstarting Application Development with Gemini Code Assist",
+  "Connecting Cloud Networks with NCC", "Privileged Access with IAM", "Enhance Gemini Model Capabilities",
+  "Analyze and Reason on Multimodal Data with Gemini", "Implement Multimodal Vector Search with BigQuery",
+  "Protect Cloud Traffic with Chrome Enterprise Premium Security", "Discover and Protect Sensitive Data Across Your Ecosystem",
+  "Get Started with Pub/Sub", "Secure Software Delivery", "Set Up a Google Cloud Network", "Create and Manage AlloyDB Instances",
+  "Build Real World AI Applications with Gemini and Imagen", "Inspect Rich Documents with Gemini Multimodality and...",
+  "Develop Gen AI Apps with Gemini and Streamlit", "Explore Generative AI with the Gemini API in Vertex AI",
+  "Build LookML Objects in Looker", "Create and Manage Cloud SQL for PostgreSQL Instances", "Deploy and Manage Apigee X",
+  "Prepare Data for Looker Dashboards and Reports", "Optimize Costs for Google Kubernetes Engine",
+  "Develop Serverless Apps with Firebase", "Develop Serverless Applications on Cloud Run",
+  "Implement Cloud Security Fundamentals on Google Cloud", "Build a Data Warehouse with BigQuery",
+  "Create ML Models with BigQuery ML", "Monitor and Log with Google Cloud Observability",
+  "Implement DevOps Workflows in Google Cloud", "Engineer Data for Predictive Modeling with BigQuery ML",
+  "Build a Secure Google Cloud Network", "Cloud Architecture: Design, Implement, and Manage",
+  "Build a Website on Google Cloud", "Implementing Cloud Load Balancing for Compute Engine",
+  "Develop Your Google Cloud Network", "Set Up an App Dev Environment on Google Cloud",
+  "Prepare Data for ML APIs on Google Cloud", "Deploy Kubernetes Applications on Google Cloud", "App Engine: 3 Ways",
+  "Get Started with Cloud Storage", "Create a Streaming Data Lake on Cloud Storage",
+  "Build Serverless Applications with Cloud Run Functions", "Streaming Analytics into BigQuery", "Get Started with API Gateway",
+  "App Building with AppSheet", "Store, Process, and Manage Data on Google Cloud - Console",
+  "Analyze BigQuery Data in Connected Sheets", "Monitor and Manage Google Cloud Resources",
+  "Store, Process, and Manage Data on Google Cloud - Command Line", "Build Google Cloud Infrastructure for AWS Professionals",
+  "Create and Manage Bigtable Instances", "Implement CI/CD Pipelines on Google Cloud",
+  "Use Functions, Formulas, and Charts in Google Sheets", "Create and Manage Cloud Spanner Instances",
+  "Build Infrastructure with Terraform on Google Cloud", "Perform Predictive Data Analysis in BigQuery",
+  "Automate Data Capture at Scale with Document AI", "Manage Data Models in Looker", "Develop and Secure APIs with Apigee X"
+].map(name => name.toLowerCase());
+
 export async function POST(req: Request) {
   try {
     const { url } = await req.json();
@@ -18,7 +63,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid Profile URL format.' }, { status: 400 });
     }
 
-    console.log(" Fetching Profile (2026 Logic Updated with 3 Point Games)...");
+    console.log(" Fetching Profile (2026 Logic Updated with 3 Point Games & Decimals)...");
 
     // 1. HTML Download
     const response = await axios.get(url.trim(), {
@@ -53,11 +98,19 @@ export async function POST(req: Request) {
     // 🔥 SIRF YE EK NAYA VARIABLE ADD KIYA HAI 🔥
     const completionHistory: any[] = []; 
 
+    // Helper Function to check if a title is a Skill Badge from our master list
+    const isSkillBadge = (titleToCheck: string) => {
+        return skillBadgesMasterList.some(badge => 
+            titleToCheck === badge || 
+            (badge.endsWith('...') && titleToCheck.startsWith(badge.slice(0, -3)))
+        );
+    };
+
     // 5. Main Logic Loop
     $('.profile-badge').each((index, element) => {
       const card = $(element);
       const dateText = card.find('.ql-body-medium').text();
-      const title = card.find('.ql-title-medium').text().toLowerCase(); // Sab lowercase me check karenge
+      const title = card.find('.ql-title-medium').text().toLowerCase().trim(); // Sab lowercase me check karenge
       const originalTitle = card.find('.ql-title-medium').text().trim(); // Original title history ke liye
 
       // 📅 Date Filter (Sirf 2026 ka data chahiye)
@@ -82,7 +135,7 @@ export async function POST(req: Request) {
       } 
       
       // CATEGORY 2: Skill Badges (0.5 Point each)
-      else if (title.includes('skill badge')) {
+      else if (isSkillBadge(title) || title.includes('skill badge')) {
         skillBadgesCount++;
         earned = 0.5;
         type = "Skill Badge";
@@ -116,11 +169,8 @@ export async function POST(req: Request) {
           title.includes('game') ||
           title.includes('dialogue design') || // 🔥 Naya 1 point game add kiya jaisa tumne bola
           title.includes('works meet play') || //  New add badges
-
           title.includes('skill up summer') || //  New add badges 
-
           title.includes('work meets play: expressive efficiency')  //  New add badges 
-          
         ) {
           gamePoints += 1;
           earned = 1;
@@ -140,8 +190,8 @@ export async function POST(req: Request) {
 
     console.log(`✅ Success! Found: ${userName}`);
 
-    // Final Calculation
-    const calculatedPoints = triviaPoints + gamePoints + Math.floor(skillBadgesCount / 2);
+    // 🔥 DECIMAL CALCULATION (Math.floor HATA DIYA HAI) 🔥
+    const calculatedPoints = triviaPoints + gamePoints + (skillBadgesCount / 2);
 
     return NextResponse.json({
       totalPoints: calculatedPoints,
