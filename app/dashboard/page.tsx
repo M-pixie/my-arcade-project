@@ -646,7 +646,7 @@ export default function DashboardPage() {
                     onClick={() => router.push('/facilitator')}
                     className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
                   >
-                    <span>Arcade Facilitator Program 2026</span>
+                    <span>Facilitator Program 26</span>
                     <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" />
