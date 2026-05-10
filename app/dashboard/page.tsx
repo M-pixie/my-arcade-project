@@ -25,6 +25,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [realRank, setRealRank] = useState<number | null>(null);
+  const [leaderboardData, setLeaderboardData] = useState<any[]>([]); // 🔥 STATE FOR MINI LEADERBOARD
   const [copiedCode, setCopiedCode] = useState<string | null>(null); // For Access Codes
 
   const cardRef = useRef<HTMLDivElement>(null);
@@ -32,6 +33,9 @@ export default function DashboardPage() {
   // ================= 🔥 WELCOME CELEBRATION STATES 🔥 =================
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const [showWelcomeCelebration, setShowWelcomeCelebration] = useState(false);
+
+  // ================= 🔥 BLINKING NAME STATE (1 SECOND TOGGLE) 🔥 =================
+  const [showYouText, setShowYouText] = useState(true);
 
   // ================= 🔥 NEW MODAL STATES 🔥 =================
   const [showZeroLabsModal, setShowZeroLabsModal] = useState(false);
@@ -49,6 +53,14 @@ export default function DashboardPage() {
       return () => clearTimeout(timer);
     }
   }, [loading, points]);
+
+  // 🔥 Name blinking effect logic (1 second interval) 🔥
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowYouText((prev) => !prev);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // ================= 🔥 AUTO-CLOSE BANNERS LOGIC (5 SECONDS) 🔥 =================
   useEffect(() => {
@@ -213,6 +225,7 @@ export default function DashboardPage() {
       return;
     }
     const unsub = subscribeLeaderboard((leaders: any[]) => {
+      setLeaderboardData(leaders); // 🔥 Added this to store all leaders for mini-leaderboard
       const me = leaders.find((l: any) => l.id === userUniqueId);
       if (me && me.rank) {
         setRealRank(me.rank);
@@ -439,17 +452,13 @@ export default function DashboardPage() {
           <div className="bg-[#f4f7fb] border border-[#dadce0] p-6 md:p-10 rounded-xl shadow-sm animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               
-              <div className="lg:col-span-5 bg-white rounded-xl shadow-md border border-[#e8eaed] overflow-hidden relative flex flex-col group transition-shadow duration-300">
-  
-  {/* 👇 Is baar 'shadow-inner' bhi hata diya hai ekdum clean flat banner ke liye */}
-  <div className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] py-5 text-center relative overflow-hidden">
-    
-    {/* 👇 Text se 'shadow-sm' bhi hata diya aur size bada rakha hai */}
-    <h3 className="text-white font-black text-3xl sm:text-4xl tracking-wide relative z-10">
-      Arcade Points: {points}
-    </h3>
-    
-  </div>
+              {/* LEFT COLUMN: Progress Report */}
+              <div className="lg:col-span-5 self-start bg-white rounded-xl shadow-md border border-[#e8eaed] overflow-hidden relative flex flex-col group transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] py-5 text-center relative overflow-hidden">
+                  <h3 className="text-white font-black text-3xl sm:text-4xl tracking-wide relative z-10">
+                    Arcade Points: {points}
+                  </h3>
+                </div>
                 
                 <div className="px-8 pt-8 pb-6 flex flex-col items-center relative bg-gradient-to-b from-[#f8f9fa] to-transparent flex-grow">
                   <div className="w-28 h-28 rounded-full border-[5px] border-white shadow-md flex items-center justify-center overflow-hidden mb-5 relative bg-[#137333] ring-4 ring-[#e6f4ea] transform transition-transform hover:scale-105">
@@ -503,10 +512,80 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* RIGHT: Stats & Share Buttons */}
-              <div className="lg:col-span-7 flex flex-col justify-center gap-6 pl-0 lg:pl-4 mt-8 lg:mt-0">
+              {/* RIGHT COLUMN */}
+              <div className="lg:col-span-7 flex flex-col gap-6 pl-0 lg:pl-4 mt-8 lg:mt-0">
                 
-                {/* --- STATS BOXES MOVED TO TOP --- */}
+                {/* 1. 🔥 MINI LEADERBOARD WITH SERIAL ALIGNMENT & BLINKING NAME 🔥 */}
+                {leaderboardData.length > 0 && userUniqueId && (
+                  <div className="relative w-full min-h-[200px] flex flex-col justify-center mb-2 border border-[#dadce0] rounded-xl bg-white shadow-sm p-4 overflow-hidden">
+                     
+                     {/* Top Right Transparent "View Leaderboard" Button */}
+                     <button 
+                        onClick={() => router.push('/leaderboard')}
+                        className="absolute top-3 right-3 bg-[#e8eaed]/60 hover:bg-[#dadce0]/80 text-[#3c4043] text-xs font-semibold px-3 py-1.5 rounded transition-colors z-30 border border-[#d5d7db]"
+                     >
+                        View Leaderboard
+                     </button>
+
+                     {(() => {
+                        const uIdx = leaderboardData.findIndex((l: any) => l.id === userUniqueId);
+                        if (uIdx === -1) return null;
+
+                        const prevUser = uIdx > 0 ? leaderboardData[uIdx - 1] : null;
+                        const meUser = leaderboardData[uIdx];
+                        const nextUser = uIdx < leaderboardData.length - 1 ? leaderboardData[uIdx + 1] : null;
+
+                        return (
+                           <div className="relative w-full h-full mx-auto flex items-end justify-center gap-4 sm:gap-8 pt-6">
+                              
+                              {/* Prev User (Left side - Higher Rank) */}
+                              {prevUser && (
+                                 <div className="flex flex-col items-center animate-float-1 z-10 w-[85px] sm:w-[100px]">
+                                    <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank #{prevUser.rank}</div>
+                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
+                                       <img src={prevUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="text-sm font-black text-[#202124] mt-1 truncate w-full text-center">{prevUser.name?.split(' ')[0] || "Player"}</div>
+                                    <div className="text-[12px] font-black text-[#202124]">{prevUser.points} pts</div>
+                                 </div>
+                              )}
+
+                              {/* ME (Center - Clickable) */}
+                              {meUser && (
+                                 <div 
+                                    onClick={() => router.push('/leaderboard')}
+                                    className="flex flex-col items-center animate-float-2 z-20 w-[90px] sm:w-[110px] cursor-pointer hover:scale-105 transition-transform"
+                                    title="Click to view full leaderboard"
+                                 >
+                                    <div className="text-[14px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank #{meUser.rank}</div>
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white shadow-md border-[3px] border-[#1a73e8]">
+                                       <img src={meUser.photoURL || userAvatar || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className={`text-[16px] font-black mt-1 truncate w-full text-center transition-colors duration-300 ${showYouText ? 'text-[#1a73e8]' : 'text-[#202124]'}`}>
+                                       {showYouText ? "You" : (meUser.name?.split(' ')[0] || "Player")}
+                                    </div>
+                                    <div className="text-[14px] font-black text-[#202124]">{meUser.points} pts</div>
+                                 </div>
+                              )}
+
+                              {/* Next User (Right side - Lower Rank) */}
+                              {nextUser && (
+                                 <div className="flex flex-col items-center animate-float-3 z-10 w-[85px] sm:w-[100px]">
+                                    <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank #{nextUser.rank}</div>
+                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
+                                       <img src={nextUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="text-sm font-black text-[#202124] mt-1 truncate w-full text-center">{nextUser.name?.split(' ')[0] || "Player"}</div>
+                                    <div className="text-[12px] font-black text-[#202124]">{nextUser.points} pts</div>
+                                 </div>
+                              )}
+                           </div>
+                        );
+                     })()}
+                  </div>
+                )}
+
+                {/* 2. --- STATS BOXES --- */}
                 <div className="grid grid-cols-2 gap-5 w-full">
                   <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
                     <span className="text-4xl font-black text-[#202124] leading-none mb-2">
@@ -523,29 +602,15 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* --- ACTION BUTTONS BOX MOVED BELOW --- */}
-                <div className="flex flex-col justify-center gap-5">
+                {/* 3. --- REORDERED ACTION BUTTONS BOX --- */}
+                <div className="flex flex-col gap-4 w-full mt-2">
                   
-                  <div className="flex flex-col gap-2">
-                    <button 
-                      onClick={() => {
-                        localStorage.removeItem("arcade_user_data");
-                        router.push('/calculator');
-                      }}
-                      className="relative w-full group bg-white border border-[#dadce0] hover:bg-[#f8f9fa] text-[#202124] font-bold py-3.5 px-6 rounded-md shadow-sm transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
-                    >
-                      <svg className="w-5 h-5 mr-2 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                      Refresh Dashboard
-                    </button>
-                    <p className="text-[11px] text-[#80868b] font-medium text-center">If points show invalid, refresh and calculate again.</p>
-                  </div>
-
-                  {/* Arcade Facilitator Program Button - Replaced the Celebration Button */}
+                  {/* 1st: View Full Leaderboard */}
                   <button 
-                    onClick={() => router.push('/facilitator')}
+                    onClick={() => router.push('/leaderboard')} 
                     className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
                   >
-                    <span>Arcade Facilitator Program 2026</span>
+                    <span>View Full Leaderboard</span>
                     <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" />
@@ -553,7 +618,17 @@ export default function DashboardPage() {
                     </span>
                   </button>
 
-                  {/* Skill Badges Button */}
+                  {/* 2nd: WhatsApp Share Button */}
+                  <button onClick={shareToWhatsApp} className="relative w-full group bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide">
+                    <span className="flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/>
+                      </svg>
+                      Share your points
+                    </span>
+                  </button>
+
+                  {/* 3rd: Skill Badges Button */}
                   <button 
                     onClick={() => router.push('/resources')}
                     className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
@@ -566,33 +641,19 @@ export default function DashboardPage() {
                     </span>
                   </button>
 
-                  {/* WhatsApp Share Button */}
-                  <button onClick={shareToWhatsApp} className="relative w-full group bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide">
-                    <span className="flex items-center gap-2">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/>
+                  {/* 4th: Arcade Facilitator Program Button */}
+                  <button 
+                    onClick={() => router.push('/facilitator')}
+                    className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
+                  >
+                    <span>Arcade Facilitator Program 2026</span>
+                    <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" />
                       </svg>
-                      Share your points
                     </span>
                   </button>
 
-                </div>
-
-                <div className="flex flex-col gap-4 w-full">
-
-                 <button 
-                  onClick={() => router.push('/leaderboard')} 
-                  className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
-                >
-                  <span>View Full Leaderboard</span>
-                  
-                  {/* PREMIUM LONG ARROW (Sleek & White) */}
-                  <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" />
-                    </svg>
-                  </span>
-                </button>
                 </div>
               </div>
             </div>
@@ -611,10 +672,7 @@ export default function DashboardPage() {
               </span>
             </div>
 
-
-
             {/* --- SECTION 1: PENDING LABS --- */}
-
             
             {pendingLabs.length > 0 && (
               <div className="mb-10">
@@ -636,7 +694,6 @@ export default function DashboardPage() {
                         <div className="mt-auto">
                           <p className="text-[11px] font-bold text-[#80868b] uppercase tracking-wider mb-1.5">Access Code</p>
                           
-                          {/* 🔥 YAHAN FIX KIYA HAI: Unified Input Box Style & New Icon 🔥 */}
                           <div className="flex items-center justify-between bg-white border border-[#dadce0] rounded-md overflow-hidden mb-4 shadow-sm">
                             <code className="text-[#1a73e8] px-3 py-2 text-[15px] font-bold tracking-wide flex-1">
                               {lab.accessCode}
@@ -685,9 +742,6 @@ export default function DashboardPage() {
               </div>
             )}
 
-
-
-
             {/* --- SECTION 2: COMPLETED LABS --- */}
             {completedLabs.length > 0 && (
               <div>
@@ -699,7 +753,6 @@ export default function DashboardPage() {
                   {completedLabs.map((lab) => (
                     <div key={`completed-${lab.id}`} className="bg-white border border-[#ceead6] rounded-xl flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow group opacity-90">
                       <div className="h-48 bg-[#202124] border-b border-[#dadce0] p-4 flex items-center justify-center relative overflow-hidden">
-                         {/* Checkmark overlay with Blinking Animation (animate-pulse) */}
                          <div className="absolute inset-0 bg-black/40 z-20 flex items-center justify-center">
                             <div className="w-14 h-14 bg-[#137333] rounded-full flex items-center justify-center border-2 border-white shadow-[0_0_15px_rgba(19,115,51,0.8)] animate-pulse">
                                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
@@ -766,7 +819,6 @@ export default function DashboardPage() {
             </div>
             
             <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
-              {/* HEIGHT INCREASED: max-h-[650px] so it shows ~10 items */}
               <div className="max-h-[650px] overflow-y-auto custom-scrollbar">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
@@ -806,41 +858,41 @@ export default function DashboardPage() {
         )}
 
        {/* ================= 🔥 MOVED CARDS (ARCADE 2026 & FACILITATOR) 🔥 ================= */}
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up mt-12" style={{animationDelay: '0.4s'}}>
-  
-  {/* Card 1: Slim Arcade Program */}
-  <div className="bg-white border border-blue-200 rounded-xl py-5 px-6 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden transition-all hover:shadow-md hover:border-blue-300">
-    <div className="mb-4">
-      <h3 className="text-[20px] font-black text-blue-600 tracking-tight">Arcade Program 2026</h3>
-      <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mt-1">January 2026 - Dec 2026</p>
-    </div>
-    <div className="w-full max-w-sm h-2.5 bg-gray-100 rounded-full flex overflow-hidden mb-2.5 shadow-inner">
-      <div className="bg-blue-500 h-full w-[60%] animate-[pulse_2s_ease-in-out_infinite]"></div>
-      <div className="bg-purple-500 h-full w-[40%]"></div>
-    </div>
-    <p className="text-[11px] text-gray-400 font-bold">Season is currently active</p>
-  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up mt-12" style={{animationDelay: '0.4s'}}>
+          
+          {/* Card 1: Slim Arcade Program */}
+          <div className="bg-white border border-blue-200 rounded-xl py-5 px-6 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden transition-all hover:shadow-md hover:border-blue-300">
+            <div className="mb-4">
+              <h3 className="text-[20px] font-black text-blue-600 tracking-tight">Arcade Program 2026</h3>
+              <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mt-1">January 2026 - Dec 2026</p>
+            </div>
+            <div className="w-full max-w-sm h-2.5 bg-gray-100 rounded-full flex overflow-hidden mb-2.5 shadow-inner">
+              <div className="bg-blue-500 h-full w-[60%] animate-[pulse_2s_ease-in-out_infinite]"></div>
+              <div className="bg-purple-500 h-full w-[40%]"></div>
+            </div>
+            <p className="text-[11px] text-gray-400 font-bold">Season is currently active</p>
+          </div>
 
-  {/* Card 2: Slim Facilitator Program */}
-  <div 
-    onClick={() => router.push('/facilitator')}
-    className="cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-700 border border-indigo-800 rounded-xl py-5 px-6 shadow-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all"
-  >
-    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
-    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-    
-    <div className="flex items-center gap-3 mb-4 z-10">
-      <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-inner">
-        <span className="text-lg drop-shadow-md">🎓</span>
-      </div>
-      <h3 className="text-[19px] font-black text-white tracking-tight">Facilitator Program 2026</h3>
-    </div>
-    
-    <p className="text-[11px] font-bold text-blue-100 z-10 bg-white/10 px-5 py-1.5 rounded-full border border-white/10 backdrop-blur-sm uppercase tracking-wider">
-      Enrolments Opening Soon
-    </p>
-  </div>
-</div>
+          {/* Card 2: Slim Facilitator Program */}
+          <div 
+            onClick={() => router.push('/facilitator')}
+            className="cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-700 border border-indigo-800 rounded-xl py-5 px-6 shadow-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div className="flex items-center gap-3 mb-4 z-10">
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-inner">
+                <span className="text-lg drop-shadow-md">🎓</span>
+              </div>
+              <h3 className="text-[19px] font-black text-white tracking-tight">Facilitator Program 2026</h3>
+            </div>
+            
+            <p className="text-[11px] font-bold text-blue-100 z-10 bg-white/10 px-5 py-1.5 rounded-full border border-white/10 backdrop-blur-sm uppercase tracking-wider">
+              Enrolments Opening Soon
+            </p>
+          </div>
+        </div>
 
         {/* ================= PREMIUM REWARDS (SWAGS) SECTION ================= */}
         <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
@@ -901,6 +953,29 @@ export default function DashboardPage() {
         .animate-header-avatar {
           animation: header-avatar-float 3s ease-in-out infinite;
         }
+        
+        /* 🔥 MINI LEADERBOARD FLOATING ANIMATIONS 🔥 */
+        @keyframes float-1 {
+          0% { transform: translate(0, 0); }
+          33% { transform: translate(4px, -6px); }
+          66% { transform: translate(-4px, 4px); }
+          100% { transform: translate(0, 0); }
+        }
+        @keyframes float-2 {
+          0% { transform: translate(0, 0); }
+          33% { transform: translate(-5px, -5px); }
+          66% { transform: translate(5px, 5px); }
+          100% { transform: translate(0, 0); }
+        }
+        @keyframes float-3 {
+          0% { transform: translate(0, 0); }
+          33% { transform: translate(5px, 5px); }
+          66% { transform: translate(-5px, -5px); }
+          100% { transform: translate(0, 0); }
+        }
+        .animate-float-1 { animation: float-1 4s ease-in-out infinite; }
+        .animate-float-2 { animation: float-2 5s ease-in-out infinite; }
+        .animate-float-3 { animation: float-3 4.5s ease-in-out infinite; }
       `}</style>
     </div>
   );
