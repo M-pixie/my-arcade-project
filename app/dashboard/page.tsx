@@ -660,6 +660,92 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {/* ================= 🔥 NEW: THE MAY LABS JOURNEY (SUBWAY MAP) 🔥 ================= */}
+        {points !== null && (
+          <div className="bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm mt-8 animate-fade-in-up" style={{ animationDelay: '0.22s' }}>
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+              <h4 className="text-sm sm:text-base font-black text-[#5f6368] uppercase tracking-widest flex items-center gap-2">
+                <span className="text-xl"></span> May Labs
+              </h4>
+              {/* Subway map text properly removed! */}
+            </div>
+
+            <div className="relative flex items-center justify-between w-full px-2 sm:px-4 mt-6 mb-8">
+              {/* Background Track Line */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 bg-[#f1f3f4] rounded-full z-0"></div>
+              
+              {/* Progress Fill Line based on completedLabs count */}
+              <div 
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" 
+                style={{ width: `${(completedLabs.length / 6) * 100}%` }}
+              ></div>
+
+              {/* Labs Mapping: Sorted so Completed are ALWAYS FIRST, then Pending */}
+              {[...completedLabs, ...pendingLabs].map((lab, index) => {
+                const isCompleted = isLabCompleted(lab.matchStrings);
+                // Current is now always the first item right after all completed labs
+                const isCurrent = !isCompleted && index === completedLabs.length;
+                
+                // Short name formatter for mapping visualization
+                let shortName = lab.title;
+                if (lab.id === 'voyage') shortName = 'Arcade Voyage';
+                if (lab.id === 'adventure') shortName = 'Arcade Adventure';
+                if (lab.id === 'trail') shortName = 'Arcade Trail';
+                if (lab.id === 'basecamp') shortName = 'Arcade BaseCamp';
+                if (lab.id === 'Expressive') shortName = 'Expressive Efficiency';
+                if (lab.id === 'Skillup') shortName = 'Skill Up Summer';
+
+                return (
+                  <div key={lab.id} className="relative z-10 flex flex-col items-center gap-2 px-1 w-1/6">
+                    
+                    {/* Node Circle */}
+                    <div className={`w-5 h-5 md:w-7 md:h-7 rounded-full border-[4px] shadow-sm flex items-center justify-center transition-all ${
+                      isCompleted 
+                        ? 'border-[#34a853] bg-[#e6f4ea]' 
+                        : isCurrent 
+                          ? 'border-[#fbbc04] bg-white scale-110 ring-2 ring-[#fbbc04]/30' 
+                          : 'border-[#dadce0] bg-[#f8f9fa]'
+                    }`}>
+                      {/* Green tick for completed */}
+                      {isCompleted && (
+                        <svg className="w-3 h-3 md:w-4 md:h-4 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                      
+                      {/* BUBBLE PING ANIMATION for current node */}
+                      {isCurrent && (
+                        <div className="relative flex items-center justify-center w-full h-full">
+                           <div className="absolute w-6 h-6 md:w-8 md:h-8 bg-[#fbbc04] rounded-full animate-ping opacity-60"></div>
+                           <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#fbbc04] rounded-full relative z-10"></div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Top Status Text */}
+                    <span className={`absolute -top-6 text-[8px] md:text-[10px] font-extrabold uppercase whitespace-nowrap ${
+                      isCompleted ? 'text-[#137333]' : isCurrent ? 'text-[#f29900]' : 'text-[#9aa0a6]'
+                    }`}>
+                      {isCompleted ? 'Completed' : isCurrent ? 'Current' : `Lab ${index + 1}`}
+                    </span>
+
+                    {/* Bottom Lab Name Text (SLIGHTLY BIGGER) */}
+                    <span className="absolute -bottom-8 text-[9px] md:text-[11px] font-extrabold text-[#5f6368] text-center w-full leading-tight hidden sm:block">
+                      {shortName}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-10 sm:mt-12 w-full text-center border-t border-[#dadce0] pt-4">
+              <span className="text-[11px] sm:text-xs font-bold text-[#5f6368]">
+                {completedLabs.length} / 6 May Labs Completed
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* ================= 🔥 APRIL ARCADE LABS LIVE (PREMIUM CARDS) 🔥 ================= */}
         {points !== null && (
           <div className="animate-fade-in-up mt-12 bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
