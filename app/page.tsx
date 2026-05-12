@@ -301,14 +301,20 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
 {/* ================= HERO SECTION ================= */}
-{/* ✨ Matching Exact Background Image Color & Adjusted Text For Visibility ✨ */}
-<section className="relative pt-20 pb-16 bg-[#d2fcb6] overflow-hidden">
+{/* ✨ Premium Gradient & White Indicator Fix ✨ */}
+<section 
+  className="relative pt-20 pb-16 overflow-hidden"
+  style={{ 
+    /* Blue to Cyan to Yellow to Orange transition */
+    background: 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 30%, #06B6D4 55%, #FACC15 80%, #F97316 100%)' 
+  }}
+>
   
   <div className="w-full relative z-10">
     <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
       
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-30 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
          <div className="absolute -top-32 -right-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
       </div>
@@ -330,22 +336,22 @@ export default function HomePage() {
               <span className="relative z-10">May Month Labs Live !</span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-[#202124] mb-5 leading-[1.1]">
-              The Arcade<span className="text-[#1a73e8]"> Program</span>
+            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1] drop-shadow-sm">
+              The Arcade<span className="text-[#FACC15]"> Program</span>
             </h1>
 
-            <p className="text-[#3c4043] text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
+            <p className="text-white/90 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8 drop-shadow-sm">
               The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
             </p>
 
-            {/* 🔥 2 Buttons Setup On Left (As Requested) 🔥 */}
+            {/* 🔥 2 Buttons Setup On Left 🔥 */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full">
               
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-7 py-3.5 bg-white text-zinc-900 font-bold text-[14px] sm:text-base rounded-xl hover:scale-105 hover:bg-gray-50 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.1)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
+                className="w-full sm:w-auto px-7 py-3.5 bg-white text-zinc-900 font-bold text-[14px] sm:text-base rounded-xl hover:scale-105 hover:bg-gray-50 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
               >
                 {/* Auto Blinking Green Indicator */}
                 <span className="absolute top-2 right-2 flex h-3 w-3">
@@ -356,9 +362,10 @@ export default function HomePage() {
                 <span className="whitespace-nowrap">Start Arcade Labs 2026 </span>
               </a>
 
+              {/* Glassmorphism style button */}
               <button 
                 onClick={() => document.getElementById('coordinator-form')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#1a73e8] text-white rounded-xl hover:bg-[#1557b0] font-bold transition-all group shadow-[0_4px_14px_rgba(26,115,232,0.3)] transform hover:-translate-y-1 text-sm sm:text-base"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl hover:bg-white/30 font-bold transition-all group shadow-[0_4px_14px_rgba(0,0,0,0.2)] transform hover:-translate-y-1 text-sm sm:text-base"
               >
                 Help Arcade Community !
                 <div className="bg-white/20 text-white p-1.5 rounded-full group-hover:scale-110 transition-transform">
@@ -369,15 +376,19 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* 🔥 RIGHT COLUMN: Premium Quick Links (With Calculator at Top) 🔥 */}
+          {/* 🔥 RIGHT COLUMN: Premium Quick Links 🔥 */}
           <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-2.5">
             <div className="flex items-center gap-2 mb-1.5 justify-center lg:justify-start">
-              <span className="w-2 h-2 rounded-full bg-[#ea4335] animate-pulse"></span>
-              <h3 className="text-[#202124] font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
+              {/* ✨ Changed the Red dot to a 2-point White glowing indicator ✨ */}
+              <span className="relative flex h-2.5 w-2.5 mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+              </span>
+              <h3 className="text-white font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
             </div>
 
             {[
-              { name: "Arcade Points Calculator", icon: "🧮", link: "/calculator" }, // ✨ ADDED AT TOP ✨
+              { name: "Arcade Points Calculator", icon: "🧮", link: "/calculator" },
               { name: "Skill Badges List", icon: "🏅", link: "/resources" },
               { name: "Facilitator Program", icon: "🌟", link: "/facilitator" },
               { name: "Live Leaderboard", icon: "🏆", link: "/leaderboard" },
@@ -396,7 +407,7 @@ export default function HomePage() {
                     router.push(item.link);
                   }
                 }}
-                className="flex items-center justify-between p-3.5 bg-white hover:bg-gray-50 border border-[#dadce0] rounded-xl transition-all duration-300 text-zinc-900 font-semibold shadow-sm hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base"
+                className="flex items-center justify-between p-3.5 bg-white/95 hover:bg-white border border-white/40 rounded-xl transition-all duration-300 text-zinc-900 font-semibold shadow-md hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base backdrop-blur-sm"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
@@ -411,19 +422,16 @@ export default function HomePage() {
         </div>
 
         {/* === BOTTOM ROW: Disclaimer & Actions Container === */}
-        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] overflow-hidden relative z-20 mt-4">
+        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.2)] overflow-hidden relative z-20 mt-4">
           
           <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
             
-            {/* Disclaimer in place of old text */}
             <p className="text-sm md:text-base text-[#5f6368] font-medium leading-relaxed max-w-3xl mx-auto bg-gray-50/50 p-4 rounded-xl border border-gray-100">
               <strong className="text-[#202124]">Disclaimer:</strong> This website is an independent, community-built tool and is not an official website of Google Cloud Arcade or Google, community-built tool designed simply to help you calculate your Arcade points and learn Google Cloud skills together with the community.
             </p>
 
-            {/* 🔥 Action Buttons Container - Upgraded to Default White Style 🔥 */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
               
-              {/* ✨ Animated Download Button ✨ */}
               <a 
                 href="https://expo.dev/artifacts/eas/mw6RYtdftR4dn57i4gSUKM.apk" 
                 className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-zinc-900 font-bold text-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto"
@@ -434,7 +442,6 @@ export default function HomePage() {
                 <span>Download App (apk)</span>
               </a>
 
-              {/* 🎁 See Google Swags Post Button */}
               <button 
                 onClick={() => router.push('/post')}
                 className="group inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-zinc-900 font-bold text-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto"
@@ -445,7 +452,6 @@ export default function HomePage() {
                 <span>See Google Swags Post</span>
               </button>
 
-              {/* 📱 Share on WhatsApp Button */}
               <a 
                 href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
                 target="_blank" 
