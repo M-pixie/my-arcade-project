@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
-import { savePublicUserToLeaderboard } from "@/lib/leaderboard"; // 🔥 ADDED THIS IMPORT 🔥
+import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
 
 // 🔥 TIME AGO UPDATED: "14m" -> "14 mins ago"
 function timeAgo(dateString: string) {
@@ -23,12 +23,13 @@ function timeAgo(dateString: string) {
   return `${Math.floor(months / 12)} years ago`;
 }
 
-// Interface for History Objects
+// Interface Updated
 interface RecentProfile {
   url: string;
   time: string;
   name?: string;
   avatar?: string | null;
+  points?: number; 
 }
 
 export default function CalculatorPage() {
@@ -45,8 +46,15 @@ export default function CalculatorPage() {
   // 🔥 NEW STATE FOR 3-SECOND AUTO CHANGE HINT
   const [showCopyHint, setShowCopyHint] = useState(false);
 
-  // 🔥 SHAKE KE LIYE NAYA STATE (Sirf ye add kiya hai)
+  // 🔥 NEW STATE FOR 1-SECOND AVATAR/COIN TOGGLE
+  const [showCoinAvatar, setShowCoinAvatar] = useState(false);
+
+  // 🔥 SHAKE KE LIYE NAYA STATE
   const [isShaking, setIsShaking] = useState(false);
+
+  // 🔥 NEW STATE FOR USER POINTS & AVATAR (HEADER KE LIYE) 🔥
+  const [userPoints, setUserPoints] = useState<number | null>(null);
+  const [userAvatar, setUserAvatar] = useState<string | null>(null); // Avatar store karne ke liye
 
   const router = useRouter();
 
@@ -64,21 +72,47 @@ export default function CalculatorPage() {
       setRecentUrls(JSON.parse(savedRecentUrls));
     }
 
-    // 🔥 SETTING INTERVAL FOR 3 SECONDS COPY HINT
-    const interval = setInterval(() => {
+    // 🔥 FETCH POINTS AND AVATAR FROM LOCAL STORAGE FOR HEADER 🔥
+    const savedData = localStorage.getItem("arcade_user_data");
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed) {
+          if (typeof parsed.points === 'number') {
+            setUserPoints(parsed.points);
+          }
+          if (parsed.userAvatar) {
+            setUserAvatar(parsed.userAvatar);
+          }
+        }
+      } catch (e) {
+        console.error("Error parsing arcade_user_data", e);
+      }
+    }
+
+    const hintInterval = setInterval(() => {
       setShowCopyHint((prev) => !prev);
     }, 3000);
-    return () => clearInterval(interval);
+
+    const avatarInterval = setInterval(() => {
+      setShowCoinAvatar((prev) => !prev);
+    }, 3000);
+
+    return () => {
+      clearInterval(hintInterval);
+      clearInterval(avatarInterval);
+    };
   }, []);
 
-  const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null) => {
+  const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null, points?: number) => {
     setRecentUrls((prevUrls) => {
       const filtered = prevUrls.filter((u) => u.url !== urlToSave);
       const newItem: RecentProfile = { 
         url: urlToSave, 
         time: new Date().toISOString(),
         name: name || "Arcade Player",
-        avatar: avatar || null
+        avatar: avatar || null,
+        points: points
       };
       const updatedUrls = [newItem, ...filtered].slice(0, 5); 
       localStorage.setItem("recent_arcade_urls_v3", JSON.stringify(updatedUrls));
@@ -101,25 +135,22 @@ export default function CalculatorPage() {
     setHideRedLine(false); 
   };
 
-  // 🔥 SHAKE TRIGGER FUNCTION (Vibrate ke sath)
   const triggerShake = () => {
     setIsShaking(false);
     setTimeout(() => {
       setIsShaking(true);
       if (typeof window !== 'undefined' && navigator.vibrate) {
-        navigator.vibrate([100, 50, 100]); // Mobile vibrate karega
+        navigator.vibrate([100, 50, 100]); 
       }
     }, 10);
   };
 
-  // 🔥 YAHAN overrideUrl PARAMETER ADD KIYA TAKI DIRECT URL SE START HO SAKE 🔥
   const proceedToDashboard = async (overrideUrl?: string | any) => {
     const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
 
     setError(null);
     setHideRedLine(false);
 
-    // Agar hum history se directly aa rahe hain to input field me url set kar dete hain
     if (typeof overrideUrl === 'string') {
       setProfileUrl(targetUrl);
     }
@@ -130,11 +161,10 @@ export default function CalculatorPage() {
       localStorage.removeItem("arcade_url");
     }
 
-    // 🔥 YAHAN STRICT REGEX ADD KIYA HAI 🔥
     const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
     if (!targetUrl || !urlPattern.test(targetUrl)) {
       setError("Please enter a valid Public Profile URL.");
-      triggerShake(); // 🔥 ERROR PE SHAKE HOGA
+      triggerShake(); 
       triggerBlink(); 
       return;
     }
@@ -153,11 +183,11 @@ export default function CalculatorPage() {
       if (!res.ok) {
         setError(data.error || "Failed to calculate points. Check URL.");
         setLoading(false);
-        triggerShake(); // 🔥 BACKEND ERROR PE BHI SHAKE HOGA
+        triggerShake(); 
         return;
       }
 
-      saveToHistory(targetUrl, data.userName, data.userAvatar);
+      saveToHistory(targetUrl, data.userName, data.userAvatar, data.totalPoints);
 
       const extractedId = targetUrl.split('/').pop() || null;
       const cacheObj = {
@@ -173,7 +203,6 @@ export default function CalculatorPage() {
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
       localStorage.setItem("current_processing_url", targetUrl);
 
-      // 🔥 NAYA CODE YAHAN ADD HUA HAI 🔥
       try {
         await savePublicUserToLeaderboard({
           name: data.userName || "Arcade Player",
@@ -184,14 +213,13 @@ export default function CalculatorPage() {
       } catch (saveErr) {
         console.error("Leaderboard Save Error:", saveErr);
       }
-      // 🔥 YAHAN TAK 🔥
       
       router.push("/dashboard");
 
     } catch (err) {
       setError("Connection failed. Check your internet and retry.");
       setLoading(false);
-      triggerShake(); // 🔥 NETWORK ERROR PE BHI SHAKE HOGA
+      triggerShake(); 
     }
   };
 
@@ -200,29 +228,64 @@ export default function CalculatorPage() {
     setError(null);
     setHideRedLine(false);
     
-    // Purana wala kaam (Copy karna) abhi bhi hoga
     navigator.clipboard.writeText(url);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 1000);
 
-    // 🔥 AUR SATH ME DIRECT DASHBOARD PROCESS BHI START HO JAYEGA 🔥
     proceedToDashboard(url);
   };
 
-  {/* ✨ FULL PAGE BACKGROUND COLOR DEFAULT WHITE/LIGHT GRAY ✨ */}
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16">
         
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-6xl font-medium text-[#202124] tracking-tight leading-tight">
-            Arcade <span className="text-[#1a73e8]">Calculator</span>
+        {/* 🔥 HEADING WITH HEADER TOGGLE (AVATAR <-> COIN) 🔥 */}
+        <div className="text-center mb-10 flex justify-center items-center">
+          <h1 className="text-4xl md:text-6xl font-medium text-[#202124] tracking-tight leading-tight flex items-center gap-5">
+            <span>Arcade <span className="text-[#1a73e8]">Calculator</span></span>
+            
+            {userPoints !== null && (
+              <div 
+                className="relative flex items-center justify-center ml-2" 
+                style={{ 
+                  width: 'clamp(80px, 10vw, 105px)', 
+                  height: 'clamp(80px, 10vw, 105px)',
+                  animation: 'coin-float 3.5s ease-in-out infinite' 
+                }}
+              >
+                
+                {/* 🟢 AVATAR LAYER (Smaller size - 75%) */}
+                <div 
+                  className={`absolute flex items-center justify-center transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
+                  style={{ width: '75%', height: '75%' }}
+                >
+                  {userAvatar ? (
+                    <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[3px] border-[#dadce0] shadow-md" />
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-white border-[3px] border-[#dadce0] shadow-md flex items-center justify-center">
+                      <span className="text-3xl font-black text-[#1a73e8]">U</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* 🟡 COIN LAYER (Original bigger size - 100%) */}
+                <div 
+                  className={`absolute w-full h-full transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}
+                >
+                  <div className="gold-coin">
+                    <span className="gold-coin-text">
+                      {userPoints}
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+            )}
           </h1>
         </div>
 
-        {/* ✨ CALCULATOR BOX COLOR WHITE ✨ */}
         <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
           
           <style>{`
@@ -236,7 +299,6 @@ export default function CalculatorPage() {
               position: absolute;
             }
 
-            /* 🔥 NEW AVATAR FLOATING ANIMATION */
             @keyframes float-avatar {
               0%, 100% { transform: translateY(0px); }
               50% { transform: translateY(-5px); }
@@ -245,7 +307,6 @@ export default function CalculatorPage() {
               animation: float-avatar 3s ease-in-out infinite;
             }
 
-            /* 🔥 PREMIUM GOOGLE-STYLE INLINE TOOLTIP ANIMATION */
             @keyframes tooltip-pop {
               0% { opacity: 0; transform: translate(-50%, 10px) scale(0.95); }
               15% { opacity: 1; transform: translate(-50%, 0) scale(1); }
@@ -257,7 +318,6 @@ export default function CalculatorPage() {
               pointer-events: none;
             }
 
-            /* 🔥 FAST SHAKE ANIMATION 🔥 */
             @keyframes fast-shake {
               0%, 100% { transform: translateX(0); }
               20% { transform: translateX(-8px); }
@@ -267,6 +327,58 @@ export default function CalculatorPage() {
             }
             .animate-fast-shake {
               animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+            }
+
+            /* 🔥 SHADOW REMOVED - SINGLE CLEAN COIN CSS 🔥 */
+            .gold-coin {
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+              background: linear-gradient(135deg, #FDE047 0%, #D4AF37 45%, #996515 100%);
+              /* Removed the double-coin thick shadow, kept a clean soft drop shadow */
+              box-shadow: 
+                inset -2px -2px 6px rgba(153, 101, 21, 0.6), 
+                inset 2px 2px 6px rgba(255, 255, 255, 0.8), 
+                4px 4px 10px rgba(0, 0, 0, 0.2), 
+                0 0 25px rgba(212, 175, 55, 0.3);
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .gold-coin::before {
+              content: "";
+              position: absolute;
+              width: 80%;
+              height: 80%;
+              border-radius: 50%;
+              background: linear-gradient(135deg, #D4AF37 0%, #FDE047 50%, #B8860B 100%);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              box-shadow: 
+                inset 2px 2px 4px rgba(0,0,0,0.1), 
+                inset -2px -2px 4px rgba(255,255,255,0.4);
+            }
+            .gold-coin-text {
+              position: relative;
+              z-index: 10;
+              font-weight: 900;
+              font-family: 'Arial Black', Impact, sans-serif;
+              font-size: clamp(1.6rem, 2.3vw, 2.2rem); 
+              color: #4A2E00; 
+              letter-spacing: -1px;
+              text-shadow: 
+                -1px -1px 1px rgba(255,240,168,0.8),
+                1px 1px 1px rgba(255,255,255,0.4),
+                1px 1px 3px rgba(0,0,0,0.4);
+            }
+            
+            @keyframes coin-float {
+              0%, 100% { 
+                transform: translateY(0px); 
+              }
+              50% { 
+                transform: translateY(-10px); 
+              }
             }
           `}</style>
 
@@ -283,13 +395,10 @@ export default function CalculatorPage() {
             </p>
 
             <div className="mb-6">
-              {/* 🔥 SHAKE CLASS AUR onAnimationEnd YAHAN ADD KIYA HAI 🔥 */}
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
                 className={`relative border-2 rounded-lg transition-colors duration-75 ${isShaking ? 'animate-fast-shake' : ''} ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}
               >
-                
-                {/* ✨ LABEL BACKGROUND CHANGED BACK TO WHITE ✨ */}
                 <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 z-10 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url
                 </label>
@@ -302,7 +411,6 @@ export default function CalculatorPage() {
                     setError(null);
                     setHideRedLine(false); 
                   }}
-                  // 🔥 YAHAN ENTER/RETURN BUTTON KA SUPPORT ADD KIYA HAI 🔥
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       proceedToDashboard();
@@ -322,7 +430,6 @@ export default function CalculatorPage() {
               )}
             </div>
 
-            {/* ✨ NEED HELP MOVED NEXT TO REMEMBER ME ✨ */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center">
@@ -338,7 +445,7 @@ export default function CalculatorPage() {
                 </a>
               </div>
               <div className="text-sm font-medium text-[#3c4043]">
-                Last update: 09 May 2026 at 09:35 pm IST
+                Last update: 13 May 2026 at 13:20 IST
               </div>
             </div>
 
@@ -369,14 +476,12 @@ export default function CalculatorPage() {
                     Recent Profiles
                   </p>
                   
-                  {/* ✨ CLEAR HISTORY BUTTON MODIFIED (No Red BG, Black Text, Bigger Icon) ✨ */}
                   <button onClick={clearHistory} className="flex items-center gap-2 text-sm text-[#202124] hover:text-black hover:bg-[#f1f3f4] bg-transparent px-4 py-2 rounded-lg font-bold transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     Clear History
                   </button>
                 </div>
                 
-                {/* ✨ INCREASED GAP (gap-x-12) FOR BETTER SPACING ✨ */}
                 <div className="flex flex-wrap gap-x-12 gap-y-6 ml-5">
                   {recentUrls.map((item, idx) => {
                     const shortId = item.url.split("/").pop()?.substring(0, 16) || "Profile";
@@ -387,7 +492,6 @@ export default function CalculatorPage() {
                         className={`relative w-auto min-w-[270px] inline-flex items-center justify-between gap-4 py-2.5 pr-6 pl-10 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#f8f9fa] rounded-xl transition-all shadow-sm hover:shadow-md ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea]' : ''}`}
                         title={item.url}
                       >
-                        {/* 🔥 PREMIUM GOOGLE-STYLE INLINE TOOLTIP */}
                         {copiedIndex === idx && (
                           <div className="absolute -top-11 left-1/2 z-50 bg-white border border-[#dadce0] shadow-[0_4px_12px_rgba(0,0,0,0.12)] rounded-md px-3 py-1.5 flex items-center gap-1.5 animate-tooltip-pop whitespace-nowrap">
                             <svg className="w-3.5 h-3.5 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
@@ -395,31 +499,53 @@ export default function CalculatorPage() {
                           </div>
                         )}
 
-                        {/* OUT-OF-BOUNDS AVATAR CONTAINER */}
                         <div className="absolute -left-6 top-1/2 -translate-y-1/2 z-10">
-                          <div className="w-12 h-12 rounded-full bg-white border-[3px] border-[#f1f3f4] overflow-hidden flex items-center justify-center animate-float-avatar shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                          <div className="w-12 h-12 rounded-full bg-white border-[3px] border-[#f1f3f4] overflow-hidden flex items-center justify-center animate-float-avatar shadow-[0_4px_10px_rgba(0,0,0,0.1)] relative">
                             {copiedIndex === idx ? (
                                <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                            ) : item.avatar ? (
-                              <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : item.points !== undefined ? (
+                              <>
+                                <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-white transition-opacity duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0' : 'opacity-100'}`}>
+                                  {item.avatar ? (
+                                    <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <span className="text-[17px] font-black text-[#1a73e8]">
+                                      {item.name ? item.name.charAt(0).toUpperCase() : "U"}
+                                    </span>
+                                  )}
+                                </div>
+                                
+                                <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-[#f8f9fa] transition-opacity duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100' : 'opacity-0'}`}>
+                                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDE047] via-[#D4AF37] to-[#996515] shadow-[inset_-2px_-2px_4px_rgba(153,101,21,0.6),inset_2px_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative">
+                                    <div className="absolute w-[75%] h-[75%] rounded-full bg-gradient-to-br from-[#D4AF37] via-[#FDE047] to-[#B8860B] border border-white/20 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.1)] flex items-center justify-center">
+                                      <span className="text-[#4A2E00] text-[13.5px] font-black tracking-tighter" style={{ textShadow: '1px 1px 1px rgba(255,255,255,0.4)' }}>
+                                        {item.points}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
                             ) : (
-                              <span className="text-[17px] font-black text-[#1a73e8]">
-                                {item.name ? item.name.charAt(0).toUpperCase() : "U"}
-                              </span>
+                              <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-white">
+                                {item.avatar ? (
+                                  <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                                ) : (
+                                  <span className="text-[17px] font-black text-[#1a73e8]">
+                                    {item.name ? item.name.charAt(0).toUpperCase() : "U"}
+                                  </span>
+                                )}
+                              </div>
                             )}
                           </div>
                         </div>
                         
-                        {/* 🔥 UPDATED NAME AND ID WITH AUTO COPY HINT */}
                         <div className="flex flex-col items-start leading-tight text-left min-w-[130px]">
                           <span className="text-[15px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
                           
                           <div className="relative w-full h-[18px] mt-0.5 overflow-hidden">
-                            {/* Original ID Text */}
                             <span className={`absolute left-0 top-0 text-[11px] text-[#5f6368] font-bold opacity-90 transition-all duration-500 ease-in-out flex items-center h-full ${showCopyHint ? 'opacity-0 translate-y-full' : 'opacity-100 translate-y-0'}`}>
                               ID: {shortId}...
                             </span>
-                            {/* ✨ Copy & Open Profile Indicator Text ✨ */}
                             <span className={`absolute left-0 top-0 text-[11px] text-[#1a73e8] font-bold transition-all duration-500 ease-in-out flex items-center gap-1 h-full ${showCopyHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}>
                               <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                               Copy <span className="text-[#dadce0] font-normal mx-0.5">•</span> Open Profile
@@ -427,7 +553,6 @@ export default function CalculatorPage() {
                           </div>
                         </div>
                         
-                        {/* TIME AGO */}
                         <div className="border-l border-[#dadce0] pl-3.5 flex items-center">
                           <span className="text-[10px] font-extrabold text-[#80868b] bg-[#f1f3f4] px-2 py-1 rounded tracking-wide">
                             {timeAgo(item.time)}
@@ -442,7 +567,6 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* ✨ STEP-BY-STEP GUIDE (3 Steps) ✨ */}
         <div className="mt-12 mb-10 max-w-[55rem] mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
@@ -452,17 +576,13 @@ export default function CalculatorPage() {
           </div>
 
           <div className="relative">
-            {/* Vertical Connecting Line (Hidden on mobile) */}
             <div className="hidden md:block absolute left-6 top-10 bottom-10 w-[2px] bg-[#e8eaed]"></div>
 
-            {/* Step 1 */}
             <div className="relative flex flex-col md:flex-row gap-6 mb-12">
-              {/* Circular Number Badge */}
               <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
                 1
               </div>
               
-              {/* Step Content Box */}
               <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
                 <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
                   <span className="text-[#3b82f6] text-xl font-extrabold">➔</span> Sign in to Google Skills
@@ -476,21 +596,17 @@ export default function CalculatorPage() {
                   Go to Google Skills
                 </a>
                 
-                {/* Step 1 Screenshot Image */}
                 <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]">
                   <img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-[102%] max-w-none h-auto object-cover -mb-[5%]" />
                 </div>
               </div>
             </div>
 
-            {/* Step 2 */}
             <div className="relative flex flex-col md:flex-row gap-6 mb-12">
-              {/* Circular Number Badge */}
               <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
                 2
               </div>
 
-              {/* Step Content Box */}
               <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
                 <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
                   <span className="text-[#10b981] text-lg flex items-center justify-center w-7 h-7 rounded-full border-2 border-[#10b981]">👤</span> Access Your Public Profile
@@ -504,21 +620,17 @@ export default function CalculatorPage() {
                   Go to Account Settings
                 </a>
 
-                {/* Step 2 Screenshot Image */}
                 <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]">
                   <img src="https://i.ibb.co/99DTpv3Q/find-ppu-ss-s-2.png" alt="Step 2 Guide" className="w-full h-auto object-cover" />
                 </div>
               </div>
             </div>
 
-            {/* Step 3 (Newly Added) */}
             <div className="relative flex flex-col md:flex-row gap-6">
-              {/* Circular Number Badge */}
               <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
                 3
               </div>
 
-              {/* Step Content Box */}
               <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
                 <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
                   <span className="text-[#a855f7] text-2xl"></span> Copy Your Profile URL
@@ -527,7 +639,6 @@ export default function CalculatorPage() {
                   Select and copy the URL - this is your public profile URL.
                 </p>
 
-                {/* Important Alert Box */}
                 <div className="bg-[#fff9e6] border border-[#ffecb3] rounded-xl p-4 flex gap-3 items-start">
                   <svg className="w-5 h-5 text-[#b06000] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   <div>
@@ -540,7 +651,6 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* ✨ URL FORMAT EXAMPLE SECTION ✨ */}
         <div className="mt-16 max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
