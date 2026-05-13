@@ -46,15 +46,16 @@ export default function CalculatorPage() {
   // 🔥 NEW STATE FOR 3-SECOND AUTO CHANGE HINT
   const [showCopyHint, setShowCopyHint] = useState(false);
 
-  // 🔥 NEW STATE FOR 1-SECOND AVATAR/COIN TOGGLE
+  // 🔥 NEW STATE FOR 3-SECOND AVATAR/COIN TOGGLE
   const [showCoinAvatar, setShowCoinAvatar] = useState(false);
 
   // 🔥 SHAKE KE LIYE NAYA STATE
   const [isShaking, setIsShaking] = useState(false);
 
-  // 🔥 NEW STATE FOR USER POINTS & AVATAR (HEADER KE LIYE) 🔥
+  // 🔥 NEW STATES FOR HEADER USER DATA 🔥
   const [userPoints, setUserPoints] = useState<number | null>(null);
-  const [userAvatar, setUserAvatar] = useState<string | null>(null); // Avatar store karne ke liye
+  const [userAvatar, setUserAvatar] = useState<string | null>(null); 
+  const [userName, setUserName] = useState<string | null>(null); 
 
   const router = useRouter();
 
@@ -72,7 +73,7 @@ export default function CalculatorPage() {
       setRecentUrls(JSON.parse(savedRecentUrls));
     }
 
-    // 🔥 FETCH POINTS AND AVATAR FROM LOCAL STORAGE FOR HEADER 🔥
+    // 🔥 FETCH POINTS, AVATAR, AND NAME FOR HEADER 🔥
     const savedData = localStorage.getItem("arcade_user_data");
     if (savedData) {
       try {
@@ -83,6 +84,9 @@ export default function CalculatorPage() {
           }
           if (parsed.userAvatar) {
             setUserAvatar(parsed.userAvatar);
+          }
+          if (parsed.userName) {
+            setUserName(parsed.userName);
           }
         }
       } catch (e) {
@@ -241,10 +245,30 @@ export default function CalculatorPage() {
 
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16">
         
-        {/* 🔥 HEADING WITH HEADER TOGGLE (AVATAR <-> COIN) 🔥 */}
+        {/* 🔥 HEADING WITH HEADER TOGGLE (TEXT <-> TEXT & AVATAR <-> COIN) 🔥 */}
         <div className="text-center mb-10 flex justify-center items-center">
-          <h1 className="text-4xl md:text-6xl font-medium text-[#202124] tracking-tight leading-tight flex items-center gap-5">
-            <span>Arcade <span className="text-[#1a73e8]">Calculator</span></span>
+          <h1 className="text-4xl md:text-6xl font-medium tracking-tight leading-tight flex items-center gap-5">
+            
+            {/* GRID STACK TO PREVENT LAYOUT SHIFT DURING TEXT TOGGLE */}
+            <div className="grid [grid-template-areas:'stack'] place-items-center text-[#202124]">
+              {userPoints !== null ? (
+                <>
+                  {/* 🔥 UPDATED: Name matches Image with premium font-semibold (Shows when Avatar shows: showCoinAvatar is false) 🔥 */}
+                  <span className={`[grid-area:stack] transition-all duration-500 ease-in-out text-[#202124] font-semibold ${showCoinAvatar ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
+                    {userName || "Arcade Player"}
+                  </span>
+                  
+                  {/* Arcade Calculator (Shows when Coin shows: showCoinAvatar is true) */}
+                  <span className={`[grid-area:stack] transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
+                    Arcade <span className="text-[#1a73e8]">Calculator</span>
+                  </span>
+                </>
+              ) : (
+                <span className="[grid-area:stack]">
+                  Arcade <span className="text-[#1a73e8]">Calculator</span>
+                </span>
+              )}
+            </div>
             
             {userPoints !== null && (
               <div 
@@ -256,10 +280,14 @@ export default function CalculatorPage() {
                 }}
               >
                 
-                {/* 🟢 AVATAR LAYER (Smaller size - 75%) */}
+                {/* 🟢 AVATAR LAYER (Clickable to Dashboard) */}
                 <div 
-                  className={`absolute flex items-center justify-center transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}
+                  onClick={() => {
+                    if (!showCoinAvatar) router.push('/dashboard');
+                  }}
+                  className={`absolute flex items-center justify-center transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0 scale-50 pointer-events-none' : 'opacity-100 scale-100 cursor-pointer hover:scale-105'}`}
                   style={{ width: '75%', height: '75%' }}
+                  title="View Dashboard"
                 >
                   {userAvatar ? (
                     <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[3px] border-[#dadce0] shadow-md" />
@@ -270,9 +298,9 @@ export default function CalculatorPage() {
                   )}
                 </div>
 
-                {/* 🟡 COIN LAYER (Original bigger size - 100%) */}
+                {/* 🟡 COIN LAYER (Not clickable) */}
                 <div 
-                  className={`absolute w-full h-full transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}
+                  className={`absolute w-full h-full pointer-events-none transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}
                 >
                   <div className="gold-coin">
                     <span className="gold-coin-text">
@@ -329,13 +357,34 @@ export default function CalculatorPage() {
               animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
             }
 
-            /* 🔥 SHADOW REMOVED - SINGLE CLEAN COIN CSS 🔥 */
+            /* 🔥 SCANNING / SWEEPING OVERLAP ANIMATION 🔥 */
+            @keyframes text-sweep {
+              0% { background-position: 200% center; }
+              100% { background-position: -200% center; }
+            }
+            .sweep-text {
+              background: linear-gradient(
+                90deg, 
+                #3c4043 0%, 
+                #3c4043 35%, 
+                #1a73e8 50%, /* Bright Blue Sweep Line */
+                #3c4043 65%, 
+                #3c4043 100%
+              );
+              background-size: 200% auto;
+              color: transparent;
+              -webkit-background-clip: text;
+              background-clip: text;
+              animation: text-sweep 3s ease-in-out infinite;
+              display: inline-block;
+            }
+
+            /* 🔥 SINGLE CLEAN COIN CSS 🔥 */
             .gold-coin {
               width: 100%;
               height: 100%;
               border-radius: 50%;
               background: linear-gradient(135deg, #FDE047 0%, #D4AF37 45%, #996515 100%);
-              /* Removed the double-coin thick shadow, kept a clean soft drop shadow */
               box-shadow: 
                 inset -2px -2px 6px rgba(153, 101, 21, 0.6), 
                 inset 2px 2px 6px rgba(255, 255, 255, 0.8), 
@@ -390,7 +439,8 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12 mt-1">
             
-            <p className="text-[#3c4043] text-sm md:text-base font-semibold mb-8 text-left">
+            {/* 🔥 SWEEPING OVERLAP ANIMATED TEXT 🔥 */}
+            <p className="text-sm md:text-base font-extrabold mb-8 text-left sweep-text">
               Paste your public profile URL to calculate arcade points.
             </p>
 
