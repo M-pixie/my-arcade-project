@@ -433,13 +433,13 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
               
               <a 
-                href="https://expo.dev/artifacts/eas/orzahhRDw4Ajp5VoXQdBza.apk" 
+                href="https://expo.dev/artifacts/eas/o1iSGGXnPPa9NoyrLUNNRx.apk" 
                 className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-zinc-900 font-bold text-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto"
               >
                 <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                <span>Download App (Updated)</span>
+                <span>Download App ( Updated )</span>
               </a>
 
               <button 
