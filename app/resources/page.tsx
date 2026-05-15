@@ -101,7 +101,7 @@ const initialBadgesData = [
   { id: "72", title: "Deploy Kubernetes Applications on Google Cloud", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/663" },
 
   // PAGE 10
-  { id: "73", title: "App Engine: 3 Ways", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/671" },
+  { id: "73", title: "Deploy and Manage Applications on Google App Engine", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/671" },
   { id: "74", title: "Get Started with Cloud Storage", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/725" },
   { id: "75", title: "Create a Streaming Data Lake on Cloud Storage", duration: "90", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/705" },
   { id: "76", title: "Build Serverless Applications with Cloud Run Functions", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/696" },
@@ -125,7 +125,8 @@ const initialBadgesData = [
   { id: "90", title: "Perform Predictive Data Analysis in BigQuery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/656" },
   { id: "91", title: "Automate Data Capture at Scale with Document AI", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/674" },
   { id: "92", title: "Manage Data Models in Looker", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/651" },
-  { id: "93", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" }
+  { id: "93", title: "Implement Cloud Collaboration and Productivity Workflows", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/671" },
+  { id: "94", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" }
 ];
 
 export default function ResourcesPage() {

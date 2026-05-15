@@ -37,7 +37,7 @@ const skillBadgesMasterList = [
   "Build a Secure Google Cloud Network", "Cloud Architecture: Design, Implement, and Manage",
   "Build a Website on Google Cloud", "Implementing Cloud Load Balancing for Compute Engine",
   "Develop Your Google Cloud Network", "Set Up an App Dev Environment on Google Cloud",
-  "Prepare Data for ML APIs on Google Cloud", "Deploy Kubernetes Applications on Google Cloud", "App Engine: 3 Ways",
+  "Prepare Data for ML APIs on Google Cloud", "Deploy Kubernetes Applications on Google Cloud", "Deploy and Manage Applications on Google App Engine",
   "Get Started with Cloud Storage", "Create a Streaming Data Lake on Cloud Storage",
   "Build Serverless Applications with Cloud Run Functions", "Streaming Analytics into BigQuery", "Get Started with API Gateway",
   "App Building with AppSheet", "Store, Process, and Manage Data on Google Cloud - Console",
@@ -46,7 +46,8 @@ const skillBadgesMasterList = [
   "Create and Manage Bigtable Instances", "Implement CI/CD Pipelines on Google Cloud",
   "Use Functions, Formulas, and Charts in Google Sheets", "Create and Manage Cloud Spanner Instances",
   "Build Infrastructure with Terraform on Google Cloud", "Perform Predictive Data Analysis in BigQuery",
-  "Automate Data Capture at Scale with Document AI", "Manage Data Models in Looker", "Develop and Secure APIs with Apigee X"
+  "Automate Data Capture at Scale with Document AI", "Manage Data Models in Looker", "Implement Cloud Collaboration and Productivity Workflows",
+  "Develop and Secure APIs with Apigee X"
 ].map(name => name.toLowerCase());
 
 export async function POST(req: Request) {
