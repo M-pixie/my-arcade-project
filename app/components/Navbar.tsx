@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -10,14 +10,42 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // 🔥 NEW: Reordered links as requested (Dashboard hata diya gaya hai taaki 404 error na aaye)
+  // 🔥 NEW STATES FOR CURRENT USER & TOGGLE 🔥
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
+  const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png");
+  const [showUserName, setShowUserName] = useState(false);
+
+  // 🔥 FETCH USER DATA FROM LOCAL STORAGE
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem("arcade_user_data");
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        if (parsed && parsed.userName) setCurrentUserName(parsed.userName);
+        if (parsed && parsed.photoURL) setCurrentUserAvatar(parsed.photoURL);
+      }
+    } catch (e) {
+      console.error("Error reading user data", e);
+    }
+  }, []);
+
+  // 🔥 5-SECOND TOGGLE LOGIC FOR LOGO TEXT
+  useEffect(() => {
+    if (!currentUserName) return;
+    const interval = setInterval(() => {
+      setShowUserName((prev) => !prev);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentUserName]);
+
+  // 🔥 NEW: Reordered links exactly as requested 🔥
   const navLinks = [
     { name: "Home", href: "/", tooltip: "Go to Homepage" },
     { name: "Calculator", href: "/calculator", tooltip: "Calculate your points" },
-    { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
-    { name: "Skill Badges", href: "/resources", tooltip: "All Skill Badges" },
-    { name: "Dashboard", href: "/dashboard", tooltip: "your dashboard" },
+    { name: "Dashboard", href: "/dashboard", tooltip: "Your dashboard" },
     { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
+    { name: "Skill Badges", href: "/resources", tooltip: "All Skill Badges" },
+    { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
     { name: "Swags Post", href: "/post", tooltip: "See User Swags Post" },
     { name: "About Arcade", href: "/about", tooltip: "Explore About Arcade" },
   ];
@@ -26,7 +54,7 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 w-full h-16 bg-white/90 backdrop-blur-md border-b border-[#dadce0] z-50">
       <div className="max-w-7xl mx-auto h-full px-4 md:px-6 flex items-center justify-between">
 
-        {/* ================= LEFT: LOGO & BACK ================= */}
+        {/* ================= LEFT: LOGO, TOGGLE TEXT & BACK ================= */}
         <div className="flex items-center gap-4">
           
           {pathname !== "/" && (
@@ -53,8 +81,10 @@ export default function Navbar() {
           )}
 
           <Link href="/" className="flex items-center gap-2 group">
-            <span className="hidden sm:block text-lg font-medium text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
-              Arcade Nexus
+            {/* 🔥 NEW: 5-Second Toggle between Arcade Nexus and User Name 🔥 */}
+            <span className="hidden sm:block text-lg font-medium tracking-tight transition-all duration-500 truncate max-w-[150px]
+              ${showUserName ? 'text-[#1a73e8]' : 'text-[#202124] group-hover:text-[#1a73e8]'}">
+              {(showUserName && currentUserName) ? currentUserName : "Arcade Nexus"}
             </span>
           </Link>
         </div>
@@ -64,7 +94,6 @@ export default function Navbar() {
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
-              // 🔥 NEW: Wrapper div for group hover tooltip
               <div key={link.name} className="relative group">
                 <Link
                   href={link.href}
@@ -87,9 +116,19 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* ================= RIGHT: MOBILE TOGGLE ================= */}
-        <div className="flex items-center gap-4">
+        {/* ================= RIGHT: AVATAR & MOBILE TOGGLE ================= */}
+        <div className="flex items-center gap-3 sm:gap-4">
           
+          {/* 🔥 NEW: User Avatar without border linking to Dashboard 🔥 */}
+          <Link href="/dashboard" className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0" title="Go to Dashboard">
+            <img 
+              src={currentUserAvatar} 
+              alt="User" 
+              className="w-full h-full object-cover" 
+              style={{ border: "none" }} // No border as requested
+            />
+          </Link>
+
           {/* Mobile Menu Button */}
           <button 
             className="md:hidden p-2 text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa] rounded-sm transition"
