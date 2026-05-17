@@ -82,22 +82,15 @@ export default function Navbar() {
           )}
           
           <Link href="/" className="flex items-center gap-2 group">
-            {/* 🔥 YAHAN HUA HAI MAGIC FIX 🔥
-                Dono text ko Grid me ek ke upar ek stack kar diya taaki width change hone par jhatka na lage */}
             <div className="hidden sm:grid [grid-template-areas:'stack'] items-center">
-              
-              {/* Arcade Nexus Text - Bolder & Black */}
               <span className={`[grid-area:stack] text-lg font-bold text-[#202124] tracking-tight transition-opacity duration-700 ease-in-out truncate max-w-[150px] ${showUserName && currentUserName ? 'opacity-0' : 'opacity-100'}`}>
                 Arcade Nexus
               </span>
-              
-              {/* User Name Text - Black */}
               {currentUserName && (
                 <span className={`[grid-area:stack] text-lg font-bold text-[#202124] tracking-tight transition-opacity duration-700 ease-in-out truncate max-w-[150px] ${showUserName ? 'opacity-100' : 'opacity-0'}`}>
                   {currentUserName}
                 </span>
               )}
-              
             </div>
           </Link>
         </div>
@@ -108,7 +101,7 @@ export default function Navbar() {
             const isActive = pathname === link.href;
             return (
               <div key={link.name} className="relative group">
-                <Link href={link.href} className={`block px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 ${isActive ? "bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]" : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa]"}`}>
+                <Link href={link.href} className={`block px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 border ${isActive ? "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa] border-transparent"}`}>
                   {link.name}
                 </Link>
               </div>
@@ -133,6 +126,34 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+
+      {/* ================= MOBILE MENU ================= */}
+      {mobileMenuOpen && (
+        <nav className="absolute top-full left-0 w-full md:hidden bg-white border-b border-[#dadce0] shadow-lg z-50">
+          <div className="px-4 py-4 space-y-1">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              
+              // 🔥 FIX: Comment yahan upar shift kar diya, error solve!
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-sm text-base font-medium transition-colors border ${
+                    isActive 
+                      ? "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" 
+                      : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa] border-transparent"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+
     </header>
   );
 }
