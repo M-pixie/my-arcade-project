@@ -69,19 +69,23 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto h-full px-4 md:px-6 flex items-center justify-between">
 
         {/* ================= LEFT: LOGO, TOGGLE TEXT & BACK ================= */}
-        <div className="flex items-center gap-4">
-          {pathname !== "/" && (
-            <div className="relative group">
-              <button
-                onClick={() => router.back()}
-                className="w-10 h-8 flex items-center justify-center rounded-sm text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe] transition-all duration-200 focus:outline-none"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
-              </button>
-            </div>
-          )}
+        <div className="flex items-center">
           
-          <Link href="/" className="flex items-center gap-2 group">
+          {/* 🔥 FIX: Back button ab achanak se jhatka nahi dega, smoothly width slide hogi 🔥 */}
+          <div 
+            className={`overflow-hidden transition-all duration-300 ease-in-out flex items-center justify-center ${
+              pathname !== "/" ? "w-10 opacity-100 mr-4" : "w-0 opacity-0 mr-0 pointer-events-none"
+            }`}
+          >
+            <button
+              onClick={() => router.back()}
+              className="w-10 h-8 flex items-center justify-center rounded-sm text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe] transition-all duration-200 focus:outline-none shrink-0"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
+            </button>
+          </div>
+          
+          <Link href="/" prefetch={true} className="flex items-center gap-2 group">
             <div className="hidden sm:grid [grid-template-areas:'stack'] items-center">
               <span className={`[grid-area:stack] text-lg font-bold text-[#202124] tracking-tight transition-opacity duration-700 ease-in-out truncate max-w-[150px] ${showUserName && currentUserName ? 'opacity-0' : 'opacity-100'}`}>
                 Arcade Nexus
@@ -101,7 +105,12 @@ export default function Navbar() {
             const isActive = pathname === link.href;
             return (
               <div key={link.name} className="relative group">
-                <Link href={link.href} className={`block px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 border ${isActive ? "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa] border-transparent"}`}>
+                {/* 🔥 FIX: prefetch={true} added for lightning-fast page loads 🔥 */}
+                <Link 
+                  href={link.href} 
+                  prefetch={true}
+                  className={`block px-4 py-2 rounded-sm text-sm font-medium transition-all duration-200 border ${isActive ? "bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]" : "text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa] border-transparent"}`}
+                >
                   {link.name}
                 </Link>
               </div>
@@ -111,7 +120,7 @@ export default function Navbar() {
 
         {/* ================= RIGHT: AVATAR & MOBILE TOGGLE ================= */}
         <div className="flex items-center gap-3 sm:gap-4">
-          <Link href="/dashboard" className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0" title="Go to Dashboard">
+          <Link href="/dashboard" prefetch={true} className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0" title="Go to Dashboard">
             <img 
               src={imageError ? "/avatar.png" : currentUserAvatar} 
               alt={currentUserName || "User"} 
@@ -139,6 +148,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
+                  prefetch={true}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`block px-4 py-3 rounded-sm text-base font-medium transition-colors border ${
                     isActive 
