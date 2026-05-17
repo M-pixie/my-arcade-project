@@ -36,13 +36,11 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-24 bg-white relative z-10">
+    // Upar ka space thoda badhaya (pt-12) aur niche ka space kam kiya (pb-4)
+    <div className="max-w-4xl mx-auto px-6 pt-12 pb-4 bg-white relative z-10">
       
       {/* Premium Header Styling */}
-      <div className="text-center mb-14">
-        <span className="text-[#1a73e8] font-bold text-sm tracking-[0.2em] uppercase block mb-3">
-          Got Questions?
-        </span>
+      <div className="text-center mb-10">
         <h2 className="text-3xl md:text-5xl font-semibold text-[#202124] tracking-tight">
           Frequently Asked Questions
         </h2>
