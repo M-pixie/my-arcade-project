@@ -202,7 +202,7 @@ export default function AboutPage() {
                  </div>
                  <div>
                     <p className="text-[11px] text-[#5f6368] uppercase font-bold mb-1 tracking-wider">WhatsApp Support:</p>
-                    <a href="https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY" target="_blank" rel="noopener noreferrer" className="text-[#34a853] font-bold text-[16px] hover:underline flex items-center gap-2">
+                    <a href="https://wa.me/918538980608" target="_blank" rel="noopener noreferrer" className="text-[#34a853] font-bold text-[16px] hover:underline flex items-center gap-2">
                        Contact Website Owner
                     </a>
                  </div>

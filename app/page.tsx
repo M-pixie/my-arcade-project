@@ -263,23 +263,31 @@ export default function HomePage() {
           }}
         >
           <div className="w-full relative z-10">
-            {/* 🔥 AVATARS SAFE PLACEMENT: Inside the inner container, top-2/left-4 so it stays inside hero, far below navbar! 🔥 */}
+            {/* 🔥 AVATARS SAFE PLACEMENT 🔥 */}
             <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
               
               {displayAvatars.length > 0 && (
-                <div className="absolute top-2 left-6 md:top-4 md:left-8 flex flex-col items-center gap-1.5 z-50">
-                  <div className="flex -space-x-3">
-                    {displayAvatars.map((url, idx) => (
-                      <img 
-                        key={`${url}-${idx}`}
-                        src={url}
-                        alt="player avatar"
-                        className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
-                        style={{ border: "none", zIndex: 10 - idx }}
-                      />
-                    ))}
+                <div className="absolute top-2 left-6 md:top-4 md:left-8 flex items-start gap-2 z-50">
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="flex -space-x-3">
+                      {displayAvatars.map((url, idx) => (
+                        <img 
+                          key={`${url}-${idx}`}
+                          src={url}
+                          alt="player avatar"
+                          className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
+                          style={{ border: "none", zIndex: 10 - idx }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-white text-xs font-medium tracking-wide drop-shadow-md">Active Users..</span>
                   </div>
-                  <span className="text-white text-xs font-medium tracking-wide drop-shadow-md">Active Users..</span>
+                  {/* 🔥 OTHERS COUNT (GREY TEXT) 🔥 */}
+                  {leaders.length > 10 && (
+                    <span className="text-[#e2e8f0] text-[13px] font-bold tracking-wide drop-shadow-md mt-1.5">
+                      & {leaders.length - 10} others
+                    </span>
+                  )}
                 </div>
               )}
 
@@ -356,7 +364,8 @@ export default function HomePage() {
                             router.push(item.link);
                           }
                         }}
-                        className="flex items-center justify-between p-3.5 bg-white/95 hover:bg-white border border-white/40 rounded-xl transition-all duration-300 text-zinc-900 font-semibold shadow-md hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base backdrop-blur-sm"
+                        /* 🔥 QUICK ACTION STYLING REDUCED CURVE (rounded-lg) & SLIGHTLY SHRUNK WIDTH (w-[98%] mx-auto) 🔥 */
+                        className="flex items-center justify-between px-3 py-3 w-[98%] mx-auto bg-white/95 hover:bg-white border border-white/40 rounded-lg transition-all duration-300 text-zinc-900 font-semibold shadow-md hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base backdrop-blur-sm"
                       >
                         <div className="flex items-center gap-3">
                           <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
@@ -407,6 +416,7 @@ export default function HomePage() {
           </div>
         </section>
 
+        
         {/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
         <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0]">
           <div className="max-w-4xl mx-auto px-6">
