@@ -20,6 +20,12 @@ export default function LeaderboardPage() {
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const currentUserRef = useRef<HTMLDivElement>(null);
 
+  // 🔥 NEW STATE FOR AVATAR ROTATION INDEX
+  const [avatarStartIndex, setAvatarStartIndex] = useState(0);
+
+  // 🔥 NEW STATE FOR PLACEHOLDER TOGGLE
+  const [showUserPlaceholder, setShowUserPlaceholder] = useState(false);
+
   useEffect(() => {
     const unsub = subscribeLeaderboard((data) => {
       setLeaders(data);
@@ -50,6 +56,27 @@ export default function LeaderboardPage() {
     }
   }, [leaders, currentUserName]);
 
+  // 🔥 ALL PLAYERS ROTATION LOGIC (SEQUENTIAL CYCLING)
+  useEffect(() => {
+    if (leaders.length === 0) return;
+
+    // Har 3.5 seconds me array aage badhega, taaki har player dikhe
+    const interval = setInterval(() => {
+      setAvatarStartIndex((prev) => (prev + 3) % leaders.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [leaders.length]);
+
+  // 🔥 PLACEHOLDER TOGGLE LOGIC (EVERY 5 SECONDS)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowUserPlaceholder((prev) => !prev);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // ================= LOGIC: SORT & SEARCH =================
   const isSearching = searchTerm.trim().length > 0;
   
@@ -60,6 +87,17 @@ export default function LeaderboardPage() {
   const searchResults = leaders.filter((user) =>
     user.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // 🔥 GET 10 AVATARS FOR DISPLAY 🔥
+  let displayAvatars: string[] = [];
+  if (leaders.length > 0) {
+    const allUrls = leaders.map(l => l.photoURL || "/avatar.png");
+    for (let i = 0; i < 10; i++) {
+      displayAvatars.push(allUrls[(avatarStartIndex + i) % allUrls.length]);
+    }
+    // Duplicate URLs hata dete hain agar list choti hui to
+    displayAvatars = Array.from(new Set(displayAvatars)).slice(0, 10);
+  }
 
   return (
     // 🚀 AuthGuard wrapper hata diya, ab direct UI render hoga (Public access)
@@ -99,11 +137,26 @@ export default function LeaderboardPage() {
 
         {/* ================= HEADER SECTION (FLEX LAYOUT) ================= */}
         <header className="pt-12 pb-6 px-6 relative z-20 max-w-6xl mx-auto">
-          {/* 🚀 CHANGED: rounded-3xl se rounded-xl kar diya for premium look */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:p-8 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)]">
+          {/* 🚀 CHANGED: Added 'relative' to position avatars absolutely within this box 🚀 */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:p-8 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)] relative overflow-hidden lg:overflow-visible">
             
+            {/* 🔥 MOVED AVATARS: Positioned absolutely in right-top corner, halka badha size, slightly below border 🔥 */}
+            {displayAvatars.length > 0 && (
+              <div className="absolute top-1.5 right-3 flex -space-x-3 z-30">
+                {displayAvatars.map((url, idx) => (
+                  <img 
+                    key={`${url}-${idx}`}
+                    src={url}
+                    alt="player avatar"
+                    className="w-8 h-8 rounded-full object-cover relative transition-transform hover:scale-110" // 🚀 Updated size to w-8 h-8 🚀
+                    style={{ border: "none", zIndex: 10 - idx }} // No border, correct stacking
+                  />
+                ))}
+              </div>
+            )}
+
             {/* Left Side: Animated Cup + Title */}
-            <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left w-full lg:w-auto relative z-10">
               
               {/* 🏆 REALISTIC ANIMATED CUP WITH FLYING RIBBONS 🏆 */}
               <div className="relative inline-flex items-center justify-center w-32 h-32 md:w-36 md:h-36 shrink-0">
@@ -144,17 +197,18 @@ export default function LeaderboardPage() {
 
               {/* Title Content */}
               <div>
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300 drop-shadow-sm mb-2">
+                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300 drop-shadow-sm mb-2 relative z-10">
                   Hall of Fame
                 </h1>
-                <p className="text-blue-200/70 text-sm md:text-base max-w-sm font-medium">
+                <p className="text-blue-200/70 text-sm md:text-base max-w-sm font-medium relative z-10">
                   See who is leading the charts and dominating the Arcade.
                 </p>
               </div>
             </div>
 
             {/* 🔥 Right Side: Premium Search Box (Updated Style like Image) 🔥 */}
-            <div className="w-full lg:w-80 shrink-0">
+            <div className="w-full lg:w-80 shrink-0 relative z-20 mt-6 lg:mt-0">
+              {/* Note: Avatars moved out from here to parent div for corner placement */}
               <div className="relative group w-full">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <svg className="w-4 h-4 text-slate-400 group-focus-within:text-white transition-colors drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +217,11 @@ export default function LeaderboardPage() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search player name..."
+                  placeholder={
+                    showUserPlaceholder && currentUserName 
+                      ? `${currentUserName.split(" ")[0]} (You)` // 🔥 YAHAN BASS FIRST NAME AUR "(You)" RAKHA HAI
+                      : "Search player name..."
+                  }
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-[#151f32]/90 border border-[#2a3855] text-white placeholder-slate-400/70 rounded-lg py-3.5 pl-12 pr-12 focus:outline-none focus:border-blue-500/70 focus:bg-[#1a253c] focus:ring-1 focus:ring-blue-500/50 transition-all shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)] text-sm font-medium tracking-wide"
@@ -342,15 +400,13 @@ function LeaderRow({ user, highlight = false, isCurrentUser = false, innerRef = 
             : "bg-[#121c38]/60 border-white/5 hover:bg-[#1a264a] hover:border-blue-400/40 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"}
       `}
     >
-      {/* 🔥 CURRENT USER LEFT GLOWING BAR 🔥 */}
-      {isCurrentUser && (
-        <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500 shadow-[0_0_12px_#3b82f6]"></div>
-      )}
+      {/* 💥 YAHAN SE MOTA BLUE BAR HATA DIYA GAYA HAI 💥 */}
 
       <div className="flex items-center gap-3 sm:gap-5 pl-1">
+        {/* 🔥 RANK SE "#" HATA DIYA HAI 🔥 */}
         <div className="w-8 sm:w-10 text-center">
           <span className={`text-lg sm:text-xl font-black transition-colors ${isCurrentUser ? "text-blue-300" : highlight ? "text-blue-400" : "text-white/30 group-hover:text-blue-400"}`}>
-            #{user.rank}
+            {user.rank}
           </span>
         </div>
         <img
