@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import { subscribeLeaderboard, savePublicUserToLeaderboard } from "@/lib/leaderboard"; 
 import { collection, query, where, getCountFromServer } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-// ================= 🔥 CONFETTI IMPORTED 🔥 =================
-import Confetti from 'react-confetti';
 
 export default function DashboardPage() {
   const [profileUrl, setProfileUrl] = useState("");
@@ -30,10 +28,6 @@ export default function DashboardPage() {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // ================= 🔥 WELCOME CELEBRATION STATES 🔥 =================
-  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
-  const [showWelcomeCelebration, setShowWelcomeCelebration] = useState(false);
-
   // ================= 🔥 BLINKING NAME STATE (1 SECOND TOGGLE) 🔥 =================
   const [showYouText, setShowYouText] = useState(true);
 
@@ -41,24 +35,22 @@ export default function DashboardPage() {
   const [showZeroLabsModal, setShowZeroLabsModal] = useState(false);
   const [showAllCompletedModal, setShowAllCompletedModal] = useState(false);
 
-  useEffect(() => {
-    setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-  }, []);
-
-  // Jab dashboard load ho jaye aur points mil jayein, tab celebration trigger hoga
-  useEffect(() => {
-    if (!loading && points !== null) {
-      setShowWelcomeCelebration(true);
-      const timer = setTimeout(() => setShowWelcomeCelebration(false), 5000); // 5 seconds baad auto gayab
-      return () => clearTimeout(timer);
-    }
-  }, [loading, points]);
+  // ================= 🔥 BUTTON TOGGLE STATE (5 SECONDS) 🔥 =================
+  const [showSubscribe, setShowSubscribe] = useState(false);
 
   // 🔥 Name blinking effect logic (1 second interval) 🔥
   useEffect(() => {
     const interval = setInterval(() => {
       setShowYouText((prev) => !prev);
     }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // 🔥 Smooth Button Toggle Logic (5 second interval) 🔥
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowSubscribe((prev) => !prev);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -174,7 +166,6 @@ export default function DashboardPage() {
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2000);
   };
-
 
   // ================= 🔥 CACHE LOAD HELPER 🔥 =================
   const loadDataFromCache = (data: any) => {
@@ -394,19 +385,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* ================= 🔥 WELCOME CONFETTI CELEBRATION 🔥 ================= */}
-      {showWelcomeCelebration && (
-        <div className="fixed inset-0 z-[100] pointer-events-none">
-          <Confetti 
-            width={windowDimensions.width} 
-            height={windowDimensions.height} 
-            numberOfPieces={300} 
-            gravity={0.15} 
-            opacity={0.9} 
-          />
-        </div>
-      )}
-
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16 space-y-10">
         
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-fade-in-up">
@@ -493,13 +471,29 @@ export default function DashboardPage() {
                     </svg>
                   </div>
 
-                  <div className="relative group w-full mb-5">
-                     <button 
-                       onClick={() => router.push('/leaderboard')}
-                       className="w-full bg-gradient-to-r from-[#fbbc04] to-[#f29900] text-white font-extrabold text-xl py-3 px-8 rounded-full shadow-sm text-center tracking-wide hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer"
-                     >
-                       Rank # {realRank || "-"}
-                     </button>
+                  <div className="relative group w-full mb-5 h-[52px]">
+                    <div 
+                      className="w-full h-full bg-[#ff578a] shadow-sm relative overflow-hidden transition-all hover:shadow-md hover:scale-[1.02]"
+                      style={{ borderRadius: '8px' }}
+                    >
+                      {/* Rank Button */}
+                      <button 
+                        onClick={() => router.push('/leaderboard')}
+                        className={`absolute inset-0 w-full h-full text-white font-extrabold text-xl flex items-center justify-center tracking-wide transition-opacity duration-1000 ease-in-out ${showSubscribe ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
+                      >
+                        Rank {realRank || "-"}
+                      </button>
+                      
+                      {/* Subscribe Button */}
+                      <a 
+                        href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`absolute inset-0 w-full h-full text-white font-[monospace] font-bold text-xl flex items-center justify-center tracking-wide transition-opacity duration-1000 ease-in-out ${showSubscribe ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                      >
+                        Subscribe here!
+                      </a>
+                    </div>
                   </div>
 
                   <div className="text-[13px] font-extrabold text-[#1a73e8] bg-[#e8f0fe] px-5 py-1.5 rounded-full uppercase tracking-wider mb-6 text-center border border-[#d2e3fc]">
@@ -541,7 +535,7 @@ export default function DashboardPage() {
                               {/* Prev User (Left side - Higher Rank) */}
                               {prevUser && (
                                  <div className="flex flex-col items-center animate-float-1 z-10 w-[85px] sm:w-[100px]">
-                                    <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank #{prevUser.rank}</div>
+                                    <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank {prevUser.rank}</div>
                                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
                                        <img src={prevUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
                                     </div>
@@ -557,7 +551,7 @@ export default function DashboardPage() {
                                     className="flex flex-col items-center animate-float-2 z-20 w-[90px] sm:w-[110px] cursor-pointer hover:scale-105 transition-transform"
                                     title="Click to view full leaderboard"
                                  >
-                                    <div className="text-[14px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank #{meUser.rank}</div>
+                                    <div className="text-[14px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank {meUser.rank}</div>
                                     <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white shadow-md border-[3px] border-[#1a73e8]">
                                        <img src={meUser.photoURL || userAvatar || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
                                     </div>
@@ -571,7 +565,7 @@ export default function DashboardPage() {
                               {/* Next User (Right side - Lower Rank) */}
                               {nextUser && (
                                  <div className="flex flex-col items-center animate-float-3 z-10 w-[85px] sm:w-[100px]">
-                                    <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank #{nextUser.rank}</div>
+                                    <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank {nextUser.rank}</div>
                                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
                                        <img src={nextUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
                                     </div>
@@ -667,7 +661,6 @@ export default function DashboardPage() {
               <h4 className="text-sm sm:text-base font-black text-[#5f6368] uppercase tracking-widest flex items-center gap-2">
                 <span className="text-xl"></span> May Labs
               </h4>
-              {/* Subway map text properly removed! */}
             </div>
 
             <div className="relative flex items-center justify-between w-full px-2 sm:px-4 mt-6 mb-8">
@@ -942,80 +935,17 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
-
-       {/* ================= 🔥 MOVED CARDS (ARCADE 2026 & FACILITATOR) 🔥 ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up mt-12" style={{animationDelay: '0.4s'}}>
-          
-          {/* Card 1: Slim Arcade Program */}
-          <div className="bg-white border border-blue-200 rounded-xl py-5 px-6 shadow-sm flex flex-col justify-center items-center text-center relative overflow-hidden transition-all hover:shadow-md hover:border-blue-300">
-            <div className="mb-4">
-              <h3 className="text-[20px] font-black text-blue-600 tracking-tight">Arcade Program 2026</h3>
-              <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mt-1">January 2026 - Dec 2026</p>
-            </div>
-            <div className="w-full max-w-sm h-2.5 bg-gray-100 rounded-full flex overflow-hidden mb-2.5 shadow-inner">
-              <div className="bg-blue-500 h-full w-[60%] animate-[pulse_2s_ease-in-out_infinite]"></div>
-              <div className="bg-purple-500 h-full w-[40%]"></div>
-            </div>
-            <p className="text-[11px] text-gray-400 font-bold">Season is currently active</p>
-          </div>
-
-          {/* Card 2: Slim Facilitator Program */}
-          <div 
-            onClick={() => router.push('/facilitator')}
-            className="cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-700 border border-indigo-800 rounded-xl py-5 px-6 shadow-md flex flex-col items-center justify-center text-center relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all"
+        
+        {/* ================= 🔥 SWAGS REVEAL TEXT (HIDDEN LINK) 🔥 ================= */}
+        <div className="mt-8 mb-4 text-center w-full animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+          <a 
+            href="https://go.cloudskillsboost.google/arcade" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#5f6368] font-medium text-sm cursor-default hover:text-[#5f6368] no-underline"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div className="flex items-center gap-3 mb-4 z-10">
-              <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-inner">
-                <span className="text-lg drop-shadow-md">🎓</span>
-              </div>
-              <h3 className="text-[19px] font-black text-white tracking-tight">Facilitator Program 2026</h3>
-            </div>
-            
-            <p className="text-[11px] font-bold text-blue-100 z-10 bg-white/10 px-5 py-1.5 rounded-full border border-white/10 backdrop-blur-sm uppercase tracking-wider">
-              Enrolments Opening Soon
-            </p>
-          </div>
-        </div>
-
-        {/* ================= PREMIUM REWARDS (SWAGS) SECTION ================= */}
-        <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-          
-          {/* 1. Prize Tier System Box */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm relative overflow-hidden">
-            <div className="absolute -right-10 -top-10 w-32 h-32 bg-blue-200/30 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#1a73e8] to-[#4285f4] text-white rounded-full flex items-center justify-center shadow-md">
-                <span className="text-xl">🏆</span>
-              </div>
-              <div>
-                <span className="font-extrabold text-gray-800 text-lg block">Prize Tier System</span>
-                <span className="text-xs text-[#1a73e8] font-bold uppercase tracking-wider">Unlock Premium Gear</span>
-              </div>
-            </div>
-            <div className="text-center relative z-10">
-              <div className="mt-2 inline-flex items-center gap-2 bg-white border border-blue-100 px-5 py-2 rounded-lg shadow-sm">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Current Status:</span>
-                <span className="text-sm font-black text-[#1a73e8]">To be announced</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 2. Swags Image */}
-          <img 
-            src="https://i.postimg.cc/MT50zzG8/1775382064372.png" 
-            alt="Premium Swags Showcase" 
-            className="w-full max-w-5xl mx-auto h-auto block rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.1)] relative z-10 transition-transform duration-700 hover:scale-[1.01] my-12" 
-          />
-
-          {/* 3. Note Banner */}
-          <div className="bg-blue-50 border border-blue-200 text-blue-800 text-sm font-bold rounded-xl p-4 text-center shadow-sm flex items-center justify-center gap-3">
-            <span className="text-xl">ℹ️</span>
-            Note: These are the previous season 2025 swags. New premium prizes for 2026 will be revealed soon!
-          </div>
-
+            The 2026 Swags Reveal is coming soon. Keep completing labs and earning points!
+          </a>
         </div>
 
       </main>
