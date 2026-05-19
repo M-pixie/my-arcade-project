@@ -898,11 +898,13 @@ export default function DashboardPage() {
             </div>
             
             <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
-              <div className="max-h-[650px] overflow-y-auto custom-scrollbar">
+              <div className="max-h-[1400px] overflow-y-auto custom-scrollbar">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
                     <tr>
-                      <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center w-12 border-r border-[#f1f3f4]">#</th>
+                      <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center whitespace-nowrap border-r border-[#f1f3f4]">
+                            All ({history.length})
+                          </th>
                       <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Lab / Badge Name</th>
                       <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
                       <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center border-l border-[#f1f3f4]">Points</th>
