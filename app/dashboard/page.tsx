@@ -744,7 +744,7 @@ export default function DashboardPage() {
           <div className="animate-fade-in-up mt-12 bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
               <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
-                <span className="text-3xl">🎮</span> May Labs Live !
+                <span className="text-3xl"></span> May Labs Live !
               </h4>
               <span className="bg-[#e8f0fe] text-[#1a73e8] text-xs font-black px-4 py-1.5 rounded-md uppercase tracking-widest border border-[#d2e3fc]">
                 Your Labs Status
