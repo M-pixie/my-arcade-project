@@ -300,8 +300,7 @@ export default function CalculatorPage() {
 
                 {/* 🟡 COIN LAYER (Not clickable) */}
                 <div 
-                  className={`absolute w-full h-full pointer-events-none transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}
-                >
+                 className={`absolute w-[75%] h-[75%] pointer-events-none transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}                >
                   <div className="gold-coin">
                     <span className="gold-coin-text">
                       {userPoints}
@@ -439,11 +438,20 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12 mt-1">
             
-            {/* 🔥 SWEEPING OVERLAP ANIMATED TEXT 🔥 */}
-            <p className="text-sm md:text-base font-extrabold mb-8 text-left sweep-text">
-              Paste your public profile URL to calculate arcade points.
-            </p>
-
+            {/* 🔥 SWEEPING OVERLAP ANIMATED TEXT & SUBSCRIBE LINK 🔥 */}
+<div className="relative mb-8">
+  <p className="text-sm md:text-base font-extrabold text-left sweep-text w-3/4">
+    Paste your public profile URL to calculate arcade points.
+  </p>
+  <a 
+    href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="absolute right-0 top-0 text-sm md:text-base font-bold text-[#202124] hover:underline cursor-pointer"
+  >
+    Subscribe here !
+  </a>
+</div>
             <div className="mb-6">
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
