@@ -13,7 +13,7 @@ const skillBadgesMasterList = [
   "Use Machine Learning APIs on Google Cloud", "Mitigate Threats and Vulnerabilities with Security Command...",
   "Monitor Environments with Google Cloud Managed Service for...", "Get Started with Dataplex", "Prompt Design in Vertex AI",
   "Configure Service Accounts and IAM Roles for Google Cloud", "Integrate BigQuery Data and Google Workspace using Apps Script",
-  "Cloud Speech API: 3 Ways", "Build a Data Mesh with Dataplex", "Analyze Sentiment with Natural Language API",
+  "Cloud Speech API: 3 Ways", "Build a Data Mesh with Knowledge Catalog", "Analyze Sentiment with Natural Language API",
   "Develop with Apps Script and AppSheet", "Using the Google Cloud Speech API", "Use APIs to Work with Cloud Storage",
   "The Basics of Google Cloud Compute", "Get Started with Sensitive Data Protection", "Analyze Images with the Cloud Vision API",
   "Secure BigLake Data", "Enrich Metadata and Discovery of BigLake Data", "Create a Secure Data Lake on Cloud Storage",

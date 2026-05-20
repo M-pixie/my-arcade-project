@@ -27,7 +27,7 @@ const initialBadgesData = [
   { id: "12", title: "Configure Service Accounts and IAM Roles for Google Cloud", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/702" },
   { id: "13", title: "Integrate BigQuery Data and Google Workspace using Apps Script", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/737" },
   { id: "14", title: "Cloud Speech API: 3 Ways", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/700" },
-  { id: "15", title: "Build a Data Mesh with Dataplex", duration: "105", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/681" },
+  { id: "15", title: "Build a Data Mesh with Knowledge Catalog", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/681" },
   { id: "16", title: "Analyze Sentiment with Natural Language API", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/667" },
 
   // PAGE 3
