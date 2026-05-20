@@ -763,10 +763,10 @@ export default function HomePage() {
         </section>
 
         {/* ================= PREMIUM PROBLEM / MESSAGE BOX ================= */}
-        <div className="py-12 max-w-3xl mx-auto px-6 bg-white">
+        <div className="py-12 max-w-4xl mx-auto px-6 bg-white">
           <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden transition-shadow hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
             <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-8 md:p-10 text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1a73e8]"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-[#1a73e8]"></div>
               <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Problem Submission Form</h3>
               <p className="text-base mt-2">
                 <span className="bg-[#e8f0fe] text-[#1a73e8] px-3 py-1 rounded-md font-medium inline-block border border-[#d2e3fc]">
@@ -792,19 +792,44 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue") && (
+              
+              {/* Conditional Sub-Category Dropdown */}
+              {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue" || formCategory === "Arcade Points Calculation") && (
                 <div className="flex flex-col gap-2.5">
                   <label className="text-sm font-semibold text-[#3c4043]">
-                    {formCategory === "Swags Delivery / Issue" ? "Select Vendor" : "Select Lab Type"}
+                    {formCategory === "Swags Delivery / Issue" && "Select Vendor"}
+                    {formCategory === "Labs Completion Issue" && "Select Lab Type"}
+                    {formCategory === "Arcade Points Calculation" && "Select Point Issue"}
                   </label>
                   <div className="relative">
                     <select required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
                       <option value="" disabled hidden>Select an option</option>
-                      <option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option>
+                      
+                      {formCategory === "Swags Delivery / Issue" && (
+                        <>
+                          <option value="Printos">Printos Services</option>
+                          <option value="Whitesquare">Whitesquare International</option>
+                        </>
+                      )}
+                      
+                      {formCategory === "Labs Completion Issue" && (
+                        <>
+                          <option value="Arcade Monthly Labs">Arcade Monthly Labs</option>
+                          <option value="Skill Badges">Skill Badges</option>
+                        </>
+                      )}
+                      
+                      {formCategory === "Arcade Points Calculation" && (
+                        <>
+                          <option value="Points Count Issue">Points Count Issue</option>
+                          <option value="Invalid Public Profile Issue">Invalid Public Profile Issue</option>
+                        </>
+                      )}
                     </select>
                   </div>
                 </div>
               )}
+
               <div className="flex flex-col gap-2.5">
                 <label className="text-sm font-semibold text-[#3c4043]">Describe Your Problem</label>
                 <textarea required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={5} className="px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] resize-none placeholder-[#9aa0a6]" placeholder="Explain your doubt or issue in detail here..."></textarea>
