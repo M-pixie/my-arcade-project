@@ -83,8 +83,7 @@ export default function RootLayout({
         {/* Main Content */}
         {children}
 
-        {/* ✅ 2. Yahan ChatBot laga diya (Body khatam hone se pehle) */}
-        <ChatBot />
+        
 
         {/* 2. 🔥 FOOTER KO YAHAN LAGA DO 🔥 */}
         <Footer />

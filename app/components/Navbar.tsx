@@ -54,14 +54,15 @@ export default function Navbar() {
   }, [currentUserName]);
 
   const navLinks = [
-    { name: "Home", href: "/", tooltip: "Go to Homepage" },
-    { name: "Calculator", href: "/calculator", tooltip: "Calculate your points" },
-    { name: "Dashboard", href: "/dashboard", tooltip: "Your dashboard" },
-    { name: "Leaderboard", href: "/leaderboard", tooltip: "Check top rankings" },
-    { name: "Skill Badges", href: "/resources", tooltip: "All Skill Badges" },
-    { name: "Facilitator", href: "/facilitator", tooltip: "Facilitator program info" },
-    { name: "Swags Post", href: "/post", tooltip: "See User Swags Post" },
-    { name: "About Arcade", href: "/about", tooltip: "Explore About Arcade" },
+    { name: "Home", href: "/"  },
+    { name: "Calculator", href: "/calculator" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Leaderboard", href: "/leaderboard" },
+    { name: "Skill Badges", href: "/resources" },
+    { name: "Facilitator", href: "/facilitator" },
+    { name: "Swags Post", href: "/post" },
+    { name: "About Arcade", href: "/about" },
+    { name: "Help ?", href: "/chat" },
   ];
 
   return (

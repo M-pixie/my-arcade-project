@@ -232,8 +232,9 @@ export default function HomePage() {
       
       <Navbar />
 
-      {/* ================= FIXED SCROLL BUTTON ================= */}
-      <div className="fixed bottom-24 left-6 md:right-8 z-[100] flex flex-col gap-3">
+      {/* ================= FIXED SCROLL BUTTON (MOVED TO RIGHT) ================= */}
+      {/* 🔥 Changed from left-6 to right-6 md:right-8 🔥 */}
+      <div className="fixed bottom-24 right-6 md:right-8 z-[100] flex flex-col gap-3">
         <button 
           onClick={() => {
             if (isAtTop) {
@@ -246,9 +247,11 @@ export default function HomePage() {
           title={isAtTop ? "Scroll to Bottom" : "Scroll to Top"}
         >
           {isAtTop ? (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+            /* 🔥 REAL "TIR" (ARROW) DOWN 🔥 */
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
           ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 15l7-7 7 7" /></svg>
+            /* 🔥 REAL "TIR" (ARROW) UP 🔥 */
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
           )}
         </button>
       </div>
@@ -267,7 +270,7 @@ export default function HomePage() {
             <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
               
               {displayAvatars.length > 0 && (
-                <div className="absolute top-2 left-6 md:top-4 md:left-8 flex items-start gap-2 z-50">
+                <div className="absolute top-2 left-6 md:top-4 md:left-8 flex items-start gap-2 z-40">
                   <div className="flex flex-col items-center gap-1.5">
                     <div className="flex -space-x-3">
                       {displayAvatars.map((url, idx) => (
@@ -282,7 +285,6 @@ export default function HomePage() {
                     </div>
                     <span className="text-white text-xs font-medium tracking-wide drop-shadow-md">Active Users..</span>
                   </div>
-                  {/* 🔥 OTHERS COUNT (GREY TEXT) 🔥 */}
                   {leaders.length > 10 && (
                     <span className="text-[#e2e8f0] text-[13px] font-bold tracking-wide drop-shadow-md mt-1.5">
                       & {leaders.length - 10} others
@@ -290,6 +292,16 @@ export default function HomePage() {
                   )}
                 </div>
               )}
+
+              {/* 🔥 NEW NEED HELP BUTTON (TOP RIGHT) 🔥 */}
+              <button
+  onClick={() => router.push('/chat')}
+  // Dekho yahan maine top-0 aur md:top-1 kar diya hai
+  className="absolute top-0 right-4 md:top-1 md:right-8 z-50 bg-white/20 hover:bg-white text-white hover:text-[#1a73e8] backdrop-blur-md border border-white/30 px-4 py-2 rounded-full text-sm font-bold shadow-md transition-all duration-300 flex items-center gap-2 group cursor-pointer"
+>
+  Need Help ?
+  <span className="text-lg group-hover:animate-bounce"></span>
+</button>
 
               <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
                  <div className="absolute -top-32 -right-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
@@ -364,7 +376,6 @@ export default function HomePage() {
                             router.push(item.link);
                           }
                         }}
-                        /* 🔥 QUICK ACTION STYLING REDUCED CURVE (rounded-lg) & SLIGHTLY SHRUNK WIDTH (w-[98%] mx-auto) 🔥 */
                         className="flex items-center justify-between px-3 py-3 w-[98%] mx-auto bg-white/95 hover:bg-white border border-white/40 rounded-lg transition-all duration-300 text-zinc-900 font-semibold shadow-md hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base backdrop-blur-sm"
                       >
                         <div className="flex items-center gap-3">

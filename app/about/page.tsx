@@ -14,7 +14,8 @@ export default function AboutPage() {
     { title: "User Dashboard", desc: "Manage your tier progression and stats.", link: "/dashboard", icon: "📊", badge: "Go" },
     { title: "Facilitator Program", desc: "Latest news & program announcements.", link: "/facilitator", icon: "📢", badge: "New" },
     { title: "Skill Badges", desc: "Curated active badges to complete.", link: "/resources", icon: "🏅", badge: "94+" },
-    { title: "Smart Chatbot", desc: "24/7 AI automated help for your queries.", link: "/ChatBot", icon: "🤖", badge: "AI" }
+    // 🔥 ChatBot link updated to /chat
+    { title: "Smart Chatbot", desc: "24/7 AI automated help for your queries.", link: "/chat", icon: "🤖", badge: "AI" }
   ];
 
   // Tab 2: Official Links Data
@@ -58,21 +59,18 @@ export default function AboutPage() {
               <div className="flex border-b border-[#707070]">
                 <button 
                   onClick={() => setActiveTab('features')}
-                  // 🔥 RED CHANGED TO GREEN (#007A33) 🔥
                   className={`flex-1 py-3.5 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeTab === 'features' ? 'bg-[#007A33] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#007A33]'}`}
                 >
                   Platform Features
                 </button>
                 <button 
                   onClick={() => setActiveTab('official')}
-                  // 🔥 RED CHANGED TO GREEN (#007A33) 🔥
                   className={`flex-1 py-3.5 text-center font-bold text-[14px] sm:text-[15px] border-l border-[#707070] transition-colors duration-200 ${activeTab === 'official' ? 'bg-[#007A33] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#007A33]'}`}
                 >
                   Official Links
                 </button>
                 <button 
                   onClick={() => setActiveTab('community')}
-                  // 🔥 RED CHANGED TO GREEN (#007A33) 🔥
                   className={`flex-1 py-3.5 text-center font-bold text-[14px] sm:text-[15px] border-l border-[#707070] transition-colors duration-200 ${activeTab === 'community' ? 'bg-[#007A33] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#007A33]'}`}
                 >
                   Community
@@ -86,26 +84,20 @@ export default function AboutPage() {
                 {activeTab === 'features' && (
                   <div className="divide-y divide-[#e0e0e0]">
                     {featuresList.map((item, index) => (
+                      // 🔥 Alert popup removed, direct redirect to link 🔥
                       <Link 
-                        href={item.title === "Smart Chatbot" ? "#" : item.link} 
+                        href={item.link} 
                         key={index} 
-                        onClick={(e) => {
-                          if (item.title === "Smart Chatbot") {
-                            e.preventDefault();
-                            alert("Go to Bottom Right Corner Any Help ? Button");
-                          }
-                        }}
                         className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full"
                       >
                         <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          <span className="text-[22px] mb-2 grayscale group-hover:grayscale-0 transition-all">{item.icon}</span>
-                          {/* 🔥 ALL BADGES/BUTTONS CHANGED TO BLUE 🔥 */}
+                          {/* 🔥 Grayscale removed for default clear view 🔥 */}
+                          <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
                           <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
                             {item.badge}
                           </span>
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          {/* 🔥 HOVER TEXT CHANGED TO GREEN 🔥 */}
                           <h3 className="text-[#202124] font-bold text-[16px] group-hover:text-[#007A33] transition-colors">
                             {item.title}
                           </h3>
@@ -124,14 +116,13 @@ export default function AboutPage() {
                     {officialLinks.map((item, index) => (
                       <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full">
                         <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          <span className="text-[22px] mb-2 grayscale group-hover:grayscale-0 transition-all">{item.icon}</span>
-                          {/* 🔥 ALL BADGES/BUTTONS CHANGED TO BLUE 🔥 */}
+                          {/* 🔥 Grayscale removed for default clear view 🔥 */}
+                          <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
                           <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
                             {item.badge}
                           </span>
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          {/* 🔥 HOVER TEXT CHANGED TO GREEN 🔥 */}
                           <h3 className="text-[#202124] font-bold text-[16px] group-hover:text-[#007A33] transition-colors">
                             {item.title} ↗
                           </h3>
@@ -150,14 +141,13 @@ export default function AboutPage() {
                     {communityLinks.map((item, index) => (
                       <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full">
                         <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          <span className="text-[22px] mb-2 grayscale group-hover:grayscale-0 transition-all">{item.icon}</span>
-                          {/* 🔥 ALL BADGES/BUTTONS CHANGED TO BLUE 🔥 */}
+                          {/* 🔥 Grayscale removed for default clear view 🔥 */}
+                          <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
                           <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
                             {item.badge}
                           </span>
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          {/* 🔥 HOVER TEXT CHANGED TO GREEN 🔥 */}
                           <h3 className="text-[#202124] font-bold text-[16px] group-hover:text-[#007A33] transition-colors">
                             {item.title} ↗
                           </h3>
@@ -220,7 +210,8 @@ export default function AboutPage() {
 
             {/* PRIVACY POLICY (Light Black Border all around) */}
             <div className="bg-white rounded-lg p-5 shadow-sm border border-[#707070] hover:shadow-md transition-shadow cursor-pointer flex gap-4 items-start group">
-               <div className="text-4xl grayscale group-hover:grayscale-0 transition-all mt-1">🔒</div>
+               {/* 🔥 Grayscale removed 🔥 */}
+               <div className="text-4xl transition-all mt-1">🔒</div>
                <div>
                  <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Privacy Policy</h3>
                  <p className="text-[12px] text-[#5f6368] leading-snug mb-1">We do not store personal data. Standard log files are used.</p>
@@ -231,7 +222,8 @@ export default function AboutPage() {
 
             {/* TERMS & CONDITIONS (Light Black Border all around) */}
             <div className="bg-white rounded-lg p-5 shadow-sm border border-[#707070] hover:shadow-md transition-shadow cursor-pointer flex gap-4 items-start group">
-               <div className="text-4xl grayscale group-hover:grayscale-0 transition-all mt-1">📝</div>
+               {/* 🔥 Grayscale removed 🔥 */}
+               <div className="text-4xl transition-all mt-1">📝</div>
                <div>
                  <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Terms & Conditions</h3>
                  <p className="text-[12px] text-[#5f6368] leading-snug mb-1">Provided "as is" to help the community. Final authority lies with Google.</p>
@@ -272,7 +264,6 @@ export default function AboutPage() {
           background: #f8f9fa; 
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          /* 🔥 Scrollbar changed to match Green Theme 🔥 */
           background: #007A33; 
           border-radius: 10px;
         }
