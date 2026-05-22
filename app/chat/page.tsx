@@ -273,7 +273,7 @@ export default function FullPageChatBot() {
       speakText(data.reply); 
     
     } catch (err: any) {
-      setMessages((prev) => [...prev, { role: "bot", text: "⚠️ Network Issue! Check your internet connection." }]);
+      setMessages((prev) => [...prev, { role: "bot", text: "Too many requests right now. Try later." }]);
     } finally {
       setLoading(false);
     }
@@ -286,7 +286,7 @@ export default function FullPageChatBot() {
 
   const clearChatHistory = () => {
     if(confirm("Are you sure you want to clear the entire chat history?")) {
-      const defaultGreeting = { role: "bot" as const, text: "Hello! 👋 I am the Cloud Arcade AI. Ask me anything related to Google Cloud, Arcade points, Swags, or Labs!" };
+      const defaultGreeting = { role: "bot" as const, text: "Ask me anything related to Google Cloud, Arcade points, Swags, or Labs!" };
       setMessages([defaultGreeting]);
       localStorage.setItem("arcade_chat_history", JSON.stringify([defaultGreeting]));
     }
@@ -316,7 +316,7 @@ export default function FullPageChatBot() {
         <div className="fixed inset-0 z-[99999] bg-black flex items-center justify-center p-6 h-[100dvh] w-[100vw]">
           <p className="text-gray-300 font-medium text-lg flex items-center justify-center gap-3 text-center">
             <span className="text-2xl"></span>
-            Screenshots are strictly prohibited. Return focus to the window.
+            Screenshots are strictly prohibited. Return to Home.
           </p>
         </div>
       )}
