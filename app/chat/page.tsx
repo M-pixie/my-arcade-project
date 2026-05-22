@@ -10,9 +10,8 @@ interface Message {
 }
 
 export default function FullPageChatBot() {
-  // ================= 🔥 LOAD HISTORY FROM LOCAL STORAGE 🔥 =================
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isClient, setIsClient] = useState(false); // To prevent hydration mismatch
+  const [isClient, setIsClient] = useState(false); 
   
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,13 +20,16 @@ export default function FullPageChatBot() {
   // 🔥 DEFAULT DARK MODE 🔥
   const [isDarkMode, setIsDarkMode] = useState(true);
   
+  // 🔥 SCROLL STATE FOR ARROW 🔥
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  
   const [recentChats, setRecentChats] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const speakerRef = useRef(isSpeakerOn);
 
-  // Initial Data Load (Runs only on client side after first render)
+  // Initial Data Load 
   useEffect(() => {
     const savedMessages = localStorage.getItem("arcade_chat_history");
     const savedRecents = localStorage.getItem("arcade_recent_searches");
@@ -35,7 +37,6 @@ export default function FullPageChatBot() {
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages));
     } else {
-      // Default greeting if no history
       setMessages([{ role: "bot", text: "Hello! 👋 I am the Cloud Arcade AI. Ask me anything related to Google Cloud, Arcade points, Swags, or Labs!" }]);
     }
 
@@ -46,7 +47,7 @@ export default function FullPageChatBot() {
     setIsClient(true);
   }, []);
 
-  // Save to Local Storage whenever messages or recents change
+  // Save to Local Storage
   useEffect(() => {
     if (isClient) {
       localStorage.setItem("arcade_chat_history", JSON.stringify(messages));
@@ -62,6 +63,25 @@ export default function FullPageChatBot() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
 
+  // ================= 🔥 DYNAMIC SCROLL LOGIC 🔥 =================
+  const handleChatScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    // Agar niche se 50px ke andar hai, toh bottom par maanenge
+    setIsAtBottom(scrollHeight - scrollTop - clientHeight < 50);
+  };
+
+  const scrollToPosition = () => {
+    if (!scrollRef.current) return;
+    if (isAtBottom) {
+      // Top pe jao
+      scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      // Bottom pe jao
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    }
+  };
+
   // ================= 🔥 CTRL + V PASTE IMAGE LOGIC 🔥 =================
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
@@ -72,8 +92,11 @@ export default function FullPageChatBot() {
         if (items[i].type.indexOf("image") !== -1) {
           const file = items[i].getAsFile();
           if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+              setSelectedImage(reader.result as string);
+            };
           }
         }
       }
@@ -104,11 +127,15 @@ export default function FullPageChatBot() {
     });
   };
 
+  // 🖼️ Handle Image Selection 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setSelectedImage(reader.result as string);
+      };
     }
   };
 
@@ -116,13 +143,12 @@ export default function FullPageChatBot() {
     if (!input.trim() && !selectedImage) return;
 
     const userMsg = input;
-    const userImg = selectedImage;
+    const userImg = selectedImage; 
 
     setMessages((prev) => [...prev, { role: "user", text: userMsg, image: userImg }]);
     
     if (userMsg.trim()) {
       setRecentChats((prev) => {
-        // Keep only unique recent searches, max 10
         const newRecents = [userMsg, ...prev.filter(item => item !== userMsg)].slice(0, 10);
         return newRecents;
       });
@@ -136,7 +162,7 @@ export default function FullPageChatBot() {
       const res = await fetch("/api/chat", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMsg }), 
+        body: JSON.stringify({ message: userMsg, image: userImg }), 
       });
 
       const data = await res.json();
@@ -157,7 +183,6 @@ export default function FullPageChatBot() {
     localStorage.removeItem("arcade_recent_searches");
   };
 
-  // 🔥 Clear Chat History Button
   const clearChatHistory = () => {
     if(confirm("Are you sure you want to clear the entire chat history?")) {
       const defaultGreeting = { role: "bot" as const, text: "Hello! 👋 I am the Cloud Arcade AI. Ask me anything related to Google Cloud, Arcade points, Swags, or Labs!" };
@@ -173,23 +198,20 @@ export default function FullPageChatBot() {
     textMain: isDarkMode ? "text-gray-100" : "text-[#202124]",
     textMuted: isDarkMode ? "text-gray-400" : "text-gray-500",
     
-    // 🔥 PREMIUM CHAT BUBBLES 🔥
     botBubble: isDarkMode 
       ? "bg-[#1e293b] text-gray-100 border border-[#334155] shadow-sm" 
       : "bg-white text-gray-800 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)]",
     userBubble: "bg-gradient-to-br from-[#1a73e8] to-[#2b5dd4] text-white shadow-md border border-blue-600/20",
     
-    inputBox: isDarkMode ? "bg-[#1e293b] border-[#334155] text-white" : "bg-gray-50 border-gray-300 text-gray-900",
+    inputBox: isDarkMode ? "bg-[#1e293b] border-[#334155] text-white" : "bg-white border-gray-300 text-gray-900",
   };
 
-  // Prevents rendering until client-side data is loaded to avoid hydration errors
   if (!isClient) return null; 
 
   return (
-    // Changed h-screen to h-[100dvh] to prevent mobile bottom cut-off
     <div className={`flex w-full h-[100dvh] font-sans transition-colors duration-300 pt-[60px] ${theme.bgMain}`}>
       
-      {/* 👈 LEFT SIDEBAR */}
+      {/* 👈 LEFT SIDEBAR (Scrollbar hidden via class) */}
       <div className="w-64 bg-[#0d1321] text-white flex flex-col hidden md:flex h-full">
         <div className="p-4 flex flex-col gap-2 pt-6">
           <h2 className="text-lg font-bold text-gray-100 mb-3 tracking-wide px-1">Arcade Nexus</h2>
@@ -215,7 +237,7 @@ export default function FullPageChatBot() {
           </a>
         </div>
 
-        <div className="flex-1 p-4 overflow-y-auto">
+        <div className="flex-1 p-4 overflow-y-auto hide-scrollbar">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Recent Searches</h3>
             <button onClick={clearRecents} className="text-xs text-red-400 hover:text-red-300 font-medium transition">Clear</button>
@@ -241,31 +263,35 @@ export default function FullPageChatBot() {
       {/* 👉 RIGHT CHAT AREA */}
       <div className={`flex-1 flex flex-col h-full relative ${theme.bgChatArea}`}>
         
-        {/* HEADER - BLENDED (No Border/Box styling) */}
-        <div className="p-3 px-6 flex justify-between items-center z-10 transition-colors duration-300 bg-transparent">
+        {/* HEADER - Mobile Responsive Fixed */}
+        <div className="p-3 sm:px-6 flex justify-between items-center z-10 transition-colors duration-300 bg-transparent">
           
-          <div className="flex-1 flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#1a73e8] to-[#4285f4] text-white rounded-full flex items-center justify-center shadow-md border border-blue-400/30">
-              <span className="text-xl translate-x-[1px]">🤖</span>
+          <div className="flex-1 flex items-center gap-2 sm:gap-3">
+            <button onClick={() => window.history.back()} className={`md:hidden p-1.5 rounded-full ${theme.textMuted} hover:text-[#1a73e8] transition-colors`}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+
+            <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-gradient-to-br from-[#1a73e8] to-[#4285f4] text-white rounded-full flex items-center justify-center shadow-md border border-blue-400/30">
+              <span className="text-lg sm:text-xl translate-x-[1px]">🤖</span>
             </div>
-             {messages.length > 1 && (
-               <button onClick={clearChatHistory} className="text-[11px] text-red-400/80 hover:text-red-400 underline underline-offset-2 transition-colors ml-2 hidden sm:block">
-                 Clear Chat
-               </button>
-             )}
+            
+            {messages.length > 1 && (
+              <button onClick={clearChatHistory} className="text-[11px] text-red-400/80 hover:text-red-400 underline underline-offset-2 transition-colors ml-1 hidden sm:block">
+                Clear Chat
+              </button>
+            )}
           </div>
 
           <div className="flex-2 flex flex-col items-center justify-center text-center">
-            <span className={`text-[15px] font-medium tracking-wide ${theme.textMain}`}>
+            <span className={`text-[12px] sm:text-[15px] font-medium tracking-wide whitespace-nowrap sm:whitespace-normal ${theme.textMain}`}>
               Ask anything related to Google Cloud Arcade
             </span>
           </div>
           
-          <div className="flex-1 flex justify-end items-center gap-2">
-            
+          <div className="flex-1 flex justify-end items-center gap-1 sm:gap-2">
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)} 
-              className={`p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e293b] text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
+              className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e293b] text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
               title="Toggle Theme"
             >
               {isDarkMode ? (
@@ -277,7 +303,7 @@ export default function FullPageChatBot() {
 
             <button 
               onClick={toggleSpeaker} 
-              className={`p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e293b] text-gray-300 hover:bg-gray-700 hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
+              className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e293b] text-gray-300 hover:bg-gray-700 hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
               title={isSpeakerOn ? "Turn off voice" : "Turn on voice"}
             >
               {isSpeakerOn ? (
@@ -289,11 +315,11 @@ export default function FullPageChatBot() {
           </div>
         </div>
 
-        {/* 💬 Messages Area */}
-        <div ref={scrollRef} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-6 scroll-smooth">
+        {/* 💬 Messages Area (Scrollbar hidden, onScroll added) */}
+        <div ref={scrollRef} onScroll={handleChatScroll} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-6 scroll-smooth hide-scrollbar">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[85%] sm:max-w-[75%] px-5 py-3.5 text-[15px] leading-relaxed tracking-wide ${
+              <div className={`max-w-[90%] sm:max-w-[75%] px-5 py-3.5 text-[15px] leading-relaxed tracking-wide ${
                 msg.role === "user" 
                   ? `${theme.userBubble} rounded-[20px] rounded-br-[4px]` 
                   : `${theme.botBubble} rounded-[20px] rounded-tl-[4px]` 
@@ -329,7 +355,6 @@ export default function FullPageChatBot() {
             </div>
           ))}
 
-          {/* 🔥 SMALLER PREMIUM SPINNER */}
           {loading && (
             <div className="flex justify-start w-full animate-fade-in pl-2">
               <div className={`px-4 py-3 ${theme.botBubble} rounded-[20px] rounded-tl-[4px] flex items-center gap-2`}>
@@ -340,13 +365,13 @@ export default function FullPageChatBot() {
           )}
         </div>
 
-        {/* ⌨️ Input Area - Cleaned up and padded bottom */}
-        <div className="p-4 pb-8 transition-colors duration-300 relative z-20 bg-transparent">
+        {/* ⌨️ Input Area with Scroll Arrow */}
+        <div className="p-3 sm:p-4 transition-colors duration-300 relative z-20 bg-transparent">
           
           {selectedImage && (
-            <div className="absolute bottom-[80px] left-8 z-30">
+            <div className="absolute bottom-[65px] left-4 sm:left-8 z-30">
               <div className={`relative inline-block p-1.5 rounded-xl shadow-2xl border ${isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-gray-200'}`}>
-                <img src={selectedImage} alt="Preview" className="h-28 object-cover rounded-lg shadow-sm" />
+                <img src={selectedImage} alt="Preview" className="h-20 sm:h-28 object-cover rounded-lg shadow-sm" />
                 <button 
                   onClick={() => setSelectedImage(null)}
                   className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg hover:bg-red-600 hover:scale-110 transition-transform border-2 border-white"
@@ -357,45 +382,76 @@ export default function FullPageChatBot() {
             </div>
           )}
 
-          <div className={`max-w-4xl mx-auto flex gap-2.5 items-center p-2 rounded-xl border focus-within:ring-2 focus-within:ring-[#1a73e8]/50 transition-all ${theme.inputBox} shadow-sm`}>
+          {/* 🔥 Container updated to hold both Input Box and Arrow Button 🔥 */}
+          <div className="max-w-5xl mx-auto flex gap-2 sm:gap-4 items-center px-1">
             
-            <button 
-              onClick={() => imageInputRef.current?.click()}
-              className={`p-2.5 rounded-lg transition ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700/50' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
-              title="Upload Screenshot"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-            </button>
-            
-            <input 
-              type="file" 
-              accept="image/*" 
-              ref={imageInputRef} 
-              onChange={handleImageChange} 
-              className="hidden" 
-            />
+            <div className={`flex-1 flex gap-2 sm:gap-2.5 items-center p-1.5 sm:p-2 rounded-xl border focus-within:ring-2 focus-within:ring-[#1a73e8]/50 transition-all ${theme.inputBox} shadow-sm`}>
+              
+              <button 
+                onClick={() => imageInputRef.current?.click()}
+                className={`p-2 sm:p-2.5 rounded-lg transition ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700/50' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
+                title="Upload Screenshot"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-[22px] sm:h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+              </button>
+              
+              <input 
+                type="file" 
+                accept="image/*" 
+                ref={imageInputRef} 
+                onChange={handleImageChange} 
+                className="hidden" 
+              />
 
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && !loading && (input.trim() || selectedImage) && sendMessage()}
-              disabled={loading} 
-              placeholder="Ask me anything or paste (Ctrl+V) a screenshot..."
-              className="flex-1 bg-transparent border-none text-[15px] font-medium focus:outline-none focus:ring-0 px-2 placeholder-gray-500"
-            />
-            
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !loading && (input.trim() || selectedImage) && sendMessage()}
+                disabled={loading} 
+                placeholder="Ask me anything or paste a screenshot..."
+                className="flex-1 bg-transparent border-none text-[14px] sm:text-[15px] font-medium focus:outline-none focus:ring-0 px-1 sm:px-2 placeholder-gray-500"
+              />
+              
+              <button 
+                onClick={sendMessage} 
+                disabled={loading || (!input.trim() && !selectedImage)}
+                className="px-4 py-2 sm:px-5 sm:py-2.5 bg-[#1a73e8] text-white rounded-lg hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-md flex items-center justify-center group"
+              >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 translate-x-[1px] group-hover:translate-x-[3px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </button>
+            </div>
+
+            {/* 🔥 NEW DYNAMIC SCROLL ARROW BUTTON 🔥 */}
             <button 
-              onClick={sendMessage} 
-              disabled={loading || (!input.trim() && !selectedImage)}
-              className="px-4 py-2.5 bg-[#1a73e8] text-white rounded-lg hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-md flex items-center justify-center group"
+              onClick={scrollToPosition}
+              className={`p-2.5 rounded-lg transition-colors flex shrink-0 items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
+              title={isAtBottom ? "Scroll to Top" : "Scroll to Bottom"}
             >
-              <svg className="w-5 h-5 translate-x-[1px] group-hover:translate-x-[3px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg>
+              {isAtBottom ? (
+                // Up Arrow
+                <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
+              ) : (
+                // Down Arrow
+                <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
+              )}
             </button>
+
           </div>
         </div>
 
       </div>
+
+      {/* Global Style to completely hide native scrollbars */}
+      <style jsx global>{`
+        .hide-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none; /* Chrome, Safari and Opera */
+        }
+      `}</style>
     </div>
   );
 }
