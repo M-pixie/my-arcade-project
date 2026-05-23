@@ -15,12 +15,10 @@ export default function FullPageChatBot() {
   
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingType, setLoadingType] = useState<"text" | "image" | null>(null); 
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   
-  // 🔥 DEFAULT DARK MODE 🔥
   const [isDarkMode, setIsDarkMode] = useState(true);
-  
-  // 🔥 SCROLL STATE FOR ARROW 🔥
   const [isAtBottom, setIsAtBottom] = useState(true);
   
   const [recentChats, setRecentChats] = useState<string[]>([]);
@@ -29,10 +27,8 @@ export default function FullPageChatBot() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const speakerRef = useRef(isSpeakerOn);
 
-  // 🔥 SECURITY STATE 🔥
   const [isBlurred, setIsBlurred] = useState(false);
 
-  // Initial Data Load 
   useEffect(() => {
     const savedMessages = localStorage.getItem("arcade_chat_history");
     const savedRecents = localStorage.getItem("arcade_recent_searches");
@@ -50,7 +46,6 @@ export default function FullPageChatBot() {
     setIsClient(true);
   }, []);
 
-  // Save to Local Storage
   useEffect(() => {
     if (isClient) {
       localStorage.setItem("arcade_chat_history", JSON.stringify(messages));
@@ -66,36 +61,22 @@ export default function FullPageChatBot() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
 
-  // ================= 🔥 ADVANCED ZERO-DELAY SECURITY LOGIC 🔥 =================
   useEffect(() => {
-    // Ye function instant black screen layega bina kisi alert/delay ke!
     const triggerBlackout = () => {
       setIsBlurred(true);
-      // Agar clipboard accessible hai toh usme warning copy kar do (Promise catch added to fix NotAllowedError)
       if (navigator?.clipboard?.writeText) {
-        navigator.clipboard.writeText("🚫 Security Alert: Content Protected.").catch(() => {
-          // Ignore permission denied error silently
-        });
+        navigator.clipboard.writeText("🚫 Security Alert: Content Protected.").catch(() => {});
       }
-      
-      // Focus wapas aane ke baad hi normal hoga
       setTimeout(() => {
         if (document.hasFocus()) setIsBlurred(false);
       }, 3000);
     };
 
-    // 1. Block Context Menu (Right Click)
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      triggerBlackout();
-    };
-
-    // 2. Block Keyboard Shortcuts (Alert is completely removed to prevent thread freezing)
+    const handleContextMenu = (e: MouseEvent) => { e.preventDefault(); triggerBlackout(); };
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Blocks PrintScreen, Mac SS (Cmd+Shift), Win Snipping (Win+Shift+S), and Copy/Print/Save
       if (
         e.key === "PrintScreen" ||
-        (e.metaKey && e.shiftKey) || // Mac Cmd+Shift+... or Win+Shift+...
+        (e.metaKey && e.shiftKey) || 
         (e.ctrlKey && (e.key.toLowerCase() === "c" || e.key.toLowerCase() === "p" || e.key.toLowerCase() === "s" || e.key.toLowerCase() === "u")) ||
         e.key === "F12" ||
         (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === "i" || e.key.toLowerCase() === "j" || e.key.toLowerCase() === "c"))
@@ -104,34 +85,18 @@ export default function FullPageChatBot() {
         triggerBlackout();
       }
     };
-
-    // 3. Block Copy Event explicitly
-    const handleCopy = (e: ClipboardEvent) => {
-      e.preventDefault();
-      triggerBlackout();
-    };
-
-    // 4. 🔥 THE INSTANT BACKGROUND BLACKOUT HACK 🔥
+    const handleCopy = (e: ClipboardEvent) => { e.preventDefault(); triggerBlackout(); };
     const handleBlur = () => setIsBlurred(true);
     const handleFocus = () => setIsBlurred(false);
-    const handleVisibilityChange = () => {
-      if (document.hidden) setIsBlurred(true);
-      else setIsBlurred(false);
-    };
-
-    // 5. Sometimes PrintScreen is caught on KeyUp
+    const handleVisibilityChange = () => setIsBlurred(document.hidden);
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "PrintScreen") {
-        e.preventDefault();
-        triggerBlackout();
-      }
+      if (e.key === "PrintScreen") { e.preventDefault(); triggerBlackout(); }
     };
 
     document.addEventListener("contextmenu", handleContextMenu);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     document.addEventListener("copy", handleCopy);
-    
     window.addEventListener("blur", handleBlur);
     window.addEventListener("focus", handleFocus);
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -147,7 +112,6 @@ export default function FullPageChatBot() {
     };
   }, []);
 
-  // ================= 🔥 DYNAMIC SCROLL LOGIC 🔥 =================
   const handleChatScroll = () => {
     if (!scrollRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
@@ -163,36 +127,29 @@ export default function FullPageChatBot() {
     }
   };
 
-  // ================= 🔥 CTRL + V PASTE IMAGE LOGIC 🔥 =================
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
       const items = e.clipboardData?.items;
       if (!items) return;
-
       for (let i = 0; i < items.length; i++) {
         if (items[i].type.indexOf("image") !== -1) {
           const file = items[i].getAsFile();
           if (file) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => {
-              setSelectedImage(reader.result as string);
-            };
+            reader.onload = () => setSelectedImage(reader.result as string);
           }
         }
       }
     };
-
     document.addEventListener("paste", handlePaste);
     return () => document.removeEventListener("paste", handlePaste);
   }, []);
 
-  // 🗣️ Text-to-Speech Function
   const speakText = (text: string) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel(); 
     if (!speakerRef.current) return;
-
     const cleanText = text.replace(/[*#_`~]/g, '').replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = "en-IN"; 
@@ -208,15 +165,12 @@ export default function FullPageChatBot() {
     });
   };
 
-  // 🖼️ Handle Image Selection 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => {
-        setSelectedImage(reader.result as string);
-      };
+      reader.onload = () => setSelectedImage(reader.result as string);
     }
   };
 
@@ -238,12 +192,15 @@ export default function FullPageChatBot() {
     setInput("");
     setSelectedImage(null);
     setLoading(true);
+    setLoadingType(userImg ? "image" : "text"); 
 
     try {
-      // 🔥 HIDDEN PROMPT INJECTION FOR IMAGE VERIFICATION 🔥
-      let apiMessage = userMsg;
+      // 🔥 STRICT ESSAY-PREVENTION INSTRUCTION 🔥
+      const systematicInstruction = "\n\n[SYSTEM INSTRUCTION: Provide your answer in a highly professional, systematic manner. STRICTLY avoid writing long essays. Use bullet points, short paragraphs (max 2-3 lines), and clean formatting. Make it airy, easy to scan, and direct.]";
+      
+      let apiMessage = (userMsg || "") + systematicInstruction;
       if (userImg) {
-        apiMessage = (userMsg || "") + "\n\n[SYSTEM INSTRUCTION: Analyze the attached image. If it is NOT related to Google Cloud, Google Cloud Arcade program, Google Cloud Swags, or Google Cloud Labs, strictly reply EXACTLY with 'Invalid Image it is not related to Google Cloud or Arcade program' and nothing else. Do not answer any questions if the image is invalid.]";
+        apiMessage += "\n\n[SYSTEM INSTRUCTION: Analyze the attached image. If it is NOT related to Google Cloud, Google Cloud Arcade program, Google Cloud Swags, or Google Cloud Labs, strictly reply EXACTLY with 'Invalid Image it is not related to Google Cloud or Arcade program' and nothing else.]";
       }
 
       const res = await fetch("/api/chat", { 
@@ -255,7 +212,6 @@ export default function FullPageChatBot() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.reply || "Server Error");
 
-      // 🔥 AUTO-DELETE INVALID IMAGE LOGIC 🔥
       if (data.reply.includes("Invalid Image it is not related to Google Cloud or Arcade program")) {
         setMessages((prev) => {
           const newMessages = [...prev];
@@ -276,6 +232,7 @@ export default function FullPageChatBot() {
       setMessages((prev) => [...prev, { role: "bot", text: "Too many requests right now. Try later." }]);
     } finally {
       setLoading(false);
+      setLoadingType(null);
     }
   };
 
@@ -302,7 +259,9 @@ export default function FullPageChatBot() {
     botBubble: isDarkMode 
       ? "bg-[#1e293b] text-gray-100 border border-[#334155] shadow-sm" 
       : "bg-white text-gray-800 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)]",
-    userBubble: "bg-gradient-to-br from-[#1a73e8] to-[#2b5dd4] text-white shadow-md border border-blue-600/20",
+    
+    // 🔥 Sleeker, flat blue user bubble 🔥
+    userBubble: isDarkMode ? "bg-[#1a73e8] text-white" : "bg-[#1a73e8] text-white", 
     
     inputBox: isDarkMode ? "bg-[#1e293b] border-[#334155] text-white" : "bg-white border-gray-300 text-gray-900",
   };
@@ -311,7 +270,6 @@ export default function FullPageChatBot() {
 
   return (
     <>
-      {/* 🔥 FULL PITCH BLACK SECURITY OVERLAY 🔥 */}
       {isBlurred && (
         <div className="fixed inset-0 z-[99999] bg-black flex items-center justify-center p-6 h-[100dvh] w-[100vw]">
           <p className="text-gray-300 font-medium text-lg flex items-center justify-center gap-3 text-center">
@@ -321,7 +279,6 @@ export default function FullPageChatBot() {
         </div>
       )}
 
-      {/* Main Content Area - It goes invisible (invisible class stops it from rendering in DOM without breaking layout) */}
       <div 
         className={`flex w-full h-[100dvh] font-sans pt-[60px] prevent-copy ${theme.bgMain} ${isBlurred ? 'opacity-0 invisible pointer-events-none' : 'opacity-100 visible'}`}
         aria-hidden={isBlurred}
@@ -330,43 +287,43 @@ export default function FullPageChatBot() {
         {/* 👈 LEFT SIDEBAR */}
         <div className="w-64 bg-[#0d1321] text-white flex flex-col hidden md:flex h-full">
           <div className="p-4 flex flex-col gap-2 pt-6">
-            <h2 className="text-lg font-bold text-gray-100 mb-3 tracking-wide px-1">Arcade Nexus</h2>
+            <h2 className="text-lg font-bold text-gray-100 mb-4 tracking-wide px-1">Arcade Nexus</h2>
             
-            <a href="/" className="bg-[#1e293b]/50 hover:bg-[#1a73e8] text-sm text-left px-4 py-2.5 rounded-md transition-colors w-full flex items-center gap-3 shadow-sm border border-[#1e293b]/50 hover:border-[#1a73e8]">
+            <a href="/" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
               🏠 Home
             </a>
-            <a href="/calculator" className="bg-[#1e293b]/50 hover:bg-[#1a73e8] text-sm text-left px-4 py-2.5 rounded-md transition-colors w-full flex items-center gap-3 shadow-sm border border-[#1e293b]/50 hover:border-[#1a73e8]">
+            <a href="/calculator" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
               📊 Go to Calculator
             </a>
-            <a href="/dashboard" className="bg-[#1e293b]/50 hover:bg-[#1a73e8] text-sm text-left px-4 py-2.5 rounded-md transition-colors w-full flex items-center gap-3 shadow-sm border border-[#1e293b]/50 hover:border-[#1a73e8]">
+            <a href="/dashboard" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
               📈 Dashboard
             </a>
-            <a href="/leaderboard" className="bg-[#1e293b]/50 hover:bg-[#1a73e8] text-sm text-left px-4 py-2.5 rounded-md transition-colors w-full flex items-center gap-3 shadow-sm border border-[#1e293b]/50 hover:border-[#1a73e8]">
+            <a href="/leaderboard" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
               🏆 Leaderboard
             </a>
             
-            <a href="/resources" className="bg-[#1e293b]/50 hover:bg-[#1a73e8] text-sm text-left px-4 py-2.5 rounded-md transition-colors w-full flex items-center gap-3 shadow-sm border border-[#1e293b]/50 hover:border-[#1a73e8]">
+            <a href="/resources" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3 mt-2">
               🎖️ Skill Badges List
             </a>
-            <a href="/facilitator" className="bg-[#1e293b]/50 hover:bg-[#1a73e8] text-sm text-left px-4 py-2.5 rounded-md transition-colors w-full flex items-center gap-3 shadow-sm border border-[#1e293b]/50 hover:border-[#1a73e8]">
+            <a href="/facilitator" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
               📢 Facilitator Program
             </a>
           </div>
 
-          <div className="flex-1 p-4 overflow-y-auto hide-scrollbar">
-            <div className="flex justify-between items-center mb-4">
+          <div className="flex-1 p-4 overflow-y-auto hide-scrollbar mt-4 border-t border-gray-800">
+            <div className="flex justify-between items-center mb-4 px-1">
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Recent Searches</h3>
               <button onClick={clearRecents} className="text-xs text-red-400 hover:text-red-300 font-medium transition">Clear</button>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               {recentChats.length === 0 ? (
-                <p className="text-[13px] text-gray-600 italic">No recent searches</p>
+                <p className="text-[13px] text-gray-600 italic px-1">No recent searches</p>
               ) : (
                 recentChats.map((chat, idx) => (
                   <div 
                     key={idx} 
                     onClick={() => setInput(chat)}
-                    className="text-[13px] bg-[#1e293b]/30 px-3 py-2.5 rounded-md truncate text-gray-300 cursor-pointer hover:bg-[#1e293b] transition-colors border border-transparent hover:border-[#334155]"
+                    className="text-[13px] px-2 py-2 rounded-md truncate text-gray-400 cursor-pointer hover:text-white hover:bg-[#1e293b]/50 transition-colors"
                   >
                     {chat}
                   </div>
@@ -379,15 +336,13 @@ export default function FullPageChatBot() {
         {/* 👉 RIGHT CHAT AREA */}
         <div className={`flex-1 flex flex-col h-full relative ${theme.bgChatArea}`}>
           
-          {/* HEADER */}
           <div className="p-3 sm:px-6 flex justify-between items-center z-10 transition-colors duration-300 bg-transparent">
-            
             <div className="flex-1 flex items-center gap-2 sm:gap-3">
               <button onClick={() => window.history.back()} className={`md:hidden p-1.5 rounded-full ${theme.textMuted} hover:text-[#1a73e8] transition-colors`}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
               </button>
 
-              <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-gradient-to-br from-[#1a73e8] to-[#4285f4] text-white rounded-full flex items-center justify-center shadow-md border border-blue-400/30">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-[#1a73e8] text-white rounded-full flex items-center justify-center shadow-sm">
                 <span className="text-lg sm:text-xl translate-x-[1px]">🤖</span>
               </div>
               
@@ -434,73 +389,83 @@ export default function FullPageChatBot() {
           {/* 💬 Messages Area */}
           <div ref={scrollRef} onScroll={handleChatScroll} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-6 scroll-smooth hide-scrollbar">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[90%] sm:max-w-[75%] px-5 py-3.5 text-[15px] leading-relaxed tracking-wide ${
-                  msg.role === "user" 
-                    ? `${theme.userBubble} rounded-[20px] rounded-br-[4px]` 
-                    : `${theme.botBubble} rounded-[20px] rounded-tl-[4px]` 
-                }`}>
-                  {msg.image && (
-                    <img 
-                      src={msg.image} 
-                      alt="Uploaded" 
-                      className="max-w-full h-auto mb-3 rounded-xl border border-white/20 shadow-sm disable-img-drag" 
-                      onDragStart={(e) => e.preventDefault()}
-                    />
-                  )}
-                  
-                  <ReactMarkdown 
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      a: ({node, ...props}) => (
-                        <a 
-                          {...props} 
-                          className={`${msg.role === 'user' ? 'text-blue-100 hover:text-white border-blue-200' : 'text-[#1a73e8] hover:text-[#1557b0] border-[#1a73e8]'} font-bold border-b transition-colors break-words`} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                        />
-                      ),
-                      ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mt-2 mb-2 space-y-1.5" />,
-                      ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mt-2 mb-2 space-y-1.5" />,
-                      p: ({node, ...props}) => <p {...props} className="mb-2 last:mb-0 whitespace-pre-wrap" />,
-                      strong: ({node, ...props}) => <strong {...props} className="font-extrabold" />,
-                      
-                      // यहाँ से अपडेट किया गया है 👇
-                      pre: ({ children }) => (
-                        <pre className={`${isDarkMode ? 'bg-[#0b1121] border-[#1e293b]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
-                          {children}
-                        </pre>
-                      ),
-                      code: ({ node, className, children, ...props }: any) => {
-                        const isInline = !className && !String(children).includes('\n');
-                        if (isInline) {
-                          return (
-                            <code {...props} className={`${isDarkMode ? 'bg-[#0f172a] text-blue-300' : 'bg-gray-100 text-[#1a73e8]'} px-1.5 py-0.5 rounded-md text-[13px] font-mono border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                              {children}
-                            </code>
-                          );
-                        }
-                        return (
-                          <code className={className} {...props}>
+              <div key={idx} className={`flex flex-col w-full ${msg.role === "user" ? "items-end" : "items-start"}`}>
+                
+                {/* 🔥 IMAGE COMPLETELY OUTSIDE THE BLUE TEXT BUBBLE 🔥 */}
+                {msg.image && (
+                  <img 
+                    src={msg.image} 
+                    alt="Uploaded" 
+                    className="max-w-[75%] sm:max-w-[50%] max-h-56 object-contain mb-2 rounded-xl disable-img-drag shadow-sm border border-gray-200/20" 
+                    onDragStart={(e) => e.preventDefault()}
+                  />
+                )}
+                
+                {/* 🔥 SLIMMER TEXT BUBBLE (Only renders if there is text) 🔥 */}
+                {msg.text && msg.text.trim() !== "" && (
+                  <div className={`max-w-[85%] sm:max-w-[70%] px-4 py-2.5 text-[14px] sm:text-[15px] leading-normal tracking-wide ${
+                    msg.role === "user" 
+                      ? `${theme.userBubble} rounded-[18px] rounded-br-[4px]` 
+                      : `${theme.botBubble} rounded-[18px] rounded-tl-[4px]` 
+                  }`}>
+                    <ReactMarkdown 
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        a: ({node, ...props}) => (
+                          <a 
+                            {...props} 
+                            className={`${msg.role === 'user' ? 'text-blue-100 hover:text-white underline underline-offset-2' : 'text-[#1a73e8] hover:text-[#1557b0] font-bold border-b border-[#1a73e8]'} transition-colors break-words`} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                          />
+                        ),
+                        ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mt-2 mb-2 space-y-1.5" />,
+                        ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mt-2 mb-2 space-y-1.5" />,
+                        p: ({node, ...props}) => <p {...props} className="mb-2 last:mb-0 whitespace-pre-wrap" />,
+                        strong: ({node, ...props}) => <strong {...props} className="font-extrabold" />,
+                        pre: ({ children }) => (
+                          <pre className={`${isDarkMode ? 'bg-[#0b1121] border-[#1e293b]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
                             {children}
-                          </code>
-                        );
-                      }
-                      // यहाँ तक अपडेट किया गया है 👆
-                      
-                    }}
-                  >
-                    {msg.text}
-                  </ReactMarkdown>
-                </div>
+                          </pre>
+                        ),
+                        code: ({ node, className, children, ...props }: any) => {
+                          const isInline = !className && !String(children).includes('\n');
+                          if (isInline) {
+                            return (
+                              <code {...props} className={`${isDarkMode ? 'bg-[#0f172a] text-blue-300 border-gray-700' : 'bg-gray-100 text-[#1a73e8] border-gray-200'} px-1.5 py-0.5 rounded-md text-[13px] font-mono border`}>
+                                {children}
+                              </code>
+                            );
+                          }
+                          return <code className={className} {...props}>{children}</code>;
+                        }
+                      }}
+                    >
+                      {msg.text}
+                    </ReactMarkdown>
+                  </div>
+                )}
               </div>
             ))}
 
             {loading && (
               <div className="flex justify-start w-full animate-fade-in pl-2">
-                <div className={`px-4 py-3 ${theme.botBubble} rounded-[20px] rounded-tl-[4px] flex items-center gap-2`}>
-                   <div className="w-4 h-4 border-[3px] border-gray-300 border-t-[#1a73e8] rounded-full animate-spin"></div>
-                   <span className="text-xs font-medium text-gray-500">Thinking...</span>
+                <div className={`px-4 py-3 ${theme.botBubble} rounded-[18px] rounded-tl-[4px] flex items-center gap-3`}>
+                   
+                   {/* 🔥 SMALLER DYNAMIC LOADING DOTS 🔥 */}
+                   {loadingType === "text" ? (
+                     <div className="flex gap-1.5 items-center justify-center">
+                       <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                       <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                       <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                     </div>
+                   ) : (
+                     <>
+                       <div className="w-3.5 h-3.5 border-[2.5px] border-gray-300 border-t-[#1a73e8] rounded-full animate-spin"></div>
+                       <span className="text-xs font-medium text-gray-500">Analyzing image...</span>
+                     </>
+                   )}
+
                 </div>
               </div>
             )}
@@ -580,7 +545,6 @@ export default function FullPageChatBot() {
         </div>
       </div>
 
-      {/* Global Style overrides */}
       <style jsx global>{`
         .hide-scrollbar {
           -ms-overflow-style: none;
@@ -590,7 +554,6 @@ export default function FullPageChatBot() {
           display: none;
         }
 
-        /* Ultimate Prevent Copy CSS */
         .prevent-copy {
           -webkit-user-select: none !important;
           -moz-user-select: none !important;
@@ -599,7 +562,6 @@ export default function FullPageChatBot() {
           -webkit-touch-callout: none !important;
         }
 
-        /* Allow typing in input but disable text selection inside it if possible */
         .prevent-copy-input {
           -webkit-user-select: text !important;
           -moz-user-select: text !important;
@@ -607,7 +569,6 @@ export default function FullPageChatBot() {
           user-select: text !important;
         }
 
-        /* Stop image downloading/dragging via CSS */
         .disable-img-drag {
           -webkit-user-drag: none;
           -khtml-user-drag: none;
