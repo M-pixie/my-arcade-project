@@ -315,7 +315,7 @@ export default function HomePage() {
                   <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
                     
                     <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1] drop-shadow-sm">
-                      The Arcade<span className="text-[#FACC15]"> Program</span>
+                      Arcade<span className="text-[#FACC15]"> Nexus</span>
                     </h1>
 
                     <p className="text-white/90 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8 drop-shadow-sm">
