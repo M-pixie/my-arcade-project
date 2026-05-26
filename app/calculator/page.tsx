@@ -57,17 +57,34 @@ export default function CalculatorPage() {
   const [userAvatar, setUserAvatar] = useState<string | null>(null); 
   const [userName, setUserName] = useState<string | null>(null); 
 
+  // 🔥 NEW STATES FOR AUTO CALCULATE & MODAL
+  const [autoCalculate, setAutoCalculate] = useState(false);
+  const [showAutoCalcModal, setShowAutoCalcModal] = useState(false);
+
   const router = useRouter();
 
   const whatsappHelpMessage = encodeURIComponent("Hello Facilitator Manish! 👋\n\nI am reaching out regarding the Google Cloud Arcade program. I need some guidance with my profile and points calculation. Could you please help me out?");
   const whatsappHelpUrl = `https://api.whatsapp.com/send?phone=918538980608&text=${whatsappHelpMessage}`;
 
   useEffect(() => {
+    // Check auto calculate preference first
+    const savedAuto = localStorage.getItem("arcade_auto_calc") === "true";
+    if (savedAuto) setAutoCalculate(true);
+
     const savedUrl = localStorage.getItem("arcade_url");
     if (savedUrl) {
       setProfileUrl(savedUrl);
       setRememberMe(true);
+      
+      // Trigger Auto Calculate if toggle is ON
+      if (savedAuto) {
+        setTimeout(() => {
+          // Passing `true` as isAutoRun flag to fix Remember Me bug
+          proceedToDashboard(savedUrl, true);
+        }, 600);
+      }
     }
+    
     const savedRecentUrls = localStorage.getItem("recent_arcade_urls_v3"); 
     if (savedRecentUrls) {
       setRecentUrls(JSON.parse(savedRecentUrls));
@@ -107,6 +124,27 @@ export default function CalculatorPage() {
       clearInterval(avatarInterval);
     };
   }, []);
+
+  const handleAutoCalcToggle = () => {
+    if (!autoCalculate) {
+      // Show modal when turning ON
+      setShowAutoCalcModal(true);
+    } else {
+      // Turn OFF immediately without modal
+      setAutoCalculate(false);
+      localStorage.setItem("arcade_auto_calc", "false");
+    }
+  };
+
+  const confirmAutoCalc = () => {
+    setAutoCalculate(true);
+    localStorage.setItem("arcade_auto_calc", "true");
+    setShowAutoCalcModal(false);
+  };
+
+  const cancelAutoCalc = () => {
+    setShowAutoCalcModal(false);
+  };
 
   const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null, points?: number) => {
     setRecentUrls((prevUrls) => {
@@ -149,7 +187,8 @@ export default function CalculatorPage() {
     }, 10);
   };
 
-  const proceedToDashboard = async (overrideUrl?: string | any) => {
+  // 🔥 UPDATED: Added isAutoRun flag to fix Remember Me state bug 🔥
+  const proceedToDashboard = async (overrideUrl?: string | any, isAutoRun: boolean = false) => {
     const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
 
     setError(null);
@@ -159,7 +198,10 @@ export default function CalculatorPage() {
       setProfileUrl(targetUrl);
     }
 
-    if (rememberMe) {
+    // State hasn't batched yet on load, so we enforce true if it's an auto-run
+    const shouldRemember = isAutoRun ? true : rememberMe;
+    
+    if (shouldRemember) {
       localStorage.setItem("arcade_url", targetUrl);
     } else {
       localStorage.removeItem("arcade_url");
@@ -245,20 +287,37 @@ export default function CalculatorPage() {
 
       <main className="max-w-6xl mx-auto px-6 pt-24 pb-16">
         
+        {/* 🔥 MODAL FOR AUTO CALCULATE 🔥 */}
+        {showAutoCalcModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in-modal">
+            <div className="bg-white rounded-lg shadow-xl w-[90%] max-w-sm p-6 animate-scale-up-modal">
+              <h3 className="text-xl font-bold text-[#202124] mb-2">Enable Auto Calculate?</h3>
+              <p className="text-[14px] text-[#5f6368] mb-6">
+                Points will calculate automatically when you open the page.
+              </p>
+              <div className="flex gap-3">
+                <button onClick={cancelAutoCalc} className="flex-1 bg-white border border-[#dadce0] text-[#3c4043] font-semibold py-2 rounded-md hover:bg-[#f8f9fa] transition-colors">
+                  Cancel
+                </button>
+                <button onClick={confirmAutoCalc} className="flex-1 bg-[#1a73e8] text-white font-semibold py-2 rounded-md hover:bg-[#1557b0] transition-colors">
+                  Yes, Enable
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 🔥 HEADING WITH HEADER TOGGLE (TEXT <-> TEXT & AVATAR <-> COIN) 🔥 */}
         <div className="text-center mb-10 flex justify-center items-center">
-          <h1 className="text-4xl md:text-6xl font-medium tracking-tight leading-tight flex items-center gap-5">
+          <h1 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight flex items-center gap-4">
             
-            {/* GRID STACK TO PREVENT LAYOUT SHIFT DURING TEXT TOGGLE */}
             <div className="grid [grid-template-areas:'stack'] place-items-center text-[#202124]">
               {userPoints !== null ? (
                 <>
-                  {/* 🔥 UPDATED: Name matches Image with premium font-semibold (Shows when Avatar shows: showCoinAvatar is false) 🔥 */}
                   <span className={`[grid-area:stack] transition-all duration-500 ease-in-out text-[#202124] font-semibold ${showCoinAvatar ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
                     {userName || "Arcade Player"}
                   </span>
                   
-                  {/* Arcade Calculator (Shows when Coin shows: showCoinAvatar is true) */}
                   <span className={`[grid-area:stack] transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
                     Arcade <span className="text-[#1a73e8]">Calculator</span>
                   </span>
@@ -274,13 +333,12 @@ export default function CalculatorPage() {
               <div 
                 className="relative flex items-center justify-center ml-2" 
                 style={{ 
-                  width: 'clamp(80px, 10vw, 105px)', 
-                  height: 'clamp(80px, 10vw, 105px)',
+                  width: 'clamp(60px, 8vw, 85px)', 
+                  height: 'clamp(60px, 8vw, 85px)',
                   animation: 'coin-float 3.5s ease-in-out infinite' 
                 }}
               >
                 
-                {/* 🟢 AVATAR LAYER (Clickable to Dashboard) */}
                 <div 
                   onClick={() => {
                     if (!showCoinAvatar) router.push('/dashboard');
@@ -293,12 +351,11 @@ export default function CalculatorPage() {
                     <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[3px] border-[#dadce0] shadow-md" />
                   ) : (
                     <div className="w-full h-full rounded-full bg-white border-[3px] border-[#dadce0] shadow-md flex items-center justify-center">
-                      <span className="text-3xl font-black text-[#1a73e8]">U</span>
+                      <span className="text-2xl font-black text-[#1a73e8]">U</span>
                     </div>
                   )}
                 </div>
 
-                {/* 🟡 COIN LAYER (Not clickable) */}
                 <div 
                  className={`absolute w-[75%] h-[75%] pointer-events-none transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}                >
                   <div className="gold-coin">
@@ -356,6 +413,11 @@ export default function CalculatorPage() {
               animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
             }
 
+            @keyframes fade-in-modal { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes scale-up-modal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+            .animate-fade-in-modal { animation: fade-in-modal 0.2s ease-out forwards; }
+            .animate-scale-up-modal { animation: scale-up-modal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
             /* 🔥 SCANNING / SWEEPING OVERLAP ANIMATION 🔥 */
             @keyframes text-sweep {
               0% { background-position: 200% center; }
@@ -411,7 +473,7 @@ export default function CalculatorPage() {
               z-index: 10;
               font-weight: 900;
               font-family: 'Arial Black', Impact, sans-serif;
-              font-size: clamp(1.6rem, 2.3vw, 2.2rem); 
+              font-size: clamp(1.1rem, 1.6vw, 1.5rem); 
               color: #4A2E00; 
               letter-spacing: -1px;
               text-shadow: 
@@ -421,12 +483,8 @@ export default function CalculatorPage() {
             }
             
             @keyframes coin-float {
-              0%, 100% { 
-                transform: translateY(0px); 
-              }
-              50% { 
-                transform: translateY(-10px); 
-              }
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-10px); }
             }
           `}</style>
 
@@ -438,20 +496,21 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12 mt-1">
             
-            {/* 🔥 SWEEPING OVERLAP ANIMATED TEXT & SUBSCRIBE LINK 🔥 */}
-<div className="relative mb-8">
-  <p className="text-sm md:text-base font-extrabold text-left sweep-text w-3/4">
-    Paste your public profile URL to calculate arcade points.
-  </p>
-  <a 
-    href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
-    target="_blank" 
-    rel="noopener noreferrer" 
-    className="absolute right-0 top-0 text-sm md:text-base font-bold text-[#202124] hover:underline cursor-pointer"
-  >
-    Subscribe here !
-  </a>
-</div>
+            {/* 🔥 REVERTED ORIGINAL TEXT LAYOUT 🔥 */}
+            <div className="relative mb-8">
+              <p className="text-sm md:text-base font-extrabold text-left sweep-text w-3/4">
+                Paste your public profile URL to calculate arcade points.
+              </p>
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="absolute right-0 top-0 text-sm md:text-base font-bold text-[#202124] hover:underline cursor-pointer"
+              >
+                Subscribe here !
+              </a>
+            </div>
+
             <div className="mb-6">
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
@@ -503,21 +562,21 @@ export default function CalculatorPage() {
                 </a>
               </div>
               <div className="text-sm font-medium text-[#3c4043]">
-                Last update: 13 May 2026 at 13:20 IST
+                Last update: 26 May 2026 at 10:20 IST
               </div>
             </div>
 
-            <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-lg font-bold py-4 rounded-md transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
+            <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-[16px] font-semibold py-3 rounded-lg transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
               {loading ? (
                 <>
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Preparing your dashboard...
+                  See you on the dashboard.
                 </>
               ) : (
-                "Calculate Points"
+                "Calculate Arcade Points"
               )}
             </button>
 
@@ -525,9 +584,32 @@ export default function CalculatorPage() {
               NOTE :- Make sure your profile is set to public so the calculator can access your badge information.
             </p>
 
+            {/* 🔥 MOVED AUTO CALCULATE TOGGLE (ABOVE RECENT PROFILES) 🔥 */}
+            <div className="mt-8 pt-6 flex items-center justify-between border-t border-[#dadce0]">
+              <div>
+                <h4 className="text-[15px] font-bold text-[#202124]">Auto Calculate</h4>
+                <p className="text-[13px] text-[#5f6368] mt-0.5">Automatically calculate points when you open the page</p>
+              </div>
+              <label className="flex items-center cursor-pointer select-none group">
+                <div className="relative">
+                  <input 
+                    type="checkbox" 
+                    className="sr-only" 
+                    checked={autoCalculate} 
+                    onChange={handleAutoCalcToggle} 
+                  />
+                  <div className={`block w-11 h-6 rounded-full transition-all duration-300 ease-in-out ${autoCalculate ? 'bg-[#1a73e8]' : 'bg-[#dadce0] group-hover:bg-[#d1d5db]'}`}></div>
+                  <div 
+                    className={`dot absolute left-[3px] top-[3px] bg-white rounded-full transition-transform duration-300 ease-in-out shadow-sm ${autoCalculate ? 'transform translate-x-5' : ''}`} 
+                    style={{ width: '18px', height: '18px' }}
+                  ></div>
+                </div>
+              </label>
+            </div>
+
             {/* 🔥 RECENT PROFILES */}
             {recentUrls.length > 0 && (
-              <div className="mt-8 border-t border-[#dadce0] pt-6 animate-fade-in-up">
+              <div className="mt-6 pt-6 border-t border-[#f1f3f4] animate-fade-in-up">
                 <div className="flex items-center justify-between mb-6">
                   <p className="text-sm font-extrabold text-[#3c4043] tracking-wider flex items-center gap-2">
                     <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -698,7 +780,7 @@ export default function CalculatorPage() {
                 </p>
 
                 <div className="bg-[#fff9e6] border border-[#ffecb3] rounded-xl p-4 flex gap-3 items-start">
-                  <svg className="w-5 h-5 text-[#b06000] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <svg className="w-5 h-5 text-[#b06000] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   <div>
                     <span className="font-bold text-[#b06000] block mb-1">Important:</span>
                     <span className="text-[#b06000] text-[14px]">Make sure your profile is set to <strong className="font-bold">public</strong> so the calculator can access your badge information.</span>
