@@ -7,6 +7,7 @@ interface Message {
   role: "bot" | "user";
   text: string;
   image?: string | null;
+  timestamp?: number; 
 }
 
 export default function FullPageChatBot() {
@@ -16,6 +17,7 @@ export default function FullPageChatBot() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingType, setLoadingType] = useState<"text" | "image" | null>(null); 
+  const [isTyping, setIsTyping] = useState(false); 
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -26,17 +28,27 @@ export default function FullPageChatBot() {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const speakerRef = useRef(isSpeakerOn);
+  
+  const stopTypingRef = useRef(false);
 
   const [isBlurred, setIsBlurred] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const savedMessages = localStorage.getItem("arcade_chat_history");
     const savedRecents = localStorage.getItem("arcade_recent_searches");
     
-    if (savedMessages) {
+    if (savedMessages && savedMessages !== "[]") {
       setMessages(JSON.parse(savedMessages));
     } else {
-      setMessages([{ role: "bot", text: "Hello! 👋 I am the Cloud Arcade AI. Ask me anything related to Google Cloud, Arcade points, Swags, or Labs!" }]);
+      setMessages([]); 
     }
 
     if (savedRecents) {
@@ -59,7 +71,7 @@ export default function FullPageChatBot() {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages, loading, isTyping]);
 
   useEffect(() => {
     const triggerBlackout = () => {
@@ -174,13 +186,45 @@ export default function FullPageChatBot() {
     }
   };
 
+  const handleCopyText = (text: string, idx: number) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedIndex(idx);
+      setTimeout(() => setCopiedIndex(null), 2000); 
+    }
+  };
+
+  const stopResponse = () => {
+    stopTypingRef.current = true;
+    setLoading(false);
+    setIsTyping(false);
+  };
+
+  const formatTimeAgo = (timestamp?: number) => {
+    if (!timestamp) return "Just now";
+    const diff = Math.max(0, now - timestamp);
+    const seconds = Math.floor(diff / 1000);
+    if (seconds < 60) return "Just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return "1 day ago";
+    return `${days} days ago`;
+  };
+
+  const startNewChat = () => {
+    setMessages([]);
+  };
+
   const sendMessage = async () => {
     if (!input.trim() && !selectedImage) return;
 
     const userMsg = input;
     const userImg = selectedImage; 
 
-    setMessages((prev) => [...prev, { role: "user", text: userMsg, image: userImg }]);
+    setMessages((prev) => [...prev, { role: "user", text: userMsg, image: userImg, timestamp: Date.now() }]);
     
     if (userMsg.trim()) {
       setRecentChats((prev) => {
@@ -193,14 +237,14 @@ export default function FullPageChatBot() {
     setSelectedImage(null);
     setLoading(true);
     setLoadingType(userImg ? "image" : "text"); 
+    stopTypingRef.current = false; 
 
     try {
-      // 🔥 STRICT ESSAY-PREVENTION INSTRUCTION 🔥
-      const systematicInstruction = "\n\n[SYSTEM INSTRUCTION: Provide your answer in a highly professional, systematic manner. STRICTLY avoid writing long essays. Use bullet points, short paragraphs (max 2-3 lines), and clean formatting. Make it airy, easy to scan, and direct.]";
+      const systematicInstruction = "\n\n[SYSTEM INSTRUCTION: Provide your answer in a highly professional, systematic manner. STRICTLY avoid writing long essays. Use bullet points, short paragraphs (max 2-3 lines), and clean formatting. Make it airy, easy to scan, and direct. IMPORTANT: If providing recommendations or extra tips, restrict them STRICTLY to the exact context/topic the user is discussing. Do not give generic advice.]";
       
       let apiMessage = (userMsg || "") + systematicInstruction;
       if (userImg) {
-        apiMessage += "\n\n[SYSTEM INSTRUCTION: Analyze the attached image. If it is NOT related to Google Cloud, Google Cloud Arcade program, Google Cloud Swags, or Google Cloud Labs, strictly reply EXACTLY with 'Invalid Image it is not related to Google Cloud or Arcade program' and nothing else.]";
+        apiMessage += "\n\n[SYSTEM INSTRUCTION: Analyze the attached image. If it is NOT related to Google Cloud, Google Cloud Arcade program, Google Cloud Swags, or Google Cloud Labs, strictly reply EXACTLY with 'Invalid Image it is not related to Google Cloud or Arcade program' and nothing else. IMPORTANT: If it IS a Google Cloud Lab screenshot asking for a solution, provide a highly concise, neat, and clean step-by-step solution. DO NOT give bulky or long-winded explanations. Only provide the exact commands or clicks needed.]";
       }
 
       const res = await fetch("/api/chat", { 
@@ -225,13 +269,35 @@ export default function FullPageChatBot() {
         });
       }
 
-      setMessages((prev) => [...prev, { role: "bot", text: data.reply }]);
-      speakText(data.reply); 
+      setLoading(false); 
+      setIsTyping(true); 
+      setMessages((prev) => [...prev, { role: "bot", text: "", timestamp: Date.now() }]);
+      
+      let currentTypingText = "";
+      const chunkSize = 12; 
+      
+      for (let i = 0; i < data.reply.length; i += chunkSize) {
+        if (stopTypingRef.current) break; 
+
+        currentTypingText += data.reply.slice(i, i + chunkSize);
+        setMessages((prev) => {
+          const newMsgs = [...prev];
+          newMsgs[newMsgs.length - 1].text = currentTypingText;
+          return newMsgs;
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1)); 
+      }
+
+      setIsTyping(false); 
+      if (!stopTypingRef.current) {
+        speakText(data.reply); 
+      }
     
     } catch (err: any) {
-      setMessages((prev) => [...prev, { role: "bot", text: "Too many requests right now. Try later." }]);
-    } finally {
       setLoading(false);
+      setIsTyping(false);
+      setMessages((prev) => [...prev, { role: "bot", text: "Too many requests right now. Try later.", timestamp: Date.now() }]);
+    } finally {
       setLoadingType(null);
     }
   };
@@ -242,28 +308,21 @@ export default function FullPageChatBot() {
   };
 
   const clearChatHistory = () => {
-    if(confirm("Are you sure you want to clear the entire chat history?")) {
-      const defaultGreeting = { role: "bot" as const, text: "Ask me anything related to Google Cloud, Arcade points, Swags, or Labs!" };
-      setMessages([defaultGreeting]);
-      localStorage.setItem("arcade_chat_history", JSON.stringify([defaultGreeting]));
-    }
+    setMessages([]);
+    localStorage.setItem("arcade_chat_history", JSON.stringify([]));
   }
 
-  // ================= 🔥 THEME VARIABLES 🔥 =================
   const theme = {
-    bgMain: isDarkMode ? "bg-[#0f172a]" : "bg-[#F0F2F5]",
-    bgChatArea: isDarkMode ? "bg-[#0f172a]" : "bg-[#f8f9fa]",
+    bgMain: isDarkMode ? "bg-[#131314]" : "bg-[#F0F2F5]",
+    bgSidebar: isDarkMode ? "bg-[#1e1f20]" : "bg-[#f8f9fa]", // 🔥 Light mode grey sidebar
+    bgChatArea: isDarkMode ? "bg-[#131314]" : "bg-[#ffffff]",
     textMain: isDarkMode ? "text-gray-100" : "text-[#202124]",
     textMuted: isDarkMode ? "text-gray-400" : "text-gray-500",
     
-    botBubble: isDarkMode 
-      ? "bg-[#1e293b] text-gray-100 border border-[#334155] shadow-sm" 
-      : "bg-white text-gray-800 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)]",
+    botBubble: isDarkMode ? "bg-[#1e1f20] border border-[#333538] text-gray-100 shadow-sm" : "bg-white border border-gray-200 text-gray-800 shadow-sm",
+    userBubble: isDarkMode ? "bg-[#282a2c] text-gray-100" : "bg-[#f0f4f9] text-gray-900", 
     
-    // 🔥 Sleeker, flat blue user bubble 🔥
-    userBubble: isDarkMode ? "bg-[#1a73e8] text-white" : "bg-[#1a73e8] text-white", 
-    
-    inputBox: isDarkMode ? "bg-[#1e293b] border-[#334155] text-white" : "bg-white border-gray-300 text-gray-900",
+    inputBox: isDarkMode ? "bg-[#1e1f20] border-transparent text-white" : "bg-[#f0f4f9] border-transparent text-gray-900",
   };
 
   if (!isClient) return null; 
@@ -273,7 +332,6 @@ export default function FullPageChatBot() {
       {isBlurred && (
         <div className="fixed inset-0 z-[99999] bg-black flex items-center justify-center p-6 h-[100dvh] w-[100vw]">
           <p className="text-gray-300 font-medium text-lg flex items-center justify-center gap-3 text-center">
-            <span className="text-2xl"></span>
             Screenshots are strictly prohibited. Return to Home.
           </p>
         </div>
@@ -285,45 +343,33 @@ export default function FullPageChatBot() {
       >
         
         {/* 👈 LEFT SIDEBAR */}
-        <div className="w-64 bg-[#0d1321] text-white flex flex-col hidden md:flex h-full">
-          <div className="p-4 flex flex-col gap-2 pt-6">
-            <h2 className="text-lg font-bold text-gray-100 mb-4 tracking-wide px-1">Arcade Nexus</h2>
+        <div className={`w-64 flex flex-col hidden md:flex h-full ${theme.bgSidebar} border-r ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <div className="p-3 flex flex-col gap-0.5 pt-4">
+            <h2 className={`text-[15px] font-bold mb-2 tracking-wide px-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>Arcade Nexus</h2>
             
-            <a href="/" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
-              🏠 Home
-            </a>
-            <a href="/calculator" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
-              📊 Go to Calculator
-            </a>
-            <a href="/dashboard" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
-              📈 Dashboard
-            </a>
-            <a href="/leaderboard" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
-              🏆 Leaderboard
-            </a>
+            <a href="/" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Home</a>
+            <a href="/calculator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Go to Calculator</a>
+            <a href="/dashboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Dashboard</a>
+            <a href="/leaderboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Leaderboard</a>
             
-            <a href="/resources" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3 mt-2">
-              🎖️ Skill Badges List
-            </a>
-            <a href="/facilitator" className="text-[15px] font-medium text-gray-400 hover:text-white px-2 py-2 transition-colors w-full flex items-center gap-3">
-              📢 Facilitator Program
-            </a>
+            <a href="/resources" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 mt-1 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Skill Badges List</a>
+            <a href="/facilitator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Facilitator Program</a>
           </div>
 
-          <div className="flex-1 p-4 overflow-y-auto hide-scrollbar mt-4 border-t border-gray-800">
-            <div className="flex justify-between items-center mb-4 px-1">
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Recent Searches</h3>
-              <button onClick={clearRecents} className="text-xs text-red-400 hover:text-red-300 font-medium transition">Clear</button>
+          <div className={`p-4 overflow-y-auto hide-scrollbar border-t mt-2 ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+            <div className="flex justify-between items-center mb-3 px-1">
+              <h3 className={`text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>Recent Searches</h3>
+              <button onClick={clearRecents} className="text-xs text-red-400 hover:text-red-500 font-medium transition">Clear</button>
             </div>
             <div className="flex flex-col gap-1">
               {recentChats.length === 0 ? (
-                <p className="text-[13px] text-gray-600 italic px-1">No recent searches</p>
+                <p className={`text-[13px] italic px-1 ${isDarkMode ? 'text-gray-600' : 'text-gray-500'}`}>No recent searches</p>
               ) : (
                 recentChats.map((chat, idx) => (
                   <div 
                     key={idx} 
                     onClick={() => setInput(chat)}
-                    className="text-[13px] px-2 py-2 rounded-md truncate text-gray-400 cursor-pointer hover:text-white hover:bg-[#1e293b]/50 transition-colors"
+                    className={`text-[13px] px-2 py-2 rounded-md truncate cursor-pointer transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
                   >
                     {chat}
                   </div>
@@ -338,19 +384,13 @@ export default function FullPageChatBot() {
           
           <div className="p-3 sm:px-6 flex justify-between items-center z-10 transition-colors duration-300 bg-transparent">
             <div className="flex-1 flex items-center gap-2 sm:gap-3">
-              <button onClick={() => window.history.back()} className={`md:hidden p-1.5 rounded-full ${theme.textMuted} hover:text-[#1a73e8] transition-colors`}>
+              <button onClick={() => window.history.back()} className={`md:hidden p-1.5 rounded-full ${theme.textMuted} hover:text-gray-300 transition-colors`}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
               </button>
 
-              <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-[#1a73e8] text-white rounded-full flex items-center justify-center shadow-sm">
+              <div className={`w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-full flex items-center justify-center shadow-sm ${isDarkMode ? 'bg-[#282a2c] text-white' : 'bg-[#1a73e8] text-white'}`}>
                 <span className="text-lg sm:text-xl translate-x-[1px]">🤖</span>
               </div>
-              
-              {messages.length > 1 && (
-                <button onClick={clearChatHistory} className="text-[11px] text-red-400/80 hover:text-red-400 underline underline-offset-2 transition-colors ml-1 hidden sm:block">
-                  Clear Chat
-                </button>
-              )}
             </div>
 
             <div className="flex-2 flex flex-col items-center justify-center text-center">
@@ -360,9 +400,28 @@ export default function FullPageChatBot() {
             </div>
             
             <div className="flex-1 flex justify-end items-center gap-1 sm:gap-2">
+              
+              {messages.length > 0 && (
+                <button 
+                  onClick={clearChatHistory} 
+                  className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c] hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
+                  title="Clear Chat"
+                >
+                  <svg className="w-4 h-4 sm:w-[18px] sm:h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+              )}
+
+              <button 
+                onClick={startNewChat} 
+                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c] hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
+                title="New Chat"
+              >
+                <svg className="w-4 h-4 sm:w-[18px] sm:h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+              </button>
+
               <button 
                 onClick={() => setIsDarkMode(!isDarkMode)} 
-                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e293b] text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
+                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
                 title="Toggle Theme"
               >
                 {isDarkMode ? (
@@ -374,7 +433,7 @@ export default function FullPageChatBot() {
 
               <button 
                 onClick={toggleSpeaker} 
-                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e293b] text-gray-300 hover:bg-gray-700 hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
+                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
                 title={isSpeakerOn ? "Turn off voice" : "Turn on voice"}
               >
                 {isSpeakerOn ? (
@@ -387,11 +446,10 @@ export default function FullPageChatBot() {
           </div>
 
           {/* 💬 Messages Area */}
-          <div ref={scrollRef} onScroll={handleChatScroll} className="flex-1 p-4 md:p-8 overflow-y-auto space-y-6 scroll-smooth hide-scrollbar">
+          <div ref={scrollRef} onScroll={handleChatScroll} className="flex-1 p-4 md:px-8 md:py-6 overflow-y-auto space-y-6 scroll-smooth hide-scrollbar">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex flex-col w-full ${msg.role === "user" ? "items-end" : "items-start"}`}>
                 
-                {/* 🔥 IMAGE COMPLETELY OUTSIDE THE BLUE TEXT BUBBLE 🔥 */}
                 {msg.image && (
                   <img 
                     src={msg.image} 
@@ -401,11 +459,10 @@ export default function FullPageChatBot() {
                   />
                 )}
                 
-                {/* 🔥 SLIMMER TEXT BUBBLE (Only renders if there is text) 🔥 */}
                 {msg.text && msg.text.trim() !== "" && (
-                  <div className={`max-w-[85%] sm:max-w-[70%] px-4 py-2.5 text-[14px] sm:text-[15px] leading-normal tracking-wide ${
+                  <div className={`relative max-w-[95%] sm:max-w-[85%] px-4 py-3 text-[14px] sm:text-[15px] leading-normal tracking-wide ${
                     msg.role === "user" 
-                      ? `${theme.userBubble} rounded-[18px] rounded-br-[4px]` 
+                      ? `${theme.userBubble} rounded-[20px] rounded-br-[4px]` 
                       : `${theme.botBubble} rounded-[18px] rounded-tl-[4px]` 
                   }`}>
                     <ReactMarkdown 
@@ -414,7 +471,7 @@ export default function FullPageChatBot() {
                         a: ({node, ...props}) => (
                           <a 
                             {...props} 
-                            className={`${msg.role === 'user' ? 'text-blue-100 hover:text-white underline underline-offset-2' : 'text-[#1a73e8] hover:text-[#1557b0] font-bold border-b border-[#1a73e8]'} transition-colors break-words`} 
+                            className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-[#1a73e8] hover:text-[#1557b0]'} underline underline-offset-2 transition-colors break-words font-medium`} 
                             target="_blank" 
                             rel="noopener noreferrer" 
                           />
@@ -424,7 +481,7 @@ export default function FullPageChatBot() {
                         p: ({node, ...props}) => <p {...props} className="mb-2 last:mb-0 whitespace-pre-wrap" />,
                         strong: ({node, ...props}) => <strong {...props} className="font-extrabold" />,
                         pre: ({ children }) => (
-                          <pre className={`${isDarkMode ? 'bg-[#0b1121] border-[#1e293b]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
+                          <pre className={`${isDarkMode ? 'bg-[#131314] border-[#333538]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
                             {children}
                           </pre>
                         ),
@@ -432,7 +489,7 @@ export default function FullPageChatBot() {
                           const isInline = !className && !String(children).includes('\n');
                           if (isInline) {
                             return (
-                              <code {...props} className={`${isDarkMode ? 'bg-[#0f172a] text-blue-300 border-gray-700' : 'bg-gray-100 text-[#1a73e8] border-gray-200'} px-1.5 py-0.5 rounded-md text-[13px] font-mono border`}>
+                              <code {...props} className={`${isDarkMode ? 'bg-[#131314] text-gray-300 border-gray-700' : 'bg-gray-100 text-[#1a73e8] border-gray-200'} px-1.5 py-0.5 rounded-md text-[13px] font-mono border`}>
                                 {children}
                               </code>
                             );
@@ -443,29 +500,62 @@ export default function FullPageChatBot() {
                     >
                       {msg.text}
                     </ReactMarkdown>
+
+                    {/* 🔥 Time & Copy Footer (Only for Bot) 🔥 */}
+                    {msg.role === "bot" && (
+                      <div className="flex items-center mt-1.5 justify-between gap-4">
+                        
+                        {/* Timestamp */}
+                        <span className={`text-[10.5px] font-medium tracking-wide ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                          {formatTimeAgo(msg.timestamp)}
+                        </span>
+
+                        {/* Copy Button */}
+                        {(!isTyping || idx !== messages.length - 1) && (
+                          <button
+                            onClick={() => handleCopyText(msg.text, idx)}
+                            className={`text-[11.5px] font-medium flex items-center gap-1.5 px-2 py-1 rounded-md transition-all ${
+                              copiedIndex === idx ? 'text-green-500 bg-green-500/10' : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-[#282a2c]' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'}`
+                            }`}
+                            title="Copy Text"
+                          >
+                            {copiedIndex === idx ? (
+                              <>
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                Copied!
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                Copy
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    )}
+
                   </div>
                 )}
               </div>
             ))}
 
+            {/* 🔥 LOADING LAYOUT */}
             {loading && (
-              <div className="flex justify-start w-full animate-fade-in pl-2">
-                <div className={`px-4 py-3 ${theme.botBubble} rounded-[18px] rounded-tl-[4px] flex items-center gap-3`}>
-                   
-                   {/* 🔥 SMALLER DYNAMIC LOADING DOTS 🔥 */}
-                   {loadingType === "text" ? (
-                     <div className="flex gap-1.5 items-center justify-center">
-                       <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                       <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                       <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                     </div>
-                   ) : (
-                     <>
-                       <div className="w-3.5 h-3.5 border-[2.5px] border-gray-300 border-t-[#1a73e8] rounded-full animate-spin"></div>
-                       <span className="text-xs font-medium text-gray-500">Analyzing image...</span>
-                     </>
-                   )}
-
+              <div className="flex flex-col items-start w-full animate-fade-in">
+                <div className={`px-4 py-3 pb-3 ${theme.botBubble} rounded-[18px] rounded-tl-[4px] flex items-center`}>
+                  {loadingType === "image" ? (
+                    <div className="flex items-center gap-2.5">
+                      <div className={`w-[15px] h-[15px] border-[2px] border-t-transparent rounded-full animate-spin ${isDarkMode ? 'border-gray-400' : 'border-[#1a73e8]'}`}></div>
+                      <span className={`text-[14px] font-semibold ${isDarkMode ? 'text-gray-300' : 'text-[#1a73e8]'}`}>Analyzing image...</span>
+                    </div>
+                  ) : (
+                    <div className="flex gap-1.5 items-center">
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -476,11 +566,11 @@ export default function FullPageChatBot() {
             
             {selectedImage && (
               <div className="absolute bottom-[65px] left-4 sm:left-8 z-30">
-                <div className={`relative inline-block p-1.5 rounded-xl shadow-2xl border ${isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-gray-200'}`}>
+                <div className={`relative inline-block p-1.5 rounded-xl shadow-2xl border ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'}`}>
                   <img src={selectedImage} alt="Preview" className="h-20 sm:h-28 object-cover rounded-lg shadow-sm disable-img-drag" onDragStart={(e) => e.preventDefault()} />
                   <button 
                     onClick={() => setSelectedImage(null)}
-                    className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg hover:bg-red-600 hover:scale-110 transition-transform border-2 border-white"
+                    className="absolute -top-3 -right-3 bg-gray-700 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg hover:bg-gray-600 hover:scale-110 transition-transform border-2 border-transparent"
                   >
                     ✕
                   </button>
@@ -490,11 +580,12 @@ export default function FullPageChatBot() {
 
             <div className="max-w-5xl mx-auto flex gap-2 sm:gap-4 items-center px-1">
               
-              <div className={`flex-1 flex gap-2 sm:gap-2.5 items-center p-1.5 sm:p-2 rounded-xl border focus-within:ring-2 focus-within:ring-[#1a73e8]/50 transition-all ${theme.inputBox} shadow-sm`}>
+              {/* 🔥 Input Focus Background Fix Here */}
+              <div className={`flex-1 flex gap-2 items-center py-1 px-1.5 sm:py-1.5 sm:px-2 rounded-xl transition-all ${theme.inputBox} ${isDarkMode ? 'focus-within:bg-[#282a2c]' : 'focus-within:bg-white'} shadow-sm`}>
                 
                 <button 
                   onClick={() => imageInputRef.current?.click()}
-                  className={`p-2 sm:p-2.5 rounded-lg transition ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700/50' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
+                  className={`p-1.5 sm:p-2 rounded-lg transition ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#333538]' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
                   title="Upload Screenshot"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-[22px] sm:h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
@@ -512,30 +603,41 @@ export default function FullPageChatBot() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && !loading && (input.trim() || selectedImage) && sendMessage()}
-                  disabled={loading} 
+                  onKeyDown={(e) => e.key === "Enter" && !loading && !isTyping && (input.trim() || selectedImage) && sendMessage()}
+                  disabled={loading || isTyping} 
                   placeholder="Ask me anything or paste a screenshot..."
                   className="flex-1 bg-transparent border-none text-[14px] sm:text-[15px] font-medium focus:outline-none focus:ring-0 px-1 sm:px-2 placeholder-gray-500 prevent-copy-input"
                 />
                 
-                <button 
-                  onClick={sendMessage} 
-                  disabled={loading || (!input.trim() && !selectedImage)}
-                  className="px-4 py-2 sm:px-5 sm:py-2.5 bg-[#1a73e8] text-white rounded-lg hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-md flex items-center justify-center group"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 translate-x-[1px] group-hover:translate-x-[3px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </button>
+                {(loading || isTyping) ? (
+                  <button 
+                    onClick={stopResponse} 
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg transition shadow-md flex items-center justify-center ${isDarkMode ? 'bg-[#333538] text-red-400 hover:bg-[#404347]' : 'bg-gray-200 text-red-500 hover:bg-gray-300'}`}
+                    title="Stop Response"
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z" /></svg>
+                  </button>
+                ) : (
+                  <button 
+                    onClick={sendMessage} 
+                    disabled={(!input.trim() && !selectedImage)}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition shadow-md flex items-center justify-center group ${isDarkMode ? 'bg-[#282a2c] text-gray-200 hover:bg-[#333538]' : 'bg-[#1a73e8] text-white hover:bg-blue-600'}`}
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 translate-x-[1px] group-hover:translate-x-[3px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg>
+                  </button>
+                )}
+
               </div>
 
               <button 
                 onClick={scrollToPosition}
-                className={`p-2.5 rounded-lg transition-colors flex shrink-0 items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
+                className={`p-2 sm:p-2.5 rounded-lg transition-colors flex shrink-0 items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
                 title={isAtBottom ? "Scroll to Top" : "Scroll to Bottom"}
               >
                 {isAtBottom ? (
-                  <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
+                  <svg className="w-6 h-6 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
                 ) : (
-                  <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
+                  <svg className="w-6 h-6 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
                 )}
               </button>
 
