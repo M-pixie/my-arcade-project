@@ -260,10 +260,7 @@ export default function HomePage() {
 
         {/* ================= HERO SECTION ================= */}
         <section 
-          className="relative pt-20 pb-16"
-          style={{ 
-            background: 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 30%, #06B6D4 55%, #FACC15 80%, #F97316 100%)' 
-          }}
+          className="relative pt-20 pb-16 bg-white"
         >
           <div className="w-full relative z-10">
             {/* 🔥 AVATARS SAFE PLACEMENT 🔥 */}
@@ -283,10 +280,10 @@ export default function HomePage() {
                         />
                       ))}
                     </div>
-                    <span className="text-white text-xs font-medium tracking-wide drop-shadow-md">Active Users..</span>
+                    <span className="text-black text-xs font-medium tracking-wide drop-shadow-sm">Active Users..</span>
                   </div>
                   {leaders.length > 10 && (
-                    <span className="text-[#e2e8f0] text-[13px] font-bold tracking-wide drop-shadow-md mt-1.5">
+                    <span className="text-gray-800 text-[13px] font-bold tracking-wide drop-shadow-sm mt-1.5">
                       & {leaders.length - 10} others
                     </span>
                   )}
@@ -295,17 +292,15 @@ export default function HomePage() {
 
               {/* 🔥 NEW NEED HELP BUTTON (TOP RIGHT) 🔥 */}
               <button
-  onClick={() => router.push('/chat')}
-  // Dekho yahan maine top-0 aur md:top-1 kar diya hai
-  className="absolute top-0 right-4 md:top-1 md:right-8 z-50 bg-white/20 hover:bg-white text-white hover:text-[#1a73e8] backdrop-blur-md border border-white/30 px-4 py-2 rounded-full text-sm font-bold shadow-md transition-all duration-300 flex items-center gap-2 group cursor-pointer"
->
-  Need Help ?
-  <span className="text-lg group-hover:animate-bounce"></span>
-</button>
+                onClick={() => router.push('/chat')}
+                className="absolute top-0 right-4 md:top-1 md:right-8 z-50 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-full text-sm font-bold shadow-md transition-all duration-300 flex items-center gap-2 group cursor-pointer border-none"
+              >
+                Need Help
+                <span className="text-lg group-hover:animate-bounce"></span>
+              </button>
 
               <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-                 <div className="absolute -top-32 -right-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
-                 <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-white rounded-full blur-[100px]"></div>
+                 {/* Removed the intense blur balls since background is now solid white, but kept containers if needed for future */}
               </div>
 
               <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-8 md:mt-4">
@@ -314,11 +309,11 @@ export default function HomePage() {
                   
                   <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
                     
-                    <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-white mb-5 leading-[1.1] drop-shadow-sm">
-                      Arcade<span className="text-[#FACC15]"> Nexus</span>
+                    <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-black mb-5 leading-[1.1] drop-shadow-sm">
+                      Arcade<span className="text-black"> Nexus</span>
                     </h1>
 
-                    <p className="text-white/90 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8 drop-shadow-sm">
+                    <p className="text-black/90 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8 drop-shadow-sm">
                       The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
                     </p>
 
@@ -327,7 +322,7 @@ export default function HomePage() {
                         href="https://go.cloudskillsboost.google/arcade"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full sm:w-auto px-7 py-3.5 bg-white text-zinc-900 font-bold text-[14px] sm:text-base rounded-lg hover:bg-gray-50 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
+                        className="w-full sm:w-auto px-7 py-3.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-lg hover:bg-[#1557b0] hover:shadow-[0_0_20px_rgba(26,115,232,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none"
                       >
                         <span className="absolute top-2 right-2 flex h-3 w-3">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
@@ -339,7 +334,7 @@ export default function HomePage() {
 
                       <button
                         onClick={() => router.push('/calculator')}
-                        className="w-full sm:w-auto px-7 py-3.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-lg hover:bg-[#1557b0] hover:shadow-[0_0_20px_rgba(26,115,232,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5"
+                        className="w-full sm:w-auto px-7 py-3.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-lg hover:bg-[#1557b0] hover:shadow-[0_0_20px_rgba(26,115,232,0.4)] shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none"
                       >
                         <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                         <span className="whitespace-nowrap">Arcade Points Calculator</span>
@@ -350,10 +345,10 @@ export default function HomePage() {
                   <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-2.5">
                     <div className="flex items-center gap-2 mb-1.5 justify-center lg:justify-start">
                       <span className="relative flex h-2.5 w-2.5 mr-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1a73e8] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1a73e8] shadow-[0_0_8px_rgba(26,115,232,0.8)]"></span>
                       </span>
-                      <h3 className="text-white font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
+                      <h3 className="text-black font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
                     </div>
 
                     {[
@@ -376,13 +371,13 @@ export default function HomePage() {
                             router.push(item.link);
                           }
                         }}
-                        className="flex items-center justify-between px-3 py-3 w-[98%] mx-auto bg-white/95 hover:bg-white border border-white/40 rounded-lg transition-all duration-300 text-zinc-900 font-semibold shadow-md hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base backdrop-blur-sm"
+                        className="flex items-center justify-between px-3 py-3 w-[98%] mx-auto bg-[#1a73e8] hover:bg-[#1557b0] border-none rounded-lg transition-all duration-300 text-white font-semibold shadow-md hover:shadow-[0_8px_20px_rgba(26,115,232,0.3)] group cursor-pointer transform hover:-translate-y-1 text-sm md:text-base backdrop-blur-sm"
                       >
                         <div className="flex items-center gap-3">
                           <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
                           <span>{item.name}</span>
                         </div>
-                        <span className="text-zinc-500 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
+                        <span className="text-white opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
                           →
                         </span>
                       </a>
@@ -390,7 +385,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.2)] overflow-hidden relative z-20 mt-4">
+                <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] overflow-hidden relative z-20 mt-4">
                   <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
                     
                     {/* YELLOW HIGHLIGHT DISCLAIMER */}
@@ -401,7 +396,7 @@ export default function HomePage() {
                     <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
                       <a 
                         href="https://expo.dev/artifacts/eas/cFGmSKQew8LyDAazBtaeLx.apk" 
-                        className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-zinc-900 font-bold text-sm rounded-lg shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto"
+                        className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-lg shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto border-none"
                       >
                         <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -413,9 +408,9 @@ export default function HomePage() {
                         href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-zinc-900 font-bold text-sm rounded-lg shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto"
+                        className="group inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-lg shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto border-none"
                       >
-                        <svg className="w-4 h-4 fill-[#25D366]" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                         <span>Share on WhatsApp</span>
                       </a>
                     </div>
