@@ -400,35 +400,11 @@ export default function DashboardPage() {
         
         {/* ================= 🔥 TOP SECTION (NORMAL SIZE: max-w-6xl) 🔥 ================= */}
         <div className="w-full max-w-6xl space-y-10">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-fade-in-up">
+          
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-fade-in-up w-full relative">
              
-             <div className="flex items-center gap-3 md:gap-4">
-               {/* 🔥 GOLDEN STAR AVATAR 🔥 */}
-               {points !== null && (
-                 <div className="relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center shrink-0 drop-shadow-sm">
-                   <svg 
-                     className="absolute inset-0 w-full h-full animate-[spin_15s_linear_infinite]" 
-                     viewBox="0 0 24 24" 
-                     fill="url(#goldGradient)"
-                   >
-                     <defs>
-                       <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                         <stop offset="0%" stopColor="#FDE047" />
-                         <stop offset="40%" stopColor="#EAB308" />
-                         <stop offset="100%" stopColor="#A16207" />
-                       </linearGradient>
-                     </defs>
-                     <path 
-                       d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" 
-                       stroke="#854D0E" 
-                       strokeWidth="0.5" 
-                       strokeLinejoin="round"
-                     />
-                   </svg>
-                   <span className="relative z-10 text-[#3E2723] font-black text-[13px] md:text-[15px]">{points}</span>
-                 </div>
-               )}
-
+             {/* LEFT: Avatar properly kept left without stretching */}
+             <div className="flex items-center gap-3 md:gap-4 z-10 shrink-0">
                {userName && (
                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden shadow-sm border border-[#dadce0] flex items-center justify-center bg-[#1a73e8] text-white font-bold text-xl shrink-0">
                    {userAvatar ? (
@@ -438,22 +414,49 @@ export default function DashboardPage() {
                    )}
                  </div>
                )}
-               <h1 className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight">
+               <h1 className="text-3xl md:text-4xl font-bold text-[#202124] tracking-tight whitespace-nowrap">
                  {userName || "Your Dashboard"}
                </h1>
              </div>
+
+             {/* MIDDLE: Perfect Green Splat with Points (rotating very slowly, absolutely centered on large screens) */}
+             <div className="sm:absolute sm:left-1/2 sm:-translate-x-1/2 flex items-center justify-center z-0 my-4 sm:my-0">
+               {points !== null && (
+                 <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center shrink-0">
+                   {/* Perfect symmetric rounded 6-pointed star using heavy polygon stroke */}
+                   <svg 
+                     className="absolute inset-0 w-full h-full animate-[spin_25s_linear_infinite]" 
+                     viewBox="0 0 100 100"
+                     style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }}
+                   >
+                     <polygon 
+                       points="50,12 63,27.5 83,31 76,50 83,69 63,72.5 50,88 37,72.5 17,69 24,50 17,31 37,27.5"
+                       fill="#0f9d58"
+                       stroke="#0f9d58"
+                       strokeWidth="11"
+                       strokeLinejoin="round"
+                     />
+                   </svg>
+                   {/* Points in White Text */}
+                   <span className="relative z-10 text-white font-black text-lg md:text-xl drop-shadow-md">
+                     {points}
+                   </span>
+                 </div>
+               )}
+             </div>
              
-             <div className="flex flex-col sm:flex-row gap-3">
+             {/* RIGHT: Chatbot & Calculator Buttons pushed to right edge, slim & premium */}
+             <div className="flex flex-col sm:flex-row gap-3 z-10 sm:ml-auto">
                <button 
                  onClick={() => router.push('/chat')} 
-                 className="inline-flex justify-center items-center gap-2 text-[#5f6368] font-bold px-5 py-2.5 bg-white border border-[#dadce0] rounded-lg shadow-sm hover:bg-[#f1f3f4] hover:text-[#202124] transition-all"
+                 className="inline-flex justify-center items-center gap-2 text-[#5f6368] font-bold px-5 py-2.5 bg-white border border-[#dadce0] rounded-lg shadow-sm hover:bg-[#f1f3f4] hover:text-[#202124] transition-all whitespace-nowrap"
                >
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                  Arcade ChatBot ?
                </button>
                <button 
                  onClick={() => router.push('/calculator')} 
-                 className="inline-flex justify-center items-center gap-2 text-white font-bold px-5 py-2.5 bg-[#1a73e8] rounded-lg shadow-sm hover:bg-[#1557b0] transition-all"
+                 className="inline-flex justify-center items-center gap-2 text-white font-bold px-5 py-2.5 bg-[#1a73e8] rounded-lg shadow-sm hover:bg-[#1557b0] transition-all whitespace-nowrap"
                >
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                  Calculate Points
