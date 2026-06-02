@@ -425,7 +425,7 @@ export default function HomePage() {
 
                     <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
                       <a 
-                        href="https://expo.dev/artifacts/eas/cFGmSKQew8LyDAazBtaeLx.apk" 
+                        href="https://expo.dev/artifacts/eas/6LvAcpZ68bBdLGeH8knj8.apk" 
                         className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
                       >
                         <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
