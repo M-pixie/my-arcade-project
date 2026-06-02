@@ -338,7 +338,7 @@ export default function DashboardPage() {
         <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
           <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
             <span className="text-white font-medium text-sm md:text-base">
-              You have not completed any May labs yet. Complete challenges, earn points & unlock rewards.
+              You have not completed any June labs yet. Complete challenges, earn points & unlock rewards.
             </span>
             <div className="flex items-center gap-4 ml-4 flex-shrink-0">
               <button
@@ -550,7 +550,7 @@ export default function DashboardPage() {
                           onClick={() => router.push('/leaderboard')}
                           className="absolute top-3 right-3 bg-[#e8eaed]/60 hover:bg-[#dadce0]/80 text-[#3c4043] text-xs font-semibold px-3 py-1.5 rounded transition-colors z-30 border border-[#d5d7db]"
                        >
-                          View Leaderboard
+                          View Rank
                        </button>
 
                        {(() => {
@@ -630,7 +630,7 @@ export default function DashboardPage() {
                       onClick={() => router.push('/leaderboard')} 
                       className="relative w-full group bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3.5 px-6 rounded-md shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center text-base outline-none tracking-wide"
                     >
-                      <span>View Full Leaderboard</span>
+                      <span>View Top Rank</span>
                       <span className="absolute right-6 group-hover:translate-x-2 transition-transform duration-300 flex items-center">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" />
@@ -685,7 +685,7 @@ export default function DashboardPage() {
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.22s' }}>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
                 <h4 className="text-sm sm:text-base font-black text-[#5f6368] uppercase tracking-widest flex items-center gap-2">
-                  <span className="text-xl"></span> May Labs
+                  <span className="text-xl"></span> June Labs
                 </h4>
               </div>
 
@@ -749,7 +749,7 @@ export default function DashboardPage() {
               
               <div className="mt-10 sm:mt-12 w-full text-center border-t border-[#dadce0] pt-4">
                 <span className="text-[11px] sm:text-xs font-bold text-[#5f6368]">
-                  {completedLabs.length} / 6 May Labs Completed
+                  {completedLabs.length} / 6 June Labs Completed
                 </span>
               </div>
             </div>
@@ -759,7 +759,7 @@ export default function DashboardPage() {
             <div className="animate-fade-in-up bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
                 <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
-                  <span className="text-3xl"></span> May Labs Live !
+                  <span className="text-3xl"></span> June Labs Live !
                 </h4>
                 <span className="bg-[#e8f0fe] text-[#1a73e8] text-xs font-black px-4 py-1.5 rounded-md uppercase tracking-widest border border-[#d2e3fc]">
                   Your Labs Status
