@@ -75,67 +75,67 @@ export default function DashboardPage() {
       id: 'voyage',
       title: 'Arcade Voyage',
       subtitle: 'Practice as you go.',
-      image: 'https://services.google.com/fh/files/misc/voyage-may.png',
-      accessCode: '1q-firebase-29238',
+      image: 'https://services.google.com/fh/files/misc/arcade_voy.png',
+      accessCode: '1q-permission-2296',
       points: 1,
-      deadline: '31/05/26, 10:59 PM',
+      deadline: '30/06/26, 11:59 PM',
       link: 'https://www.skills.google/games/7172',
-      matchStrings: ['Arcade Voyage: Data Governance and Firebase Foundations']
+      matchStrings: ['Arcade Voyage: Identity Management and Pre-trained AI APIs']
     },
     {
       id: 'adventure',
       title: 'Arcade Adventure',
       subtitle: 'Play. Explore. Learn.',
       image: 'https://services.google.com/fh/files/misc/arcade-adv.png',
-      accessCode: '1q-appdeploy-84713',
+      accessCode: '1q-observe-07175',
       points: 1,
-      deadline: '31/05/26, 10:59 PM',
-      link: 'https://www.skills.google/games/7171',
-      matchStrings: ['Arcade Adventure: Modern App Deployment']
+      deadline: '30/06/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7222',
+      matchStrings: ['Arcade Adventure: App Dev and Cloud Observability']
     },
     {
       id: 'trail',
       title: 'Arcade Trail',
       subtitle: 'Build through hands-on.',
-      image: 'https://services.google.com/fh/files/misc/trail-may.png',
-      accessCode: '1q-devops-95082',
+      image: 'https://services.google.com/fh/files/misc/arcade_trail.png',
+      accessCode: '1q-dataset-72501',
       points: 1,
-      deadline: '31/05/26, 11:09 PM',
-      link: 'https://www.skills.google/games/7173',
-      matchStrings: ['Arcade Trail: Cloud Security and DevOps Foundations']
+      deadline: '30/06/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7224',
+      matchStrings: ['Arcade Trail: Data Engineering and Information Protection']
     },
     {
       id: 'basecamp',
       title: 'Arcade Base Camp',
       subtitle: 'Gain essential Google Cloud skills',
-      image: 'https://services.google.com/fh/files/misc/arcade-bc-may.png',
-      accessCode: '1q-basecamp-05059',
+      image: 'https://services.google.com/fh/files/misc/arcade_bc.png',
+      accessCode: '1q-basecamp-0626',
       points: 1,
-      deadline: '31/05/26, 10:59 PM',
-      link: 'https://www.skills.google/games/7174',
-      matchStrings: ['Arcade Base Camp May 2026']
+      deadline: '30/06/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7225',
+      matchStrings: ['Arcade Base Camp June 2026']
     },
     {
-      id: 'Expressive',
-      title: 'Expressive Efficiency',
+      id: 'cloud canvas',
+      title: 'Work Meets Play: Cloud Canvas',
       subtitle: 'Precision in Expression!',
-      image: 'https://services.google.com/fh/files/misc/wmp-may.png',
-      accessCode: '1q-worknplay-35206',
+      image: 'https://services.google.com/fh/files/misc/arcade_work.png',
+      accessCode: '1q-worknplay-2557',
       points: 1,
-      deadline: '31/05/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7176',
-      matchStrings: ['Work Meets Play: Expressive Efficiency']
+      deadline: '30/06/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7227',
+      matchStrings: ['Work Meets Play: Cloud Canvas']
     },
     {
-      id: 'Skillup',
-      title: 'Skill Up Summer',
+      id: 'logic',
+      title: 'Logic Log',
       subtitle: 'Google Skills',
-      image: 'https://services.google.com/fh/files/misc/specialgame-may.png',
-      accessCode: '1q-summer-06031',
+      image: 'https://services.google.com/fh/files/misc/arcade_logic.png',
+      accessCode: '1q-lookml-25118',
       points: 1,
-      deadline: '31/05/26, 10:59 PM',
-      link: 'https://www.skills.google/games/7175',
-      matchStrings: ['Skill Up Summer']
+      deadline: '30/06/26, 11:59 PM',
+      link: 'https://www.skills.google/games/7226',
+      matchStrings: ['Logic Log']
     }
   ];
 
