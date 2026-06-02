@@ -124,114 +124,127 @@ export default function FacilitatorPage() {
 
         <main className="pt-20">
           
-          {/* ================= PREMIUM HERO SECTION ================= */}
-          <section className="relative border-b border-[#dadce0] bg-gradient-to-b from-[#f0f4f8] to-[#ffffff] overflow-hidden">
+          {/* ================= PREMIUM HERO SECTION (UPDATED) ================= */}
+          <section className="relative border-b border-[#dadce0] bg-white overflow-hidden">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.04] blur-[100px] rounded-full pointer-events-none"></div>
-            <div className="absolute bottom-[-10%] right-[-5%] w-[30%] h-[50%] bg-[#34A853] opacity-[0.04] blur-[100px] rounded-full pointer-events-none"></div>
-
-            <div className="max-w-6xl mx-auto px-6 pt-10 pb-16 md:pt-12 md:pb-20 flex flex-col items-center justify-center relative z-10">
+            
+            <div className="max-w-6xl mx-auto px-6 pt-16 pb-16 md:pt-20 md:pb-20 relative z-10">
               
-              <div className="flex-1 text-center w-full max-w-6xl mx-auto mb-4">
+              {/* Top Hero Row */}
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 mb-16">
                 
-                {/* 🔥 Sleek & Clean Heading (Less Bulky) */}
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1a73e8] tracking-tight text-center mb-8 mt-4">
-                  Facilitator Program '26
-                </h1>
-
-                {/* NEW GRID LAYOUT: Left (Highlights & Status) | Right (Quick Actions Buttons) */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-left mb-10 w-full">
+                {/* Left Content (Based on First Picture) */}
+                <div className="flex-1 w-full lg:w-[60%] text-left lg:ml-[-32px]">
+                  <h4 className="text-[#5f6368] font-bold tracking-widest text-sm uppercase mb-3">Google Cloud Arcade</h4>
                   
-                  {/* LEFT COLUMN: Highlights and Registration Status */}
-                  <div className="lg:col-span-2 flex flex-col gap-6 w-full">
-                    
-                    {/* Highlights Box */}
-                    <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                      <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight">Facilitator Program Highlights</h2>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
-                          No-cost gaming campaign
-                        </li>
-                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
-                          Learn in-demand cloud skills
-                        </li>
-                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#4285f4]"></span>
-                          Earn digital badges & points
-                        </li>
-                        <li className="flex items-center gap-3 text-[15px] font-bold text-[#3c4043]">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#fbbc04]"></span>
-                          Claim swag & goodies
-                        </li>
-                      </ul>
+                  <h1 className="text-[52px] sm:text-[64px] md:text-[76px] font-normal text-[#202124] leading-tight mb-6 tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                    Facilitator 2026
+                  </h1>
+                  
+                  <p className="text-[#3c4043] text-[17px] sm:text-[19px] leading-[1.6] mb-10 max-w-2xl font-normal">
+                    The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards <strong className="text-[#202124] font-bold">claiming swag prizes and Google Cloud goodies.</strong>
+                  </p>
+
+                  <h3 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight">
+                    Enrolments will OPEN soon!
+                  </h3>
+
+                  <div className="flex flex-col gap-5 text-[#202124] font-normal text-[17px]">
+                    <div className="flex items-start gap-4">
+                      <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+                      <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                     </div>
-
-                    {/* Long Premium Registration Status Box */}
-                    <div className="bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 w-full flex flex-col md:flex-row items-center justify-between gap-6 h-full">
-                      <div className="flex-1">
-                          <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-2 tracking-tight">Registration Status</h2>
-                          <p className="text-[#5f6368] text-sm font-bold">
-                            Enrolments are expected to open in March 2026 in the Arcade Facilitator Program.
-                          </p>
-                      </div>
-                      <div className="w-full md:w-auto bg-[#1a73e8] text-white text-center font-bold px-10 py-4 rounded-md shadow-sm text-[15px] animate-pulse flex-shrink-0">
-                        Enrolments Opening Soon
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* RIGHT COLUMN: Quick Actions (Buttons) */}
-                  <div className="lg:col-span-1 bg-white border border-[#e8eaed] rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
-                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight flex items-center gap-2">
-                      <svg className="w-5 h-5 text-[#fbbc04]" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" /><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" /></svg>
-                      Quick Actions
-                    </h2>
-                    
-                    <div className="flex flex-col gap-3.5 mt-auto">
-                      <button 
-                        onClick={() => router.push("/calculator")}
-                        className="w-full px-6 py-4 bg-[#34a853] text-white font-bold text-[15px] rounded-lg hover:bg-[#2b8a44] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                      >
-                        <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        Calculate Points
-                      </button>
-
-                      <button 
-                        onClick={() => router.push("/leaderboard")}
-                        className="w-full px-6 py-4 bg-white text-[#1a73e8] border border-[#dadce0] font-bold text-[15px] rounded-lg hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                      >
-                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        Leaderboard
-                      </button>
-
-                      <button 
-                        onClick={() => router.push("/resources")}
-                        className="w-full px-6 py-4 bg-[#fbbc04] text-[#202124] font-bold text-[15px] rounded-lg hover:bg-[#f2a900] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                      >
-                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                        Skill Badges List
-                      </button>
-
-                      <button 
-                        onClick={() => router.push("/dashboard")}
-                        className="w-full px-6 py-4 bg-[#1a73e8] text-white font-bold text-[15px] rounded-lg hover:bg-[#1557b0] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group"
-                      >
-                        <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                        Dashboard
-                      </button>
+                    <div className="flex items-start gap-4">
+                      <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+                      <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                     </div>
                   </div>
-
                 </div>
+
+                {/* Right Content (CSS Generated Graphic with Animation) */}
+                <div className="w-full lg:w-[40%] flex justify-center lg:justify-end flex-shrink-0 mt-8 lg:mt-0">
+                  <div className="w-[280px] h-[280px] sm:w-[330px] sm:h-[330px] rounded-full bg-[#111216] flex flex-col items-center justify-center relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-[12px] border-[#292a36] overflow-hidden">
+                    
+                    {/* Background Noise/Texture */}
+                    <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                    
+                    {/* Floating Symbols (With Animation) */}
+                    <div className="absolute top-[22%] left-[20%] text-[#ff66c4] text-2xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow">+</div>
+                    <div className="absolute bottom-[28%] right-[15%] text-[#ff66c4] text-3xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '0.5s' }}>+</div>
+                    <div className="absolute top-[48%] left-[10%] text-[#ff66c4] text-xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '1s' }}>+</div>
+                    <div className="absolute top-[18%] right-[38%] text-[#4285f4] text-xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '1.5s' }}>+</div>
+                    
+                    {/* Floating Dots Group (With Float Animation) */}
+                    <div className="absolute top-[32%] right-[20%] flex gap-1.5 animate-float-slow">
+                      <div className="w-1.5 h-1.5 bg-[#ff66c4] rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    </div>
+                    <div className="absolute bottom-[20%] left-[38%] flex gap-1.5 animate-float-slow" style={{ animationDelay: '1s' }}>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-[#ff66c4] rounded-full"></div>
+                    </div>
+                    <div className="absolute top-[20%] left-[32%] flex flex-col gap-1.5 animate-float-slow" style={{ animationDelay: '2s' }}>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-[#ff66c4] rounded-full"></div>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    </div>
+                    
+                    {/* Scattered Blue Dots (With Opacity Pulse) */}
+                    <div className="absolute top-[42%] right-[10%] w-1.5 h-1.5 bg-[#4285f4] rounded-full animate-pulse-opacity-slow"></div>
+                    <div className="absolute bottom-[35%] left-[15%] w-1.5 h-1.5 bg-[#4285f4] rounded-full animate-pulse-opacity-slow" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-[15%] right-[35%] w-1.5 h-1.5 bg-[#4285f4] rounded-full animate-pulse-opacity-slow" style={{ animationDelay: '2s' }}></div>
+
+                    {/* Google Cloud Logo */}
+                    <div className="flex items-center gap-2 mb-3.5 z-10">
+                      <svg className="w-6.5 h-6.5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
+                      </svg>
+                      <span className="text-white font-medium text-[17px] tracking-wide">Google Cloud</span>
+                    </div>
+
+                    {/* Arcade Text (Pixel Style Font Fallback) */}
+                    <div className="text-[#fbbc04] font-black text-3xl sm:text-[40px] leading-[1.1] text-center z-10 mb-3.5" style={{ fontFamily: '"Courier New", monospace', letterSpacing: '0.05em', textShadow: '2px 2px 0px rgba(0,0,0,0.8)' }}>
+                      THE<br/>ARCADE
+                    </div>
+
+                    {/* Facilitator Program */}
+                    <div className="text-white font-bold text-xl sm:text-[24px] text-center z-10 leading-snug tracking-wide">
+                      Facilitator<br/>Program
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-              {/* SLIM & PREMIUM Assistance & Support Block */}
-              <div className="w-full flex flex-col gap-6 max-w-6xl mx-auto text-left mb-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* 1. Slim Premium Referral Code Box */}
-                  <div className="md:col-span-2 bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center relative overflow-hidden">
+              {/* Quick Actions & Contact Blocks Area */}
+              <div className="flex flex-col gap-10">
+                
+                {/* 4 Button Action Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+                  <button onClick={() => router.push("/calculator")} className="w-full px-4 py-4 bg-[#34a853] text-white font-bold text-[15px] rounded-lg hover:bg-[#2b8a44] hover:shadow-md transition-all flex items-center justify-center gap-2 group">
+                    <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    Calculate Points
+                  </button>
+                  <button onClick={() => router.push("/leaderboard")} className="w-full px-4 py-4 bg-white text-[#1a73e8] border border-[#dadce0] font-bold text-[15px] rounded-lg hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:shadow-md transition-all flex items-center justify-center gap-2 group">
+                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    Leaderboard
+                  </button>
+                  <button onClick={() => router.push("/resources")} className="w-full px-4 py-4 bg-[#fbbc04] text-[#202124] font-bold text-[15px] rounded-lg hover:bg-[#f2a900] hover:shadow-md transition-all flex items-center justify-center gap-2 group">
+                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    Skill Badges List
+                  </button>
+                  <button onClick={() => router.push("/dashboard")} className="w-full px-4 py-4 bg-[#1a73e8] text-white font-bold text-[15px] rounded-lg hover:bg-[#1557b0] hover:shadow-md transition-all flex items-center justify-center gap-2 group">
+                    <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                    Dashboard
+                  </button>
+                </div>
+
+                {/* Slim Assistance & Referral Block */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                  <div className="md:col-span-2 bg-white border border-[#e8eaed] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center relative overflow-hidden">
                     <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#e8f0fe] rounded-full blur-3xl opacity-50 pointer-events-none"></div>
                     <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight flex items-center gap-2.5 relative z-10">
                       <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
@@ -256,16 +269,12 @@ export default function FacilitatorPage() {
                     </div>
                   </div>
 
-                  {/* 2. Slim Premium Assistance / Help Box */}
-                  <div className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center">
-                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight">May I help you?</h2>
+                  <div className="bg-white border border-[#e8eaed] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center">
+                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight">Need help ?</h2>
                     <div className="flex flex-col gap-3">
-                      <button 
-                        onClick={() => document.getElementById('contact-coordinators')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="group w-full text-left px-4 py-3 bg-[#f8fbff] border border-[#d2e3fc] rounded-lg hover:bg-[#e8f0fe] hover:border-[#aecbfa] hover:-translate-y-0.5 transition-all duration-200 shadow-sm flex items-center justify-between"
-                      >
+                      <button onClick={() => document.getElementById('contact-coordinators')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-4 py-3 bg-[#f8fbff] border border-[#d2e3fc] rounded-lg hover:bg-[#e8f0fe] hover:border-[#aecbfa] hover:-translate-y-0.5 transition-all duration-200 shadow-sm flex items-center justify-between">
                         <div className="flex flex-col">
-                          <span className="font-bold text-[#1a73e8] text-[14px] leading-tight">Contact Co-ordinator</span>
+                          <span className="font-bold text-[#1a73e8] text-[14px] leading-tight">Co-ordinator</span>
                           <span className="text-[#1a73e8] text-[11px] font-bold opacity-80 mt-0.5">For Arcade Labs Issues</span>
                         </div>
                         <div className="w-7 h-7 rounded-full bg-white border border-[#d2e3fc] flex items-center justify-center group-hover:bg-[#1a73e8] group-hover:border-[#1a73e8] transition-colors flex-shrink-0">
@@ -273,10 +282,7 @@ export default function FacilitatorPage() {
                         </div>
                       </button>
 
-                      <button 
-                        onClick={() => document.getElementById('contact-facilitator')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="group w-full text-left px-4 py-3 bg-white border border-[#dadce0] rounded-lg hover:bg-[#f8f9fa] hover:border-[#bdc1c6] hover:-translate-y-0.5 transition-all duration-200 shadow-sm flex items-center justify-between"
-                      >
+                      <button onClick={() => document.getElementById('contact-facilitator')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-4 py-3 bg-white border border-[#dadce0] rounded-lg hover:bg-[#f8f9fa] hover:border-[#bdc1c6] hover:-translate-y-0.5 transition-all duration-200 shadow-sm flex items-center justify-between">
                         <div className="flex flex-col">
                           <span className="font-bold text-[#3c4043] text-[14px] leading-tight">Contact Facilitator</span>
                           <span className="text-[#5f6368] text-[11px] font-bold mt-0.5">For General Queries</span>
@@ -288,8 +294,8 @@ export default function FacilitatorPage() {
                     </div>
                   </div>
                 </div>
-              </div>
 
+              </div>
             </div>
           </section>
 
@@ -298,7 +304,7 @@ export default function FacilitatorPage() {
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-8 text-center">Milestones & Swags</h2>
               
-              <div className="bg-white border border-[#e8eaed] rounded-xl shadow-sm overflow-hidden mb-8">
+              <div className="bg-white border border-[#e8eaed] rounded-lg shadow-sm overflow-hidden mb-8">
                 <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#f1f3f4] border-b border-[#e8eaed] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
                   <div className="col-span-5">Users Milestone</div>
                   <div className="col-span-4 text-center">Required Points</div>
@@ -344,7 +350,7 @@ export default function FacilitatorPage() {
                 </div>
               </div>
 
-              <div className="bg-[#fce8e6] border border-[#fad2cf] rounded-xl p-6 shadow-sm flex items-start sm:items-center gap-5 transform hover:-translate-y-1 transition-transform duration-300">
+              <div className="bg-[#fce8e6] border border-[#fad2cf] rounded-lg p-6 shadow-sm flex items-start sm:items-center gap-5 transform hover:-translate-y-1 transition-transform duration-300">
                 <div className="w-12 h-12 rounded-full bg-white border border-[#fad2cf] flex items-center justify-center flex-shrink-0 text-2xl text-[#ea4335] font-bold shadow-sm">
                   !
                 </div>
@@ -366,37 +372,39 @@ export default function FacilitatorPage() {
                 0%, 100% { transform: translateY(0px); }
                 50% { transform: translateY(-12px); }
               }
+              @keyframes customFloatLight {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-3px); }
+              }
+              @keyframes slowPulseScale {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+              }
+              @keyframes slowPulseOpacity {
+                0%, 100% { opacity: 0.8; }
+                50% { opacity: 1; }
+              }
               .float-anim-1 { animation: customFloat 4s ease-in-out infinite; }
               .float-anim-2 { animation: customFloat 4s ease-in-out infinite 1s; }
               .float-anim-3 { animation: customFloat 4s ease-in-out infinite 2s; }
+              .animate-float-slow { animation: customFloatLight 6s ease-in-out infinite; }
+              .animate-pulse-scale-slow { animation: slowPulseScale 4s ease-in-out infinite; }
+              .animate-pulse-opacity-slow { animation: slowPulseOpacity 4s ease-in-out infinite; }
             `}</style>
             
-            {/* Subtle glow effect in the background to make images pop */}
             <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-[#e8f0fe] rounded-full blur-[100px] -translate-y-1/2 opacity-60 pointer-events-none"></div>
 
             <div className="max-w-6xl mx-auto relative z-10">
-              
               <div className="text-center mb-16">
                 <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight">Arcade Facilitator & Team</h2>
-                
               </div>
 
-              {/* 🔥 REMOVED THE BOX, BORDERS AND BACKGROUND! Content flows directly on the section 🔥 */}
               <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 lg:gap-20">
-                
-                {/* Left Column: BIG Animated Images Floating directly on background */}
                 <div className="flex flex-col items-center justify-center flex-shrink-0 md:w-5/12">
-                  
                   <div className="flex gap-6 sm:gap-8 mb-4">
                     {/* Manish Profile */}
                     <div className="flex flex-col items-center float-anim-1">
-                      <a 
-                        href="https://linkedin.com/in/manish-ui" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative"
-                        style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
-                      >
+                      <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
                         <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-full h-full object-cover object-top" style={{ imageRendering: "high-quality" }} />
                       </a>
                       <div className="mt-5 text-center">
@@ -409,13 +417,7 @@ export default function FacilitatorPage() {
 
                     {/* Anjali Profile */}
                     <div className="flex flex-col items-center float-anim-2">
-                      <a 
-                        href="https://www.linkedin.com/in/anjali-p-a2ba1419b" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative"
-                        style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
-                      >
+                      <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
                         <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-full h-full object-cover object-top" style={{ imageRendering: "high-quality" }} />
                       </a>
                       <div className="mt-5 text-center">
@@ -429,13 +431,7 @@ export default function FacilitatorPage() {
 
                   {/* Rohit Profile */}
                   <div className="flex flex-col items-center float-anim-3 -mt-4 relative z-20">
-                    <a 
-                      href="https://www.linkedin.com/in/rohit-kumar-b482752ab" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative"
-                      style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}
-                    >
+                    <a href="https://www.linkedin.com/in/rohit-kumar-b482752ab" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
                       <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-full h-full object-cover object-top" style={{ imageRendering: "high-quality" }} />
                     </a>
                     <div className="mt-5 text-center">
@@ -445,16 +441,14 @@ export default function FacilitatorPage() {
                       </div>
                     </div>
                   </div>
-
                 </div>
 
-                {/* Right Column: Normal Bio, Stats & Compact Dual Buttons (REMOVED vertical line too!) */}
                 <div className="flex-1 flex flex-col justify-center">
                   <p className="text-[#3c4043] text-[17px] leading-relaxed mb-8 text-center md:text-left font-normal">
                     As a dedicated Google Cloud Arcade Facilitator in 2025 & 26, Manish & Anjali Patel has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts. He is passionate about empowering the community to upskill, earn certifications, and claim official Google Cloud swags.
                   </p>
 
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-5 rounded-xl border border-[#e8eaed] shadow-sm mb-8">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-5 rounded-lg border border-[#e8eaed] shadow-sm mb-8">
                     {[
                       { icon: "🏆", title: "2x Ultimate", subtitle: "Cohort 1 & 2" },
                       { icon: "👥", title: "2000+", subtitle: "People Guided" },
@@ -470,34 +464,17 @@ export default function FacilitatorPage() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-                    <a 
-                      href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-bold rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none hover:-translate-y-0.5"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                      </svg>
+                    <a href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-bold rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none hover:-translate-y-0.5">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                       WhatsApp
                     </a>
-                    
-                    <a 
-                      href="https://linkedin.com/in/manish-ui" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 bg-[#0a66c2] hover:bg-[#004182] text-white text-[15px] font-bold rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none hover:-translate-y-0.5"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                      </svg>
+                    <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 bg-[#0a66c2] hover:bg-[#004182] text-white text-[15px] font-bold rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none hover:-translate-y-0.5">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                       LinkedIn
                     </a>
                   </div>
                 </div>
-
               </div>
-
             </div>
           </section>
 
@@ -509,12 +486,11 @@ export default function FacilitatorPage() {
                 <p className="text-[#5f6368] text-base max-w-2xl mx-auto font-bold">
                   Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly.
                 </p>
-                
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {contactCoordinators.map((coord, idx) => (
-                  <div key={idx} className="bg-white border border-[#e8eaed] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
+                  <div key={idx} className="bg-white border border-[#e8eaed] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex flex-col">
                         <h3 className="text-[19px] font-bold text-[#202124]">{coord.name}</h3>
@@ -525,23 +501,19 @@ export default function FacilitatorPage() {
                       </a>
                     </div>
                     
-                    <button 
-                      onClick={() => setSelectedCoordinator(coord)}
-                      className="w-full py-2 bg-[#1a73e8] text-white font-bold text-sm rounded-md hover:bg-[#1557b0] transition-all shadow-sm flex items-center justify-center tracking-wide"
-                    >
+                    <button onClick={() => setSelectedCoordinator(coord)} className="w-full py-2 bg-[#1a73e8] text-white font-bold text-sm rounded-md hover:bg-[#1557b0] transition-all shadow-sm flex items-center justify-center tracking-wide">
                       Contact
                     </button>
                   </div>
                 ))}
               </div>
-
             </div>
           </section>
 
           {/* 🔥 MODAL FOR CO-ORDINATOR FORM 🔥 */}
           {selectedCoordinator && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-              <div className="bg-white border border-[#dadce0] rounded-xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-up">
+              <div className="bg-white border border-[#dadce0] rounded-lg w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-up">
                 
                 <div className="bg-[#f8f9fa] border-b border-[#e8eaed] p-5 flex justify-between items-center">
                   <h3 className="font-bold text-[#202124] text-lg flex items-center gap-2">
@@ -556,38 +528,17 @@ export default function FacilitatorPage() {
                 <div className="p-6 space-y-5">
                   <div>
                     <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">Enter Labs Name</label>
-                    <input 
-                      type="text" 
-                      value={coordinatorForm.name}
-                      onChange={(e) => setCoordinatorForm({...coordinatorForm, name: e.target.value})}
-                      placeholder="e.g. Share Data Using Google Data Cloud"
-                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors"
-                    />
+                    <input type="text" value={coordinatorForm.name} onChange={(e) => setCoordinatorForm({...coordinatorForm, name: e.target.value})} placeholder="e.g. Share Data Using Google Data Cloud" className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors" />
                   </div>
                   <div>
                     <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">GSP No.</label>
-                    <input 
-                      type="text" 
-                      value={coordinatorForm.gsp}
-                      onChange={(e) => setCoordinatorForm({...coordinatorForm, gsp: e.target.value})}
-                      placeholder="e.g. GSP398"
-                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors uppercase"
-                    />
+                    <input type="text" value={coordinatorForm.gsp} onChange={(e) => setCoordinatorForm({...coordinatorForm, gsp: e.target.value})} placeholder="e.g. GSP398" className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors uppercase" />
                   </div>
                   <div>
                     <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">Problem / Query</label>
-                    <textarea 
-                      value={coordinatorForm.query}
-                      onChange={(e) => setCoordinatorForm({...coordinatorForm, query: e.target.value})}
-                      placeholder="Describe your lab issue briefly..."
-                      rows={3}
-                      className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors resize-none"
-                    ></textarea>
+                    <textarea value={coordinatorForm.query} onChange={(e) => setCoordinatorForm({...coordinatorForm, query: e.target.value})} placeholder="Describe your lab issue briefly..." rows={3} className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors resize-none"></textarea>
                   </div>
-                  <button 
-                    onClick={handleCoordinatorSubmit}
-                    className="w-full py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-md shadow-sm transition-colors flex items-center justify-center mt-2 tracking-wide"
-                  >
+                  <button onClick={handleCoordinatorSubmit} className="w-full py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-md shadow-sm transition-colors flex items-center justify-center mt-2 tracking-wide">
                     Send Message
                   </button>
                 </div>
@@ -605,7 +556,7 @@ export default function FacilitatorPage() {
                 </p>
               </div>
 
-              <div className="bg-white border border-[#e8eaed] rounded-xl shadow-sm overflow-hidden mb-6">
+              <div className="bg-white border border-[#e8eaed] rounded-lg shadow-sm overflow-hidden mb-6">
                 <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-[#f1f3f4] border-b border-[#e8eaed] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
                   <div className="col-span-5">Members</div>
                   <div className="col-span-3 text-center">Skill Badges</div>
@@ -616,18 +567,11 @@ export default function FacilitatorPage() {
                 <div className="divide-y divide-[#e8eaed]">
                   {coordinatorsData.map((coord, index) => (
                     <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
-                      
                       <div className="col-span-1 md:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                        <a 
-                          href={coord.linkedin} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="font-bold text-[#202124] hover:text-[#1a73e8] text-base transition-colors"
-                        >
+                        <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="font-bold text-[#202124] hover:text-[#1a73e8] text-base transition-colors">
                           {coord.name}
                         </a>
                       </div>
-
                       <div className="col-span-1 md:col-span-5 grid grid-cols-2 gap-4 md:gap-0 mt-3 md:mt-0">
                         <div className="md:col-span-1 flex flex-col md:items-center">
                           <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-1">Skill Badges</span>
@@ -638,29 +582,14 @@ export default function FacilitatorPage() {
                           <span className="font-bold text-[#b06000] text-base">{coord.points}</span>
                         </div>
                       </div>
-
                       <div className="col-span-1 md:col-span-2 flex items-center justify-start md:justify-end gap-3 mt-3 md:mt-0">
-                        <a 
-                          href={coord.profileUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="inline-flex items-center justify-center px-4 py-2 bg-white border border-[#dadce0] text-[#1a73e8] text-sm font-bold rounded-lg hover:bg-[#f8f9fa] transition-colors shadow-sm"
-                        >
+                        <a href={coord.profileUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-4 py-2 bg-white border border-[#dadce0] text-[#1a73e8] text-sm font-bold rounded-lg hover:bg-[#f8f9fa] transition-colors shadow-sm">
                           Profile
                         </a>
-                        <a 
-                          href={coord.linkedin} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-[#0a66c2] hover:text-[#004182] transition-colors"
-                          title="View LinkedIn Profile"
-                        >
-                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                          </svg>
+                        <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors" title="View LinkedIn Profile">
+                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                         </a>
                       </div>
-                      
                     </div>
                   ))}
                 </div>
@@ -679,28 +608,16 @@ export default function FacilitatorPage() {
               <div className="border border-[#e8eaed] rounded-lg bg-white divide-y divide-[#e8eaed] shadow-sm">
                 {officialFaqs.map((faq, index) => (
                   <div key={index} className={`overflow-hidden bg-white ${index === 0 ? 'rounded-t-lg' : ''} ${index === officialFaqs.length - 1 ? 'rounded-b-lg' : ''}`}>
-                    <button
-                      className="w-full flex justify-between items-center p-6 sm:p-8 text-left hover:bg-[#f8f9fa] transition-colors gap-6 focus:outline-none"
-                      onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                    >
+                    <button className="w-full flex justify-between items-center p-6 sm:p-8 text-left hover:bg-[#f8f9fa] transition-colors gap-6 focus:outline-none" onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}>
                       <span className="font-bold text-lg sm:text-xl text-[#202124] leading-snug">
                         {faq.question}
                       </span>
-                      <svg 
-                        className={`w-6 h-6 text-[#1a73e8] flex-shrink-0 transform transition-transform duration-300 ${openFaqIndex === index ? "rotate-180" : ""}`} 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className={`w-6 h-6 text-[#1a73e8] flex-shrink-0 transform transition-transform duration-300 ${openFaqIndex === index ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
                     
-                    <div 
-                      className={`transition-all duration-300 ease-in-out ${
-                        openFaqIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                      }`}
-                    >
+                    <div className={`transition-all duration-300 ease-in-out ${openFaqIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}>
                       <div className="p-6 sm:p-8 pt-0 text-[#3c4043] text-base sm:text-lg font-bold leading-relaxed bg-[#f8fbff]">
                         {faq.answer}
                       </div>
@@ -710,17 +627,12 @@ export default function FacilitatorPage() {
               </div>
 
               <div className="mt-10 text-center">
-                 <a 
-                   href="https://rsvp.withgoogle.com/events/arcade-facilitator/faqs" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   className="inline-flex items-center gap-2 text-base font-bold text-[#1a73e8] hover:text-[#1557b0] transition-colors group bg-[#e8f0fe] px-6 py-3 rounded-full"
-                 >
-                   View all FAQs on official site
-                   <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                   </svg>
-                 </a>
+                   <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/faqs" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-base font-bold text-[#1a73e8] hover:text-[#1557b0] transition-colors group bg-[#e8f0fe] px-6 py-3 rounded-full">
+                     View all FAQs on official site
+                     <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                     </svg>
+                   </a>
               </div>
             </div>
           </section>
