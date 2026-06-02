@@ -21,7 +21,7 @@ const initialBadgesData = [
   { id: "08", title: "Mitigate Threats and Vulnerabilities with Security Command...", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/759" },
 
   // PAGE 2
-  { id: "09", title: "Monitor Environments with Google Cloud Managed Service for...", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/761" },
+  { id: "09", title: "Monitor Environments with Google Cloud Managed Service for Prometheus", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/761" },
   { id: "10", title: "Get Started with Dataplex", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/726" },
   { id: "11", title: "Prompt Design in Vertex AI", duration: "105", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/976" },
   { id: "12", title: "Configure Service Accounts and IAM Roles for Google Cloud", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/702" },
