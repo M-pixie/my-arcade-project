@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Search, ExternalLink, Clock, Layers, ChevronDown, CheckCircle2, Circle, Check } from "lucide-react";
+import { Search, ExternalLink, Clock, Layers, ChevronDown, CheckCircle2, Circle, Check, ArrowUp, ArrowDown } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 
@@ -125,10 +125,6 @@ const initialBadgesData = [
   { id: "90", title: "Perform Predictive Data Analysis in BigQuery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/656" },
   { id: "91", title: "Automate Data Capture at Scale with Document AI", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/674" },
   { id: "92", title: "Manage Data Models in Looker", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/651" },
-  
-  
-
-  
   { id: "93", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" }
 ];
 
@@ -140,6 +136,7 @@ export default function ResourcesPage() {
   
   const [autoCompletedIds, setAutoCompletedIds] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false); // Scroll logic hook
 
   useEffect(() => {
     setIsMounted(true);
@@ -173,6 +170,24 @@ export default function ResourcesPage() {
     
   }, []);
 
+  // ================= SCROLL LOGIC =================
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 300); // 300px scroll hote hi arrow up ho jayega
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleScrollAction = () => {
+    if (isScrolled) {
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to Top
+    } else {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }); // Scroll to Bottom
+    }
+  };
+  // ================================================
+
   const processedData = useMemo(() => {
     let filtered = initialBadgesData.filter((badge) => {
       const matchesSearch = badge.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -205,7 +220,7 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pt-20"> 
+    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pt-14 relative"> 
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes premiumFastBlink {
           0%   { background-color: #d1e7dd; border-color: #a3cfbb; }
@@ -221,12 +236,25 @@ export default function ResourcesPage() {
 
       <Navbar />
 
+      {/* Dynamic Scroll Top/Bottom Button (Fixed at Bottom Right) */}
+      <button
+        onClick={handleScrollAction}
+        className="fixed bottom-8 right-8 z-50 w-12 h-12 flex items-center justify-center bg-white border border-[#dadce0] rounded-full text-[#5f6368] hover:text-[#1a73e8] hover:border-[#1a73e8] hover:bg-[#f8f9fa] transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_16px_rgba(26,115,232,0.15)]"
+        title={isScrolled ? "Scroll to Top" : "Scroll to Bottom"}
+      >
+        {isScrolled ? (
+          <ArrowUp className="w-6 h-6 transition-transform duration-300" />
+        ) : (
+          <ArrowDown className="w-6 h-6 transition-transform duration-300" />
+        )}
+      </button>
+
       {/* ================= SEARCH & ADVANCED FILTERS ================= */}
-      <section className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#dadce0] shadow-sm pt-4">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-6 py-5">
+      <section className="sticky top-16 lg:top-[72px] z-30 bg-white/95 backdrop-blur-md border-b border-[#dadce0] shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-5 pt-3">
           
-          {/* Main Filter Premium Blue Buttons (Restored to Inline without wrapping) */}
-          <div className="flex flex-nowrap items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto pb-1">
+          {/* Main Filter Premium Blue Buttons - Pushed left and added slight px-1 padding for better scrolling view */}
+          <div className="flex flex-nowrap items-center justify-start gap-2 sm:gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto pb-1 px-1 sm:px-0">
             {["All", "Introductory", "Intermediate", "Advanced"].map((f) => (
               <button
                 key={f}
@@ -244,10 +272,10 @@ export default function ResourcesPage() {
 
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
             
-            {/* LIVE TRACKER BOX (Clickable for Navigation) */}
+            {/* LIVE TRACKER BOX */}
             {isMounted && (
-              <div className="relative group/tracker">
-                <div className="flex bg-white border border-[#dadce0] rounded-md overflow-hidden text-sm w-full sm:w-auto shadow-sm hover:border-[#1a73e8] transition-colors">
+              <div className="relative group/tracker w-full sm:w-auto">
+                <div className="flex bg-white border border-[#dadce0] rounded-md overflow-hidden text-sm w-full shadow-sm hover:border-[#1a73e8] transition-colors">
                   <div 
                     onClick={() => scrollToSection('completed-section')}
                     className="px-3 py-2.5 text-[#1e8e3e] font-bold border-r border-[#dadce0] bg-[#e6f4ea]/60 flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#e6f4ea] transition-colors"
