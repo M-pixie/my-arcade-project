@@ -168,6 +168,16 @@ export default function ResourcesPage() {
 
     setAutoCompletedIds(autoCompleted);
     
+    // 🔥 FIX FOR CROSS-PAGE AUTO-SCROLL
+    setTimeout(() => {
+      if (window.location.hash === "#completed-section") {
+        const element = document.getElementById("completed-section");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }, 300); // 300ms ka delay taaki data render ho jaye
+    
   }, []);
 
   // ================= SCROLL LOGIC =================
@@ -275,18 +285,20 @@ export default function ResourcesPage() {
             {/* LIVE TRACKER BOX */}
             {isMounted && (
               <div className="relative group/tracker w-full sm:w-auto">
-                <div className="flex bg-white border border-[#dadce0] rounded-md overflow-hidden text-sm w-full shadow-sm hover:border-[#1a73e8] transition-colors">
+                <div className="flex bg-white border border-[#dadce0] rounded-md overflow-hidden text-sm w-full shadow-sm transition-colors">
+                  {/* Completed Tracker Box - Changed to darker, shining green */}
                   <div 
                     onClick={() => scrollToSection('completed-section')}
-                    className="px-3 py-2.5 text-[#1e8e3e] font-bold border-r border-[#dadce0] bg-[#e6f4ea]/60 flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#e6f4ea] transition-colors"
+                    className="px-3 py-2.5 text-[#0f5132] font-bold border-r border-[#0f5132]/20 bg-[#d1e7dd] flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#c3e0cf] transition-colors"
                   >
                     <CheckCircle2 size={16} /> 
                     <span className="hidden xl:inline">Completed:</span> 
                     {autoCompletedIds.length}
                   </div>
+                  {/* Pending Tracker Box - Changed to red/danger theme */}
                   <div 
                     onClick={() => scrollToSection('pending-section')}
-                    className="px-3 py-2.5 text-[#5f6368] font-bold bg-[#f8f9fa] flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#e8eaed] transition-colors"
+                    className="px-3 py-2.5 text-[#d93025] font-bold bg-[#fce8e6] flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer hover:bg-[#f6d7d5] transition-colors"
                   >
                     <Circle size={16} /> 
                     <span className="hidden xl:inline">Pending:</span> 

@@ -402,7 +402,7 @@ export default function DashboardPage() {
         <div className="w-full max-w-6xl space-y-10">
           
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-fade-in-up w-full relative">
-             
+              
              {/* LEFT: Avatar properly kept left without stretching */}
              <div className="flex items-center gap-3 md:gap-4 z-10 shrink-0">
                {userName && (
@@ -562,7 +562,7 @@ export default function DashboardPage() {
                           const nextUser = uIdx < leaderboardData.length - 1 ? leaderboardData[uIdx + 1] : null;
 
                           return (
-                             <div className="relative w-full h-full mx-auto flex items-end justify-center gap-4 sm:gap-8 pt-6">
+                              <div className="relative w-full h-full mx-auto flex items-end justify-center gap-4 sm:gap-8 pt-6">
                                 
                                 {prevUser && (
                                    <div className="flex flex-col items-center animate-float-1 z-10 w-[85px] sm:w-[100px]">
@@ -602,25 +602,33 @@ export default function DashboardPage() {
                                       <div className="text-[12px] font-black text-[#202124]">{nextUser.points} pts</div>
                                    </div>
                                 )}
-                             </div>
+                              </div>
                           );
                        })()}
                     </div>
                   )}
 
                   <div className="grid grid-cols-2 gap-5 w-full">
-                    <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
-                      <span className="text-4xl font-black text-[#202124] leading-none mb-2">
+                    {/* 🔥 1. All Games Box -> Bright Purple & Auto-Scrolls to History */}
+                    <div 
+                      onClick={() => document.getElementById('history-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                      className="bg-[#a142f4] px-6 py-5 rounded-xl border border-[#9334e6] flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
+                    >
+                      <span className="text-4xl font-black text-white leading-none mb-2 drop-shadow-sm">
                         {history.filter(item => item.type !== 'Skill Badge').length}
                       </span>
-                      <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">All Games</span>
+                      <span className="text-[13px] text-white/95 font-bold uppercase tracking-wider text-center drop-shadow-sm">All Games</span>
                     </div>
 
-                    <div className="bg-white px-6 py-5 rounded-xl border border-[#dadce0] flex flex-col items-center justify-center shadow-sm hover:border-[#1a73e8] hover:shadow-md transition-all">
-                      <span className="text-4xl font-black text-[#202124] leading-none mb-2">
+                    {/* 🔥 2. Skill Badges Box -> Bright Green & Auto-Navigates to Completed Badges in Resources */}
+                    <div 
+                      onClick={() => router.push('/resources#completed-section')}
+                      className="bg-[#0f9d58] px-6 py-5 rounded-xl border border-[#0b8043] flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
+                    >
+                      <span className="text-4xl font-black text-white leading-none mb-2 drop-shadow-sm">
                         {breakdown?.skills || 0}
                       </span>
-                      <span className="text-[13px] text-[#5f6368] font-bold uppercase tracking-wider text-center">Skill Badges</span>
+                      <span className="text-[13px] text-white/95 font-bold uppercase tracking-wider text-center drop-shadow-sm">Skill Badges</span>
                     </div>
                   </div>
 
@@ -894,8 +902,9 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* 🔥 Added id="history-section" here for auto-scroll navigation */}
           {points !== null && (
-            <div className="animate-fade-in-up" style={{animationDelay: '0.3s'}}>
+            <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4">
                 <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
                   <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
