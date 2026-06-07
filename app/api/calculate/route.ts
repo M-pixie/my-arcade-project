@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 // ==========================================
 const skillBadgesMasterList = [
   "Manage Kubernetes in Google Cloud", "Classify Images with TensorFlow on Google Cloud", "Derive Insights from BigQuery Data",
-  "Share Data Using Google Data Cloud", "Get Started with Google Workspace Tools", "Migrate MySQL Data to Cloud SQL Using Database Migration...",
+  "Share Data Using Google Data Cloud", "Implement Cloud Collaboration and Productivity Workflows", "Migrate MySQL Data to Cloud SQL Using Database Migration...",
   "Use Machine Learning APIs on Google Cloud", "Mitigate Threats and Vulnerabilities with Security Command...",
   "Monitor Environments with Google Cloud Managed Service for...", "Get Started with Dataplex", "Prompt Design in Agent Platform",
   "Configure Service Accounts and IAM Roles for Google Cloud", "Integrate BigQuery Data and Google Workspace using Apps Script",
