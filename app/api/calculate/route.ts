@@ -16,7 +16,7 @@ const skillBadgesMasterList = [
   "Implement Speech and Language Solutions with Pre-trained APIs", "Build a Data Mesh with Knowledge Catalog", "Analyze Sentiment with Natural Language API",
   "Develop with Apps Script and AppSheet", "Using the Google Cloud Speech API", "Use APIs to Work with Cloud Storage",
   "The Basics of Google Cloud Compute", "Get Started with Sensitive Data Protection", "Analyze Images with the Cloud Vision API",
-  "Secure BigLake Data", "Enrich Metadata and Discovery of BigLake Data", "Create a Secure Data Lake on Cloud Storage",
+  "Secure Lakehouse Data", "Enrich Metadata and Discovery of BigLake Data", "Create a Secure Data Lake on Cloud Storage",
   "Analyze Speech and Language with Google APIs", "Monitoring in Google Cloud", "Build Event-Driven Applications with Eventarc",
   "Create Your First Gemini Enterprise Application", "Engineer AI Agents with Agent Development Kit (ADK)",
   "Build Global and Regional Load Balancing Solutions", "Google DeepMind: Train A Small Language Model",
