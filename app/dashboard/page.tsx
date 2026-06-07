@@ -79,14 +79,14 @@ export default function DashboardPage() {
       accessCode: '1q-permission-2296',
       points: 1,
       deadline: '30/06/26, 11:59 PM',
-      link: 'https://www.skills.google/games/7172',
+      link: 'https://www.skills.google/games/7223',
       matchStrings: ['Arcade Voyage: Identity Management and Pre-trained AI APIs']
     },
     {
       id: 'adventure',
       title: 'Arcade Adventure',
       subtitle: 'Play. Explore. Learn.',
-      image: 'https://services.google.com/fh/files/misc/arcade-adv.png',
+      image: 'https://services.google.com/fh/files/misc/arcade_adv.png',
       accessCode: '1q-observe-07175',
       points: 1,
       deadline: '30/06/26, 11:59 PM',
