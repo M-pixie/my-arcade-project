@@ -23,10 +23,10 @@ const initialBadgesData = [
   // PAGE 2
   { id: "09", title: "Monitor Environments with Google Cloud Managed Service for Prometheus", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/761" },
   { id: "10", title: "Get Started with Dataplex", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/726" },
-  { id: "11", title: "Prompt Design in Vertex AI", duration: "105", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/976" },
+  { id: "11", title: "Prompt Design in Agent Platform", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/976" },
   { id: "12", title: "Configure Service Accounts and IAM Roles for Google Cloud", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/702" },
   { id: "13", title: "Integrate BigQuery Data and Google Workspace using Apps Script", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/737" },
-  { id: "14", title: "Cloud Speech API: 3 Ways", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/700" },
+  { id: "14", title: "Implement Speech and Language Solutions with Pre-trained APIs", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/700" },
   { id: "15", title: "Build a Data Mesh with Knowledge Catalog", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/681" },
   { id: "16", title: "Analyze Sentiment with Natural Language API", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/667" },
 
@@ -37,14 +37,14 @@ const initialBadgesData = [
   { id: "20", title: "The Basics of Google Cloud Compute", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/754" },
   { id: "21", title: "Get Started with Sensitive Data Protection", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/750" },
   { id: "22", title: "Analyze Images with the Cloud Vision API", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/633" },
-  { id: "23", title: "Secure BigLake Data", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/751" },
+  { id: "23", title: "Secure Lakehouse Data", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/751" },
   { id: "24", title: "Enrich Metadata and Discovery of BigLake Data", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/753" },
 
   // PAGE 4
   { id: "25", title: "Create a Secure Data Lake on Cloud Storage", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/704" },
   { id: "26", title: "Analyze Speech and Language with Google APIs", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/634" },
   { id: "27", title: "Monitoring in Google Cloud", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/747" },
-  { id: "28", title: "Get Started with Eventarc", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/727" },
+  { id: "28", title: "Build Event-Driven Applications with Eventarc", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/727" },
   { id: "29", title: "Create Your First Gemini Enterprise Application", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1586" },
   { id: "30", title: "Engineer AI Agents with Agent Development Kit (ADK)", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1596" },
   { id: "31", title: "Build Global and Regional Load Balancing Solutions", duration: "270", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1558" },
@@ -126,6 +126,9 @@ const initialBadgesData = [
   { id: "91", title: "Automate Data Capture at Scale with Document AI", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/674" },
   { id: "92", title: "Manage Data Models in Looker", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/651" },
   { id: "93", title: "Implement Cloud Collaboration and Productivity Workflows", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/671" },
+  
+
+  
   { id: "94", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" }
 ];
 
