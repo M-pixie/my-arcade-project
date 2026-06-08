@@ -258,316 +258,324 @@ export default function HomePage() {
 
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
-    {/* ================= HERO SECTION ================= */}
-        <section 
-          className="relative pt-20 pb-16 bg-white"
+{/* ================= HERO SECTION ================= */}
+<section 
+  className="relative pt-20 pb-10 bg-[#f8f9fa] overflow-hidden"
+>
+  <div className="w-full relative z-10">
+    {/* 🔥 AVATARS 🔥 */}
+    <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
+      
+      {displayAvatars.length > 0 && (
+        <div className="absolute top-2 left-6 md:top-4 md:left-8 flex items-start gap-2 z-40">
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="flex -space-x-3">
+              {displayAvatars.map((url, idx) => (
+                <img 
+                  key={`${url}-${idx}`}
+                  src={url}
+                  alt="player avatar"
+                  className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
+                  style={{ border: "none", zIndex: 10 - idx }}
+                />
+              ))}
+            </div>
+            <span className="text-[#202124] text-xs font-medium tracking-wide">Active Users..</span>
+          </div>
+          {leaders.length > 10 && (
+            <span className="text-[#5f6368] text-[13px] font-bold tracking-wide mt-1.5">
+              & {leaders.length - 10} others
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* 🔥 TOP RIGHT BUTTONS (Subscribe + Need Help) 🔥 */}
+      <div className="absolute top-0 right-4 md:top-1 md:right-8 z-50 flex items-center gap-3 md:gap-4">
+        {/* 🌟 PREMIUM SUBSCRIBE HERE BUTTON 🌟 */}
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-8 py-2 md:px-12 md:py-2.5 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[14px] md:text-[15px] rounded-[4px] shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
         >
-          <div className="w-full relative z-10">
-            {/* 🔥 AVATARS SAFE PLACEMENT 🔥 */}
-            <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
-              
-              {displayAvatars.length > 0 && (
-                <div className="absolute top-2 left-6 md:top-4 md:left-8 flex items-start gap-2 z-40">
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div className="flex -space-x-3">
-                      {displayAvatars.map((url, idx) => (
-                        <img 
-                          key={`${url}-${idx}`}
-                          src={url}
-                          alt="player avatar"
-                          className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
-                          style={{ border: "none", zIndex: 10 - idx }}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-black text-xs font-medium tracking-wide drop-shadow-sm">Active Users..</span>
-                  </div>
-                  {leaders.length > 10 && (
-                    <span className="text-gray-800 text-[13px] font-bold tracking-wide drop-shadow-sm mt-1.5">
-                      & {leaders.length - 10} others
-                    </span>
-                  )}
-                </div>
-              )}
+          Subscribe here!
+        </a>
 
-              {/* 🔥 NEW NEED HELP BUTTON (TOP RIGHT) 🔥 */}
-              <button
-                onClick={() => router.push('/chat')}
-                className="absolute top-0 right-4 md:top-1 md:right-8 z-50 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-6 py-2.5 rounded-[4px] text-sm font-bold transition-all duration-300 flex items-center gap-2 group cursor-pointer border-none shadow-none"
-              >
-                Need Help ?
-                <span className="text-lg group-hover:animate-bounce"></span>
-              </button>
+        {/* 🔥 NEED HELP BUTTON 🔥 */}
+        <button
+          onClick={() => router.push('/chat')}
+          className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-[4px] text-sm md:text-[15px] font-bold transition-all duration-300 flex items-center gap-2 group cursor-pointer border-none shadow-none"
+        >
+          Need Help ?
+        </button>
+      </div>
 
-              <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-                 {/* Removed the intense blur balls since background is now solid white, but kept containers if needed for future */}
-              </div>
-
-              {/* 🔥 SHIFTED DOWN: Changed mt-8 md:mt-4 to mt-16 md:mt-12 🔥 */}
-              <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-16 md:mt-12">
-                
-                <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
-                  
-                  <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
-                    
-                    <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-black mb-5 leading-[1.1] drop-shadow-sm">
-                      Arcade<span className="text-black"> Nexus</span>
-                    </h1>
-
-                    <p className="text-black/90 text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8 drop-shadow-sm">
-                      The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-8">
-                      <a
-                        href="https://go.cloudskillsboost.google/arcade"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-[4px] hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none relative"
-                      >
-                        <span className="absolute top-2 right-2 flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#34a853]"></span>
-                        </span>
-                        <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        <span className="whitespace-nowrap">Start Arcade Labs 2026 </span>
-                      </a>
-
-                      <button
-                        onClick={() => router.push('/calculator')}
-                        className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-[4px] hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
-                      >
-                        <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        <span className="whitespace-nowrap">Arcade Points Calculator</span>
-                      </button>
-                    </div>
-
-                    {/* 🔥 ENROLMENTS OPEN SOON SECTION 🔥 */}
-                    <div className="flex flex-col gap-4 text-left w-full max-w-2xl bg-white/50 p-5 rounded-lg border border-gray-200 shadow-sm">
-                      <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
-                        Facilitator Enrolments will Open soon!
-                      </h3>
-                      <div className="flex flex-col gap-3 text-[#202124] font-medium text-[15px]">
-                        <div className="flex items-start gap-3">
-                          <svg className="w-[22px] h-[22px] flex-shrink-0 text-gray-800 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                          </svg>
-                          <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <svg className="w-[22px] h-[22px] flex-shrink-0 text-gray-800 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                          </svg>
-                          <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 mb-1.5 justify-center lg:justify-start">
-                      <span className="relative flex h-2.5 w-2.5 mr-1">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1a73e8] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1a73e8] shadow-[0_0_8px_rgba(26,115,232,0.8)]"></span>
-                      </span>
-                      <h3 className="text-black font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
-                    </div>
-
-                    {[
-                      { name: "See Swags Post", icon: "📌", link: "/post" },
-                      { name: "Arcade Points Calculator", icon: "🧮", link: "/calculator" },
-                      { name: "Skill Badges List", icon: "🏅", link: "/resources" },
-                      { name: "Facilitator Program", icon: "🌟", link: "/facilitator" },
-                      { name: "Live Leaderboard", icon: "🏆", link: "/leaderboard" },
-                      { name: "Get 309 Credits", icon: "💰", link: "#credits-section" },
-                    ].map((item, idx) => (
-                      <a
-                        key={idx}
-                        href={item.link}
-                        onClick={(e) => {
-                          if(item.link.startsWith('#')) {
-                            e.preventDefault();
-                            document.getElementById(item.link.substring(1))?.scrollIntoView({ behavior: 'smooth' });
-                          } else if (item.link.startsWith('/')) {
-                            e.preventDefault();
-                            router.push(item.link);
-                          }
-                        }}
-                        className="flex items-center justify-between px-4 py-2.5 w-[98%] mx-auto bg-[#1a73e8] hover:bg-[#1557b0] border-none rounded-[4px] transition-all duration-300 text-white font-semibold shadow-none group cursor-pointer text-sm md:text-base"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
-                          <span>{item.name}</span>
-                        </div>
-                        <span className="text-white opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
-                          →
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 🔥 DISCLAIMER BOX 🔥 */}
-                <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] overflow-hidden relative z-20 mt-12">
-                  <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
-                    
-                    {/* YELLOW HIGHLIGHT DISCLAIMER */}
-                    <p className="text-[14px] font-bold text-[#111] leading-relaxed text-justify bg-[#fff59d] p-4 rounded-sm border border-[#fbc02d] shadow-sm w-full">
-                      Disclaimer: Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
-                      <a 
-                        href="https://expo.dev/artifacts/eas/vHaGgJWDDCEmjJ42esZnWi.apk"
-                        className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
-                      >
-                        <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        <span>Get App (New Version)</span>
-                      </a>
-
-                      <a 
-                        href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
-                      >
-                        <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                        <span>Share on WhatsApp</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </section>
-
+      {/* 🔥 MAIN CONTENT CONTAINER 🔥 */}
+      <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-20 md:mt-16">
         
-        {/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
-        <section className="relative z-10 py-24 bg-[#f8f9fa] border-b border-[#dadce0]">
-          <div className="max-w-4xl mx-auto px-6">
+        <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
+          
+          <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            <div className="text-center mb-12 relative z-10">
-              <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-5">
-                Start <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Arcade Labs</span>
-              </h2>
+            {/* 🎯 ARCADE NEXUS IN GOOGLE OFFICIAL BLUE COLOR */}
+            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-[#1a73e8] mb-5 leading-[1.1]">
+              Arcade<span className="text-[#1a73e8]"> Nexus</span>
+            </h1>
+
+            {/* 🎯 PARAGRAPH IN GOOGLE OFFICIAL GREY COLOR FOR ULTIMATE CLARITY */}
+            <p className="text-[#5f6368] text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
+              The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
+            </p>
+
+            {/* 🔥 ACTION BUTTONS GROUP 🔥 */}
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-8">
+              
+              <a
+                href="https://go.cloudskillsboost.google/arcade"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-[4px] hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
+              >
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span className="whitespace-nowrap">Start Arcade Labs 2026 </span>
+              </a>
+
+              <button
+                onClick={() => router.push('/calculator')}
+                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-[4px] hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
+              >
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                <span className="whitespace-nowrap">Arcade Points Calculator</span>
+              </button>
             </div>
 
-            {/* TABBED INTERFACE (Clean & Professional) */}
-            <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col">
-              
-              {/* Tab Headers */}
-              <div className="flex flex-col sm:flex-row border-b border-[#707070]">
-                <button 
-                  onClick={() => setActiveGuideTab('start')}
-                  className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#707070] ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
-                >
-                  How to Start Arcade ?
-                </button>
-                <button 
-                  onClick={() => setActiveGuideTab('tools')}
-                  className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#707070] ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
-                >
-                  Arcade Tools
-                </button>
-                <button 
-                  onClick={() => setActiveGuideTab('points')}
-                  className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
-                >
-                  Points System
-                </button>
-              </div>
-              
-              {/* Tab Content Area */}
-              <div className="h-[auto] max-h-[450px] overflow-y-auto custom-scrollbar">
-                
-                {/* 1. How to Start Content */}
-                {activeGuideTab === 'start' && (
-                  <div className="divide-y divide-[#e0e0e0] animate-fade-in">
-                    {startSteps.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
-                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
-                            {item.badge}
-                          </span>
-                        </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-[#202124] font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
-                            {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1">→</span>
-                          </h3>
-                          <div className="text-[#5f6368] text-[15px] mt-1.5 leading-relaxed">
-                            {item.desc}
-                          </div>
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                )}
-
-                {/* 2. Arcade Tools Content */}
-                {activeGuideTab === 'tools' && (
-                  <div className="divide-y divide-[#e0e0e0] animate-fade-in">
-                    {arcadeTools.map((item, index) => (
-                      <Link href={item.link} key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
-                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
-                            {item.badge}
-                          </span>
-                        </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-[#202124] font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
-                            {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                          </h3>
-                          <div className="text-[#5f6368] text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed">
-                            <span className="text-[#1a73e8] font-bold text-[14px]">🔗</span> {item.desc}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-
-                {/* 3. Points System Content */}
-                {activeGuideTab === 'points' && (
-                  <div className="divide-y divide-[#e0e0e0] animate-fade-in">
-                    {pointsSystem.map((item, index) => (
-                      <div key={index} className="flex p-5 hover:bg-[#f8f9fa] group transition-colors duration-200 w-full">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
-                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
-                            {item.badge}
-                          </span>
-                        </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-[#202124] font-bold text-[18px] transition-colors">
-                            {item.title}
-                          </h3>
-                          <div className="text-[#5f6368] text-[15px] mt-1.5 leading-relaxed">
-                            {item.desc}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
+            {/* 🔥 ENROLMENTS OPEN SOON SECTION 🔥 */}
+            <div className="flex flex-col gap-4 text-left w-full max-w-2xl bg-white p-5 rounded-lg border border-[#dadce0] shadow-sm">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
+                Facilitator Enrolments will Open soon!
+              </h3>
+              <div className="flex flex-col gap-3 text-[#5f6368] font-medium text-[15px]">
+                <div className="flex items-start gap-3">
+                  <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#5f6368] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#5f6368] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
+                </div>
               </div>
             </div>
 
           </div>
-        </section>
+
+          {/* QUICK ACTIONS PANEL */}
+          <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2 mb-1.5 justify-center lg:justify-start">
+              <span className="relative flex h-2.5 w-2.5 mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1a73e8] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1a73e8] shadow-[0_0_8px_rgba(26,115,232,0.8)]"></span>
+              </span>
+              <h3 className="text-[#202124] font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
+            </div>
+
+            {[
+              { name: "See Swags Post", icon: "📌", link: "/post" },
+              { name: "Arcade Points Calculator", icon: "🧮", link: "/calculator" },
+              { name: "Skill Badges List", icon: "🏅", link: "/resources" },
+              { name: "Facilitator Program", icon: "🌟", link: "/facilitator" },
+              { name: "Live Leaderboard", icon: "🏆", link: "/leaderboard" },
+              { name: "Get 309 Credits", icon: "💰", link: "#credits-section" },
+            ].map((item, idx) => (
+              <a
+                key={idx}
+                href={item.link}
+                onClick={(e) => {
+                  if(item.link.startsWith('#')) {
+                    e.preventDefault();
+                    document.getElementById(item.link.substring(1))?.scrollIntoView({ behavior: 'smooth' });
+                  } else if (item.link.startsWith('/')) {
+                    e.preventDefault();
+                    router.push(item.link);
+                  }
+                }}
+                className="flex items-center justify-between px-4 py-2.5 w-[98%] mx-auto bg-[#1a73e8] hover:bg-[#1557b0] border-none rounded-[4px] transition-all duration-300 text-white font-semibold shadow-none group cursor-pointer text-sm md:text-base"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
+                  <span>{item.name}</span>
+                </div>
+                <span className="text-white opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
+                  →
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* 🔥 DISCLAIMER BOX (CURVE IS LIGHTER NOW WITH rounded-lg) 🔥 */}
+        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-lg shadow-sm overflow-hidden relative z-20 mt-12">
+          <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
+            
+            <p className="text-[14px] font-medium text-[#202124] leading-relaxed text-justify bg-[#fef7e0] p-4 rounded-[4px] border border-[#fbc02d] w-full">
+              Disclaimer: Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience.
+            </p>
+
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
+              <a 
+                href="https://expo.dev/artifacts/eas/vHaGgJWDDCEmjJ42esZnWi.apk"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
+              >
+                <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>Get App (New Version)</span>
+              </a>
+
+              <a 
+                href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
+              >
+                <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                <span>Share on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
+{/* Reduced padding top (pt-6) to remove the gap and bring Start Arcade Labs up */}
+<section className="relative z-10 pt-6 pb-24 bg-[#f8f9fa] border-b border-[#dadce0]">
+  <div className="max-w-4xl mx-auto px-6">
+    
+    <div className="text-center mb-10 relative z-10">
+      <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-5">
+        Start <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Arcade Labs</span>
+      </h2>
+    </div>
+
+    {/* TABBED INTERFACE (Clean & Professional) */}
+    <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col">
+      
+      {/* Tab Headers */}
+      <div className="flex flex-col sm:flex-row border-b border-[#707070]">
+        <button 
+          onClick={() => setActiveGuideTab('start')}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#707070] ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+        >
+          How to Start Arcade ?
+        </button>
+        <button 
+          onClick={() => setActiveGuideTab('tools')}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#707070] ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+        >
+          Arcade Tools
+        </button>
+        <button 
+          onClick={() => setActiveGuideTab('points')}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+        >
+          Points System
+        </button>
+      </div>
+      
+      {/* Tab Content Area */}
+      <div className="h-[auto] max-h-[450px] overflow-y-auto custom-scrollbar">
+        
+        {/* 1. How to Start Content */}
+        {activeGuideTab === 'start' && (
+          <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+            {startSteps.map((item, index) => (
+              <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
+                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
+                  <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
+                    {item.badge}
+                  </span>
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <h3 className="text-[#202124] font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
+                    {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1">→</span>
+                  </h3>
+                  <div className="text-[#5f6368] text-[15px] mt-1.5 leading-relaxed">
+                    {item.desc}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {/* 2. Arcade Tools Content */}
+        {activeGuideTab === 'tools' && (
+          <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+            {arcadeTools.map((item, index) => (
+              <Link href={item.link} key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
+                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
+                  <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                  <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
+                    {item.badge}
+                  </span>
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <h3 className="text-[#202124] font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
+                    {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  </h3>
+                  <div className="text-[#5f6368] text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed">
+                    <span className="text-[#1a73e8] font-bold text-[14px]">🔗</span> {item.desc}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* 3. Points System Content */}
+        {activeGuideTab === 'points' && (
+          <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+            {pointsSystem.map((item, index) => (
+              <div key={index} className="flex p-5 hover:bg-[#f8f9fa] group transition-colors duration-200 w-full">
+                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
+                  <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
+                    {item.badge}
+                  </span>
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <h3 className="text-[#202124] font-bold text-[18px] transition-colors">
+                    {item.title}
+                  </h3>
+                  <div className="text-[#5f6368] text-[15px] mt-1.5 leading-relaxed">
+                    {item.desc}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
+    </div>
+
+  </div>
+</section>
 
         {/* ================= FREE CREDITS GUIDE (SHIFTED HERE) ================= */}
         <section id="credits-section" className="relative z-10 py-16 bg-[#ffffff] border-b border-[#dadce0] overflow-hidden font-sans">
