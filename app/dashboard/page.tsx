@@ -13,6 +13,10 @@ export default function DashboardPage() {
   const [breakdown, setBreakdown] = useState<any>(null);
   const [history, setHistory] = useState<any[]>([]); 
   
+  // 🔥 NEW STATE FOR HISTORY FILTER & SEARCH
+  const [historyFilter, setHistoryFilter] = useState("All Games");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [userName, setUserName] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
   const [userUniqueId, setUserUniqueId] = useState<string | null>(null); 
@@ -33,11 +37,9 @@ export default function DashboardPage() {
   const [showAllCompletedModal, setShowAllCompletedModal] = useState(false);
   const [showSubscribe, setShowSubscribe] = useState(false);
   
-  // 🔥 New State for hiding modals permanently
   const [hideModals, setHideModals] = useState(false);
 
   useEffect(() => {
-    // Check local storage for banner preferences
     if (localStorage.getItem("hide_arcade_banners") === "true") {
       setHideModals(true);
     }
@@ -314,6 +316,27 @@ export default function DashboardPage() {
     link.click();
     document.body.removeChild(link);
   };
+
+  // 🔥 FILTER LOGIC FOR HISTORY SECTION
+  const filteredHistory = history.filter((item) => {
+    // Search Query Match
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!matchesSearch) return false;
+
+    // Dropdown Category Match
+    if (historyFilter === "Arcade Games") {
+      const lowerName = item.name.toLowerCase();
+      return lowerName.includes('arcade') || lowerName.includes('level') || lowerName.includes('trivia');
+    }
+    if (historyFilter === "Skill Badges") {
+      return item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
+    }
+    if (historyFilter === "Labs free course") {
+      return item.type === 'Course' || item.name.toLowerCase().includes('course');
+    }
+    // "All Games" shows everything matching search
+    return true; 
+  });
 
   if (error) {
     return (
@@ -902,19 +925,63 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* 🔥 Added id="history-section" here for auto-scroll navigation */}
+          {/* 🔥 HISTORY SECTION WITH NEW SEARCH, FILTER & COUNTS 🔥 */}
           {points !== null && (
             <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4">
-                <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
+                
+                {/* Header Title */}
+                <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
                   <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                   Labs Completion History
                 </h4>
                 
-                <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                  Export CSV Report
-                </button>
+                {/* 🔥 NEW CONTROLS: Counts, Search, Dropdown & Export */}
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
+                  
+                  {/* Left Side Counts for Games and Badges */}
+                  <div className="flex items-center gap-4 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
+                     <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
+                       Arcade Games ({history.filter(item => item.type !== 'Skill Badge').length})
+                     </span>
+                     <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
+                       Skill Badges ({breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length})
+                     </span>
+                  </div>
+
+                  {/* Search Box */}
+                  <div className="relative w-full sm:w-56">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <input
+                      type="text"
+                      placeholder="Search labs..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-semibold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm"
+                    />
+                  </div>
+
+                  {/* Dropdown Filter */}
+                  <div className="relative w-full sm:w-44">
+                    <select
+                      value={historyFilter}
+                      onChange={(e) => setHistoryFilter(e.target.value)}
+                      className="w-full appearance-none pl-4 pr-10 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-bold text-[#3c4043] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer"
+                    >
+                      <option value="All Games">All Games</option>
+                      <option value="Arcade Games">Arcade Games</option>
+                      <option value="Skill Badges">Skill Badges</option>
+                      <option value="Labs free course">Labs Free Course</option>
+                    </select>
+                    <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+
+                  {/* Export CSV */}
+                  <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    Export
+                  </button>
+                </div>
               </div>
               
               <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
@@ -923,16 +990,16 @@ export default function DashboardPage() {
                     <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
                       <tr>
                         <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center whitespace-nowrap border-r border-[#f1f3f4]">
-                              All ({history.length})
-                            </th>
+                           All ({filteredHistory.length})
+                        </th>
                         <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Labs / Skill Badges</th>
                         <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
                         <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center border-l border-[#f1f3f4]">Points</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#f1f3f4]">
-                      {history.length > 0 ? (
-                        history.map((item, i) => (
+                      {filteredHistory.length > 0 ? (
+                        filteredHistory.map((item, i) => (
                           <tr key={i} className="hover:bg-[#f8f9fa] transition-colors group">
                             <td className="px-5 py-4 text-base font-bold text-[#80868b] text-center border-r border-[#f1f3f4]">{i + 1}</td>
                             <td className="px-6 py-4"><p className="text-lg font-bold text-[#202124] group-hover:text-[#1a73e8] transition-colors">{item.name}</p></td>
@@ -947,7 +1014,7 @@ export default function DashboardPage() {
                       ) : (
                         <tr>
                           <td colSpan={4} className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
-                            No valid 2026 badges found for this profile.
+                            No labs found matching your filter criteria.
                           </td>
                         </tr>
                       )}
