@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🎮 Arcade Calculator
+### *Retro aesthetics meets modern web performance.*
 
-First, run the development server:
+[**Live Demo**](https://arcade-calculator.vercel.app/) • [**Report Bug**](https://github.com/M-pixie/my-arcade-project/issues) • [**Request Feature**](https://github.com/M-pixie/my-arcade-project/issues)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![GitHub contributors](https://img.shields.io/github/contributors/M-pixie/my-arcade-project.svg?style=for-the-badge)
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+</div>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💡 About The Project
+The **Arcade Calculator** is a high-performance web application designed to bring a nostalgic, arcade-inspired UI to everyday arithmetic. Built with **Next.js 14**, this project demonstrates a deep focus on **component-driven architecture**, **state management**, and **responsive design principles**.
 
-## Learn More
+## 🚀 Key Technical Highlights
+*   **Performance First:** Leveraged Next.js App Router for optimized loading and rendering.
+*   **Clean Architecture:** Modular component structure for high maintainability.
+*   **Adaptive UI:** Fully responsive design that scales seamlessly from handheld mobile devices to desktop monitors.
+*   **Scalable Logic:** Robust input validation and arithmetic handling.
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Built With
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | Next.js 14 (App Router) |
+| **Styling** | Tailwind CSS |
+| **Language** | TypeScript |
+| **Deployment** | Vercel |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👥 Meet the Team
+| Developer | GitHub | Role |
+| :--- | :--- | :--- |
+| **Anjali Patel** | [@Anjal08](https://github.com/Anjal08) | UI/UX & Logic |
+| **Manish Kumar** | [@M-Pixie](https://github.com/M-Pixie) | Core Architecture |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+<div align="center">
+  <sub>Built with passion for the web.</sub>
+</div>
