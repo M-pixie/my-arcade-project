@@ -326,8 +326,12 @@ export default function DashboardPage() {
     // Dropdown Category Match
     if (historyFilter === "Arcade Games") {
       const lowerName = item.name.toLowerCase();
-      return lowerName.includes('arcade') || lowerName.includes('level') || lowerName.includes('trivia');
+      const isSkillBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
+      const isCourse = item.type === 'Course' || lowerName.includes('course');
+      return !isSkillBadge && !isCourse;
     }
+    
+
     if (historyFilter === "Skill Badges") {
       return item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     }
@@ -942,7 +946,12 @@ export default function DashboardPage() {
                   {/* Left Side Counts for Games and Badges */}
                   <div className="flex items-center gap-4 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
                      <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
-                       Arcade Games ({history.filter(item => item.type !== 'Skill Badge').length})
+                       Arcade Games ({history.filter(item => {
+                         const lower = item.name.toLowerCase();
+                         const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
+                         const isCrse = item.type === 'Course' || lower.includes('course');
+                         return !isBadge && !isCrse;
+                       }).length})
                      </span>
                      <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
                        Skill Badges ({breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length})
