@@ -887,16 +887,17 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ================= LIVE SWAG POLL & REVIEW TRACKER ================= */}
+      {/* ================= LIVE SWAG POLL & REVIEW TRACKER ================= */}
         <div className="pb-12 pt-10 bg-white border-b border-[#dadce0]">
           <div className="max-w-4xl mx-auto px-6">
             
             <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
               
-              <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              {/* UPDATED: Green Background and Centered Text */}
+              <div className="bg-[#0f9d58] border-b border-[#dadce0] p-6 sm:p-8 flex flex-col items-center justify-center text-center gap-2">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#202124]">Google Arcade Swags Review</h3>
-                  <p className="text-[#5f6368] text-sm mt-1">Live tracking and community feedback</p>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white">Google Arcade Swags Review</h3>
+                  <p className="text-green-100 text-sm mt-1">Live tracking and community feedback</p>
                 </div>
               </div>
 
@@ -978,11 +979,12 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-[#e8f0fe] to-[#f3e8fd] border border-[#d2e3fc] rounded-xl p-6 sm:p-8 text-center shadow-sm">
-                    <h4 className="text-[18px] sm:text-xl font-bold text-[#1a73e8] mb-3 flex items-center justify-center gap-2">
+                  {/* UPDATED: Green Background for Community Experience Section */}
+                  <div className="bg-[#0f9d58] border border-[#0d8a4d] rounded-xl p-6 sm:p-8 text-center shadow-sm">
+                    <h4 className="text-[18px] sm:text-xl font-bold text-white mb-3 flex items-center justify-center gap-2">
                       <span className="text-2xl">🌟</span> Share Your Community Experience!
                     </h4>
-                    <p className="text-[#5f6368] text-[14px] sm:text-[15px] font-medium leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-green-50 text-[14px] sm:text-[15px] font-medium leading-relaxed max-w-2xl mx-auto">
                       How much did this platform and our community guidance help you? Please share your valuable feedback and support using the review box above. Your feedback keeps us motivated!
                     </p>
                   </div>
