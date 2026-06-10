@@ -46,7 +46,7 @@ export default function CalculatorPage() {
   // 🔥 NEW STATE FOR 3-SECOND AUTO CHANGE HINT
   const [showCopyHint, setShowCopyHint] = useState(false);
 
-  // 🔥 NEW STATE FOR 3-SECOND AVATAR/COIN TOGGLE
+  // 🔥 NEW STATE FOR 3-SECOND TEXT TOGGLE
   const [showCoinAvatar, setShowCoinAvatar] = useState(false);
 
   // 🔥 SHAKE KE LIYE NAYA STATE
@@ -307,11 +307,11 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        {/* 🔥 HEADING WITH HEADER TOGGLE (TEXT <-> TEXT & AVATAR <-> COIN) 🔥 */}
+        {/* 🔥 HEADING WITH HEADER TEXT TOGGLE ONLY (NO AVATAR, COIN STAYS FIXED) 🔥 */}
         <div className="text-center mb-10 flex justify-center items-center">
           <h1 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight flex items-center gap-4">
             
-            <div className="grid [grid-template-areas:'stack'] place-items-center text-[#202124]">
+            <div className="grid [grid-template-areas:'stack'] justify-items-end text-[#202124]">
               {userPoints !== null ? (
                 <>
                   <span className={`[grid-area:stack] transition-all duration-500 ease-in-out text-[#202124] font-semibold ${showCoinAvatar ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
@@ -338,33 +338,14 @@ export default function CalculatorPage() {
                   animation: 'coin-float 3.5s ease-in-out infinite' 
                 }}
               >
-                
-                <div 
-                  onClick={() => {
-                    if (!showCoinAvatar) router.push('/dashboard');
-                  }}
-                  className={`absolute flex items-center justify-center transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0 scale-50 pointer-events-none' : 'opacity-100 scale-100 cursor-pointer hover:scale-105'}`}
-                  style={{ width: '75%', height: '75%' }}
-                  title="View Dashboard"
-                >
-                  {userAvatar ? (
-                    <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[3px] border-[#dadce0] shadow-md" />
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-white border-[3px] border-[#dadce0] shadow-md flex items-center justify-center">
-                      <span className="text-2xl font-black text-[#1a73e8]">U</span>
-                    </div>
-                  )}
-                </div>
-
-                <div 
-                 className={`absolute w-[75%] h-[75%] pointer-events-none transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 scale-100' : 'opacity-0 scale-125'}`}                >
+                {/* 🪙 FIXED GOLD COIN (Avatar removed completely from here) */}
+                <div className="absolute w-[75%] h-[75%] pointer-events-none transition-all duration-500 ease-in-out"> 
                   <div className="gold-coin">
                     <span className="gold-coin-text">
                       {userPoints}
                     </span>
                   </div>
                 </div>
-
               </div>
             )}
           </h1>
@@ -562,7 +543,7 @@ export default function CalculatorPage() {
                 </a>
               </div>
               <div className="text-sm font-medium text-[#3c4043]">
-                Last update: 26 May 2026 at 10:20 IST
+                Last update: 10 June 2026 at 08:43 IST
               </div>
             </div>
 
@@ -580,9 +561,29 @@ export default function CalculatorPage() {
               )}
             </button>
 
-            <p className="text-[13.5px] font-bold text-[#5d4037] text-center mt-5 leading-snug tracking-wide">
-              NOTE :- Make sure your profile is set to public so the calculator can access your badge information.
-            </p>
+            {/* 🔥 NOTE & AVATAR COMBINED 🔥 */}
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6">
+              {userPoints !== null && (
+                <div 
+                  onClick={() => router.push('/dashboard')}
+                  className="w-10 h-10 shrink-0 cursor-pointer hover:scale-105 transition-transform duration-300"
+                  title="View Dashboard"
+                >
+                  {userAvatar ? (
+                    <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[2px] border-[#dadce0] shadow-sm" />
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-white border-[2px] border-[#dadce0] shadow-sm flex items-center justify-center">
+                      <span className="text-[18px] font-black text-[#1a73e8]">
+                        {userName ? userName.charAt(0).toUpperCase() : "U"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+              <p className="text-[13.5px] font-bold text-[#5d4037] text-center leading-snug tracking-wide">
+                 Make sure your profile is set to public so the calculator can access your badge information.
+              </p>
+            </div>
 
             {/* 🔥 MOVED AUTO CALCULATE TOGGLE (ABOVE RECENT PROFILES) 🔥 */}
             <div className="mt-8 pt-6 flex items-center justify-between border-t border-[#dadce0]">
