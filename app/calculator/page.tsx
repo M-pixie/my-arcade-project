@@ -778,26 +778,32 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 🔥 SLEEKER "PUBLIC PROFILE FORMAT" BOX 🔥 */}
-        <div className="mt-12 max-w-2xl mx-auto">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-[#202124] flex items-center justify-center gap-2">
+   {/* 🔥 PERFECTLY CENTERED "PUBLIC PROFILE FORMAT" BOX 🔥 */}
+        <div className="mt-8 mb-10 max-w-[55rem] mx-auto"> 
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-[#202124]">
               Public Profile Format
             </h2>
           </div>
           
-          <div className="bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm text-center">
-            <h4 className="text-[15px] font-bold text-[#202124] mb-4">Your URL should look like this:</h4>
+          {/* 🔥 Same width as top boxes 🔥 */}
+          <div className="relative flex flex-col md:flex-row gap-6">
+            <div className="hidden md:block w-12 shrink-0"></div>
             
-            <div className="bg-[#f8f9fa] rounded-lg p-3.5 border border-[#e8eaed] mb-4 inline-block w-full overflow-hidden">
-              <p className="text-[#1a73e8] font-mono text-[14px] break-all">
-                https://www.skills.google/public_profiles/<span className="text-[#34a853] font-bold">PROFILE_ID</span>
+            <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm text-center">
+              <h4 className="text-[16px] font-bold text-[#202124] mb-6">Your URL should look like this..</h4>
+              
+              {/* 🔥 Green Box, White Text 🔥 */}
+              <div className="bg-[#1e8e3e] rounded-xl p-4 md:p-5 border border-[#137333] mb-6 w-full overflow-hidden flex items-center justify-center shadow-inner">
+                <p className="text-white font-mono text-[14px] md:text-[16px] break-all text-center tracking-wide">
+                  https://www.skills.google/public_profiles/<span className="font-extrabold">PROFILE_ID</span>
+                </p>
+              </div>
+              
+              <p className="text-[#5f6368] text-[15px] leading-relaxed">
+                The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
               </p>
             </div>
-            
-            <p className="text-[#5f6368] text-[13.5px] leading-relaxed">
-              The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
-            </p>
           </div>
         </div>
 
