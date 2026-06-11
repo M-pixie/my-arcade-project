@@ -364,14 +364,6 @@ export default function CalculatorPage() {
               position: absolute;
             }
 
-            @keyframes float-avatar {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(-5px); }
-            }
-            .animate-float-avatar {
-              animation: float-avatar 3s ease-in-out infinite;
-            }
-
             @keyframes tooltip-pop {
               0% { opacity: 0; transform: translate(-50%, 10px) scale(0.95); }
               15% { opacity: 1; transform: translate(-50%, 0) scale(1); }
@@ -641,7 +633,8 @@ export default function CalculatorPage() {
                         )}
 
                         <div className="absolute -left-6 top-1/2 -translate-y-1/2 z-10">
-                          <div className="w-12 h-12 rounded-full bg-white border-[3px] border-[#f1f3f4] overflow-hidden flex items-center justify-center animate-float-avatar shadow-[0_4px_10px_rgba(0,0,0,0.1)] relative">
+                          {/* 🔥 REMOVED animate-float-avatar SO IT STAYS STATIC 🔥 */}
+                          <div className="w-12 h-12 rounded-full bg-white border-[3px] border-[#f1f3f4] overflow-hidden flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.1)] relative">
                             {copiedIndex === idx ? (
                                <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                             ) : item.points !== undefined ? (
@@ -682,16 +675,9 @@ export default function CalculatorPage() {
                         
                         <div className="flex flex-col items-start leading-tight text-left min-w-[130px]">
                           <span className="text-[15px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
-                          
-                          <div className="relative w-full h-[18px] mt-0.5 overflow-hidden">
-                            <span className={`absolute left-0 top-0 text-[11px] text-[#5f6368] font-bold opacity-90 transition-all duration-500 ease-in-out flex items-center h-full ${showCopyHint ? 'opacity-0 translate-y-full' : 'opacity-100 translate-y-0'}`}>
-                              ID: {shortId}...
-                            </span>
-                            <span className={`absolute left-0 top-0 text-[11px] text-[#1a73e8] font-bold transition-all duration-500 ease-in-out flex items-center gap-1 h-full ${showCopyHint ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}>
-                              <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                              Copy <span className="text-[#dadce0] font-normal mx-0.5">•</span> Open Profile
-                            </span>
-                          </div>
+                          <span className="text-[11px] text-[#5f6368] font-bold opacity-90 mt-0.5">
+                            ID: {shortId}...
+                          </span>
                         </div>
                         
                         <div className="border-l border-[#dadce0] pl-3.5 flex items-center">
@@ -792,23 +778,24 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        <div className="mt-16 max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
-              Public profile Format
+        {/* 🔥 SLEEKER "PUBLIC PROFILE FORMAT" BOX 🔥 */}
+        <div className="mt-12 max-w-2xl mx-auto">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-[#202124] flex items-center justify-center gap-2">
+              Public Profile Format
             </h2>
           </div>
           
-          <div className="bg-white border border-[#dadce0] rounded-2xl p-6 md:p-10 shadow-sm text-center">
-            <h4 className="text-lg font-bold text-[#202124] mb-6">Your URL should look like this:</h4>
+          <div className="bg-white border border-[#dadce0] rounded-xl p-6 shadow-sm text-center">
+            <h4 className="text-[15px] font-bold text-[#202124] mb-4">Your URL should look like this:</h4>
             
-            <div className="bg-[#f8f9fa] rounded-xl p-4 md:p-5 border border-[#e8eaed] mb-6 inline-block w-full overflow-hidden">
-              <p className="text-[#1a73e8] font-mono text-sm md:text-base break-all">
+            <div className="bg-[#f8f9fa] rounded-lg p-3.5 border border-[#e8eaed] mb-4 inline-block w-full overflow-hidden">
+              <p className="text-[#1a73e8] font-mono text-[14px] break-all">
                 https://www.skills.google/public_profiles/<span className="text-[#34a853] font-bold">PROFILE_ID</span>
               </p>
             </div>
             
-            <p className="text-[#5f6368] text-[15px] leading-relaxed max-w-2xl mx-auto">
+            <p className="text-[#5f6368] text-[13.5px] leading-relaxed">
               The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
             </p>
           </div>

@@ -23,6 +23,7 @@ export default function DashboardPage() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastRefreshed, setLastRefreshed] = useState<string>("");
 
   const router = useRouter();
   const [copied, setCopied] = useState(false);
@@ -141,6 +142,20 @@ export default function DashboardPage() {
     }
   ];
 
+  const arcadeTiersData = [
+    { name: 'Arcade Trooper', target: 50, image: 'https://services.google.com/fh/files/misc/arcade-trooper.svg', gradient: 'from-[#8ab4f8] to-[#1a73e8]' },
+    { name: 'Arcade Ranger', target: 75, image: 'https://services.google.com/fh/files/misc/arcade-ranger.svg', gradient: 'from-[#81c995] to-[#34a853]' },
+    { name: 'Arcade Champion', target: 95, image: 'https://services.google.com/fh/files/misc/arcade-champion.svg', gradient: 'from-[#fde293] to-[#f9ab00]' },
+    { name: 'Arcade Legend', target: 120, image: 'https://services.google.com/fh/files/misc/arcade-legend.svg', gradient: 'from-[#f28b82] to-[#ea4335]' }
+  ];
+
+  // 🔥 Helper Function to get the Current Tier
+  const getCurrentTier = () => {
+    if (points === null || points < 50) return "No Tier Yet";
+    const achieved = [...arcadeTiersData].reverse().find(t => points >= t.target);
+    return achieved ? achieved.name : "No Tier Yet";
+  };
+
   const isLabCompleted = (matchStrings: string[]) => {
     if (!history || history.length === 0) return false;
     return history.some(item =>
@@ -174,6 +189,7 @@ export default function DashboardPage() {
     setUserName(data.userName);
     setUserAvatar(data.userAvatar);
     setUserUniqueId(data.userUniqueId);
+    setLastRefreshed(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
     setLoading(false);
   };
 
@@ -249,6 +265,7 @@ export default function DashboardPage() {
       
       const extractedId = url.trim().split('/').pop() || null;
       setUserUniqueId(extractedId);
+      setLastRefreshed(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
 
       const cacheObj = {
         profileUrl: url.trim(),
@@ -273,7 +290,7 @@ export default function DashboardPage() {
       }
 
     } catch (err) {
-      setError("Backend server se connect nahi ho raha. Kripya URL check karein.");
+      setError("Please check your internet connection and try again.");
     } finally {
       setLoading(false);
       localStorage.removeItem("current_processing_url"); 
@@ -716,6 +733,70 @@ export default function DashboardPage() {
         {/* ================= 🔥 BOTTOM SECTION (WIDER SIZE: max-w-[1350px]) 🔥 ================= */}
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
           
+          {/* 🔥 NEW ARCADE TIERS SECTION 🔥 */}
+          {points !== null && (
+            <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.21s' }}>
+              <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
+                <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
+                  Arcade Prize Tiers
+                </h4>
+                <span className="text-[#202124] text-base font-medium">
+                  Current Status : <span className="font-bold">{getCurrentTier()}</span>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {arcadeTiersData.map((tier, idx) => {
+                  const progressPercentage = Math.min(100, (points / tier.target) * 100);
+                  const isAchieved = points >= tier.target;
+                  
+                  return (
+                    <div key={idx} className={`bg-[#f8f9fa] border rounded-lg p-5 flex flex-col items-center relative overflow-hidden shadow-sm hover:shadow-md transition-all group ${isAchieved ? 'border-[#34a853]' : 'border-[#dadce0]'}`}>
+                      <div className="w-24 h-24 mb-4 flex items-center justify-center relative">
+                        <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
+                        {isAchieved && (
+                           <div className="absolute inset-0 bg-white/20 rounded-full blur-md z-0"></div>
+                        )}
+                      </div>
+                      
+                      <h5 className="text-lg font-bold text-[#202124] mb-3 text-center">{tier.name}</h5>
+                      
+                      {/* Premium Progress Bar */}
+                      <div className="w-full mt-auto flex flex-col gap-2">
+                        <div className="w-full h-2.5 bg-[#e8eaed] rounded-full overflow-hidden border border-[#dadce0]/50 shadow-inner">
+                          <div 
+                            className={`h-full rounded-full bg-gradient-to-r ${tier.gradient} transition-all duration-1000 ease-out`}
+                            style={{ width: `${progressPercentage}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between items-center text-[11px] font-extrabold uppercase tracking-wide w-full">
+                           <span className={isAchieved ? "text-[#137333]" : "text-[#5f6368]"}>
+                             {isAchieved ? "Achieved" : "In Progress"}
+                           </span>
+                           <span className="text-[#3c4043]">{points} / {tier.target} pts</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Footer text & links */}
+              <div className="mt-8 flex flex-col lg:flex-row justify-between items-center text-sm font-semibold text-[#5f6368] gap-4">
+                <div className="flex items-center gap-2 lg:w-1/3">
+                  <svg className="w-4 h-4 text-[#80868b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  Last refreshed: {lastRefreshed || "Just now"}
+                </div>
+                <div className="text-[#202124] text-[15px] font-medium text-center lg:w-1/3">
+                  Current Status : <span className="font-bold">{getCurrentTier()}</span>
+                </div>
+                <div className="text-center lg:text-right lg:w-1/3">
+                  You can also explore full Arcade Tier details <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:underline font-bold">here.</a>
+                </div>
+              </div>
+            </div>
+          )}
+
           {points !== null && (
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.22s' }}>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
@@ -1036,12 +1117,12 @@ export default function DashboardPage() {
           
           <div className="mt-8 mb-4 text-center w-full animate-fade-in-up" style={{animationDelay: '0.4s'}}>
             <a 
-              href="https://go.cloudskillsboost.google/arcade" 
+              href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-[#5f6368] font-medium text-sm cursor-default hover:text-[#5f6368] no-underline"
             >
-              The 2026 Swags Reveal is coming soon. Keep completing labs and earning points!
+              You can also explore full Arcade Prize Tiers details here.
             </a>
           </div>
         </div>
