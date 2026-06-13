@@ -307,47 +307,10 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        {/* 🔥 HEADING WITH HEADER TEXT TOGGLE ONLY (NO AVATAR, COIN STAYS FIXED) 🔥 */}
+        {/* 🔥 CLEAN STATIC HEADING (Name & Coin Removed from here) 🔥 */}
         <div className="text-center mb-10 flex justify-center items-center">
-          <h1 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight flex items-center gap-4">
-            
-            <div className="grid [grid-template-areas:'stack'] justify-items-end text-[#202124]">
-              {userPoints !== null ? (
-                <>
-                  <span className={`[grid-area:stack] transition-all duration-500 ease-in-out text-[#202124] font-semibold ${showCoinAvatar ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-                    {userName || "Arcade Player"}
-                  </span>
-                  
-                  <span className={`[grid-area:stack] transition-all duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
-                    Arcade <span className="text-[#1a73e8]">Calculator</span>
-                  </span>
-                </>
-              ) : (
-                <span className="[grid-area:stack]">
-                  Arcade <span className="text-[#1a73e8]">Calculator</span>
-                </span>
-              )}
-            </div>
-            
-            {userPoints !== null && (
-              <div 
-                className="relative flex items-center justify-center ml-2" 
-                style={{ 
-                  width: 'clamp(60px, 8vw, 85px)', 
-                  height: 'clamp(60px, 8vw, 85px)',
-                  animation: 'coin-float 3.5s ease-in-out infinite' 
-                }}
-              >
-                {/* 🪙 FIXED GOLD COIN (Avatar removed completely from here) */}
-                <div className="absolute w-[75%] h-[75%] pointer-events-none transition-all duration-500 ease-in-out"> 
-                  <div className="gold-coin">
-                    <span className="gold-coin-text">
-                      {userPoints}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+          <h1 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight text-[#202124]">
+            Arcade <span className="text-[#1a73e8]">Calculator</span>
           </h1>
         </div>
 
@@ -412,67 +375,14 @@ export default function CalculatorPage() {
               animation: text-sweep 3s ease-in-out infinite;
               display: inline-block;
             }
-
-            /* 🔥 SINGLE CLEAN COIN CSS 🔥 */
-            .gold-coin {
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-              background: linear-gradient(135deg, #FDE047 0%, #D4AF37 45%, #996515 100%);
-              box-shadow: 
-                inset -2px -2px 6px rgba(153, 101, 21, 0.6), 
-                inset 2px 2px 6px rgba(255, 255, 255, 0.8), 
-                4px 4px 10px rgba(0, 0, 0, 0.2), 
-                0 0 25px rgba(212, 175, 55, 0.3);
-              position: relative;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .gold-coin::before {
-              content: "";
-              position: absolute;
-              width: 80%;
-              height: 80%;
-              border-radius: 50%;
-              background: linear-gradient(135deg, #D4AF37 0%, #FDE047 50%, #B8860B 100%);
-              border: 1px solid rgba(255, 255, 255, 0.2);
-              box-shadow: 
-                inset 2px 2px 4px rgba(0,0,0,0.1), 
-                inset -2px -2px 4px rgba(255,255,255,0.4);
-            }
-            .gold-coin-text {
-              position: relative;
-              z-index: 10;
-              font-weight: 900;
-              font-family: 'Arial Black', Impact, sans-serif;
-              font-size: clamp(1.1rem, 1.6vw, 1.5rem); 
-              color: #4A2E00; 
-              letter-spacing: -1px;
-              text-shadow: 
-                -1px -1px 1px rgba(255,240,168,0.8),
-                1px 1px 1px rgba(255,255,255,0.4),
-                1px 1px 3px rgba(0,0,0,0.4);
-            }
-            
-            @keyframes coin-float {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(-10px); }
-            }
           `}</style>
-
-          {loading && (
-            <div className="absolute top-0 left-0 h-[2px] w-full bg-[#f1f3f4] overflow-hidden z-50">
-              <div className="h-full bg-[#5f6368] animate-real-loading rounded-full"></div>
-            </div>
-          )}
 
           <div className="p-8 md:p-12 mt-1">
             
             {/* 🔥 REVERTED ORIGINAL TEXT LAYOUT 🔥 */}
             <div className="relative mb-8">
               <p className="text-sm md:text-base font-extrabold text-left sweep-text w-3/4">
-                Paste your public profile URL to calculate arcade points.
+                Paste your public profile url here.
               </p>
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
@@ -480,7 +390,7 @@ export default function CalculatorPage() {
                 rel="noopener noreferrer" 
                 className="absolute right-0 top-0 text-sm md:text-base font-bold text-[#202124] hover:underline cursor-pointer"
               >
-                Subscribe here !
+                Subscribe
               </a>
             </div>
 
@@ -489,6 +399,7 @@ export default function CalculatorPage() {
                 onAnimationEnd={() => setIsShaking(false)}
                 className={`relative border-2 rounded-lg transition-colors duration-75 ${isShaking ? 'animate-fast-shake' : ''} ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}
               >
+                {/* 🔥 LABEL RESTORED EXACTLY AS ORIGINAL (-top-3) 🔥 */}
                 <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 z-10 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
                   Enter Public Profile Url
                 </label>
@@ -508,6 +419,13 @@ export default function CalculatorPage() {
                   }}
                   className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-lg relative z-10"
                 />
+                
+                {/* 🔥 LOADER FIXED: left-3 right-3 to prevent overlapping into curved corners 🔥 */}
+                {loading && (
+                  <div className="absolute -bottom-[2px] left-3 right-3 h-[2px] bg-transparent overflow-hidden z-0">
+                    <div className="h-full bg-[#5f6368] animate-real-loading rounded-full"></div>
+                  </div>
+                )}
               </div>
 
               {error && (
@@ -520,7 +438,7 @@ export default function CalculatorPage() {
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center">
                   <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
@@ -534,8 +452,20 @@ export default function CalculatorPage() {
                   <span className="text-[16px] font-semibold">Need help?</span>
                 </a>
               </div>
-              <div className="text-sm font-medium text-[#3c4043]">
-                Last update: 10 June 2026 at 08:43 IST
+
+              {/* 🔥 NAME & POINTS ADDED IN THE MIDDLE (Clickable & Underline on Hover) 🔥 */}
+              {userPoints !== null && (
+                <div 
+                  onClick={() => router.push('/dashboard')}
+                  className="text-black font-bold text-[15px] md:text-center flex-1 cursor-pointer hover:underline"
+                  title="View Dashboard"
+                >
+                  {userName || "Arcade Player"} : {userPoints} Points
+                </div>
+              )}
+
+              <div className="text-sm font-medium text-[#3c4043] md:text-right">
+                Last update: 13 June 2026 at 1:24 IST
               </div>
             </div>
 
@@ -600,7 +530,7 @@ export default function CalculatorPage() {
               </label>
             </div>
 
-            {/* 🔥 RECENT PROFILES */}
+            {/* 🔥 RECENT PROFILES (Width reduced for sleeker premium feel) 🔥 */}
             {recentUrls.length > 0 && (
               <div className="mt-6 pt-6 border-t border-[#f1f3f4] animate-fade-in-up">
                 <div className="flex items-center justify-between mb-6">
@@ -615,14 +545,14 @@ export default function CalculatorPage() {
                   </button>
                 </div>
                 
-                <div className="flex flex-wrap gap-x-12 gap-y-6 ml-5">
+                <div className="flex flex-wrap gap-x-8 gap-y-5 ml-2 md:ml-5">
                   {recentUrls.map((item, idx) => {
                     const shortId = item.url.split("/").pop()?.substring(0, 16) || "Profile";
                     return (
                       <button 
                         key={idx} 
                         onClick={() => handleHistoryClick(item.url, idx)} 
-                        className={`relative w-auto min-w-[270px] inline-flex items-center justify-between gap-4 py-2.5 pr-6 pl-10 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#f8f9fa] rounded-xl transition-all shadow-sm hover:shadow-md ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea]' : ''}`}
+                        className={`relative w-auto min-w-[240px] inline-flex items-center justify-between gap-3 py-2 pr-5 pl-9 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#f8f9fa] rounded-xl transition-all shadow-sm hover:shadow-md ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea]' : ''}`}
                         title={item.url}
                       >
                         {copiedIndex === idx && (
@@ -632,27 +562,27 @@ export default function CalculatorPage() {
                           </div>
                         )}
 
-                        <div className="absolute -left-6 top-1/2 -translate-y-1/2 z-10">
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 z-10">
                           {/* 🔥 REMOVED animate-float-avatar SO IT STAYS STATIC 🔥 */}
-                          <div className="w-12 h-12 rounded-full bg-white border-[3px] border-[#f1f3f4] overflow-hidden flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.1)] relative">
+                          <div className="w-10 h-10 rounded-full bg-white border-[2px] border-[#f1f3f4] overflow-hidden flex items-center justify-center shadow-sm relative">
                             {copiedIndex === idx ? (
-                               <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                               <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                             ) : item.points !== undefined ? (
                               <>
                                 <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-white transition-opacity duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0' : 'opacity-100'}`}>
                                   {item.avatar ? (
                                     <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                   ) : (
-                                    <span className="text-[17px] font-black text-[#1a73e8]">
+                                    <span className="text-[15px] font-black text-[#1a73e8]">
                                       {item.name ? item.name.charAt(0).toUpperCase() : "U"}
                                     </span>
                                   )}
                                 </div>
                                 
                                 <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-[#f8f9fa] transition-opacity duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100' : 'opacity-0'}`}>
-                                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDE047] via-[#D4AF37] to-[#996515] shadow-[inset_-2px_-2px_4px_rgba(153,101,21,0.6),inset_2px_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative">
+                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDE047] via-[#D4AF37] to-[#996515] shadow-[inset_-2px_-2px_4px_rgba(153,101,21,0.6),inset_2px_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative">
                                     <div className="absolute w-[75%] h-[75%] rounded-full bg-gradient-to-br from-[#D4AF37] via-[#FDE047] to-[#B8860B] border border-white/20 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.1)] flex items-center justify-center">
-                                      <span className="text-[#4A2E00] text-[13.5px] font-black tracking-tighter" style={{ textShadow: '1px 1px 1px rgba(255,255,255,0.4)' }}>
+                                      <span className="text-[#4A2E00] text-[11px] font-black tracking-tighter" style={{ textShadow: '1px 1px 1px rgba(255,255,255,0.4)' }}>
                                         {item.points}
                                       </span>
                                     </div>
@@ -664,7 +594,7 @@ export default function CalculatorPage() {
                                 {item.avatar ? (
                                   <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
-                                  <span className="text-[17px] font-black text-[#1a73e8]">
+                                  <span className="text-[15px] font-black text-[#1a73e8]">
                                     {item.name ? item.name.charAt(0).toUpperCase() : "U"}
                                   </span>
                                 )}
@@ -673,15 +603,15 @@ export default function CalculatorPage() {
                           </div>
                         </div>
                         
-                        <div className="flex flex-col items-start leading-tight text-left min-w-[130px]">
-                          <span className="text-[15px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
-                          <span className="text-[11px] text-[#5f6368] font-bold opacity-90 mt-0.5">
+                        <div className="flex flex-col items-start leading-tight text-left min-w-[120px]">
+                          <span className="text-[14px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
+                          <span className="text-[10px] text-[#5f6368] font-bold opacity-90 mt-0.5">
                             ID: {shortId}...
                           </span>
                         </div>
                         
-                        <div className="border-l border-[#dadce0] pl-3.5 flex items-center">
-                          <span className="text-[10px] font-extrabold text-[#80868b] bg-[#f1f3f4] px-2 py-1 rounded tracking-wide">
+                        <div className="border-l border-[#dadce0] pl-3 flex items-center">
+                          <span className="text-[9px] font-extrabold text-[#80868b] bg-[#f1f3f4] px-1.5 py-1 rounded tracking-wide">
                             {timeAgo(item.time)}
                           </span>
                         </div>
@@ -694,7 +624,8 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        <div className="mt-12 mb-10 max-w-[55rem] mx-auto">
+        {/* 🔥 GUIDE BOXES LAYOUT INCREASED FOR PREMIUM HORIZONTAL LOOK 🔥 */}
+        <div className="mt-12 mb-10 max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
               Public Profile Guide Format
@@ -773,36 +704,23 @@ export default function CalculatorPage() {
                     <span className="text-[#b06000] text-[14px]">Make sure your profile is set to <strong className="font-bold">public</strong> so the calculator can access your badge information.</span>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-   {/* 🔥 PERFECTLY CENTERED "PUBLIC PROFILE FORMAT" BOX 🔥 */}
-        <div className="mt-8 mb-10 max-w-[55rem] mx-auto"> 
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-[#202124]">
-              Public Profile Format
-            </h2>
-          </div>
-          
-          {/* 🔥 Same width as top boxes 🔥 */}
-          <div className="relative flex flex-col md:flex-row gap-6">
-            <div className="hidden md:block w-12 shrink-0"></div>
-            
-            <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm text-center">
-              <h4 className="text-[16px] font-bold text-[#202124] mb-6">Your URL should look like this..</h4>
-              
-              {/* 🔥 Green Box, White Text 🔥 */}
-              <div className="bg-[#1e8e3e] rounded-xl p-4 md:p-5 border border-[#137333] mb-6 w-full overflow-hidden flex items-center justify-center shadow-inner">
-                <p className="text-white font-mono text-[14px] md:text-[16px] break-all text-center tracking-wide">
-                  https://www.skills.google/public_profiles/<span className="font-extrabold">PROFILE_ID</span>
-                </p>
+                {/* 🔥 MERGED "PUBLIC PROFILE FORMAT" INSIDE STEP 3 🔥 */}
+                <div className="mt-8 pt-6 border-t border-[#e8eaed]">
+                  <h4 className="text-[16px] font-bold text-[#202124] mb-5">Your URL should look like this..</h4>
+                  
+                  <div className="bg-[#1e8e3e] rounded-xl p-4 md:p-5 border border-[#137333] mb-4 w-full overflow-hidden flex items-center justify-center shadow-inner">
+                    <p className="text-white font-mono text-[14px] md:text-[16px] break-all text-center tracking-wide">
+                      https://www.skills.google/public_profiles/<span className="font-extrabold">PROFILE_ID</span>
+                    </p>
+                  </div>
+                  
+                  <p className="text-[#5f6368] text-[15px] leading-relaxed text-center">
+                    The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
+                  </p>
+                </div>
+
               </div>
-              
-              <p className="text-[#5f6368] text-[15px] leading-relaxed">
-                The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
-              </p>
             </div>
           </div>
         </div>
