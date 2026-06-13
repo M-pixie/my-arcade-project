@@ -628,7 +628,7 @@ export default function CalculatorPage() {
         <div className="mt-12 mb-10 max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
-              Public Profile Guide Format
+              Get Public Profile ?
             </h2>
             <p className="text-[#5f6368] mt-2 text-[15px]">Follow these simple steps to find your public profile URL</p>
           </div>
