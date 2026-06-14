@@ -359,20 +359,6 @@ export default function DashboardPage() {
     return true; 
   });
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#f8f9fa] flex flex-col items-center justify-center font-sans px-6 text-center">
-         <Navbar />
-         <div className="text-6xl mb-4">⚠️</div>
-         <h2 className="text-2xl font-bold text-[#d93025] mb-2">Something went wrong!</h2>
-         <p className="text-[#5f6368] mb-6 max-w-md">{error}</p>
-         <button onClick={() => router.push('/calculator')} className="px-6 py-3 bg-[#1a73e8] text-white font-bold rounded-lg shadow hover:bg-[#1557b0]">
-           Go Back to Calculator
-         </button>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
@@ -552,31 +538,25 @@ export default function DashboardPage() {
                       </svg>
                     </div>
 
-                    <div className="relative group w-full mb-5 h-[52px]">
-                      <div 
-                        className="w-full h-full bg-[#ff578a] shadow-sm relative overflow-hidden transition-all hover:shadow-md hover:scale-[1.02]"
-                        style={{ borderRadius: '8px' }}
+                    <div className="flex w-full gap-3 mb-5">
+                      <button 
+                        onClick={() => router.push('/leaderboard')}
+                        className="flex-1 bg-white border border-[#dadce0] text-[#202124] font-semibold py-2 px-4 rounded-full shadow-sm hover:bg-[#f8f9fa] transition-all text-sm flex items-center justify-center"
                       >
-                        <button 
-                          onClick={() => router.push('/leaderboard')}
-                          className={`absolute inset-0 w-full h-full text-white font-extrabold text-xl flex items-center justify-center tracking-wide transition-opacity duration-1000 ease-in-out ${showSubscribe ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
-                        >
-                          Rank {realRank || "-"}
-                        </button>
-                        
-                        <a 
-                          href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`absolute inset-0 w-full h-full text-white font-[monospace] font-bold text-xl flex items-center justify-center tracking-wide transition-opacity duration-1000 ease-in-out ${showSubscribe ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-                        >
-                          Subscribe here!
-                        </a>
-                      </div>
+                        Rank {realRank || "-"}
+                      </button>
+                      <a 
+                        href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-[#202124] text-white font-semibold py-2 px-4 rounded-full shadow-sm hover:bg-[#3c4043] transition-all text-sm flex items-center justify-center text-center"
+                      >
+                        Subscribe
+                      </a>
                     </div>
 
-                    <div className="text-[13px] font-extrabold text-[#1a73e8] bg-[#e8f0fe] px-5 py-1.5 rounded-full uppercase tracking-wider mb-6 text-center border border-[#d2e3fc]">
-                      User Progress Report
+                    <div className="text-black text-center mb-6">
+                      {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
                     </div>
 
                     <div className="text-sm font-bold text-[#80868b] border-t border-[#e8eaed] pt-5 w-full text-center mt-auto tracking-wide uppercase">
@@ -1068,7 +1048,7 @@ export default function DashboardPage() {
 
                   {/* Export CSV */}
                   <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4" /></svg>
                     Export
                   </button>
                 </div>
