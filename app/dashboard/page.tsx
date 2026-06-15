@@ -555,9 +555,9 @@ export default function DashboardPage() {
                       </a>
                     </div>
 
-                    <div className="text-black text-center font-bold mb-6">
-                {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
-                </div>
+                    <div className="text-black text-center font-bold text-lg mb-6">
+  {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
+</div>
 
                     <div className="text-sm font-bold text-[#80868b] border-t border-[#e8eaed] pt-5 w-full text-center mt-auto tracking-wide uppercase">
                       Member since <span className="text-[#3c4043]">{getMemberSinceYear()}</span>

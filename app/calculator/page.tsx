@@ -307,10 +307,10 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        {/* 🔥 CLEAN STATIC HEADING (Name & Coin Removed from here) 🔥 */}
+        {/* 🔥 CLEAN STATIC HEADING 🔥 */}
         <div className="text-center mb-10 flex justify-center items-center">
           <h1 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight text-[#202124]">
-            Arcade <span className="text-[#1a73e8]">Calculator</span>
+            Arcade Calculator
           </h1>
         </div>
 
@@ -354,35 +354,31 @@ export default function CalculatorPage() {
             .animate-fade-in-modal { animation: fade-in-modal 0.2s ease-out forwards; }
             .animate-scale-up-modal { animation: scale-up-modal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-            /* 🔥 SCANNING / SWEEPING OVERLAP ANIMATION 🔥 */
-            @keyframes text-sweep {
-              0% { background-position: 200% center; }
-              100% { background-position: -200% center; }
+            /* 🔥 BOUNCING WAVE TEXT ANIMATION (Normal Color, Faster) 🔥 */
+            @keyframes text-wave-bounce {
+              0%, 40%, 100% { transform: translateY(0); }
+              20% { transform: translateY(-4px); }
             }
-            .sweep-text {
-              background: linear-gradient(
-                90deg, 
-                #3c4043 0%, 
-                #3c4043 35%, 
-                #1a73e8 50%, /* Bright Blue Sweep Line */
-                #3c4043 65%, 
-                #3c4043 100%
-              );
-              background-size: 200% auto;
-              color: transparent;
-              -webkit-background-clip: text;
-              background-clip: text;
-              animation: text-sweep 3s ease-in-out infinite;
+            .wave-char {
               display: inline-block;
+              animation: text-wave-bounce 1s infinite ease-in-out;
             }
           `}</style>
 
           <div className="p-8 md:p-12 mt-1">
             
-            {/* 🔥 REVERTED ORIGINAL TEXT LAYOUT 🔥 */}
+            {/* 🔥 REVERTED ORIGINAL TEXT LAYOUT WITH NEW WAVE ANIMATION (Normal Font, Normal Weight) 🔥 */}
             <div className="relative mb-8">
-              <p className="text-sm md:text-base font-extrabold text-left sweep-text w-3/4">
-                Paste your public profile url here.
+              <p className="text-sm md:text-base text-left w-3/4 text-[#202124]">
+                {"Paste your public profile url here".split("").map((char, index) => (
+                  <span 
+                    key={index} 
+                    className="wave-char" 
+                    style={{ animationDelay: `${index * 0.02}s` }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                ))}
               </p>
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
@@ -390,7 +386,7 @@ export default function CalculatorPage() {
                 rel="noopener noreferrer" 
                 className="absolute right-0 top-0 text-sm md:text-base font-bold text-[#202124] hover:underline cursor-pointer"
               >
-                Subscribe
+                Subscribe here.
               </a>
             </div>
 
@@ -444,13 +440,6 @@ export default function CalculatorPage() {
                   <input id="remember-me" type="checkbox" className="w-4 h-4 text-[#1a73e8] border-[#dadce0] rounded-sm focus:ring-[#1a73e8] focus:ring-offset-0 cursor-pointer" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
                   <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Remember me</label>
                 </div>
-                
-                <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[#2563eb] hover:text-[#1d4ed8] transition-colors group">
-                  <svg className="w-[22px] h-[22px] transition-transform group-hover:scale-105" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8.29 13.29L6 11.59l1.41-1.41 3.29 3.29 5.88-5.88L18 9l-7.29 7.29z"/>
-                  </svg>
-                  <span className="text-[16px] font-semibold">Need help?</span>
-                </a>
               </div>
 
               {/* 🔥 NAME & POINTS ADDED IN THE MIDDLE (Clickable & Underline on Hover) 🔥 */}
@@ -465,11 +454,12 @@ export default function CalculatorPage() {
               )}
 
               <div className="text-sm font-medium text-[#3c4043] md:text-right">
-                Last update: 13 June 2026 at 1:24 IST
+                Last update: 15/06/2026 at 10:00 IST
               </div>
             </div>
 
-            <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-[16px] font-semibold py-3 rounded-lg transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
+            {/* 🔥 BUTTON PADDING UPDATED TO py-4 FOR THICKER LOOK 🔥 */}
+            <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-[16px] font-semibold py-4 rounded-lg transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
               {loading ? (
                 <>
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -483,28 +473,34 @@ export default function CalculatorPage() {
               )}
             </button>
 
-            {/* 🔥 NOTE & AVATAR COMBINED 🔥 */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6">
-              {userPoints !== null && (
-                <div 
-                  onClick={() => router.push('/dashboard')}
-                  className="w-10 h-10 shrink-0 cursor-pointer hover:scale-105 transition-transform duration-300"
-                  title="View Dashboard"
-                >
-                  {userAvatar ? (
-                    <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[2px] border-[#dadce0] shadow-sm" />
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-white border-[2px] border-[#dadce0] shadow-sm flex items-center justify-center">
-                      <span className="text-[18px] font-black text-[#1a73e8]">
-                        {userName ? userName.charAt(0).toUpperCase() : "U"}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-              <p className="text-[13.5px] font-bold text-[#5d4037] text-center leading-snug tracking-wide">
-                 Make sure your profile is set to public so the calculator can access your badge information.
-              </p>
+            {/* 🔥 NOTE, AVATAR & HELP COMBINED 🔥 */}
+            <div className="flex flex-col sm:flex-row justify-between items-center w-full mt-6 px-1">
+              <div className="flex items-center gap-3">
+                {userPoints !== null && (
+                  <div 
+                    onClick={() => router.push('/dashboard')}
+                    className="w-10 h-10 shrink-0 cursor-pointer hover:scale-105 transition-transform duration-300"
+                    title="View Dashboard"
+                  >
+                    {userAvatar ? (
+                      <img src={userAvatar} alt="Profile" className="w-full h-full object-cover rounded-full border-[2px] border-[#dadce0] shadow-sm" />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-white border-[2px] border-[#dadce0] shadow-sm flex items-center justify-center">
+                        <span className="text-[18px] font-black text-[#1a73e8]">
+                          {userName ? userName.charAt(0).toUpperCase() : "U"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+                <p className="text-[13.5px] font-bold text-[#5d4037] leading-snug tracking-wide text-left">
+                  Set your profile to Public to enable badge access.
+                </p>
+              </div>
+
+              <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="text-[15px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline transition-colors mt-3 sm:mt-0 whitespace-nowrap">
+                Need Help ?
+              </a>
             </div>
 
             {/* 🔥 MOVED AUTO CALCULATE TOGGLE (ABOVE RECENT PROFILES) 🔥 */}
@@ -536,7 +532,7 @@ export default function CalculatorPage() {
                 <div className="flex items-center justify-between mb-6">
                   <p className="text-sm font-extrabold text-[#3c4043] tracking-wider flex items-center gap-2">
                     <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Recent Profiles
+                    Recent Profiles History
                   </p>
                   
                   <button onClick={clearHistory} className="flex items-center gap-2 text-sm text-[#202124] hover:text-black hover:bg-[#f1f3f4] bg-transparent px-4 py-2 rounded-lg font-bold transition-colors">

@@ -153,19 +153,21 @@ export default function Footer() {
                 </div>
               </a>
 
-              {/* Box 2: Google Skills */}
+             {/* Box 2: Google Skills */}
               <a 
-                href="https://www.skills.google/" 
+                href="https://www.linkedin.com/company/arcade-nexus/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center justify-start sm:justify-center gap-3 w-full sm:w-auto px-6 py-3 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(26,115,232,0.12)] group"
               >
-                <svg className="w-5 h-5 text-[#1a73e8] group-hover:scale-110 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                <svg className="w-5 h-5 text-[#1a73e8] group-hover:scale-110 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
                 </svg>
                 <div className="flex flex-col text-left">
-                  <span>Google Skills</span>
-                  <span className="text-[12px] text-[#5f6368] font-normal group-hover:text-[#1a73e8] transition-colors leading-tight mt-0.5">Learning platform</span>
+                  <span>Arcade Nexus | Linkedin Page</span>
+                  <span className="text-[12px] text-[#5f6368] font-normal group-hover:text-[#1a73e8] transition-colors leading-tight mt-0.5">follow this page</span>
                 </div>
               </a>
 
@@ -207,7 +209,7 @@ export default function Footer() {
             
             {/* 🔥 FIX: Dark text (text-[#202124]) aur issue fixed */}
             <p className="text-[13px] text-[#202124] font-bold tracking-[0.05em] uppercase mt-2">
-              Last Updated: 10 June 2026 08:45 am IST
+              Last Updated: 15 June 2026 10:10 am IST
             </p>
           </div>
 
