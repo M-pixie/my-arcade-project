@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react"; // 🔥 useRef ADD KIYA HAI AUTO-SCROLL KE LIYE
+import { useEffect, useState, useRef } from "react"; 
 import Navbar from "@/app/components/Navbar";
 import { subscribeLeaderboard } from "@/lib/leaderboard";
 
@@ -88,6 +88,9 @@ export default function LeaderboardPage() {
     user.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // 🔥 Get current user rank for header display 🔥
+  const currentUserRank = leaders.find((l) => l.name === currentUserName)?.rank;
+
   // 🔥 GET 10 AVATARS FOR DISPLAY 🔥
   let displayAvatars: string[] = [];
   if (leaders.length > 0) {
@@ -100,7 +103,6 @@ export default function LeaderboardPage() {
   }
 
   return (
-    // 🚀 AuthGuard wrapper hata diya, ab direct UI render hoga (Public access)
     <>
       {/* 🌌 PREMIUM NAVY BLUE BACKGROUND 🌌 */}
       <div className="min-h-screen bg-gradient-to-b from-[#050b14] via-[#0a1229] to-[#050b14] text-white font-sans pt-16 pb-12 relative overflow-hidden">
@@ -123,10 +125,20 @@ export default function LeaderboardPage() {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-6px); }
           }
+          @keyframes podium-bg-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
           .animate-ribbon-1 { animation: float-ribbon-1 4s ease-in-out infinite; }
           .animate-ribbon-2 { animation: float-ribbon-2 5s ease-in-out infinite; }
           .animate-cup { animation: float-cup 4s ease-in-out infinite; }
           .animate-avatar { animation: float-avatar 3s ease-in-out infinite; }
+          .animate-podium-bg {
+            background: linear-gradient(270deg, rgba(78,52,46,0.6), rgba(26,115,232,0.6), rgba(255,74,125,0.6), rgba(76,175,80,0.6), rgba(142,36,170,0.6), rgba(78,52,46,0.6));
+            background-size: 300% 300%;
+            animation: podium-bg-shift 6s ease infinite;
+          }
         `}</style>
 
         {/* Ambient Glowing Background Effects */}
@@ -137,10 +149,8 @@ export default function LeaderboardPage() {
 
         {/* ================= HEADER SECTION (FLEX LAYOUT) ================= */}
         <header className="pt-12 pb-6 px-6 relative z-20 max-w-6xl mx-auto">
-          {/* 🚀 CHANGED: Added 'relative' to position avatars absolutely within this box 🚀 */}
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:p-8 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)] relative overflow-hidden lg:overflow-visible">
             
-            {/* 🔥 MOVED AVATARS: Positioned absolutely in right-top corner, halka badha size, slightly below border 🔥 */}
             {displayAvatars.length > 0 && (
               <div className="absolute top-1.5 right-3 flex -space-x-3 z-30">
                 {displayAvatars.map((url, idx) => (
@@ -148,8 +158,8 @@ export default function LeaderboardPage() {
                     key={`${url}-${idx}`}
                     src={url}
                     alt="player avatar"
-                    className="w-8 h-8 rounded-full object-cover relative transition-transform hover:scale-110" // 🚀 Updated size to w-8 h-8 🚀
-                    style={{ border: "none", zIndex: 10 - idx }} // No border, correct stacking
+                    className="w-8 h-8 rounded-full object-cover relative transition-transform hover:scale-110" 
+                    style={{ border: "none", zIndex: 10 - idx }} 
                   />
                 ))}
               </div>
@@ -161,7 +171,6 @@ export default function LeaderboardPage() {
               {/* 🏆 REALISTIC ANIMATED CUP WITH FLYING RIBBONS 🏆 */}
               <div className="relative inline-flex items-center justify-center w-32 h-32 md:w-36 md:h-36 shrink-0">
                 
-                {/* 🚀 CHANGED: Blue glow background added so stars and cup pop even more */}
                 <div className="absolute inset-[-20px] bg-blue-500/20 blur-[25px] rounded-full pointer-events-none"></div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/40 via-yellow-400/20 to-transparent blur-2xl rounded-full animate-pulse"></div>
 
@@ -197,8 +206,9 @@ export default function LeaderboardPage() {
 
               {/* Title Content */}
               <div>
+                {/* 🔥 CHANGED: Removed colon (:) from 'Your Rank' 🔥 */}
                 <h1 className="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300 drop-shadow-sm mb-2 relative z-10">
-                  Hall of Fame
+                  Your Rank {currentUserRank ? currentUserRank : "--"}
                 </h1>
                 <p className="text-blue-200/70 text-sm md:text-base max-w-sm font-medium relative z-10">
                   See who is leading the charts and dominating the Arcade.
@@ -206,9 +216,7 @@ export default function LeaderboardPage() {
               </div>
             </div>
 
-            {/* 🔥 Right Side: Premium Search Box (Updated Style like Image) 🔥 */}
             <div className="w-full lg:w-80 shrink-0 relative z-20 mt-6 lg:mt-0">
-              {/* Note: Avatars moved out from here to parent div for corner placement */}
               <div className="relative group w-full">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <svg className="w-4 h-4 text-slate-400 group-focus-within:text-white transition-colors drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +227,7 @@ export default function LeaderboardPage() {
                   type="text"
                   placeholder={
                     showUserPlaceholder && currentUserName 
-                      ? `${currentUserName.split(" ")[0]} (You)` // 🔥 YAHAN BASS FIRST NAME AUR "(You)" RAKHA HAI
+                      ? `${currentUserName.split(" ")[0]} (You)` 
                       : "Search player name..."
                   }
                   value={searchTerm}
@@ -249,7 +257,6 @@ export default function LeaderboardPage() {
               {/* ================= 🔥 THE REAL PODIUM (TOP 3) 🔥 ================= */}
               <div className="flex flex-row justify-center items-end gap-2 sm:gap-4 md:gap-8 pt-8 mt-4 relative">
                 
-                {/* Base shadow for the entire podium */}
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-10 bg-blue-500/20 blur-2xl rounded-full pointer-events-none"></div>
 
                 {podiumOrder.map((user) => {
@@ -257,7 +264,7 @@ export default function LeaderboardPage() {
                   const isFirst = user.rank === 1;
                   const isSecond = user.rank === 2;
                   const isThird = user.rank === 3;
-                  const isCurrentUser = user.name === currentUserName; // 🔥 CHECK IF PODIUM USER IS CURRENT USER
+                  const isCurrentUser = user.name === currentUserName; 
 
                   let heightClass = "";
                   if (isFirst) heightClass = "h-[240px] sm:h-[280px] md:h-[340px]";
@@ -267,10 +274,9 @@ export default function LeaderboardPage() {
                   return (
                     <div 
                       key={user.id} 
-                      ref={isCurrentUser ? currentUserRef : null} // 🔥 ATTACH REF FOR SCROLL IF APPLICABLE
+                      ref={isCurrentUser ? currentUserRef : null} 
                       className={`relative flex flex-col items-center w-28 sm:w-36 md:w-56 group ${isFirst ? 'z-20' : 'z-10'}`}
                     >
-                      {/* 🔥 CURRENT USER BADGE FOR PODIUM 🔥 */}
                       {isCurrentUser && (
                         <div className="absolute -top-16 md:-top-20 bg-blue-500 border border-blue-300 text-white text-[10px] sm:text-xs font-black px-3 py-1 rounded-full animate-bounce shadow-[0_0_15px_rgba(59,130,246,0.8)] z-50 tracking-wider">
                           YOU
@@ -279,7 +285,6 @@ export default function LeaderboardPage() {
                       
                       <div className="relative mb-[-30px] md:mb-[-40px] z-30 flex flex-col items-center transition-transform duration-300 group-hover:-translate-y-2">
                         
-                        {/* 🚀 CHANGED: Crowns shifted down and size increased */}
                         {(isFirst || isSecond || isThird) && (
                           <div className={`absolute z-40 animate-pulse drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]
                             ${isFirst ? "-top-10 md:-top-[75px] text-5xl md:text-6xl" : "-top-10 md:-top-[60px] text-4xl md:text-5xl"}
@@ -288,44 +293,53 @@ export default function LeaderboardPage() {
                           </div>
                         )}
                         
+                        {/* 🔥 REMOVED BORDERS FROM AVATAR 🔥 */}
                         <img
                           src={user.photoURL || "/avatar.png"}
                           alt={user.name}
-                          className={`rounded-full object-cover border-4 bg-[#0a1229] animate-avatar
-                            ${isFirst ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 border-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.6)]" : ""}
-                            ${isSecond ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-slate-300 shadow-[0_0_15px_rgba(203,213,225,0.4)]" : ""}
-                            ${isThird ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : ""}
+                          className={`rounded-full object-cover bg-[#0a1229] animate-avatar
+                            ${isFirst ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 shadow-[0_0_25px_rgba(250,204,21,0.6)]" : ""}
+                            ${isSecond ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 shadow-[0_0_15px_rgba(203,213,225,0.4)]" : ""}
+                            ${isThird ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : ""}
                             ${isCurrentUser ? "ring-4 ring-blue-500 ring-offset-2 ring-offset-[#0a1229]" : ""} 
                           `}
                         />
-                        <div className={`absolute -bottom-3 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-sm md:text-base border-2 shadow-lg z-30
-                          ${isFirst ? "bg-gradient-to-br from-yellow-300 to-yellow-500 text-yellow-900 border-yellow-200" : ""}
-                          ${isSecond ? "bg-gradient-to-br from-slate-200 to-slate-400 text-slate-900 border-white" : ""}
-                          ${isThird ? "bg-gradient-to-br from-orange-400 to-orange-600 text-orange-950 border-orange-200" : ""}
-                        `}>
-                          {user.rank}
-                        </div>
                       </div>
 
-                      <div className={`w-full rounded-t-2xl border-t-2 border-x-2 flex flex-col items-center justify-end pb-4 md:pb-8 px-2 text-center backdrop-blur-md transition-all duration-300 overflow-hidden relative
+                      {/* 🔥 ADDED MULTI-COLOR GRADIENT ANIMATION TO BOXES 🔥 */}
+                      {/* 🔥 CHANGED to flex-col without justify-end so we can use flex-1 for center spacing 🔥 */}
+                      <div className={`w-full rounded-t-2xl border-t-2 border-x-2 border-white/20 flex flex-col items-center pb-4 md:pb-8 px-2 text-center transition-all duration-300 overflow-hidden relative animate-podium-bg shadow-[0_-10px_30px_rgba(0,0,0,0.3)]
                         ${heightClass} 
-                        ${isFirst ? "bg-gradient-to-b from-yellow-500/30 via-yellow-700/10 to-transparent border-yellow-400/50 shadow-[0_-10px_30px_rgba(250,204,21,0.15)]" : ""}
-                        ${isSecond ? "bg-gradient-to-b from-slate-400/30 via-slate-600/10 to-transparent border-slate-300/50 shadow-[0_-10px_20px_rgba(203,213,225,0.1)]" : ""}
-                        ${isThird ? "bg-gradient-to-b from-orange-600/30 via-orange-800/10 to-transparent border-orange-500/50 shadow-[0_-10px_20px_rgba(249,115,22,0.1)]" : ""}
                         ${isCurrentUser ? "before:absolute before:inset-0 before:bg-blue-500/10 before:animate-pulse" : ""}
                       `}>
                         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
-                        <h3 className="text-xs sm:text-sm md:text-lg font-bold text-white truncate w-full drop-shadow-md mb-1 px-1 relative z-10">
-                          {user.name || "Anonymous"}
-                        </h3>
-                        <p className={`text-base sm:text-xl md:text-3xl font-black drop-shadow-[0_0_10px_currentColor] relative z-10
-                          ${isFirst ? "text-yellow-400" : ""}
-                          ${isSecond ? "text-slate-200" : ""}
-                          ${isThird ? "text-orange-400" : ""}
-                        `}>
-                          {user.points?.toLocaleString() ?? 0} 
-                          <span className="block md:inline-block text-[9px] sm:text-[10px] md:text-sm text-white/50 ml-0 md:ml-1 mt-1 md:mt-0 font-bold uppercase tracking-widest">pts</span>
-                        </p>
+                        
+                        {/* 🔥 RANK NUMBER MOVED TO MIDDLE (Higher, between avatar and name) 🔥 */}
+                        <div className="flex-1 flex items-center justify-center w-full relative z-10 mt-6 md:mt-8">
+                          <div className={`text-3xl sm:text-4xl md:text-5xl font-black drop-shadow-md
+                            ${isFirst ? "text-yellow-400" : ""}
+                            ${isSecond ? "text-slate-200" : ""}
+                            ${isThird ? "text-orange-400" : ""}
+                          `}>
+                            {user.rank}
+                          </div>
+                        </div>
+
+                        {/* 🔥 NAME AND POINTS AT THE BOTTOM 🔥 */}
+                        <div className="flex flex-col items-center justify-end relative z-10 w-full">
+                          <h3 className="text-xs sm:text-sm md:text-lg font-bold text-white truncate w-full drop-shadow-md mb-1 px-1">
+                            {user.name || "Anonymous"}
+                          </h3>
+                          
+                          <p className={`text-base sm:text-xl md:text-3xl font-black drop-shadow-[0_0_10px_currentColor]
+                            ${isFirst ? "text-yellow-400" : ""}
+                            ${isSecond ? "text-slate-200" : ""}
+                            ${isThird ? "text-orange-400" : ""}
+                          `}>
+                            {user.points?.toLocaleString() ?? 0} 
+                            <span className="block md:inline-block text-[9px] sm:text-[10px] md:text-sm text-white/70 ml-0 md:ml-1 mt-1 md:mt-0 font-bold uppercase tracking-widest">pts</span>
+                          </p>
+                        </div>
                       </div>
                     </div>
                   );
@@ -400,10 +414,8 @@ function LeaderRow({ user, highlight = false, isCurrentUser = false, innerRef = 
             : "bg-[#121c38]/60 border-white/5 hover:bg-[#1a264a] hover:border-blue-400/40 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"}
       `}
     >
-      {/* 💥 YAHAN SE MOTA BLUE BAR HATA DIYA GAYA HAI 💥 */}
 
       <div className="flex items-center gap-3 sm:gap-5 pl-1">
-        {/* 🔥 RANK SE "#" HATA DIYA HAI 🔥 */}
         <div className="w-8 sm:w-10 text-center">
           <span className={`text-lg sm:text-xl font-black transition-colors ${isCurrentUser ? "text-blue-300" : highlight ? "text-blue-400" : "text-white/30 group-hover:text-blue-400"}`}>
             {user.rank}
@@ -422,7 +434,6 @@ function LeaderRow({ user, highlight = false, isCurrentUser = false, innerRef = 
       </div>
 
       <div className="text-right flex items-center gap-3">
-        {/* 🔥 "YOU" TEXT BADGE FOR ROW 🔥 */}
         {isCurrentUser && (
           <span className="hidden sm:inline-block bg-blue-500/20 border border-blue-400/50 text-blue-300 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest">
             You
