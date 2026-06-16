@@ -365,29 +365,29 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* 🔥 ENROLMENTS OPEN SOON SECTION (DARK BROWN BG & WHITE TEXT) 🔥 */}
-            <div className="flex flex-col gap-4 text-left w-full max-w-lg bg-[#4e342e] p-6 rounded-xl shadow-lg border-none">
-              <h3 className="text-[18px] md:text-[20px] font-bold text-white tracking-tight">
+            {/* 🔥 ENROLMENTS OPEN SOON SECTION (NO BOX, DARK BROWN TEXT) 🔥 */}
+            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-[#4e342e] tracking-tight">
                 Facilitator Enrolments will Open soon!
               </h3>
-              <div className="flex flex-col gap-3 text-white font-medium text-[14px] md:text-[15px]">
+              <div className="flex flex-col gap-2 text-[#4e342e] font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-white mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4e342e] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span className="text-[#e0e0e0]">13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
+                  <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-white mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4e342e] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span className="text-[#e0e0e0]">Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
+                  <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                 </div>
               </div>
             </div>
@@ -444,7 +444,7 @@ export default function HomePage() {
             
             {/* 🎯 DISCLAIMER TEXT IN DARK BROWN (#4e342e) */}
             <p className="text-[14px] md:text-[15px] font-bold text-[#4e342e] leading-relaxed w-full">
-              Disclaimer: Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience.
+              <span className="underline">Disclaimer :-</span> Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience.
             </p>
 
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full pt-2">

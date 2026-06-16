@@ -128,90 +128,89 @@ export default function FacilitatorPage() {
           <section className="relative border-b border-[#dadce0] bg-white overflow-hidden">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.04] blur-[100px] rounded-full pointer-events-none"></div>
             
-            <div className="max-w-6xl mx-auto px-6 pt-16 pb-16 md:pt-20 md:pb-20 relative z-10">
+            <div className="max-w-6xl mx-auto px-6 pt-12 pb-16 md:pt-16 md:pb-20 relative z-10">
               
               {/* Top Hero Row */}
               <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 mb-16">
                 
                 {/* Left Content (Based on First Picture) */}
-                <div className="flex-1 w-full lg:w-[60%] text-left lg:ml-[-32px]">
-                  <h4 className="text-[#5f6368] font-bold tracking-widest text-sm uppercase mb-3">Google Cloud Arcade</h4>
+                <div className="flex-1 w-full lg:w-[60%] text-left lg:ml-[-16px]">
                   
-                  <h1 className="text-[52px] sm:text-[64px] md:text-[76px] font-normal text-[#202124] leading-tight mb-6 tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                  <h1 className="text-[42px] sm:text-[48px] md:text-[56px] font-bold text-[#202124] leading-tight mb-5 tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                     Facilitator 2026
                   </h1>
                   
-                  <p className="text-[#3c4043] text-[17px] sm:text-[19px] leading-[1.6] mb-10 max-w-2xl font-normal">
+                  <p className="text-[#3c4043] text-[16px] sm:text-[18px] leading-[1.6] mb-8 max-w-2xl font-normal">
                     The Arcade Facilitator Program is an always-on, no-cost gaming campaign where technical practitioners of all levels can learn new cloud skills like computing, application development, big data & AI/ML and earn digital badges & points to use towards <strong className="text-[#202124] font-bold">claiming swag prizes and Google Cloud goodies.</strong>
                   </p>
 
-                  <h3 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-6 tracking-tight">
+                  <h3 className="text-lg sm:text-[20px] font-bold text-[#202124] mb-5 tracking-tight">
                     Enrolments will OPEN soon!
                   </h3>
 
-                  <div className="flex flex-col gap-5 text-[#202124] font-normal text-[17px]">
-                    <div className="flex items-start gap-4">
-                      <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+                  <div className="flex flex-col gap-4 text-[#202124] font-normal text-[16px]">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                       <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                     </div>
-                    <div className="flex items-start gap-4">
-                      <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+                    <div className="flex items-start gap-3">
+                      <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                       <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Right Content (CSS Generated Graphic with Animation) */}
-                <div className="w-full lg:w-[40%] flex justify-center lg:justify-end flex-shrink-0 mt-8 lg:mt-0">
-                  <div className="w-[280px] h-[280px] sm:w-[330px] sm:h-[330px] rounded-full bg-[#111216] flex flex-col items-center justify-center relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-[12px] border-[#292a36] overflow-hidden">
+                <div className="w-full lg:w-[40%] flex justify-center lg:justify-end flex-shrink-0 mt-2 lg:-mt-8">
+                  <div className="w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] rounded-full bg-[#111216] flex flex-col items-center justify-center relative shadow-[0_15px_40px_rgba(0,0,0,0.25)] border-[8px] border-[#292a36] overflow-hidden">
                     
                     {/* Background Noise/Texture */}
-                    <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                    <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
                     
                     {/* Floating Symbols (With Animation) */}
-                    <div className="absolute top-[22%] left-[20%] text-[#ff66c4] text-2xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow">+</div>
-                    <div className="absolute bottom-[28%] right-[15%] text-[#ff66c4] text-3xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '0.5s' }}>+</div>
-                    <div className="absolute top-[48%] left-[10%] text-[#ff66c4] text-xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '1s' }}>+</div>
-                    <div className="absolute top-[18%] right-[38%] text-[#4285f4] text-xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '1.5s' }}>+</div>
+                    <div className="absolute top-[22%] left-[20%] text-[#ff66c4] text-xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow">+</div>
+                    <div className="absolute bottom-[28%] right-[15%] text-[#ff66c4] text-2xl font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '0.5s' }}>+</div>
+                    <div className="absolute top-[48%] left-[10%] text-[#ff66c4] text-lg font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '1s' }}>+</div>
+                    <div className="absolute top-[18%] right-[38%] text-[#4285f4] text-lg font-bold animate-pulse-scale-slow animate-pulse-opacity-slow" style={{ animationDelay: '1.5s' }}>+</div>
                     
                     {/* Floating Dots Group (With Float Animation) */}
-                    <div className="absolute top-[32%] right-[20%] flex gap-1.5 animate-float-slow">
-                      <div className="w-1.5 h-1.5 bg-[#ff66c4] rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    <div className="absolute top-[32%] right-[20%] flex gap-1 animate-float-slow">
+                      <div className="w-1 h-1 bg-[#ff66c4] rounded-full"></div>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
                     </div>
-                    <div className="absolute bottom-[20%] left-[38%] flex gap-1.5 animate-float-slow" style={{ animationDelay: '1s' }}>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-[#ff66c4] rounded-full"></div>
+                    <div className="absolute bottom-[20%] left-[38%] flex gap-1 animate-float-slow" style={{ animationDelay: '1s' }}>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
+                      <div className="w-1 h-1 bg-[#ff66c4] rounded-full"></div>
                     </div>
-                    <div className="absolute top-[20%] left-[32%] flex flex-col gap-1.5 animate-float-slow" style={{ animationDelay: '2s' }}>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-[#ff66c4] rounded-full"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    <div className="absolute top-[20%] left-[32%] flex flex-col gap-1 animate-float-slow" style={{ animationDelay: '2s' }}>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
+                      <div className="w-1 h-1 bg-[#ff66c4] rounded-full"></div>
+                      <div className="w-1 h-1 bg-white rounded-full"></div>
                     </div>
                     
                     {/* Scattered Blue Dots (With Opacity Pulse) */}
-                    <div className="absolute top-[42%] right-[10%] w-1.5 h-1.5 bg-[#4285f4] rounded-full animate-pulse-opacity-slow"></div>
-                    <div className="absolute bottom-[35%] left-[15%] w-1.5 h-1.5 bg-[#4285f4] rounded-full animate-pulse-opacity-slow" style={{ animationDelay: '1s' }}></div>
-                    <div className="absolute bottom-[15%] right-[35%] w-1.5 h-1.5 bg-[#4285f4] rounded-full animate-pulse-opacity-slow" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute top-[42%] right-[10%] w-1 h-1 bg-[#4285f4] rounded-full animate-pulse-opacity-slow"></div>
+                    <div className="absolute bottom-[35%] left-[15%] w-1 h-1 bg-[#4285f4] rounded-full animate-pulse-opacity-slow" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute bottom-[15%] right-[35%] w-1 h-1 bg-[#4285f4] rounded-full animate-pulse-opacity-slow" style={{ animationDelay: '2s' }}></div>
 
                     {/* Google Cloud Logo */}
-                    <div className="flex items-center gap-2 mb-3.5 z-10">
-                      <svg className="w-6.5 h-6.5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <div className="flex items-center gap-1.5 mb-2.5 z-10">
+                      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
                       </svg>
-                      <span className="text-white font-medium text-[17px] tracking-wide">Google Cloud</span>
+                      <span className="text-white font-medium text-[15px] tracking-wide">Google Cloud</span>
                     </div>
 
                     {/* Arcade Text (Pixel Style Font Fallback) */}
-                    <div className="text-[#fbbc04] font-black text-3xl sm:text-[40px] leading-[1.1] text-center z-10 mb-3.5" style={{ fontFamily: '"Courier New", monospace', letterSpacing: '0.05em', textShadow: '2px 2px 0px rgba(0,0,0,0.8)' }}>
+                    <div className="text-[#fbbc04] font-black text-2xl sm:text-[32px] leading-[1.1] text-center z-10 mb-2.5" style={{ fontFamily: '"Courier New", monospace', letterSpacing: '0.05em', textShadow: '1.5px 1.5px 0px rgba(0,0,0,0.8)' }}>
                       THE<br/>ARCADE
                     </div>
 
                     {/* Facilitator Program */}
-                    <div className="text-white font-bold text-xl sm:text-[24px] text-center z-10 leading-snug tracking-wide">
+                    <div className="text-white font-bold text-lg sm:text-[20px] text-center z-10 leading-snug tracking-wide">
                       Facilitator<br/>Program
                     </div>
                   </div>

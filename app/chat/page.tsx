@@ -314,7 +314,7 @@ export default function FullPageChatBot() {
 
   const theme = {
     bgMain: isDarkMode ? "bg-[#131314]" : "bg-[#F0F2F5]",
-    bgSidebar: isDarkMode ? "bg-[#1e1f20]" : "bg-[#f8f9fa]", // 🔥 Light mode grey sidebar
+    bgSidebar: isDarkMode ? "bg-[#1e1f20]" : "bg-[#f8f9fa]",
     bgChatArea: isDarkMode ? "bg-[#131314]" : "bg-[#ffffff]",
     textMain: isDarkMode ? "text-gray-100" : "text-[#202124]",
     textMuted: isDarkMode ? "text-gray-400" : "text-gray-500",
@@ -395,7 +395,7 @@ export default function FullPageChatBot() {
 
             <div className="flex-2 flex flex-col items-center justify-center text-center">
               <span className={`text-[12px] sm:text-[15px] font-medium tracking-wide whitespace-nowrap sm:whitespace-normal ${theme.textMain}`}>
-                Ask anything related to Google Cloud Arcade
+                Ask Arcade Nexus
               </span>
             </div>
             
@@ -459,8 +459,9 @@ export default function FullPageChatBot() {
                   />
                 )}
                 
+                {/* 🔥 REMOVED tracking-wide and leading-normal mapping issues for normal text 🔥 */}
                 {msg.text && msg.text.trim() !== "" && (
-                  <div className={`relative max-w-[95%] sm:max-w-[85%] px-4 py-3 text-[14px] sm:text-[15px] leading-normal tracking-wide ${
+                  <div className={`relative max-w-[95%] sm:max-w-[85%] px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed ${
                     msg.role === "user" 
                       ? `${theme.userBubble} rounded-[20px] rounded-br-[4px]` 
                       : `${theme.botBubble} rounded-[18px] rounded-tl-[4px]` 
@@ -479,7 +480,8 @@ export default function FullPageChatBot() {
                         ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mt-2 mb-2 space-y-1.5" />,
                         ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mt-2 mb-2 space-y-1.5" />,
                         p: ({node, ...props}) => <p {...props} className="mb-2 last:mb-0 whitespace-pre-wrap" />,
-                        strong: ({node, ...props}) => <strong {...props} className="font-extrabold" />,
+                        /* 🔥 FIXED: font-extrabold changed to standard font-bold so it's not bulky 🔥 */
+                        strong: ({node, ...props}) => <strong {...props} className="font-bold" />,
                         pre: ({ children }) => (
                           <pre className={`${isDarkMode ? 'bg-[#131314] border-[#333538]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
                             {children}
