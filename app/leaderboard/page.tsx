@@ -148,8 +148,10 @@ export default function LeaderboardPage() {
         <Navbar />
 
         {/* ================= HEADER SECTION (FLEX LAYOUT) ================= */}
-        <header className="pt-12 pb-6 px-6 relative z-20 max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:p-8 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)] relative overflow-hidden lg:overflow-visible">
+        {/* 🔥 CHANGED: max-w-[75rem] and px-4 md:px-6 to make it slightly longer left and right 🔥 */}
+        <header className="pt-12 pb-6 px-4 md:px-6 relative z-20 max-w-[75rem] mx-auto">
+          {/* 🔥 CHANGED: Increased horizontal padding inside the box (md:px-10) for wider look 🔥 */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:py-8 md:px-10 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)] relative overflow-hidden lg:overflow-visible">
             
             {displayAvatars.length > 0 && (
               <div className="absolute top-1.5 right-3 flex -space-x-3 z-30">
@@ -206,7 +208,6 @@ export default function LeaderboardPage() {
 
               {/* Title Content */}
               <div>
-                {/* 🔥 CHANGED: Removed colon (:) from 'Your Rank' 🔥 */}
                 <h1 className="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300 drop-shadow-sm mb-2 relative z-10">
                   Your Rank {currentUserRank ? currentUserRank : "--"}
                 </h1>
@@ -293,7 +294,6 @@ export default function LeaderboardPage() {
                           </div>
                         )}
                         
-                        {/* 🔥 REMOVED BORDERS FROM AVATAR 🔥 */}
                         <img
                           src={user.photoURL || "/avatar.png"}
                           alt={user.name}
@@ -306,15 +306,12 @@ export default function LeaderboardPage() {
                         />
                       </div>
 
-                      {/* 🔥 ADDED MULTI-COLOR GRADIENT ANIMATION TO BOXES 🔥 */}
-                      {/* 🔥 CHANGED to flex-col without justify-end so we can use flex-1 for center spacing 🔥 */}
                       <div className={`w-full rounded-t-2xl border-t-2 border-x-2 border-white/20 flex flex-col items-center pb-4 md:pb-8 px-2 text-center transition-all duration-300 overflow-hidden relative animate-podium-bg shadow-[0_-10px_30px_rgba(0,0,0,0.3)]
                         ${heightClass} 
                         ${isCurrentUser ? "before:absolute before:inset-0 before:bg-blue-500/10 before:animate-pulse" : ""}
                       `}>
                         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
                         
-                        {/* 🔥 RANK NUMBER MOVED TO MIDDLE (Higher, between avatar and name) 🔥 */}
                         <div className="flex-1 flex items-center justify-center w-full relative z-10 mt-6 md:mt-8">
                           <div className={`text-3xl sm:text-4xl md:text-5xl font-black drop-shadow-md
                             ${isFirst ? "text-yellow-400" : ""}
@@ -325,7 +322,6 @@ export default function LeaderboardPage() {
                           </div>
                         </div>
 
-                        {/* 🔥 NAME AND POINTS AT THE BOTTOM 🔥 */}
                         <div className="flex flex-col items-center justify-end relative z-10 w-full">
                           <h3 className="text-xs sm:text-sm md:text-lg font-bold text-white truncate w-full drop-shadow-md mb-1 px-1">
                             {user.name || "Anonymous"}
