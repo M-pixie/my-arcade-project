@@ -10,14 +10,17 @@ type Leader = {
   name?: string;
   photoURL?: string;
   points?: number;
+  profileUrl?: string; // 🔥 profileUrl needed for exact match
 };
 
 export default function LeaderboardPage() {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   
-  // 🔥 NEW STATE FOR CURRENT USER HIGHLIGHT
+  // 🔥 NEW STATE FOR EXACT CURRENT USER MATCHING
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
+  const [currentUserUniqueId, setCurrentUserUniqueId] = useState<string | null>(null);
+  
   const currentUserRef = useRef<HTMLDivElement>(null);
 
   // 🔥 NEW STATE FOR AVATAR ROTATION INDEX
@@ -36,8 +39,10 @@ export default function LeaderboardPage() {
       const savedData = localStorage.getItem("arcade_user_data");
       if (savedData) {
         const parsed = JSON.parse(savedData);
-        if (parsed && parsed.userName) {
-          setCurrentUserName(parsed.userName);
+        if (parsed) {
+          if (parsed.userName) setCurrentUserName(parsed.userName);
+          // 🔥 Now fetching unique ID to prevent duplicate name clashes
+          if (parsed.userUniqueId) setCurrentUserUniqueId(parsed.userUniqueId);
         }
       }
     } catch (e) {
@@ -54,7 +59,7 @@ export default function LeaderboardPage() {
         currentUserRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 600); // 600ms delay taaki page pehle pura render ho jaye
     }
-  }, [leaders, currentUserName]);
+  }, [leaders, currentUserName, currentUserUniqueId]);
 
   // 🔥 ALL PLAYERS ROTATION LOGIC (SEQUENTIAL CYCLING)
   useEffect(() => {
@@ -77,6 +82,16 @@ export default function LeaderboardPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // ================= LOGIC: EXACT MATCH HELPER =================
+  const isExactCurrentUser = (user: Leader) => {
+    if (!currentUserName) return false;
+    // If we have unique ID, compare that strictly. Otherwise fallback to name.
+    if (currentUserUniqueId && user.profileUrl) {
+      return user.profileUrl.includes(currentUserUniqueId);
+    }
+    return user.name === currentUserName;
+  };
+
   // ================= LOGIC: SORT & SEARCH =================
   const isSearching = searchTerm.trim().length > 0;
   
@@ -88,8 +103,8 @@ export default function LeaderboardPage() {
     user.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 🔥 Get current user rank for header display 🔥
-  const currentUserRank = leaders.find((l) => l.name === currentUserName)?.rank;
+  // 🔥 Get EXACT current user rank for header display 🔥
+  const currentUserRank = leaders.find((l) => isExactCurrentUser(l))?.rank;
 
   // 🔥 GET 10 AVATARS FOR DISPLAY 🔥
   let displayAvatars: string[] = [];
@@ -139,6 +154,15 @@ export default function LeaderboardPage() {
             background-size: 300% 300%;
             animation: podium-bg-shift 6s ease infinite;
           }
+          /* 🔥 NEW: Text gradient animation exactly matching podium box colors 🔥 */
+          .animate-podium-text {
+            background: linear-gradient(270deg, #bcaaa4, #82b1ff, #ff8fa3, #a5d6a7, #ce93d8, #bcaaa4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: podium-bg-shift 6s ease infinite;
+          }
         `}</style>
 
         {/* Ambient Glowing Background Effects */}
@@ -148,9 +172,7 @@ export default function LeaderboardPage() {
         <Navbar />
 
         {/* ================= HEADER SECTION (FLEX LAYOUT) ================= */}
-        {/* 🔥 CHANGED: max-w-[75rem] and px-4 md:px-6 to make it slightly longer left and right 🔥 */}
         <header className="pt-12 pb-6 px-4 md:px-6 relative z-20 max-w-[75rem] mx-auto">
-          {/* 🔥 CHANGED: Increased horizontal padding inside the box (md:px-10) for wider look 🔥 */}
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#121c38]/40 border border-white/5 p-6 md:py-8 md:px-10 rounded-xl backdrop-blur-md shadow-[0_0_30px_rgba(0,0,0,0.3)] relative overflow-hidden lg:overflow-visible">
             
             {displayAvatars.length > 0 && (
@@ -208,7 +230,8 @@ export default function LeaderboardPage() {
 
               {/* Title Content */}
               <div>
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-purple-300 drop-shadow-sm mb-2 relative z-10">
+                {/* 🔥 CHANGED: font-black to font-bold, added animate-podium-text 🔥 */}
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight animate-podium-text drop-shadow-sm mb-2 relative z-10">
                   Your Rank {currentUserRank ? currentUserRank : "--"}
                 </h1>
                 <p className="text-blue-200/70 text-sm md:text-base max-w-sm font-medium relative z-10">
@@ -265,7 +288,7 @@ export default function LeaderboardPage() {
                   const isFirst = user.rank === 1;
                   const isSecond = user.rank === 2;
                   const isThird = user.rank === 3;
-                  const isCurrentUser = user.name === currentUserName; 
+                  const isExactUser = isExactCurrentUser(user); // 🔥 Check by exact ID match
 
                   let heightClass = "";
                   if (isFirst) heightClass = "h-[240px] sm:h-[280px] md:h-[340px]";
@@ -275,10 +298,10 @@ export default function LeaderboardPage() {
                   return (
                     <div 
                       key={user.id} 
-                      ref={isCurrentUser ? currentUserRef : null} 
+                      ref={isExactUser ? currentUserRef : null} // 🔥 Apply ref only if exact
                       className={`relative flex flex-col items-center w-28 sm:w-36 md:w-56 group ${isFirst ? 'z-20' : 'z-10'}`}
                     >
-                      {isCurrentUser && (
+                      {isExactUser && (
                         <div className="absolute -top-16 md:-top-20 bg-blue-500 border border-blue-300 text-white text-[10px] sm:text-xs font-black px-3 py-1 rounded-full animate-bounce shadow-[0_0_15px_rgba(59,130,246,0.8)] z-50 tracking-wider">
                           YOU
                         </div>
@@ -301,14 +324,14 @@ export default function LeaderboardPage() {
                             ${isFirst ? "w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 shadow-[0_0_25px_rgba(250,204,21,0.6)]" : ""}
                             ${isSecond ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 shadow-[0_0_15px_rgba(203,213,225,0.4)]" : ""}
                             ${isThird ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : ""}
-                            ${isCurrentUser ? "ring-4 ring-blue-500 ring-offset-2 ring-offset-[#0a1229]" : ""} 
+                            ${isExactUser ? "ring-4 ring-blue-500 ring-offset-2 ring-offset-[#0a1229]" : ""} 
                           `}
                         />
                       </div>
 
                       <div className={`w-full rounded-t-2xl border-t-2 border-x-2 border-white/20 flex flex-col items-center pb-4 md:pb-8 px-2 text-center transition-all duration-300 overflow-hidden relative animate-podium-bg shadow-[0_-10px_30px_rgba(0,0,0,0.3)]
                         ${heightClass} 
-                        ${isCurrentUser ? "before:absolute before:inset-0 before:bg-blue-500/10 before:animate-pulse" : ""}
+                        ${isExactUser ? "before:absolute before:inset-0 before:bg-blue-500/10 before:animate-pulse" : ""}
                       `}>
                         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
                         
@@ -348,8 +371,8 @@ export default function LeaderboardPage() {
                   <LeaderRow 
                     key={user.id} 
                     user={user} 
-                    isCurrentUser={user.name === currentUserName} 
-                    innerRef={user.name === currentUserName ? currentUserRef : null} 
+                    isCurrentUser={isExactCurrentUser(user)} // 🔥 Exact check for list rows too
+                    innerRef={isExactCurrentUser(user) ? currentUserRef : null} 
                   />
                 ))}
                 {restLeaders.length === 0 && (
@@ -371,7 +394,7 @@ export default function LeaderboardPage() {
                     key={user.id} 
                     user={user} 
                     highlight={true} 
-                    isCurrentUser={user.name === currentUserName} 
+                    isCurrentUser={isExactCurrentUser(user)} 
                   />
                 ))
               ) : (
