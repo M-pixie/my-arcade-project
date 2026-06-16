@@ -259,9 +259,23 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
 {/* ================= HERO SECTION ================= */}
-<section 
-  className="relative pt-20 pb-10 bg-[#f8f9fa] overflow-hidden"
->
+<section className="relative pt-20 pb-10 bg-[#f8f9fa] overflow-hidden">
+  {/* Custom Style for the Multi-Color Text Animation */}
+  <style>{`
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animate-gradient-text {
+      background: linear-gradient(270deg, #4e342e, #1a73e8, #ff4a7d, #4caf50, #fbc02d, #8e24aa, #4e342e);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s ease infinite;
+    }
+  `}</style>
+
   <div className="w-full relative z-10">
     {/* 🔥 AVATARS 🔥 */}
     <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
@@ -290,19 +304,20 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* 🔥 TOP RIGHT BUTTONS (Subscribe + Need Help) 🔥 */}
-      <div className="absolute top-0 right-4 md:top-1 md:right-8 z-50 flex items-center gap-3 md:gap-4">
-        {/* 🌟 PREMIUM SUBSCRIBE HERE BUTTON 🌟 */}
+      {/* 🌟 PREMIUM SUBSCRIBE HERE BUTTON (CENTERED & LONG) 🌟 */}
+      <div className="absolute top-2 md:top-4 left-1/2 transform -translate-x-1/2 z-50 flex justify-center">
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-8 py-2 md:px-12 md:py-2.5 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[14px] md:text-[15px] rounded-[4px] shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
+          className="px-12 py-2.5 md:px-16 md:py-3 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[14px] md:text-[15px] rounded-full shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
         >
           Subscribe here!
         </a>
+      </div>
 
-        {/* 🔥 NEED HELP BUTTON 🔥 */}
+      {/* 🔥 TOP RIGHT BUTTON (Need Help) 🔥 */}
+      <div className="absolute top-0 right-4 md:top-4 md:right-8 z-50 flex items-center">
         <button
           onClick={() => router.push('/chat')}
           className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-[4px] text-sm md:text-[15px] font-bold transition-all duration-300 flex items-center gap-2 group cursor-pointer border-none shadow-none"
@@ -318,19 +333,18 @@ export default function HomePage() {
           
           <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            {/* 🎯 ARCADE NEXUS IN GOOGLE OFFICIAL BLUE COLOR */}
-            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight text-[#1a73e8] mb-5 leading-[1.1]">
-              Arcade<span className="text-[#1a73e8]"> Nexus</span>
+            {/* 🎯 ARCADE NEXUS WITH 5-6 COLOR OVERLAP ANIMATION & DARK BROWN BASE */}
+            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1] animate-gradient-text">
+              Arcade Nexus
             </h1>
 
-            {/* 🎯 PARAGRAPH IN GOOGLE OFFICIAL GREY COLOR FOR ULTIMATE CLARITY */}
+            {/* 🎯 PARAGRAPH IN GOOGLE OFFICIAL GREY COLOR */}
             <p className="text-[#5f6368] text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
               The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
             </p>
 
             {/* 🔥 ACTION BUTTONS GROUP 🔥 */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-8">
-              
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
@@ -350,14 +364,14 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* 🔥 ENROLMENTS OPEN SOON SECTION 🔥 */}
-            <div className="flex flex-col gap-4 text-left w-full max-w-2xl bg-white p-5 rounded-lg border border-[#dadce0] shadow-sm">
-              <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
+            {/* 🔥 ENROLMENTS OPEN SOON SECTION (GREEN BACKGROUND) 🔥 */}
+            <div className="flex flex-col gap-4 text-left w-full max-w-lg bg-[#e8f5e9] p-6 rounded-xl border border-[#c8e6c9] shadow-sm">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-[#1b5e20] tracking-tight">
                 Facilitator Enrolments will Open soon!
               </h3>
-              <div className="flex flex-col gap-3 text-[#5f6368] font-medium text-[15px]">
+              <div className="flex flex-col gap-3 text-[#2e7d32] font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
-                  <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#5f6368] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#2e7d32] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -366,7 +380,7 @@ export default function HomePage() {
                   <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <svg className="w-[22px] h-[22px] flex-shrink-0 text-[#5f6368] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#2e7d32] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -423,15 +437,16 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 🔥 DISCLAIMER BOX (CURVE IS LIGHTER NOW WITH rounded-lg) 🔥 */}
-        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-lg shadow-sm overflow-hidden relative z-20 mt-12">
+        {/* 🔥 DISCLAIMER BOX (CLEAN, NO DOUBLE BOX) 🔥 */}
+        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden relative z-20 mt-12">
           <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
             
-            <p className="text-[14px] font-medium text-[#202124] leading-relaxed text-justify bg-[#fef7e0] p-4 rounded-[4px] border border-[#fbc02d] w-full">
+            {/* 🎯 DISCLAIMER TEXT IN DARK BROWN (#4e342e) */}
+            <p className="text-[14px] md:text-[15px] font-bold text-[#4e342e] leading-relaxed w-full">
               Disclaimer: Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience.
             </p>
 
-            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full">
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full pt-2">
               <a 
                 href="https://expo.dev/artifacts/eas/xmR9GpsFdcWwb9TAT9qCC6.apk"
                 className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
