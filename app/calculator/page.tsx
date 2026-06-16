@@ -43,12 +43,6 @@ export default function CalculatorPage() {
   const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   
-  // 🔥 NEW STATE FOR 3-SECOND AUTO CHANGE HINT
-  const [showCopyHint, setShowCopyHint] = useState(false);
-
-  // 🔥 NEW STATE FOR 3-SECOND TEXT TOGGLE
-  const [showCoinAvatar, setShowCoinAvatar] = useState(false);
-
   // 🔥 SHAKE KE LIYE NAYA STATE
   const [isShaking, setIsShaking] = useState(false);
 
@@ -63,9 +57,6 @@ export default function CalculatorPage() {
 
   const router = useRouter();
 
-  const whatsappHelpMessage = encodeURIComponent("Hello Facilitator Manish! 👋\n\nI am reaching out regarding the Google Cloud Arcade program. I need some guidance with my profile and points calculation. Could you please help me out?");
-  const whatsappHelpUrl = `https://api.whatsapp.com/send?phone=918538980608&text=${whatsappHelpMessage}`;
-
   useEffect(() => {
     // Check auto calculate preference first
     const savedAuto = localStorage.getItem("arcade_auto_calc") === "true";
@@ -79,7 +70,6 @@ export default function CalculatorPage() {
       // Trigger Auto Calculate if toggle is ON
       if (savedAuto) {
         setTimeout(() => {
-          // Passing `true` as isAutoRun flag to fix Remember Me bug
           proceedToDashboard(savedUrl, true);
         }, 600);
       }
@@ -110,27 +100,12 @@ export default function CalculatorPage() {
         console.error("Error parsing arcade_user_data", e);
       }
     }
-
-    const hintInterval = setInterval(() => {
-      setShowCopyHint((prev) => !prev);
-    }, 3000);
-
-    const avatarInterval = setInterval(() => {
-      setShowCoinAvatar((prev) => !prev);
-    }, 3000);
-
-    return () => {
-      clearInterval(hintInterval);
-      clearInterval(avatarInterval);
-    };
   }, []);
 
   const handleAutoCalcToggle = () => {
     if (!autoCalculate) {
-      // Show modal when turning ON
       setShowAutoCalcModal(true);
     } else {
-      // Turn OFF immediately without modal
       setAutoCalculate(false);
       localStorage.setItem("arcade_auto_calc", "false");
     }
@@ -187,7 +162,6 @@ export default function CalculatorPage() {
     }, 10);
   };
 
-  // 🔥 UPDATED: Added isAutoRun flag to fix Remember Me state bug 🔥
   const proceedToDashboard = async (overrideUrl?: string | any, isAutoRun: boolean = false) => {
     const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
 
@@ -198,7 +172,6 @@ export default function CalculatorPage() {
       setProfileUrl(targetUrl);
     }
 
-    // State hasn't batched yet on load, so we enforce true if it's an auto-run
     const shouldRemember = isAutoRun ? true : rememberMe;
     
     if (shouldRemember) {
@@ -249,6 +222,7 @@ export default function CalculatorPage() {
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
       localStorage.setItem("current_processing_url", targetUrl);
 
+      // Save to leaderboard
       try {
         await savePublicUserToLeaderboard({
           name: data.userName || "Arcade Player",
@@ -317,14 +291,19 @@ export default function CalculatorPage() {
         <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
           
           <style>{`
-            @keyframes real-loading {
-              0% { left: -30%; width: 10%; }
-              50% { left: 30%; width: 60%; }
-              100% { left: 100%; width: 10%; }
+            /* 🔥 SLOW FILL PROGRESS BAR 🔥 */
+            @keyframes slow-fill {
+              0% { width: 0%; }
+              20% { width: 30%; }
+              50% { width: 65%; }
+              80% { width: 85%; }
+              100% { width: 95%; } 
             }
-            .animate-real-loading {
-              animation: real-loading 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            .animate-slow-fill {
+              animation: slow-fill 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
               position: absolute;
+              left: 0;
+              top: 0;
             }
 
             @keyframes tooltip-pop {
@@ -354,7 +333,7 @@ export default function CalculatorPage() {
             .animate-fade-in-modal { animation: fade-in-modal 0.2s ease-out forwards; }
             .animate-scale-up-modal { animation: scale-up-modal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-            /* 🔥 BOUNCING WAVE TEXT ANIMATION (Normal Color, Faster) 🔥 */
+            /* 🔥 BOUNCING WAVE TEXT ANIMATION 🔥 */
             @keyframes text-wave-bounce {
               0%, 40%, 100% { transform: translateY(0); }
               20% { transform: translateY(-4px); }
@@ -367,18 +346,24 @@ export default function CalculatorPage() {
 
           <div className="p-8 md:p-12 mt-1">
             
-            {/* 🔥 REVERTED ORIGINAL TEXT LAYOUT WITH NEW WAVE ANIMATION (Normal Font, Normal Weight) 🔥 */}
+            {/* 🔥 DYNAMIC TEXT (STATIC BOLD vs WAVE DARK BROWN) 🔥 */}
             <div className="relative mb-8">
               <p className="text-sm md:text-base text-left w-3/4 text-[#202124]">
-                {"Paste your public profile url here".split("").map((char, index) => (
-                  <span 
-                    key={index} 
-                    className="wave-char" 
-                    style={{ animationDelay: `${index * 0.02}s` }}
-                  >
-                    {char === " " ? "\u00A0" : char}
+                {!loading ? (
+                  <span className="font-bold">Paste your public profile url here</span>
+                ) : (
+                  <span className="font-semibold text-[#4e342e]">
+                    {"Calculating your points...".split("").map((char, index) => (
+                      <span 
+                        key={index} 
+                        className="wave-char" 
+                        style={{ animationDelay: `${index * 0.02}s` }}
+                      >
+                        {char === " " ? "\u00A0" : char}
+                      </span>
+                    ))}
                   </span>
-                ))}
+                )}
               </p>
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" 
@@ -390,15 +375,36 @@ export default function CalculatorPage() {
               </a>
             </div>
 
+            {/* 🔥 CLASSIC MATERIAL OUTLINE INPUT BOX 🔥 */}
             <div className="mb-6">
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
-                className={`relative border-2 rounded-lg transition-colors duration-75 ${isShaking ? 'animate-fast-shake' : ''} ${error ? (hideRedLine ? "border-[#dadce0]" : "border-[#d93025]") : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}
+                className={`relative border-2 rounded-lg transition-colors duration-75 ${
+                  isShaking ? 'animate-fast-shake' : ''
+                } ${
+                  error && !hideRedLine
+                    ? "border-[#d93025]"
+                    : "border-[#dadce0] focus-within:border-[#1a73e8]"
+                }`}
               >
-                {/* 🔥 LABEL RESTORED EXACTLY AS ORIGINAL (-top-3) 🔥 */}
-                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-colors duration-75 z-10 ${error ? (hideRedLine ? "text-[#5f6368]" : "text-[#d93025]") : "text-[#1a73e8]"}`}>
-                  Enter Public Profile Url
+                {/* 🎯 Single Smooth Loader Line in Premium Brown Color */}
+                {loading && !error && (
+                  <div className="absolute -bottom-[2px] left-2 right-2 h-[2px] bg-transparent overflow-hidden z-0">
+                    <div className="h-full bg-[#5d4037] animate-slow-fill rounded-full"></div>
+                  </div>
+                )}
+
+                {/* 🎯 PERMANENT NAME LABEL (If User Exists) */}
+                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-all duration-300 ease-in-out z-10 ${
+                  error && !hideRedLine 
+                    ? "text-[#d93025]" 
+                    : userName 
+                    ? "text-[#4e342e]" 
+                    : "text-[#1a73e8]"
+                }`}>
+                  {userName ? `Hi, ${userName}` : "Enter Public Profile Url"}
                 </label>
+                
                 <input
                   type="text"
                   placeholder="https://www.skills.google/public_profiles/..."
@@ -413,15 +419,9 @@ export default function CalculatorPage() {
                       proceedToDashboard();
                     }
                   }}
-                  className="w-full px-4 py-4 text-base text-[#202124] bg-transparent outline-none rounded-lg relative z-10"
+                  spellCheck="false"
+                  className="w-full px-4 py-4 text-base text-[#202124] placeholder-[#9aa0a6] bg-transparent outline-none relative z-10"
                 />
-                
-                {/* 🔥 LOADER FIXED: left-3 right-3 to prevent overlapping into curved corners 🔥 */}
-                {loading && (
-                  <div className="absolute -bottom-[2px] left-3 right-3 h-[2px] bg-transparent overflow-hidden z-0">
-                    <div className="h-full bg-[#5f6368] animate-real-loading rounded-full"></div>
-                  </div>
-                )}
               </div>
 
               {error && (
@@ -442,7 +442,6 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              {/* 🔥 NAME & POINTS ADDED IN THE MIDDLE (Clickable & Underline on Hover) 🔥 */}
               {userPoints !== null && (
                 <div 
                   onClick={() => router.push('/dashboard')}
@@ -458,7 +457,6 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* 🔥 BUTTON PADDING UPDATED TO py-4 FOR THICKER LOOK 🔥 */}
             <button onClick={proceedToDashboard} disabled={loading} className="w-full bg-[#1e8e3e] hover:bg-[#137333] active:bg-[#0d5023] text-white text-[16px] font-semibold py-4 rounded-lg transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm">
               {loading ? (
                 <>
@@ -473,7 +471,6 @@ export default function CalculatorPage() {
               )}
             </button>
 
-            {/* 🔥 NOTE, AVATAR & HELP COMBINED 🔥 */}
             <div className="flex flex-col sm:flex-row justify-between items-center w-full mt-6 px-1">
               <div className="flex items-center gap-3">
                 {userPoints !== null && (
@@ -498,17 +495,26 @@ export default function CalculatorPage() {
                 </p>
               </div>
 
-              <a href={whatsappHelpUrl} target="_blank" rel="noopener noreferrer" className="text-[15px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline transition-colors mt-3 sm:mt-0 whitespace-nowrap">
-                Need Help ?
-              </a>
+              {/* 🌟 ARCADE CHATBOT HELP BUTTON REPLACED 'NEED HELP?' HERE 🌟 */}
+              <button 
+                onClick={() => router.push('/chat')}
+                className="flex items-center gap-1.5 text-[15px] font-bold text-black hover:underline transition-all mt-3 sm:mt-0 whitespace-nowrap cursor-pointer"
+                title="Arcade Chatbot Help"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                Arcade Chatbot Help.
+              </button>
             </div>
 
-            {/* 🔥 MOVED AUTO CALCULATE TOGGLE (ABOVE RECENT PROFILES) 🔥 */}
+            {/* 🔥 CLEAN AUTO CALCULATE SECTION 🔥 */}
             <div className="mt-8 pt-6 flex items-center justify-between border-t border-[#dadce0]">
               <div>
                 <h4 className="text-[15px] font-bold text-[#202124]">Auto Calculate</h4>
                 <p className="text-[13px] text-[#5f6368] mt-0.5">Automatically calculate points when you open the page</p>
               </div>
+              
               <label className="flex items-center cursor-pointer select-none group">
                 <div className="relative">
                   <input 
@@ -526,7 +532,7 @@ export default function CalculatorPage() {
               </label>
             </div>
 
-            {/* 🔥 RECENT PROFILES (Width reduced for sleeker premium feel) 🔥 */}
+            {/* 🔥 RECENT PROFILES HISTORY 🔥 */}
             {recentUrls.length > 0 && (
               <div className="mt-6 pt-6 border-t border-[#f1f3f4] animate-fade-in-up">
                 <div className="flex items-center justify-between mb-6">
@@ -541,31 +547,30 @@ export default function CalculatorPage() {
                   </button>
                 </div>
                 
-                <div className="flex flex-wrap gap-x-8 gap-y-5 ml-2 md:ml-5">
+                <div className="flex flex-wrap gap-x-8 gap-y-6 ml-2 md:ml-5">
                   {recentUrls.map((item, idx) => {
                     const shortId = item.url.split("/").pop()?.substring(0, 16) || "Profile";
                     return (
-                      <button 
-                        key={idx} 
-                        onClick={() => handleHistoryClick(item.url, idx)} 
-                        className={`relative w-auto min-w-[240px] inline-flex items-center justify-between gap-3 py-2 pr-5 pl-9 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#f8f9fa] rounded-xl transition-all shadow-sm hover:shadow-md ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea]' : ''}`}
-                        title={item.url}
-                      >
-                        {copiedIndex === idx && (
-                          <div className="absolute -top-11 left-1/2 z-50 bg-white border border-[#dadce0] shadow-[0_4px_12px_rgba(0,0,0,0.12)] rounded-md px-3 py-1.5 flex items-center gap-1.5 animate-tooltip-pop whitespace-nowrap">
-                            <svg className="w-3.5 h-3.5 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                            <span className="text-[#3c4043] text-[12px] font-bold">Profile Copied</span>
-                          </div>
-                        )}
+                      <div key={idx} className="flex flex-col items-end relative w-auto">
+                        <button 
+                          onClick={() => handleHistoryClick(item.url, idx)} 
+                          className={`relative w-full min-w-[240px] inline-flex items-center justify-between gap-3 py-2 pr-5 pl-9 bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#f8f9fa] rounded-xl transition-all shadow-sm hover:shadow-md ${copiedIndex === idx ? 'border-[#34a853] bg-[#e6f4ea]' : ''}`}
+                          title={item.url}
+                        >
+                          {copiedIndex === idx && (
+                            <div className="absolute -top-11 left-1/2 z-50 bg-white border border-[#dadce0] shadow-[0_4px_12px_rgba(0,0,0,0.12)] rounded-md px-3 py-1.5 flex items-center gap-1.5 animate-tooltip-pop whitespace-nowrap">
+                              <svg className="w-3.5 h-3.5 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                              <span className="text-[#3c4043] text-[12px] font-bold">Profile Copied</span>
+                            </div>
+                          )}
 
-                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 z-10">
-                          {/* 🔥 REMOVED animate-float-avatar SO IT STAYS STATIC 🔥 */}
-                          <div className="w-10 h-10 rounded-full bg-white border-[2px] border-[#f1f3f4] overflow-hidden flex items-center justify-center shadow-sm relative">
-                            {copiedIndex === idx ? (
-                               <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                            ) : item.points !== undefined ? (
-                              <>
-                                <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-white transition-opacity duration-500 ease-in-out ${showCoinAvatar ? 'opacity-0' : 'opacity-100'}`}>
+                          {/* 🎯 STATIC AVATAR */}
+                          <div className="absolute -left-5 top-1/2 -translate-y-1/2 z-10">
+                            <div className="w-10 h-10 rounded-full bg-white border-[2px] border-[#f1f3f4] overflow-hidden flex items-center justify-center shadow-sm relative">
+                              {copiedIndex === idx ? (
+                                 <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                              ) : (
+                                <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-white">
                                   {item.avatar ? (
                                     <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                   ) : (
@@ -574,44 +579,32 @@ export default function CalculatorPage() {
                                     </span>
                                   )}
                                 </div>
-                                
-                                <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-[#f8f9fa] transition-opacity duration-500 ease-in-out ${showCoinAvatar ? 'opacity-100' : 'opacity-0'}`}>
-                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDE047] via-[#D4AF37] to-[#996515] shadow-[inset_-2px_-2px_4px_rgba(153,101,21,0.6),inset_2px_2px_4px_rgba(255,255,255,0.8)] flex items-center justify-center relative">
-                                    <div className="absolute w-[75%] h-[75%] rounded-full bg-gradient-to-br from-[#D4AF37] via-[#FDE047] to-[#B8860B] border border-white/20 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.1)] flex items-center justify-center">
-                                      <span className="text-[#4A2E00] text-[11px] font-black tracking-tighter" style={{ textShadow: '1px 1px 1px rgba(255,255,255,0.4)' }}>
-                                        {item.points}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </>
-                            ) : (
-                              <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-white">
-                                {item.avatar ? (
-                                  <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                                ) : (
-                                  <span className="text-[15px] font-black text-[#1a73e8]">
-                                    {item.name ? item.name.charAt(0).toUpperCase() : "U"}
-                                  </span>
-                                )}
-                              </div>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col items-start leading-tight text-left min-w-[120px]">
+                            <span className="text-[14px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
+                            <span className="text-[10px] text-[#5f6368] font-bold opacity-90 mt-0.5">
+                              ID: {shortId}...
+                            </span>
+                          </div>
+                          
+                          {/* 🎯 BOLD, LARGER BLACK POINTS */}
+                          <div className="border-l border-[#dadce0] pl-4 flex items-center justify-center">
+                            {item.points !== undefined && (
+                              <span className="text-[16px] md:text-[18px] font-black text-black tracking-tight">
+                                {item.points} <span className="text-[12px] font-bold text-[#5f6368]">Pts</span>
+                              </span>
                             )}
                           </div>
-                        </div>
+                        </button>
                         
-                        <div className="flex flex-col items-start leading-tight text-left min-w-[120px]">
-                          <span className="text-[14px] font-black text-[#202124] tracking-tight">{item.name || "Arcade Player"}</span>
-                          <span className="text-[10px] text-[#5f6368] font-bold opacity-90 mt-0.5">
-                            ID: {shortId}...
-                          </span>
-                        </div>
-                        
-                        <div className="border-l border-[#dadce0] pl-3 flex items-center">
-                          <span className="text-[9px] font-extrabold text-[#80868b] bg-[#f1f3f4] px-1.5 py-1 rounded tracking-wide">
-                            {timeAgo(item.time)}
-                          </span>
-                        </div>
-                      </button>
+                        {/* 🎯 SMALLER, WELL ALIGNED TIME OUTSIDE THE BOX (BOTTOM RIGHT) */}
+                        <span className="text-[10px] md:text-[11px] font-medium text-black mt-1 pr-3 opacity-80 tracking-wide">
+                          {timeAgo(item.time)}
+                        </span>
+                      </div>
                     );
                   })}
                 </div>
@@ -620,7 +613,7 @@ export default function CalculatorPage() {
           </div>
         </div>
 
-        {/* 🔥 GUIDE BOXES LAYOUT INCREASED FOR PREMIUM HORIZONTAL LOOK 🔥 */}
+        {/* ... Guide Steps ... */}
         <div className="mt-12 mb-10 max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
@@ -701,7 +694,6 @@ export default function CalculatorPage() {
                   </div>
                 </div>
 
-                {/* 🔥 MERGED "PUBLIC PROFILE FORMAT" INSIDE STEP 3 🔥 */}
                 <div className="mt-8 pt-6 border-t border-[#e8eaed]">
                   <h4 className="text-[16px] font-bold text-[#202124] mb-5">Your URL should look like this..</h4>
                   

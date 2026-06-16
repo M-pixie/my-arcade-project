@@ -260,7 +260,7 @@ export default function HomePage() {
 
 {/* ================= HERO SECTION ================= */}
 <section className="relative pt-20 pb-10 bg-[#f8f9fa] overflow-hidden">
-  {/* Custom Style for the Multi-Color Text Animation */}
+  {/* Custom Style for the Multi-Color Text Animation (Yellow removed) */}
   <style>{`
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
@@ -268,7 +268,8 @@ export default function HomePage() {
       100% { background-position: 0% 50%; }
     }
     .animate-gradient-text {
-      background: linear-gradient(270deg, #4e342e, #1a73e8, #ff4a7d, #4caf50, #fbc02d, #8e24aa, #4e342e);
+      /* Removed yellow (#fbc02d), kept other vibrant colors and dark brown base */
+      background: linear-gradient(270deg, #4e342e, #1a73e8, #ff4a7d, #4caf50, #8e24aa, #4e342e);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -333,7 +334,7 @@ export default function HomePage() {
           
           <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            {/* 🎯 ARCADE NEXUS WITH 5-6 COLOR OVERLAP ANIMATION & DARK BROWN BASE */}
+            {/* 🎯 ARCADE NEXUS TEXT ANIMATION (No Yellow) */}
             <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1] animate-gradient-text">
               Arcade Nexus
             </h1>
@@ -364,29 +365,29 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* 🔥 ENROLMENTS OPEN SOON SECTION (GREEN BACKGROUND) 🔥 */}
-            <div className="flex flex-col gap-4 text-left w-full max-w-lg bg-[#e8f5e9] p-6 rounded-xl border border-[#c8e6c9] shadow-sm">
-              <h3 className="text-[18px] md:text-[20px] font-bold text-[#1b5e20] tracking-tight">
+            {/* 🔥 ENROLMENTS OPEN SOON SECTION (DARK BROWN BG & WHITE TEXT) 🔥 */}
+            <div className="flex flex-col gap-4 text-left w-full max-w-lg bg-[#4e342e] p-6 rounded-xl shadow-lg border-none">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-white tracking-tight">
                 Facilitator Enrolments will Open soon!
               </h3>
-              <div className="flex flex-col gap-3 text-[#2e7d32] font-medium text-[14px] md:text-[15px]">
+              <div className="flex flex-col gap-3 text-white font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#2e7d32] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-white mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
+                  <span className="text-[#e0e0e0]">13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#2e7d32] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-white mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                  <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
+                  <span className="text-[#e0e0e0]">Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                 </div>
               </div>
             </div>
@@ -437,7 +438,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 🔥 DISCLAIMER BOX (CLEAN, NO DOUBLE BOX) 🔥 */}
+        {/* 🔥 DISCLAIMER BOX 🔥 */}
         <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden relative z-20 mt-12">
           <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
             
