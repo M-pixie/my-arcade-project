@@ -348,12 +348,12 @@ export default function FullPageChatBot() {
             <h2 className={`text-[15px] font-bold mb-2 tracking-wide px-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>Arcade Nexus</h2>
             
             <a href="/" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Home</a>
-            <a href="/calculator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Go to Calculator</a>
+            <a href="/calculator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Calculator</a>
             <a href="/dashboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Dashboard</a>
             <a href="/leaderboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Leaderboard</a>
             
-            <a href="/resources" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 mt-1 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Skill Badges List</a>
-            <a href="/facilitator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Facilitator Program</a>
+            <a href="/resources" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 mt-1 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Skill Badges</a>
+            <a href="/facilitator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Facilitator</a>
           </div>
 
           <div className={`p-4 overflow-y-auto hide-scrollbar border-t mt-2 ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
