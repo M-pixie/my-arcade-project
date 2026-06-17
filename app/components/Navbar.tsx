@@ -106,11 +106,15 @@ export default function Navbar() {
             const isActive = pathname === link.href;
             return (
               <div key={link.name} className="relative group">
-                {/* 🔥 FIX: fully curve pills (rounded-full) and premium blue styling 🔥 */}
+                {/* 🔥 Premium Outline/Curve Styling (Colorless Background) 🔥 */}
                 <Link 
                   href={link.href} 
                   prefetch={true}
-                  className={`block px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${isActive ? "bg-[#1a73e8] text-white border-[#1a73e8]" : "text-[#5f6368] hover:text-white hover:bg-[#1a73e8] border-transparent"}`}
+                  className={`block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+                    isActive 
+                      ? "border-[#1a73e8] text-[#1a73e8] bg-transparent" 
+                      : "border-transparent text-[#5f6368] hover:border-[#dadce0] hover:text-[#202124] bg-transparent"
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -150,10 +154,10 @@ export default function Navbar() {
                   href={link.href}
                   prefetch={true}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-full text-base font-medium transition-colors border ${
+                  className={`block px-4 py-3 rounded-full text-base font-medium transition-all duration-300 border ${
                     isActive 
-                      ? "bg-[#1a73e8] text-white border-[#1a73e8]" 
-                      : "text-[#5f6368] hover:text-white hover:bg-[#1a73e8] border-transparent"
+                      ? "border-[#1a73e8] text-[#1a73e8] bg-transparent" 
+                      : "border-transparent text-[#5f6368] hover:border-[#dadce0] hover:text-[#202124] bg-transparent"
                   }`}
                 >
                   {link.name}
