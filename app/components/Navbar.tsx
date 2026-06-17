@@ -61,8 +61,9 @@ export default function Navbar() {
     { name: "Skill Badges", href: "/resources" },
     { name: "Facilitator", href: "/facilitator" },
     { name: "Swags Post", href: "/post" },
-    { name: "About Arcade", href: "/about" },
-    { name: "Help ?", href: "/chat" },
+    { name: "About", href: "/about" },
+    { name: "Help", href: "/chat" },
+    { name: "Admin", href: "/admin-nexus-2026" },
   ];
 
   return (

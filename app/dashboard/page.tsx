@@ -1001,8 +1001,9 @@ export default function DashboardPage() {
                          return !isBadge && !isCrse;
                        }).length})
                      </span>
+
                      <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
-                       Skill Badges ({breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length})
+                       Skill Badges  ({breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length})
                      </span>
                   </div>
 
@@ -1032,9 +1033,11 @@ export default function DashboardPage() {
                   </div>
 
                   <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4" /></svg>
-                    Export
-                  </button>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1 M12 15V3 m0 12l-4-4 m4 4l4-4" />
+  </svg>
+  Export
+</button>
                 </div>
               </div>
               
@@ -1046,7 +1049,7 @@ export default function DashboardPage() {
                         <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center whitespace-nowrap border-r border-[#f1f3f4]">
                            All ({filteredHistory.length})
                         </th>
-                        <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Labs / Skill Badges</th>
+                        <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Labs / Skill Badges Completion</th>
                         <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
                         <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center border-l border-[#f1f3f4]">Points</th>
                       </tr>
