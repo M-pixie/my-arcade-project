@@ -468,7 +468,7 @@ export default function CalculatorPage() {
                     checked={rememberMe} 
                     onChange={(e) => setRememberMe(e.target.checked)} 
                   />
-                  <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Remember me</label>
+                  <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Don't forget me next time</label>
                 </div>
               </div>
 
@@ -638,7 +638,7 @@ export default function CalculatorPage() {
         <div className="mt-12 mb-10 max-w-5xl mx-auto border-t border-[#dadce0] pt-12">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
-              Get Public Profile ?
+              Make Public Profile
             </h2>
             <p className="text-[#5f6368] mt-2 text-[15px]">Follow these simple steps to find your public profile URL</p>
           </div>
@@ -694,43 +694,7 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            <div className="relative flex flex-col md:flex-row gap-6">
-              <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">
-                3
-              </div>
 
-              <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
-                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
-                  <span className="text-[#a855f7] text-2xl"></span> Copy Your Profile URL
-                </h3>
-                <p className="text-[#5f6368] mb-6 text-[15px] leading-relaxed">
-                  Select and copy the URL - this is your public profile URL.
-                </p>
-
-                <div className="bg-[#fff9e6] border border-[#ffecb3] rounded-xl p-4 flex gap-3 items-start">
-                  <svg className="w-5 h-5 text-[#b06000] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <div>
-                    <span className="font-bold text-[#b06000] block mb-1">Important:</span>
-                    <span className="text-[#b06000] text-[14px]">Make sure your profile is set to <strong className="font-bold">public</strong> so the calculator can access your badge information.</span>
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-[#e8eaed]">
-                  <h4 className="text-[16px] font-bold text-[#202124] mb-5">Your URL should look like this..</h4>
-                  
-                  <div className="bg-[#1e8e3e] rounded-xl p-4 md:p-5 border border-[#137333] mb-4 w-full overflow-hidden flex items-center justify-center shadow-inner">
-                    <p className="text-white font-mono text-[14px] md:text-[16px] break-all text-center tracking-wide">
-                      https://www.skills.google/public_profiles/<span className="font-extrabold">PROFILE_ID</span>
-                    </p>
-                  </div>
-                  
-                  <p className="text-[#5f6368] text-[15px] leading-relaxed text-center">
-                    The unique ID at the end is specific to your profile and allows the calculator to access your badge information.
-                  </p>
-                </div>
-
-              </div>
-            </div>
           </div>
         </div>
 
