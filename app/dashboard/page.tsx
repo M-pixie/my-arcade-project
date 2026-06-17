@@ -142,11 +142,12 @@ export default function DashboardPage() {
     }
   ];
 
+  // 🔥 ADDED SPOTS IN TIERS DATA 🔥
   const arcadeTiersData = [
-    { name: 'Arcade Trooper', target: 50, image: 'https://services.google.com/fh/files/misc/arcade-trooper.svg', gradient: 'from-[#8ab4f8] to-[#1a73e8]' },
-    { name: 'Arcade Ranger', target: 75, image: 'https://services.google.com/fh/files/misc/arcade-ranger.svg', gradient: 'from-[#81c995] to-[#34a853]' },
-    { name: 'Arcade Champion', target: 95, image: 'https://services.google.com/fh/files/misc/arcade-champion.svg', gradient: 'from-[#fde293] to-[#f9ab00]' },
-    { name: 'Arcade Legend', target: 120, image: 'https://services.google.com/fh/files/misc/arcade-legend.svg', gradient: 'from-[#f28b82] to-[#ea4335]' }
+    { name: 'Arcade Trooper', target: 50, image: 'https://services.google.com/fh/files/misc/arcade-trooper.svg', gradient: 'from-[#8ab4f8] to-[#1a73e8]', spots: '6000 spots' },
+    { name: 'Arcade Ranger', target: 75, image: 'https://services.google.com/fh/files/misc/arcade-ranger.svg', gradient: 'from-[#81c995] to-[#34a853]', spots: '4000 spots' },
+    { name: 'Arcade Champion', target: 95, image: 'https://services.google.com/fh/files/misc/arcade-champion.svg', gradient: 'from-[#fde293] to-[#f9ab00]', spots: '3000 spots' },
+    { name: 'Arcade Legend', target: 120, image: 'https://services.google.com/fh/files/misc/arcade-legend.svg', gradient: 'from-[#f28b82] to-[#ea4335]', spots: '2500 spots' }
   ];
 
   // 🔥 Helper Function to get the Current Tier
@@ -334,13 +335,10 @@ export default function DashboardPage() {
     document.body.removeChild(link);
   };
 
-  // 🔥 FILTER LOGIC FOR HISTORY SECTION
   const filteredHistory = history.filter((item) => {
-    // Search Query Match
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
     if (!matchesSearch) return false;
 
-    // Dropdown Category Match
     if (historyFilter === "Arcade Games") {
       const lowerName = item.name.toLowerCase();
       const isSkillBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
@@ -348,14 +346,12 @@ export default function DashboardPage() {
       return !isSkillBadge && !isCourse;
     }
     
-
     if (historyFilter === "Skill Badges") {
       return item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     }
     if (historyFilter === "Labs free course") {
       return item.type === 'Course' || item.name.toLowerCase().includes('course');
     }
-    // "All Games" shows everything matching search
     return true; 
   });
 
@@ -363,7 +359,6 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
-      {/* 1. Zero Completed Labs Banner */}
       {!hideModals && showZeroLabsModal && (
         <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
           <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
@@ -394,7 +389,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* 2. All Labs Completed Banner */}
       {!hideModals && showAllCompletedModal && (
         <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
           <div className="w-full max-w-[1100px] bg-[#1a73e8] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#1557b0]">
@@ -425,15 +419,12 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* 🔥 FLEX CONTAINER FOR PROPER ALIGNMENT 🔥 */}
       <main className="w-full mx-auto px-6 pt-24 pb-16 flex flex-col items-center">
         
-        {/* ================= 🔥 TOP SECTION (NORMAL SIZE: max-w-6xl) 🔥 ================= */}
         <div className="w-full max-w-6xl space-y-10">
           
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 animate-fade-in-up w-full relative">
               
-             {/* LEFT: Avatar properly kept left without stretching */}
              <div className="flex items-center gap-3 md:gap-4 z-10 shrink-0">
                {userName && (
                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden shadow-sm border border-[#dadce0] flex items-center justify-center bg-[#1a73e8] text-white font-bold text-xl shrink-0">
@@ -449,11 +440,9 @@ export default function DashboardPage() {
                </h1>
              </div>
 
-             {/* MIDDLE: Perfect Green Splat with Points (rotating very slowly, absolutely centered on large screens) */}
              <div className="sm:absolute sm:left-1/2 sm:-translate-x-1/2 flex items-center justify-center z-0 my-4 sm:my-0">
                {points !== null && (
                  <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center shrink-0">
-                   {/* Perfect symmetric rounded 6-pointed star using heavy polygon stroke */}
                    <svg 
                      className="absolute inset-0 w-full h-full animate-[spin_25s_linear_infinite]" 
                      viewBox="0 0 100 100"
@@ -467,7 +456,6 @@ export default function DashboardPage() {
                        strokeLinejoin="round"
                      />
                    </svg>
-                   {/* Points in White Text */}
                    <span className="relative z-10 text-white font-black text-lg md:text-xl drop-shadow-md">
                      {points}
                    </span>
@@ -475,7 +463,6 @@ export default function DashboardPage() {
                )}
              </div>
              
-             {/* RIGHT: Chatbot & Calculator Buttons pushed to right edge, slim & premium */}
              <div className="flex flex-col sm:flex-row gap-3 z-10 sm:ml-auto">
                <button 
                  onClick={() => router.push('/chat')} 
@@ -538,29 +525,32 @@ export default function DashboardPage() {
                       </svg>
                     </div>
 
-                    <div className="flex w-full gap-3 mb-5">
+                    {/* 🔥 User Progress Report Text Updated (Dark Golden, No Box) 🔥 */}
+                    <div className="text-center font-bold text-lg mb-4 text-[#b8860b]">
+                      {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
+                    </div>
+
+                    {/* 🔥 Buttons Container Moved Below Text, Subscribe gets Dark Grey Background 🔥 */}
+                    <div className="flex w-full gap-3 mb-6 mt-4">
+                      <a 
+                        href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-[#5f6368] text-white font-semibold py-2 px-4 rounded-full shadow-sm hover:bg-[#3c4043] transition-all text-sm flex items-center justify-center text-center"
+                      >
+                        Subscribe
+                      </a>
                       <button 
                         onClick={() => router.push('/leaderboard')}
                         className="flex-1 bg-white border border-[#dadce0] text-[#202124] font-semibold py-2 px-4 rounded-full shadow-sm hover:bg-[#f8f9fa] transition-all text-sm flex items-center justify-center"
                       >
                         Rank {realRank || "-"}
                       </button>
-                      <a 
-                        href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 bg-[#202124] text-white font-semibold py-2 px-4 rounded-full shadow-sm hover:bg-[#3c4043] transition-all text-sm flex items-center justify-center text-center"
-                      >
-                        Subscribe
-                      </a>
                     </div>
 
-                    <div className="text-black text-center font-bold text-lg mb-6">
-  {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
-</div>
-
-                    <div className="text-sm font-bold text-[#80868b] border-t border-[#e8eaed] pt-5 w-full text-center mt-auto tracking-wide uppercase">
-                      Member since <span className="text-[#3c4043]">{getMemberSinceYear()}</span>
+                    {/* 🔥 Member Since Color Updated to Dark Brown 🔥 */}
+                    <div className="text-sm font-bold text-[#5D4037] border-t border-[#e8eaed] pt-5 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm">
+                      Member since <span className="text-[#3E2723] font-black">{getMemberSinceYear()}</span>
                     </div>
                   </div>
                 </div>
@@ -633,7 +623,6 @@ export default function DashboardPage() {
                   )}
 
                   <div className="grid grid-cols-2 gap-5 w-full">
-                    {/* 🔥 1. All Games Box -> Bright Purple & Auto-Scrolls to History */}
                     <div 
                       onClick={() => document.getElementById('history-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
                       className="bg-[#a142f4] px-6 py-5 rounded-xl border border-[#9334e6] flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
@@ -644,7 +633,6 @@ export default function DashboardPage() {
                       <span className="text-[13px] text-white/95 font-bold uppercase tracking-wider text-center drop-shadow-sm">All Games</span>
                     </div>
 
-                    {/* 🔥 2. Skill Badges Box -> Bright Green & Auto-Navigates to Completed Badges in Resources */}
                     <div 
                       onClick={() => router.push('/resources#completed-section')}
                       className="bg-[#0f9d58] px-6 py-5 rounded-xl border border-[#0b8043] flex flex-col items-center justify-center shadow-md hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer"
@@ -710,10 +698,8 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* ================= 🔥 BOTTOM SECTION (WIDER SIZE: max-w-[1350px]) 🔥 ================= */}
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
           
-          {/* 🔥 NEW ARCADE TIERS SECTION 🔥 */}
           {points !== null && (
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.21s' }}>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
@@ -731,37 +717,42 @@ export default function DashboardPage() {
                   const isAchieved = points >= tier.target;
                   
                   return (
-                    <div key={idx} className={`bg-[#f8f9fa] border rounded-lg p-5 flex flex-col items-center relative overflow-hidden shadow-sm hover:shadow-md transition-all group ${isAchieved ? 'border-[#34a853]' : 'border-[#dadce0]'}`}>
-                      <div className="w-24 h-24 mb-4 flex items-center justify-center relative">
+                    <div key={idx} className={`bg-[#353840] border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : 'border-[#5f6368]'}`}>
+                      
+                      <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative">
                         <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
-                        {isAchieved && (
-                           <div className="absolute inset-0 bg-white/20 rounded-full blur-md z-0"></div>
-                        )}
+                        {/* Glow completely removed from here as per request */}
                       </div>
                       
-                      <h5 className="text-lg font-bold text-[#202124] mb-3 text-center">{tier.name}</h5>
+                      <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
                       
-                      {/* Premium Progress Bar */}
                       <div className="w-full mt-auto flex flex-col gap-2">
-                        <div className="w-full h-2.5 bg-[#e8eaed] rounded-full overflow-hidden border border-[#dadce0]/50 shadow-inner">
+                        <div className="w-full h-2.5 bg-[#202124] rounded-full overflow-hidden border border-black/50 shadow-inner">
                           <div 
                             className={`h-full rounded-full bg-gradient-to-r ${tier.gradient} transition-all duration-1000 ease-out`}
                             style={{ width: `${progressPercentage}%` }}
                           ></div>
                         </div>
+                        
                         <div className="flex justify-between items-center text-[11px] font-extrabold uppercase tracking-wide w-full">
-                           <span className={isAchieved ? "text-[#137333]" : "text-[#5f6368]"}>
+                           <span className={isAchieved ? "text-[#81c995]" : "text-[#9aa0a6]"}>
                              {isAchieved ? "Achieved" : "In Progress"}
                            </span>
-                           <span className="text-[#3c4043]">{points} / {tier.target} pts</span>
+                           <span className="text-[#e8eaed]">{points} / {tier.target} pts</span>
                         </div>
+                        
+                        <div className="mt-3 text-center w-full">
+                          <span className="text-xs font-bold text-[#fbbc04] bg-[#fbbc04]/10 px-3 py-1.5 rounded-full border border-[#fbbc04]/20 tracking-wide block">
+                             {tier.spots}
+                          </span>
+                        </div>
+
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Footer text & links */}
               <div className="mt-8 flex flex-col lg:flex-row justify-between items-center text-sm font-semibold text-[#5f6368] gap-4">
                 <div className="flex items-center gap-2 lg:w-1/3">
                   <svg className="w-4 h-4 text-[#80868b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -829,13 +820,13 @@ export default function DashboardPage() {
                         )}
                       </div>
 
-                      <span className={`absolute -top-6 text-[8px] md:text-[10px] font-extrabold uppercase whitespace-nowrap ${
+                      <span className={`absolute -top-6 text-xs md:text-sm font-medium whitespace-nowrap ${
                         isCompleted ? 'text-[#137333]' : isCurrent ? 'text-[#f29900]' : 'text-[#9aa0a6]'
                       }`}>
                         {isCompleted ? 'Completed' : isCurrent ? 'Current' : `Lab ${index + 1}`}
                       </span>
 
-                      <span className="absolute -bottom-8 text-[9px] md:text-[11px] font-extrabold text-[#5f6368] text-center w-full leading-tight hidden sm:block">
+                      <span className="absolute -bottom-8 text-[11px] md:text-xs font-medium text-[#5f6368] text-center w-full leading-tight hidden sm:block">
                         {shortName}
                       </span>
                     </div>
@@ -990,21 +981,17 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* 🔥 HISTORY SECTION WITH NEW SEARCH, FILTER & COUNTS 🔥 */}
           {points !== null && (
             <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
                 
-                {/* Header Title */}
                 <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
                   <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                   Labs Completion History
                 </h4>
                 
-                {/* 🔥 NEW CONTROLS: Counts, Search, Dropdown & Export */}
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
                   
-                  {/* Left Side Counts for Games and Badges */}
                   <div className="flex items-center gap-4 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
                      <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
                        Arcade Games ({history.filter(item => {
@@ -1019,7 +1006,6 @@ export default function DashboardPage() {
                      </span>
                   </div>
 
-                  {/* Search Box */}
                   <div className="relative w-full sm:w-56">
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     <input
@@ -1031,7 +1017,6 @@ export default function DashboardPage() {
                     />
                   </div>
 
-                  {/* Dropdown Filter */}
                   <div className="relative w-full sm:w-44">
                     <select
                       value={historyFilter}
@@ -1046,7 +1031,6 @@ export default function DashboardPage() {
                     <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
                   </div>
 
-                  {/* Export CSV */}
                   <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4" /></svg>
                     Export
