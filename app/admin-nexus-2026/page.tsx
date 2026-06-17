@@ -99,8 +99,8 @@ export default function AdminDashboard() {
         <div className="bg-[#fbf8ee] rounded-xl shadow-md border border-[#dadce0] w-full max-w-sm overflow-hidden">
           {/* Top Section */}
           <div className="p-8 pb-6 flex flex-col items-center border-b border-[#e8eaed]">
-            <h1 className="text-xl font-bold text-[#b31412] mb-4">Admin Center</h1>
-            <p className="text-[#5f6368] font-medium mb-3">Admin Access Required</p>
+            <h1 className="text-xl font-bold text-[#b31412] mb-4">Admin Nexus Privacy</h1>
+            <p className="text-[#5f6368] font-medium mb-3">Admin Access</p>
             <div className="text-4xl">👨‍💻</div>
           </div>
           
