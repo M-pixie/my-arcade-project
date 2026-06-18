@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
     // ✅ DYNAMIC PARTS ARRAY: Handle both text and image smartly
-    const userParts = [{ text: message || "Analyze this image" }];
+    const userParts = [{ text: message || "Analyzing image.." }];
     
     if (image) {
       // Decode Base64 from frontend
