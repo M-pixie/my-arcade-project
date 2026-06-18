@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // ✅ Key Direct (Production mein isko .env mein rakhna!)
-const API_KEY = "AQ.Ab8RN6J7LCw55fpUEtkQsDqN2PBsXzuu-AVMSB1whyEmzs6SmQ"; 
+const API_KEY = "AQ.Ab8RN6Ktrgr2HsBieDDeJYPbr77K2rpit0o0-cLZ2I2coIwSGA"; 
 
 export const dynamic = "force-dynamic";
 // 🚀 EDGE RUNTIME for blazing fast responses

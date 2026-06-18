@@ -466,17 +466,16 @@ export default function DashboardPage() {
              <div className="flex flex-col sm:flex-row gap-3 z-10 sm:ml-auto">
                <button 
                  onClick={() => router.push('/chat')} 
-                 className="inline-flex justify-center items-center gap-2 text-[#5f6368] font-bold px-5 py-2.5 bg-white border border-[#dadce0] rounded-lg shadow-sm hover:bg-[#f1f3f4] hover:text-[#202124] transition-all whitespace-nowrap"
+                 className="inline-flex justify-center items-center gap-2 text-white font-bold px-5 py-2.5 bg-[#1a73e8] border border-transparent rounded-lg shadow-sm hover:bg-[#1557b0] transition-all whitespace-nowrap"
                >
-                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-                 Arcade ChatBot ?
+                 Ai chat
                </button>
                <button 
                  onClick={() => router.push('/calculator')} 
                  className="inline-flex justify-center items-center gap-2 text-white font-bold px-5 py-2.5 bg-[#1a73e8] rounded-lg shadow-sm hover:bg-[#1557b0] transition-all whitespace-nowrap"
                >
                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                 Calculate Points
+                 Calculator
                </button>
              </div>
           </div>
@@ -486,8 +485,8 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 <div className="lg:col-span-5 self-start bg-white rounded-xl shadow-md border border-[#e8eaed] overflow-hidden relative flex flex-col group transition-shadow duration-300">
-                  <div className="bg-gradient-to-r from-[#4f46e5] to-[#7c3aed] py-5 text-center relative overflow-hidden">
-                    <h3 className="text-white font-black text-3xl sm:text-4xl tracking-wide relative z-10">
+                  <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
+                    <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white">
                       Arcade Points: {points}
                     </h3>
                   </div>
@@ -507,12 +506,12 @@ export default function DashboardPage() {
 
                     <button 
                       onClick={handleCopyProfile}
-                      className={`text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm hover:shadow-md flex items-center gap-2 mb-7 ${copied ? 'bg-[#34a853] text-white ring-2 ring-[#ceead6]' : 'bg-gradient-to-r from-[#8ab4f8] to-[#4285f4] hover:from-[#669df6] hover:to-[#1a73e8] text-white'}`}
+                      className={`text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm hover:shadow-md flex items-center gap-2 mb-7 ${copied ? 'bg-[#34a853] text-white ring-2 ring-[#ceead6]' : 'bg-[#1a73e8] hover:bg-[#1557b0] text-white'}`}
                     >
                       {copied ? (
-                        <>Copied! <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg></>
+                        <>Copied <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg></>
                       ) : (
-                        <>Public Profile <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></>
+                        <>Copy Profile <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></>
                       )}
                     </button>
 
@@ -571,49 +570,73 @@ export default function DashboardPage() {
                           const uIdx = leaderboardData.findIndex((l: any) => l.id === userUniqueId);
                           if (uIdx === -1) return null;
 
+                          const prevPrevUser = uIdx > 1 ? leaderboardData[uIdx - 2] : null;
                           const prevUser = uIdx > 0 ? leaderboardData[uIdx - 1] : null;
                           const meUser = leaderboardData[uIdx];
                           const nextUser = uIdx < leaderboardData.length - 1 ? leaderboardData[uIdx + 1] : null;
+                          const nextNextUser = uIdx < leaderboardData.length - 2 ? leaderboardData[uIdx + 2] : null;
 
                           return (
-                              <div className="relative w-full h-full mx-auto flex items-end justify-center gap-4 sm:gap-8 pt-6">
+                              <div className="relative w-full h-full mx-auto flex items-end justify-center gap-2 sm:gap-4 pt-6">
                                 
+                                {prevPrevUser && (
+                                   <div className="flex flex-col items-center animate-float-1 z-10 w-[60px] sm:w-[75px]">
+                                      <div className="text-[10px] sm:text-[11px] font-black text-[#202124] mb-1 whitespace-nowrap"> {prevPrevUser.rank}</div>
+                                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
+                                         <img src={prevPrevUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
+                                      </div>
+                                      <div className="text-[11px] sm:text-xs font-black text-[#202124] mt-1 truncate w-full text-center">{prevPrevUser.name?.split(' ')[0] || "Player"}</div>
+                                      <div className="text-[10px] sm:text-[11px] font-black text-[#202124]">{prevPrevUser.points} </div>
+                                   </div>
+                                )}
+
                                 {prevUser && (
-                                   <div className="flex flex-col items-center animate-float-1 z-10 w-[85px] sm:w-[100px]">
-                                      <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank {prevUser.rank}</div>
-                                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
+                                   <div className="flex flex-col items-center animate-float-3 z-10 w-[70px] sm:w-[85px]">
+                                      <div className="text-[11px] sm:text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap"> {prevUser.rank}</div>
+                                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
                                          <img src={prevUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
                                       </div>
-                                      <div className="text-sm font-black text-[#202124] mt-1 truncate w-full text-center">{prevUser.name?.split(' ')[0] || "Player"}</div>
-                                      <div className="text-[12px] font-black text-[#202124]">{prevUser.points} pts</div>
+                                      <div className="text-xs sm:text-sm font-black text-[#202124] mt-1 truncate w-full text-center">{prevUser.name?.split(' ')[0] || "Player"}</div>
+                                      <div className="text-[11px] sm:text-[12px] font-black text-[#202124]">{prevUser.points} </div>
                                    </div>
                                 )}
 
                                 {meUser && (
                                    <div 
                                       onClick={() => router.push('/leaderboard')}
-                                      className="flex flex-col items-center animate-float-2 z-20 w-[90px] sm:w-[110px] cursor-pointer hover:scale-105 transition-transform"
+                                      className="flex flex-col items-center animate-float-2 z-20 w-[80px] sm:w-[95px] cursor-pointer hover:scale-105 transition-transform"
                                       title="Click to view full leaderboard"
                                    >
-                                      <div className="text-[14px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank {meUser.rank}</div>
-                                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-white shadow-md border-[3px] border-[#1a73e8]">
+                                      <div className="text-[12px] sm:text-[14px] font-black text-[#202124] mb-1 whitespace-nowrap"> {meUser.rank}</div>
+                                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-md border border-[#dadce0]">
                                          <img src={meUser.photoURL || userAvatar || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
                                       </div>
-                                      <div className={`text-[16px] font-black mt-1 truncate w-full text-center transition-colors duration-300 ${showYouText ? 'text-[#1a73e8]' : 'text-[#202124]'}`}>
+                                      <div className={`text-[13px] sm:text-[16px] font-black mt-1 truncate w-full text-center transition-colors duration-300 ${showYouText ? 'text-[#1a73e8]' : 'text-[#202124]'}`}>
                                          {showYouText ? "You" : (meUser.name?.split(' ')[0] || "Player")}
                                       </div>
-                                      <div className="text-[14px] font-black text-[#202124]">{meUser.points} pts</div>
+                                      <div className="text-[12px] sm:text-[14px] font-black text-[#202124]">{meUser.points} </div>
                                    </div>
                                 )}
 
                                 {nextUser && (
-                                   <div className="flex flex-col items-center animate-float-3 z-10 w-[85px] sm:w-[100px]">
-                                      <div className="text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap">Rank {nextUser.rank}</div>
-                                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
+                                   <div className="flex flex-col items-center animate-float-1 z-10 w-[70px] sm:w-[85px]">
+                                      <div className="text-[11px] sm:text-[12px] font-black text-[#202124] mb-1 whitespace-nowrap"> {nextUser.rank}</div>
+                                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
                                          <img src={nextUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
                                       </div>
-                                      <div className="text-sm font-black text-[#202124] mt-1 truncate w-full text-center">{nextUser.name?.split(' ')[0] || "Player"}</div>
-                                      <div className="text-[12px] font-black text-[#202124]">{nextUser.points} pts</div>
+                                      <div className="text-xs sm:text-sm font-black text-[#202124] mt-1 truncate w-full text-center">{nextUser.name?.split(' ')[0] || "Player"}</div>
+                                      <div className="text-[11px] sm:text-[12px] font-black text-[#202124]">{nextUser.points} </div>
+                                   </div>
+                                )}
+
+                                {nextNextUser && (
+                                   <div className="flex flex-col items-center animate-float-3 z-10 w-[60px] sm:w-[75px]">
+                                      <div className="text-[10px] sm:text-[11px] font-black text-[#202124] mb-1 whitespace-nowrap">{nextNextUser.rank}</div>
+                                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white shadow-sm border border-[#dadce0]">
+                                         <img src={nextNextUser.photoURL || "/avatar.png"} alt="Avatar" className="w-full h-full object-cover" />
+                                      </div>
+                                      <div className="text-[11px] sm:text-xs font-black text-[#202124] mt-1 truncate w-full text-center">{nextNextUser.name?.split(' ')[0] || "Player"}</div>
+                                      <div className="text-[10px] sm:text-[11px] font-black text-[#202124]">{nextNextUser.points} </div>
                                    </div>
                                 )}
                               </div>
@@ -754,18 +777,22 @@ export default function DashboardPage() {
               </div>
 
               <div className="mt-8 flex flex-col lg:flex-row justify-between items-center text-sm font-semibold text-[#5f6368] gap-4">
-                <div className="flex items-center gap-2 lg:w-1/3">
-                  <svg className="w-4 h-4 text-[#80868b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  Last refreshed: {lastRefreshed || "Just now"}
-                </div>
-                <div className="text-[#202124] text-[15px] font-medium text-center lg:w-1/3">
-                  Current Status : <span className="font-bold">{getCurrentTier()}</span>
-                </div>
-                <div className="text-center lg:text-right lg:w-1/3">
-                  You can also explore full Arcade Tier details <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:underline font-bold">here.</a>
-                </div>
-              </div>
-            </div>
+  <div className="flex items-center gap-2 lg:w-1/3">
+    <svg className="w-4 h-4 text-[#80868b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    Last refreshed: {lastRefreshed || "Just now"}
+  </div>
+  <div className="text-center lg:w-1/3 flex justify-center">
+    <span className="inline-flex items-center justify-center bg-[#1a73e8] text-white px-6 py-2.5 rounded-full text-[15px] font-bold shadow-md hover:shadow-lg transition-all whitespace-nowrap tracking-wide">
+      Current Status : {getCurrentTier()}
+    </span>
+  </div>
+  <div className="text-center lg:text-right lg:w-1/3">
+    You can also explore full Arcade Tier details <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:underline font-bold">here.</a>
+  </div>
+</div>
+</div>
+
+
           )}
 
           {points !== null && (
@@ -835,7 +862,7 @@ export default function DashboardPage() {
               </div>
               
               <div className="mt-10 sm:mt-12 w-full text-center border-t border-[#dadce0] pt-4">
-                <span className="text-[11px] sm:text-xs font-bold text-[#5f6368]">
+                <span className="text-sm sm:text-base font-bold text-black">
                   {completedLabs.length} / 6 June Labs Completed
                 </span>
               </div>
@@ -981,106 +1008,105 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {points !== null && (
-            <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
-                
-                <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
-                  <svg className="w-6 h-6 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                  Labs Completion History
-                </h4>
-                
-                <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
-                  
-                  <div className="flex items-center gap-4 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
-                     <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
-                       Arcade Games ({history.filter(item => {
-                         const lower = item.name.toLowerCase();
-                         const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
-                         const isCrse = item.type === 'Course' || lower.includes('course');
-                         return !isBadge && !isCrse;
-                       }).length})
-                     </span>
+        {points !== null && (
+  <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
+      
+      <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center whitespace-nowrap">
+        Completion History
+      </h4>
+      
+      <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
+        
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
+           <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm">
+             Arcade Games: {history.filter(item => {
+               const lower = item.name.toLowerCase();
+               const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
+               const isCrse = item.type === 'Course' || lower.includes('course');
+               return !isBadge && !isCrse;
+             }).length}
+           </span>
 
-                     <span className="text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">
-                       Skill Badges  ({breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length})
-                     </span>
-                  </div>
+           <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm">
+             Skill Badges: {breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length}
+           </span>
+        </div>
 
-                  <div className="relative w-full sm:w-56">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input
-                      type="text"
-                      placeholder="Search labs..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-semibold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm"
-                    />
-                  </div>
+        <div className="relative w-full sm:w-56">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <input
+            type="text"
+            placeholder="Search labs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-semibold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm"
+          />
+        </div>
 
-                  <div className="relative w-full sm:w-44">
-                    <select
-                      value={historyFilter}
-                      onChange={(e) => setHistoryFilter(e.target.value)}
-                      className="w-full appearance-none pl-4 pr-10 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-bold text-[#3c4043] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer"
-                    >
-                      <option value="All Games">All Games</option>
-                      <option value="Arcade Games">Arcade Games</option>
-                      <option value="Skill Badges">Skill Badges</option>
-                      <option value="Labs free course">Labs Free Course</option>
-                    </select>
-                    <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
-                  </div>
+        <div className="relative w-full sm:w-44">
+          <select
+            value={historyFilter}
+            onChange={(e) => setHistoryFilter(e.target.value)}
+            className="w-full appearance-none pl-4 pr-10 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-bold text-[#3c4043] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer"
+          >
+            <option value="All Games">All Games</option>
+            <option value="Arcade Games">Arcade Games</option>
+            <option value="Skill Badges">Skill Badges</option>
+            <option value="Labs free course">Labs Free Course</option>
+          </select>
+          <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+        </div>
 
-                  <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1 M12 15V3 m0 12l-4-4 m4 4l4-4" />
-  </svg>
-  Export
-</button>
-                </div>
-              </div>
-              
-              <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
-                <div className="max-h-[1400px] overflow-y-auto custom-scrollbar">
-                  <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
-                      <tr>
-                        <th className="px-5 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center whitespace-nowrap border-r border-[#f1f3f4]">
-                           All ({filteredHistory.length})
-                        </th>
-                        <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider">Labs / Skill Badges Completion</th>
-                        <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
-                        <th className="px-6 py-4 text-sm font-extrabold text-[#5f6368] uppercase tracking-wider text-center border-l border-[#f1f3f4]">Points</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#f1f3f4]">
-                      {filteredHistory.length > 0 ? (
-                        filteredHistory.map((item, i) => (
-                          <tr key={i} className="hover:bg-[#f8f9fa] transition-colors group">
-                            <td className="px-5 py-4 text-base font-bold text-[#80868b] text-center border-r border-[#f1f3f4]">{i + 1}</td>
-                            <td className="px-6 py-4"><p className="text-lg font-bold text-[#202124] group-hover:text-[#1a73e8] transition-colors">{item.name}</p></td>
-                            <td className="px-6 py-4 whitespace-nowrap border-l border-[#f1f3f4]"><p className="text-base text-[#5f6368] font-semibold">{item.date}</p></td>
-                            <td className="px-6 py-4 text-center border-l border-[#f1f3f4]">
-                              <span className={`inline-block px-4 py-1.5 rounded-lg text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : item.points === 1 ? 'bg-[#e8f0fe] text-[#1a73e8] border border-[#d2e3fc]' : 'bg-[#f3e8fd] text-[#8430ce] border border-[#d7aefb]'}`}>
-                                +{item.points}
-                              </span>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={4} className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
-                            No labs found matching your filter criteria.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
+        <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1 M12 15V3 m0 12l-4-4 m4 4l4-4" />
+          </svg>
+          Export
+        </button>
+      </div>
+    </div>
+    
+    <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
+      <div className="max-h-[1400px] overflow-y-auto custom-scrollbar">
+        <table className="w-full text-left border-collapse min-w-[600px]">
+          <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
+            <tr>
+              <th className="px-5 py-4 text-base font-bold text-black text-center whitespace-nowrap border-r border-[#f1f3f4]">
+                  All ({filteredHistory.length})
+              </th>
+              <th className="px-6 py-4 text-base font-bold text-black">Labs / Skill Badges Completion</th>
+              <th className="px-6 py-4 text-base font-bold text-black whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
+              <th className="px-6 py-4 text-base font-bold text-black text-center border-l border-[#f1f3f4]">Points</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#f1f3f4]">
+            {filteredHistory.length > 0 ? (
+              filteredHistory.map((item, i) => (
+                <tr key={i} className="hover:bg-[#f8f9fa] transition-colors group">
+                  <td className="px-5 py-4 text-base font-bold text-black text-center border-r border-[#f1f3f4]">{i + 1}</td>
+                  <td className="px-6 py-4 text-lg font-bold text-black hover:text-[#1a73e8] transition-colors cursor-default">{item.name}</td>
+                  <td className="px-6 py-4 text-base font-bold text-black whitespace-nowrap border-l border-[#f1f3f4]">{item.date}</td>
+                  <td className="px-6 py-4 text-center border-l border-[#f1f3f4]">
+                    <span className={`inline-block px-4 py-1.5 rounded-lg text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#137333] text-white border border-[#0d5023]' : item.points === 1 ? 'bg-[#1a73e8] text-white border border-[#1557b0]' : 'bg-[#9334e6] text-white border border-[#7627bb]'}`}>
+                      +{item.points}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
+                  No labs found matching your filter criteria.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+)}
           
           <div className="mt-8 mb-4 text-center w-full animate-fade-in-up" style={{animationDelay: '0.4s'}}>
             <a 
@@ -1109,23 +1135,18 @@ export default function DashboardPage() {
         }
         
         @keyframes float-1 {
-          0% { transform: translate(0, 0); }
-          33% { transform: translate(4px, -6px); }
-          66% { transform: translate(-4px, 4px); }
-          100% { transform: translate(0, 0); }
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(1px, -2px); }
         }
         @keyframes float-2 {
-          0% { transform: translate(0, 0); }
-          33% { transform: translate(-5px, -5px); }
-          66% { transform: translate(5px, 5px); }
-          100% { transform: translate(0, 0); }
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(0px, 2px); }
         }
         @keyframes float-3 {
-          0% { transform: translate(0, 0); }
-          33% { transform: translate(5px, 5px); }
-          66% { transform: translate(-5px, -5px); }
-          100% { transform: translate(0, 0); }
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(2px, -1px); }
         }
+
         .animate-float-1 { animation: float-1 4s ease-in-out infinite; }
         .animate-float-2 { animation: float-2 5s ease-in-out infinite; }
         .animate-float-3 { animation: float-3 4.5s ease-in-out infinite; }
