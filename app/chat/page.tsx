@@ -31,7 +31,6 @@ export default function FullPageChatBot() {
   
   const stopTypingRef = useRef(false);
 
-  const [isBlurred, setIsBlurred] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const [now, setNow] = useState(Date.now());
@@ -72,57 +71,6 @@ export default function FullPageChatBot() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading, isTyping]);
-
-  useEffect(() => {
-    const triggerBlackout = () => {
-      setIsBlurred(true);
-      if (navigator?.clipboard?.writeText) {
-        navigator.clipboard.writeText("🚫 Security Alert: Content Protected.").catch(() => {});
-      }
-      setTimeout(() => {
-        if (document.hasFocus()) setIsBlurred(false);
-      }, 3000);
-    };
-
-    const handleContextMenu = (e: MouseEvent) => { e.preventDefault(); triggerBlackout(); };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.key === "PrintScreen" ||
-        (e.metaKey && e.shiftKey) || 
-        (e.ctrlKey && (e.key.toLowerCase() === "c" || e.key.toLowerCase() === "p" || e.key.toLowerCase() === "s" || e.key.toLowerCase() === "u")) ||
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === "i" || e.key.toLowerCase() === "j" || e.key.toLowerCase() === "c"))
-      ) {
-        e.preventDefault();
-        triggerBlackout();
-      }
-    };
-    const handleCopy = (e: ClipboardEvent) => { e.preventDefault(); triggerBlackout(); };
-    const handleBlur = () => setIsBlurred(true);
-    const handleFocus = () => setIsBlurred(false);
-    const handleVisibilityChange = () => setIsBlurred(document.hidden);
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "PrintScreen") { e.preventDefault(); triggerBlackout(); }
-    };
-
-    document.addEventListener("contextmenu", handleContextMenu);
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-    document.addEventListener("copy", handleCopy);
-    window.addEventListener("blur", handleBlur);
-    window.addEventListener("focus", handleFocus);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-      document.removeEventListener("copy", handleCopy);
-      window.removeEventListener("blur", handleBlur);
-      window.removeEventListener("focus", handleFocus);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, []);
 
   const handleChatScroll = () => {
     if (!scrollRef.current) return;
@@ -329,18 +277,7 @@ export default function FullPageChatBot() {
 
   return (
     <>
-      {isBlurred && (
-        <div className="fixed inset-0 z-[99999] bg-black flex items-center justify-center p-6 h-[100dvh] w-[100vw]">
-          <p className="text-gray-300 font-medium text-lg flex items-center justify-center gap-3 text-center">
-            Screenshots are strictly prohibited. Return to Home.
-          </p>
-        </div>
-      )}
-
-      <div 
-        className={`flex w-full h-[100dvh] font-sans pt-[60px] prevent-copy ${theme.bgMain} ${isBlurred ? 'opacity-0 invisible pointer-events-none' : 'opacity-100 visible'}`}
-        aria-hidden={isBlurred}
-      >
+      <div className={`flex w-full h-[100dvh] font-sans pt-[60px] ${theme.bgMain}`}>
         
         {/* 👈 LEFT SIDEBAR */}
         <div className={`w-64 flex flex-col hidden md:flex h-full ${theme.bgSidebar} border-r ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
@@ -454,12 +391,10 @@ export default function FullPageChatBot() {
                   <img 
                     src={msg.image} 
                     alt="Uploaded" 
-                    className="max-w-[75%] sm:max-w-[50%] max-h-56 object-contain mb-2 rounded-xl disable-img-drag shadow-sm border border-gray-200/20" 
-                    onDragStart={(e) => e.preventDefault()}
+                    className="max-w-[75%] sm:max-w-[50%] max-h-56 object-contain mb-2 rounded-xl shadow-sm border border-gray-200/20" 
                   />
                 )}
                 
-                {/* 🔥 REMOVED tracking-wide and leading-normal mapping issues for normal text 🔥 */}
                 {msg.text && msg.text.trim() !== "" && (
                   <div className={`relative max-w-[95%] sm:max-w-[85%] px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed ${
                     msg.role === "user" 
@@ -480,7 +415,6 @@ export default function FullPageChatBot() {
                         ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mt-2 mb-2 space-y-1.5" />,
                         ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mt-2 mb-2 space-y-1.5" />,
                         p: ({node, ...props}) => <p {...props} className="mb-2 last:mb-0 whitespace-pre-wrap" />,
-                        /* 🔥 FIXED: font-extrabold changed to standard font-bold so it's not bulky 🔥 */
                         strong: ({node, ...props}) => <strong {...props} className="font-bold" />,
                         pre: ({ children }) => (
                           <pre className={`${isDarkMode ? 'bg-[#131314] border-[#333538]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
@@ -569,7 +503,7 @@ export default function FullPageChatBot() {
             {selectedImage && (
               <div className="absolute bottom-[65px] left-4 sm:left-8 z-30">
                 <div className={`relative inline-block p-1.5 rounded-xl shadow-2xl border ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'}`}>
-                  <img src={selectedImage} alt="Preview" className="h-20 sm:h-28 object-cover rounded-lg shadow-sm disable-img-drag" onDragStart={(e) => e.preventDefault()} />
+                  <img src={selectedImage} alt="Preview" className="h-20 sm:h-28 object-cover rounded-lg shadow-sm" />
                   <button 
                     onClick={() => setSelectedImage(null)}
                     className="absolute -top-3 -right-3 bg-gray-700 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg hover:bg-gray-600 hover:scale-110 transition-transform border-2 border-transparent"
@@ -582,7 +516,6 @@ export default function FullPageChatBot() {
 
             <div className="max-w-5xl mx-auto flex gap-2 sm:gap-4 items-center px-1">
               
-              {/* 🔥 Input Focus Background Fix Here */}
               <div className={`flex-1 flex gap-2 items-center py-1 px-1.5 sm:py-1.5 sm:px-2 rounded-xl transition-all ${theme.inputBox} ${isDarkMode ? 'focus-within:bg-[#282a2c]' : 'focus-within:bg-white'} shadow-sm`}>
                 
                 <button 
@@ -608,7 +541,7 @@ export default function FullPageChatBot() {
                   onKeyDown={(e) => e.key === "Enter" && !loading && !isTyping && (input.trim() || selectedImage) && sendMessage()}
                   disabled={loading || isTyping} 
                   placeholder="Ask me anything or paste a screenshot..."
-                  className="flex-1 bg-transparent border-none text-[14px] sm:text-[15px] font-medium focus:outline-none focus:ring-0 px-1 sm:px-2 placeholder-gray-500 prevent-copy-input"
+                  className="flex-1 bg-transparent border-none text-[14px] sm:text-[15px] font-medium focus:outline-none focus:ring-0 px-1 sm:px-2 placeholder-gray-500"
                 />
                 
                 {(loading || isTyping) ? (
@@ -656,30 +589,6 @@ export default function FullPageChatBot() {
         }
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
-        }
-
-        .prevent-copy {
-          -webkit-user-select: none !important;
-          -moz-user-select: none !important;
-          -ms-user-select: none !important;
-          user-select: none !important;
-          -webkit-touch-callout: none !important;
-        }
-
-        .prevent-copy-input {
-          -webkit-user-select: text !important;
-          -moz-user-select: text !important;
-          -ms-user-select: text !important;
-          user-select: text !important;
-        }
-
-        .disable-img-drag {
-          -webkit-user-drag: none;
-          -khtml-user-drag: none;
-          -moz-user-drag: none;
-          -o-user-drag: none;
-          user-drag: none;
-          pointer-events: none;
         }
       `}</style>
     </>
