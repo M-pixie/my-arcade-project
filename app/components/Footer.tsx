@@ -137,19 +137,19 @@ export default function Footer() {
                 WhatsApp Community
               </a>
 
-              {/* Box 1: Google Cloud Community */}
+              {/* Box 1: Get App (New Version) */}
               <a 
-                href="https://discuss.google.dev/c/google-cloud/14" 
+                href="https://expo.dev/artifacts/eas/xmR9GpsFdcWwb9TAT9qCC6.apk" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center justify-start sm:justify-center gap-3 w-full sm:w-auto px-6 py-3 bg-white border border-[#dadce0] text-[#202124] text-[15px] font-medium rounded-md hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:text-[#1a73e8] transition-all duration-300 shadow-sm hover:shadow-[0_4px_12px_rgba(26,115,232,0.12)] group"
               >
-                <svg className="w-5 h-5 text-[#1a73e8] group-hover:scale-110 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                <svg className="w-5 h-5 text-[#1a73e8] group-hover:-translate-y-1 transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 <div className="flex flex-col text-left">
-                  <span>Google Cloud Community</span>
-                  <span className="text-[12px] text-[#5f6368] font-normal group-hover:text-[#1a73e8] transition-colors leading-tight mt-0.5">Official forums</span>
+                  <span>Get App (New Version)</span>
+                  <span className="text-[12px] text-[#5f6368] font-normal group-hover:text-[#1a73e8] transition-colors leading-tight mt-0.5">Download APK</span>
                 </div>
               </a>
 
@@ -209,7 +209,7 @@ export default function Footer() {
             
             {/* 🔥 FIX: Dark text (text-[#202124]) aur issue fixed */}
             <p className="text-[13px] text-[#202124] font-bold tracking-[0.05em] uppercase mt-2">
-              Last Updated: 15 June 2026 10:10 am IST
+              Last Updated: 21 June 2026 11:57 am IST
             </p>
           </div>
 

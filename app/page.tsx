@@ -259,7 +259,8 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
 {/* ================= HERO SECTION ================= */}
-<section className="relative pt-20 pb-10 bg-[#f8f9fa] overflow-hidden">
+{/* Premium soft gradient background aur bottom padding (pb) kam kar di hai */}
+<section className="relative pt-20 pb-4 bg-gradient-to-b from-[#f0f4f8] via-[#f8f9fa] to-[#ffffff] overflow-hidden">
   {/* Custom Style for the Multi-Color Text Animation (Yellow removed) */}
   <style>{`
     @keyframes gradientShift {
@@ -323,7 +324,7 @@ export default function HomePage() {
           onClick={() => router.push('/chat')}
           className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-[4px] text-sm md:text-[15px] font-bold transition-all duration-300 flex items-center gap-2 group cursor-pointer border-none shadow-none"
         >
-          Need Help ?
+          Arcade Chatbot
         </button>
       </div>
 
@@ -341,7 +342,7 @@ export default function HomePage() {
 
             {/* 🎯 PARAGRAPH IN GOOGLE OFFICIAL GREY COLOR */}
             <p className="text-[#5f6368] text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
-              The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, and track your cloud skills journey.
+              The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, & track.
             </p>
 
             {/* 🔥 ACTION BUTTONS GROUP 🔥 */}
@@ -350,7 +351,7 @@ export default function HomePage() {
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-[4px] hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
+                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-full hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
               >
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 <span className="whitespace-nowrap">Start Arcade Labs 2026 </span>
@@ -358,7 +359,7 @@ export default function HomePage() {
 
               <button
                 onClick={() => router.push('/calculator')}
-                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-[4px] hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
+                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-full hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
               >
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                 <span className="whitespace-nowrap">Arcade Points Calculator</span>
@@ -394,23 +395,14 @@ export default function HomePage() {
 
           </div>
 
-          {/* QUICK ACTIONS PANEL */}
-          <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2 mb-1.5 justify-center lg:justify-start">
-              <span className="relative flex h-2.5 w-2.5 mr-1">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1a73e8] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1a73e8] shadow-[0_0_8px_rgba(26,115,232,0.8)]"></span>
-              </span>
-              <h3 className="text-[#202124] font-bold text-lg uppercase tracking-wider">Quick Actions</h3>
-            </div>
-
+          {/* QUICK ACTIONS PANEL (No heading, 5 buttons, lighter premium grey color) */}
+          <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-3">
             {[
-              { name: "See Swags Post", icon: "📌", link: "/post" },
-              { name: "Arcade Points Calculator", icon: "🧮", link: "/calculator" },
-              { name: "Skill Badges List", icon: "🏅", link: "/resources" },
-              { name: "Facilitator Program", icon: "🌟", link: "/facilitator" },
-              { name: "Live Leaderboard", icon: "🏆", link: "/leaderboard" },
-              { name: "Get 309 Credits", icon: "💰", link: "#credits-section" },
+              { name: "Arcade Points Calculator", link: "/calculator" },
+              { name: "Skill Badges List", link: "/resources" },
+              { name: "Facilitator Program", link: "/facilitator" },
+              { name: "Live Leaderboard", link: "/leaderboard" },
+              { name: "Get 309 Credits", link: "#credits-section" },
             ].map((item, idx) => (
               <a
                 key={idx}
@@ -424,50 +416,11 @@ export default function HomePage() {
                     router.push(item.link);
                   }
                 }}
-                className="flex items-center justify-between px-4 py-2.5 w-[98%] mx-auto bg-[#1a73e8] hover:bg-[#1557b0] border-none rounded-[4px] transition-all duration-300 text-white font-semibold shadow-none group cursor-pointer text-sm md:text-base"
+                className="flex items-center justify-center w-full max-w-[300px] lg:max-w-full mx-auto px-6 py-2.5 md:py-3 bg-[#5f6368] hover:bg-[#4a4d51] border-none rounded-full transition-all duration-300 text-white font-bold tracking-wide shadow-sm hover:shadow-md cursor-pointer text-[14px] md:text-[15px]"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
-                  <span>{item.name}</span>
-                </div>
-                <span className="text-white opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all font-bold">
-                  →
-                </span>
+                <span>{item.name}</span>
               </a>
             ))}
-          </div>
-        </div>
-
-        {/* 🔥 DISCLAIMER BOX 🔥 */}
-        <div className="w-full lg:max-w-[55rem] mx-auto bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden relative z-20 mt-12">
-          <div className="p-6 md:p-8 w-full flex flex-col items-center text-center gap-6">
-            
-            {/* 🎯 DISCLAIMER TEXT IN DARK BROWN (#4e342e) */}
-            <p className="text-[14px] md:text-[15px] font-bold text-[#4e342e] leading-relaxed w-full">
-              <span className="underline">Disclaimer :-</span> Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience.
-            </p>
-
-            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 w-full pt-2">
-              <a 
-                href="https://expo.dev/artifacts/eas/xmR9GpsFdcWwb9TAT9qCC6.apk"
-                className="group relative inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
-              >
-                <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                <span>Get App (New Version)</span>
-              </a>
-
-              <a 
-                href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20the%20Arcade%20Nexus%20App%20here:%20https://arcade-calculator.vercel.app/download" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-2.5 px-6 py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-[4px] shadow-none transition-all duration-300 w-full sm:w-auto border-none"
-              >
-                <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                <span>Share on WhatsApp</span>
-              </a>
-            </div>
           </div>
         </div>
 
@@ -477,13 +430,13 @@ export default function HomePage() {
 </section>
 
 {/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
-{/* Reduced padding top (pt-6) to remove the gap and bring Start Arcade Labs up */}
-<section className="relative z-10 pt-6 pb-24 bg-[#f8f9fa] border-b border-[#dadce0]">
+{/* Padding top (pt-2) aur kam kar diya taaki dono sections paas aa jayein */}
+<section className="relative z-10 pt-2 pb-24 bg-[#ffffff] border-b border-[#dadce0]">
   <div className="max-w-4xl mx-auto px-6">
     
     <div className="text-center mb-10 relative z-10">
-      <h2 className="text-4xl md:text-5xl font-bold text-[#202124] tracking-tight mb-5">
-        Start <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1a73e8] to-[#4285F4]">Arcade Labs</span>
+      <h2 className="text-4xl md:text-5xl font-bold text-black tracking-tight mb-5">
+        Start Arcade Labs
       </h2>
     </div>
 
