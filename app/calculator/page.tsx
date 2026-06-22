@@ -5,7 +5,7 @@ import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
 
-// 🔥 TIME AGO UPDATED: "14m" -> "14 mins ago"
+// 🔥 TIME AGO UPDATED: "Just now" wapas add kar diya
 function timeAgo(dateString: string) {
   const date = new Date(dateString);
   const now = new Date();
@@ -456,7 +456,7 @@ export default function CalculatorPage() {
               )}
             </div>
 
-            {/* 🔥 REMEMBER ME & LAST UPDATE 🔥 */}
+            {/* 🔥 REMEMBER ME & DYNAMIC LAST CALCULATE 🔥 */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center">
@@ -473,7 +473,7 @@ export default function CalculatorPage() {
               </div>
 
               <div className="text-sm font-medium text-[#3c4043] md:text-right">
-                Last update: 15/06/2026 at 10:00 IST
+                Last Calculate : {recentUrls.length > 0 ? timeAgo(recentUrls[0].time) : "Never"}
               </div>
             </div>
 
@@ -557,8 +557,8 @@ export default function CalculatorPage() {
             {recentUrls.length > 0 && (
               <div className="mt-6 pt-6 border-t border-[#f1f3f4] animate-fade-in-up">
                 <div className="flex items-center justify-between mb-6">
-                  <p className="text-sm font-extrabold text-[#3c4043] tracking-wider flex items-center gap-2">
-                    <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  {/* 🔥 RECENT PROFILES TEXT UPDATED 🔥 */}
+                  <p className="text-base font-bold text-[#202124]">
                     Recent Profiles History
                   </p>
                   
@@ -621,10 +621,7 @@ export default function CalculatorPage() {
                           </div>
                         </button>
                         
-                        {/* 🎯 SMALLER, WELL ALIGNED TIME OUTSIDE THE BOX (BOTTOM RIGHT) */}
-                        <span className="text-[10px] md:text-[11px] font-medium text-black mt-1 pr-3 opacity-80 tracking-wide">
-                          {timeAgo(item.time)}
-                        </span>
+                        {/* 🔥 INDIVIDUAL ITEM TIMING REMOVED FROM HERE 🔥 */}
                       </div>
                     );
                   })}

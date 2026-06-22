@@ -369,7 +369,7 @@ export default function HomePage() {
             {/* 🔥 ENROLMENTS OPEN SOON SECTION (NO BOX, DARK BROWN TEXT) 🔥 */}
             <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
               <h3 className="text-[18px] md:text-[20px] font-bold text-[#4e342e] tracking-tight">
-                Facilitator Enrolments will Open soon!
+                Facilitator Enrolments soon..
               </h3>
               <div className="flex flex-col gap-2 text-[#4e342e] font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
