@@ -51,7 +51,7 @@ export default function HomePage() {
     { title: "Facilitator Page", desc: "Get expert guidance, FAQs, and connect directly with community leads.", link: "/facilitator", icon: "🤝", badge: "Lead" }
   ];
 
-  // Tab 3: Arcade Points System Data (Clean & Minimal with Sky Blue Badges)
+  // Tab 3: Arcade Points System Data
   const pointsSystem = [
     { title: "Arcade Adventure", desc: "Standard track progression (1 game badge = 1 point)", icon: "🗺️", badge: "1 Pt" },
     { title: "Arcade Voyage", desc: "Intermediate cloud challenges (1 game badge = 1 point)", icon: "⛵", badge: "1 Pt" },
@@ -232,9 +232,8 @@ export default function HomePage() {
       
       <Navbar />
 
-      {/* ================= FIXED SCROLL BUTTON (MOVED TO RIGHT) ================= */}
-      {/* 🔥 Changed from left-6 to right-6 md:right-8 🔥 */}
-      <div className="fixed bottom-24 right-6 md:right-8 z-[100] flex flex-col gap-3">
+      {/* ================= FIXED SCROLL BUTTON ================= */}
+      <div className="fixed bottom-8 right-6 md:right-8 z-[100] flex flex-col gap-3">
         <button 
           onClick={() => {
             if (isAtTop) {
@@ -247,10 +246,8 @@ export default function HomePage() {
           title={isAtTop ? "Scroll to Bottom" : "Scroll to Top"}
         >
           {isAtTop ? (
-            /* 🔥 REAL "TIR" (ARROW) DOWN 🔥 */
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
           ) : (
-            /* 🔥 REAL "TIR" (ARROW) UP 🔥 */
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
           )}
         </button>
@@ -258,10 +255,11 @@ export default function HomePage() {
 
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
+
+
 {/* ================= HERO SECTION ================= */}
-{/* Premium soft gradient background aur bottom padding (pb) kam kar di hai */}
-<section className="relative pt-20 pb-4 bg-gradient-to-b from-[#f0f4f8] via-[#f8f9fa] to-[#ffffff] overflow-hidden">
-  {/* Custom Style for the Multi-Color Text Animation (Yellow removed) */}
+<section className="relative pt-20 pb-4 bg-[#2c46a6] overflow-hidden">
+  {/* Custom Style for the Multi-Color Text Animation */}
   <style>{`
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
@@ -269,17 +267,28 @@ export default function HomePage() {
       100% { background-position: 0% 50%; }
     }
     .animate-gradient-text {
-      /* Removed yellow (#fbc02d), kept other vibrant colors and dark brown base */
-      background: linear-gradient(270deg, #4e342e, #1a73e8, #ff4a7d, #4caf50, #8e24aa, #4e342e);
+      background: linear-gradient(270deg, #ffffff, #4ade80, #ff4a7d, #ffffff, #8e24aa, #4ade80);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: gradientShift 6s ease infinite;
     }
+    /* Hide scrollbar for tabs */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
   `}</style>
 
+  {/* Subtle Background Glows */}
+  <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.15] blur-[100px] rounded-full pointer-events-none"></div>
+  <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#6a3093] opacity-[0.15] blur-[120px] rounded-full pointer-events-none"></div>
+
   <div className="w-full relative z-10">
-    {/* 🔥 AVATARS 🔥 */}
+    {/* 🔥 HEADER & OVERLAYS 🔥 */}
     <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
       
       {displayAvatars.length > 0 && (
@@ -292,88 +301,76 @@ export default function HomePage() {
                   src={url}
                   alt="player avatar"
                   className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
-                  style={{ border: "none", zIndex: 10 - idx }}
+                  style={{ border: "2px solid #2c46a6", zIndex: 10 - idx }}
                 />
               ))}
             </div>
-            <span className="text-[#202124] text-xs font-medium tracking-wide">Active Users..</span>
+            <span className="text-white text-xs font-medium tracking-wide">Active Users..</span>
           </div>
           {leaders.length > 10 && (
-            <span className="text-[#5f6368] text-[13px] font-bold tracking-wide mt-1.5">
+            <span className="text-white/80 text-[13px] font-medium tracking-wide mt-1.5">
               & {leaders.length - 10} others
             </span>
           )}
         </div>
       )}
 
-      {/* 🌟 PREMIUM SUBSCRIBE HERE BUTTON (CENTERED & LONG) 🌟 */}
-      <div className="absolute top-2 md:top-4 left-1/2 transform -translate-x-1/2 z-50 flex justify-center">
+      {/* 🌟 ARCADE NEXUS HEADER (TOP CENTER) 🌟 */}
+      <div className="absolute top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 flex justify-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight m-0 animate-gradient-text drop-shadow-md">
+          Arcade Nexus
+        </h1>
+      </div>
+
+      {/* 🔥 SUBSCRIBE HERE BUTTON (TOP RIGHT CORNER) 🔥 */}
+      <div className="absolute top-2 right-4 md:top-4 md:right-8 z-50 flex items-center">
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-12 py-2.5 md:px-16 md:py-3 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[14px] md:text-[15px] rounded-full shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
+          className="px-6 py-2 md:px-10 md:py-2.5 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[13px] md:text-[15px] rounded-full shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
         >
-          Subscribe here!
+          Subscribe
         </a>
       </div>
 
-      {/* 🔥 TOP RIGHT BUTTON (Need Help) 🔥 */}
-      <div className="absolute top-0 right-4 md:top-4 md:right-8 z-50 flex items-center">
-        <button
-          onClick={() => router.push('/chat')}
-          className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2 md:px-6 md:py-2.5 rounded-[4px] text-sm md:text-[15px] font-bold transition-all duration-300 flex items-center gap-2 group cursor-pointer border-none shadow-none"
-        >
-          Arcade Chatbot
-        </button>
-      </div>
-
       {/* 🔥 MAIN CONTENT CONTAINER 🔥 */}
-      <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-20 md:mt-16">
+      <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-20 md:mt-24">
         
-        <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 w-full">
           
-          <div className="w-full lg:w-2/3 flex flex-col items-center lg:items-start text-center lg:text-left">
+          <div className="w-full lg:w-3/5 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            {/* 🎯 ARCADE NEXUS TEXT ANIMATION (No Yellow) */}
-            <h1 className="text-5xl sm:text-6xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1] animate-gradient-text">
-              Arcade Nexus
-            </h1>
-
-            {/* 🎯 PARAGRAPH IN GOOGLE OFFICIAL GREY COLOR */}
-            <p className="text-[#5f6368] text-lg md:text-xl max-w-xl font-medium leading-relaxed mb-8">
-              The ultimate professional dashboard to calculate your points, monitor live leaderboard rankings, & track.
+            <p className="text-white/95 text-xl md:text-2xl max-w-xl font-medium leading-relaxed mb-8 mt-2 drop-shadow-sm">
+              Calculate points, monitor live rankings, and track your entire Arcade journey in one sleek dashboard.
             </p>
 
-            {/* 🔥 ACTION BUTTONS GROUP 🔥 */}
-            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-8">
+            {/* FONTS UPDATED HERE TO BE NORMAL & BOLD INSTEAD OF EXTRABOLD */}
+            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-10">
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-full hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
+                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 focus:outline-none flex items-center justify-center border-none shadow-md"
               >
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                <span className="whitespace-nowrap">Start Arcade Labs 2026 </span>
+                <span className="whitespace-nowrap">Start Arcade Labs</span>
               </a>
 
               <button
                 onClick={() => router.push('/calculator')}
-                className="w-full sm:w-auto px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] sm:text-base rounded-full hover:bg-[#1557b0] transition-all duration-300 focus:outline-none flex items-center justify-center gap-2.5 border-none shadow-none"
+                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 focus:outline-none flex items-center justify-center border-none shadow-md"
               >
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                <span className="whitespace-nowrap">Arcade Points Calculator</span>
+                <span className="whitespace-nowrap">Points Calculator</span>
               </button>
             </div>
 
-            {/* 🔥 ENROLMENTS OPEN SOON SECTION (NO BOX, DARK BROWN TEXT) 🔥 */}
-            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
-              <h3 className="text-[18px] md:text-[20px] font-bold text-[#4e342e] tracking-tight">
-                Facilitator Enrolments soon..
+            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2 bg-white/10 p-5 rounded-2xl backdrop-blur-sm border border-white/20">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-white tracking-tight">
+                Facilitator Enrolments...
               </h3>
-              <div className="flex flex-col gap-2 text-[#4e342e] font-medium text-[14px] md:text-[15px]">
+              <div className="flex flex-col gap-3 text-white/90 font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4e342e] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4ade80] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -382,7 +379,7 @@ export default function HomePage() {
                   <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4e342e] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4ade80] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -395,65 +392,108 @@ export default function HomePage() {
 
           </div>
 
-          {/* QUICK ACTIONS PANEL (No heading, 5 buttons, lighter premium grey color) */}
-          <div className="relative z-10 w-full lg:w-1/3 flex flex-col gap-3">
-            {[
-              { name: "Arcade Points Calculator", link: "/calculator" },
-              { name: "Skill Badges List", link: "/resources" },
-              { name: "Facilitator Program", link: "/facilitator" },
-              { name: "Live Leaderboard", link: "/leaderboard" },
-              { name: "Get 309 Credits", link: "#credits-section" },
-            ].map((item, idx) => (
-              <a
-                key={idx}
-                href={item.link}
-                onClick={(e) => {
-                  if(item.link.startsWith('#')) {
-                    e.preventDefault();
-                    document.getElementById(item.link.substring(1))?.scrollIntoView({ behavior: 'smooth' });
-                  } else if (item.link.startsWith('/')) {
-                    e.preventDefault();
-                    router.push(item.link);
-                  }
-                }}
-                className="flex items-center justify-center w-full max-w-[300px] lg:max-w-full mx-auto px-6 py-2.5 md:py-3 bg-[#5f6368] hover:bg-[#4a4d51] border-none rounded-full transition-all duration-300 text-white font-bold tracking-wide shadow-sm hover:shadow-md cursor-pointer text-[14px] md:text-[15px]"
-              >
-                <span>{item.name}</span>
-              </a>
-            ))}
+          {/* 🔥 IMAGE_D6632B.JPG EXACT REPLICA CARD 🔥 */}
+          <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
+            <div className="bg-[#ffffff] rounded-[8px] shadow-2xl flex flex-col w-full overflow-hidden">
+              {[
+                { 
+                  name: "Arcade Points Calculator", 
+                  link: "/calculator", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /> 
+                },
+                { 
+                  name: "Skill Badges List", 
+                  link: "/resources", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /> 
+                },
+                { 
+                  name: "Facilitator Program", 
+                  link: "/facilitator", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /> 
+                },
+                { 
+                  name: "Live Leaderboard", 
+                  link: "/leaderboard", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /> 
+                },
+                { 
+                  name: "Get 309 Credits", 
+                  link: "#credits-section", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0v3.75C20.25 20.653 16.556 22.5 12 22.5s-8.25-1.847-8.25-4.125v-3.75" /> 
+                },
+                { 
+                  name: "Arcade Chatbot", 
+                  link: "/chat", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /> 
+                },
+              ].map((item, idx) => (
+                <a
+                  key={idx}
+                  href={item.link}
+                  onClick={(e) => {
+                    if(item.link.startsWith('#')) {
+                      e.preventDefault();
+                      document.getElementById(item.link.substring(1))?.scrollIntoView({ behavior: 'smooth' });
+                    } else if (item.link.startsWith('/')) {
+                      e.preventDefault();
+                      router.push(item.link);
+                    }
+                  }}
+                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#f0f2f5] last:border-none hover:bg-[#f8f9fc] transition-colors duration-200 cursor-pointer"
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Exact Replica Icon Box */}
+                    <div className="w-[38px] h-[38px] rounded-[10px] bg-[#f2f5fa] border border-[#e2e8f4] flex items-center justify-center text-[#2c46a6] shrink-0">
+                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.75">
+                        {item.icon}
+                      </svg>
+                    </div>
+                    {/* Exact Replica Font */}
+                    <span className="font-[600] text-[15px] text-[#1c325e] tracking-tight">
+                      {item.name}
+                    </span>
+                  </div>
+                  {/* Made Arrow Darker */}
+                  <span className="text-[#64748b]">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 {/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
-{/* Padding top (pt-2) aur kam kar diya taaki dono sections paas aa jayein */}
-<section className="relative z-10 pt-2 pb-24 bg-[#ffffff] border-b border-[#dadce0]">
+<section className="relative z-10 pt-4 pb-24 bg-[#2c46a6]">
   <div className="max-w-4xl mx-auto px-6">
     
     <div className="text-center mb-10 relative z-10">
-      <h2 className="text-4xl md:text-5xl font-bold text-black tracking-tight mb-5">
+      <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-5 drop-shadow-sm">
         Start Arcade Labs
       </h2>
     </div>
 
-    {/* TABBED INTERFACE (Clean & Professional) */}
-    <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col">
+    {/* TABBED INTERFACE */}
+    <div className="bg-white rounded-xl shadow-2xl border-none overflow-hidden flex flex-col">
       
       {/* Tab Headers */}
-      <div className="flex flex-col sm:flex-row border-b border-[#707070]">
+      <div className="flex flex-col sm:flex-row border-b border-[#e0e0e0]">
         <button 
           onClick={() => setActiveGuideTab('start')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#707070] ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#e0e0e0] ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
         >
           How to Start Arcade ?
         </button>
         <button 
           onClick={() => setActiveGuideTab('tools')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#707070] ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#e0e0e0] ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
         >
           Arcade Tools
         </button>
@@ -475,7 +515,7 @@ export default function HomePage() {
               <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
                 <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
                   <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
+                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
                     {item.badge}
                   </span>
                 </div>
@@ -499,7 +539,7 @@ export default function HomePage() {
               <Link href={item.link} key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
                 <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
                   <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                  <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
+                  <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
                     {item.badge}
                   </span>
                 </div>
@@ -523,7 +563,7 @@ export default function HomePage() {
               <div key={index} className="flex p-5 hover:bg-[#f8f9fa] group transition-colors duration-200 w-full">
                 <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
                   <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
+                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
                     {item.badge}
                   </span>
                 </div>
@@ -546,13 +586,13 @@ export default function HomePage() {
   </div>
 </section>
 
-        {/* ================= FREE CREDITS GUIDE (SHIFTED HERE) ================= */}
+        {/* ================= FREE CREDITS GUIDE ================= */}
         <section id="credits-section" className="relative z-10 py-16 bg-[#ffffff] border-b border-[#dadce0] overflow-hidden font-sans">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
             
             <div className="mb-16">
               <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Watch the Video Tutorial & Get 309$ Credits</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Watch the Video & Get 309$ Credits</h2>
                 <p className="text-[#5f6368] text-lg">Follow along with this step-by-step video guide</p>
               </div>
               
@@ -568,10 +608,11 @@ export default function HomePage() {
                   
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-[10px]">
-                      🚀
+                    ＄
+
                     </div>
                     <div className="text-white text-sm md:text-base font-semibold truncate text-left drop-shadow-md">
-                      [ Coming Soon.. ] Google Cloud FREE 309 Credits | Step-by-Step Guide | Google Skills
+                      Google Cloud FREE 309 Credits | Step-by-Step Guide
                     </div>
                   </div>
 
@@ -596,25 +637,25 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex justify-between items-end w-full">
-                    <div className="text-white font-bold text-2xl md:text-3xl tracking-tighter drop-shadow-md flex items-center gap-1.5">
-                      <span className="text-[#4285f4]">G</span>
-                      <span className="text-[#ea4335]">o</span>
-                      <span className="text-[#fbbc05]">o</span>
-                      <span className="text-[#4285f4]">g</span>
-                      <span className="text-[#34a853]">l</span>
-                      <span className="text-[#ea4335]">e</span> 
-                      <span className="text-white ml-1">Cloud</span>
+                    {/* 👇 TEXT ADDED HERE 👇 */}
+                    <div className="text-white/95 font-bold text-sm md:text-base drop-shadow-md pb-1">
+                      The video guide will be published soon.
                     </div>
-                    <div className="bg-[#212121]/80 hover:bg-[#212121] transition-colors backdrop-blur-sm text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2 shadow-sm border border-white/10">
-                      Watch on 
-                      <svg className="w-16 h-4 md:h-5" viewBox="0 0 90 20" fill="currentColor">
-                        <path d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 0 14.285 0 14.285 0C14.285 0 5.35042 0 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C0 5.35042 0 10 0 10C0 10 0 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324ZM11.4276 14.2857V5.71429L18.8552 10L11.4276 14.2857Z" />
+                    
+                    {/* 👇 YOUTUBE BUTTON FIXED HERE 👇 */}
+                    <div className="bg-[#212121]/90 hover:bg-black transition-colors backdrop-blur-md text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-1.5 shadow-md border border-white/20 cursor-pointer">
+                      <span>Watch on</span>
+                      <svg className="w-5 h-5 text-[#ff0000] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                       </svg>
+                      <span className="font-bold tracking-tighter text-base mt-[1px]">YouTube</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            
+            {/* ... Rest of your existing code below (Special Credit Link, Step-by-Step, etc.) ... */}
 
             <div className="bg-[#fff8f0] border border-[#fbd0b4] rounded-xl p-6 md:p-8 mb-16 shadow-sm relative transition-all max-w-5xl mx-auto">
               <button 
@@ -671,105 +712,92 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mb-16 max-w-5xl mx-auto">
-              <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-8 text-center">Step-by-Step Guide</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    title: "Sign Out of Your Google Skills Account", 
-                    icon: "🚪",
-                    desc: "Before starting, make sure you log out of your Google Skills account. This is important to ensure the credits are applied correctly.", 
-                    alert: { type: "important", text: "Important: This step is crucial! Credits may not apply if you're already logged in." }
-                  },
-                  { 
-                    title: "Open the Special Credit Link", 
-                    icon: "🔗",
-                    desc: "Visit the exclusive link provided above or in the video description.", 
-                    alert: { type: "important", text: "Important: This link contains a special code at the end of the URL, which is required to activate the credits." }
-                  },
-                  { 
-                    title: "Sign In to Your Google Skills Account", 
-                    icon: "🔑",
-                    desc: "Once the link opens, sign in using your Google account, or your email and password manually.", 
-                    alert: { type: "tip", text: "Tip: Use the same account you plan to complete Skill Badges." }
-                  },
-                  { 
-                    title: "Receive Initial Credits", 
-                    icon: "🎁",
-                    desc: "After signing in through the special link, you will automatically receive 9 credits in your account.", 
-                    alert: null,
-                    badge: "9 Credits"
-                  },
-                  { 
-                    title: "Complete One Lab from the Catalog", 
-                    icon: "💻",
-                    desc: "To unlock the remaining credits, from the Google Skills Catalog, search for 'hands on'. Select 'A Tour of Google Cloud Hands-on Labs' (recommended for beginners).", 
-                    alert: { type: "tip", text: "Tip: This lab is perfect for beginners and takes about 3-5 minutes." }
-                  },
-                  { 
-                    title: "Finish the Lab with 100% Score", 
-                    icon: "💯",
-                    desc: "Complete the selected lab and ensure you achieve a 100/100 score. This may include opening the Google Cloud Console, assigning permissions to a principal, and enabling a required API.", 
-                    alert: { type: "important", text: "Important: Partial completion will not unlock the remaining credits." }
-                  },
-                  { 
-                    title: "Verify Your Total Credits", 
-                    icon: "✅",
-                    desc: "After ending the lab, visit the Billing / Payments page of your Google Skills Account and confirm that 300 additional credits have been added.", 
-                    alert: null,
-                    badge: "309 Total Credits"
-                  }
-                ].map((step, index) => (
-                  <div key={index} className="flex flex-col sm:flex-row items-start gap-4 p-5 md:p-6 rounded-xl bg-white border border-[#dadce0] shadow-sm">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6b3cb0] text-white font-bold text-sm shrink-0">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-bold text-[#202124] mb-2 flex items-center gap-2">
-                        <span className="text-[#d94a11]">{step.icon}</span> {step.title}
-                      </h4>
-                      <p className="text-[#5f6368] text-[15px] leading-relaxed mb-3">{step.desc}</p>
+            {/* TIMELINE DESIGN FOR STEP BY STEP GUIDE */}
+            <div className="mb-16 max-w-5xl mx-auto px-2">
+              <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
+              
+              <div className="relative ml-4 md:ml-8">
+                {/* Vertical Connector Line */}
+                <div className="absolute top-4 bottom-0 left-[19px] w-[3px] bg-[#e8eaed] z-0"></div>
+
+                <div className="space-y-6 md:space-y-8 relative z-10">
+                  {[
+                    { 
+                      title: "Sign Out of Your Google Skills Account", 
+                      icon: "🚪",
+                      desc: "Before starting, make sure you log out of your Google Skills account. This is important to ensure the credits are applied correctly.", 
+                      alert: { type: "important", text: "Important: This step is crucial! Credits may not apply if you're already logged in." }
+                    },
+                    { 
+                      title: "Open the Special Credit Link", 
+                      icon: "🔗",
+                      desc: "Visit the exclusive link provided above or in the video description.", 
+                      alert: { type: "important", text: "Important: This link contains a special code at the end of the URL, which is required to activate the credits." }
+                    },
+                    { 
+                      title: "Sign In to Your Google Skills Account", 
+                      icon: "🔑",
+                      desc: "Once the link opens, sign in using your Google account, or your email and password manually.", 
+                      alert: { type: "tip", text: "Tip: Use the same account you plan to complete Skill Badges." }
+                    },
+                    { 
+                      title: "Receive Initial Credits", 
+                      icon: "🎁",
+                      desc: "After signing in through the special link, you will automatically receive 9 credits in your account.", 
+                      alert: null,
+                      badge: "9 Credits"
+                    },
+                    { 
+                      title: "Complete One Lab from the Catalog", 
+                      icon: "💻",
+                      desc: "To unlock the remaining credits, from the Google Skills Catalog, search for 'hands on'. Select 'A Tour of Google Cloud Hands-on Labs' (recommended for beginners).", 
+                      alert: { type: "tip", text: "Tip: This lab is perfect for beginners and takes about 3-5 minutes." }
+                    },
+                    { 
+                      title: "Finish the Lab with 100% Score", 
+                      icon: "💯",
+                      desc: "Complete the selected lab and ensure you achieve a 100/100 score. This may include opening the Google Cloud Console, assigning permissions to a principal, and enabling a required API.", 
+                      alert: { type: "important", text: "Important: Partial completion will not unlock the remaining credits." }
+                    },
+                    { 
+                      title: "Verify Your Total Credits", 
+                      icon: "✅",
+                      desc: "After ending the lab, visit the Billing / Payments page of your Google Skills Account and confirm that 300 additional credits have been added.", 
+                      alert: null,
+                      badge: "309 Total Credits"
+                    }
+                  ].map((step, index) => (
+                    <div key={index} className="relative flex items-start gap-4 md:gap-6">
                       
-                      {step.badge && (
-                        <div className="inline-block mt-1 mb-2 px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc]">
-                          {step.badge}
-                        </div>
-                      )}
+                      {/* Connected Circle Bullet */}
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6b3cb0] text-white font-bold text-sm shrink-0 border-4 border-white shadow-sm z-10 mt-3">
+                        {index + 1}
+                      </div>
 
-                      {step.alert && (
-                        <div className={`mt-2 p-3 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
-                          <span className="mt-0.5">{step.alert.type === 'important' ? '⚠️' : '💡'}</span>
-                          <span>{step.alert.text}</span>
-                        </div>
-                      )}
+                      {/* Content Card */}
+                      <div className="flex-1 p-5 md:p-6 rounded-xl bg-white border border-[#dadce0] shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-md">
+                        <h4 className="text-lg font-bold text-[#202124] mb-2 flex items-center gap-2">
+                          <span className="text-[#d94a11]">{step.icon}</span> {step.title}
+                        </h4>
+                        <p className="text-[#5f6368] text-[15px] leading-relaxed mb-3">{step.desc}</p>
+                        
+                        {step.badge && (
+                          <div className="inline-block mt-1 mb-2 px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc]">
+                            {step.badge}
+                          </div>
+                        )}
+
+                        {step.alert && (
+                          <div className={`mt-2 p-3 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
+                            <span className="mt-0.5">{step.alert.type === 'important' ? '⚠️' : '💡'}</span>
+                            <span>{step.alert.text}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <div className="bg-[#e6f4ea] rounded-xl p-6 md:p-8 shadow-sm border border-[#ceead6] max-w-5xl mx-auto">
-              <h3 className="text-xl md:text-2xl font-bold mb-5 flex items-center gap-2 text-[#0d652d]">
-                <div className="bg-[#137333] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">✓</div> 
-                Pro Tips for Success
-              </h3>
-              <ul className="space-y-4">
-                {[
-                  { title: "Always sign out first", desc: "This is the most common reason credits don't apply" },
-                  { title: "Use the special link", desc: "The code at the end of the URL is essential" },
-                  { title: "Complete the lab 100%", desc: "Follow all instructions carefully for full credit" },
-                  { title: "Check your billing page", desc: "Verify credits are added after completing the lab" },
-                  { title: "Be patient", desc: "Sometimes credits take a few minutes to appear" }
-                ].map((tip, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-[#0d652d]">
-                    <span className="mt-2 w-1.5 h-1.5 bg-[#137333] rounded-full shrink-0"></span>
-                    <div className="text-[15px]">
-                      <strong className="font-bold text-[#137333]">{tip.title}</strong>
-                      <span className="text-[#0d652d]"> - {tip.desc}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
             </div>
 
           </div>
@@ -856,116 +884,8 @@ export default function HomePage() {
           </div>
         </div>
 
-      {/* ================= LIVE SWAG POLL & REVIEW TRACKER ================= */}
-        <div className="pb-12 pt-10 bg-white border-b border-[#dadce0]">
-          <div className="max-w-4xl mx-auto px-6">
-            
-            <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
-              
-              {/* UPDATED: Green Background and Centered Text */}
-              <div className="bg-[#0f9d58] border-b border-[#dadce0] p-6 sm:p-8 flex flex-col items-center justify-center text-center gap-2">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white">Google Arcade Swags Review</h3>
-                  <p className="text-green-100 text-sm mt-1">Live tracking and community feedback</p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-8">
-
-                {/* Review Input */}
-                <div className="mb-8">
-                  <h4 className="font-bold text-[#202124] mb-3">Leave a Review</h4>
-                  <form onSubmit={handleReviewSubmit} className="flex flex-col gap-3">
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <input 
-                        type="text" 
-                        value={reviewName}
-                        onChange={(e) => setReviewName(e.target.value)}
-                        placeholder="Your Name..." 
-                        required
-                        className="sm:w-1/3 px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[15px]"
-                      />
-                      <select 
-                        value={reviewVendor}
-                        onChange={(e) => setReviewVendor(e.target.value)}
-                        className="sm:w-1/4 px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[15px]"
-                      >
-                        <option value="Printo">Printo</option>
-                        <option value="Whitesquare">Whitesquare</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <input 
-                        type="text" 
-                        value={reviewText}
-                        onChange={(e) => setReviewText(e.target.value)}
-                        placeholder="Share your swag experience or delivery location..." 
-                        required
-                        className="flex-1 px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[15px]"
-                      />
-                      <button type="submit" className="px-6 py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold rounded-lg shadow-sm transition-colors text-[15px]">
-                        Post
-                      </button>
-                    </div>
-                  </form>
-                </div>
-
-                {/* Live Comments Feed */}
-                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                  {reviews.length === 0 ? (
-                    <p className="text-center text-[#5f6368] py-4 text-sm font-medium">No reviews yet. Be the first to share your experience!</p>
-                  ) : (
-                    reviews.map((rev, idx) => (
-                      <div key={idx} className="bg-white border border-[#e8eaed] p-4 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-[#e8f0fe] text-[#1a73e8] flex items-center justify-center font-bold text-xs border border-[#d2e3fc]">
-                              {rev.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <span className="font-bold text-[#202124] text-sm">{rev.name}</span>
-                              <span className="text-[#80868b] text-xs ml-2">{rev.time}</span>
-                            </div>
-                          </div>
-                          <span className="bg-[#f8f9fa] border border-[#dadce0] text-[#5f6368] text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
-                            {rev.vendor}
-                          </span>
-                        </div>
-                        <p className="text-[#3c4043] text-[14px] leading-relaxed ml-10">
-                          {rev.text}
-                        </p>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <div className="mt-8 flex flex-col gap-4">
-                  <div className="bg-[#f8f9fa] border border-[#dadce0] rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <span className="text-[#3c4043] font-semibold text-sm flex items-center gap-2"><span className="text-xl">🛠️</span> Official Swags Support:</span>
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-sm">
-                      <a href="mailto:printose@printo.in" className="text-[#1a73e8] hover:underline font-medium flex items-center gap-1.5"><span className="text-base">📦</span> printose@printo.in</a>
-                      <a href="mailto:support@whitesquarein.com" className="text-[#1a73e8] hover:underline font-medium flex items-center gap-1.5"><span className="text-base">📦</span> support@whitesquarein.com</a>
-                    </div>
-                  </div>
-
-                  {/* UPDATED: Green Background for Community Experience Section */}
-                  <div className="bg-[#0f9d58] border border-[#0d8a4d] rounded-xl p-6 sm:p-8 text-center shadow-sm">
-                    <h4 className="text-[18px] sm:text-xl font-bold text-white mb-3 flex items-center justify-center gap-2">
-                      <span className="text-2xl">🌟</span> Share Your Community Experience!
-                    </h4>
-                    <p className="text-green-50 text-[14px] sm:text-[15px] font-medium leading-relaxed max-w-2xl mx-auto">
-                      How much did this platform and our community guidance help you? Please share your valuable feedback and support using the review box above. Your feedback keeps us motivated!
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* ================= WIDER FAQ SECTION ================= */}
-  <section className="w-full max-w-5xl mx-auto px-6 pt-2 pb-12 mb-8">
+        <section className="w-full max-w-5xl mx-auto px-6 pt-2 pb-12 mb-8">
           <div className="w-full">
             <FAQ />
           </div>
