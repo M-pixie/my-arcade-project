@@ -4,12 +4,8 @@ import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-
-
 export default function FacilitatorPage() {
   const router = useRouter();
-  
-  
 
   // State for Co-ordinator Contact Form
   const [selectedCoordinator, setSelectedCoordinator] = useState<{name: string, phone: string} | null>(null);
@@ -71,204 +67,177 @@ export default function FacilitatorPage() {
           </div>
         </div>
 
-        {/* 🔥 PT-20 reduced to PT-16 to shift content up 🔥 */}
         <main className="pt-16">
           
-          {/* ================= PREMIUM HERO SECTION (UPDATED) ================= */}
-          <section className="relative border-b border-[#dadce0] bg-white overflow-hidden">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.04] blur-[100px] rounded-full pointer-events-none"></div>
-            
-            {/* 🔥 Reduced PT-12 MD:PT-16 to PT-6 MD:PT-8 🔥 */}
-            <div className="max-w-6xl mx-auto px-6 pt-6 pb-12 md:pt-8 md:pb-16 relative z-10">
+          {/* ================= PREMIUM HERO SECTION ================= */}
+          <section className="relative bg-[#2c46a6] overflow-hidden py-12 px-4 sm:px-6">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.15] blur-[100px] rounded-full pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#6a3093] opacity-[0.15] blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div className="max-w-5xl mx-auto relative z-10 flex flex-col gap-8">
               
-              {/* Top Hero Row */}
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 mb-16">
+              <div className="w-full bg-[#4061ce] rounded-[2.5rem] p-8 md:p-14 lg:p-20 shadow-2xl flex flex-col items-center text-center border border-white/10">
                 
-                {/* Left Content */}
-                {/* lg:-mt-2 se isko halka upar kiya gaya hai */}
-                <div className="flex-1 w-full lg:w-[60%] text-left lg:ml-[-16px] lg:-mt-2">
-                  
-                  <h1 className="text-4xl md:text-5xl font-medium text-[#202124] leading-tight mb-4 tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                    Arcade Facilitator Program
-                  </h1>
-                  
-                 
+                <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/90 text-[13px] font-bold mb-8 backdrop-blur-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#34a853]"></span>
+                  Arcade · Facilitator Program
+                </div>
 
-                  {/* mt-10 se isko halka niche kiya gaya hai */}
-                  <h3 className="text-lg sm:text-[20px] font-bold text-[#202124] mt-10 mb-5 tracking-tight">
-                    Enrolments soon..
-                  </h3>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-2 tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                  Arcade Facilitator Program
+                </h1>
+                
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#4ade80] to-[#22c55e] mb-8 tracking-tight pb-2">
+                  Enrolments soon..
+                </h2>
 
-                  <div className="flex flex-col gap-4 text-[#202124] font-normal text-[16px]">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                      <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#202124] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
-                      <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
-                    </div>
+                <div className="flex flex-col gap-3 text-white/90 font-medium text-[15px] md:text-[17px] mb-12">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                   </div>
                 </div>
 
-                {/* Right Content - 4 Curved Sleek Pill Buttons */}
-                {/* lg:mt-8 se isko thoda layout me niche laya gaya hai */}
-                <div className="w-full lg:w-[35%] flex flex-col gap-3.5 justify-center flex-shrink-0 mt-8 lg:mt-8">
-                  <button onClick={() => router.push("/calculator")} className="w-full max-w-[260px] mx-auto lg:ml-auto lg:mr-0 px-5 py-3 bg-[#34a853] text-white font-bold text-[14px] rounded-full hover:bg-[#2b8a44] hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                <div className="flex flex-wrap justify-center gap-4 w-full max-w-3xl">
+                  <button onClick={() => router.push("/calculator")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-white text-[#2c46a6] font-bold text-[15px] rounded-full hover:bg-gray-100 hover:shadow-lg transition-all flex items-center justify-center gap-3 group">
                     <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     Calculate Points
                   </button>
-                  <button onClick={() => router.push("/leaderboard")} className="w-full max-w-[260px] mx-auto lg:ml-auto lg:mr-0 px-5 py-3 bg-white text-[#1a73e8] border border-[#dadce0] font-bold text-[14px] rounded-full hover:bg-[#f8f9fa] hover:border-[#1a73e8] hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <button onClick={() => router.push("/leaderboard")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-transparent border-2 border-white/30 text-white font-bold text-[15px] rounded-full hover:bg-white/10 hover:border-white/50 transition-all flex items-center justify-center gap-3 group">
                     <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                     Leaderboard
                   </button>
-                  <button onClick={() => router.push("/resources")} className="w-full max-w-[260px] mx-auto lg:ml-auto lg:mr-0 px-5 py-3 bg-[#fbbc04] text-[#202124] font-bold text-[14px] rounded-full hover:bg-[#f2a900] hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <button onClick={() => router.push("/resources")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-transparent border-2 border-white/30 text-white font-bold text-[15px] rounded-full hover:bg-white/10 hover:border-white/50 transition-all flex items-center justify-center gap-3 group">
                     <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
                     Skill Badges List
                   </button>
-                  <button onClick={() => router.push("/dashboard")} className="w-full max-w-[260px] mx-auto lg:ml-auto lg:mr-0 px-5 py-3 bg-[#1a73e8] text-white font-bold text-[14px] rounded-full hover:bg-[#1557b0] hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <button onClick={() => router.push("/dashboard")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-[#34a853] text-white font-bold text-[15px] rounded-full hover:bg-[#2b8a44] shadow-md transition-all flex items-center justify-center gap-3 group">
                     <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                     Dashboard
                   </button>
                 </div>
-
               </div>
 
-              {/* Slim Assistance & Referral Block */}
-              <div className="flex flex-col gap-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-                  <div className="md:col-span-2 bg-white border border-[#e8eaed] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center relative overflow-hidden">
-                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#e8f0fe] rounded-full blur-3xl opacity-50 pointer-events-none"></div>
-                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight flex items-center gap-2.5 relative z-10">
-                      <svg className="w-5 h-5 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-                      Facilitator Referral Code
-                    </h2>
-                    <div className="bg-gradient-to-r from-[#1a73e8] to-[#1557b0] rounded-lg p-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm relative z-10">
-                      <div className="flex items-center gap-4">
-                        <div className="hidden sm:flex w-10 h-10 rounded-full bg-white/10 items-center justify-center backdrop-blur-sm border border-white/20">
-                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                        </div>
-                        <div className="font-mono text-xl sm:text-[24px] text-white font-bold tracking-[0.15em] opacity-95 select-none">
-                          ****-**-***
-                        </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                
+                <div className="md:col-span-2 bg-[#3350b5]/50 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-lg flex flex-col justify-center relative overflow-hidden">
+                  <div className="absolute -right-10 -top-10 w-32 h-32 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+                  <h2 className="text-xl sm:text-[22px] font-bold text-white mb-5 tracking-tight flex items-center gap-3">
+                    <svg className="w-6 h-6 text-[#4ade80]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+                    Facilitator Referral Code
+                  </h2>
+                  <div className="bg-black/20 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-inner border border-white/5">
+                    <div className="flex items-center gap-4">
+                      <div className="font-mono text-2xl sm:text-[26px] text-white font-bold tracking-[0.2em] opacity-95 select-none">
+                        ****-**-***
                       </div>
-                      <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold px-6 py-2.5 rounded-lg text-[13px] cursor-not-allowed backdrop-blur-sm transition-all duration-300 w-full sm:w-auto shadow-sm flex items-center justify-center gap-2">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                        </span>
-                        Coming Soon
-                      </button>
                     </div>
+                    <button className="bg-white/10 text-white/50 border border-white/10 font-bold px-8 py-3 rounded-xl text-[14px] cursor-not-allowed w-full sm:w-auto flex items-center justify-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/50 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white/50"></span>
+                      </span>
+                      Coming Soon
+                    </button>
                   </div>
+                </div>
 
-                  <div className="bg-white border border-[#e8eaed] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-center">
-                    <h2 className="text-xl sm:text-[22px] font-bold text-[#202124] mb-4 tracking-tight">Need help ?</h2>
-                    <div className="flex flex-col gap-3">
-                      <button onClick={() => document.getElementById('contact-coordinators')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-4 py-3 bg-[#f8fbff] border border-[#d2e3fc] rounded-lg hover:bg-[#e8f0fe] hover:border-[#aecbfa] hover:-translate-y-0.5 transition-all duration-200 shadow-sm flex items-center justify-between">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-[#1a73e8] text-[14px] leading-tight">Co-ordinator</span>
-                          <span className="text-[#1a73e8] text-[11px] font-bold opacity-80 mt-0.5">For Arcade Labs Issues</span>
-                        </div>
-                        <div className="w-7 h-7 rounded-full bg-white border border-[#d2e3fc] flex items-center justify-center group-hover:bg-[#1a73e8] group-hover:border-[#1a73e8] transition-colors flex-shrink-0">
-                          <svg className="w-3.5 h-3.5 text-[#1a73e8] group-hover:text-white transition-colors transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
-                        </div>
-                      </button>
+                <div className="bg-[#3350b5]/50 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-lg flex flex-col justify-center">
+                  <h2 className="text-xl sm:text-[22px] font-bold text-white mb-5 tracking-tight">Need help?</h2>
+                  <div className="flex flex-col gap-3">
+                    {/* 🔥 Coordinator Button - Styled like a Blue Card (Matched with Reference Image) 🔥 */}
+                    <button onClick={() => document.getElementById('contact-coordinators')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-5 py-4 bg-[#1a73e8] border border-[#1557b0] rounded-2xl hover:bg-[#1557b0] transition-all duration-200 flex items-center justify-between shadow-md">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-white text-[15px] leading-tight">Co-ordinator</span>
+                        <span className="text-white/80 text-[12px] font-medium mt-1">For Arcade Labs Issues</span>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors flex-shrink-0 text-white">
+                        <svg className="w-4 h-4 transition-transform transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
+                      </div>
+                    </button>
 
-                      <button onClick={() => document.getElementById('contact-facilitator')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-4 py-3 bg-white border border-[#dadce0] rounded-lg hover:bg-[#f8f9fa] hover:border-[#bdc1c6] hover:-translate-y-0.5 transition-all duration-200 shadow-sm flex items-center justify-between">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-[#3c4043] text-[14px] leading-tight">Contact Facilitator</span>
-                          <span className="text-[#5f6368] text-[11px] font-bold mt-0.5">For General Queries</span>
-                        </div>
-                        <div className="w-7 h-7 rounded-full bg-[#f1f3f4] border border-[#dadce0] flex items-center justify-center group-hover:bg-[#e8eaed] transition-colors flex-shrink-0">
-                          <svg className="w-3.5 h-3.5 text-[#5f6368] transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
-                        </div>
-                      </button>
-                    </div>
+                    {/* 🔥 Contact Facilitator Button - Styled as Grey/Translucent Card 🔥 */}
+                    <button onClick={() => document.getElementById('contact-facilitator')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-5 py-4 bg-white/10 border border-white/20 rounded-2xl hover:bg-white/20 transition-all duration-200 flex items-center justify-between shadow-sm">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-white text-[15px] leading-tight">Contact Facilitator</span>
+                        <span className="text-white/60 text-[12px] font-medium mt-1">For General Queries</span>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors flex-shrink-0 text-white">
+                        <svg className="w-4 h-4 transition-transform transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
+                      </div>
+                    </button>
                   </div>
                 </div>
 
               </div>
             </div>
           </section>
-{/* ================= MILESTONES & SWAGS SECTION ================= */}
-<section className="pt-8 pb-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
-  <div className="max-w-5xl mx-auto">
-    
-    {/* HEADING: Bottom margin (mb-6 se mb-10) badha diya taaki box halka niche shift ho */}
-    <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-10 text-center">
-      Milestones & Swags
-    </h2>
-    
-    {/* MAIN BOX CONTAINER */}
-    <div className="bg-white border border-[#cccccc] rounded-xl shadow-lg overflow-hidden mb-8">
-      
-      {/* HEADER TABS: 3 Different Colors (Teal, Blue, Gold) */}
-      <div className="grid grid-cols-12 text-lg sm:text-xl font-bold text-white">
-        {/* Column 1: Teal Color */}
-        <div className="col-span-5 bg-[#3a6b66] flex items-center justify-center py-6 px-6">
-          Users Milestone
-        </div>
-        
-        {/* Column 2: Blue Color */}
-        <div className="col-span-4 bg-[#506c8d] flex items-center justify-center py-6 px-6">
-          Required Points
-        </div>
-        
-        {/* Column 3: Gold/Tan Color */}
-        <div className="col-span-3 bg-[#cdb685] flex items-center justify-center py-6 px-6">
-          Expected Rewards
-        </div>
-      </div>
 
-      {/* MILESTONE ROWS */}
-      <div className="divide-y divide-[#e8eaed]">
-        
-        {/* Ultimate Milestone Row */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-          <div className="col-span-5 flex items-center gap-4">
-            <span className="w-3 h-3 bg-[#1a73e8] rounded-full"></span>
-            <span className="font-bold text-[#202124] text-lg">Ultimate Milestone</span>
-          </div>
-          <div className="col-span-4 text-center font-bold text-[#1a73e8] text-lg">40+ Points</div>
-          <div className="col-span-3 text-center text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-        </div>
+          {/* ================= MILESTONES & SWAGS SECTION ================= */}
+          <section className="pt-16 pb-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
+            <div className="max-w-5xl mx-auto">
+              
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-10 text-center">
+                Milestones & Swags
+              </h2>
+              
+              <div className="bg-white border border-[#cccccc] rounded-xl shadow-lg overflow-hidden mb-8">
+                <div className="grid grid-cols-12 text-sm md:text-lg lg:text-xl font-bold text-white">
+                  <div className="col-span-5 bg-[#3a6b66] flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
+                    Users Milestone
+                  </div>
+                  <div className="col-span-4 bg-[#506c8d] flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
+                    Required Points
+                  </div>
+                  <div className="col-span-3 bg-[#cdb685] flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
+                    Expected Rewards
+                  </div>
+                </div>
 
-        {/* Milestone 3 Row */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-          <div className="col-span-5 flex items-center gap-4">
-            <span className="w-3 h-3 bg-[#fbbc04] rounded-full"></span>
-            <span className="font-bold text-[#202124] text-lg">Milestone 3</span>
-          </div>
-          <div className="col-span-4 text-center font-bold text-[#b06000] text-lg">25 - 39 Points</div>
-          <div className="col-span-3 text-center text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-        </div>
+                <div className="divide-y divide-[#e8eaed]">
+                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
+                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
+                      <span className="w-3 h-3 bg-[#1a73e8] rounded-full flex-shrink-0"></span>
+                      <span className="font-bold text-[#202124] text-sm md:text-lg">Ultimate Milestone</span>
+                    </div>
+                    <div className="col-span-4 text-center font-bold text-[#1a73e8] text-sm md:text-lg">40+ Points</div>
+                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
+                  </div>
 
-        {/* Milestone 2 Row */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-          <div className="col-span-5 flex items-center gap-4">
-            <span className="w-3 h-3 bg-[#34a853] rounded-full"></span>
-            <span className="font-bold text-[#202124] text-lg">Milestone 2</span>
-          </div>
-          <div className="col-span-4 text-center font-bold text-[#2b8a44] text-lg">15 - 24 Points</div>
-          <div className="col-span-3 text-center text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-        </div>
+                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
+                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
+                      <span className="w-3 h-3 bg-[#fbbc04] rounded-full flex-shrink-0"></span>
+                      <span className="font-bold text-[#202124] text-sm md:text-lg">Milestone 3</span>
+                    </div>
+                    <div className="col-span-4 text-center font-bold text-[#b06000] text-sm md:text-lg">25 - 39 Points</div>
+                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
+                  </div>
 
-        {/* Milestone 1 Row */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-          <div className="col-span-5 flex items-center gap-4">
-            <span className="w-3 h-3 bg-[#ea4335] rounded-full"></span>
-            <span className="font-bold text-[#202124] text-lg">Milestone 1</span>
-          </div>
-          <div className="col-span-4 text-center font-bold text-[#c5221f] text-lg">10 - 14 Points</div>
-          <div className="col-span-3 text-center text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-        </div>
+                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
+                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
+                      <span className="w-3 h-3 bg-[#34a853] rounded-full flex-shrink-0"></span>
+                      <span className="font-bold text-[#202124] text-sm md:text-lg">Milestone 2</span>
+                    </div>
+                    <div className="col-span-4 text-center font-bold text-[#2b8a44] text-sm md:text-lg">15 - 24 Points</div>
+                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
+                  </div>
 
-      </div>
-    </div>
-
-  </div>
-</section>
+                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
+                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
+                      <span className="w-3 h-3 bg-[#ea4335] rounded-full flex-shrink-0"></span>
+                      <span className="font-bold text-[#202124] text-sm md:text-lg">Milestone 1</span>
+                    </div>
+                    <div className="col-span-4 text-center font-bold text-[#c5221f] text-sm md:text-lg">10 - 14 Points</div>
+                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
           {/* ================= BORDERLESS & OPEN CONTACT FACILITATOR WITH ANIMATED IMAGES ================= */}
           <section id="contact-facilitator" className="py-20 px-6 bg-[#fcfcfc] border-b border-[#dadce0] relative overflow-hidden">
@@ -292,9 +261,6 @@ export default function FacilitatorPage() {
               .float-anim-1 { animation: customFloat 4s ease-in-out infinite; }
               .float-anim-2 { animation: customFloat 4s ease-in-out infinite 1s; }
               .float-anim-3 { animation: customFloat 4s ease-in-out infinite 2s; }
-              .animate-float-slow { animation: customFloatLight 6s ease-in-out infinite; }
-              .animate-pulse-scale-slow { animation: slowPulseScale 4s ease-in-out infinite; }
-              .animate-pulse-opacity-slow { animation: slowPulseOpacity 4s ease-in-out infinite; }
             `}</style>
             
             <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-[#e8f0fe] rounded-full blur-[100px] -translate-y-1/2 opacity-60 pointer-events-none"></div>
@@ -307,10 +273,9 @@ export default function FacilitatorPage() {
               <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 lg:gap-20">
                 <div className="flex flex-col items-center justify-center flex-shrink-0 md:w-5/12">
                   <div className="flex gap-6 sm:gap-8 mb-4">
-                    {/* Manish Profile */}
                     <div className="flex flex-col items-center float-anim-1">
-                      <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
-                        <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-full h-full object-cover object-top" style={{ imageRendering: "high-quality" }} />
+                      <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative">
+                        <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-full h-full object-cover object-top" />
                       </a>
                       <div className="mt-5 text-center">
                         <h4 className="font-bold text-[#202124] text-[17px]">Manish</h4>
@@ -320,10 +285,9 @@ export default function FacilitatorPage() {
                       </div>
                     </div>
 
-                    {/* Anjali Profile */}
                     <div className="flex flex-col items-center float-anim-2">
-                      <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
-                        <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-full h-full object-cover object-top" style={{ imageRendering: "high-quality" }} />
+                      <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative">
+                        <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-full h-full object-cover object-top" />
                       </a>
                       <div className="mt-5 text-center">
                         <h4 className="font-bold text-[#202124] text-[17px]">Anjali</h4>
@@ -334,10 +298,9 @@ export default function FacilitatorPage() {
                     </div>
                   </div>
 
-                  {/* Rohit Profile */}
                   <div className="flex flex-col items-center float-anim-3 -mt-4 relative z-20">
-                    <a href="https://www.linkedin.com/in/rohit-kumar-b482752ab" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative" style={{ transform: "translateZ(0)", backfaceVisibility: "hidden" }}>
-                      <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-full h-full object-cover object-top" style={{ imageRendering: "high-quality" }} />
+                    <a href="https://www.linkedin.com/in/rohit-kumar-b482752ab" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative">
+                      <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-full h-full object-cover object-top" />
                     </a>
                     <div className="mt-5 text-center">
                       <h4 className="font-bold text-[#202124] text-[17px]">Rohit</h4>
@@ -383,35 +346,44 @@ export default function FacilitatorPage() {
             </div>
           </section>
 
-          {/* ================= 🔥 CONTACT CO-ORDINATORS SECTION 🔥 ================= */}
-          <section id="contact-coordinators" className="py-24 px-6 bg-[#f8fbff] border-b border-[#d2e3fc] relative">
+          {/* ================= 🔥 PREMIUM CONTACT CO-ORDINATORS SECTION 🔥 ================= */}
+          <section id="contact-coordinators" className="py-24 px-4 sm:px-6 bg-[#fcfcfc] relative">
             <div className="max-w-6xl mx-auto z-10 relative">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-3">Need help ?</h2>
-                <p className="text-[#5f6368] text-base max-w-2xl mx-auto font-bold">
-                  Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly.
-                </p>
-              </div>
+              
+              {/* Wrapping the entire Help Section in a large Premium Blue Card */}
+              <div className="w-full bg-[#2c46a6] rounded-[2.5rem] p-8 md:p-14 lg:p-16 shadow-2xl relative overflow-hidden border border-[#4061ce]">
+                
+                {/* Subtle Background Glows inside the Card */}
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[70%] bg-[#4285F4] opacity-[0.2] blur-[120px] rounded-full pointer-events-none"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[40%] h-[60%] bg-[#4ade80] opacity-[0.1] blur-[100px] rounded-full pointer-events-none"></div>
 
-              {/* Smaller Cards with Sleek Grey Pill Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {contactCoordinators.map((coord, idx) => (
-                  <div key={idx} className="bg-white border border-[#e8eaed] rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between">
-                    <div className="flex justify-between items-start mb-5">
-                      <div className="flex flex-col">
-                        <h3 className="text-[17px] font-bold text-[#202124]">{coord.name}</h3>
-                        <span className="text-[10px] font-bold text-[#5f6368] bg-[#f1f3f4] border border-[#dadce0] px-2 py-1 rounded-full w-fit mt-1.5 uppercase tracking-wide">Co-ordinator</span>
+                <div className="text-center mb-14 relative z-10">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">Need help ?</h2>
+                  <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium">
+                    Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 relative z-10">
+                  {contactCoordinators.map((coord, idx) => (
+                    <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1">
+                      <div className="flex justify-between items-start mb-6">
+                        <div className="flex flex-col">
+                          <h3 className="text-[18px] font-bold text-[#202124]">{coord.name}</h3>
+                          <span className="text-[10px] font-bold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full w-fit mt-2 uppercase tracking-wide">Co-ordinator</span>
+                        </div>
+                        <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors bg-[#f1f3f4] p-2 rounded-full" title="View LinkedIn Profile">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
                       </div>
-                      <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors" title="View LinkedIn Profile">
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                      </a>
+                      
+                      <button onClick={() => setSelectedCoordinator(coord)} className="w-full py-2.5 bg-[#f8f9fa] border border-[#dadce0] text-[#3c4043] font-bold text-[14px] rounded-xl hover:bg-[#1a73e8] hover:text-white hover:border-[#1a73e8] transition-all flex items-center justify-center tracking-wide group">
+                        Contact
+                        <svg className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                      </button>
                     </div>
-                    
-                    <button onClick={() => setSelectedCoordinator(coord)} className="w-full py-2 bg-[#f8f9fa] border border-[#dadce0] text-[#3c4043] font-bold text-sm rounded-full hover:bg-[#e8eaed] hover:text-[#202124] transition-all flex items-center justify-center tracking-wide">
-                      Contact
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </section>
@@ -502,8 +474,6 @@ export default function FacilitatorPage() {
               </div>
             </div>
           </section>
-
-          
 
         </main>
       </div>

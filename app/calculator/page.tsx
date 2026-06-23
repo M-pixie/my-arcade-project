@@ -482,7 +482,7 @@ export default function CalculatorPage() {
               <button 
                 onClick={proceedToDashboard} 
                 disabled={loading} 
-                className="w-[90%] sm:w-[400px] md:w-[900px] bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-[16px] font-semibold py-3.5 rounded-full transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-md hover:shadow-lg"
+                className="w-[90%] sm:w-[400px] md:w-[1000px] bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-[16px] font-semibold py-3.5 rounded-full transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-md hover:shadow-lg"
               >
                 {loading ? (
                   <>
