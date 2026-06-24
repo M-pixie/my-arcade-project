@@ -204,7 +204,7 @@ export default function FullPageChatBot() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.reply || "Server Error");
 
-      if (data.reply.includes("Invalid Image it is not related to Google Cloud or Arcade program")) {
+      if (data.reply.includes("Invalid Image it is not related to Google Cloud or Arcade")) {
         setMessages((prev) => {
           const newMessages = [...prev];
           for (let i = newMessages.length - 1; i >= 0; i--) {
@@ -244,7 +244,7 @@ export default function FullPageChatBot() {
     } catch (err: any) {
       setLoading(false);
       setIsTyping(false);
-      setMessages((prev) => [...prev, { role: "bot", text: "Too many requests right now. Try later.", timestamp: Date.now() }]);
+      setMessages((prev) => [...prev, { role: "bot", text: "429. That's an error.", timestamp: Date.now() }]);
     } finally {
       setLoadingType(null);
     }
@@ -326,7 +326,7 @@ export default function FullPageChatBot() {
               </button>
 
               <div className={`w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-full flex items-center justify-center shadow-sm ${isDarkMode ? 'bg-[#282a2c] text-white' : 'bg-[#1a73e8] text-white'}`}>
-                <span className="text-lg sm:text-xl translate-x-[1px]">🤖</span>
+                <span className="text-lg sm:text-xl translate-x-[1px]">Ai</span>
               </div>
             </div>
 

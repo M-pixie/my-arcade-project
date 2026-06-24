@@ -258,7 +258,7 @@ export default function HomePage() {
 
 
 {/* ================= HERO SECTION ================= */}
-<section className="relative pt-20 pb-4 bg-[#2c46a6] overflow-hidden">
+<section className="relative pt-20 pb-4 bg-[#1E293B] overflow-hidden">
   {/* Custom Style for the Multi-Color Text Animation */}
   <style>{`
     @keyframes gradientShift {
@@ -301,11 +301,11 @@ export default function HomePage() {
                   src={url}
                   alt="player avatar"
                   className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
-                  style={{ border: "2px solid #2c46a6", zIndex: 10 - idx }}
+                  style={{ border: "2px solid #1E293B", zIndex: 10 - idx }}
                 />
               ))}
             </div>
-            <span className="text-white text-xs font-medium tracking-wide">Active Users..</span>
+            <span className="text-white text-xs font-medium tracking-wide">ACTIVE PLAYERS</span>
           </div>
           {leaders.length > 10 && (
             <span className="text-white/80 text-[13px] font-medium tracking-wide mt-1.5">
@@ -330,7 +330,7 @@ export default function HomePage() {
           rel="noopener noreferrer"
           className="px-6 py-2 md:px-10 md:py-2.5 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[13px] md:text-[15px] rounded-full shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
         >
-          Subscribe
+          Subscribe for Arcade Access
         </a>
       </div>
 
@@ -353,20 +353,20 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 focus:outline-none flex items-center justify-center border-none shadow-md"
               >
-                <span className="whitespace-nowrap">Start Arcade Labs</span>
+                <span className="whitespace-nowrap">START LABS 2026</span>
               </a>
 
               <button
                 onClick={() => router.push('/calculator')}
                 className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 focus:outline-none flex items-center justify-center border-none shadow-md"
               >
-                <span className="whitespace-nowrap">Points Calculator</span>
+                <span className="whitespace-nowrap">ARCADE CALCULATOR</span>
               </button>
             </div>
 
             <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2 bg-white/10 p-5 rounded-2xl backdrop-blur-sm border border-white/20">
               <h3 className="text-[18px] md:text-[20px] font-bold text-white tracking-tight">
-                Facilitator Enrolments...
+                Facilitator Enrolments ..
               </h3>
               <div className="flex flex-col gap-3 text-white/90 font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
@@ -443,7 +443,7 @@ export default function HomePage() {
                 >
                   <div className="flex items-center gap-4">
                     {/* Exact Replica Icon Box */}
-                    <div className="w-[38px] h-[38px] rounded-[10px] bg-[#f2f5fa] border border-[#e2e8f4] flex items-center justify-center text-[#2c46a6] shrink-0">
+                    <div className="w-[38px] h-[38px] rounded-[10px] bg-[#f2f5fa] border border-[#e2e8f4] flex items-center justify-center text-[#1E293B] shrink-0">
                       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.75">
                         {item.icon}
                       </svg>
@@ -471,7 +471,7 @@ export default function HomePage() {
 </section>
 
 {/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
-<section className="relative z-10 pt-4 pb-24 bg-[#2c46a6]">
+<section className="relative z-10 pt-4 pb-24 bg-[#1E293B]">
   <div className="max-w-4xl mx-auto px-6">
     
     <div className="text-center mb-10 relative z-10">
@@ -648,7 +648,7 @@ export default function HomePage() {
                       <svg className="w-5 h-5 text-[#ff0000] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                       </svg>
-                      <span className="font-bold tracking-tighter text-base mt-[1px]">YouTube</span>
+                      <span className="font-bold tracking-tighter text-base mt-[1px]"></span>
                     </div>
                   </div>
                 </div>
