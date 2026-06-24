@@ -2,36 +2,9 @@
 
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function FacilitatorPage() {
   const router = useRouter();
-
-  // State for Co-ordinator Contact Form
-  const [selectedCoordinator, setSelectedCoordinator] = useState<{name: string, phone: string} | null>(null);
-  const [coordinatorForm, setCoordinatorForm] = useState({
-    name: "",
-    gsp: "",
-    query: ""
-  });
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const handleCoordinatorSubmit = () => {
-    if (!coordinatorForm.name || !coordinatorForm.gsp || !coordinatorForm.query) {
-      alert("Please fill all the details (Name, GSP No, and Query).");
-      return;
-    }
-    if (selectedCoordinator) {
-      const message = `Hello ${selectedCoordinator.name},%0A%0A*Name (Labs):* ${coordinatorForm.name}%0A*GSP No:* ${coordinatorForm.gsp}%0A*Query/Problem:* ${coordinatorForm.query}%0A%0AI am facing an issue in Arcade 2026. Please help me out.`;
-      window.open(`https://wa.me/${selectedCoordinator.phone}?text=${message}`, "_blank");
-      
-      // Close Modal & Show Success Tooltip
-      setSelectedCoordinator(null);
-      setCoordinatorForm({ name: "", gsp: "", query: "" });
-      setShowTooltip(true);
-      setTimeout(() => setShowTooltip(false), 5000);
-    }
-  };
 
   // COORDINATORS DATA
   const coordinatorsData = [
@@ -44,141 +17,82 @@ export default function FacilitatorPage() {
     { name: "Santu Gupta", linkedin: "https://www.linkedin.com/in/santu-kumar-163a17279", badges: "125+", points: "92", profileUrl: "https://www.skills.google/public_profiles/b384c49b-874a-48a3-9c0f-a34b61f15a47" }
   ];
 
-  // Contact Co-ordinators Data
-  const contactCoordinators = [
-    { name: "Raman Rimpy", phone: "917696732471", linkedin: "https://www.linkedin.com/in/ramandeep-rimpy-175b123a5" },
-    { name: "Preeti Patel", phone: "917080203742", linkedin: "https://www.linkedin.com/in/preeti-patel-a91406331" },
-    { name: "Milan Deori", phone: "919083231422", linkedin: "https://www.linkedin.com/in/milan-deori-939a832a1" },
-    { name: "Jayanta", phone: "919832724535", linkedin: "https://www.linkedin.com/in/jayantaghosh2004" },
-    { name: "Ataul Rahman", phone: "918936868890", linkedin: "https://www.linkedin.com/in/ataul-rahman" },
-    { name: "Santu Gupta", phone: "918651581856", linkedin: "https://www.linkedin.com/in/santu-kumar-163a17279" }
-  ];
-
   return (
     <>
       <div className="min-h-screen bg-[#fcfcfc] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8]">
         <Navbar />
 
-        {/* 🔥 TOOLTIP NOTIFICATION 🔥 */}
-        <div className={`fixed top-24 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500 ease-in-out ${showTooltip ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0 pointer-events-none"}`}>
-          <div className="bg-[#34a853] text-white px-6 py-3 rounded-lg shadow-lg font-bold text-sm flex items-center gap-3 border border-[#2b8a44]">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-            Coordinator team will reach out shortly within 24hrs.
-          </div>
-        </div>
-
         <main className="pt-16">
           
-          {/* ================= PREMIUM HERO SECTION ================= */}
-          <section className="relative bg-[#2c46a6] overflow-hidden py-12 px-4 sm:px-6">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.15] blur-[100px] rounded-full pointer-events-none"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#6a3093] opacity-[0.15] blur-[120px] rounded-full pointer-events-none"></div>
-
-            <div className="max-w-5xl mx-auto relative z-10 flex flex-col gap-8">
+          {/* ================= ULTRA CLEAN PREMIUM HERO SECTION ================= */}
+          <section className="relative bg-white overflow-hidden py-20 px-4 sm:px-6">
+            <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center gap-6">
               
-              <div className="w-full bg-[#4061ce] rounded-[2.5rem] p-8 md:p-14 lg:p-20 shadow-2xl flex flex-col items-center text-center border border-white/10">
-                
-                <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/90 text-[13px] font-bold mb-8 backdrop-blur-sm">
-                  <span className="w-2 h-2 rounded-full bg-[#34a853]"></span>
-                  Arcade · Facilitator Program
+              {/* EXACT MATCH OF THE IMAGE FONT STYLE */}
+              <h1 className="text-4xl sm:text-5xl md:text-[56px] font-bold text-[#0f172a] tracking-tight mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                Arcade Facilitator Program
+              </h1>
+              
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#34a853] mb-4 tracking-tight">
+                Enrolments soon..
+              </h2>
+
+              <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[15px] md:text-[17px] mb-6">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                 </div>
-
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-2 tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                  Arcade Facilitator Program
-                </h1>
-                
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#4ade80] to-[#22c55e] mb-8 tracking-tight pb-2">
-                  Enrolments soon..
-                </h2>
-
-                <div className="flex flex-col gap-3 text-white/90 font-medium text-[15px] md:text-[17px] mb-12">
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                    <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                    <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                    <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap justify-center gap-4 w-full max-w-3xl">
-                  <button onClick={() => router.push("/calculator")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-white text-[#2c46a6] font-bold text-[15px] rounded-full hover:bg-gray-100 hover:shadow-lg transition-all flex items-center justify-center gap-3 group">
-                    <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    Calculate Points
-                  </button>
-                  <button onClick={() => router.push("/leaderboard")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-transparent border-2 border-white/30 text-white font-bold text-[15px] rounded-full hover:bg-white/10 hover:border-white/50 transition-all flex items-center justify-center gap-3 group">
-                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                    Leaderboard
-                  </button>
-                  <button onClick={() => router.push("/resources")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-transparent border-2 border-white/30 text-white font-bold text-[15px] rounded-full hover:bg-white/10 hover:border-white/50 transition-all flex items-center justify-center gap-3 group">
-                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    Skill Badges List
-                  </button>
-                  <button onClick={() => router.push("/dashboard")} className="flex-1 min-w-[200px] sm:min-w-[240px] px-6 py-4 bg-[#34a853] text-white font-bold text-[15px] rounded-full hover:bg-[#2b8a44] shadow-md transition-all flex items-center justify-center gap-3 group">
-                    <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                    Dashboard
-                  </button>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+              {/* 🔥 INLINE GREY REFERRAL CODE STRIP 🔥 */}
+              <div className="w-full max-w-lg mx-auto flex flex-col gap-1.5 mb-12">
+                <span className="text-[13px] font-bold text-[#5f6368] uppercase tracking-wider text-left pl-1">
+                  Referral Code
+                </span>
+                <div className="flex items-center justify-between bg-[#f1f3f4] rounded-lg px-5 py-3 border border-[#dadce0]">
+                  <div className="font-mono text-xl sm:text-2xl text-[#202124] font-extrabold tracking-[0.15em] opacity-80">
+                    ****_***_***
+                  </div>
+                  <div className="bg-white/80 border border-[#dadce0] text-[#5f6368] px-3 py-1.5 rounded-md text-[13px] font-bold flex items-center gap-2 shadow-sm cursor-not-allowed">
+                    <span className="w-2 h-2 rounded-full bg-[#9aa0a6]"></span>
+                    Coming Soon
+                  </div>
+                </div>
+              </div>
+
+              {/* ACTION BUTTONS (2x2 Grid, Grey Color, Slight Curve) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mx-auto mb-14">
                 
-                <div className="md:col-span-2 bg-[#3350b5]/50 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-lg flex flex-col justify-center relative overflow-hidden">
-                  <div className="absolute -right-10 -top-10 w-32 h-32 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
-                  <h2 className="text-xl sm:text-[22px] font-bold text-white mb-5 tracking-tight flex items-center gap-3">
-                    <svg className="w-6 h-6 text-[#4ade80]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-                    Facilitator Referral Code
-                  </h2>
-                  <div className="bg-black/20 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-inner border border-white/5">
-                    <div className="flex items-center gap-4">
-                      <div className="font-mono text-2xl sm:text-[26px] text-white font-bold tracking-[0.2em] opacity-95 select-none">
-                        ****-**-***
-                      </div>
-                    </div>
-                    <button className="bg-white/10 text-white/50 border border-white/10 font-bold px-8 py-3 rounded-xl text-[14px] cursor-not-allowed w-full sm:w-auto flex items-center justify-center gap-2">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/50 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white/50"></span>
-                      </span>
-                      Coming Soon
-                    </button>
-                  </div>
-                </div>
-
-                <div className="bg-[#3350b5]/50 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-lg flex flex-col justify-center">
-                  <h2 className="text-xl sm:text-[22px] font-bold text-white mb-5 tracking-tight">Need help?</h2>
-                  <div className="flex flex-col gap-3">
-                    {/* 🔥 Coordinator Button - Styled like a Blue Card (Matched with Reference Image) 🔥 */}
-                    <button onClick={() => document.getElementById('contact-coordinators')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-5 py-4 bg-[#1a73e8] border border-[#1557b0] rounded-2xl hover:bg-[#1557b0] transition-all duration-200 flex items-center justify-between shadow-md">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-white text-[15px] leading-tight">Co-ordinator</span>
-                        <span className="text-white/80 text-[12px] font-medium mt-1">For Arcade Labs Issues</span>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors flex-shrink-0 text-white">
-                        <svg className="w-4 h-4 transition-transform transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
-                      </div>
-                    </button>
-
-                    {/* 🔥 Contact Facilitator Button - Styled as Grey/Translucent Card 🔥 */}
-                    <button onClick={() => document.getElementById('contact-facilitator')?.scrollIntoView({ behavior: 'smooth' })} className="group w-full text-left px-5 py-4 bg-white/10 border border-white/20 rounded-2xl hover:bg-white/20 transition-all duration-200 flex items-center justify-between shadow-sm">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-white text-[15px] leading-tight">Contact Facilitator</span>
-                        <span className="text-white/60 text-[12px] font-medium mt-1">For General Queries</span>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors flex-shrink-0 text-white">
-                        <svg className="w-4 h-4 transition-transform transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
-                      </div>
-                    </button>
-                  </div>
-                </div>
+                <button onClick={() => router.push("/calculator")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <svg className="w-5 h-5 text-[#5f6368] group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                  Calculate Points
+                </button>
+                
+                <button onClick={() => router.push("/leaderboard")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <svg className="w-5 h-5 text-[#5f6368] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                  Leaderboard
+                </button>
+                
+                <button onClick={() => router.push("/resources")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <svg className="w-5 h-5 text-[#5f6368] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                  Skill Badges List
+                </button>
+                
+                <button onClick={() => router.push("/dashboard")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
+                  <svg className="w-5 h-5 text-[#5f6368] transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                  Dashboard
+                </button>
 
               </div>
-            </div>
+              </div>
           </section>
 
           {/* ================= MILESTONES & SWAGS SECTION ================= */}
-          <section className="pt-16 pb-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
+          <section className="pt-16 pb-24 px-6 bg-[#f8f9fa] border-y border-[#dadce0]">
             <div className="max-w-5xl mx-auto">
               
               <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-10 text-center">
@@ -245,18 +159,6 @@ export default function FacilitatorPage() {
               @keyframes customFloat {
                 0%, 100% { transform: translateY(0px); }
                 50% { transform: translateY(-12px); }
-              }
-              @keyframes customFloatLight {
-                0%, 100% { transform: translateY(0px); }
-                50% { transform: translateY(-3px); }
-              }
-              @keyframes slowPulseScale {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-              }
-              @keyframes slowPulseOpacity {
-                0%, 100% { opacity: 0.8; }
-                50% { opacity: 1; }
               }
               .float-anim-1 { animation: customFloat 4s ease-in-out infinite; }
               .float-anim-2 { animation: customFloat 4s ease-in-out infinite 1s; }
@@ -345,84 +247,6 @@ export default function FacilitatorPage() {
               </div>
             </div>
           </section>
-
-          {/* ================= 🔥 PREMIUM CONTACT CO-ORDINATORS SECTION 🔥 ================= */}
-          <section id="contact-coordinators" className="py-24 px-4 sm:px-6 bg-[#fcfcfc] relative">
-            <div className="max-w-6xl mx-auto z-10 relative">
-              
-              {/* Wrapping the entire Help Section in a large Premium Blue Card */}
-              <div className="w-full bg-[#2c46a6] rounded-[2.5rem] p-8 md:p-14 lg:p-16 shadow-2xl relative overflow-hidden border border-[#4061ce]">
-                
-                {/* Subtle Background Glows inside the Card */}
-                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[70%] bg-[#4285F4] opacity-[0.2] blur-[120px] rounded-full pointer-events-none"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[40%] h-[60%] bg-[#4ade80] opacity-[0.1] blur-[100px] rounded-full pointer-events-none"></div>
-
-                <div className="text-center mb-14 relative z-10">
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">Need help ?</h2>
-                  <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto font-medium">
-                    Facing any issue with labs or GSP tracking? Reach out to our dedicated co-ordinators directly.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 relative z-10">
-                  {contactCoordinators.map((coord, idx) => (
-                    <div key={idx} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="flex flex-col">
-                          <h3 className="text-[18px] font-bold text-[#202124]">{coord.name}</h3>
-                          <span className="text-[10px] font-bold text-[#1a73e8] bg-[#e8f0fe] px-3 py-1 rounded-full w-fit mt-2 uppercase tracking-wide">Co-ordinator</span>
-                        </div>
-                        <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors bg-[#f1f3f4] p-2 rounded-full" title="View LinkedIn Profile">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        </a>
-                      </div>
-                      
-                      <button onClick={() => setSelectedCoordinator(coord)} className="w-full py-2.5 bg-[#f8f9fa] border border-[#dadce0] text-[#3c4043] font-bold text-[14px] rounded-xl hover:bg-[#1a73e8] hover:text-white hover:border-[#1a73e8] transition-all flex items-center justify-center tracking-wide group">
-                        Contact
-                        <svg className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 🔥 MODAL FOR CO-ORDINATOR FORM 🔥 */}
-          {selectedCoordinator && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-              <div className="bg-white border border-[#dadce0] rounded-lg w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in-up">
-                
-                <div className="bg-[#f8f9fa] border-b border-[#e8eaed] p-5 flex justify-between items-center">
-                  <h3 className="font-bold text-[#202124] text-lg flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 bg-[#1a73e8] rounded-full"></span>
-                    Contact {selectedCoordinator.name}
-                  </h3>
-                  <button onClick={() => setSelectedCoordinator(null)} className="text-[#5f6368] hover:text-[#202124] transition-colors focus:outline-none">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                  </button>
-                </div>
-
-                <div className="p-6 space-y-5">
-                  <div>
-                    <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">Enter Labs Name</label>
-                    <input type="text" value={coordinatorForm.name} onChange={(e) => setCoordinatorForm({...coordinatorForm, name: e.target.value})} placeholder="e.g. Share Data Using Google Data Cloud" className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors" />
-                  </div>
-                  <div>
-                    <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">GSP No.</label>
-                    <input type="text" value={coordinatorForm.gsp} onChange={(e) => setCoordinatorForm({...coordinatorForm, gsp: e.target.value})} placeholder="e.g. GSP398" className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors uppercase" />
-                  </div>
-                  <div>
-                    <label className="block text-[13px] font-bold text-[#5f6368] uppercase mb-1.5">Problem / Query</label>
-                    <textarea value={coordinatorForm.query} onChange={(e) => setCoordinatorForm({...coordinatorForm, query: e.target.value})} placeholder="Describe your lab issue briefly..." rows={3} className="w-full px-4 py-3 bg-[#f8f9fa] border border-[#dadce0] rounded-lg text-[15px] font-bold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:bg-white transition-colors resize-none"></textarea>
-                  </div>
-                  <button onClick={handleCoordinatorSubmit} className="w-full py-2.5 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm rounded-md shadow-sm transition-colors flex items-center justify-center mt-2 tracking-wide">
-                    Send Message
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* ================= TOP PERFORMERS SECTION ================= */}
           <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
