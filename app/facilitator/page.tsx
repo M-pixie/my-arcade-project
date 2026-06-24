@@ -91,67 +91,116 @@ export default function FacilitatorPage() {
               </div>
           </section>
 
-          {/* ================= MILESTONES & SWAGS SECTION ================= */}
-          <section className="pt-16 pb-24 px-6 bg-[#f8f9fa] border-y border-[#dadce0]">
-            <div className="max-w-5xl mx-auto">
-              
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-10 text-center">
-                Milestones & Swags
-              </h2>
-              
-              <div className="bg-white border border-[#cccccc] rounded-xl shadow-lg overflow-hidden mb-8">
-                <div className="grid grid-cols-12 text-sm md:text-lg lg:text-xl font-bold text-white">
-                  <div className="col-span-5 bg-[#3a6b66] flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
-                    Users Milestone
-                  </div>
-                  <div className="col-span-4 bg-[#506c8d] flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
-                    Required Points
-                  </div>
-                  <div className="col-span-3 bg-[#cdb685] flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
-                    Expected Rewards
-                  </div>
-                </div>
+{/* ================= MILESTONES & SWAGS SECTION ================= */}
+<section className="pt-16 pb-24 px-6 bg-[#f8f9fa] border-y border-[#dadce0]">
+  <div className="max-w-5xl mx-auto">
+    
+    <h2 className="text-3xl sm:text-4xl font-bold text-[#1a73e8] tracking-tight mb-10 text-center">
+      User Milestones & Prizes
+    </h2>
+    
+    <div className="bg-white border border-[#cccccc] rounded-xl shadow-lg overflow-hidden mb-6">
+      {/* Table Header */}
+      <div className="grid grid-cols-12 text-sm md:text-lg lg:text-xl font-bold text-white bg-[#fbbc04]">
+        <div className="col-span-3 flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
+          Name
+        </div>
+        <div className="col-span-5 flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
+          Milestone Achieved
+        </div>
+        <div className="col-span-4 flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
+          Prizes*
+        </div>
+      </div>
 
-                <div className="divide-y divide-[#e8eaed]">
-                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
-                      <span className="w-3 h-3 bg-[#1a73e8] rounded-full flex-shrink-0"></span>
-                      <span className="font-bold text-[#202124] text-sm md:text-lg">Ultimate Milestone</span>
-                    </div>
-                    <div className="col-span-4 text-center font-bold text-[#1a73e8] text-sm md:text-lg">40+ Points</div>
-                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-                  </div>
+      {/* Table Body */}
+      <div className="divide-y divide-[#e8eaed]">
+        
+        {/* Milestone 1 */}
+        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f1f3f4] transition-colors">
+          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
+            Milestone 1
+          </div>
+          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
+            Complete ANY <strong>6 Arcade Games</strong> & <strong>18 Skill Badges</strong>
+          </div>
+          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
+            15 Arcade + 5 Bonus Points<br />
+            <strong>= 20 Total Arcade Points</strong>
+          </div>
+        </div>
 
-                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
-                      <span className="w-3 h-3 bg-[#fbbc04] rounded-full flex-shrink-0"></span>
-                      <span className="font-bold text-[#202124] text-sm md:text-lg">Milestone 3</span>
-                    </div>
-                    <div className="col-span-4 text-center font-bold text-[#b06000] text-sm md:text-lg">25 - 39 Points</div>
-                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-                  </div>
+        {/* Milestone 2 */}
+        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center bg-[#f8f9fa] hover:bg-[#f1f3f4] transition-colors">
+          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
+            Milestone 2
+          </div>
+          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
+            Complete ANY <strong>8 Arcade Games</strong> & <strong>34 Skill Badges</strong>
+          </div>
+          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
+            25 Arcade + 15 Bonus Points<br />
+            <strong>= 40 Total Arcade Points</strong>
+          </div>
+        </div>
 
-                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
-                      <span className="w-3 h-3 bg-[#34a853] rounded-full flex-shrink-0"></span>
-                      <span className="font-bold text-[#202124] text-sm md:text-lg">Milestone 2</span>
-                    </div>
-                    <div className="col-span-4 text-center font-bold text-[#2b8a44] text-sm md:text-lg">15 - 24 Points</div>
-                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-                  </div>
+        {/* Milestone 3 */}
+        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f1f3f4] transition-colors">
+          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
+            Milestone 3
+          </div>
+          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
+            Complete ANY <strong>10 Arcade Games</strong> & <strong>50 Skill Badges</strong>
+          </div>
+          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
+            35 Arcade + 25 Bonus Points<br />
+            <strong>= 60 Total Arcade Points</strong>
+          </div>
+        </div>
 
-                  <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f8f9fa] transition-colors">
-                    <div className="col-span-5 flex items-center gap-3 md:gap-4">
-                      <span className="w-3 h-3 bg-[#ea4335] rounded-full flex-shrink-0"></span>
-                      <span className="font-bold text-[#202124] text-sm md:text-lg">Milestone 1</span>
-                    </div>
-                    <div className="col-span-4 text-center font-bold text-[#c5221f] text-sm md:text-lg">10 - 14 Points</div>
-                    <div className="col-span-3 text-center text-xs md:text-base text-[#5f6368] font-bold animate-pulse">Coming soon</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+        {/* Ultimate Milestone */}
+        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center bg-[#f8f9fa] hover:bg-[#f1f3f4] transition-colors">
+          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
+            Ultimate<br />Milestone
+          </div>
+          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
+            Complete ANY <strong>12 Arcade Games</strong> & <strong>66 Skill Badges</strong>
+          </div>
+          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
+            45 Arcade + 35 Bonus Points<br />
+            <strong>= 80 Total Arcade Points</strong>
+          </div>
+        </div>
+
+        {/* Bonus Milestone */}
+        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f1f3f4] transition-colors">
+          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
+            <strong>[NEW]</strong> Bonus<br />Milestone**
+          </div>
+          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
+            <strong>Eligibility Criteria is coming soon!</strong>
+          </div>
+          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
+            <strong>10 Extra Bonus Points</strong>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {/* Notes Section */}
+    <div className="text-sm md:text-base text-[#5f6368] space-y-1 px-2">
+      <p>*You will only receive points for the milestone that you earn and not for the ones before that.</p>
+      <p>**Users become eligible to take part in the Bonus Milestone after they at-least complete "Milestone 1".</p>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
 
           {/* ================= BORDERLESS & OPEN CONTACT FACILITATOR WITH ANIMATED IMAGES ================= */}
           <section id="contact-facilitator" className="py-20 px-6 bg-[#fcfcfc] border-b border-[#dadce0] relative overflow-hidden">
