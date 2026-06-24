@@ -258,7 +258,7 @@ export default function HomePage() {
 
 
 {/* ================= HERO SECTION ================= */}
-<section className="relative pt-20 pb-4 bg-[#1E293B] overflow-hidden">
+<section className="relative pt-20 pb-4 bg-white overflow-hidden">
   {/* Custom Style for the Multi-Color Text Animation */}
   <style>{`
     @keyframes gradientShift {
@@ -267,7 +267,7 @@ export default function HomePage() {
       100% { background-position: 0% 50%; }
     }
     .animate-gradient-text {
-      background: linear-gradient(270deg, #ffffff, #4ade80, #ff4a7d, #ffffff, #8e24aa, #4ade80);
+      background: linear-gradient(270deg, #1a73e8, #4ade80, #ff4a7d, #1a73e8, #8e24aa, #4ade80);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -278,99 +278,99 @@ export default function HomePage() {
       width: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.2);
+      background-color: rgba(0,0,0,0.1);
       border-radius: 10px;
     }
   `}</style>
 
-  {/* Subtle Background Glows */}
-  <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.15] blur-[100px] rounded-full pointer-events-none"></div>
-  <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#6a3093] opacity-[0.15] blur-[120px] rounded-full pointer-events-none"></div>
+  {/* Subtle Background Glows for White Theme */}
+  <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-[#4285F4] opacity-[0.08] blur-[100px] rounded-full pointer-events-none"></div>
+  <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#ff4a7d] opacity-[0.05] blur-[120px] rounded-full pointer-events-none"></div>
 
   <div className="w-full relative z-10">
     {/* 🔥 HEADER & OVERLAYS 🔥 */}
     <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
       
-      {displayAvatars.length > 0 && (
-        <div className="absolute top-2 left-6 md:top-4 md:left-8 flex items-start gap-2 z-40">
-          <div className="flex flex-col items-center gap-1.5">
-            <div className="flex -space-x-3">
-              {displayAvatars.map((url, idx) => (
-                <img 
-                  key={`${url}-${idx}`}
-                  src={url}
-                  alt="player avatar"
-                  className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-md"
-                  style={{ border: "2px solid #1E293B", zIndex: 10 - idx }}
-                />
-              ))}
-            </div>
-            <span className="text-white text-xs font-medium tracking-wide">ACTIVE PLAYERS</span>
-          </div>
-          {leaders.length > 10 && (
-            <span className="text-white/80 text-[13px] font-medium tracking-wide mt-1.5">
-              & {leaders.length - 10} others
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* 🌟 ARCADE NEXUS HEADER (TOP CENTER) 🌟 */}
-      <div className="absolute top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 flex justify-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight m-0 animate-gradient-text drop-shadow-md">
-          Arcade Nexus
-        </h1>
-      </div>
-
-      {/* 🔥 SUBSCRIBE HERE BUTTON (TOP RIGHT CORNER) 🔥 */}
-      <div className="absolute top-2 right-4 md:top-4 md:right-8 z-50 flex items-center">
+      {/* 🔥 SUBSCRIBE HERE BUTTON (TOP LEFT) 🔥 */}
+      <div className="absolute top-2 left-4 md:top-4 md:left-8 z-50 flex items-center">
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
           target="_blank"
           rel="noopener noreferrer"
           className="px-6 py-2 md:px-10 md:py-2.5 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[13px] md:text-[15px] rounded-full shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
         >
-          Subscribe for Arcade Access
+          Subscribe for Arcade
         </a>
       </div>
 
+      {/* 🌟 ARCADE NEXUS HEADER (TOP CENTER) 🌟 */}
+      <div className="absolute top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 flex justify-center w-full">
+        {/* Mobile: 34px (3.5xl), Tablet: 44px, Desktop: 56px */}
+        <h1 className="text-[34px] sm:text-[44px] md:text-[56px] font-bold tracking-tight m-0 animate-gradient-text drop-shadow-md text-center">
+          Arcade Nexus
+        </h1>
+      </div>
+
+      {/* 🔥 AVATARS (TOP RIGHT) 🔥 */}
+      {displayAvatars.length > 0 && (
+        <div className="absolute top-2 right-4 md:top-4 md:right-8 flex flex-col items-end gap-1.5 z-40">
+          <div className="flex -space-x-3">
+            {displayAvatars.map((url, idx) => (
+              <img 
+                key={`${url}-${idx}`}
+                src={url}
+                alt="player avatar"
+                className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-sm"
+                style={{ zIndex: 10 - idx }}
+              />
+            ))}
+          </div>
+          <span className="text-gray-600 text-xs font-bold tracking-wide">Active Players</span>
+        </div>
+      )}
+
       {/* 🔥 MAIN CONTENT CONTAINER 🔥 */}
-      <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-20 md:mt-24">
+      <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-28 md:mt-24">
         
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 w-full">
           
           <div className="w-full lg:w-3/5 flex flex-col items-center lg:items-start text-center lg:text-left">
             
-            <p className="text-white/95 text-xl md:text-2xl max-w-xl font-medium leading-relaxed mb-8 mt-2 drop-shadow-sm">
+            <p className="text-gray-700 text-xl md:text-2xl max-w-xl font-medium leading-relaxed mb-8 mt-2">
               Calculate points, monitor live rankings, and track your entire Arcade journey in one sleek dashboard.
             </p>
 
-            {/* FONTS UPDATED HERE TO BE NORMAL & BOLD INSTEAD OF EXTRABOLD */}
+            {/* 🔥 SLIGHT CURVE BUTTONS 🔥 */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-10">
+              
+              {/* Button 1: Arcade Points Calculator (Blue Theme) */}
+              <button
+                onClick={() => router.push('/calculator')}
+                className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-bold text-[15px] sm:text-[16px] tracking-wide rounded-lg hover:bg-[#1557b0] hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center shadow-[0_4px_14px_rgba(26,115,232,0.3)] border border-transparent"
+              >
+                <span className="whitespace-nowrap">Arcade Calculator</span>
+              </button>
+
+              {/* Button 2: Start Labs here (White Theme) */}
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 focus:outline-none flex items-center justify-center border-none shadow-md"
+                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-lg hover:bg-gray-50 hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center border border-gray-200 shadow-[0_4px_14px_rgba(0,0,0,0.05)]"
               >
-                <span className="whitespace-nowrap">START LABS 2026</span>
+                <span className="whitespace-nowrap">Start Labs here</span>
               </a>
 
-              <button
-                onClick={() => router.push('/calculator')}
-                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300 focus:outline-none flex items-center justify-center border-none shadow-md"
-              >
-                <span className="whitespace-nowrap">ARCADE CALCULATOR</span>
-              </button>
             </div>
 
-            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2 bg-white/10 p-5 rounded-2xl backdrop-blur-sm border border-white/20">
-              <h3 className="text-[18px] md:text-[20px] font-bold text-white tracking-tight">
-                Facilitator Enrolments ..
+            {/* Facilitator Box */}
+            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2 bg-gray-50/80 p-5 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-gray-900 tracking-tight">
+                Facilitator Program
               </h3>
-              <div className="flex flex-col gap-3 text-white/90 font-medium text-[14px] md:text-[15px]">
+              <div className="flex flex-col gap-3 text-gray-700 font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4ade80] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#1a73e8] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -379,7 +379,7 @@ export default function HomePage() {
                   <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#4ade80] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#1a73e8] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -392,9 +392,9 @@ export default function HomePage() {
 
           </div>
 
-          {/* 🔥 IMAGE_D6632B.JPG EXACT REPLICA CARD 🔥 */}
+          {/* 🔥 PREMIUM LIGHT GREY CARD (RIGHT SIDE) 🔥 */}
           <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
-            <div className="bg-[#ffffff] rounded-[8px] shadow-2xl flex flex-col w-full overflow-hidden">
+            <div className="bg-[#f4f7f9] rounded-[12px] shadow-[0_12px_32px_rgba(0,0,0,0.08)] flex flex-col w-full overflow-hidden border border-[#e2e8f0]">
               {[
                 { 
                   name: "Arcade Points Calculator", 
@@ -439,22 +439,22 @@ export default function HomePage() {
                       router.push(item.link);
                     }
                   }}
-                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#f0f2f5] last:border-none hover:bg-[#f8f9fc] transition-colors duration-200 cursor-pointer"
+                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#e2e8f0] last:border-none hover:bg-[#e9edf3] transition-colors duration-200 cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
-                    {/* Exact Replica Icon Box */}
-                    <div className="w-[38px] h-[38px] rounded-[10px] bg-[#f2f5fa] border border-[#e2e8f4] flex items-center justify-center text-[#1E293B] shrink-0">
-                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.75">
+                    {/* Light Blue/White Icon Box */}
+                    <div className="w-[38px] h-[38px] rounded-[8px] bg-white border border-[#d1d5db] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm group-hover:bg-[#1a73e8] group-hover:text-white transition-all duration-300">
+                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                         {item.icon}
                       </svg>
                     </div>
-                    {/* Exact Replica Font */}
-                    <span className="font-[600] text-[15px] text-[#1c325e] tracking-tight">
+                    {/* Dark Premium Text */}
+                    <span className="font-[600] text-[15px] text-[#1e293b] tracking-tight group-hover:text-[#0f172a]">
                       {item.name}
                     </span>
                   </div>
-                  {/* Made Arrow Darker */}
-                  <span className="text-[#64748b]">
+                  {/* Subtle Dark Arrow */}
+                  <span className="text-[#94a3b8] group-hover:text-[#1a73e8] transition-colors">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
@@ -471,35 +471,35 @@ export default function HomePage() {
 </section>
 
 {/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
-<section className="relative z-10 pt-4 pb-24 bg-[#1E293B]">
+<section className="relative z-10 pt-4 pb-24 bg-gray-50 border-t border-gray-100">
   <div className="max-w-4xl mx-auto px-6">
     
     <div className="text-center mb-10 relative z-10">
-      <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-5 drop-shadow-sm">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-5 drop-shadow-sm">
         Start Arcade Labs
       </h2>
     </div>
 
     {/* TABBED INTERFACE */}
-    <div className="bg-white rounded-xl shadow-2xl border-none overflow-hidden flex flex-col">
+    <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden flex flex-col">
       
       {/* Tab Headers */}
-      <div className="flex flex-col sm:flex-row border-b border-[#e0e0e0]">
+      <div className="flex flex-col sm:flex-row border-b border-gray-200">
         <button 
           onClick={() => setActiveGuideTab('start')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#e0e0e0] ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}
         >
-          How to Start Arcade ?
+          Arcade Labs Start
         </button>
         <button 
           onClick={() => setActiveGuideTab('tools')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-[#e0e0e0] ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}
         >
           Arcade Tools
         </button>
         <button 
           onClick={() => setActiveGuideTab('points')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#1a73e8]'}`}
+          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}
         >
           Points System
         </button>
@@ -510,20 +510,20 @@ export default function HomePage() {
         
         {/* 1. How to Start Content */}
         {activeGuideTab === 'start' && (
-          <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+          <div className="divide-y divide-gray-100 animate-fade-in">
             {startSteps.map((item, index) => (
-              <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
-                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
+              <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full">
+                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
                   <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
                   <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
                     {item.badge}
                   </span>
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-[#202124] font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
+                  <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
                     {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1">→</span>
                   </h3>
-                  <div className="text-[#5f6368] text-[15px] mt-1.5 leading-relaxed">
+                  <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">
                     {item.desc}
                   </div>
                 </div>
@@ -534,20 +534,20 @@ export default function HomePage() {
 
         {/* 2. Arcade Tools Content */}
         {activeGuideTab === 'tools' && (
-          <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+          <div className="divide-y divide-gray-100 animate-fade-in">
             {arcadeTools.map((item, index) => (
-              <Link href={item.link} key={index} className="flex p-5 hover:bg-[#f0f4f8] group transition-colors duration-200 w-full">
-                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
+              <Link href={item.link} key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full">
+                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
                   <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
                   <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
                     {item.badge}
                   </span>
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-[#202124] font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
+                  <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
                     {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                   </h3>
-                  <div className="text-[#5f6368] text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed">
+                  <div className="text-gray-600 text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed">
                     <span className="text-[#1a73e8] font-bold text-[14px]">🔗</span> {item.desc}
                   </div>
                 </div>
@@ -558,20 +558,20 @@ export default function HomePage() {
 
         {/* 3. Points System Content */}
         {activeGuideTab === 'points' && (
-          <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+          <div className="divide-y divide-gray-100 animate-fade-in">
             {pointsSystem.map((item, index) => (
-              <div key={index} className="flex p-5 hover:bg-[#f8f9fa] group transition-colors duration-200 w-full">
-                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-5">
+              <div key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full">
+                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
                   <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
                   <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
                     {item.badge}
                   </span>
                 </div>
                 <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-[#202124] font-bold text-[18px] transition-colors">
+                  <h3 className="text-gray-900 font-bold text-[18px] transition-colors">
                     {item.title}
                   </h3>
-                  <div className="text-[#5f6368] text-[15px] mt-1.5 leading-relaxed">
+                  <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">
                     {item.desc}
                   </div>
                 </div>
