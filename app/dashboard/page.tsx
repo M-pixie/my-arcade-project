@@ -74,22 +74,22 @@ export default function DashboardPage() {
 
   const aprilLabs = [
     {
-      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/voyuge-july.png', accessCode: '1q-bucket-58231', points: 1, link: 'https://www.skills.google/games/7315', matchStrings: ['Arcade Voyage: Identity Management and Pre-trained AI APIs']
+      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/voyuge-july.png', accessCode: '1q-bucket-58231', points: 1, link: 'https://www.skills.google/games/7315', matchStrings: ['Arcade Voyage: Cloud Storage and Data Governance']
     },
     {
-      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/adv-july.png', accessCode: '1q-lowcode-92316', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Adventure: App Dev and Cloud Observability']
+      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/adv-july.png', accessCode: '1q-lowcode-92316', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Adventure: Low-Code Development']
     },
     {
-      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/trail-july.png', accessCode: '1q-workspace-31069', points: 1,  link: 'https://www.skills.google/games/7316', matchStrings: ['Arcade Trail: Data Engineering and Information Protection']
+      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/trail-july.png', accessCode: '1q-workspace-31069', points: 1,  link: 'https://www.skills.google/games/7316', matchStrings: ['Arcade Trail: Google Workspace Administration']
     },
     {
-      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/basecamp-july.png', accessCode: '1q-basecamp-07511', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Base Camp June 2026']
+      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/basecamp-july.png', accessCode: '1q-basecamp-07511', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Base Camp July 2026']
     },
     {
-      id: 'data mesh', title: 'Arcade Simulator: Data Mesh Architect', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/special-july.png', accessCode: '1q-datamesh-16451', points: 1,  link: 'https://www.skills.google/games/7317', matchStrings: ['Work Meets Play: Cloud Canvas']
+      id: 'data mesh', title: 'Arcade Simulator: Data Mesh Architect', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/special-july.png', accessCode: '1q-datamesh-16451', points: 1,  link: 'https://www.skills.google/games/7317', matchStrings: ['Arcade Simulator: Data Mesh Architect']
     },
     {
-      id: 'safe', title: 'Safe Spaces', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/new-special-game.png', accessCode: '1q-security-19110', points: 1,  link: 'https://www.skills.google/games/7318', matchStrings: ['Logic Log']
+      id: 'safe', title: 'Safe Spaces', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/new-special-game.png', accessCode: '1q-security-19110', points: 1,  link: 'https://www.skills.google/games/7318', matchStrings: ['Safe Spaces']
     }
   ];
 
