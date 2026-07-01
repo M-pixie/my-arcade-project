@@ -173,7 +173,10 @@ export async function POST(req: Request) {
           title.includes('skill up summer') || //  New add badges 
           title.includes('work meets play: expressive efficiency') ||  //  New add badges 
           title.includes('logic log') || // june
-          title.includes('work meets play: cloud canvas') // june
+          title.includes('work meets play: cloud canvas') || // june
+          title.includes('safe spaces') || // july
+          title.includes('arcade simulator: data mesh architect') // july
+
         ) {
           gamePoints += 1;
           earned = 1;

@@ -456,7 +456,9 @@ export default function CalculatorPage() {
                     {error}
                   </div>
                   <div className="text-black text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5">
-                    <p>• Please make your public profile visible again in your settings.</p>
+                    <p>• Please make your public profile visible again in your settings.
+                      
+                    </p>
                     <p>• Your profile has extra characters at the start or end.</p>
                   </div>
                 </div>

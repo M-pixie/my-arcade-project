@@ -74,22 +74,22 @@ export default function DashboardPage() {
 
   const aprilLabs = [
     {
-      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/arcade_voy.png', accessCode: '1q-permission-2296', points: 1, deadline: '30/06/26, 11:59 PM', link: 'https://www.skills.google/games/7223', matchStrings: ['Arcade Voyage: Identity Management and Pre-trained AI APIs']
+      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/voyuge-july.png', accessCode: '1q-bucket-58231', points: 1, link: 'https://www.skills.google/games/7315', matchStrings: ['Arcade Voyage: Identity Management and Pre-trained AI APIs']
     },
     {
-      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/arcade_adv.png', accessCode: '1q-observe-07175', points: 1, deadline: '30/06/26, 11:59 PM', link: 'https://www.skills.google/games/7222', matchStrings: ['Arcade Adventure: App Dev and Cloud Observability']
+      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/adv-july.png', accessCode: '1q-lowcode-92316', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Adventure: App Dev and Cloud Observability']
     },
     {
-      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/arcade_trail.png', accessCode: '1q-dataset-72501', points: 1, deadline: '30/06/26, 11:59 PM', link: 'https://www.skills.google/games/7224', matchStrings: ['Arcade Trail: Data Engineering and Information Protection']
+      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/trail-july.png', accessCode: '1q-workspace-31069', points: 1,  link: 'https://www.skills.google/games/7316', matchStrings: ['Arcade Trail: Data Engineering and Information Protection']
     },
     {
-      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/arcade_bc.png', accessCode: '1q-basecamp-0626', points: 1, deadline: '30/06/26, 11:59 PM', link: 'https://www.skills.google/games/7225', matchStrings: ['Arcade Base Camp June 2026']
+      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/basecamp-july.png', accessCode: '1q-basecamp-07511', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Base Camp June 2026']
     },
     {
-      id: 'cloud canvas', title: 'Work Meets Play: Cloud Canvas', subtitle: 'Precision in Expression!', image: 'https://services.google.com/fh/files/misc/arcade_work.png', accessCode: '1q-worknplay-2557', points: 1, deadline: '30/06/26, 11:59 PM', link: 'https://www.skills.google/games/7227', matchStrings: ['Work Meets Play: Cloud Canvas']
+      id: 'data mesh', title: 'Arcade Simulator: Data Mesh Architect', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/special-july.png', accessCode: '1q-datamesh-16451', points: 1,  link: 'https://www.skills.google/games/7317', matchStrings: ['Work Meets Play: Cloud Canvas']
     },
     {
-      id: 'logic', title: 'Logic Log', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/arcade_logic.png', accessCode: '1q-lookml-25118', points: 1, deadline: '30/06/26, 11:59 PM', link: 'https://www.skills.google/games/7226', matchStrings: ['Logic Log']
+      id: 'safe', title: 'Safe Spaces', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/new-special-game.png', accessCode: '1q-security-19110', points: 1,  link: 'https://www.skills.google/games/7318', matchStrings: ['Logic Log']
     }
   ];
 
@@ -332,7 +332,7 @@ export default function DashboardPage() {
         <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
           <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
             <span className="text-white font-medium text-sm md:text-base">
-              You have not completed any June labs yet. Complete challenges, earn points & unlock rewards.
+              You have not completed any July labs yet. Complete challenges, earn points & unlock rewards.
             </span>
             <div className="flex items-center gap-4 ml-4 flex-shrink-0">
               <button onClick={() => { localStorage.setItem("hide_arcade_banners", "true"); setHideModals(true); setShowZeroLabsModal(false); }} className="text-white/80 hover:text-white text-xs font-semibold underline whitespace-nowrap transition-colors">Don't show again</button>
@@ -653,7 +653,7 @@ export default function DashboardPage() {
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.22s' }}>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
                 <h4 className="text-sm sm:text-base font-black text-[#5f6368] uppercase tracking-widest flex items-center gap-2">
-                  <span className="text-xl"></span> June Labs
+                  <span className="text-xl"></span> JuLY Labs
                 </h4>
               </div>
 
@@ -717,7 +717,7 @@ export default function DashboardPage() {
               
               <div className="mt-10 sm:mt-12 w-full text-center border-t border-[#dadce0] pt-4">
                 <span className="text-sm sm:text-base font-bold text-black">
-                  {completedLabs.length} / 6 June Labs Completed
+                  {completedLabs.length} / 6 JULY Labs Completed
                 </span>
               </div>
             </div>
@@ -728,7 +728,7 @@ export default function DashboardPage() {
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
                 <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
-                  June Labs End !
+                  JULY LABS LIVE !
                 </h4>
               </div>
               
