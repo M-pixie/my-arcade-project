@@ -267,11 +267,13 @@ export default function HomePage() {
       100% { background-position: 0% 50%; }
     }
     .animate-gradient-text {
-      background: linear-gradient(270deg, #1a73e8, #4ade80, #ff4a7d, #1a73e8, #8e24aa, #4ade80);
+      /* Made the colors darker and high-contrast for a more premium, clear look */
+      background: linear-gradient(270deg, #0d47a1, #d81b60, #4a148c, #00838f, #0d47a1);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: gradientShift 6s ease infinite;
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.15));
     }
     /* Hide scrollbar for tabs */
     .custom-scrollbar::-webkit-scrollbar {
@@ -303,10 +305,9 @@ export default function HomePage() {
         </a>
       </div>
 
-      {/* 🌟 ARCADE NEXUS HEADER (TOP CENTER) 🌟 */}
-      <div className="absolute top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 flex justify-center w-full">
-        {/* Mobile: 34px (3.5xl), Tablet: 44px, Desktop: 56px */}
-        <h1 className="text-[34px] sm:text-[44px] md:text-[56px] font-bold tracking-tight m-0 animate-gradient-text drop-shadow-md text-center">
+      {/* 🌟 ARCADE NEXUS HEADER (TOP CENTER) - DARK CLEAR GRADIENT 🌟 */}
+      <div className="absolute top-2 md:top-2 left-1/2 transform -translate-x-1/2 z-50 flex justify-center w-full pointer-events-none">
+        <h1 className="text-[34px] sm:text-[44px] md:text-[56px] font-extrabold tracking-tight m-0 text-center animate-gradient-text">
           Arcade Nexus
         </h1>
       </div>
@@ -363,12 +364,12 @@ export default function HomePage() {
 
             </div>
 
-            {/* Facilitator Box */}
-            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2 bg-gray-50/80 p-5 rounded-2xl border border-gray-200 shadow-sm">
-              <h3 className="text-[18px] md:text-[20px] font-bold text-gray-900 tracking-tight">
+            {/* Facilitator Box - No Box/Border Design */}
+            <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
+              <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
                 Facilitator Program
               </h3>
-              <div className="flex flex-col gap-3 text-gray-700 font-medium text-[14px] md:text-[15px]">
+              <div className="flex flex-col gap-3 text-[#5f6368] font-medium text-[14px] md:text-[15px]">
                 <div className="flex items-start gap-3">
                   <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#1a73e8] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -439,23 +440,24 @@ export default function HomePage() {
                       router.push(item.link);
                     }
                   }}
+                  /* Changed styles to make buttons look clear and clickable directly */
                   className="flex items-center justify-between px-5 py-[14px] border-b border-[#e2e8f0] last:border-none hover:bg-[#e9edf3] transition-colors duration-200 cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
-                    {/* Light Blue/White Icon Box */}
-                    <div className="w-[38px] h-[38px] rounded-[8px] bg-white border border-[#d1d5db] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm group-hover:bg-[#1a73e8] group-hover:text-white transition-all duration-300">
-                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    {/* Icon Box: Now always light blue with dark blue icon for clear visibility */}
+                    <div className="w-[38px] h-[38px] rounded-[8px] bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm transition-all duration-300">
+                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                         {item.icon}
                       </svg>
                     </div>
-                    {/* Dark Premium Text */}
-                    <span className="font-[600] text-[15px] text-[#1e293b] tracking-tight group-hover:text-[#0f172a]">
+                    {/* Text: Now always bold and dark */}
+                    <span className="font-[700] text-[15px] text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
                       {item.name}
                     </span>
                   </div>
-                  {/* Subtle Dark Arrow */}
-                  <span className="text-[#94a3b8] group-hover:text-[#1a73e8] transition-colors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  {/* Arrow: Always blue and visible */}
+                  <span className="text-[#1a73e8] group-hover:translate-x-1 transform transition-transform">
+                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </span>
@@ -637,12 +639,10 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex justify-between items-end w-full">
-                    {/* 👇 TEXT ADDED HERE 👇 */}
                     <div className="text-white/95 font-bold text-sm md:text-base drop-shadow-md pb-1">
                       The video guide will be published soon.
                     </div>
                     
-                    {/* 👇 YOUTUBE BUTTON FIXED HERE 👇 */}
                     <div className="bg-[#212121]/90 hover:bg-black transition-colors backdrop-blur-md text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-1.5 shadow-md border border-white/20 cursor-pointer">
                       <span>Watch on</span>
                       <svg className="w-5 h-5 text-[#ff0000] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -655,8 +655,6 @@ export default function HomePage() {
               </div>
             </div>
             
-            {/* ... Rest of your existing code below (Special Credit Link, Step-by-Step, etc.) ... */}
-
             <div className="bg-[#fff8f0] border border-[#fbd0b4] rounded-xl p-6 md:p-8 mb-16 shadow-sm relative transition-all max-w-5xl mx-auto">
               <button 
                 onClick={handleCopyCode}
