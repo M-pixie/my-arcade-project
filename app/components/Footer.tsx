@@ -209,7 +209,7 @@ export default function Footer() {
             
             {/* 🔥 FIX: Dark text (text-[#202124]) aur issue fixed */}
             <p className="text-[13px] text-[#202124] font-bold tracking-[0.05em] uppercase mt-2">
-              Last Updated: 21 June 2026 11:57 am IST
+              Last Updated: 03 July 2026 16:28 IST
             </p>
           </div>
 

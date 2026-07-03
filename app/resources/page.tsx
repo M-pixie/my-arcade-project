@@ -12,17 +12,17 @@ import { useRouter } from "next/navigation";
 const initialBadgesData = [
   // PAGE 1
   { id: "01", title: "Manage Kubernetes in Google Cloud", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/783" },
-  { id: "02", title: "Classify Images with TensorFlow on Google Cloud", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/646" },
+  { id: "02", title: "[Deprecated] Classify Images with TensorFlow on Google Cloud", duration: "75", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/646" },
   { id: "03", title: "Derive Insights from BigQuery Data", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/623" },
   { id: "04", title: "Share Data Using Google Data Cloud", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/657" },
   { id: "05", title: "Implement Cloud Collaboration and Productivity Workflows", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/676" },
-  { id: "06", title: "Migrate MySQL Data to Cloud SQL Using Database Migration...", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/629" },
+  { id: "06", title: "Migrate MySQL Data to Cloud SQL Using Database Migration Service", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/629" },
   { id: "07", title: "Use Machine Learning APIs on Google Cloud", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/630" },
-  { id: "08", title: "Mitigate Threats and Vulnerabilities with Security Command...", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/759" },
+  { id: "08", title: "Mitigate Threats and Vulnerabilities with Security Command Center", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/759" },
 
   // PAGE 2
   { id: "09", title: "Monitor Environments with Google Cloud Managed Service for Prometheus", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/761" },
-  { id: "10", title: "Get Started with Dataplex", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/726" },
+  { id: "10", title: "Organize and Govern Data with Knowledge Catalog", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/726" },
   { id: "11", title: "Prompt Design in Agent Platform", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/976" },
   { id: "12", title: "Configure Service Accounts and IAM Roles for Google Cloud", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/702" },
   { id: "13", title: "Integrate BigQuery Data and Google Workspace using Apps Script", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/737" },
@@ -38,7 +38,7 @@ const initialBadgesData = [
   { id: "21", title: "Get Started with Sensitive Data Protection", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/750" },
   { id: "22", title: "Analyze Images with the Cloud Vision API", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/633" },
   { id: "23", title: "Secure Lakehouse Data", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/751" },
-  { id: "24", title: "Enrich Metadata and Discovery of BigLake Data", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/753" },
+  { id: "24", title: "Enrich Metadata and Discovery of Lakehouse Data", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/753" },
 
   // PAGE 4
   { id: "25", title: "Create a Secure Data Lake on Cloud Storage", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/704" },
@@ -64,16 +64,16 @@ const initialBadgesData = [
   { id: "41", title: "Implement Multimodal Vector Search with BigQuery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1232" },
   { id: "42", title: "Protect Cloud Traffic with Chrome Enterprise Premium Security", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/784" },
   { id: "43", title: "Discover and Protect Sensitive Data Across Your Ecosystem", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1177" },
-  { id: "44", title: "Get Started with Pub/Sub", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/728" },
+  { id: "44", title: "Implement Event-Driven Messaging and Automation Workflows", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/728" },
   { id: "45", title: "Secure Software Delivery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1164" },
   { id: "46", title: "Set Up a Google Cloud Network", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/641" },
   { id: "47", title: "Create and Manage AlloyDB Instances", duration: "45", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/642" },
   { id: "48", title: "Build Real World AI Applications with Gemini and Imagen", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1076" },
 
   // PAGE 7
-  { id: "49", title: "Inspect Rich Documents with Gemini Multimodality and...", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/981" },
+  { id: "49", title: "Inspect Rich Documents with Gemini Multimodality and Multimodal RAG", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/981" },
   { id: "50", title: "Develop Gen AI Apps with Gemini and Streamlit", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/978" },
-  { id: "51", title: "Explore Generative AI with the Gemini API in Vertex AI", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/959" },
+  { id: "51", title: "Explore Generative AI in Agent Platform", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/959" },
   { id: "52", title: "Build LookML Objects in Looker", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/639" },
   { id: "53", title: "Create and Manage Cloud SQL for PostgreSQL Instances", duration: "75", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/652" },
   { id: "54", title: "Deploy and Manage Apigee X", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/661" },
@@ -102,11 +102,11 @@ const initialBadgesData = [
 
   // PAGE 10
   { id: "73", title: "Deploy and Manage Applications on Google App Engine", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/671" },
-  { id: "74", title: "Get Started with Cloud Storage", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/725" },
+  { id: "74", title: "Implement Cloud Storage and Data Protection Solutions", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/725" },
   { id: "75", title: "Create a Streaming Data Lake on Cloud Storage", duration: "90", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/705" },
   { id: "76", title: "Build Serverless Applications with Cloud Run Functions", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/696" },
   { id: "77", title: "Streaming Analytics into BigQuery", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/752" },
-  { id: "78", title: "Get Started with API Gateway", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/662" },
+  { id: "78", title: "Deploy and Secure Serverless APIs with API Gateway", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/662" },
   { id: "79", title: "App Building with AppSheet", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/635" },
   { id: "80", title: "Store, Process, and Manage Data on Google Cloud - Console", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/658" },
 
@@ -125,7 +125,13 @@ const initialBadgesData = [
   { id: "90", title: "Perform Predictive Data Analysis in BigQuery", duration: "30", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/656" },
   { id: "91", title: "Automate Data Capture at Scale with Document AI", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/674" },
   { id: "92", title: "Manage Data Models in Looker", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/651" },
-  { id: "93", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" }
+  { id: "93", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" },
+  { id: "94", title: "Orchestrate Multi-agent Workflows with Gemini Enterprise", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1682" },
+
+  { id: "95", title: "[DEPRECATED] Designing Network Security in Google Cloud", duration: "165", labs: "Skill Badge", level: "Advance", link: "https://www.skills.google/course_templates/1421" }, // not confirem ..
+
+  { id: "96", title: "DEPRECATED Build Google Cloud Infrastructure for Azure Professionals", duration: "165", labs: "Skill Badge", level: "Advance", link: "https://www.skills.google/course_templates/xxx" } // not confirm yet..
+  
 ];
 
 export default function ResourcesPage() {

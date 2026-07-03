@@ -342,23 +342,39 @@ export default function CalculatorPage() {
               display: inline-block;
               animation: text-wave-slow 1.2s infinite ease-in-out;
             }
+
+            /* 🔥 ANIMATED GRADIENT PILL & BUTTON 🔥 */
+            @keyframes gradient-pill {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            .animate-gradient-pill {
+              background-size: 200% 200%;
+              animation: gradient-pill 3s ease infinite;
+            }
           `}</style>
 
           <div className="p-8 md:p-12 mt-1">
             
-            {/* 🔥 DYNAMIC TEXT & TOP RIGHT POINTS 🔥 */}
+            {/* 🔥 DYNAMIC TEXT & TOP RIGHT PILL 🔥 */}
             <div className="relative mb-8">
-              <p className="text-sm md:text-base text-left w-2/3 text-[#202124] font-bold">
+              <p className="text-sm md:text-base text-left w-2/3 text-[#202124] font-bold mt-2">
                 Paste your public profile url here
               </p>
               
+              {/* 🌟 ANIMATED GRADIENT CURVE PILL 🌟 */}
               {userPoints !== null && (
                 <div 
                   onClick={() => router.push('/dashboard')}
-                  className="absolute right-0 top-0 text-sm md:text-base font-bold text-[#202124] hover:underline cursor-pointer"
+                  className="absolute right-0 -top-1 cursor-pointer transition-transform hover:scale-105 shadow-md hover:shadow-lg rounded-full"
                   title="View Dashboard"
                 >
-                  {userName || "Arcade Player"} : {userPoints} Points
+                  <div className="px-4 py-1.5 flex items-center gap-2 rounded-full text-white font-bold text-[13px] animate-gradient-pill bg-gradient-to-r from-[#9333ea] via-[#ec4899] to-[#6366f1]">
+                    <span>{userName ? userName.split(' ')[0] : "Player"}</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-white opacity-80"></div>
+                    <span>{userPoints} Pts</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -375,8 +391,8 @@ export default function CalculatorPage() {
                     : "border-[#dadce0] focus-within:border-[#1a73e8]"
                 }`}
               >
-                {/* 🎯 Single Smooth Loader Line in Premium Brown Color */}
-                {loading && !error && (
+                {/* 🎯 Single Smooth Loader Line (ONLY SHOWS IF userPoints === null - No Avatar) */}
+                {loading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-2 right-2 h-[2px] bg-transparent overflow-hidden z-0">
                     <div className="h-full bg-[#5d4037] animate-slow-fill rounded-full"></div>
                   </div>
@@ -393,37 +409,10 @@ export default function CalculatorPage() {
                   {userName ? `Hi, ${userName}` : "Enter Public Profile Url"}
                 </label>
                 
-                {/* 🔥 MAGIC URL LOADING WAVE TEXT (Matching input text style) 🔥 */}
+                {/* 🔥 SIMPLE URL LOADING TEXT (Dhundla effect removed, 100% solid now) 🔥 */}
                 {loading ? (
-                  <div className="w-full h-[56px] px-4 py-4 text-base text-[#202124] bg-transparent relative z-10 flex items-center overflow-hidden whitespace-nowrap">
-                    {profileUrl.startsWith("https://www.skills.google/public_profiles/") ? (
-                      <>
-                        <span>https://www.skills.google/public_profiles/</span>
-                        <span>
-                          {profileUrl.replace("https://www.skills.google/public_profiles/", "").split("").map((char, index) => (
-                            <span 
-                              key={index} 
-                              className="wave-char-slow" 
-                              style={{ animationDelay: `${index * 0.04}s` }}
-                            >
-                              {char}
-                            </span>
-                          ))}
-                        </span>
-                      </>
-                    ) : (
-                      <span>
-                        {profileUrl.split("").map((char, index) => (
-                          <span 
-                            key={index} 
-                            className="wave-char-slow" 
-                            style={{ animationDelay: `${index * 0.04}s` }}
-                          >
-                            {char}
-                          </span>
-                        ))}
-                      </span>
-                    )}
+                  <div className="w-full h-[56px] pl-4 pr-14 py-4 text-base text-[#202124] bg-transparent relative z-10 flex items-center overflow-hidden whitespace-nowrap">
+                    {profileUrl}
                   </div>
                 ) : (
                   <input
@@ -441,10 +430,39 @@ export default function CalculatorPage() {
                       }
                     }}
                     spellCheck="false"
-                    className="w-full px-4 py-4 text-base text-[#202124] placeholder-[#9aa0a6] bg-transparent outline-none relative z-10"
+                    className="w-full pl-4 pr-14 py-4 text-base text-[#202124] placeholder-[#9aa0a6] bg-transparent outline-none relative z-10"
                   />
                 )}
+
+                {/* 🎯 AVATAR INSIDE INPUT BOX (RIGHT CORNER) WITH LOADING SPINNER 🎯 */}
+                {userPoints !== null && (
+                  <div 
+                    onClick={() => !loading && router.push('/dashboard')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-20 cursor-pointer group flex items-center justify-center w-11 h-11"
+                    title={`${userPoints} Pts • View Dashboard`}
+                  >
+                    {/* 🌀 BOLD BLUE SPINNER (Visible only when loading) 🌀 */}
+                    {loading && (
+                      <div className="absolute inset-0 rounded-full border-[3px] border-[#1a73e8] border-t-transparent border-l-transparent animate-spin"></div>
+                    )}
+                    
+                    {/* 🎯 ACTUAL AVATAR (Scale shrink removed, stays crisp) */}
+                    <div className={`w-9 h-9 rounded-full bg-white border-2 overflow-hidden flex items-center justify-center shadow-sm transition-all duration-300 relative z-10 ${
+                      loading ? 'border-transparent' : 'border-[#dadce0] group-hover:border-[#1a73e8] group-hover:scale-105'
+                    }`}>
+                      {userAvatar ? (
+                        <img src={userAvatar} alt="Avatar" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-[14px] font-black text-[#1a73e8]">
+                          {userName ? userName.charAt(0).toUpperCase() : "U"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
+            
+            
 
               {/* 🔥 UPDATED ERROR SECTION WITH INSTRUCTIONS 🔥 */}
               {error && (
@@ -477,7 +495,29 @@ export default function CalculatorPage() {
                     checked={rememberMe} 
                     onChange={(e) => setRememberMe(e.target.checked)} 
                   />
-                  <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Don't forget me next time</label>
+                  <label htmlFor="remember-me" className="ml-3 text-sm font-medium text-[#3c4043] cursor-pointer select-none">Remember Me.</label>
+                </div>
+              </div>
+
+
+              {/* 🔥 REFERRAL CODE SECTION 🔥 */}
+              <div className="flex flex-col mx-auto w-full md:w-auto md:flex-1 max-w-[340px]">
+                <label className="text-[13px] font-bold text-black mb-1.5 ml-28">
+                  Referral Code
+                </label>
+
+                <div className="bg-[#f1f3f4] border border-[#dadce0] rounded-lg px-4 py-2.5 flex items-center justify-between">
+                  <div className="text-[#3c4043] font-black text-[20px] tracking-[0.15em] flex items-center gap-1.5 leading-none">
+                    <span className="mt-2">****</span>
+                    <span className="text-[#9aa0a6] font-medium text-[22px]">_</span>
+                    <span className="mt-2">***</span>
+                    <span className="text-[#9aa0a6] font-medium text-[22px]">_</span>
+                    <span className="mt-2">***</span>
+                  </div>
+                  <div className="bg-white border border-[#dadce0] rounded-md px-3 py-1 flex items-center gap-2 shadow-sm">
+                    <div className="w-2 h-2 rounded-full bg-[#9aa0a6]"></div>
+                    <span className="text-[12px] font-bold text-[#5f6368]">Coming Soon</span>
+                  </div>
                 </div>
               </div>
 
@@ -486,12 +526,12 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* 🔥 PREMIUM COMPACT BUTTON (With mt-12 spacing and text below) 🔥 */}
+           {/* 🔥 PREMIUM HIGH-EFFECT BUTTON 🔥 */}
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
               <button 
                 onClick={proceedToDashboard} 
                 disabled={loading} 
-                className="w-[90%] sm:w-[400px] md:w-[1000px] bg-[#1a73e8] hover:bg-[#1557b0] active:bg-[#174ea6] text-white text-[16px] font-semibold py-3.5 rounded-full transition-all disabled:opacity-90 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-md hover:shadow-lg"
+                className="w-[90%] sm:w-[400px] md:w-[1000px] bg-gradient-to-r from-[#1a73e8] via-[#9333ea] to-[#ec4899] animate-gradient-pill text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center gap-2 shadow-lg hover:shadow-xl hover:shadow-[#9333ea]/30"
               >
                 {loading ? (
                   <>
@@ -514,7 +554,7 @@ export default function CalculatorPage() {
                   rel="noopener noreferrer" 
                   className="text-[13.5px] font-bold text-[#202124] tracking-wide hover:underline inline-block"
                 >
-                  Subscribe to Google Skills Arcade to receive updates and perks.
+                  Subscribe to Google Skills Arcade.
                 </a>
               </div>
             </div>
