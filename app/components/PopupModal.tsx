@@ -47,8 +47,8 @@ export default function PopupModal() {
 
         {/* HEADER */}
         <div className="text-center mt-2 mb-4">
-          <h2 className="text-[1.15rem] font-bold text-gray-800 leading-tight">Arcade Program '26</h2>
-          <p className="text-gray-500 text-xs mt-1">Get instant updates on WhatsApp</p>
+          <h2 className="text-[1.15rem] font-bold text-gray-800 leading-tight">Facilitator Program '26</h2>
+          <p className="text-gray-500 text-xs mt-1">Registration opens on 13 july</p>
         </div>
 
         {/* HIGHLIGHTED CARD (Channel + QR) */}
@@ -82,7 +82,7 @@ export default function PopupModal() {
             rel="noreferrer"
             className="w-full flex items-center justify-center gap-1.5 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-semibold rounded-lg border border-[#1fae51] shadow-sm transition-all focus:outline-none"
           >
-            Follow Channel
+            Arcade Group
           </a>
         </div>
 
