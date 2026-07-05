@@ -348,6 +348,8 @@ export default function CalculatorPage() {
           <style>{`
             @keyframes slow-fill { 0% { width: 0%; } 20% { width: 30%; } 50% { width: 65%; } 80% { width: 85%; } 100% { width: 95%; } }
             .animate-slow-fill { animation: slow-fill 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; position: absolute; left: 0; top: 0; }
+            @keyframes tooltip-pop { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.95); } 15% { opacity: 1; transform: translate(-50%, 0) scale(1); } 85% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -5px) scale(0.95); } }
+            .animate-tooltip-pop { animation: tooltip-pop 2s cubic-bezier(0.16, 1, 0.3, 1) forwards; pointer-events: none; }
             @keyframes fast-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
             .animate-fast-shake { animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
             @keyframes fade-in-modal { from { opacity: 0; } to { opacity: 1; } }
@@ -434,8 +436,27 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold transition-all duration-300 ease-in-out z-10 ${error && !hideRedLine ? "text-[#d93025]" : userName ? "text-[#4e342e]" : "text-[#1a73e8]"}`}>
-                  {userName ? `Hi, ${userName}` : "Enter Public Profile Url"}
+                {/* 🔥 UPDATED LABEL: SHOWS DOTS INSTEAD OF NAME WHEN LOADING 🔥 */}
+                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${error && !hideRedLine ? "text-[#d93025]" : userName && !loading ? "text-[#4e342e]" : "text-[#1a73e8]"}`}>
+                  {loading ? (
+                    loadingStep === 'wave' ? (
+                      <div className="flex items-center gap-[3px] h-5 px-1">
+                        <div className="w-[5px] h-[5px] bg-[#1a73e8] rounded-full dot-wave-1"></div>
+                        <div className="w-[5px] h-[5px] bg-[#1a73e8] rounded-full dot-wave-2"></div>
+                        <div className="w-[5px] h-[5px] bg-[#1a73e8] rounded-full dot-wave-3"></div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center h-5 px-1">
+                        <div className="gem-container" style={{ transform: 'scale(0.7)' }}>
+                          <div className="gem-dot bg-[#1a73e8] gem-dot-1"></div>
+                          <div className="gem-dot bg-[#1a73e8] gem-dot-2"></div>
+                          <div className="gem-dot bg-[#1a73e8] gem-dot-3"></div>
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    userName ? `Hi, ${userName}` : "Enter Public Profile Url"
+                  )}
                 </label>
                 
                 {loading ? (
@@ -500,8 +521,6 @@ export default function CalculatorPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
-              
-              {/* 🔥 UPDATED: GREY BUTTON & BLACK TEXT 🔥 */}
               <button 
                 onClick={proceedToDashboard} 
                 disabled={loading} 
@@ -568,46 +587,47 @@ export default function CalculatorPage() {
                     
                     return (
                       <div key={idx} className="relative">
+                        {/* 🔥 UPDATED: Card border uses themeColor permanently all around, no hover requirement for color 🔥 */}
                         <button 
-                          onClick={() => handleHistoryClick(item.url, idx)} 
-                          className="relative w-[175px] h-[50px] flex items-center gap-2.5 px-3 py-1 bg-white border border-[#dadce0] hover:shadow-md rounded-md transition-all overflow-hidden group focus:outline-none"
-                          style={{ borderColor: copiedIndex === idx ? themeColor : undefined }}
-                          title={item.url}
-                        >
-                          {copiedIndex === idx && (
-                            <div className="absolute -top-11 left-1/2 -translate-x-1/2 z-50 bg-white border border-[#dadce0] shadow-[0_4px_12px_rgba(0,0,0,0.12)] rounded-md px-3 py-1.5 flex items-center gap-1.5 animate-tooltip-pop whitespace-nowrap">
-                              <svg className="w-3.5 h-3.5" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                              <span className="text-[#3c4043] text-[12px] font-bold">Copied</span>
-                            </div>
-                          )}
-
-                          <div className="w-8 h-8 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10">
-                            {copiedIndex === idx ? (
-                               <div className="w-full h-full flex items-center justify-center bg-white">
-                                 <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                               </div>
-                            ) : (
-                               item.avatar ? (
-                                 <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                               ) : (
-                                 <div className="w-full h-full flex items-center justify-center text-white font-medium text-[14px]" style={{ backgroundColor: themeColor }}>
-                                   {item.name ? item.name.charAt(0).toUpperCase() : "U"}
-                                 </div>
-                               )
-                            )}
-                          </div>
-                          
-                          <div className="flex flex-col items-start gap-[1.5px] z-10 w-full overflow-hidden text-left">
-                            <span className="text-[12.5px] font-bold text-[#202124] truncate w-full tracking-tight mt-[2px]">
-                              {item.name || "Arcade Player"}
-                            </span>
-                            {item.points !== undefined && (
-                              <div className="px-1.5 py-[1.5px] rounded text-white text-[10px] font-bold shadow-sm leading-none tracking-wide" style={{ backgroundColor: themeColor }}>
-                                {item.points} Pts
-                              </div>
-                            )}
-                          </div>
-                        </button>
+  onClick={() => handleHistoryClick(item.url, idx)} 
+  /* 🔥 Yahan border hataya aur shadow-md (floating effect) daala 🔥 */
+  className="relative w-[175px] h-[54px] flex items-center gap-2.5 px-3 py-1 bg-white rounded-lg transition-all overflow-hidden group focus:outline-none shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-lg hover:scale-[1.02]"
+  style={{ 
+    borderLeft: `4px solid ${copiedIndex === idx ? '#34a853' : themeColor}`, // Border hatakar sirf side mein color line rakh di
+    boxShadow: copiedIndex === idx ? '0 0 0 2px #34a853' : undefined 
+  }}
+  title={item.url}
+>
+  {/* 🔥 Tooltip baki sab same... 🔥 */}
+  
+  <div className="w-9 h-9 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10">
+    {copiedIndex === idx ? (
+       <div className="w-full h-full flex items-center justify-center bg-white">
+         <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+       </div>
+    ) : (
+       item.avatar ? (
+         <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
+       ) : (
+         <div className="w-full h-full flex items-center justify-center text-white font-medium text-[14px]" style={{ backgroundColor: themeColor }}>
+           {item.name ? item.name.charAt(0).toUpperCase() : "U"}
+         </div>
+       )
+    )}
+  </div>
+  
+  {/* Name & Points */}
+  <div className="flex flex-col items-center justify-center z-10 w-full overflow-hidden">
+    <span className="text-[13px] font-bold text-[#202124] truncate w-full text-center tracking-tight">
+      {item.name || "Arcade Player"}
+    </span>
+    {item.points !== undefined && (
+      <span className="text-[12px] font-semibold text-[#5f6368] mt-[2px] leading-none">
+        {item.points} Pts
+      </span>
+    )}
+  </div>
+</button>
                       </div>
                     );
                   })}
