@@ -290,7 +290,7 @@ export default function CalculatorPage() {
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-6 pt-24 pb-16">
+      <main className="max-w-7xl mx-auto px-6 pt-24 pb-16">
         
         {/* 🔥 MODAL FOR AUTO CALCULATE 🔥 */}
         {showAutoCalcModal && (
@@ -521,36 +521,37 @@ export default function CalculatorPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
+              {/* 🔥 UPDATED: Soft Aqua background, White text, Crisp hover (no scaling/blur), Exact Input width (w-full) 🔥 */}
               <button 
-                onClick={proceedToDashboard} 
-                disabled={loading} 
-                className="w-[90%] sm:w-[400px] md:w-[1000px] bg-[#f1f3f4] hover:bg-[#e8eaed] border border-[#dadce0] text-[#202124] text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center shadow-sm hover:shadow-md"
-              >
-                {/* 🔥 DYNAMIC AI ANIMATION 🔥 */}
-                {loading ? (
-                  <div className="flex items-center justify-center gap-3 h-6">
-                    <span className="leading-none">Calculating Points</span>
-                    
-                    {/* Switch between Wave and Collide based on loadingStep state */}
-                    {loadingStep === 'wave' ? (
-                      <div className="flex items-center gap-1 relative top-[1px]">
-                        <div className="w-[5px] h-[5px] bg-[#202124] rounded-full dot-wave-1"></div>
-                        <div className="w-[5px] h-[5px] bg-[#202124] rounded-full dot-wave-2"></div>
-                        <div className="w-[5px] h-[5px] bg-[#202124] rounded-full dot-wave-3"></div>
-                      </div>
-                    ) : (
-                      <div className="gem-container ml-1">
-                        <div className="gem-dot bg-[#202124] gem-dot-1"></div>
-                        <div className="gem-dot bg-[#202124] gem-dot-2"></div>
-                        <div className="gem-dot bg-[#202124] gem-dot-3"></div>
-                      </div>
-                    )}
+  onClick={proceedToDashboard} 
+  disabled={loading} 
+  className="w-full bg-[#0891B2] hover:bg-[#0891B2] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-sm flex justify-center items-center shadow-sm"
+>
+  {/* 🔥 DYNAMIC AI ANIMATION 🔥 */}
+  {loading ? (
+    <div className="flex items-center justify-center gap-3 h-6">
+      <span className="leading-none text-white">Calculating Points</span>
+      
+      {/* Switch between Wave and Collide based on loadingStep state */}
+      {loadingStep === 'wave' ? (
+        <div className="flex items-center gap-1 relative top-[1px]">
+          <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-1"></div>
+          <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-2"></div>
+          <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-3"></div>
+        </div>
+      ) : (
+        <div className="gem-container ml-1">
+          <div className="gem-dot bg-white gem-dot-1"></div>
+          <div className="gem-dot bg-white gem-dot-2"></div>
+          <div className="gem-dot bg-white gem-dot-3"></div>
+        </div>
+      )}
 
-                  </div>
-                ) : (
-                  "Calculate Arcade Points"
-                )}
-              </button>
+    </div>
+  ) : (
+    "Calculate Arcade Points"
+  )}
+</button>
               
               <div className="mt-8 text-center">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className="text-[13.5px] font-bold text-[#202124] tracking-wide hover:underline inline-block">
@@ -587,19 +588,14 @@ export default function CalculatorPage() {
                     
                     return (
                       <div key={idx} className="relative">
-                        {/* 🔥 UPDATED: Card border uses themeColor permanently all around, no hover requirement for color 🔥 */}
                         <button 
   onClick={() => handleHistoryClick(item.url, idx)} 
-  /* 🔥 Yahan border hataya aur shadow-md (floating effect) daala 🔥 */
   className="relative w-[175px] h-[54px] flex items-center gap-2.5 px-3 py-1 bg-white rounded-lg transition-all overflow-hidden group focus:outline-none shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-lg hover:scale-[1.02]"
   style={{ 
-    borderLeft: `4px solid ${copiedIndex === idx ? '#34a853' : themeColor}`, // Border hatakar sirf side mein color line rakh di
-    boxShadow: copiedIndex === idx ? '0 0 0 2px #34a853' : undefined 
+    borderLeft: `4px solid ${themeColor}` 
   }}
   title={item.url}
 >
-  {/* 🔥 Tooltip baki sab same... 🔥 */}
-  
   <div className="w-9 h-9 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10">
     {copiedIndex === idx ? (
        <div className="w-full h-full flex items-center justify-center bg-white">
@@ -616,7 +612,6 @@ export default function CalculatorPage() {
     )}
   </div>
   
-  {/* Name & Points */}
   <div className="flex flex-col items-center justify-center z-10 w-full overflow-hidden">
     <span className="text-[13px] font-bold text-[#202124] truncate w-full text-center tracking-tight">
       {item.name || "Arcade Player"}
@@ -636,8 +631,9 @@ export default function CalculatorPage() {
             )}
           </div>
         </div>
-
-        <div className="mt-12 mb-10 max-w-5xl mx-auto border-t border-[#dadce0] pt-12">
+      
+  
+        <div className="mt-12 mb-10 max-w-6xl mx-auto border-t border-[#dadce0] pt-12">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
               Make Public Profile
