@@ -9,6 +9,7 @@ import {
   limit,
   onSnapshot,
   getDocs,
+  increment,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -33,6 +34,7 @@ export async function savePublicUserToLeaderboard(userData: { name: string; phot
         points: userData.points,
         profileUrl: userData.profileUrl,
         updatedAt: serverTimestamp(),
+        calculationCount: increment(1),
       },
       { merge: true } // merge: true se agar user dobara calculate karega toh purana data overwrite (update) ho jayega
     );

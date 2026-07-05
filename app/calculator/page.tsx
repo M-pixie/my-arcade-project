@@ -61,8 +61,9 @@ export default function CalculatorPage() {
   const [autoCalculate, setAutoCalculate] = useState(false);
   const [showAutoCalcModal, setShowAutoCalcModal] = useState(false);
   
-  // 🔥 NEW STATE FOR RESET MODAL
+  // 🔥 NEW STATES FOR RESET MODAL & ANIMATION PHASES
   const [showResetModal, setShowResetModal] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<'wave' | 'collide'>('wave');
 
   const router = useRouter();
 
@@ -101,6 +102,18 @@ export default function CalculatorPage() {
       }
     }
   }, []);
+
+  // 🔥 ANIMATION PHASE CONTROLLER 🔥
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (loading) {
+      setLoadingStep('wave'); // Start with slow wave
+      timer = setTimeout(() => {
+        setLoadingStep('collide'); // Shift to fast Gemini collide after 1.2s
+      }, 1200);
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   const handleAutoCalcToggle = () => {
     if (!autoCalculate) {
@@ -142,16 +155,13 @@ export default function CalculatorPage() {
     localStorage.removeItem("recent_arcade_urls_v3");
   };
 
-  // 🔥 NEW FUNCTION TO RESET EVERYTHING
   const handleResetData = () => {
-    // Clear LocalStorage
     localStorage.removeItem("arcade_url");
     localStorage.removeItem("recent_arcade_urls_v3");
     localStorage.removeItem("arcade_user_data");
     localStorage.removeItem("current_processing_url");
     localStorage.removeItem("arcade_auto_calc");
 
-    // Clear States
     setProfileUrl("");
     setRecentUrls([]);
     setUserPoints(null);
@@ -161,7 +171,6 @@ export default function CalculatorPage() {
     setRememberMe(false);
     setError(null);
 
-    // Close Modal
     setShowResetModal(false);
   };
 
@@ -303,7 +312,7 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        {/* 🔥 NEW MODAL FOR RESET DATA 🔥 */}
+        {/* 🔥 MODAL FOR RESET DATA 🔥 */}
         {showResetModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in-modal">
             <div className="bg-white rounded-lg shadow-xl w-[90%] max-w-sm p-6 animate-scale-up-modal">
@@ -339,25 +348,58 @@ export default function CalculatorPage() {
           <style>{`
             @keyframes slow-fill { 0% { width: 0%; } 20% { width: 30%; } 50% { width: 65%; } 80% { width: 85%; } 100% { width: 95%; } }
             .animate-slow-fill { animation: slow-fill 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; position: absolute; left: 0; top: 0; }
-            @keyframes tooltip-pop { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.95); } 15% { opacity: 1; transform: translate(-50%, 0) scale(1); } 85% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -5px) scale(0.95); } }
-            .animate-tooltip-pop { animation: tooltip-pop 2s cubic-bezier(0.16, 1, 0.3, 1) forwards; pointer-events: none; }
             @keyframes fast-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
             .animate-fast-shake { animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
             @keyframes fade-in-modal { from { opacity: 0; } to { opacity: 1; } }
             @keyframes scale-up-modal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
             .animate-fade-in-modal { animation: fade-in-modal 0.2s ease-out forwards; }
             .animate-scale-up-modal { animation: scale-up-modal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-            @keyframes gradient-pill { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-            .animate-gradient-pill { background-size: 200% 200%; animation: gradient-pill 3s ease infinite; }
             
-            /* 🔥 NEW: AI BOUNCING DOTS ANIMATION 🔥 */
-            @keyframes bounce-dot {
+            /* 🔥 PHASE 1: INITIAL WAVE ANIMATION 🔥 */
+            @keyframes wave-bounce {
               0%, 100% { transform: translateY(0); opacity: 0.4; }
-              50% { transform: translateY(-4px); opacity: 1; }
+              50% { transform: translateY(-3.5px); opacity: 1; }
             }
-            .dot-1 { animation: bounce-dot 1.2s infinite ease-in-out; }
-            .dot-2 { animation: bounce-dot 1.2s infinite ease-in-out 0.2s; }
-            .dot-3 { animation: bounce-dot 1.2s infinite ease-in-out 0.4s; }
+            .dot-wave-1 { animation: wave-bounce 1s infinite ease-in-out; animation-delay: 0s; }
+            .dot-wave-2 { animation: wave-bounce 1s infinite ease-in-out; animation-delay: 0.15s; }
+            .dot-wave-3 { animation: wave-bounce 1s infinite ease-in-out; animation-delay: 0.3s; }
+
+            /* 🔥 PHASE 2: FAST GEMINI TRIANGULAR COLLISION 🔥 */
+            @keyframes rotate-gemini {
+              0% { transform: rotate(0deg) scale(0.9); }
+              100% { transform: rotate(360deg) scale(0.9); }
+            }
+            @keyframes collide-1 {
+              0%, 100% { transform: translate(0, 0) scale(0.8); }
+              50% { transform: translate(0, 4px) scale(1.3); } /* Pulls down */
+            }
+            @keyframes collide-2 {
+              0%, 100% { transform: translate(0, 0) scale(0.8); }
+              50% { transform: translate(3.5px, -2.5px) scale(1.3); } /* Pulls up-right */
+            }
+            @keyframes collide-3 {
+              0%, 100% { transform: translate(0, 0) scale(0.8); }
+              50% { transform: translate(-3.5px, -2.5px) scale(1.3); } /* Pulls up-left */
+            }
+            
+            .gem-container {
+              width: 14px;
+              height: 14px;
+              position: relative;
+              animation: rotate-gemini 1s linear infinite; /* Fast Rotation */
+            }
+            
+            .gem-dot {
+              position: absolute;
+              width: 4.5px;
+              height: 4.5px;
+              border-radius: 50%;
+            }
+            
+            /* Triangle Position Setup */
+            .gem-dot-1 { top: 0px; left: 4.75px; animation: collide-1 0.6s ease-in-out infinite; }
+            .gem-dot-2 { top: 8px; left: 0px; animation: collide-2 0.6s ease-in-out infinite; }
+            .gem-dot-3 { top: 8px; left: 9.5px; animation: collide-3 0.6s ease-in-out infinite; }
           `}</style>
 
           <div className="p-8 md:p-12 mt-1">
@@ -458,20 +500,33 @@ export default function CalculatorPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
+              
+              {/* 🔥 UPDATED: GREY BUTTON & BLACK TEXT 🔥 */}
               <button 
                 onClick={proceedToDashboard} 
                 disabled={loading} 
-                className="w-[90%] sm:w-[400px] md:w-[1000px] bg-gradient-to-r from-[#1a73e8] via-[#9333ea] to-[#ec4899] animate-gradient-pill text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center shadow-lg hover:shadow-xl hover:shadow-[#9333ea]/30"
+                className="w-[90%] sm:w-[400px] md:w-[1000px] bg-[#f1f3f4] hover:bg-[#e8eaed] border border-[#dadce0] text-[#202124] text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center shadow-sm hover:shadow-md"
               >
-                {/* 🔥 UPDATED: AI THINKING ANIMATION 🔥 */}
+                {/* 🔥 DYNAMIC AI ANIMATION 🔥 */}
                 {loading ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <span>Calculating Points</span>
-                    <div className="flex items-center gap-[3px] pt-1.5 ml-1">
-                      <div className="w-1.5 h-1.5 bg-white rounded-full dot-1"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full dot-2"></div>
-                      <div className="w-1.5 h-1.5 bg-white rounded-full dot-3"></div>
-                    </div>
+                  <div className="flex items-center justify-center gap-3 h-6">
+                    <span className="leading-none">Calculating Points</span>
+                    
+                    {/* Switch between Wave and Collide based on loadingStep state */}
+                    {loadingStep === 'wave' ? (
+                      <div className="flex items-center gap-1 relative top-[1px]">
+                        <div className="w-[5px] h-[5px] bg-[#202124] rounded-full dot-wave-1"></div>
+                        <div className="w-[5px] h-[5px] bg-[#202124] rounded-full dot-wave-2"></div>
+                        <div className="w-[5px] h-[5px] bg-[#202124] rounded-full dot-wave-3"></div>
+                      </div>
+                    ) : (
+                      <div className="gem-container ml-1">
+                        <div className="gem-dot bg-[#202124] gem-dot-1"></div>
+                        <div className="gem-dot bg-[#202124] gem-dot-2"></div>
+                        <div className="gem-dot bg-[#202124] gem-dot-3"></div>
+                      </div>
+                    )}
+
                   </div>
                 ) : (
                   "Calculate Arcade Points"
@@ -489,20 +544,17 @@ export default function CalculatorPage() {
             {recentUrls.length > 0 && (
               <div className="mt-6 pt-6 border-t border-[#f1f3f4] animate-fade-in-up">
                 
-                {/* 🔥 ACTION BUTTONS WRAPPER 🔥 */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
                   <p className="text-base font-bold text-[#202124]">
                     Recent Profiles History
                   </p>
                   
-                  {/* 🔥 CLEAR & RESET BUTTONS SIDE BY SIDE 🔥 */}
                   <div className="flex items-center gap-2">
                     <button onClick={clearHistory} className="flex items-center gap-2 text-sm text-[#202124] hover:text-black hover:bg-[#f1f3f4] bg-transparent px-3 py-1.5 rounded-lg font-bold transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       Clear History
                     </button>
                     
-                    {/* 🔴 NEW RESET BUTTON 🔴 */}
                     <button onClick={() => setShowResetModal(true)} className="flex items-center gap-2 text-sm text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6] bg-transparent px-3 py-1.5 rounded-lg font-bold transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                       Reset
@@ -529,7 +581,6 @@ export default function CalculatorPage() {
                             </div>
                           )}
 
-                          {/* 🎯 COMPACT AVATAR */}
                           <div className="w-8 h-8 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10">
                             {copiedIndex === idx ? (
                                <div className="w-full h-full flex items-center justify-center bg-white">
@@ -546,7 +597,6 @@ export default function CalculatorPage() {
                             )}
                           </div>
                           
-                          {/* 🎯 NAME & POINTS PILL */}
                           <div className="flex flex-col items-start gap-[1.5px] z-10 w-full overflow-hidden text-left">
                             <span className="text-[12.5px] font-bold text-[#202124] truncate w-full tracking-tight mt-[2px]">
                               {item.name || "Arcade Player"}

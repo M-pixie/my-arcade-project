@@ -269,6 +269,8 @@ export default function AdminDashboard() {
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043]">User Name</th>
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043]">Public Profile</th>
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] text-center w-28">Points</th>
+                      {/* 🔥 NEW COLUMN HEADER: PROFILE ANALYZED 🔥 */}
+                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] text-center w-36">Profile Analyzed</th>
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider">Last Update</th>
                     </tr>
                   </thead>
@@ -310,6 +312,15 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4 border-r border-[#e8eaed] text-center">
                             <span className="text-base font-bold text-[#202124]">{user.points}</span>
                           </td>
+                          
+                          {/* 🔥 NEW COLUMN DATA: PROFILE ANALYZED COUNT 🔥 */}
+                          <td className="px-6 py-4 border-r border-[#e8eaed] text-center">
+                            <span className="bg-[#f8f9fa] border border-[#dadce0] px-3 py-1.5 rounded-full text-[12px] font-bold text-[#3c4043] inline-flex items-center gap-1.5">
+                              
+                              {user.calculationCount || 1} {user.calculationCount === 1 || !user.calculationCount ? 'Time' : 'Times'}
+                            </span>
+                          </td>
+
                           <td className="px-6 py-4">
                             <span className="text-[13px] font-medium text-[#5f6368]">{formatDate(user.updatedAt)}</span>
                           </td>
