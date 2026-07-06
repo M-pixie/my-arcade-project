@@ -33,11 +33,10 @@ export default function DashboardPage() {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [showYouText, setShowYouText] = useState(true);
-  const [showZeroLabsModal, setShowZeroLabsModal] = useState(false);
-  const [showAllCompletedModal, setShowAllCompletedModal] = useState(false);
   const [showSubscribe, setShowSubscribe] = useState(false);
   
   const [hideModals, setHideModals] = useState(false);
+  const [showRevealCard, setShowRevealCard] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("hide_arcade_banners") === "true") {
@@ -57,20 +56,6 @@ export default function DashboardPage() {
       clearInterval(intervalSub);
     };
   }, []);
-
-  useEffect(() => {
-    if (showZeroLabsModal && !hideModals) {
-      const timer = setTimeout(() => setShowZeroLabsModal(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showZeroLabsModal, hideModals]);
-
-  useEffect(() => {
-    if (showAllCompletedModal && !hideModals) {
-      const timer = setTimeout(() => setShowAllCompletedModal(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [showAllCompletedModal, hideModals]);
 
   const aprilLabs = [
     {
@@ -115,16 +100,6 @@ export default function DashboardPage() {
 
   const pendingLabs = aprilLabs.filter(lab => !isLabCompleted(lab.matchStrings));
   const completedLabs = aprilLabs.filter(lab => isLabCompleted(lab.matchStrings));
-
-  useEffect(() => {
-    if (!loading && points !== null && history) {
-      if (completedLabs.length === 0) {
-        setShowZeroLabsModal(true);
-      } else if (completedLabs.length === aprilLabs.length) {
-        setShowAllCompletedModal(true);
-      }
-    }
-  }, [loading, points, history, completedLabs.length, aprilLabs.length]);
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -328,38 +303,6 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
       <Navbar />
 
-      {!hideModals && showZeroLabsModal && (
-        <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
-          <div className="w-full max-w-[1100px] bg-[#d93025] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#b3261e]">
-            <span className="text-white font-medium text-sm md:text-base">
-              You have not completed any July labs yet. Complete challenges, earn points & unlock rewards.
-            </span>
-            <div className="flex items-center gap-4 ml-4 flex-shrink-0">
-              <button onClick={() => { localStorage.setItem("hide_arcade_banners", "true"); setHideModals(true); setShowZeroLabsModal(false); }} className="text-white/80 hover:text-white text-xs font-semibold underline whitespace-nowrap transition-colors">Don't show again</button>
-              <button onClick={() => setShowZeroLabsModal(false)} className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {!hideModals && showAllCompletedModal && (
-        <div className="fixed top-20 left-0 right-0 z-[150] flex justify-center px-4 banner-slide-down">
-          <div className="w-full max-w-[1100px] bg-[#1a73e8] rounded-md shadow-md flex items-center justify-between p-4 px-6 border border-[#1557b0]">
-            <span className="text-white font-medium text-sm md:text-base">
-              Congratulations! 🎉 You have successfully completed all labs for this month. Stay tuned for the upcoming challenges!
-            </span>
-            <div className="flex items-center gap-4 ml-4 flex-shrink-0">
-              <button onClick={() => { localStorage.setItem("hide_arcade_banners", "true"); setHideModals(true); setShowAllCompletedModal(false); }} className="text-white/80 hover:text-white text-xs font-semibold underline whitespace-nowrap transition-colors">Don't show again</button>
-              <button onClick={() => setShowAllCompletedModal(false)} className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <main className="w-full mx-auto px-6 pt-24 pb-16 flex flex-col items-center">
         
         <div className="w-full max-w-[1350px]">
@@ -472,9 +415,28 @@ export default function DashboardPage() {
                     <h2 className="text-[28px] font-bold text-[#202124] tracking-normal">Facilitator Progress</h2>
                   </div>
                   
-                  {/* BLURRED FACILITATOR PROGRESS SECTION */}
+                  {/* CLEAR FACILITATOR PROGRESS SECTION */}
                   <div className="relative w-full">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full blur-[6px] select-none pointer-events-none opacity-60">
+                    
+                    {/* Bada Centered white card (Kam curve & X button) */}
+                    {showRevealCard && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
+                        <div className="bg-white border border-[#dadce0] shadow-xl px-10 py-8 flex flex-col items-center gap-3 animate-fade-in-up pointer-events-auto relative" style={{ borderRadius: '4px' }}>
+                          <button 
+                            onClick={() => setShowRevealCard(false)} 
+                            className="absolute top-3 right-3 text-[#5f6368] hover:text-black transition-colors"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                          <span className="text-[21px] font-black text-black ">Revealing on 16th July</span>
+                          <span className="text-[15px] font-bold text-[#5f6368]">Facilitator progress will be available soon.</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
                       {facilitatorMilestones.map((milestone) => {
                         const arcadeProgress = Math.min(100, (arcadeGamesCount / milestone.targetArcade) * 100);
                         const skillsProgress = Math.min(100, (skillBadgesCount / milestone.targetSkills) * 100);
@@ -482,7 +444,7 @@ export default function DashboardPage() {
                         const totalPercent = Math.floor((arcadeProgress + skillsProgress) / 2);
 
                         return (
-                          <div key={milestone.id} className="bg-white border border-[#dadce0] rounded-xl p-5 shadow-sm">
+                          <div key={milestone.id} className="bg-white border border-[#dadce0] rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex justify-between items-center mb-5">
                               <h3 className="font-bold text-lg text-[#202124] leading-none">{milestone.title}</h3>
                               <span className="text-[14px] font-bold text-[#202124]">
@@ -515,25 +477,23 @@ export default function DashboardPage() {
                             <div className="pt-4 border-t border-[#f1f3f4] flex justify-between items-center min-h-[50px]">
                               <span className="font-bold text-[#202124] text-[15px]">Bonus Points</span>
                               {isAchieved ? (
-                                <div className="w-8 h-8 rounded-full bg-[#34a853] flex items-center justify-center text-white font-bold text-[15px]">
-                                  {milestone.points}
+                                <div className="flex items-center gap-3">
+                                  <span className="text-[22px] font-black text-black">+{milestone.points}</span>
+                                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white ring-2 ring-[#34a853] shadow-md flex items-center justify-center bg-[#137333]">
+                                    {userAvatar ? (
+                                      <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                                    ) : (
+                                      <span className="text-white font-bold text-lg">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                                    )}
+                                  </div>
                                 </div>
                               ) : (
-                                <span className="font-bold text-[#202124] text-[14px]">Not Yet</span>
+                                <span className="font-bold text-[#202124] text-[15px]">Not Yet</span>
                               )}
                             </div>
                           </div>
                         );
                       })}
-                    </div>
-
-                    {/* LOCK SCREEN OVERLAY FOR FACILITATOR PROGRESS */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                      <div className="bg-[#202124]/90 backdrop-blur-sm text-white px-8 py-5 rounded-2xl border border-[#5f6368] shadow-2xl flex flex-col items-center transform transition-transform hover:scale-105">
-                        <svg className="w-10 h-10 mb-3 text-[#fbbc04]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        <span className="font-black text-xl tracking-wide">Revealing on 16th July</span>
-                        <span className="text-sm font-bold text-[#9aa0a6] mt-1">Your progress is being tracked securely</span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -723,7 +683,6 @@ export default function DashboardPage() {
             </div>
           )}
 
-{/* REDESIGNED JUNE LABS LIVE SECTION - LIGHT THEME W/ PREMIUM DARK IMAGE CARDS */}
           {points !== null && (
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
@@ -739,14 +698,12 @@ export default function DashboardPage() {
                      Pending Labs ({pendingLabs.length})
                   </h5>
                   
-                  {/* Changed to lg:grid-cols-3 and increased gap */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                     {pendingLabs.map((lab) => (
                       <div key={`pending-${lab.id}`} className="flex flex-col items-center">
                         <h5 className="text-[20px] lg:text-[22px] font-bold text-[#1a73e8] mb-2 text-center">{lab.title}</h5>
                         <p className="text-[14px] text-[#5f6368] font-bold mb-4 text-center">{lab.subtitle}</p>
 
-                        {/* Made box larger, square-ish with aspect-square, and adjusted padding */}
                         <div className="bg-gradient-to-b from-[#181a20] to-[#0b0c0f] p-6 md:p-8 rounded-2xl mb-5 w-full max-w-[340px] flex justify-center items-center border border-[#dadce0] shadow-[0_8px_16px_rgba(0,0,0,0.15)] relative overflow-hidden group hover:border-[#1a73e8] hover:shadow-lg transition-all aspect-square">
                           <img 
                             src={lab.image} 
@@ -793,14 +750,12 @@ export default function DashboardPage() {
                     Completed Labs ({completedLabs.length})
                   </h5>
                   
-                  {/* Changed to lg:grid-cols-3 and increased gap */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                     {completedLabs.map((lab) => (
                       <div key={`completed-${lab.id}`} className="flex flex-col items-center group">
                         <h5 className="text-[20px] lg:text-[22px] font-bold text-[#1a73e8] mb-2 text-center">{lab.title}</h5>
                         <p className="text-[14px] text-[#5f6368] font-bold mb-4 text-center">{lab.subtitle}</p>
 
-                        {/* Made box larger, square-ish with aspect-square, and adjusted padding */}
                         <div className="bg-gradient-to-b from-[#181a20] to-[#0b0c0f] p-6 md:p-8 rounded-2xl mb-5 w-full max-w-[340px] flex justify-center items-center border border-[#dadce0] shadow-[0_8px_16px_rgba(0,0,0,0.15)] relative overflow-hidden aspect-square">
                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[1.5px] z-20 flex items-center justify-center rounded-2xl">
                               <div className="w-14 h-14 bg-[#137333] rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
