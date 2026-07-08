@@ -221,7 +221,7 @@ export default function HomePage() {
           {isAtTop ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
           ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7-7m7-7l7-7" /></svg>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
           )}
         </button>
       </div>
@@ -551,217 +551,175 @@ export default function HomePage() {
   </div>
 </section>
 
-        {/* ================= FREE CREDITS GUIDE ================= */}
-        <section id="credits-section" className="relative z-10 py-16 bg-[#ffffff] border-b border-[#dadce0] overflow-hidden font-sans">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-            
-            <div className="mb-16">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Watch the Video & Get 309$ Credits</h2>
-                <p className="text-[#5f6368] text-lg">Follow along with this step-by-step video guide</p>
-              </div>
-              
-              <div className="relative max-w-5xl mx-auto rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#dadce0] aspect-video flex items-center justify-center group cursor-pointer bg-[#0f52ba]">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0d47a1] via-[#1565c0] to-[#1976d2]"></div>
-                
-                <div className="absolute inset-0 opacity-20 pointer-events-none">
-                   <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-[80px]"></div>
-                   <div className="absolute bottom-10 right-10 w-64 h-64 bg-[#64b5f6] rounded-full blur-[80px]"></div>
-                </div>
-                
-                <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-between z-10">
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-[10px]">
-                    ＄
-                    </div>
-                    <div className="text-white text-sm md:text-base font-semibold truncate text-left drop-shadow-md">
-                      Google Cloud FREE 309 Credits | Step-by-Step Guide
-                    </div>
-                  </div>
+      {/* ================= FREE CREDITS GUIDE ================= */}
+<section id="credits-section" className="relative z-10 py-16 bg-[#ffffff] border-b border-[#dadce0] overflow-hidden font-sans">
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+    
+    <div className="mb-16">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Get Free 309 Credits</h2>
+        <p className="text-[#5f6368] text-lg">Follow along with this step-by-step video guide</p>
+      </div>
+      
+      {/* YouTube Video Embed */}
+      <div className="relative max-w-5xl mx-auto rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#dadce0] aspect-video bg-black">
+        <iframe 
+          className="absolute inset-0 w-full h-full"
+          src="https://www.youtube.com/embed/WVdUW1wJwyI" 
+          title="How to get your free credits or monthly credits pass? | Google Skills Campaigns" 
+          frameBorder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerPolicy="strict-origin-when-cross-origin" 
+          allowFullScreen>
+        </iframe>
+      </div>
+    </div>
+    
+    <div className="bg-[#fff8f0] border border-[#fbd0b4] rounded-xl p-6 md:p-8 mb-16 shadow-sm relative transition-all max-w-5xl mx-auto">
+      <button 
+        onClick={handleCopyCode}
+        className="absolute top-5 right-5 md:top-6 md:right-6 bg-white hover:bg-[#f9f9f9] px-3 py-1.5 rounded-lg text-[14px] font-bold flex items-center gap-2 border border-[#dadce0] transition-colors cursor-pointer group shadow-sm"
+        title="Copy code"
+      >
+        <span className="text-[#c03f0c]">qlcampaign=6m-ctsdq-27</span>
+        {isCopied ? (
+          <span className="text-[#137333] flex items-center bg-[#e6f4ea] p-1 rounded-md">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+        ) : (
+          <span className="text-[#5f6368] group-hover:text-[#202124] p-1 rounded-md bg-[#f1f3f4]">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </span>
+        )}
+      </button>
+      
+      <div className="flex items-start gap-3 mb-5 mt-4 md:mt-0">
+        <div className="text-[#d94a11] text-2xl shrink-0">🔗</div>
+        <div className="pr-0 md:pr-48"> 
+          <h3 className="text-xl font-bold text-[#202124] mb-1.5">Special Credit Link</h3>
+          <p className="text-[#5f6368] text-sm">
+            Use this exclusive link to receive your <strong className="text-[#137333]">309 credits</strong>
+          </p>
+          <p className="text-[#1a73e8] text-xs font-semibold mt-2 flex items-center gap-1.5">
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+            Last updated & verified: February 2026
+          </p>
+        </div>
+      </div>
 
-                  <div className="text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full">
-                    <div className="inline-block bg-[#1a73e8]/30 backdrop-blur-md border border-white/20 text-white text-xs md:text-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-wider mb-4">
-                      Coming Soon...
-                    </div>
-                    
-                    <h3 className="text-white font-black text-4xl md:text-6xl tracking-tight mb-6 drop-shadow-lg flex justify-center items-center gap-4">
-                      <span className="text-[#90caf9]">309</span>
-                      <div className="flex flex-col text-left leading-tight text-xl md:text-3xl">
-                        <span>FREE</span>
-                        <span>CREDITS</span>
-                      </div>
-                    </h3>
-
-                    <div className="mx-auto w-16 h-11 md:w-20 md:h-14 bg-[#ff0000] rounded-xl flex items-center justify-center shadow-[0_4px_14px_rgba(255,0,0,0.4)] transition-transform duration-300 group-hover:scale-110">
-                      <svg className="w-6 h-6 md:w-8 md:h-8 text-white fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-end w-full">
-                    <div className="text-white/95 font-bold text-sm md:text-base drop-shadow-md pb-1">
-                      The video guide will be published soon.
-                    </div>
-                    
-                    <div className="bg-[#212121]/90 hover:bg-black transition-colors backdrop-blur-md text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-1.5 shadow-md border border-white/20 cursor-pointer">
-                      <span>Watch on</span>
-                      <svg className="w-5 h-5 text-[#ff0000] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                      </svg>
-                      <span className="font-bold tracking-tighter text-base mt-[1px]"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-[#fff8f0] border border-[#fbd0b4] rounded-xl p-6 md:p-8 mb-16 shadow-sm relative transition-all max-w-5xl mx-auto">
-              <button 
-                onClick={handleCopyCode}
-                className="absolute top-5 right-5 md:top-6 md:right-6 bg-white hover:bg-[#f9f9f9] px-3 py-1.5 rounded-lg text-[14px] font-bold flex items-center gap-2 border border-[#dadce0] transition-colors cursor-pointer group shadow-sm"
-                title="Copy code"
-              >
-                <span className="text-[#c03f0c]">qlcampaign=6m-ctsdq-27</span>
-                {isCopied ? (
-                  <span className="text-[#137333] flex items-center bg-[#e6f4ea] p-1 rounded-md">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                ) : (
-                  <span className="text-[#5f6368] group-hover:text-[#202124] p-1 rounded-md bg-[#f1f3f4]">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                  </span>
-                )}
-              </button>
-              
-              <div className="flex items-start gap-3 mb-5 mt-4 md:mt-0">
-                <div className="text-[#d94a11] text-2xl shrink-0">🔗</div>
-                <div className="pr-0 md:pr-48"> 
-                  <h3 className="text-xl font-bold text-[#202124] mb-1.5">Special Credit Link</h3>
-                  <p className="text-[#5f6368] text-sm">
-                    Use this exclusive link to receive your <strong className="text-[#137333]">309 credits</strong>
-                  </p>
-                  <p className="text-[#1a73e8] text-xs font-semibold mt-2 flex items-center gap-1.5">
-                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                    Last updated & verified: February 2026
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-white border border-[#dadce0] rounded-lg p-3 flex flex-col md:flex-row items-center justify-between gap-3">
-                <div className="flex-1 w-full overflow-hidden px-1">
-                  <p className="text-[11px] text-[#5f6368] font-bold uppercase mb-0.5">Special Link:</p>
-                  <div className="text-sm text-[#1a73e8] block truncate w-full">
-                    https://www.skills.google/catalog?<span className="bg-[#ffe5d9] text-[#c03f0c] px-1.5 py-0.5 rounded font-bold">qlcampaign=6m-ctsdq-27</span>
-                  </div>
-                </div>
-                <a 
-                  href="https://www.skills.google/catalog?qlcampaign=6m-ctsdq-27" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full md:w-auto px-5 py-2.5 bg-[#d94a11] hover:bg-[#c03f0c] text-white font-bold text-sm rounded-lg shadow-sm transition-all text-center flex items-center justify-center gap-2 whitespace-nowrap"
-                >
-                  Open Link
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
-              </div>
-            </div>
-
-            {/* TIMELINE DESIGN FOR STEP BY STEP GUIDE */}
-            <div className="mb-16 max-w-5xl mx-auto px-2">
-              <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
-              
-              <div className="relative ml-4 md:ml-8">
-                {/* Vertical Connector Line */}
-                <div className="absolute top-4 bottom-0 left-[19px] w-[3px] bg-[#e8eaed] z-0"></div>
-
-                <div className="space-y-6 md:space-y-8 relative z-10">
-                  {[
-                    { 
-                      title: "Sign Out of Your Google Skills Account", 
-                      icon: "🚪",
-                      desc: "Before starting, make sure you log out of your Google Skills account. This is important to ensure the credits are applied correctly.", 
-                      alert: { type: "important", text: "Important: This step is crucial! Credits may not apply if you're already logged in." }
-                    },
-                    { 
-                      title: "Open the Special Credit Link", 
-                      icon: "🔗",
-                      desc: "Visit the exclusive link provided above or in the video description.", 
-                      alert: { type: "important", text: "Important: This link contains a special code at the end of the URL, which is required to activate the credits." }
-                    },
-                    { 
-                      title: "Sign In to Your Google Skills Account", 
-                      icon: "🔑",
-                      desc: "Once the link opens, sign in using your Google account, or your email and password manually.", 
-                      alert: { type: "tip", text: "Tip: Use the same account you plan to complete Skill Badges." }
-                    },
-                    { 
-                      title: "Receive Initial Credits", 
-                      icon: "🎁",
-                      desc: "After signing in through the special link, you will automatically receive 9 credits in your account.", 
-                      alert: null,
-                      badge: "9 Credits"
-                    },
-                    { 
-                      title: "Complete One Lab from the Catalog", 
-                      icon: "💻",
-                      desc: "To unlock the remaining credits, from the Google Skills Catalog, search for 'hands on'. Select 'A Tour of Google Cloud Hands-on Labs' (recommended for beginners).", 
-                      alert: { type: "tip", text: "Tip: This lab is perfect for beginners and takes about 3-5 minutes." }
-                    },
-                    { 
-                      title: "Finish the Lab with 100% Score", 
-                      icon: "💯",
-                      desc: "Complete the selected lab and ensure you achieve a 100/100 score. This may include opening the Google Cloud Console, assigning permissions to a principal, and enabling a required API.", 
-                      alert: { type: "important", text: "Important: Partial completion will not unlock the remaining credits." }
-                    },
-                    { 
-                      title: "Verify Your Total Credits", 
-                      icon: "✅",
-                      desc: "After ending the lab, visit the Billing / Payments page of your Google Skills Account and confirm that 300 additional credits have been added.", 
-                      alert: null,
-                      badge: "309 Total Credits"
-                    }
-                  ].map((step, index) => (
-                    <div key={index} className="relative flex items-start gap-4 md:gap-6">
-                      
-                      {/* Connected Circle Bullet */}
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6b3cb0] text-white font-bold text-sm shrink-0 border-4 border-white shadow-sm z-10 mt-3">
-                        {index + 1}
-                      </div>
-
-                      {/* Content Card */}
-                      <div className="flex-1 p-5 md:p-6 rounded-xl bg-white border border-[#dadce0] shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-md">
-                        <h4 className="text-lg font-bold text-[#202124] mb-2 flex items-center gap-2">
-                          <span className="text-[#d94a11]">{step.icon}</span> {step.title}
-                        </h4>
-                        <p className="text-[#5f6368] text-[15px] leading-relaxed mb-3">{step.desc}</p>
-                        
-                        {step.badge && (
-                          <div className="inline-block mt-1 mb-2 px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc]">
-                            {step.badge}
-                          </div>
-                        )}
-
-                        {step.alert && (
-                          <div className={`mt-2 p-3 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
-                            <span className="mt-0.5">{step.alert.type === 'important' ? '⚠️' : '💡'}</span>
-                            <span>{step.alert.text}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
+      <div className="bg-white border border-[#dadce0] rounded-lg p-3 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="flex-1 w-full overflow-hidden px-1">
+          <p className="text-[11px] text-[#5f6368] font-bold uppercase mb-0.5">Special Link:</p>
+          <div className="text-sm text-[#1a73e8] block truncate w-full">
+            https://www.skills.google/catalog?<span className="bg-[#ffe5d9] text-[#c03f0c] px-1.5 py-0.5 rounded font-bold">qlcampaign=6m-ctsdq-27</span>
           </div>
-        </section>
+        </div>
+        <a 
+          href="https://www.skills.google/catalog?qlcampaign=6m-ctsdq-27" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="w-full md:w-auto px-5 py-2.5 bg-[#d94a11] hover:bg-[#c03f0c] text-white font-bold text-sm rounded-lg shadow-sm transition-all text-center flex items-center justify-center gap-2 whitespace-nowrap"
+        >
+          Open Link
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    {/* TIMELINE DESIGN FOR STEP BY STEP GUIDE */}
+    <div className="mb-16 max-w-5xl mx-auto px-2">
+      <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
+      
+      <div className="relative ml-4 md:ml-8">
+        {/* Vertical Connector Line */}
+        <div className="absolute top-4 bottom-0 left-[19px] w-[3px] bg-[#e8eaed] z-0"></div>
+
+        <div className="space-y-6 md:space-y-8 relative z-10">
+          {[
+            { 
+              title: "Sign Out of Your Google Skills Account", 
+              icon: "🚪",
+              desc: "Before starting, make sure you log out of your Google Skills account. This is important to ensure the credits are applied correctly.", 
+              alert: { type: "important", text: "Important: This step is crucial! Credits may not apply if you're already logged in." }
+            },
+            { 
+              title: "Open the Special Credit Link", 
+              icon: "🔗",
+              desc: "Visit the exclusive link provided above or in the video description.", 
+              alert: { type: "important", text: "Important: This link contains a special code at the end of the URL, which is required to activate the credits." }
+            },
+            { 
+              title: "Sign In to Your Google Skills Account", 
+              icon: "🔑",
+              desc: "Once the link opens, sign in using your Google account, or your email and password manually.", 
+              alert: { type: "tip", text: "Tip: Use the same account you plan to complete Skill Badges." }
+            },
+            { 
+              title: "Receive Initial Credits", 
+              icon: "🎁",
+              desc: "After signing in through the special link, you will automatically receive 9 credits in your account.", 
+              alert: null,
+              badge: "9 Credits"
+            },
+            { 
+              title: "Complete One Lab from the Catalog", 
+              icon: "💻",
+              desc: "To unlock the remaining credits, from the Google Skills Catalog, search for 'hands on'. Select 'A Tour of Google Cloud Hands-on Labs' (recommended for beginners).", 
+              alert: { type: "tip", text: "Tip: This lab is perfect for beginners and takes about 3-5 minutes." }
+            },
+            { 
+              title: "Finish the Lab with 100% Score", 
+              icon: "💯",
+              desc: "Complete the selected lab and ensure you achieve a 100/100 score. This may include opening the Google Cloud Console, assigning permissions to a principal, and enabling a required API.", 
+              alert: { type: "important", text: "Important: Partial completion will not unlock the remaining credits." }
+            },
+            { 
+              title: "Verify Your Total Credits", 
+              icon: "✅",
+              desc: "After ending the lab, visit the Billing / Payments page of your Google Skills Account and confirm that 300 additional credits have been added.", 
+              alert: null,
+              badge: "309 Total Credits"
+            }
+          ].map((step, index) => (
+            <div key={index} className="relative flex items-start gap-4 md:gap-6">
+              
+              {/* Connected Circle Bullet */}
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6b3cb0] text-white font-bold text-sm shrink-0 border-4 border-white shadow-sm z-10 mt-3">
+                {index + 1}
+              </div>
+
+              {/* Content Card */}
+              <div className="flex-1 p-5 md:p-6 rounded-xl bg-white border border-[#dadce0] shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-md">
+                <h4 className="text-lg font-bold text-[#202124] mb-2 flex items-center gap-2">
+                  <span className="text-[#d94a11]">{step.icon}</span> {step.title}
+                </h4>
+                <p className="text-[#5f6368] text-[15px] leading-relaxed mb-3">{step.desc}</p>
+                
+                {step.badge && (
+                  <div className="inline-block mt-1 mb-2 px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc]">
+                    {step.badge}
+                  </div>
+                )}
+
+                {step.alert && (
+                  <div className={`mt-2 p-3 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
+                    <span className="mt-0.5">{step.alert.type === 'important' ? '⚠️' : '💡'}</span>
+                    <span>{step.alert.text}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
         {/* ================= PREMIUM PROBLEM / MESSAGE BOX ================= */}
         <div className="py-12 max-w-4xl mx-auto px-6 bg-white">
