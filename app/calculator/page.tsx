@@ -53,6 +53,13 @@ export default function CalculatorPage() {
   const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   
+  // 🔥 STATE FOR REFERRAL CODE COPY 🔥
+  const [copiedReferral, setCopiedReferral] = useState(false);
+  
+  // 🔥 STATES FOR TIMER 🔥
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  const [isMounted, setIsMounted] = useState(false);
+  
   const [isShaking, setIsShaking] = useState(false);
   const [userPoints, setUserPoints] = useState<number | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null); 
@@ -66,6 +73,32 @@ export default function CalculatorPage() {
   const [loadingStep, setLoadingStep] = useState<'wave' | 'collide'>('wave');
 
   const router = useRouter();
+
+  // 🔥 TIMER EFFECT 🔥
+  useEffect(() => {
+    setIsMounted(true);
+    // Target date: 13 July 2026, 17:00:00 IST
+    const targetDate = new Date("July 13, 2026 17:00:00 GMT+0530").getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
+      } else {
+        setTimeLeft({
+          d: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          s: Math.floor((distance % (1000 * 60)) / 1000)
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const savedAuto = localStorage.getItem("arcade_auto_calc") === "true";
@@ -132,6 +165,13 @@ export default function CalculatorPage() {
 
   const cancelAutoCalc = () => {
     setShowAutoCalcModal(false);
+  };
+
+  // 🔥 FUNCTION TO COPY REFERRAL CODE 🔥
+  const handleCopyReferral = () => {
+    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
+    setCopiedReferral(true);
+    setTimeout(() => setCopiedReferral(false), 2000);
   };
 
   const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null, points?: number) => {
@@ -318,7 +358,9 @@ export default function CalculatorPage() {
             <div className="bg-white rounded-lg shadow-xl w-[90%] max-w-sm p-6 animate-scale-up-modal">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-full bg-[#fce8e6] flex items-center justify-center text-[#d93025] shrink-0">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
                 </div>
                 <h3 className="text-xl font-bold text-[#202124]">Reset Data?</h3>
               </div>
@@ -479,12 +521,15 @@ export default function CalculatorPage() {
               {error && (
                 <div className="mt-2 flex flex-col">
                   <div className="flex items-center gap-2 text-[#d93025] text-sm font-medium">
-                    <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                    <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
                     {error}
                   </div>
                   <div className="text-black text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5">
                     <p>• Please make your public profile visible again in your settings.</p>
                     <p>• Your profile has extra characters at the start or end.</p>
+                    <p>• Please check your internet connections.</p>
                   </div>
                 </div>
               )}
@@ -498,21 +543,50 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col mx-auto w-full md:w-auto md:flex-1 max-w-[340px]">
-                <label className="text-[13px] font-bold text-black mb-1.5 ml-28">Referral Code</label>
-                <div className="bg-[#f1f3f4] border border-[#dadce0] rounded-lg px-4 py-2.5 flex items-center justify-between">
-                  <div className="text-[#3c4043] font-black text-[20px] tracking-[0.15em] flex items-center gap-1.5 leading-none">
-                    <span className="mt-2">****</span>
-                    <span className="text-[#9aa0a6] font-medium text-[22px]">_</span>
-                    <span className="mt-2">***</span>
-                    <span className="text-[#9aa0a6] font-medium text-[22px]">_</span>
-                    <span className="mt-2">***</span>
-                  </div>
-                  <div className="bg-white border border-[#dadce0] rounded-md px-3 py-1 flex items-center gap-2 shadow-sm">
-                    <div className="w-2 h-2 rounded-full bg-[#9aa0a6]"></div>
-                    <span className="text-[12px] font-bold text-[#5f6368]">Coming Soon</span>
+              {/* 🔥 REFERRAL CODE COPY SECTION UPDATED 🔥 */}
+              <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center">
+                
+                {/* ⬆️ TIMER MOVED ABOVE THE CODE BOX ⬆️ */}
+                <div className="flex items-center justify-center w-full mb-2">
+                  <div className="text-[13px] font-medium text-[#3c4043] flex items-center gap-1.5">
+                    Starts in
+                    <div className={`flex gap-1.5 font-bold text-[#1a73e8] transition-opacity duration-300 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                      <span>{timeLeft.d}d</span>
+                      <span>{timeLeft.h}h</span>
+                      <span>{timeLeft.m}m</span>
+                      <span>{timeLeft.s}s</span>
+                    </div>
                   </div>
                 </div>
+
+                <div className="bg-[#f1f3f4] border border-[#dadce0] rounded-lg px-4 py-3 flex items-center justify-center w-full">
+                  <div className="flex items-center gap-3">
+                    <div className="font-mono text-xl sm:text-[22px] text-black font-extrabold tracking-wider">
+                      GCAF26-IN-9SC-AE9
+                    </div>
+                    <button
+                      onClick={handleCopyReferral}
+                      className="p-1 text-[#5f6368] hover:text-black transition-colors rounded-md"
+                      title="Copy Code"
+                    >
+                      {copiedReferral ? (
+                        <svg className="w-6 h-6 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+                
+                {/* ⬇️ LABEL STAYS BELOW THE CODE BOX ⬇️ */}
+                <div className="flex flex-col items-center justify-center mt-2 w-full">
+                  <label className="text-[13px] font-bold text-black mb-0.5">Facilitator Referral Code</label>
+                </div>
+
               </div>
 
               <div className="text-sm font-medium text-[#3c4043] md:text-right">
@@ -523,35 +597,34 @@ export default function CalculatorPage() {
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
               {/* 🔥 UPDATED: Soft Aqua background, White text, Crisp hover (no scaling/blur), Exact Input width (w-full) 🔥 */}
               <button 
-  onClick={proceedToDashboard} 
-  disabled={loading} 
-  className="w-full bg-[#0891B2] hover:bg-[#0891B2] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-sm flex justify-center items-center shadow-sm"
->
-  {/* 🔥 DYNAMIC AI ANIMATION 🔥 */}
-  {loading ? (
-    <div className="flex items-center justify-center gap-3 h-6">
-      <span className="leading-none text-white">Calculating Points</span>
-      
-      {/* Switch between Wave and Collide based on loadingStep state */}
-      {loadingStep === 'wave' ? (
-        <div className="flex items-center gap-1 relative top-[1px]">
-          <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-1"></div>
-          <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-2"></div>
-          <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-3"></div>
-        </div>
-      ) : (
-        <div className="gem-container ml-1">
-          <div className="gem-dot bg-white gem-dot-1"></div>
-          <div className="gem-dot bg-white gem-dot-2"></div>
-          <div className="gem-dot bg-white gem-dot-3"></div>
-        </div>
-      )}
-
-    </div>
-  ) : (
-    "Calculate Arcade Points"
-  )}
-</button>
+                onClick={proceedToDashboard} 
+                disabled={loading} 
+                className="w-full bg-[#0891B2] hover:bg-[#0891B2] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-sm flex justify-center items-center shadow-sm"
+              >
+                {/* 🔥 DYNAMIC AI ANIMATION 🔥 */}
+                {loading ? (
+                  <div className="flex items-center justify-center gap-3 h-6">
+                    <span className="leading-none text-white">Calculating Points</span>
+                    
+                    {/* Switch between Wave and Collide based on loadingStep state */}
+                    {loadingStep === 'wave' ? (
+                      <div className="flex items-center gap-1 relative top-[1px]">
+                        <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-1"></div>
+                        <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-2"></div>
+                        <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-3"></div>
+                      </div>
+                    ) : (
+                      <div className="gem-container ml-1">
+                        <div className="gem-dot bg-white gem-dot-1"></div>
+                        <div className="gem-dot bg-white gem-dot-2"></div>
+                        <div className="gem-dot bg-white gem-dot-3"></div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  "Calculate Arcade Points"
+                )}
+              </button>
               
               <div className="mt-8 text-center">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className="text-[13.5px] font-bold text-[#202124] tracking-wide hover:underline inline-block">
@@ -559,6 +632,7 @@ export default function CalculatorPage() {
                 </a>
               </div>
             </div>
+
 
             {/* 🔥 NEW COMPACT PREMIUM HISTORY CARDS 🔥 */}
             {recentUrls.length > 0 && (
@@ -571,12 +645,16 @@ export default function CalculatorPage() {
                   
                   <div className="flex items-center gap-2">
                     <button onClick={clearHistory} className="flex items-center gap-2 text-sm text-[#202124] hover:text-black hover:bg-[#f1f3f4] bg-transparent px-3 py-1.5 rounded-lg font-bold transition-colors">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
                       Clear History
                     </button>
                     
                     <button onClick={() => setShowResetModal(true)} className="flex items-center gap-2 text-sm text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6] bg-transparent px-3 py-1.5 rounded-lg font-bold transition-colors">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
                       Reset
                     </button>
                   </div>
@@ -589,40 +667,40 @@ export default function CalculatorPage() {
                     return (
                       <div key={idx} className="relative">
                         <button 
-  onClick={() => handleHistoryClick(item.url, idx)} 
-  className="relative w-[175px] h-[54px] flex items-center gap-2.5 px-3 py-1 bg-white rounded-lg transition-all overflow-hidden group focus:outline-none shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-lg hover:scale-[1.02]"
-  style={{ 
-    borderLeft: `4px solid ${themeColor}` 
-  }}
-  title={item.url}
->
-  <div className="w-9 h-9 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10">
-    {copiedIndex === idx ? (
-       <div className="w-full h-full flex items-center justify-center bg-white">
-         <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-       </div>
-    ) : (
-       item.avatar ? (
-         <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
-       ) : (
-         <div className="w-full h-full flex items-center justify-center text-white font-medium text-[14px]" style={{ backgroundColor: themeColor }}>
-           {item.name ? item.name.charAt(0).toUpperCase() : "U"}
-         </div>
-       )
-    )}
-  </div>
-  
-  <div className="flex flex-col items-center justify-center z-10 w-full overflow-hidden">
-    <span className="text-[13px] font-bold text-[#202124] truncate w-full text-center tracking-tight">
-      {item.name || "Arcade Player"}
-    </span>
-    {item.points !== undefined && (
-      <span className="text-[12px] font-semibold text-[#5f6368] mt-[2px] leading-none">
-        {item.points} Pts
-      </span>
-    )}
-  </div>
-</button>
+                          onClick={() => handleHistoryClick(item.url, idx)} 
+                          className="relative w-[175px] h-[54px] flex items-center gap-2.5 px-3 py-1 bg-white rounded-lg transition-all overflow-hidden group focus:outline-none shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-lg hover:scale-[1.02]"
+                          style={{ borderLeft: `4px solid ${themeColor}` }}
+                          title={item.url}
+                        >
+                          <div className="w-9 h-9 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10">
+                            {copiedIndex === idx ? (
+                              <div className="w-full h-full flex items-center justify-center bg-white">
+                                <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                              </div>
+                            ) : (
+                              item.avatar ? (
+                                <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-white font-medium text-[14px]" style={{ backgroundColor: themeColor }}>
+                                  {item.name ? item.name.charAt(0).toUpperCase() : "U"}
+                                </div>
+                              )
+                            )}
+                          </div>
+                          
+                          <div className="flex flex-col items-center justify-center z-10 w-full overflow-hidden">
+                            <span className="text-[13px] font-bold text-[#202124] truncate w-full text-center tracking-tight">
+                              {item.name || "Arcade Player"}
+                            </span>
+                            {item.points !== undefined && (
+                              <span className="text-[12px] font-semibold text-[#5f6368] mt-[2px] leading-none">
+                                {item.points} Pts
+                              </span>
+                            )}
+                          </div>
+                        </button>
                       </div>
                     );
                   })}
@@ -632,7 +710,6 @@ export default function CalculatorPage() {
           </div>
         </div>
       
-  
         <div className="mt-12 mb-10 max-w-6xl mx-auto border-t border-[#dadce0] pt-12">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-[#202124] flex items-center justify-center gap-3">
@@ -647,26 +724,42 @@ export default function CalculatorPage() {
             <div className="relative flex flex-col md:flex-row gap-6 mb-12">
               <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">1</div>
               <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
-                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2"><span className="text-[#3b82f6] text-xl font-extrabold">➔</span> Sign in to Google Skills</h3>
-                <p className="text-[#5f6368] mb-5 text-[15px] leading-relaxed">Access the Google Skills platform and sign in with your Google account.<br className="hidden md:block"/>Navigate to the Google Skills website and sign in with your Google account to access your profile.</p>
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
+                  <span className="text-[#3b82f6] text-xl font-extrabold">➔</span> Sign in to Google Skills
+                </h3>
+                <p className="text-[#5f6368] mb-5 text-[15px] leading-relaxed">
+                  Access the Google Skills platform and sign in with your Google account.<br className="hidden md:block"/>Navigate to the Google Skills website and sign in with your Google account to access your profile.
+                </p>
                 <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg font-medium transition-colors mb-8 shadow-sm">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
                   Go to Google Skills
                 </a>
-                <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]"><img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-[102%] max-w-none h-auto object-cover -mb-[5%]" /></div>
+                <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]">
+                  <img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-[102%] max-w-none h-auto object-cover -mb-[5%]" />
+                </div>
               </div>
             </div>
 
             <div className="relative flex flex-col md:flex-row gap-6 mb-12">
               <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-[#3b82f6] text-white flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2">2</div>
               <div className="flex-1 bg-white border border-[#dadce0] rounded-2xl p-6 md:p-8 shadow-sm">
-                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2"><span className="text-[#10b981] text-lg flex items-center justify-center w-7 h-7 rounded-full border-2 border-[#10b981]">👤</span> Access Your Public Profile</h3>
-                <p className="text-[#5f6368] mb-5 text-[15px] leading-relaxed">After logging in navigate to the following link to access your Google Skills account settings.<br className="hidden md:block"/>On this Account Settings page scroll down to 'Public Profile' section.</p>
+                <h3 className="text-2xl font-bold text-[#202124] mb-3 flex items-center gap-2">
+                  <span className="text-[#10b981] text-lg flex items-center justify-center w-7 h-7 rounded-full border-2 border-[#10b981]">👤</span> Access Your Public Profile
+                </h3>
+                <p className="text-[#5f6368] mb-5 text-[15px] leading-relaxed">
+                  After logging in navigate to the following link to access your Google Skills account settings.<br className="hidden md:block"/>On this Account Settings page scroll down to 'Public Profile' section.
+                </p>
                 <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg font-medium transition-colors mb-8 shadow-sm">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
                   Go to Account Settings
                 </a>
-                <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]"><img src="https://i.ibb.co/99DTpv3Q/find-ppu-ss-s-2.png" alt="Step 2 Guide" className="w-full h-auto object-cover" /></div>
+                <div className="rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa]">
+                  <img src="https://i.ibb.co/99DTpv3Q/find-ppu-ss-s-2.png" alt="Step 2 Guide" className="w-full h-auto object-cover" />
+                </div>
               </div>
             </div>
 

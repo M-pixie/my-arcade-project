@@ -2,9 +2,44 @@
 
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function FacilitatorPage() {
   const router = useRouter();
+  const [copied, setCopied] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Target date: 13 July 2026, 17:00:00 IST
+    const targetDate = new Date("July 13, 2026 17:00:00 GMT+0530").getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
+      } else {
+        setTimeLeft({
+          d: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          s: Math.floor((distance % (1000 * 60)) / 1000)
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   // COORDINATORS DATA
   const coordinatorsData = [
@@ -25,7 +60,7 @@ export default function FacilitatorPage() {
         <main className="pt-16">
           
           {/* ================= ULTRA CLEAN PREMIUM HERO SECTION ================= */}
-          <section className="relative bg-white overflow-hidden py-20 px-4 sm:px-6">
+          <section className="relative bg-white overflow-hidden pt-20 pb-8 px-4 sm:px-6">
             <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center gap-6">
               
               {/* EXACT MATCH OF THE IMAGE FONT STYLE */}
@@ -33,9 +68,16 @@ export default function FacilitatorPage() {
                 Arcade Facilitator Program
               </h1>
               
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#34a853] mb-4 tracking-tight">
-                Enrolments soon..
-              </h2>
+              {/* LIVE COUNTDOWN TIMER REPLACING "Enrolments soon.." */}
+              <div className="text-xl sm:text-2xl font-medium text-[#3c4043] mb-4 tracking-tight flex items-center justify-center gap-2">
+                Starting in
+                <div className={`flex gap-2 font-bold text-[#1a73e8] transition-opacity duration-300 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
+                  <span>{timeLeft.d}d</span>
+                  <span>{timeLeft.h}h</span>
+                  <span>{timeLeft.m}m</span>
+                  <span>{timeLeft.s}s</span>
+                </div>
+              </div>
 
               <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[15px] md:text-[17px] mb-6">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
@@ -50,17 +92,29 @@ export default function FacilitatorPage() {
 
               {/* 🔥 INLINE GREY REFERRAL CODE STRIP 🔥 */}
               <div className="w-full max-w-lg mx-auto flex flex-col gap-1.5 mb-12">
-                <span className="text-[13px] font-bold text-[#5f6368] uppercase tracking-wider text-left pl-1">
+                <span className="text-[13px] font-bold text-[#5f6368] uppercase tracking-wider text-center pl-1">
                   Referral Code
                 </span>
-                <div className="flex items-center justify-between bg-[#f1f3f4] rounded-lg px-5 py-3 border border-[#dadce0]">
-                  <div className="font-mono text-xl sm:text-2xl text-[#202124] font-extrabold tracking-[0.15em] opacity-80">
-                    ****_***_***
+                <div className="flex items-center justify-center bg-[#f1f3f4] rounded-lg px-5 py-4 border border-[#dadce0]">
+                  
+                  {/* Updated Referral Code & Copy Icon - "Coming Soon" Removed */}
+                  <div className="flex items-center gap-3">
+                    <div className="font-mono text-2xl sm:text-3xl text-black font-extrabold tracking-wider">
+                      GCAF26-IN-9SC-AE9
+                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="p-1 text-[#5f6368] hover:text-black transition-colors rounded-md"
+                      title="Copy Code"
+                    >
+                      {copied ? (
+                        <svg className="w-6 h-6 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                      ) : (
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                      )}
+                    </button>
                   </div>
-                  <div className="bg-white/80 border border-[#dadce0] text-[#5f6368] px-3 py-1.5 rounded-md text-[13px] font-bold flex items-center gap-2 shadow-sm cursor-not-allowed">
-                    <span className="w-2 h-2 rounded-full bg-[#9aa0a6]"></span>
-                    Coming Soon
-                  </div>
+
                 </div>
               </div>
 
@@ -92,7 +146,7 @@ export default function FacilitatorPage() {
           </section>
 
 {/* ================= MILESTONES & SWAGS SECTION ================= */}
-<section className="pt-16 pb-24 px-6 bg-[#f8f9fa] border-y border-[#dadce0]">
+<section className="pt-10 pb-24 px-6 bg-[#f8f9fa] border-y border-[#dadce0]">
   <div className="max-w-5xl mx-auto">
     
     <h2 className="text-3xl sm:text-4xl font-bold text-[#1a73e8] tracking-tight mb-10 text-center">
@@ -172,35 +226,35 @@ export default function FacilitatorPage() {
           </div>
         </div>
 
-        {/* Bonus Milestone */}
-        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f1f3f4] transition-colors">
-          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
-            <strong>[NEW]</strong> Bonus<br />Milestone**
-          </div>
-          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
-            <strong>Eligibility Criteria is coming soon!</strong>
-          </div>
-          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
-            <strong>10 Extra Bonus Points</strong>
-          </div>
-        </div>
-
       </div>
     </div>
 
+    {/* 🔥 UPDATED: Note with Link instead of New Milestone 🔥 */}
+    <div className="bg-[#e8f0fe] border border-[#d2e3fc] rounded-lg p-4 mb-6 text-[#01070f] text-sm md:text-base font-medium shadow-sm">
+      <span className="font-bold text-[#0c0d0d] mr-1">Note:</span> If you complete the "Bonus Milestone" along with Ultimate Milestone, you can earn an extra 10 bonus points, thus making your total, 45 + 35 + 10 = 90 points.
+    </div>
+
     {/* Notes Section */}
-    <div className="text-sm md:text-base text-[#5f6368] space-y-1 px-2">
-      <p>*You will only receive points for the milestone that you earn and not for the ones before that.</p>
-      <p>**Users become eligible to take part in the Bonus Milestone after they at-least complete "Milestone 1".</p>
+    <div className="text-sm md:text-base text-[#5f6368] space-y-2 px-2">
+      <p>• You will only receive points for the milestone that you earn and not for the ones before that.</p>
+      <p>• Users become eligible to take part in the Bonus Milestone after they at-least complete "Milestone 1".</p>
+      
+      {/* Clickable Eligibility Criteria Link */}
+      <p className="mt-2">
+        <span className="font-bold text-[#202124]">See Eligibility Criteria :</span>{" "}
+        <a 
+          href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-[#1a73e8] underline hover:text-[#1557b0] transition-colors"
+        >
+          https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone
+        </a>
+      </p>
     </div>
 
   </div>
 </section>
-
-
-
-
-
 
           {/* ================= BORDERLESS & OPEN CONTACT FACILITATOR WITH ANIMATED IMAGES ================= */}
           <section id="contact-facilitator" className="py-20 px-6 bg-[#fcfcfc] border-b border-[#dadce0] relative overflow-hidden">
@@ -256,7 +310,7 @@ export default function FacilitatorPage() {
                     <div className="mt-5 text-center">
                       <h4 className="font-bold text-[#202124] text-[17px]">Rohit</h4>
                       <div className="inline-block mt-1 bg-[#fce8e6] border border-[#fad2cf] px-3 py-1 rounded-md shadow-sm">
-                        <span className="text-[11px] font-bold text-[#c5221f] uppercase tracking-wide">Labs Lead</span>
+                        <span className="text-[11px] font-bold text-[#c5221f] uppercase tracking-wide">Arcade Faciliatator</span>
                       </div>
                     </div>
                   </div>
@@ -264,7 +318,7 @@ export default function FacilitatorPage() {
 
                 <div className="flex-1 flex flex-col justify-center">
                   <p className="text-[#3c4043] text-[17px] leading-relaxed mb-8 text-center md:text-left font-normal">
-                    As a dedicated Google Cloud Arcade Facilitator in 2025 & 26, Manish & Anjali Patel has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts. He is passionate about empowering the community to upskill, earn certifications, and claim official Google Cloud swags.
+                    As a dedicated Google Cloud Arcade Facilitator in 2025 & 26, Manish & Anjali Patel , Rohit Kumar has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts. He is passionate about empowering the community to upskill, earn certifications, and claim official Google Cloud swags.
                   </p>
 
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-5 rounded-lg border border-[#e8eaed] shadow-sm mb-8">

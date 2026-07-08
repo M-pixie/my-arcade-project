@@ -17,13 +17,22 @@ import { subscribeLeaderboard } from "@/lib/leaderboard";
 export default function HomePage() {
   const router = useRouter();
 
-  // 🔥 State for Copy Button
+  // 🔥 State for Campaign Code Copy Button
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText("qlcampaign=6m-ctsdq-27");
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  // 🔥 NEW: State for Referral Code Copy Button
+  const [isReferralCopied, setIsReferralCopied] = useState(false);
+
+  const handleCopyReferral = () => {
+    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
+    setIsReferralCopied(true);
+    setTimeout(() => setIsReferralCopied(false), 2000);
   };
 
   // 🔥 State for Premium Problem Box Form
@@ -212,7 +221,7 @@ export default function HomePage() {
           {isAtTop ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
           ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7-7m7-7l7-7" /></svg>
           )}
         </button>
       </div>
@@ -245,7 +254,7 @@ export default function HomePage() {
         </h1>
       </div>
 
-      {/* 🔥 You & Others Avatar (NO BORDER, ORIGINAL LOOK) 🔥 */}
+      {/* 🔥 You Avatar UPDATED (Blue border & only Name) 🔥 */}
       <div 
         className="absolute top-4 right-4 md:top-6 md:right-8 flex flex-col items-center gap-1.5 z-40 cursor-pointer group"
         onClick={() => router.push('/dashboard')}
@@ -254,10 +263,10 @@ export default function HomePage() {
           src={imageError ? "/avatar.png" : currentUserAvatar} 
           alt="Your Avatar" 
           onError={() => setImageError(true)}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110 border-2 border-[#1a73e8] p-[2px] bg-white shadow-sm"
         />
-        <span className="text-[#5f6368] text-[11px] md:text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors">
-          {currentUserName ? `${currentUserName} (You)` : "You"} & {leaders.length > 0 ? leaders.length - 1 : 0} others
+        <span className="text-[#5f6368] text-[11px] md:text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors text-center max-w-[80px] truncate">
+          {currentUserName || "You"}
         </span>
       </div>
 
@@ -321,19 +330,30 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 🔥 Premium Referral Code Section (Normal Pink) 🔥 */}
+              {/* 🔥 UPDATED: Yellow Premium Referral Code Section 🔥 */}
               <div className="mt-5 w-full">
                 <h4 className="text-[#5f6368] text-[12px] font-bold uppercase tracking-[0.1em] mb-2 ml-1">
-                  Referral Code
+                  Facilitator Referral Code
                 </h4>
-                <div className="bg-[#ff4a7d] border border-[#f92e66] rounded-md p-4 md:px-5 flex items-center justify-between w-full shadow-sm">
-                  <div className="text-white font-black text-[22px] tracking-[0.25em] mt-1">
-                    ****_***_***
+                <div className="bg-[#fef7e0] border border-[#fbbc04] rounded-md p-3 md:px-5 flex items-center justify-between w-full shadow-sm">
+                  <div className="font-mono text-black font-extrabold text-[18px] md:text-[20px] tracking-wider mt-1">
+                    GCAF26-IN-9SC-AE9
                   </div>
-                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-md shadow-sm shrink-0">
-                    <span className="w-2 h-2 rounded-full bg-[#ff4a7d]"></span>
-                    <span className="text-[#ff4a7d] text-[13px] font-bold">Coming Soon</span>
-                  </div>
+                  <button
+                    onClick={handleCopyReferral}
+                    className="p-1.5 text-[#b06000] hover:text-black hover:bg-[#fbbc04]/30 transition-colors rounded-md shrink-0"
+                    title="Copy Referral Code"
+                  >
+                    {isReferralCopied ? (
+                      <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -554,7 +574,6 @@ export default function HomePage() {
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-[10px]">
                     ＄
-
                     </div>
                     <div className="text-white text-sm md:text-base font-semibold truncate text-left drop-shadow-md">
                       Google Cloud FREE 309 Credits | Step-by-Step Guide
