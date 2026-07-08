@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { db } from "@/lib/firebase"; 
 import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
-  const [passcode, setPasscode] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   // 🔥 LEADERBOARD STATES
@@ -18,6 +18,7 @@ export default function AdminDashboard() {
   const [loadingPosts, setLoadingPosts] = useState(false);
 
   const [error, setError] = useState("");
+  const [shake, setShake] = useState(false); // 🔥 SHAKE ANIMATION STATE 🔥
   
   // 🔥 COPY ICON TRACKING 🔥
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -27,17 +28,45 @@ export default function AdminDashboard() {
 
   const router = useRouter();
 
-  // 🔥 TUMHARA SECRET PASSWORD 🔥
-  const SECRET_PASSWORD = "827160"; // Ise badal lena bhai
+  // 🔥 AUTHORIZED ADMIN EMAILS (INHE APNE HISAB SE BADAL LENA) 🔥
+  const AUTHORIZED_EMAILS = [
+    "vy7manish@gmail.com", 
+    "patelanjali0801@gmail.com"
+  ];
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passcode === SECRET_PASSWORD) {
-      setIsAuthenticated(true);
-    } else {
-      setError("Incorrect Passcode!");
-      setPasscode("");
+  // 🔥 GOOGLE LOGIN LOGIC 🔥
+  const handleGoogleLogin = async () => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      
+      if (user.email && AUTHORIZED_EMAILS.includes(user.email)) {
+        setIsAuthenticated(true);
+        setError("");
+        setShake(false);
+      } else {
+        await signOut(auth);
+        setError("Access Denied: Unauthorized Email Address.");
+        // 🔥 Trigger Shake Animation 🔥
+        setShake(true);
+        setTimeout(() => setShake(false), 500); 
+      }
+    } catch (err) {
+      console.error("Login Error:", err);
+      setError("Login failed. Please try again.");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
     }
+  };
+
+  // 🔥 LOGOUT LOGIC 🔥
+  const handleLogout = async () => {
+    const auth = getAuth();
+    await signOut(auth);
+    setIsAuthenticated(false);
   };
 
   // 🔥 1. REAL-TIME FIREBASE LISTENER (LEADERBOARD) 🔥
@@ -75,7 +104,6 @@ export default function AdminDashboard() {
       querySnapshot.forEach((doc) => {
         fetchedPosts.push({ id: doc.id, ...doc.data() });
       });
-      // Reverse array to show latest first (assuming no strict timestamp field for ordering)
       setPosts(fetchedPosts.reverse());
       setLoadingPosts(false);
     }, (err) => {
@@ -98,12 +126,10 @@ export default function AdminDashboard() {
     }
   };
 
-  // 🔥 SEARCH LOGIC VARIABLES 🔥
   const lowerQuery = searchQuery.trim().toLowerCase();
   const isSearching = lowerQuery.length > 0;
   const isNoMatch = isSearching && users.length > 0 && !users.some(u => u.name?.toLowerCase().includes(lowerQuery));
 
-  // 🔥 MANUAL SCROLL ON CLICK 🔥
   const handleSearchClick = () => {
     if (isSearching && !isNoMatch) {
       const firstMatch = users.find(u => u.name?.toLowerCase().includes(lowerQuery));
@@ -118,7 +144,6 @@ export default function AdminDashboard() {
 
   const formatDate = (dateValue: any) => {
     if (!dateValue) return "N/A";
-    // Check if it's a string timestamp (from comments)
     if (typeof dateValue === 'string') {
       const date = new Date(dateValue);
       if (!isNaN(date.getTime())) {
@@ -129,17 +154,15 @@ export default function AdminDashboard() {
       }
       return dateValue;
     }
-    // Check if Firestore Timestamp
     if (typeof dateValue.toDate === 'function') {
       return dateValue.toDate().toLocaleString('en-IN', { 
         day: '2-digit', month: 'short', year: 'numeric',
         hour: '2-digit', minute: '2-digit'
       });
     }
-    return String(dateValue).split("GMT")[0].trim(); // Chhota format
+    return String(dateValue).split("GMT")[0].trim();
   };
 
-  // 🔥 COPY FUNCTION WITH TICK FEEDBACK 🔥
   const handleCopy = (id: string, url: string) => {
     navigator.clipboard.writeText(url);
     setCopiedId(id);
@@ -149,66 +172,81 @@ export default function AdminDashboard() {
   // 🔥 1. LOGIN SCREEN 🔥
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4 font-sans">
-        <div className="bg-[#fbf8ee] rounded-xl shadow-md border border-[#dadce0] w-full max-w-sm overflow-hidden">
-          {/* Top Section */}
-          <div className="p-8 pb-6 flex flex-col items-center border-b border-[#e8eaed]">
-            <h1 className="text-xl font-bold text-[#b31412] mb-4">Arcade Nexus Privacy</h1>
-            <p className="text-[#5f6368] font-medium mb-3">Admin Access</p>
+      <div className="min-h-screen bg-[#b31412] flex items-center justify-center p-4 font-sans">
+        <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
+          
+          {/* 🔥 Top Section: Ab Solid Blue Hai 🔥 */}
+          <div className="p-8 pb-6 flex flex-col items-center bg-[#1a73e8] border-b border-[#0f52b0]">
+            <h1 className="text-xl font-bold text-white mb-2 text-center">Arcade Nexus Privacy</h1>
+            <p className="text-[#e8f0fe] font-medium mb-3 text-sm">Admin Only</p>
             <div className="text-4xl">👨‍💻</div>
           </div>
           
           {/* Bottom Section (Form) */}
           <div className="bg-white p-8 pt-6">
-            <form onSubmit={handleLogin} className="flex flex-col gap-4">
-              <div>
-                <label className="block text-xs font-bold text-[#5f6368] uppercase tracking-wider mb-2">
-                  Passcode:
-                </label>
-                
-                {/* Thin Line Border and Green Submit Button */}
-                <div className="flex items-center border border-[#dadce0] rounded overflow-hidden focus-within:border-[#0f9d58] focus-within:ring-1 focus-within:ring-[#0f9d58] transition-all">
-                  <input
-                    type="password"
-                    value={passcode}
-                    onChange={(e) => setPasscode(e.target.value)}
-                    placeholder="Enter Secret Key"
-                    className="w-full px-4 py-2.5 text-sm focus:outline-none text-[#202124] font-medium"
-                    autoFocus
-                  />
-                  <button
-                    type="submit"
-                    className="px-6 py-2.5 bg-[#0f9d58] hover:bg-[#0b8043] text-white font-bold text-sm transition-colors"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-              {error && <p className="text-[#b31412] text-xs font-bold">{error}</p>}
-            </form>
+            <div className="flex flex-col gap-4">
+              
+              {/* 🔥 Session Expired Text 🔥 */}
+              <p className="text-[13.5px] font-bold text-[#5f6368] uppercase tracking-wider mb-2 text-center">
+                Admin Access Only
+              </p>
+              
+              {/* 🔥 Google Button: Blue Border & Slight Curve 🔥 */}
+              <button
+                onClick={handleGoogleLogin}
+                className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border-2 border-[#1a73e8] rounded-md hover:bg-[#f8f9fa] transition-all focus:outline-none shadow-sm"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                <span className="text-[#3c4043] font-bold text-sm">Sign in with Google</span>
+              </button>
+
+              {/* 🔥 Error Text: Bada, Bold aur Hard Shake Animation 🔥 */}
+              {error && (
+                <p className={`text-[#b31412] text-[16px] font-bold text-center mt-2 ${shake ? 'animate-hard-shake' : ''}`}>
+                  {error}
+                </p>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* 🔥 CSS for Hard Shake 🔥 */}
+        <style jsx>{`
+          @keyframes hardShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+          }
+          .animate-hard-shake {
+            animation: hardShake 0.4s ease-in-out;
+          }
+        `}</style>
       </div>
     );
   }
 
   // 🔥 2. ADMIN DASHBOARD 🔥
   return (
-    <div className="min-h-screen bg-[#f8f9fa] p-4 md:p-8 font-sans text-[#202124] flex justify-center">
+    <div className="min-h-screen bg-[#b31412] p-4 md:p-8 font-sans flex justify-center">
       <div className="w-full max-w-6xl flex flex-col gap-8">
         
         {/* Header Setup */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-black text-[#202124] flex items-center gap-2">
+          <h1 className="text-2xl font-black text-white flex items-center gap-2">
             Live Database
             <span className="flex h-2.5 w-2.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#137333]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
             </span>
           </h1>
           <button
-            onClick={() => setIsAuthenticated(false)}
-            className="text-sm font-bold text-[#d93025] hover:underline"
+            onClick={handleLogout}
+            className="text-sm font-bold text-[#ffcccc] hover:text-white hover:underline transition-colors"
           >
             Lock & Exit
           </button>
@@ -216,15 +254,13 @@ export default function AdminDashboard() {
 
         {/* ================= LEADERBOARD SECTION ================= */}
         <div className="w-full flex flex-col gap-2">
-          
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-[#5f6368]">User Points Leaderboard</h2>
-            {/* 🔥 SEARCH WITH RIGHT SIDE BUTTON IN BOX 🔥 */}
+            <h2 className="text-lg font-bold text-white">User Points Leaderboard</h2>
             <div className="flex justify-end px-1">
               <div className="relative flex flex-col items-end w-48 sm:w-64">
                 <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-md transition-colors w-full ${
                   isNoMatch 
-                    ? 'border-[#d93025] text-[#d93025] bg-[#fce8e6]' 
+                    ? 'border-white text-white bg-red-600' 
                     : 'text-[#5f6368] border-[#dadce0] bg-white focus-within:border-[#0f9d58]'
                 }`}>
                   <input
@@ -234,7 +270,7 @@ export default function AdminDashboard() {
                     onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}
                     placeholder="Search user..."
                     className={`bg-transparent border-none outline-none w-full text-sm font-bold py-1 ${
-                      isNoMatch ? 'text-[#d93025] placeholder-[#d93025]' : 'text-[#202124] placeholder-[#9aa0a6]'
+                      isNoMatch ? 'text-white placeholder-[#ffcccc]' : 'text-[#202124] placeholder-[#9aa0a6]'
                     }`}
                   />
                   <button 
@@ -248,7 +284,7 @@ export default function AdminDashboard() {
                   </button>
                 </div>
                 {isNoMatch && (
-                  <span className="text-[11px] font-bold text-[#d93025] absolute top-full mt-1 right-1">
+                  <span className="text-[11px] font-bold text-yellow-300 absolute top-full mt-1 right-1">
                     No user found
                   </span>
                 )}
@@ -256,8 +292,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* MAIN TABLE WITH FIXED HEIGHT & SCROLL */}
-          <div className="bg-white rounded-lg shadow-sm border border-[#dadce0] w-full overflow-hidden">
+          <div className="bg-white rounded-lg shadow-2xl border border-[#dadce0] w-full overflow-hidden">
             <div className="w-full overflow-x-auto max-h-[500px] overflow-y-auto custom-scrollbar">
               {loading ? (
                 <div className="p-10 text-center text-[#5f6368] font-bold">Syncing live data...</div>
@@ -269,7 +304,6 @@ export default function AdminDashboard() {
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043]">User Name</th>
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043]">Public Profile</th>
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] text-center w-28">Points</th>
-                      {/* 🔥 NEW COLUMN HEADER: PROFILE ANALYZED 🔥 */}
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] text-center w-36">Profile Analyzed</th>
                       <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider">Last Update</th>
                     </tr>
@@ -312,15 +346,11 @@ export default function AdminDashboard() {
                           <td className="px-6 py-4 border-r border-[#e8eaed] text-center">
                             <span className="text-base font-bold text-[#202124]">{user.points}</span>
                           </td>
-                          
-                          {/* 🔥 NEW COLUMN DATA: PROFILE ANALYZED COUNT 🔥 */}
                           <td className="px-6 py-4 border-r border-[#e8eaed] text-center">
                             <span className="bg-[#f8f9fa] border border-[#dadce0] px-3 py-1.5 rounded-full text-[12px] font-bold text-[#3c4043] inline-flex items-center gap-1.5">
-                              
                               {user.calculationCount || 1} {user.calculationCount === 1 || !user.calculationCount ? 'Time' : 'Times'}
                             </span>
                           </td>
-
                           <td className="px-6 py-4">
                             <span className="text-[13px] font-medium text-[#5f6368]">{formatDate(user.updatedAt)}</span>
                           </td>
@@ -336,14 +366,13 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ================= NEW: SWAG POSTS MANAGEMENT ================= */}
+        {/* ================= SWAG POSTS MANAGEMENT ================= */}
         <div className="w-full flex flex-col gap-4 mt-4">
-          
-          <div className="flex items-center justify-between border-b border-[#dadce0] pb-2">
-            <h2 className="text-2xl font-bold text-[#202124]">
+          <div className="flex items-center justify-between border-b border-[#ffcccc] pb-2">
+            <h2 className="text-2xl font-bold text-white">
               Swag Posts Moderation
             </h2>
-            <span className="text-[#202124] text-[15px] font-bold">
+            <span className="text-white text-[15px] font-bold">
               Total Posts: {posts.length}
             </span>
           </div>
@@ -355,9 +384,9 @@ export default function AdminDashboard() {
               </div>
             ) : posts.length > 0 ? (
               posts.map((post) => (
-                <div key={post.id} className="bg-white rounded-xl shadow-sm border border-[#dadce0] p-5 flex flex-col lg:flex-row gap-6 hover:shadow-md transition-shadow">
+                <div key={post.id} className="bg-white rounded-xl shadow-2xl border border-[#dadce0] p-5 flex flex-col lg:flex-row gap-6 hover:shadow-lg transition-shadow">
                   
-                  {/* LEFT: POST INFO, IMAGE & AUTHOR */}
+                  {/* LEFT: POST INFO */}
                   <div className="flex-1 flex flex-col">
                     <div className="flex justify-between items-start mb-4 border-b border-[#f1f3f4] pb-4">
                       <div className="flex items-center gap-3">
@@ -374,7 +403,6 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       
-                      {/* DELETE POST BUTTON */}
                       <button 
                         onClick={() => handleDeletePost(post.id)}
                         className="bg-white border border-[#dadce0] text-[#d93025] hover:bg-[#fce8e6] hover:border-[#fce8e6] px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"

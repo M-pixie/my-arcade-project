@@ -35,7 +35,6 @@ export default function HomePage() {
   // 🔥 Tab State for Premium Guide Section
   const [activeGuideTab, setActiveGuideTab] = useState('start');
 
-  // Tab 1: How to Start Arcade Data
   const startSteps = [
     { link: "https://share.google/mn0xUfmd49TA9RPc1", title: "Sign in Account", desc: "Sign up on Cloud Skills Boost and set up your Arcade profile.", icon: "👤", badge: "Step 1" },
     { link: "https://share.google/45EC3J4RjWLzgbkGy", title: "Registration", desc: "Enroll in Arcade to unlock labs, points and challenges.", icon: "📝", badge: "Step 2" },
@@ -43,7 +42,6 @@ export default function HomePage() {
     { link: "https://share.google/JRMVQ9xd8tTwx8Mol", title: "Facilitator Program", desc: "Join the program & Win Exclusive Points & rewards.", icon: "🏅", badge: "Step 4" }
   ];
 
-  // Tab 2: Arcade Tools Data
   const arcadeTools = [
     { title: "Points Calculator", desc: "Get reliable Arcade point calculation directly from your profile URL.", link: "/calculator", icon: "🔢", badge: "Calc" },
     { title: "Smart Dashboard", desc: "View total points, recent activity, rank and history cleanly.", link: "/dashboard", icon: "📊", badge: "Dash" },
@@ -51,7 +49,6 @@ export default function HomePage() {
     { title: "Facilitator Page", desc: "Get expert guidance, FAQs, and connect directly with community leads.", link: "/facilitator", icon: "🤝", badge: "Lead" }
   ];
 
-  // Tab 3: Arcade Points System Data
   const pointsSystem = [
     { title: "Arcade Adventure", desc: "Standard track progression (1 game badge = 1 point)", icon: "🗺️", badge: "1 Pt" },
     { title: "Arcade Voyage", desc: "Intermediate cloud challenges (1 game badge = 1 point)", icon: "⛵", badge: "1 Pt" },
@@ -60,7 +57,6 @@ export default function HomePage() {
     { title: "Special Badges", desc: "Limited-time exclusive (1 game badge = 2 points)", icon: "🌟", badge: "2 Pts" }
   ];
 
-  // 🔥 State for Smart Auto Scroll Button
   const [isAtTop, setIsAtTop] = useState(true);
 
   // 🔥 LOCAL STATES
@@ -77,13 +73,24 @@ export default function HomePage() {
   const [globalPrinto, setGlobalPrinto] = useState({ received: 0, not_received: 0 });
   const [globalWs, setGlobalWs] = useState({ received: 0, not_received: 0 });
 
-  // 🔥 LEADERBOARD STATES FOR ROTATING AVATARS 🔥
+  // 🔥 LEADERBOARD STATES
   const [leaders, setLeaders] = useState<any[]>([]);
-  const [avatarStartIndex, setAvatarStartIndex] = useState(0);
+  // 🔥 NEW: State for Current User Profile
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
-    // 🔥 AVATARS DATA FETCH 🔥
+    // Fetch Leaders Data
     const unsubLeaderboard = subscribeLeaderboard((data) => setLeaders(data));
+
+    // 🔥 NEW: Get current user details from local storage if available for avatar
+    const savedUserData = localStorage.getItem("arcadeUserData");
+    if (savedUserData) {
+      try {
+        setCurrentUser(JSON.parse(savedUserData));
+      } catch (e) {
+        console.error("Error parsing user data", e);
+      }
+    }
 
     const savedPrintoVote = localStorage.getItem("printoVote") as "received" | "not_received" | null;
     if (savedPrintoVote) setPrintoVote(savedPrintoVote);
@@ -115,25 +122,6 @@ export default function HomePage() {
     };
   }, []);
 
-  // 🔥 ALL PLAYERS AVATAR ROTATION LOGIC 🔥
-  useEffect(() => {
-    if (leaders.length === 0) return;
-    const interval = setInterval(() => {
-      setAvatarStartIndex((prev) => (prev + 3) % leaders.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, [leaders.length]);
-
-  // 🔥 SELECT 10 AVATARS FOR DISPLAY 🔥
-  let displayAvatars: string[] = [];
-  if (leaders.length > 0) {
-    const allUrls = leaders.map(l => l.photoURL || "/avatar.png");
-    for (let i = 0; i < 10; i++) {
-      displayAvatars.push(allUrls[(avatarStartIndex + i) % allUrls.length]);
-    }
-    displayAvatars = Array.from(new Set(displayAvatars)).slice(0, 10);
-  }
-
   useEffect(() => {
     const handleScroll = () => {
       setIsAtTop(window.scrollY < 300);
@@ -160,44 +148,6 @@ export default function HomePage() {
     setFormSubCategory("");
   };
 
-  const handlePrintoVoteClick = async (vote: "received" | "not_received") => {
-    if (printoVote === vote) return; 
-    
-    const previousVote = printoVote;
-    setPrintoVote(vote);
-    localStorage.setItem("printoVote", vote);
-
-    const statsRef = doc(db, "swagStats", "cohort2");
-    const updates: any = {
-      [vote === "received" ? "printoReceived" : "printoNotReceived"]: increment(1)
-    };
-    
-    if (previousVote) {
-      updates[previousVote === "received" ? "printoReceived" : "printoNotReceived"] = increment(-1);
-    }
-    
-    await setDoc(statsRef, updates, { merge: true });
-  };
-
-  const handleWhiteSquareVoteClick = async (vote: "received" | "not_received") => {
-    if (whiteSquareVote === vote) return; 
-
-    const previousVote = whiteSquareVote;
-    setWhiteSquareVote(vote);
-    localStorage.setItem("whiteSquareVote", vote);
-
-    const statsRef = doc(db, "swagStats", "cohort2");
-    const updates: any = {
-      [vote === "received" ? "wsReceived" : "wsNotReceived"]: increment(1)
-    };
-    
-    if (previousVote) {
-      updates[previousVote === "received" ? "wsReceived" : "wsNotReceived"] = increment(-1);
-    }
-    
-    await setDoc(statsRef, updates, { merge: true });
-  };
-
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if(!reviewText.trim() || !reviewName.trim()) return;
@@ -212,18 +162,6 @@ export default function HomePage() {
     
     await addDoc(collection(db, "swagReviews"), newReview);
     setReviewText("");
-  };
-
-  const printoTotal = globalPrinto.received + globalPrinto.not_received;
-  const printoStats = { 
-    received: printoTotal > 0 ? Math.round((globalPrinto.received / printoTotal) * 100) : 0, 
-    not_received: printoTotal > 0 ? Math.round((globalPrinto.not_received / printoTotal) * 100) : 0 
-  };
-  
-  const wsTotal = globalWs.received + globalWs.not_received;
-  const whiteSquareStats = { 
-    received: wsTotal > 0 ? Math.round((globalWs.received / wsTotal) * 100) : 0, 
-    not_received: wsTotal > 0 ? Math.round((globalWs.not_received / wsTotal) * 100) : 0 
   };
 
   return (
@@ -255,27 +193,9 @@ export default function HomePage() {
 
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
-
-
 {/* ================= HERO SECTION ================= */}
 <section className="relative pt-20 pb-4 bg-white overflow-hidden">
-  {/* Custom Style for the Multi-Color Text Animation */}
   <style>{`
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .animate-gradient-text {
-      /* Made the colors darker and high-contrast for a more premium, clear look */
-      background: linear-gradient(270deg, #0d47a1, #d81b60, #4a148c, #00838f, #0d47a1);
-      background-size: 300% 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradientShift 6s ease infinite;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.15));
-    }
-    /* Hide scrollbar for tabs */
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
     }
@@ -290,81 +210,65 @@ export default function HomePage() {
   <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#ff4a7d] opacity-[0.05] blur-[120px] rounded-full pointer-events-none"></div>
 
   <div className="w-full relative z-10">
-    {/* 🔥 HEADER & OVERLAYS 🔥 */}
     <div className="py-8 md:py-10 relative overflow-hidden flex flex-col gap-10 w-full mx-auto">
       
-      {/* 🔥 SUBSCRIBE HERE BUTTON (TOP LEFT) 🔥 */}
-      <div className="absolute top-2 left-4 md:top-4 md:left-8 z-50 flex items-center">
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-6 py-2 md:px-10 md:py-2.5 bg-[#ff4a7d] hover:bg-[#f92e66] text-white font-bold text-[13px] md:text-[15px] rounded-full shadow-[0_4px_12px_rgba(255,74,125,0.25)] hover:shadow-[0_6px_16px_rgba(255,74,125,0.4)] transition-all duration-300 flex items-center justify-center tracking-wide border-none cursor-pointer transform hover:-translate-y-0.5"
-        >
-          Subscribe for Arcade
-        </a>
-      </div>
-
-      {/* 🌟 ARCADE NEXUS HEADER (TOP CENTER) - DARK CLEAR GRADIENT 🌟 */}
+      {/* 🔥 Arcade Nexus Header 🔥 */}
       <div className="absolute top-2 md:top-2 left-1/2 transform -translate-x-1/2 z-50 flex justify-center w-full pointer-events-none">
-        <h1 className="text-[34px] sm:text-[44px] md:text-[56px] font-extrabold tracking-tight m-0 text-center animate-gradient-text">
+        <h1 className="text-[40px] md:text-[56px] font-bold text-gray-900 tracking-tight drop-shadow-sm m-0 text-center">
           Arcade Nexus
         </h1>
       </div>
 
-      {/* 🔥 AVATARS (TOP RIGHT) 🔥 */}
-      {displayAvatars.length > 0 && (
-        <div className="absolute top-2 right-4 md:top-4 md:right-8 flex flex-col items-end gap-1.5 z-40">
-          <div className="flex -space-x-3">
-            {displayAvatars.map((url, idx) => (
-              <img 
-                key={`${url}-${idx}`}
-                src={url}
-                alt="player avatar"
-                className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover relative transition-transform hover:scale-110 shadow-sm"
-                style={{ zIndex: 10 - idx }}
-              />
-            ))}
-          </div>
-          <span className="text-gray-600 text-xs font-bold tracking-wide">Active Players</span>
-        </div>
-      )}
+      {/* 🔥 You & Others Avatar 🔥 */}
+      <div 
+        className="absolute top-4 right-4 md:top-6 md:right-8 flex flex-col items-center gap-1.5 z-40 cursor-pointer group"
+        onClick={() => router.push('/dashboard')}
+      >
+        <img 
+          src={currentUser?.photoURL || "/avatar.png"} 
+          alt="Your Avatar" 
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[#1a73e8] object-cover shadow-sm transition-transform duration-300 group-hover:scale-110"
+        />
+        <span className="text-[#5f6368] text-[11px] md:text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors">
+          You & {leaders.length > 0 ? leaders.length - 1 : 0} others
+        </span>
+      </div>
 
-      {/* 🔥 MAIN CONTENT CONTAINER 🔥 */}
       <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-28 md:mt-24">
-        
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 w-full">
           
           <div className="w-full lg:w-3/5 flex flex-col items-center lg:items-start text-center lg:text-left">
-            
             <p className="text-gray-700 text-xl md:text-2xl max-w-xl font-medium leading-relaxed mb-8 mt-2">
               Calculate points, monitor live rankings, and track your entire Arcade journey in one sleek dashboard.
             </p>
 
-            {/* 🔥 SLIGHT CURVE BUTTONS 🔥 */}
-            <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 w-full mb-10">
-              
-              {/* Button 1: Arcade Points Calculator (Blue Theme) */}
+            {/* 🔥 Buttons Section 🔥 */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10 w-full">
               <button
                 onClick={() => router.push('/calculator')}
-                className="w-full sm:w-auto px-8 py-3.5 bg-[#1a73e8] text-white font-bold text-[15px] sm:text-[16px] tracking-wide rounded-lg hover:bg-[#1557b0] hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center shadow-[0_4px_14px_rgba(26,115,232,0.3)] border border-transparent"
+                className="px-6 py-2.5 bg-[#1a73e8] text-white font-bold text-[14px] tracking-wide rounded-md hover:bg-[#1557b0] hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-transparent"
               >
-                <span className="whitespace-nowrap">Arcade Calculator</span>
+                Arcade Calculator
               </button>
-
-              {/* Button 2: Start Labs here (White Theme) */}
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#1a73e8] font-bold text-[15px] sm:text-[16px] tracking-wide rounded-lg hover:bg-gray-50 hover:-translate-y-0.5 transition-all duration-300 focus:outline-none flex items-center justify-center border border-gray-200 shadow-[0_4px_14px_rgba(0,0,0,0.05)]"
+                className="px-6 py-2.5 bg-white text-[#1a73e8] font-bold text-[14px] tracking-wide rounded-md hover:bg-gray-50 hover:-translate-y-0.5 transition-all duration-300 border border-[#dadce0] shadow-sm"
               >
-                <span className="whitespace-nowrap">Start Labs here</span>
+                Start Labs here
               </a>
-
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-2.5 bg-[#ff4a7d] text-white font-bold text-[14px] tracking-wide rounded-md hover:bg-[#f92e66] hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-transparent"
+              >
+                Subscribe for Arcade
+              </a>
             </div>
 
-            {/* Facilitator Box - No Box/Border Design */}
+            {/* 🔥 Facilitator Program Box 🔥 */}
             <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
               <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
                 Facilitator Program
@@ -389,13 +293,35 @@ export default function HomePage() {
                   <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
                 </div>
               </div>
-            </div>
 
-          </div>
+              {/* 🔥 Premium Referral Code Section 🔥 */}
+              <div className="mt-5 w-full">
+                <h4 className="text-[#5f6368] text-[12px] font-bold uppercase tracking-[0.1em] mb-2 ml-1">
+                  Facilitator Referral Code
+                </h4>
+                {/* Yahan Box ko Normal Pink aur Curve ko md kiya hai */}
+                <div className="bg-[#1db3dd] border border-[#f92e66] rounded-md p-4 md:px-5 flex items-center justify-between w-full shadow-sm">
+                  
+                  {/* Asterisk Text ko White kiya taaki Pink pe chamke */}
+                  <div className="text-white font-black text-[22px] tracking-[0.25em] mt-1">
+                    ****_***_***
+                  </div>
+                  
+                  {/* Coming Soon Button ko White background aur Pink text/dot diya hai */}
+                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-md shadow-sm shrink-0">
+                    <span className="w-2 h-2 rounded-full bg-[#45059f]"></span>
+                    <span className="text-[#120207] text-[13px] font-bold">Coming Soon</span>
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
 
-          {/* 🔥 PREMIUM LIGHT GREY CARD (RIGHT SIDE) 🔥 */}
+              
+
+          {/* 🔥 Premium Blue Card for Tools (RIGHT SIDE) 🔥 */}
           <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
-            <div className="bg-[#f4f7f9] rounded-[12px] shadow-[0_12px_32px_rgba(0,0,0,0.08)] flex flex-col w-full overflow-hidden border border-[#e2e8f0]">
+            <div className="bg-gradient-to-b from-[#1a73e8] to-[#313135] rounded-[16px] shadow-[0_12px_32px_rgba(26,115,232,0.2)] flex flex-col w-full overflow-hidden border border-[#4285f4]">
               {[
                 { 
                   name: "Arcade Points Calculator", 
@@ -440,23 +366,19 @@ export default function HomePage() {
                       router.push(item.link);
                     }
                   }}
-                  /* Changed styles to make buttons look clear and clickable directly */
-                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#e2e8f0] last:border-none hover:bg-[#e9edf3] transition-colors duration-200 cursor-pointer group"
+                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#4285f4]/30 last:border-none hover:bg-white/10 transition-colors duration-200 cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
-                    {/* Icon Box: Now always light blue with dark blue icon for clear visibility */}
-                    <div className="w-[38px] h-[38px] rounded-[8px] bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm transition-all duration-300">
+                    <div className="w-[38px] h-[38px] rounded-[8px] bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0 shadow-sm transition-all duration-300">
                       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                         {item.icon}
                       </svg>
                     </div>
-                    {/* Text: Now always bold and dark */}
-                    <span className="font-[700] text-[15px] text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
+                    <span className="font-[700] text-[15px] text-white tracking-tight group-hover:text-blue-100 transition-colors">
                       {item.name}
                     </span>
                   </div>
-                  {/* Arrow: Always blue and visible */}
-                  <span className="text-[#1a73e8] group-hover:translate-x-1 transform transition-transform">
+                  <span className="text-white opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transform transition-all">
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
