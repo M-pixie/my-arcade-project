@@ -75,22 +75,46 @@ export default function HomePage() {
 
   // 🔥 LEADERBOARD STATES
   const [leaders, setLeaders] = useState<any[]>([]);
-  // 🔥 NEW: State for Current User Profile
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  
+  // 🔥 NEW: State for Current User Profile (SYNCED WITH NAVBAR LOGIC)
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
+  const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png");
+  const [imageError, setImageError] = useState(false);
+
+  // 🔥 MAGIC REFRESH FUNCTION FOR HOMEPAGE AVATAR & NAME 🔥
+  const refreshUserData = () => {
+    try {
+      const savedData = localStorage.getItem("arcade_user_data") || localStorage.getItem("arcadeUserData");
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        
+        // Avatar logic
+        const newAvatar = parsed.userAvatar || parsed.photoURL;
+        if (newAvatar) {
+          setCurrentUserAvatar(newAvatar);
+          setImageError(false); 
+        }
+
+        // Name logic
+        const newName = parsed.userName || parsed.name;
+        if (newName) {
+          setCurrentUserName(newName);
+        }
+      }
+    } catch (e) {
+      console.error("Error reading user data", e);
+    }
+  };
 
   useEffect(() => {
-    // Fetch Leaders Data
-    const unsubLeaderboard = subscribeLeaderboard((data) => setLeaders(data));
+    // Initial fetch
+    refreshUserData();
+    
+    // Listeners for real-time updates
+    window.addEventListener("arcadeDataUpdated", refreshUserData);
+    window.addEventListener("storage", refreshUserData);
 
-    // 🔥 NEW: Get current user details from local storage if available for avatar
-    const savedUserData = localStorage.getItem("arcadeUserData");
-    if (savedUserData) {
-      try {
-        setCurrentUser(JSON.parse(savedUserData));
-      } catch (e) {
-        console.error("Error parsing user data", e);
-      }
-    }
+    const unsubLeaderboard = subscribeLeaderboard((data) => setLeaders(data));
 
     const savedPrintoVote = localStorage.getItem("printoVote") as "received" | "not_received" | null;
     if (savedPrintoVote) setPrintoVote(savedPrintoVote);
@@ -116,6 +140,8 @@ export default function HomePage() {
     });
 
     return () => {
+      window.removeEventListener("arcadeDataUpdated", refreshUserData);
+      window.removeEventListener("storage", refreshUserData);
       unsubLeaderboard();
       unsubReviews();
       unsubStats();
@@ -219,18 +245,19 @@ export default function HomePage() {
         </h1>
       </div>
 
-      {/* 🔥 You & Others Avatar 🔥 */}
+      {/* 🔥 You & Others Avatar (NO BORDER, ORIGINAL LOOK) 🔥 */}
       <div 
         className="absolute top-4 right-4 md:top-6 md:right-8 flex flex-col items-center gap-1.5 z-40 cursor-pointer group"
         onClick={() => router.push('/dashboard')}
       >
         <img 
-          src={currentUser?.photoURL || "/avatar.png"} 
+          src={imageError ? "/avatar.png" : currentUserAvatar} 
           alt="Your Avatar" 
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-[#1a73e8] object-cover shadow-sm transition-transform duration-300 group-hover:scale-110"
+          onError={() => setImageError(true)}
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <span className="text-[#5f6368] text-[11px] md:text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors">
-          You & {leaders.length > 0 ? leaders.length - 1 : 0} others
+          {currentUserName ? `${currentUserName} (You)` : "You"} & {leaders.length > 0 ? leaders.length - 1 : 0} others
         </span>
       </div>
 
@@ -294,34 +321,28 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 🔥 Premium Referral Code Section 🔥 */}
+              {/* 🔥 Premium Referral Code Section (Normal Pink) 🔥 */}
               <div className="mt-5 w-full">
                 <h4 className="text-[#5f6368] text-[12px] font-bold uppercase tracking-[0.1em] mb-2 ml-1">
-                  Facilitator Referral Code
+                  Referral Code
                 </h4>
-                {/* Yahan Box ko Normal Pink aur Curve ko md kiya hai */}
-                <div className="bg-[#1db3dd] border border-[#f92e66] rounded-md p-4 md:px-5 flex items-center justify-between w-full shadow-sm">
-                  
-                  {/* Asterisk Text ko White kiya taaki Pink pe chamke */}
+                <div className="bg-[#ff4a7d] border border-[#f92e66] rounded-md p-4 md:px-5 flex items-center justify-between w-full shadow-sm">
                   <div className="text-white font-black text-[22px] tracking-[0.25em] mt-1">
                     ****_***_***
                   </div>
-                  
-                  {/* Coming Soon Button ko White background aur Pink text/dot diya hai */}
                   <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-md shadow-sm shrink-0">
-                    <span className="w-2 h-2 rounded-full bg-[#45059f]"></span>
-                    <span className="text-[#120207] text-[13px] font-bold">Coming Soon</span>
+                    <span className="w-2 h-2 rounded-full bg-[#ff4a7d]"></span>
+                    <span className="text-[#ff4a7d] text-[13px] font-bold">Coming Soon</span>
                   </div>
                 </div>
               </div>
-              </div>
-              </div>
 
-              
+            </div>
+          </div>
 
           {/* 🔥 Premium Blue Card for Tools (RIGHT SIDE) 🔥 */}
           <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
-            <div className="bg-gradient-to-b from-[#1a73e8] to-[#313135] rounded-[16px] shadow-[0_12px_32px_rgba(26,115,232,0.2)] flex flex-col w-full overflow-hidden border border-[#4285f4]">
+            <div className="bg-gradient-to-b from-[#1a73e8] to-[#0d47a1] rounded-[16px] shadow-[0_12px_32px_rgba(26,115,232,0.2)] flex flex-col w-full overflow-hidden border border-[#4285f4]">
               {[
                 { 
                   name: "Arcade Points Calculator", 
