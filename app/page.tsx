@@ -66,8 +66,6 @@ export default function HomePage() {
     { title: "Special Badges", desc: "Limited-time exclusive (1 game badge = 2 points)", icon: "🌟", badge: "2 Pts" }
   ];
 
-  const [isAtTop, setIsAtTop] = useState(true);
-
   // 🔥 LOCAL STATES
   const [printoVote, setPrintoVote] = useState<"received" | "not_received" | null>(null);
   const [whiteSquareVote, setWhiteSquareVote] = useState<"received" | "not_received" | null>(null);
@@ -157,15 +155,6 @@ export default function HomePage() {
     };
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsAtTop(window.scrollY < 300);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let text = `Hi Manish, I am ${formName}.\n\nI have a query regarding: *${formCategory}*`;
@@ -202,29 +191,7 @@ export default function HomePage() {
   return (
     <>
       <PopupModal />
-      
       <Navbar />
-
-      {/* ================= FIXED SCROLL BUTTON ================= */}
-      <div className="fixed bottom-8 right-6 md:right-8 z-[100] flex flex-col gap-3">
-        <button 
-          onClick={() => {
-            if (isAtTop) {
-              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            } else {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-          }}
-          className="w-12 h-12 bg-white text-[#1a73e8] rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.15)] flex items-center justify-center hover:bg-[#e8f0fe] hover:scale-110 transition-all border border-[#dadce0]"
-          title={isAtTop ? "Scroll to Bottom" : "Scroll to Top"}
-        >
-          {isAtTop ? (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
-          ) : (
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
-          )}
-        </button>
-      </div>
 
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
@@ -575,21 +542,22 @@ export default function HomePage() {
       </div>
     </div>
     
-    <div className="bg-[#fff8f0] border border-[#fbd0b4] rounded-xl p-6 md:p-8 mb-16 shadow-sm relative transition-all max-w-5xl mx-auto">
+    {/* 🔥 UPDATED PREMIUM BLUE CREDIT BOX 🔥 */}
+    <div className="bg-[#1a73e8] border border-[#1557b0] rounded-xl p-6 md:p-8 mb-16 shadow-lg relative transition-all max-w-5xl mx-auto text-white">
       <button 
         onClick={handleCopyCode}
-        className="absolute top-5 right-5 md:top-6 md:right-6 bg-white hover:bg-[#f9f9f9] px-3 py-1.5 rounded-lg text-[14px] font-bold flex items-center gap-2 border border-[#dadce0] transition-colors cursor-pointer group shadow-sm"
+        className="absolute top-5 right-5 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-[14px] font-bold flex items-center gap-2 border border-white/20 transition-colors cursor-pointer group shadow-sm"
         title="Copy code"
       >
-        <span className="text-[#c03f0c]">qlcampaign=6m-ctsdq-27</span>
+        <span className="text-white tracking-wide">qlcampaign=6m-ctsdq-27</span>
         {isCopied ? (
-          <span className="text-[#137333] flex items-center bg-[#e6f4ea] p-1 rounded-md">
+          <span className="text-green-300 flex items-center p-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
             </svg>
           </span>
         ) : (
-          <span className="text-[#5f6368] group-hover:text-[#202124] p-1 rounded-md bg-[#f1f3f4]">
+          <span className="text-white p-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
@@ -598,31 +566,31 @@ export default function HomePage() {
       </button>
       
       <div className="flex items-start gap-3 mb-5 mt-4 md:mt-0">
-        <div className="text-[#d94a11] text-2xl shrink-0">🔗</div>
+        <div className="text-yellow-300 text-2xl shrink-0 mt-0.5">🔗</div>
         <div className="pr-0 md:pr-48"> 
-          <h3 className="text-xl font-bold text-[#202124] mb-1.5">Special Credit Link</h3>
-          <p className="text-[#5f6368] text-sm">
-            Use this exclusive link to receive your <strong className="text-[#137333]">309 credits</strong>
+          <h3 className="text-xl font-bold text-white mb-1.5 tracking-wide">Special Credit Link</h3>
+          <p className="text-blue-100 text-sm">
+            Use this exclusive link to receive your <strong className="text-white bg-white/20 px-2 py-0.5 rounded ml-1">309 credits</strong>
           </p>
-          <p className="text-[#1a73e8] text-xs font-semibold mt-2 flex items-center gap-1.5">
+          <p className="text-blue-200 text-xs font-semibold mt-3 flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
             Last updated & verified: February 2026
           </p>
         </div>
       </div>
 
-      <div className="bg-white border border-[#dadce0] rounded-lg p-3 flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="flex-1 w-full overflow-hidden px-1">
+      <div className="bg-white rounded-lg p-3 flex flex-col md:flex-row items-center justify-between gap-3 shadow-inner">
+        <div className="flex-1 w-full overflow-hidden px-2">
           <p className="text-[11px] text-[#5f6368] font-bold uppercase mb-0.5">Special Link:</p>
-          <div className="text-sm text-[#1a73e8] block truncate w-full">
-            https://www.skills.google/catalog?<span className="bg-[#ffe5d9] text-[#c03f0c] px-1.5 py-0.5 rounded font-bold">qlcampaign=6m-ctsdq-27</span>
+          <div className="text-sm text-[#1a73e8] font-medium block truncate w-full">
+            https://www.skills.google/catalog?<span className="bg-[#e8f0fe] text-[#1a73e8] px-1.5 py-0.5 rounded font-bold border border-[#d2e3fc]">qlcampaign=6m-ctsdq-27</span>
           </div>
         </div>
         <a 
           href="https://www.skills.google/catalog?qlcampaign=6m-ctsdq-27" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="w-full md:w-auto px-5 py-2.5 bg-[#d94a11] hover:bg-[#c03f0c] text-white font-bold text-sm rounded-lg shadow-sm transition-all text-center flex items-center justify-center gap-2 whitespace-nowrap"
+          className="w-full md:w-auto px-6 py-2.5 bg-[#202124] hover:bg-[#3c4043] text-white font-bold text-sm rounded-lg shadow-md transition-all text-center flex items-center justify-center gap-2 whitespace-nowrap"
         >
           Open Link
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -630,7 +598,7 @@ export default function HomePage() {
       </div>
     </div>
 
-    {/* TIMELINE DESIGN FOR STEP BY STEP GUIDE */}
+    {/* 🔥 SHORTENED TIMELINE DESIGN FOR STEP BY STEP GUIDE 🔥 */}
     <div className="mb-16 max-w-5xl mx-auto px-2">
       <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
       
@@ -641,46 +609,46 @@ export default function HomePage() {
         <div className="space-y-6 md:space-y-8 relative z-10">
           {[
             { 
-              title: "Sign Out of Your Google Skills Account", 
+              title: "Sign Out First", 
               icon: "🚪",
-              desc: "Before starting, make sure you log out of your Google Skills account. This is important to ensure the credits are applied correctly.", 
-              alert: { type: "important", text: "Important: This step is crucial! Credits may not apply if you're already logged in." }
+              desc: "Log out of your current Google Skills account before doing anything else.", 
+              alert: { type: "important", text: "Crucial: Credits won't apply if you're already logged in." }
             },
             { 
-              title: "Open the Special Credit Link", 
+              title: "Open Special Link", 
               icon: "🔗",
-              desc: "Visit the exclusive link provided above or in the video description.", 
-              alert: { type: "important", text: "Important: This link contains a special code at the end of the URL, which is required to activate the credits." }
+              desc: "Click the exclusive blue link provided above. It contains your unique activation code.", 
+              alert: null
             },
             { 
-              title: "Sign In to Your Google Skills Account", 
+              title: "Sign In", 
               icon: "🔑",
-              desc: "Once the link opens, sign in using your Google account, or your email and password manually.", 
-              alert: { type: "tip", text: "Tip: Use the same account you plan to complete Skill Badges." }
+              desc: "Log back in using the Google account where you want to earn your badges.", 
+              alert: null
             },
             { 
-              title: "Receive Initial Credits", 
+              title: "Get 9 Credits", 
               icon: "🎁",
-              desc: "After signing in through the special link, you will automatically receive 9 credits in your account.", 
+              desc: "You will instantly receive 9 initial credits in your account.", 
               alert: null,
               badge: "9 Credits"
             },
             { 
-              title: "Complete One Lab from the Catalog", 
+              title: "Start a Lab", 
               icon: "💻",
-              desc: "To unlock the remaining credits, from the Google Skills Catalog, search for 'hands on'. Select 'A Tour of Google Cloud Hands-on Labs' (recommended for beginners).", 
-              alert: { type: "tip", text: "Tip: This lab is perfect for beginners and takes about 3-5 minutes." }
+              desc: "Search the catalog and start 'A Tour of Google Cloud Hands-on Labs'.", 
+              alert: null
             },
             { 
-              title: "Finish the Lab with 100% Score", 
+              title: "Score 100%", 
               icon: "💯",
-              desc: "Complete the selected lab and ensure you achieve a 100/100 score. This may include opening the Google Cloud Console, assigning permissions to a principal, and enabling a required API.", 
-              alert: { type: "important", text: "Important: Partial completion will not unlock the remaining credits." }
+              desc: "Complete the lab instructions fully and ensure you get a 100/100 score.", 
+              alert: { type: "important", text: "Partial completion won't unlock the remaining credits." }
             },
             { 
-              title: "Verify Your Total Credits", 
+              title: "Verify 309 Credits", 
               icon: "✅",
-              desc: "After ending the lab, visit the Billing / Payments page of your Google Skills Account and confirm that 300 additional credits have been added.", 
+              desc: "Check your Billing page to confirm all remaining credits are added.", 
               alert: null,
               badge: "309 Total Credits"
             }
@@ -688,25 +656,26 @@ export default function HomePage() {
             <div key={index} className="relative flex items-start gap-4 md:gap-6">
               
               {/* Connected Circle Bullet */}
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#6b3cb0] text-white font-bold text-sm shrink-0 border-4 border-white shadow-sm z-10 mt-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#1a73e8] text-white font-bold text-sm shrink-0 border-4 border-white shadow-sm z-10 mt-2">
                 {index + 1}
               </div>
 
               {/* Content Card */}
-              <div className="flex-1 p-5 md:p-6 rounded-xl bg-white border border-[#dadce0] shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-md">
-                <h4 className="text-lg font-bold text-[#202124] mb-2 flex items-center gap-2">
-                  <span className="text-[#d94a11]">{step.icon}</span> {step.title}
-                </h4>
-                <p className="text-[#5f6368] text-[15px] leading-relaxed mb-3">{step.desc}</p>
+              <div className="flex-1 p-5 rounded-xl bg-white border border-[#dadce0] shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-md">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
+                  <h4 className="text-lg font-bold text-[#202124] flex items-center gap-2">
+                    <span>{step.icon}</span> {step.title}
+                  </h4>
+                  {step.badge && (
+                    <span className="inline-block px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc] w-fit">
+                      {step.badge}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[#5f6368] text-[14px] leading-relaxed mb-2">{step.desc}</p>
                 
-                {step.badge && (
-                  <div className="inline-block mt-1 mb-2 px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc]">
-                    {step.badge}
-                  </div>
-                )}
-
                 {step.alert && (
-                  <div className={`mt-2 p-3 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
+                  <div className={`mt-2 p-2.5 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
                     <span className="mt-0.5">{step.alert.type === 'important' ? '⚠️' : '💡'}</span>
                     <span>{step.alert.text}</span>
                   </div>
