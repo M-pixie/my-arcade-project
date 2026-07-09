@@ -29,6 +29,7 @@ export default function DashboardPage() {
   const [realRank, setRealRank] = useState<number | null>(null);
   const [leaderboardData, setLeaderboardData] = useState<any[]>([]);
   const [copiedCode, setCopiedCode] = useState<string | null>(null); 
+  const [copiedReferral, setCopiedReferral] = useState(false);
 
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +37,6 @@ export default function DashboardPage() {
   const [showSubscribe, setShowSubscribe] = useState(false);
   
   const [hideModals, setHideModals] = useState(false);
-  const [showRevealCard, setShowRevealCard] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("hide_arcade_banners") === "true") {
@@ -105,6 +105,12 @@ export default function DashboardPage() {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2000);
+  };
+
+  const handleCopyReferral = () => {
+    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
+    setCopiedReferral(true);
+    setTimeout(() => setCopiedReferral(false), 2000);
   };
 
   const loadDataFromCache = (data: any) => {
@@ -411,31 +417,33 @@ export default function DashboardPage() {
               <div className="lg:col-span-8 flex flex-col w-full h-full">
                 
                 <div className="mb-8 w-full flex-grow">
-                  <div className="flex items-center justify-center lg:justify-center mb-8 lg:pl-16">
-                    <h2 className="text-[28px] font-bold text-[#202124] tracking-normal">Facilitator Progress</h2>
+                  
+                  {/* 🔥 UPDATED: Facilitator Progress Header with Referral Code 🔥 */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 w-full gap-4">
+                    <h2 className="text-[28px] font-bold text-black tracking-normal">Facilitator Progress</h2>
+                    
+                    <div className="flex items-center justify-between sm:justify-start gap-3 bg-white border border-[#dadce0] py-2 px-4 rounded-lg shadow-sm w-full sm:w-auto">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] uppercase font-bold text-[#5f6368] leading-none mb-1">Referral Code</span>
+                        <span className="text-[16px] font-black text-black leading-none tracking-wide">GCAF26-IN-9SC-AE9</span>
+                      </div>
+                      <button 
+                        onClick={handleCopyReferral} 
+                        className="text-[#5f6368] hover:text-black transition-colors ml-2 bg-gray-50 hover:bg-gray-100 p-2 rounded-md" 
+                        title="Copy Referral Code"
+                      >
+                        {copiedReferral ? (
+                           <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        ) : (
+                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
                   
                   {/* CLEAR FACILITATOR PROGRESS SECTION */}
                   <div className="relative w-full">
                     
-                    {/* Bada Centered white card (Kam curve & X button) */}
-                    {showRevealCard && (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
-                        <div className="bg-white border border-[#dadce0] shadow-xl px-10 py-8 flex flex-col items-center gap-3 animate-fade-in-up pointer-events-auto relative" style={{ borderRadius: '4px' }}>
-                          <button 
-                            onClick={() => setShowRevealCard(false)} 
-                            className="absolute top-3 right-3 text-[#5f6368] hover:text-black transition-colors"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                          <span className="text-[21px] font-black text-black ">Revealing on 16th July</span>
-                          <span className="text-[15px] font-bold text-[#5f6368]">Facilitator progress will be available soon.</span>
-                        </div>
-                      </div>
-                    )}
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
                       {facilitatorMilestones.map((milestone) => {
                         const arcadeProgress = Math.min(100, (arcadeGamesCount / milestone.targetArcade) * 100);
@@ -503,7 +511,15 @@ export default function DashboardPage() {
                   
                   <div className="text-center mb-11 w-full">
                     <p className="text-[#137333] font-bold text-[16px] md:text-[18px] leading-snug">
-                      +10 Bonus Points - Eligibility Criteria Coming Soon
+                      Complete the Ultimate + 10 Bonus Milestone to earn 90 points.{' '}
+                      <a 
+                        href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-[#1a73e8] hover:underline ml-1"
+                      >
+                        See Eligibility Criteria
+                      </a>
                     </p>
                   </div>
 
@@ -683,6 +699,7 @@ export default function DashboardPage() {
             </div>
           )}
 
+
           {points !== null && (
             <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
@@ -691,6 +708,7 @@ export default function DashboardPage() {
                 </h4>
               </div>
               
+              {/* 🔥 UPDATED PENDING LABS UI 🔥 */}
               {pendingLabs.length > 0 && (
                 <div className="mb-10">
                   <h5 className="text-sm font-black text-[#5f6368] uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -701,14 +719,14 @@ export default function DashboardPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                     {pendingLabs.map((lab) => (
                       <div key={`pending-${lab.id}`} className="flex flex-col items-center">
-                        <h5 className="text-[20px] lg:text-[22px] font-bold text-[#1a73e8] mb-2 text-center">{lab.title}</h5>
+                        <h5 className="text-[20px] lg:text-[22px] font-bold text-black mb-2 text-center">{lab.title}</h5>
                         <p className="text-[14px] text-[#5f6368] font-bold mb-4 text-center">{lab.subtitle}</p>
 
-                        <div className="bg-gradient-to-b from-[#181a20] to-[#0b0c0f] p-6 md:p-8 rounded-2xl mb-5 w-full max-w-[340px] flex justify-center items-center border border-[#dadce0] shadow-[0_8px_16px_rgba(0,0,0,0.15)] relative overflow-hidden group hover:border-[#1a73e8] hover:shadow-lg transition-all aspect-square">
+                        <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
                           <img 
                             src={lab.image} 
                             alt={lab.title} 
-                            className="h-44 md:h-52 lg:h-60 w-full object-contain group-hover:scale-105 transition-transform duration-300 z-10" 
+                            className="w-full object-contain rounded-[12px] shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300 z-10" 
                           />
                         </div>
 
@@ -729,11 +747,12 @@ export default function DashboardPage() {
                           Arcade points: {lab.points}
                         </p>
 
+                        {/* Updated to match Learn More pill design */}
                         <a 
                           href={lab.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-[#1a73e8] text-white font-black text-[15px] py-2.5 px-8 rounded-md hover:bg-[#1557b0] transition-colors uppercase tracking-widest shadow-sm inline-block text-center"
+                          className="bg-white hover:bg-[#f8f9fa] text-[#1a73e8] font-bold text-[15px] py-2 px-8 rounded-full border border-[#dadce0] transition-all shadow-sm inline-block text-center"
                         >
                           Start Lab
                         </a>
@@ -743,6 +762,7 @@ export default function DashboardPage() {
                 </div>
               )}
 
+              {/* 🔥 UPDATED COMPLETED LABS UI 🔥 */}
               {completedLabs.length > 0 && (
                 <div>
                   <h5 className={`text-sm font-black text-[#137333] uppercase tracking-widest mb-6 flex items-center gap-2 ${pendingLabs.length > 0 ? 'pt-6 border-t border-[#dadce0]' : ''}`}>
@@ -753,11 +773,11 @@ export default function DashboardPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                     {completedLabs.map((lab) => (
                       <div key={`completed-${lab.id}`} className="flex flex-col items-center group">
-                        <h5 className="text-[20px] lg:text-[22px] font-bold text-[#1a73e8] mb-2 text-center">{lab.title}</h5>
+                        <h5 className="text-[20px] lg:text-[22px] font-bold text-black mb-2 text-center">{lab.title}</h5>
                         <p className="text-[14px] text-[#5f6368] font-bold mb-4 text-center">{lab.subtitle}</p>
 
-                        <div className="bg-gradient-to-b from-[#181a20] to-[#0b0c0f] p-6 md:p-8 rounded-2xl mb-5 w-full max-w-[340px] flex justify-center items-center border border-[#dadce0] shadow-[0_8px_16px_rgba(0,0,0,0.15)] relative overflow-hidden aspect-square">
-                           <div className="absolute inset-0 bg-black/40 backdrop-blur-[1.5px] z-20 flex items-center justify-center rounded-2xl">
+                        <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
+                           <div className="absolute inset-0 bg-black/40 backdrop-blur-[1.5px] z-20 flex items-center justify-center rounded-[12px] m-[1px]">
                               <div className="w-14 h-14 bg-[#137333] rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
                                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                               </div>
@@ -765,7 +785,7 @@ export default function DashboardPage() {
                           <img 
                             src={lab.image} 
                             alt={lab.title} 
-                            className="h-44 md:h-52 lg:h-60 w-full object-contain z-10" 
+                            className="w-full object-contain rounded-[12px] shadow-sm z-10" 
                           />
                         </div>
 
@@ -786,11 +806,12 @@ export default function DashboardPage() {
                           Arcade points: {lab.points}
                         </p>
 
+                        {/* Updated to match Learn More pill design with green text */}
                         <a 
                           href={lab.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-[#137333] text-white font-black text-[15px] py-2.5 px-8 rounded-md hover:bg-[#0f5c29] transition-colors uppercase tracking-widest shadow-sm inline-block text-center"
+                          className="bg-white hover:bg-[#f4fbf7] text-[#137333] font-bold text-[15px] py-2 px-8 rounded-full border border-[#dadce0] transition-all shadow-sm inline-block text-center"
                         >
                           COMPLETED
                         </a>
@@ -807,7 +828,7 @@ export default function DashboardPage() {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
                 
                 <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center whitespace-nowrap">
-                  Completion History
+                  Completion Badges History
                 </h4>
                 
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
@@ -847,51 +868,56 @@ export default function DashboardPage() {
                     <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
                   </div>
 
-                  <button onClick={downloadCSV} className="flex items-center justify-center gap-2 bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-all w-full sm:w-auto whitespace-nowrap">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1 M12 15V3 m0 12l-4-4 m4 4l4-4" />
-                    </svg>
-                    Export
-                  </button>
+                  
                 </div>
               </div>
               
-              <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm">
-                <div className="max-h-[1400px] overflow-y-auto custom-scrollbar">
-                  <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead className="bg-[#f8f9fa] sticky top-0 z-10 border-b border-[#dadce0] shadow-sm">
-                      <tr>
-                        <th className="px-5 py-4 text-base font-bold text-black text-center whitespace-nowrap border-r border-[#f1f3f4]">
-                            All ({filteredHistory.length})
-                        </th>
-                        <th className="px-6 py-4 text-base font-bold text-black">Labs / Skill Badges Completion</th>
-                        <th className="px-6 py-4 text-base font-bold text-black whitespace-nowrap border-l border-[#f1f3f4]">Earned Date</th>
-                        <th className="px-6 py-4 text-base font-bold text-black text-center border-l border-[#f1f3f4]">Points</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#f1f3f4]">
-                      {filteredHistory.length > 0 ? (
-                        filteredHistory.map((item, i) => (
-                          <tr key={i} className="hover:bg-[#f8f9fa] transition-colors group">
-                            <td className="px-5 py-4 text-base font-bold text-black text-center border-r border-[#f1f3f4]">{i + 1}</td>
-                            <td className="px-6 py-4 text-lg font-bold text-black hover:text-[#1a73e8] transition-colors cursor-default">{item.name}</td>
-                            <td className="px-6 py-4 text-base font-bold text-black whitespace-nowrap border-l border-[#f1f3f4]">{item.date}</td>
-                            <td className="px-6 py-4 text-center border-l border-[#f1f3f4]">
-                              <span className={`inline-block px-4 py-1.5 rounded-lg text-sm font-black shadow-sm ${item.points >= 2 ? 'bg-[#137333] text-white border border-[#0d5023]' : item.points === 1 ? 'bg-[#1a73e8] text-white border border-[#1557b0]' : 'bg-[#9334e6] text-white border border-[#7627bb]'}`}>
-                                +{item.points}
-                              </span>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={4} className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
-                            No labs found matching your filter criteria.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+              {/* 🔥 NEW GRID HISTORY LAYOUT 🔥 */}
+              <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm p-4">
+                <div className="max-h-[2000px] overflow-y-auto custom-scrollbar pr-2">
+                  {filteredHistory.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                      {filteredHistory.map((item, i) => (
+                        <div key={i} className="flex flex-col items-center bg-white p-4 rounded-xl border border-transparent hover:border-[#dadce0] hover:shadow-md transition-all group">
+                          
+                          {/* Image Container */}
+                          <div className="w-full h-40 mb-4 flex items-center justify-center">
+                            {item.image ? (
+                              <img 
+                                src={item.image} 
+                                alt={item.name} 
+                                className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" 
+                              />
+                            ) : (
+                              <div className="w-20 h-20 bg-[#f8f9fa] border border-[#dadce0] rounded-full flex items-center justify-center text-3xl shadow-sm">🏅</div>
+                            )}
+                          </div>
+                          
+                          {/* Title */}
+                          <h5 className="text-[16px] font-bold text-center text-[#202124] mb-1 line-clamp-2">
+                            {item.name}
+                          </h5>
+                          
+                          {/* Date */}
+                          <p className="text-[14px] text-[#5f6368] text-center mb-3">
+                            {item.date.toLowerCase().includes('earned') ? item.date : `Earned ${item.date}`}
+                          </p>
+                          
+                          {/* Points - Updated to match Learn More pill design dynamically based on points color */}
+                          <div className="mt-auto pt-2">
+                            <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-white border border-[#dadce0] shadow-sm ${item.points >= 2 ? 'text-[#137333]' : item.points === 1 ? 'text-[#1a73e8]' : 'text-[#9334e6]'}`}>
+                              +{item.points} {item.points > 1 ? 'Points' : 'Point'}
+                            </span>
+                          </div>
+
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
+                      No labs found matching your filter criteria.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -910,10 +936,13 @@ export default function DashboardPage() {
         </div>
 
       </main>
+
+
       <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #e2e8f0; border-radius: 20px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #dadce0; border-radius: 20px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #bdc1c6; }
         
         .banner-slide-down {
           animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;

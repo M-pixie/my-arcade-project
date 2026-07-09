@@ -8,109 +8,105 @@ export const dynamic = 'force-dynamic';
 // 🔥 MASTER LIST OF 93 SKILL BADGES 🔥
 // ==========================================
 
-
 const skillBadgesMasterList = [
-  
   "Manage Kubernetes in Google Cloud",
-   "[Deprecated] Classify Images with TensorFlow on Google Cloud", 
-   "Derive Insights from BigQuery Data",
+  "[Deprecated] Classify Images with TensorFlow on Google Cloud", 
+  "Derive Insights from BigQuery Data",
   "Share Data Using Google Data Cloud", 
   "Implement Cloud Collaboration and Productivity Workflows",
-   "Migrate MySQL Data to Cloud SQL Using Database Migration Service",
+  "Migrate MySQL Data to Cloud SQL Using Database Migration Service",
   "Use Machine Learning APIs on Google Cloud",
-   "Mitigate Threats and Vulnerabilities with Security Command Center",
+  "Mitigate Threats and Vulnerabilities with Security Command Center",
   "Monitor Environments with Google Cloud Managed Service for Prometheus", 
-   "Prompt Design in Agent Platform",
+  "Prompt Design in Agent Platform",
   "Configure Service Accounts and IAM Roles for Google Cloud",
-   "Integrate BigQuery Data and Google Workspace using Apps Script",
+  "Integrate BigQuery Data and Google Workspace using Apps Script",
   "Implement Speech and Language Solutions with Pre-trained APIs", 
   "Build a Data Mesh with Knowledge Catalog",
-   "Analyze Sentiment with Natural Language API",
+  "Analyze Sentiment with Natural Language API",
   "Develop with Apps Script and AppSheet",
-   "Using the Google Cloud Speech API",
-    "Use APIs to Work with Cloud Storage",
+  "Using the Google Cloud Speech API",
+  "Use APIs to Work with Cloud Storage",
   "The Basics of Google Cloud Compute", 
   "Get Started with Sensitive Data Protection", 
   "Analyze Images with the Cloud Vision API",
   "Secure Lakehouse Data", 
   "Enrich Metadata and Discovery of BigLake Data",
-   "Create a Secure Data Lake on Cloud Storage",
+  "Create a Secure Data Lake on Cloud Storage",
   "Analyze Speech and Language with Google APIs",
-   "Monitoring in Google Cloud",
-    "Build Event-Driven Applications with Eventarc",
+  "Monitoring in Google Cloud",
+  "Build Event-Driven Applications with Eventarc",
   "Create Your First Gemini Enterprise Application",
-   "Engineer AI Agents with Agent Development Kit (ADK)",
+  "Engineer AI Agents with Agent Development Kit (ADK)",
   "Build Global and Regional Load Balancing Solutions",
-   "Google DeepMind: Train A Small Language Model",
+  "Google DeepMind: Train A Small Language Model",
   "Build a Smart Cloud Application with Vibe Coding and MCP",
-   "Deploy Multi-Agent Architectures",
+  "Deploy Multi-Agent Architectures",
   "Develop AI-Powered Prototypes in Google AI Studio",
-   "Kickstarting Application Development with Gemini Code Assist",
+  "Kickstarting Application Development with Gemini Code Assist",
   "Connecting Cloud Networks with NCC",
-   "Privileged Access with IAM",
-    "Enhance Gemini Model Capabilities",
+  "Privileged Access with IAM",
+  "Enhance Gemini Model Capabilities",
   "Analyze and Reason on Multimodal Data with Gemini",
-   "Implement Multimodal Vector Search with BigQuery",
+  "Implement Multimodal Vector Search with BigQuery",
   "Protect Cloud Traffic with Chrome Enterprise Premium Security",
-   "Discover and Protect Sensitive Data Across Your Ecosystem",
+  "Discover and Protect Sensitive Data Across Your Ecosystem",
   "Implement Event-Driven Messaging and Automation Workflows",
-   "Secure Software Delivery",
-   "Set Up a Google Cloud Network",
-    "Create and Manage AlloyDB Instances",
+  "Secure Software Delivery",
+  "Set Up a Google Cloud Network",
+  "Create and Manage AlloyDB Instances",
   "Build Real World AI Applications with Gemini and Imagen",
-   "Inspect Rich Documents with Gemini Multimodality and Multimodal RAG",
+  "Inspect Rich Documents with Gemini Multimodality and Multimodal RAG",
   "Develop Gen AI Apps with Gemini and Streamlit",
-   "Explore Generative AI in Agent Platform",
+  "Explore Generative AI in Agent Platform",
   "Build LookML Objects in Looker",
-   "Create and Manage Cloud SQL for PostgreSQL Instances",
-    "Deploy and Manage Apigee X",
+  "Create and Manage Cloud SQL for PostgreSQL Instances",
+  "Deploy and Manage Apigee X",
   "Prepare Data for Looker Dashboards and Reports",
-   "Optimize Costs for Google Kubernetes Engine",
+  "Optimize Costs for Google Kubernetes Engine",
   "Develop Serverless Apps with Firebase",
-   "Develop Serverless Applications on Cloud Run",
+  "Develop Serverless Applications on Cloud Run",
   "Implement Cloud Security Fundamentals on Google Cloud",
-   "Build a Data Warehouse with BigQuery",
+  "Build a Data Warehouse with BigQuery",
   "Create ML Models with BigQuery ML",
-   "Monitor and Log with Google Cloud Observability",
+  "Monitor and Log with Google Cloud Observability",
   "Implement DevOps Workflows in Google Cloud",
-   "Engineer Data for Predictive Modeling with BigQuery ML",
+  "Engineer Data for Predictive Modeling with BigQuery ML",
   "Build a Secure Google Cloud Network",
-   "Cloud Architecture: Design, Implement, and Manage",
+  "Cloud Architecture: Design, Implement, and Manage",
   "Build a Website on Google Cloud",
-   "Implementing Cloud Load Balancing for Compute Engine",
+  "Implementing Cloud Load Balancing for Compute Engine",
   "Develop Your Google Cloud Network",
-   "Set Up an App Dev Environment on Google Cloud",
+  "Set Up an App Dev Environment on Google Cloud",
   "Prepare Data for ML APIs on Google Cloud",
-   "Deploy Kubernetes Applications on Google Cloud",
-    "Deploy and Manage Applications on Google App Engine",
+  "Deploy Kubernetes Applications on Google Cloud",
+  "Deploy and Manage Applications on Google App Engine",
   "Implement Cloud Storage and Data Protection Solutions",
-   "Create a Streaming Data Lake on Cloud Storage",
+  "Create a Streaming Data Lake on Cloud Storage",
   "Build Serverless Applications with Cloud Run Functions",
-   "Streaming Analytics into BigQuery",
-    "Deploy and Secure Serverless APIs with API Gateway",
+  "Streaming Analytics into BigQuery",
+  "Deploy and Secure Serverless APIs with API Gateway",
   "App Building with AppSheet",
-   "Store, Process, and Manage Data on Google Cloud - Console",
+  "Store, Process, and Manage Data on Google Cloud - Console",
   "Analyze BigQuery Data in Connected Sheets",
-   "Monitor and Manage Google Cloud Resources",
+  "Monitor and Manage Google Cloud Resources",
   "Store, Process, and Manage Data on Google Cloud - Command Line",
-   "Build Google Cloud Infrastructure for AWS Professionals",
+  "Build Google Cloud Infrastructure for AWS Professionals",
   "Create and Manage Bigtable Instances",
-   "Implement CI/CD Pipelines on Google Cloud",
+  "Implement CI/CD Pipelines on Google Cloud",
   "Use Functions, Formulas, and Charts in Google Sheets",
-"Create and Manage Cloud Spanner Instances",
-"Build Infrastructure with Terraform on Google Cloud",
-"Perform Predictive Data Analysis in BigQuery",
-"Automate Data Capture at Scale with Document AI",
-"Manage Data Models in Looker", "Implement Cloud Collaboration and Productivity Workflows",
-"[DEPRECATED] Designing Network Security in Google Cloud",
-"Orchestrate Multi-agent Workflows with Gemini Enterprise",
-"Organize and Govern Data with Knowledge Catalog",
-"Enrich Metadata and Discovery of Lakehouse Data",
-"Develop and Secure APIs with Apigee X",
-"DEPRECATED Build Google Cloud Infrastructure for Azure Professionals"
-
-
-
+  "Create and Manage Cloud Spanner Instances",
+  "Build Infrastructure with Terraform on Google Cloud",
+  "Perform Predictive Data Analysis in BigQuery",
+  "Automate Data Capture at Scale with Document AI",
+  "Manage Data Models in Looker", 
+  "Implement Cloud Collaboration and Productivity Workflows",
+  "[DEPRECATED] Designing Network Security in Google Cloud",
+  "Orchestrate Multi-agent Workflows with Gemini Enterprise",
+  "Organize and Govern Data with Knowledge Catalog",
+  "Enrich Metadata and Discovery of Lakehouse Data",
+  "Develop and Secure APIs with Apigee X",
+  "DEPRECATED Build Google Cloud Infrastructure for Azure Professionals"
 ].map(name => name.toLowerCase());
 
 export async function POST(req: Request) {
@@ -175,14 +171,17 @@ export async function POST(req: Request) {
       const card = $(element);
       const dateText = card.find('.ql-body-medium').text();
       
-      //const title = card.find('.ql-title-medium').text().toLowerCase().trim(); // Sab lowercase me check karenge
-     // const originalTitle = card.find('.ql-title-medium').text().trim(); // Original title history ke liye
+      const rawText = card.find('.ql-title-medium').text(); //  1. HTML se raw text fetch kiya (isme hidden \n aur extra spaces hote hain)
 
-     const rawText = card.find('.ql-title-medium').text(); //  1. HTML se raw text fetch kiya (isme hidden \n aur extra spaces hote hain)
+      const title = rawText.replace(/\s+/g, ' ').toLowerCase().trim(); // 2. Backend Match: Extra spaces/Enter hata ke single space banaya, aur array match ke liye lowercase kiya
 
-const title = rawText.replace(/\s+/g, ' ').toLowerCase().trim(); // 2. Backend Match: Extra spaces/Enter hata ke single space banaya, aur array match ke liye lowercase kiya
+      const originalTitle = rawText.replace(/\s+/g, ' ').trim();   // 3. Frontend UI: Text clean kiya par lowercase nahi kiya, taaki History table me naam professional dikhe
 
-const originalTitle = rawText.replace(/\s+/g, ' ').trim();   // 3. Frontend UI: Text clean kiya par lowercase nahi kiya, taaki History table me naam professional dikhe
+      // 🔥 1. YAHAN IMAGE NIKALNI HAI (UPDATED FOR URL FIX) 🔥
+      let badgeImg = card.find('img').attr('src') || "";
+      if (badgeImg.startsWith('/')) {
+        badgeImg = 'https://www.skills.google' + badgeImg;
+      }
 
       // 📅 Date Filter (Sirf 2026 ka data chahiye)
       if (!dateText.includes('2026')) return; 
@@ -259,7 +258,8 @@ const originalTitle = rawText.replace(/\s+/g, ' ').trim();   // 3. Frontend UI: 
           name: originalTitle,
           date: dateText.replace('Completed ', '').trim(),
           points: earned,
-          type: type
+          type: type,
+          image: badgeImg // 🔥 2. YE LINE ADD KR DENA 🔥
         });
       }
     });

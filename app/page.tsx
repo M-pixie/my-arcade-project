@@ -524,7 +524,7 @@ export default function HomePage() {
     
     <div className="mb-16">
       <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Get Free 309 Credits</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Get Free 750 Credits</h2>
         <p className="text-[#5f6368] text-lg">Follow along with this step-by-step video guide</p>
       </div>
       
@@ -570,7 +570,7 @@ export default function HomePage() {
         <div className="pr-0 md:pr-48"> 
           <h3 className="text-xl font-bold text-white mb-1.5 tracking-wide">Special Credit Link</h3>
           <p className="text-blue-100 text-sm">
-            Use this exclusive link to receive your <strong className="text-white bg-white/20 px-2 py-0.5 rounded ml-1">309 credits</strong>
+            Use this exclusive link to receive your <strong className="text-white bg-white/20 px-2 py-0.5 rounded ml-1">750credits</strong>
           </p>
           <p className="text-blue-200 text-xs font-semibold mt-3 flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
@@ -646,11 +646,11 @@ export default function HomePage() {
               alert: { type: "important", text: "Partial completion won't unlock the remaining credits." }
             },
             { 
-              title: "Verify 309 Credits", 
+              title: "Verify 750 Credits", 
               icon: "✅",
               desc: "Check your Billing page to confirm all remaining credits are added.", 
               alert: null,
-              badge: "309 Total Credits"
+              badge: "750 Total Credits"
             }
           ].map((step, index) => (
             <div key={index} className="relative flex items-start gap-4 md:gap-6">
