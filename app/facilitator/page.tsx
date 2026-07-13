@@ -83,12 +83,12 @@ export default function FacilitatorPage() {
               <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[15px] md:text-[17px] mb-6 mt-2">
           
                 <a 
-                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/home"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2 text-[#1a73e8] hover:text-[#1557b0] font-bold transition-all w-fit mx-auto mt-1"
                 >
-                  🔗 Facilitator Registration Link
+                  🔗 Facilitator Registration Form
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                   </svg>
