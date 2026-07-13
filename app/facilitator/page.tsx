@@ -79,15 +79,20 @@ export default function FacilitatorPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[15px] md:text-[17px] mb-6">
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                  <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
-                </div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
-                </div>
+              {/* 🔥 UPDATED: RSVP Link Replacing Dates 🔥 */}
+              <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[15px] md:text-[17px] mb-6 mt-2">
+          
+                <a 
+                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/home"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-center gap-2 text-[#1a73e8] hover:text-[#1557b0] font-bold transition-all w-fit mx-auto mt-1"
+                >
+                  🔗 Facilitator Registration Link
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                  </svg>
+                </a>
               </div>
 
               {/* 🔥 INLINE GREY REFERRAL CODE STRIP 🔥 */}
@@ -97,7 +102,6 @@ export default function FacilitatorPage() {
                 </span>
                 <div className="flex items-center justify-center bg-[#f1f3f4] rounded-lg px-5 py-4 border border-[#dadce0]">
                   
-                  {/* Updated Referral Code & Copy Icon - "Coming Soon" Removed */}
                   <div className="flex items-center gap-3">
                     <div className="font-mono text-2xl sm:text-3xl text-black font-extrabold tracking-wider">
                       GCAF26-IN-9SC-AE9
@@ -118,27 +122,31 @@ export default function FacilitatorPage() {
                 </div>
               </div>
 
-              {/* ACTION BUTTONS (2x2 Grid, Grey Color, Slight Curve) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mx-auto mb-14">
+              {/* 🔥 ACTION BUTTONS (1 Row of 4, Different Google Theme Colors) 🔥 */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mx-auto mb-14">
                 
-                <button onClick={() => router.push("/calculator")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
-                  <svg className="w-5 h-5 text-[#5f6368] group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                  Calculate Points
+                {/* 1. Calculate Points (Blue) */}
+                <button onClick={() => router.push("/calculator")} className="w-full px-4 py-4 bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#d2e3fc] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
+                  <svg className="w-5 h-5 text-[#1a73e8] group-hover:rotate-12 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                  <span>Calculator</span>
                 </button>
                 
-                <button onClick={() => router.push("/leaderboard")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
-                  <svg className="w-5 h-5 text-[#5f6368] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                  Leaderboard
+                {/* 2. Leaderboard (Green) */}
+                <button onClick={() => router.push("/leaderboard")} className="w-full px-4 py-4 bg-[#e6f4ea] border border-[#ceead6] text-[#137333] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#ceead6] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
+                  <svg className="w-5 h-5 text-[#137333] group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                  <span>Leaderboard</span>
                 </button>
                 
-                <button onClick={() => router.push("/resources")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
-                  <svg className="w-5 h-5 text-[#5f6368] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                  Skill Badges List
+                {/* 3. Skill Badges (Yellow) */}
+                <button onClick={() => router.push("/resources")} className="w-full px-4 py-4 bg-[#fef7e0] border border-[#fde293] text-[#b06000] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#fde293] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
+                  <svg className="w-5 h-5 text-[#b06000] group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                  <span>Skill Badges</span>
                 </button>
                 
-                <button onClick={() => router.push("/dashboard")} className="w-full px-6 py-4 bg-[#f1f3f4] border border-[#dadce0] text-[#3c4043] font-bold text-[15px] rounded-lg hover:bg-[#e8eaed] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 group">
-                  <svg className="w-5 h-5 text-[#5f6368] transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                  Dashboard
+                {/* 4. Dashboard (Red/Pink) */}
+                <button onClick={() => router.push("/dashboard")} className="w-full px-4 py-4 bg-[#fce8e6] border border-[#fad2cf] text-[#c5221f] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#fad2cf] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
+                  <svg className="w-5 h-5 text-[#c5221f] transform group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                  <span>Dashboard</span>
                 </button>
 
               </div>

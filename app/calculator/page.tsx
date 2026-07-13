@@ -385,7 +385,17 @@ export default function CalculatorPage() {
           </h1>
         </div>
 
-        <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative">
+        {/* 🔥 UPDATED MAIN CARD: Dynamic color changing background on loading & shorter border radius 🔥 */}
+        <div 
+          className={`rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative transition-all duration-1000 ease-in-out`}
+          style={{
+            backgroundColor: loading 
+              ? loadingStep === 'wave' 
+                ? '#e8f0fe' // Smooth Soft Blue First Phase
+                : ['#fce8e6', '#fef7e0', '#e6f4ea', '#f3e5f5'][Math.floor((new Date().getTime() / 1000) % 4)] // Rapidly transitions between Red, Yellow, Green, Purple in Phase 2
+              : '#ffffff' // Standard Clean White when idle
+          }}
+        >
           
           <style>{`
             @keyframes slow-fill { 0% { width: 0%; } 20% { width: 30%; } 50% { width: 65%; } 80% { width: 85%; } 100% { width: 95%; } }
@@ -415,22 +425,22 @@ export default function CalculatorPage() {
             }
             @keyframes collide-1 {
               0%, 100% { transform: translate(0, 0) scale(0.8); }
-              50% { transform: translate(0, 4px) scale(1.3); } /* Pulls down */
+              50% { transform: translate(0, 4px) scale(1.3); }
             }
             @keyframes collide-2 {
               0%, 100% { transform: translate(0, 0) scale(0.8); }
-              50% { transform: translate(3.5px, -2.5px) scale(1.3); } /* Pulls up-right */
+              50% { transform: translate(3.5px, -2.5px) scale(1.3); }
             }
             @keyframes collide-3 {
               0%, 100% { transform: translate(0, 0) scale(0.8); }
-              50% { transform: translate(-3.5px, -2.5px) scale(1.3); } /* Pulls up-left */
+              50% { transform: translate(-3.5px, -2.5px) scale(1.3); }
             }
             
             .gem-container {
               width: 14px;
               height: 14px;
               position: relative;
-              animation: rotate-gemini 1s linear infinite; /* Fast Rotation */
+              animation: rotate-gemini 1s linear infinite;
             }
             
             .gem-dot {
@@ -440,7 +450,6 @@ export default function CalculatorPage() {
               border-radius: 50%;
             }
             
-            /* Triangle Position Setup */
             .gem-dot-1 { top: 0px; left: 4.75px; animation: collide-1 0.6s ease-in-out infinite; }
             .gem-dot-2 { top: 8px; left: 0px; animation: collide-2 0.6s ease-in-out infinite; }
             .gem-dot-3 { top: 8px; left: 9.5px; animation: collide-3 0.6s ease-in-out infinite; }
@@ -478,7 +487,6 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                {/* 🔥 UPDATED LABEL: SHOWS DOTS INSTEAD OF NAME WHEN LOADING 🔥 */}
                 <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${error && !hideRedLine ? "text-[#d93025]" : userName && !loading ? "text-[#4e342e]" : "text-[#1a73e8]"}`}>
                   {loading ? (
                     loadingStep === 'wave' ? (
@@ -543,23 +551,10 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              {/* 🔥 REFERRAL CODE COPY SECTION UPDATED 🔥 */}
+              {/* 🔥 UPDATED: REMOVED TIMER FROM HERE 🔥 */}
               <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center">
                 
-                {/* ⬆️ TIMER MOVED ABOVE THE CODE BOX ⬆️ */}
-                <div className="flex items-center justify-center w-full mb-2">
-                  <div className="text-[13px] font-medium text-[#3c4043] flex items-center gap-1.5">
-                    Starts in
-                    <div className={`flex gap-1.5 font-bold text-[#1a73e8] transition-opacity duration-300 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
-                      <span>{timeLeft.d}d</span>
-                      <span>{timeLeft.h}h</span>
-                      <span>{timeLeft.m}m</span>
-                      <span>{timeLeft.s}s</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-[#f1f3f4] border border-[#dadce0] rounded-lg px-4 py-3 flex items-center justify-center w-full">
+                <div className="bg-[#f1f3f4] border border-[#dadce0] rounded-lg px-4 py-3 flex items-center justify-center w-full shadow-sm">
                   <div className="flex items-center gap-3">
                     <div className="font-mono text-xl sm:text-[22px] text-black font-extrabold tracking-wider">
                       GCAF26-IN-9SC-AE9
@@ -582,7 +577,6 @@ export default function CalculatorPage() {
                   </div>
                 </div>
                 
-                {/* ⬇️ LABEL STAYS BELOW THE CODE BOX ⬇️ */}
                 <div className="flex flex-col items-center justify-center mt-2 w-full">
                   <label className="text-[13px] font-bold text-black mb-0.5">Facilitator Referral Code</label>
                 </div>
@@ -595,18 +589,16 @@ export default function CalculatorPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
-              {/* 🔥 UPDATED: Soft Aqua background, White text, Crisp hover (no scaling/blur), Exact Input width (w-full) 🔥 */}
+              {/* 🔥 UPDATED BUTTON: Pure Clean Google Blue theme 🔥 */}
               <button 
                 onClick={proceedToDashboard} 
                 disabled={loading} 
-                className="w-full bg-[#0891B2] hover:bg-[#0891B2] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-sm flex justify-center items-center shadow-sm"
+                className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-sm flex justify-center items-center shadow-sm"
               >
-                {/* 🔥 DYNAMIC AI ANIMATION 🔥 */}
                 {loading ? (
                   <div className="flex items-center justify-center gap-3 h-6">
                     <span className="leading-none text-white">Calculating Points</span>
                     
-                    {/* Switch between Wave and Collide based on loadingStep state */}
                     {loadingStep === 'wave' ? (
                       <div className="flex items-center gap-1 relative top-[1px]">
                         <div className="w-[5px] h-[5px] bg-white rounded-full dot-wave-1"></div>
@@ -632,7 +624,6 @@ export default function CalculatorPage() {
                 </a>
               </div>
             </div>
-
 
             {/* 🔥 NEW COMPACT PREMIUM HISTORY CARDS 🔥 */}
             {recentUrls.length > 0 && (

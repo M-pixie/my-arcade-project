@@ -285,13 +285,34 @@ export default function DashboardPage() {
     return true; 
   });
 
-  const skillBadgesCount = breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length;
-  const arcadeGamesCount = history.filter(item => {
+  const totalSkillBadgesCount = breakdown?.skills || history.filter(item => item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge')).length;
+  const totalArcadeGamesCount = history.filter(item => {
     const lower = item.name.toLowerCase();
     const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
     const isCourse = item.type === 'Course' || lower.includes('course');
     return !isBadge && !isCourse;
   }).length;
+
+  const facilitatorArcadeGamesCount = history.filter(item => {
+    const lower = item.name.toLowerCase();
+    const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
+    const isCourse = item.type === 'Course' || lower.includes('course');
+    const isGame = !isBadge && !isCourse;
+    
+    return isGame && aprilLabs.some(lab => 
+      lab.matchStrings.some(match => lower.includes(match.toLowerCase()))
+    );
+  }).length;
+
+  const facilitatorSkillBadgesCount = history.filter(item => {
+    const isBadge = item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
+    if (!isBadge) return false;
+
+    const earnedDate = new Date(item.date);
+    const targetStartDate = new Date("2026-07-16T00:00:00");
+    return earnedDate > targetStartDate;
+  }).length;
+
 
   const facilitatorMilestones = [
     { id: 1, title: 'Milestone 1', targetArcade: 6, targetSkills: 18, points: 5 },
@@ -301,9 +322,17 @@ export default function DashboardPage() {
   ];
 
   const achievedMilestone = [...facilitatorMilestones].reverse().find(
-    (m) => arcadeGamesCount >= m.targetArcade && skillBadgesCount >= m.targetSkills
+    (m) => facilitatorArcadeGamesCount >= m.targetArcade && facilitatorSkillBadgesCount >= m.targetSkills
   );
   const milestoneText = achievedMilestone ? achievedMilestone.title : "No Milestones Yet";
+
+  // Premium Backgrounds for Milestone Cards
+  const premiumCardStyles = [
+    "bg-gradient-to-br from-[#ffffff] to-[#f8f9fa] border-[#e8eaed]", // Card 1: Clean White/Silver
+    "bg-gradient-to-br from-[#f8fbff] to-[#e8f0fe] border-[#d2e3fc]", // Card 2: Premium Soft Blue
+    "bg-gradient-to-br from-[#fdfefe] to-[#e6f4ea] border-[#ceead6]", // Card 3: Premium Soft Green
+    "bg-gradient-to-br from-[#fffdf8] to-[#fef7e0] border-[#fce8e6]"  // Card 4: Premium Soft Gold
+  ];
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
@@ -317,8 +346,8 @@ export default function DashboardPage() {
               
               <div className="lg:col-span-4 flex flex-col w-full lg:border-r lg:border-[#dadce0] lg:pr-6">
                 
-                <div className="bg-white rounded-xl shadow-sm border border-[#e8eaed] overflow-hidden relative flex flex-col transition-shadow duration-300 w-full min-h-[640px]">
-                  <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
+                {/* 🔥 LEFT CARD: SQUARE BORDER 🔥 */}
+                 <div className="bg-white rounded-xl shadow-sm border border-[#e8eaed] overflow-hidden relative flex flex-col transition-shadow duration-300 w-full min-h-[640px]">                  <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
                     <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white">
                       Arcade Points: {points}
                     </h3>
@@ -361,7 +390,7 @@ export default function DashboardPage() {
                         onClick={() => router.push('/resources#completed-section')} 
                         className="cursor-pointer text-center group transition-transform hover:scale-105"
                       >
-                        <div className="text-[28px] font-black text-[#202124]">{skillBadgesCount}</div>
+                        <div className="text-[28px] font-black text-[#202124]">{totalSkillBadgesCount}</div>
                         <div className="text-[13px] font-bold text-[#202124] uppercase tracking-wide mt-1">Skill Badges</div>
                       </div>
                     </div>
@@ -371,30 +400,21 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex w-full gap-3 mb-6">
-                      <a 
-                        href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 bg-[#5f6368] text-white font-semibold py-2.5 px-4 rounded-full shadow-sm hover:bg-[#3c4043] transition-all text-sm flex items-center justify-center text-center"
-                      >
-                        Subscribe
-                      </a>
                       <button 
                         onClick={() => router.push('/leaderboard')}
-                        className="flex-1 bg-white border border-[#dadce0] text-[#202124] font-semibold py-2.5 px-4 rounded-full shadow-sm hover:bg-[#f8f9fa] transition-all text-sm flex items-center justify-center"
+                        className="flex-1 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold py-2.5 px-4 rounded-full shadow-sm transition-all text-sm flex items-center justify-center"
                       >
                         Rank {realRank || "-"}
                       </button>
                     </div>
 
-                    <div className="text-sm font-bold text-[#5D4037] border-t border-[#e8eaed] pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm">
-                      Member since <span className="text-[#3E2723] font-black">{getMemberSinceYear()}</span>
+                    <div className="text-sm font-black text-[#1a73e8] border-t border-[#e8eaed] pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm">
+                      Member since <span className="text-[#1a73e8] font-black">{getMemberSinceYear()}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 bg-white rounded-xl shadow-sm border border-[#dadce0] p-6 text-center flex flex-col justify-center transition-all hover:shadow-md">
-                  <h4 className="text-[13px] font-black text-[#5f6368] uppercase tracking-widest mb-3">
+              <div className="mt-6 bg-white rounded-xl shadow-sm border border-[#dadce0] p-6 text-center flex flex-col justify-center transition-all hover:shadow-md">                  <h4 className="text-[13px] font-black text-[#5f6368] uppercase tracking-widest mb-3">
                     Facilitator Progress
                   </h4>
                   <div className="inline-flex items-center justify-center gap-2">
@@ -404,7 +424,7 @@ export default function DashboardPage() {
                         <span className="text-xl font-bold text-[#137333]">{milestoneText}</span>
                       </>
                     ) : (
-                      <span className="text-sm font-bold text-[#ea4335] bg-[#fce8e6] px-4 py-1.5 rounded-full">
+                      <span className="text-sm font-bold text-[#ea4335] bg-[#fce8e6] px-4 py-1.5 rounded-none">
                         {milestoneText}
                       </span>
                     )}
@@ -418,7 +438,6 @@ export default function DashboardPage() {
                 
                 <div className="mb-8 w-full flex-grow">
                   
-                  {/* 🔥 UPDATED: Facilitator Progress Header with Referral Code 🔥 */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 w-full gap-4">
                     <h2 className="text-[28px] font-bold text-black tracking-normal">Facilitator Progress</h2>
                     
@@ -441,18 +460,21 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   
-                  {/* CLEAR FACILITATOR PROGRESS SECTION */}
                   <div className="relative w-full">
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
-                      {facilitatorMilestones.map((milestone) => {
-                        const arcadeProgress = Math.min(100, (arcadeGamesCount / milestone.targetArcade) * 100);
-                        const skillsProgress = Math.min(100, (skillBadgesCount / milestone.targetSkills) * 100);
-                        const isAchieved = arcadeGamesCount >= milestone.targetArcade && skillBadgesCount >= milestone.targetSkills;
+                      {facilitatorMilestones.map((milestone, index) => {
+                        const arcadeProgress = Math.min(100, (facilitatorArcadeGamesCount / milestone.targetArcade) * 100);
+                        const skillsProgress = Math.min(100, (facilitatorSkillBadgesCount / milestone.targetSkills) * 100);
+                        const isAchieved = facilitatorArcadeGamesCount >= milestone.targetArcade && facilitatorSkillBadgesCount >= milestone.targetSkills;
                         const totalPercent = Math.floor((arcadeProgress + skillsProgress) / 2);
 
+                        // 🔥 DIFFERENT PREMIUM COLORS FOR CARDS 🔥
+                        const cardStyle = premiumCardStyles[index % premiumCardStyles.length];
+
                         return (
-                          <div key={milestone.id} className="bg-white border border-[#dadce0] rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                          // 🔥 CARDS SQUARE SHAPE 🔥
+                          <div key={milestone.id} className={`${cardStyle} border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow`}>
                             <div className="flex justify-between items-center mb-5">
                               <h3 className="font-bold text-lg text-[#202124] leading-none">{milestone.title}</h3>
                               <span className="text-[14px] font-bold text-[#202124]">
@@ -463,30 +485,39 @@ export default function DashboardPage() {
                             <div className="space-y-4 mb-6">
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  <span className="text-[#202124]">Arcade Games</span> 
-                                  <span className="text-[#202124]">{Math.min(arcadeGamesCount, milestone.targetArcade)} / {milestone.targetArcade}</span>
+                                  <span className="text-[#202124]">Arcade Games (July Only)</span> 
+                                  <span className="text-[#202124]">{Math.min(facilitatorArcadeGamesCount, milestone.targetArcade)} / {milestone.targetArcade}</span>
                                 </div>
-                                <div className="w-full bg-[#f1f3f4] h-2.5 rounded-full overflow-hidden">
-                                  <div className="bg-[#1a73e8] h-full transition-all duration-1000 ease-out" style={{ width: `${arcadeProgress}%` }}></div>
+                                {/* 🔥 PROGRESS BAR: SQUARE + BLUE 🔥 */}
+                                <div className="w-full bg-[#e5e7eb] h-2.5 rounded-none overflow-hidden border border-[#dadce0]">
+                                  <div className="bg-[#1a73e8] h-full rounded-none transition-all duration-1000 ease-out" style={{ width: `${arcadeProgress}%` }}></div>
                                 </div>
                               </div>
 
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  <span className="text-[#202124]">Skill Badges</span> 
-                                  <span className="text-[#202124]">{Math.min(skillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
+                                  <span className="text-[#202124]">Skill Badges (Post-July 16)</span> 
+                                  <span className="text-[#202124]">{Math.min(facilitatorSkillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
                                 </div>
-                                <div className="w-full bg-[#f1f3f4] h-2.5 rounded-full overflow-hidden">
-                                  <div className="bg-[#34a853] h-full transition-all duration-1000 ease-out" style={{ width: `${skillsProgress}%` }}></div>
+                                {/* 🔥 PROGRESS BAR: SQUARE + GREEN 🔥 */}
+                                <div className="w-full bg-[#e5e7eb] h-2.5 rounded-none overflow-hidden border border-[#dadce0]">
+                                  <div className="bg-[#34a853] h-full rounded-none transition-all duration-1000 ease-out" style={{ width: `${skillsProgress}%` }}></div>
                                 </div>
                               </div>
                             </div>
 
                             <div className="pt-4 border-t border-[#f1f3f4] flex justify-between items-center min-h-[50px]">
-                              <span className="font-bold text-[#202124] text-[15px]">Bonus Points</span>
+                              <span className="font-bold text-[#202124] text-[14px] lg:text-[15px]">Milestone Rewards</span>
                               {isAchieved ? (
                                 <div className="flex items-center gap-3">
-                                  <span className="text-[22px] font-black text-black">+{milestone.points}</span>
+                                  <div className="flex flex-col items-end">
+                                    <span className="text-[15px] md:text-[17px] font-extrabold text-[#137333] leading-tight">
+                                      +{milestone.points} Bonus Pts
+                                    </span>
+                                    <span className="text-[12px] font-bold text-[#5f6368] leading-none mt-0.5">
+                                      + {milestone.targetArcade} Game Pts
+                                    </span>
+                                  </div>
                                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white ring-2 ring-[#34a853] shadow-md flex items-center justify-center bg-[#137333]">
                                     {userAvatar ? (
                                       <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
@@ -506,7 +537,6 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* Right Side Buttons with NEW Bonus Milestone Text */}
                 <div className="w-full mt-auto pt-6 flex flex-col items-center">
                   
                   <div className="text-center mb-11 w-full">
@@ -708,7 +738,6 @@ export default function DashboardPage() {
                 </h4>
               </div>
               
-              {/* 🔥 UPDATED PENDING LABS UI 🔥 */}
               {pendingLabs.length > 0 && (
                 <div className="mb-10">
                   <h5 className="text-sm font-black text-[#5f6368] uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -747,7 +776,6 @@ export default function DashboardPage() {
                           Arcade points: {lab.points}
                         </p>
 
-                        {/* Updated to match Learn More pill design */}
                         <a 
                           href={lab.link}
                           target="_blank"
@@ -762,7 +790,6 @@ export default function DashboardPage() {
                 </div>
               )}
 
-              {/* 🔥 UPDATED COMPLETED LABS UI 🔥 */}
               {completedLabs.length > 0 && (
                 <div>
                   <h5 className={`text-sm font-black text-[#137333] uppercase tracking-widest mb-6 flex items-center gap-2 ${pendingLabs.length > 0 ? 'pt-6 border-t border-[#dadce0]' : ''}`}>
@@ -806,7 +833,6 @@ export default function DashboardPage() {
                           Arcade points: {lab.points}
                         </p>
 
-                        {/* Updated to match Learn More pill design with green text */}
                         <a 
                           href={lab.link}
                           target="_blank"
@@ -835,11 +861,11 @@ export default function DashboardPage() {
                   
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
                      <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm">
-                       Arcade Games: {arcadeGamesCount}
+                       Arcade Games: {totalArcadeGamesCount}
                      </span>
 
                      <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm">
-                       Skill Badges: {skillBadgesCount}
+                       Skill Badges: {totalSkillBadgesCount}
                      </span>
                   </div>
 
@@ -872,7 +898,6 @@ export default function DashboardPage() {
                 </div>
               </div>
               
-              {/* 🔥 NEW GRID HISTORY LAYOUT 🔥 */}
               <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm p-4">
                 <div className="max-h-[2000px] overflow-y-auto custom-scrollbar pr-2">
                   {filteredHistory.length > 0 ? (
@@ -880,7 +905,6 @@ export default function DashboardPage() {
                       {filteredHistory.map((item, i) => (
                         <div key={i} className="flex flex-col items-center bg-white p-4 rounded-xl border border-transparent hover:border-[#dadce0] hover:shadow-md transition-all group">
                           
-                          {/* Image Container */}
                           <div className="w-full h-40 mb-4 flex items-center justify-center">
                             {item.image ? (
                               <img 
@@ -893,17 +917,14 @@ export default function DashboardPage() {
                             )}
                           </div>
                           
-                          {/* Title */}
                           <h5 className="text-[16px] font-bold text-center text-[#202124] mb-1 line-clamp-2">
                             {item.name}
                           </h5>
                           
-                          {/* Date */}
                           <p className="text-[14px] text-[#5f6368] text-center mb-3">
                             {item.date.toLowerCase().includes('earned') ? item.date : `Earned ${item.date}`}
                           </p>
                           
-                          {/* Points - Updated to match Learn More pill design dynamically based on points color */}
                           <div className="mt-auto pt-2">
                             <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-white border border-[#dadce0] shadow-sm ${item.points >= 2 ? 'text-[#137333]' : item.points === 1 ? 'text-[#1a73e8]' : 'text-[#9334e6]'}`}>
                               +{item.points} {item.points > 1 ? 'Points' : 'Point'}
@@ -936,7 +957,6 @@ export default function DashboardPage() {
         </div>
 
       </main>
-
 
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }

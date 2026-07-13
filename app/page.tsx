@@ -274,36 +274,32 @@ export default function HomePage() {
             {/* 🔥 Facilitator Program Box 🔥 */}
             <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
               <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
-                Facilitator Program
+                Arcade Facilitator Program
               </h3>
-              <div className="flex flex-col gap-3 text-[#5f6368] font-medium text-[14px] md:text-[15px]">
-                <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#1a73e8] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
+              
+              {/* 🔥 UPDATED: RSVP Link instead of hardcoded dates 🔥 */}
+              <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[14px] md:text-[15px]">
+                <p>Lead your community and unlock exclusive Arcade rewards.</p>
+                <a 
+                  href="https://rsvp.withgoogle.com/events/arcade-facilitator/home"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 text-[#1a73e8] hover:text-[#1557b0] font-bold transition-all w-fit mt-1"
+                >
+                  🔗 Facilitator Registration Link 2026 
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                   </svg>
-                  <span>13 July 2026 at 17:00 - 14 September 2026 at 23:59 GMT+5:30</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <svg className="w-[20px] h-[20px] flex-shrink-0 text-[#1a73e8] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <span>Registration opens on 13 July 2026 at 17:00 GMT+5:30</span>
-                </div>
+                </a>
               </div>
 
-              {/* 🔥 UPDATED: Yellow Premium Referral Code Section 🔥 */}
-              <div className="mt-5 w-full">
+              {/* 🔥 UPDATED: Yellow Premium Referral Code Section (Shortened Width) 🔥 */}
+              <div className="mt-4 w-full max-w-[340px]">
                 <h4 className="text-[#5f6368] text-[12px] font-bold uppercase tracking-[0.1em] mb-2 ml-1">
-                  Facilitator Referral Code
+                  Referral Code
                 </h4>
-                <div className="bg-[#fef7e0] border border-[#fbbc04] rounded-md p-3 md:px-5 flex items-center justify-between w-full shadow-sm">
-                  <div className="font-mono text-black font-extrabold text-[18px] md:text-[20px] tracking-wider mt-1">
+                <div className="bg-[#fef7e0] border border-[#fbbc04] rounded-md p-3 md:px-4 flex items-center justify-between w-full shadow-sm">
+                  <div className="font-mono text-black font-extrabold text-[17px] md:text-[19px] tracking-wider mt-0.5">
                     GCAF26-IN-9SC-AE9
                   </div>
                   <button
