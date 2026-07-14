@@ -547,7 +547,7 @@ export default function HomePage() {
         className="absolute top-5 right-5 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-[14px] font-bold flex items-center gap-2 border border-white/20 transition-colors cursor-pointer group shadow-sm"
         title="Copy code"
       >
-        <span className="text-white tracking-wide">qlcampaign=6m-ctsdq-27</span>
+        <span className="text-white tracking-wide">6z-DEVBR-15::FjUNJM3E2wESE1X7D5W0yw</span>
         {isCopied ? (
           <span className="text-green-300 flex items-center p-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -568,7 +568,7 @@ export default function HomePage() {
         <div className="pr-0 md:pr-48"> 
           <h3 className="text-xl font-bold text-white mb-1.5 tracking-wide">Special Credit Link</h3>
           <p className="text-blue-100 text-sm">
-            Use this exclusive link to receive your <strong className="text-white bg-white/20 px-2 py-0.5 rounded ml-1">750credits</strong>
+            Use this exclusive link to receive your <strong className="text-white bg-white/20 px-2 py-0.5 rounded ml-1">759credits</strong>
           </p>
           <p className="text-blue-200 text-xs font-semibold mt-3 flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
