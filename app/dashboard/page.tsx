@@ -279,9 +279,32 @@ export default function DashboardPage() {
     if (historyFilter === "Skill Badges") {
       return item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     }
+    
     if (historyFilter === "Labs free course") {
       return item.type === 'Course' || item.name.toLowerCase().includes('course');
     }
+
+    // 🔥 NEW FILTER LOGIC FOR FACILITATOR PROGRESS HISTORY (14 JULY ONWARDS) 🔥
+    if (historyFilter === "Facilitator Progress History") {
+      const lowerName = item.name.toLowerCase();
+      const isBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
+      const isCourse = item.type === 'Course' || lowerName.includes('course');
+      const isGame = !isBadge && !isCourse;
+      
+      const earnedDate = new Date(item.date);
+      const targetStartDate = new Date("2026-07-14T00:00:00");
+      
+      if (isBadge) {
+        return earnedDate >= targetStartDate; // Badges from 14 July
+      }
+      if (isGame) {
+        return aprilLabs.some(lab => 
+          lab.matchStrings.some(match => lowerName.includes(match.toLowerCase()))
+        ); // Only July Arcade Games
+      }
+      return false; 
+    }
+
     return true; 
   });
 
@@ -304,13 +327,14 @@ export default function DashboardPage() {
     );
   }).length;
 
+  // 🔥 UPDATED LOGIC TO START COUNTING FROM 14 JULY 🔥
   const facilitatorSkillBadgesCount = history.filter(item => {
     const isBadge = item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     if (!isBadge) return false;
 
     const earnedDate = new Date(item.date);
-    const targetStartDate = new Date("2026-07-16T00:00:00");
-    return earnedDate > targetStartDate;
+    const targetStartDate = new Date("2026-07-14T00:00:00");
+    return earnedDate >= targetStartDate;
   }).length;
 
 
@@ -496,7 +520,8 @@ export default function DashboardPage() {
 
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  <span className="text-[#202124]">Skill Badges (Post-July 16)</span> 
+                                  {/* 🔥 TEXT UPDATED TO 14 JULY 🔥 */}
+                                  <span className="text-[#202124]">Skill Badges (Post-July 14)</span> 
                                   <span className="text-[#202124]">{Math.min(facilitatorSkillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
                                 </div>
                                 {/* 🔥 PROGRESS BAR: SQUARE + GREEN 🔥 */}
@@ -860,13 +885,24 @@ export default function DashboardPage() {
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
                   
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
-                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm">
+                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm hidden md:inline-block">
                        Arcade Games: {totalArcadeGamesCount}
                      </span>
-
-                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm">
+                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm hidden md:inline-block">
                        Skill Badges: {totalSkillBadgesCount}
                      </span>
+                     
+                     {/* 🔥 NEW FACILITATOR PROGRESS BUTTON 🔥 */}
+                     <button 
+                       onClick={() => setHistoryFilter(historyFilter === "Facilitator Progress History" ? "All Games" : "Facilitator Progress History")}
+                       className={`px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm transition-all cursor-pointer ${
+                         historyFilter === "Facilitator Progress History" 
+                           ? "bg-[#137333] text-white ring-2 ring-[#34a853]" 
+                           : "bg-[#1a73e8] hover:bg-[#1557b0] text-white"
+                       }`}
+                     >
+                       Facilitator Progress History
+                     </button>
                   </div>
 
                   <div className="relative w-full sm:w-56">
@@ -890,11 +926,12 @@ export default function DashboardPage() {
                       <option value="Arcade Games">Arcade Games</option>
                       <option value="Skill Badges">Skill Badges</option>
                       <option value="Labs free course">Labs Free Course</option>
+                      {/* 🔥 NEW OPTION ADDED HERE TOO 🔥 */}
+                      <option value="Facilitator Progress History">Facilitator Progress</option>
                     </select>
                     <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
                   </div>
 
-                  
                 </div>
               </div>
               
