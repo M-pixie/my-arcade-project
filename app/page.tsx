@@ -9,6 +9,7 @@ import PopupModal from "@/app/components/PopupModal";
 import { useState, useEffect } from "react"; 
 
 // 🔥 FIREBASE IMPORTS 🔥
+
 import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase"; 
 // 🔥 LEADERBOARD IMPORT FOR AVATARS 🔥
@@ -88,6 +89,7 @@ export default function HomePage() {
   const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png");
   const [imageError, setImageError] = useState(false);
 
+  
   // 🔥 MAGIC REFRESH FUNCTION FOR HOMEPAGE AVATAR & NAME 🔥
   const refreshUserData = () => {
     try {
@@ -271,7 +273,7 @@ export default function HomePage() {
               </a>
             </div>
 
-            {/* 🔥 Facilitator Program Box 🔥 */}
+            {/*  Facilitator Program Box  */}
             <div className="flex flex-col gap-3 text-left w-full max-w-lg mt-2">
               <h3 className="text-[18px] md:text-[20px] font-bold text-[#202124] tracking-tight">
                 Arcade Facilitator Program
@@ -293,7 +295,7 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/* 🔥 UPDATED: Yellow Premium Referral Code Section (Shortened Width) 🔥 */}
+              {/*  UPDATED: Yellow Premium Referral Code Section (Shortened Width)  */}
               <div className="mt-4 w-full max-w-[340px]">
                 <h4 className="text-[#5f6368] text-[12px] font-bold uppercase tracking-[0.1em] mb-2 ml-1">
                   Referral Code
@@ -323,7 +325,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* 🔥 Premium Blue Card for Tools (RIGHT SIDE) 🔥 */}
+          {/*  Premium Blue Card for Tools (RIGHT SIDE)  */}
           <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
             <div className="bg-gradient-to-b from-[#1a73e8] to-[#0d47a1] rounded-[16px] shadow-[0_12px_32px_rgba(26,115,232,0.2)] flex flex-col w-full overflow-hidden border border-[#4285f4]">
               {[
@@ -398,7 +400,7 @@ export default function HomePage() {
   </div>
 </section>
 
-{/* ================= 🔥 NEW PREMIUM TABBED GUIDE SECTION 🔥 ================= */}
+{/* =================  NEW PREMIUM TABBED GUIDE SECTION  ================= */}
 <section className="relative z-10 pt-4 pb-24 bg-gray-50 border-t border-gray-100">
   <div className="max-w-4xl mx-auto px-6">
     
@@ -538,7 +540,7 @@ export default function HomePage() {
       </div>
     </div>
     
-    {/* 🔥 UPDATED PREMIUM BLUE CREDIT BOX 🔥 */}
+    {/*  UPDATED PREMIUM BLUE CREDIT BOX  */}
     <div className="bg-[#1a73e8] border border-[#1557b0] rounded-xl p-6 md:p-8 mb-16 shadow-lg relative transition-all max-w-5xl mx-auto text-white">
       <button 
         onClick={handleCopyCode}
@@ -579,11 +581,11 @@ export default function HomePage() {
         <div className="flex-1 w-full overflow-hidden px-2">
           <p className="text-[11px] text-[#5f6368] font-bold uppercase mb-0.5">Special Link:</p>
           <div className="text-sm text-[#1a73e8] font-medium block truncate w-full">
-            https://www.skills.google/catalog?<span className="bg-[#e8f0fe] text-[#1a73e8] px-1.5 py-0.5 rounded font-bold border border-[#d2e3fc]">qlcampaign=6m-ctsdq-27</span>
+            https://www.skills.google/catalog?<span className="bg-[#e8f0fe] text-[#1a73e8] px-1.5 py-0.5 rounded font-bold border border-[#d2e3fc]">6z-DEVBR-15::FjUNJM3E2wESE1X7D5W0yw</span>
           </div>
         </div>
         <a 
-          href="https://www.skills.google/catalog?qlcampaign=6m-ctsdq-27" 
+          href="https://www.skills.google/catalog?keywords=GSP282&event=Your" 
           target="_blank" 
           rel="noopener noreferrer"
           className="w-full md:w-auto px-6 py-2.5 bg-[#202124] hover:bg-[#3c4043] text-white font-bold text-sm rounded-lg shadow-md transition-all text-center flex items-center justify-center gap-2 whitespace-nowrap"
@@ -594,7 +596,7 @@ export default function HomePage() {
       </div>
     </div>
 
-    {/* 🔥 SHORTENED TIMELINE DESIGN FOR STEP BY STEP GUIDE 🔥 */}
+    {/*  SHORTENED TIMELINE DESIGN FOR STEP BY STEP GUIDE  */}
     <div className="mb-16 max-w-5xl mx-auto px-2">
       <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
       
