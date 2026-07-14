@@ -20,7 +20,7 @@ export default function LeaderboardPage() {
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserUniqueId, setCurrentUserUniqueId] = useState<string | null>(null);
   
-  const currentUserRef = useRef<HTMLTableRowElement | HTMLDivElement>(null as any);
+  const currentUserRef = useRef<HTMLTableRowElement>(null as any);
   const [showUserPlaceholder, setShowUserPlaceholder] = useState(false);
 
   useEffect(() => {
@@ -70,17 +70,15 @@ export default function LeaderboardPage() {
 
   const isSearching = searchTerm.trim().length > 0;
   
-  // Normal order top 3 (1, 2, 3) for the rectangular cards
-  const topThree = leaders.slice(0, 3);
-  // Rank 4 onwards for the table
-  const restLeaders = leaders.slice(3);
-
   const searchResults = leaders.filter((user) =>
     user.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const currentUserData = leaders.find((l) => isExactCurrentUser(l));
   const currentUserRank = currentUserData?.rank;
+
+  // Render list: either search results or the full leaders list
+  const displayList = isSearching ? searchResults : leaders;
 
   return (
     <>
@@ -105,200 +103,116 @@ export default function LeaderboardPage() {
 
         <Navbar />
 
-        <main className="max-w-5xl mx-auto px-4 py-8 relative z-10">
+        {/* 🔥 LAYOUT WIDER: max-w-[1350px] ADDED 🔥 */}
+        <main className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-8 relative z-10">
           
-          {/* ================= 🔥 TOP 3 RECTANGULAR CARDS 🔥 ================= */}
-          {!isSearching && topThree.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10 mt-4">
-              {topThree.map((user) => {
-                const isExactUser = isExactCurrentUser(user);
-                
-                let themeColor = "";
-                let rankLabel = "";
-                
-                if (user.rank === 1) {
-                  themeColor = "#fbc02d"; // Gold
-                  rankLabel = "1st";
-                } else if (user.rank === 2) {
-                  themeColor = "#9aa0a6"; // Silver
-                  rankLabel = "2nd";
-                } else if (user.rank === 3) {
-                  themeColor = "#d87c3b"; // Bronze
-                  rankLabel = "3rd";
-                }
-
-                return (
-                  <div key={user.id} className="relative">
-                    {/* 🔥 Curve reduced using rounded-md 🔥 */}
-                    <button 
-                      ref={isExactUser ? (currentUserRef as any) : null}
-                      className={`relative w-full h-[72px] flex items-center gap-4 px-4 py-2 border border-[#dadce0] rounded-md overflow-hidden transition-all text-left outline-none ${isExactUser ? "animate-blink-user border-[#0f9d58] shadow-md scale-[1.02] z-10" : "bg-white shadow-sm hover:shadow-md hover:border-[#bdc1c6]"}`}
-                    >
-                      {/* 🔥 Corner Design Removed from here 🔥 */}
-
-                      {/* 🎯 Avatar */}
-                      <div className="w-12 h-12 rounded-full shrink-0 shadow-sm border border-[#f1f3f4] overflow-hidden relative z-10 bg-white">
-                        {user.photoURL ? (
-                          <img src={user.photoURL} alt="Avatar" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-white font-bold text-[18px]" style={{ backgroundColor: themeColor }}>
-                            {(user.name || "U").charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* 🎯 Name & Points Pill */}
-                      <div className="flex flex-col items-start gap-1 z-10 w-full overflow-hidden">
-                        <div className="flex items-center gap-2 w-full">
-                          <span className="text-[15px] font-black text-[#202124] truncate tracking-tight">
-                            {user.name || "Anonymous"}
-                          </span>
-                          {isExactUser && (
-                            <span className="bg-[#0f9d58] text-white px-2 py-[2px] rounded text-[9px] font-black uppercase tracking-wider shrink-0">
-                              You
-                            </span>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center w-full mt-0.5">
-                          {/* Colored Points Pill */}
-                          <div className="px-2 py-[3px] rounded text-white text-[12px] font-bold shadow-sm leading-none tracking-wide" style={{ backgroundColor: themeColor }}>
-                            {user.points?.toLocaleString() ?? 0} Pts
-                          </div>
-                          
-                          {/* 🔥 Black, Bold & Pushed to Right 🔥 */}
-                          <span className="text-[14px] font-black text-[#202124] ml-auto">
-                            Rank - {rankLabel}
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* ================= 🔥 SEARCH & RANK ACTION BAR 🔥 ================= */}
-          <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="w-full sm:w-80 shrink-0 relative z-20">
-              <div className="relative group w-full">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-slate-400 group-focus-within:text-[#5f6368] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  placeholder={
-                    showUserPlaceholder && currentUserName 
-                      ? `${currentUserName.split(" ")[0]} You` 
-                      : "Search player name..."
-                  }
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-white border border-[#dadce0] text-slate-900 placeholder-slate-400 rounded-lg py-3 pl-11 pr-10 focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all text-[14px] font-bold shadow-sm"
-                />
-                {searchTerm && (
-                  <button 
-                    onClick={() => setSearchTerm("")}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    <svg className="w-5 h-5 bg-slate-100 hover:bg-slate-200 rounded-full p-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* 🔥 NEW: TOTAL MEMBERS BUTTON & YOUR RANK 🔥 */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-              <div className="w-full sm:w-auto px-5 py-3 bg-white border border-[#dadce0] rounded-lg flex items-center justify-center gap-2 shadow-sm">
-                <span className="text-[13px] font-bold text-[#5f6368]">Total Members:</span>
-                <span className="text-[15px] font-black text-[#202124]">{leaders.length}</span>
-              </div>
-              
-              <button 
-                onClick={() => {
-                  if (currentUserRef.current) {
-                    currentUserRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-                  }
-                }}
-                className="w-full sm:w-auto px-5 py-3 bg-white border border-[#dadce0] hover:border-[#1a73e8] rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all group cursor-pointer"
-              >
-                <span className="text-[13px] font-bold text-[#5f6368] group-hover:text-[#202124] transition-colors">Your Rank:</span>
-                <span className="text-[15px] font-black text-[#1a73e8]">{currentUserRank ? currentUserRank : "--"}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* ================= 🔥 FULL PAGE ADMIN STYLE TABLE (RANK 4+) 🔥 ================= */}
-          <div className="w-full flex flex-col gap-2">
+          {/* ================= 🔥 FULL PAGE ADMIN STYLE TABLE (ALL RANKS INCLUDED) 🔥 ================= */}
+          <div className="w-full flex flex-col gap-2 mt-4">
             
-            {/* Table Heading */}
-            <h2 className="text-xl font-bold text-[#202124] mb-2 flex items-center gap-2">
+            {/* 🔥 HEADING CENTERED 🔥 */}
+            <h2 className="text-2xl font-extrabold text-[#202124] mb-5 flex items-center justify-center gap-2 w-full text-center">
               User Points Leaderboard
-              {isSearching && <span className="text-sm font-medium text-[#5f6368]"> - Search Results</span>}
+              {isSearching && <span className="text-lg font-medium text-[#5f6368]"> - Search Results</span>}
             </h2>
 
-            <div className="bg-white rounded-lg shadow-sm border border-[#dadce0] w-full overflow-hidden">
+            <div className="bg-white rounded-xl shadow-sm border border-[#dadce0] w-full overflow-hidden">
               <div className="w-full overflow-x-auto custom-scrollbar">
                 
-                {isSearching ? (
-                  searchResults.length > 0 ? (
-                    <table className="w-full text-left border-collapse min-w-[500px]">
-                      <thead className="bg-[#0f9d58] border-b border-[#0b8043]">
-                        <tr>
-                          <th className="px-6 py-5 text-[15px] font-black text-white uppercase tracking-wider border-r border-[#0b8043] w-24 text-center">Rank</th>
-                          <th className="px-6 py-5 text-[15px] font-black text-white uppercase tracking-wider border-r border-[#0b8043]">User Name</th>
-                          <th className="px-6 py-5 text-[15px] font-black text-white uppercase tracking-wider text-center w-36">Points</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#e8eaed]">
-                        {searchResults.map((user) => (
-                          <LeaderTableRow 
-                            key={user.id} 
-                            user={user} 
-                            isCurrentUser={isExactCurrentUser(user)} 
-                            innerRef={isExactCurrentUser(user) ? currentUserRef : null} 
-                          />
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <div className="p-16 text-center bg-white">
-                      <div className="text-5xl mb-4 opacity-50">🔍</div>
-                      <p className="text-[#5f6368] text-[15px] font-bold">No player found with that name.</p>
-                    </div>
-                  )
-                ) : (
-                  restLeaders.length > 0 ? (
-                    <table className="w-full text-left border-collapse min-w-[500px]">
-                      <thead className="bg-[#0f9d58] border-b border-[#0b8043]">
-                        <tr>
-                          <th className="px-6 py-5 text-[15px] font-black text-white uppercase tracking-wider border-r border-[#0b8043] w-24 text-center">Rank</th>
-                          <th className="px-6 py-5 text-[15px] font-black text-white uppercase tracking-wider border-r border-[#0b8043]">User Name</th>
-                          <th className="px-6 py-5 text-[15px] font-black text-white uppercase tracking-wider text-center w-36">Points</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#e8eaed]">
-                        {restLeaders.map((user) => (
-                          <LeaderTableRow 
-                            key={user.id} 
-                            user={user} 
-                            isCurrentUser={isExactCurrentUser(user)} 
-                            innerRef={isExactCurrentUser(user) ? currentUserRef : null} 
-                          />
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <div className="p-12 text-center bg-white">
-                      <p className="text-[#5f6368] text-[15px] font-bold">Waiting for more players to join the battle... ⚔️</p>
-                    </div>
-                  )
-                )}
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                  <thead className="bg-[#0f9d58]">
+                    
+                    {/* 🔥 SEARCH & RANKS MERGED INSIDE THE GREEN HEADER 🔥 */}
+                    <tr>
+                      <th colSpan={3} className="px-6 py-5 border-b border-[#0b8043]">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                          
+                          <div className="w-full sm:w-80 shrink-0 relative">
+                            <div className="relative group w-full">
+                              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg className="w-4 h-4 text-slate-400 group-focus-within:text-[#5f6368] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                              </div>
+                              <input
+                                type="text"
+                                placeholder={
+                                  showUserPlaceholder && currentUserName 
+                                    ? `${currentUserName.split(" ")[0]} You` 
+                                    : "Search player name..."
+                                }
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-white border-0 text-slate-900 placeholder-slate-400 rounded-lg py-3 pl-11 pr-10 focus:outline-none focus:ring-2 focus:ring-white transition-all text-[14px] font-bold shadow-sm"
+                              />
+                              {searchTerm && (
+                                <button 
+                                  onClick={() => setSearchTerm("")}
+                                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                                >
+                                  <svg className="w-5 h-5 bg-slate-100 hover:bg-slate-200 rounded-full p-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                            <div className="w-full sm:w-auto px-5 py-3 bg-[#0b8043] rounded-lg flex items-center justify-center gap-2 shadow-sm">
+                              <span className="text-[13px] font-bold text-green-100">Total Members:</span>
+                              <span className="text-[15px] font-black text-white">{leaders.length}</span>
+                            </div>
+                            
+                            <button 
+                              onClick={() => {
+                                if (currentUserRef.current) {
+                                  currentUserRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+                                }
+                              }}
+                              className="w-full sm:w-auto px-5 py-3 bg-white text-[#0f9d58] hover:bg-green-50 rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+                            >
+                              <span className="text-[13px] font-bold">Your Rank:</span>
+                              <span className="text-[15px] font-black">{currentUserRank ? currentUserRank : "--"}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+
+                    {/* 🔥 COLUMN HEADERS 🔥 */}
+                    <tr>
+                      <th className="px-6 py-4 text-[15px] font-black text-white uppercase tracking-wider border-r border-[#0b8043] border-b border-[#0b8043] w-24 text-center">Rank</th>
+                      <th className="px-6 py-4 text-[15px] font-black text-white uppercase tracking-wider border-r border-[#0b8043] border-b border-[#0b8043]">User Name</th>
+                      <th className="px-6 py-4 text-[15px] font-black text-white uppercase tracking-wider text-center border-b border-[#0b8043] w-36">Points</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y divide-[#e8eaed]">
+                    {displayList.length > 0 ? (
+                      displayList.map((user) => (
+                        <LeaderTableRow 
+                          key={user.id} 
+                          user={user} 
+                          isCurrentUser={isExactCurrentUser(user)} 
+                          innerRef={isExactCurrentUser(user) ? currentUserRef : null} 
+                        />
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={3} className="p-16 text-center bg-white">
+                          {isSearching ? (
+                            <>
+                              <div className="text-5xl mb-4 opacity-50">🔍</div>
+                              <p className="text-[#5f6368] text-[15px] font-bold">No player found with that name.</p>
+                            </>
+                          ) : (
+                            <p className="text-[#5f6368] text-[15px] font-bold">Waiting for players to join the battle... ⚔️</p>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
 
               </div>
             </div>
@@ -317,35 +231,70 @@ export default function LeaderboardPage() {
   );
 }
 
-// 🔥 ROW COMPONENT FOR ADMIN STYLE TABLE 🔥
+// 🔥 ROW COMPONENT FOR ADMIN STYLE TABLE WITH DARK COLORS FOR TOP 3 🔥
 function LeaderTableRow({ user, isCurrentUser = false, innerRef = null }: { user: Leader; isCurrentUser?: boolean; innerRef?: any }) {
+  
+  let rowBg = "bg-white hover:bg-[#f8f9fa]";
+  let textColor = "text-[#202124]";
+  let rankColor = "text-[#5f6368]";
+  let borderClass = "border-[#e8eaed]";
+
+  // 🔥 CUSTOM STYLES FOR TOP 3 RANKS 🔥
+  if (user.rank === 1) {
+    rowBg = "bg-[#4a148c] hover:bg-[#6a1b9a]"; // Dark Purple
+    textColor = "text-white";
+    rankColor = "text-white";
+    borderClass = "border-[#380b6b]";
+  } else if (user.rank === 2) {
+    rowBg = "bg-[#4e342e] hover:bg-[#5d4037]"; // Dark Brown
+    textColor = "text-white";
+    rankColor = "text-white";
+    borderClass = "border-[#3e2723]";
+  } else if (user.rank === 3) {
+    rowBg = "bg-[#d89b00] hover:bg-[#f5b300]"; // Dark Yellow/Gold
+    textColor = "text-white";
+    rankColor = "text-white";
+    borderClass = "border-[#b07d00]";
+  } else if (isCurrentUser) {
+    rowBg = "animate-blink-user";
+    textColor = "text-[#0f9d58]";
+    rankColor = "text-[#0f9d58]";
+  }
+
   return (
     <tr 
       ref={innerRef}
-      className={`transition-colors duration-300 ${isCurrentUser ? "animate-blink-user" : "hover:bg-[#f8f9fa] bg-white"}`}
+      className={`transition-colors duration-300 ${rowBg}`}
     >
-      <td className={`px-6 py-4 text-[15px] font-bold text-center border-r border-[#e8eaed] ${isCurrentUser ? "text-[#0f9d58]" : "text-[#5f6368]"}`}>
+      <td className={`px-6 py-4 text-[16px] font-black text-center border-r ${borderClass} ${rankColor}`}>
         {user.rank}
+        {user.rank <= 3 && (
+          <div className="text-[10px] uppercase font-bold mt-1 opacity-80">
+            {user.rank === 1 ? '🥇 1st' : user.rank === 2 ? '🥈 2nd' : '🥉 3rd'}
+          </div>
+        )}
       </td>
-      <td className="px-6 py-4 border-r border-[#e8eaed]">
+      
+      <td className={`px-6 py-4 border-r ${borderClass}`}>
         <div className="flex items-center gap-4">
           <img 
             src={user.photoURL || "/avatar.png"} 
             alt={user.name} 
-            className={`w-10 h-10 rounded-full object-cover shrink-0 border border-[#dadce0] ${isCurrentUser ? "border-2 border-[#0f9d58]" : ""}`} 
+            className={`w-10 h-10 rounded-full object-cover shrink-0 shadow-sm border border-white/20 ${isCurrentUser && user.rank > 3 ? "border-2 border-[#0f9d58]" : ""}`} 
           />
-          <span className={`text-[15px] font-bold truncate max-w-[150px] sm:max-w-[300px] ${isCurrentUser ? "text-[#0f9d58]" : "text-[#202124]"}`}>
+          <span className={`text-[15px] font-bold truncate max-w-[150px] sm:max-w-[300px] ${textColor}`}>
             {user.name || "Anonymous"}
           </span>
           {isCurrentUser && (
-            <span className="ml-2 bg-[#0f9d58] text-white px-2.5 py-0.5 rounded-sm text-[10px] font-black uppercase tracking-wider shadow-sm">
+            <span className={`ml-2 px-2.5 py-0.5 rounded-sm text-[10px] font-black uppercase tracking-wider shadow-sm ${user.rank <= 3 ? "bg-white text-black" : "bg-[#0f9d58] text-white"}`}>
               You
             </span>
           )}
         </div>
       </td>
+      
       <td className="px-6 py-4 text-center">
-        <span className={`text-[16px] font-black ${isCurrentUser ? "text-[#0f9d58]" : "text-[#202124]"}`}>
+        <span className={`text-[17px] font-black ${textColor}`}>
           {user.points?.toLocaleString() ?? 0}
         </span>
       </td>
