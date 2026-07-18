@@ -223,22 +223,6 @@ export default function HomePage() {
         </h1>
       </div>
 
-      {/* 🔥 You Avatar UPDATED (Blue border & only Name) 🔥 */}
-      <div 
-        className="absolute top-4 right-4 md:top-6 md:right-8 flex flex-col items-center gap-1.5 z-40 cursor-pointer group"
-        onClick={() => router.push('/dashboard')}
-      >
-        <img 
-          src={imageError ? "/avatar.png" : currentUserAvatar} 
-          alt="Your Avatar" 
-          onError={() => setImageError(true)}
-          className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110 border-2 border-[#1a73e8] p-[2px] bg-white shadow-sm"
-        />
-        <span className="text-[#5f6368] text-[11px] md:text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors text-center max-w-[80px] truncate">
-          {currentUserName || "You"}
-        </span>
-      </div>
-
       <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-28 md:mt-24">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 w-full">
           
@@ -325,9 +309,29 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/*  Premium Blue Card for Tools (RIGHT SIDE)  */}
+          {/*  Premium White Card for Tools (RIGHT SIDE)  */}
           <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
-            <div className="bg-gradient-to-b from-[#1a73e8] to-[#0d47a1] rounded-[16px] shadow-[0_12px_32px_rgba(26,115,232,0.2)] flex flex-col w-full overflow-hidden border border-[#4285f4]">
+            <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col w-full overflow-hidden border border-[#dadce0]">
+              
+              {/* Profile / Avatar Header shifted inside the box */}
+              <div 
+                className="flex items-center justify-between p-4 border-b border-[#dadce0] bg-[#f8f9fa] cursor-pointer group hover:bg-[#f1f3f4] transition-colors"
+                onClick={() => router.push('/dashboard')}
+              >
+                <span className="text-[#3c4043] font-bold text-[14px]">Quick Actions</span>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-[#5f6368] text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors text-right max-w-[80px] truncate">
+                    {currentUserName || "You"}
+                  </span>
+                  <img 
+                    src={imageError ? "/avatar.png" : currentUserAvatar} 
+                    alt="Your Avatar" 
+                    onError={() => setImageError(true)}
+                    className="w-9 h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-110 border-2 border-[#1a73e8] p-[2px] bg-white shadow-sm"
+                  />
+                </div>
+              </div>
+
               {[
                 { 
                   name: "Arcade Points Calculator", 
@@ -372,19 +376,19 @@ export default function HomePage() {
                       router.push(item.link);
                     }
                   }}
-                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#4285f4]/30 last:border-none hover:bg-white/10 transition-colors duration-200 cursor-pointer group"
+                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#dadce0] last:border-none hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-[38px] h-[38px] rounded-[8px] bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0 shadow-sm transition-all duration-300">
+                    <div className="w-[38px] h-[38px] rounded-[8px] bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm transition-all duration-300 group-hover:bg-[#1a73e8] group-hover:text-white">
                       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                         {item.icon}
                       </svg>
                     </div>
-                    <span className="font-[700] text-[15px] text-white tracking-tight group-hover:text-blue-100 transition-colors">
+                    <span className="font-[700] text-[15px] text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
                       {item.name}
                     </span>
                   </div>
-                  <span className="text-white opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transform transition-all">
+                  <span className="text-[#9aa0a6] group-hover:text-[#1a73e8] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transform transition-all">
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
