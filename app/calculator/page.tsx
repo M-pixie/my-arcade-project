@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
@@ -44,7 +44,10 @@ interface RecentProfile {
 
 export default function CalculatorPage() {
   const [profileUrl, setProfileUrl] = useState("");
-  const [loading, setLoading] = useState(false);
+  // 🔥 PAUSE/RESUME STATE (idle, loading, paused)
+  const [calcState, setCalcState] = useState<'idle' | 'loading' | 'paused'>('idle');
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   const [error, setError] = useState<string | null>(null);
   
   const [rememberMe, setRememberMe] = useState(false);
@@ -52,9 +55,6 @@ export default function CalculatorPage() {
   
   const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  
-  // 🔥 STATE FOR REFERRAL CODE COPY 🔥
-  const [copiedReferral, setCopiedReferral] = useState(false);
   
   // 🔥 STATES FOR TIMER 🔥
   const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
@@ -139,14 +139,14 @@ export default function CalculatorPage() {
   // 🔥 ANIMATION PHASE CONTROLLER 🔥
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (loading) {
+    if (calcState === 'loading') {
       setLoadingStep('wave'); // Start with slow wave
       timer = setTimeout(() => {
         setLoadingStep('collide'); // Shift to fast Gemini collide after 1.2s
       }, 1200);
     }
     return () => clearTimeout(timer);
-  }, [loading]);
+  }, [calcState]);
 
   const handleAutoCalcToggle = () => {
     if (!autoCalculate) {
@@ -165,13 +165,6 @@ export default function CalculatorPage() {
 
   const cancelAutoCalc = () => {
     setShowAutoCalcModal(false);
-  };
-
-  // 🔥 FUNCTION TO COPY REFERRAL CODE 🔥
-  const handleCopyReferral = () => {
-    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
-    setCopiedReferral(true);
-    setTimeout(() => setCopiedReferral(false), 2000);
   };
 
   const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null, points?: number) => {
@@ -210,6 +203,7 @@ export default function CalculatorPage() {
     setAutoCalculate(false);
     setRememberMe(false);
     setError(null);
+    setCalcState('idle');
 
     setShowResetModal(false);
   };
@@ -234,6 +228,7 @@ export default function CalculatorPage() {
     }, 10);
   };
 
+  // 🔥 CORE CALCULATE FUNCTION 🔥
   const proceedToDashboard = async (overrideUrl?: string | any, isAutoRun: boolean = false) => {
     const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
 
@@ -260,20 +255,24 @@ export default function CalculatorPage() {
       return;
     }
 
-    setLoading(true); 
+    // 🔥 PREPARE FOR FETCH & ABORT CONTROLLER
+    setCalcState('loading'); 
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
     
     try {
       const res = await fetch("/api/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: targetUrl }),
+        signal // Attach the signal to allow aborting
       });
 
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.error || "Failed to calculate points. Check URL.");
-        setLoading(false);
+        setCalcState('idle');
         triggerShake(); 
         return;
       }
@@ -307,10 +306,33 @@ export default function CalculatorPage() {
       
       router.push("/dashboard");
 
-    } catch (err) {
+    } catch (err: any) {
+      // Ignore error if we intentionally aborted it (Paused)
+      if (err.name === 'AbortError') {
+        console.log('Calculation Paused');
+        return;
+      }
+
       setError("Connection failed. Check your internet and retry.");
-      setLoading(false);
+      setCalcState('idle');
       triggerShake(); 
+    }
+  };
+
+  // 🔥 HANDLER FOR MAIN BUTTON CLICKS (PLAY/PAUSE/RESUME) 🔥
+  const handleMainButtonClick = () => {
+    if (calcState === 'idle') {
+      // Start calculation
+      proceedToDashboard();
+    } else if (calcState === 'loading') {
+      // Pause calculation
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort(); // Cancel network request
+      }
+      setCalcState('paused');
+    } else if (calcState === 'paused') {
+      // Resume calculation
+      proceedToDashboard();
     }
   };
 
@@ -325,6 +347,10 @@ export default function CalculatorPage() {
 
     proceedToDashboard(url);
   };
+
+  // Simplified boolean checks for UI render
+  const isLoading = calcState === 'loading';
+  const isPaused = calcState === 'paused';
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
@@ -385,17 +411,8 @@ export default function CalculatorPage() {
           </h1>
         </div>
 
-        {/* 🔥 UPDATED MAIN CARD: Dynamic color changing background on loading & shorter border radius 🔥 */}
-        <div 
-          className={`rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative transition-all duration-1000 ease-in-out`}
-          style={{
-            backgroundColor: loading 
-              ? loadingStep === 'wave' 
-                ? '#e8f0fe' // Smooth Soft Blue First Phase
-                : ['#fce8e6', '#fef7e0', '#e6f4ea', '#f3e5f5'][Math.floor((new Date().getTime() / 1000) % 4)] // Rapidly transitions between Red, Yellow, Green, Purple in Phase 2
-              : '#ffffff' // Standard Clean White when idle
-          }}
-        >
+        {/* 🔥 MAIN CARD: Kept clean white 🔥 */}
+        <div className={`bg-white rounded-xl border border-[#dadce0] shadow-sm overflow-hidden mb-8 relative transition-all duration-1000 ease-in-out`}>
           
           <style>{`
             @keyframes slow-fill { 0% { width: 0%; } 20% { width: 30%; } 50% { width: 65%; } 80% { width: 85%; } 100% { width: 95%; } }
@@ -481,14 +498,14 @@ export default function CalculatorPage() {
                 onAnimationEnd={() => setIsShaking(false)}
                 className={`relative border-2 rounded-lg transition-colors duration-75 ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : "border-[#dadce0] focus-within:border-[#1a73e8]"}`}
               >
-                {loading && !error && userPoints === null && (
+                {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-2 right-2 h-[2px] bg-transparent overflow-hidden z-0">
-                    <div className="h-full bg-[#5d4037] animate-slow-fill rounded-full"></div>
+                    <div className="h-full bg-[#1a73e8] animate-slow-fill rounded-full"></div>
                   </div>
                 )}
 
-                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${error && !hideRedLine ? "text-[#d93025]" : userName && !loading ? "text-[#4e342e]" : "text-[#1a73e8]"}`}>
-                  {loading ? (
+                <label className={`absolute -top-3 left-3 bg-white px-1 text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${error && !hideRedLine ? "text-[#d93025]" : (userName && !isLoading && !isPaused) ? "text-[#4e342e]" : "text-[#1a73e8]"}`}>
+                  {isLoading ? (
                     loadingStep === 'wave' ? (
                       <div className="flex items-center gap-[3px] h-5 px-1">
                         <div className="w-[5px] h-[5px] bg-[#1a73e8] rounded-full dot-wave-1"></div>
@@ -504,14 +521,29 @@ export default function CalculatorPage() {
                         </div>
                       </div>
                     )
+                  ) : isPaused ? (
+                    "Calculation Paused"
                   ) : (
                     userName ? `Hi, ${userName}` : "Enter Public Profile Url"
                   )}
                 </label>
                 
-                {loading ? (
-                  <div className="w-full h-[56px] px-4 py-4 text-base text-[#202124] bg-transparent relative z-10 flex items-center overflow-hidden whitespace-nowrap">
-                    {profileUrl}
+                {calcState !== 'idle' ? (
+                  <div className="w-full h-[56px] px-4 py-4 text-base text-[#202124] bg-transparent relative z-10 flex items-center justify-between overflow-hidden whitespace-nowrap">
+                    <span className="truncate">{profileUrl}</span>
+                    
+                    {/* Add an X button to cancel and allow editing when paused */}
+                    {isPaused && (
+                      <button 
+                        onClick={() => setCalcState('idle')}
+                        title="Cancel Calculation"
+                        className="ml-2 text-[#9aa0a6] hover:text-[#d93025] transition-colors p-1"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <input
@@ -551,36 +583,11 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              {/* 🔥 UPDATED: REMOVED TIMER FROM HERE 🔥 */}
-              <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center">
-                
-                <div className="bg-[#f1f3f4] border border-[#dadce0] rounded-lg px-4 py-3 flex items-center justify-center w-full shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="font-mono text-xl sm:text-[22px] text-black font-extrabold tracking-wider">
-                      GCAF26-IN-9SC-AE9
-                    </div>
-                    <button
-                      onClick={handleCopyReferral}
-                      className="p-1 text-[#5f6368] hover:text-black transition-colors rounded-md"
-                      title="Copy Code"
-                    >
-                      {copiedReferral ? (
-                        <svg className="w-6 h-6 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="flex flex-col items-center justify-center mt-2 w-full">
-                  <label className="text-[13px] font-bold text-black mb-0.5">Facilitator Referral Code</label>
-                </div>
-
+              {/* 🔥 REPLACED REFERRAL CODE WITH SUBSCRIBE LINK 🔥 */}
+              <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center justify-center">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className="text-[14px] font-bold text-[#1a73e8] hover:text-[#1557b0] tracking-wide hover:underline inline-block bg-[#e8f0fe] hover:bg-[#d2e3fc] px-4 py-2 rounded-lg border border-[#d2e3fc] transition-colors">
+                  Subscribe to Google Skills Arcade
+                </a>
               </div>
 
               <div className="text-sm font-medium text-[#3c4043] md:text-right">
@@ -589,15 +596,18 @@ export default function CalculatorPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center w-full mb-6 mt-12">
-              {/* 🔥 UPDATED BUTTON: Pure Clean Google Blue theme 🔥 */}
+              
+              {/* 🔥 PLAY / PAUSE / RESUME BUTTON 🔥 */}
               <button 
-                onClick={proceedToDashboard} 
-                disabled={loading} 
-                className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:shadow-sm flex justify-center items-center shadow-sm"
+                onClick={handleMainButtonClick}
+                className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white text-[16px] font-bold py-3.5 rounded-lg transition-all duration-300 transform hover:-translate-y-[1px] hover:shadow-lg active:scale-[0.98] flex justify-center items-center shadow-sm"
               >
-                {loading ? (
+                {isLoading ? (
                   <div className="flex items-center justify-center gap-3 h-6">
-                    <span className="leading-none text-white">Calculating Points</span>
+                    <svg className="w-5 h-5 fill-current opacity-80" viewBox="0 0 24 24">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                    <span className="leading-none text-white">Calculating... (Pause)</span>
                     
                     {loadingStep === 'wave' ? (
                       <div className="flex items-center gap-1 relative top-[1px]">
@@ -613,16 +623,18 @@ export default function CalculatorPage() {
                       </div>
                     )}
                   </div>
+                ) : isPaused ? (
+                  <div className="flex items-center justify-center gap-2 h-6">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <span className="leading-none text-white">Paused (Click to Resume)</span>
+                  </div>
                 ) : (
                   "Calculate Arcade Points"
                 )}
               </button>
               
-              <div className="mt-8 text-center">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className="text-[13.5px] font-bold text-[#202124] tracking-wide hover:underline inline-block">
-                  Subscribe to Google Skills Arcade.
-                </a>
-              </div>
             </div>
 
             {/* 🔥 NEW COMPACT PREMIUM HISTORY CARDS 🔥 */}

@@ -103,29 +103,24 @@ export default function LeaderboardPage() {
 
         <Navbar />
 
-        {/* 🔥 LAYOUT WIDER: max-w-[1350px] ADDED 🔥 */}
-        <main className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-8 relative z-10">
+        {/* 🔥 LAYOUT WIDER: max-w-[1350px] ADDED, SHIFTED UP WITH pt-2 🔥 */}
+        <main className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 pt-2 pb-8 relative z-10">
           
           {/* ================= 🔥 FULL PAGE ADMIN STYLE TABLE (ALL RANKS INCLUDED) 🔥 ================= */}
-          <div className="w-full flex flex-col gap-2 mt-4">
+          <div className="w-full flex flex-col gap-2 mt-0">
             
-            {/* 🔥 HEADING CENTERED 🔥 */}
-            <h2 className="text-2xl font-extrabold text-[#202124] mb-5 flex items-center justify-center gap-2 w-full text-center">
-              User Points Leaderboard
-              {isSearching && <span className="text-lg font-medium text-[#5f6368]"> - Search Results</span>}
-            </h2>
-
             <div className="bg-white rounded-xl shadow-sm border border-[#dadce0] w-full overflow-hidden">
               <div className="w-full overflow-x-auto custom-scrollbar">
                 
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead className="bg-[#0f9d58]">
                     
-                    {/* 🔥 SEARCH & RANKS MERGED INSIDE THE GREEN HEADER 🔥 */}
+                    {/* 🔥 SEARCH, USERS RANK & TOTAL MEMBERS HEADER 🔥 */}
                     <tr>
                       <th colSpan={3} className="px-6 py-5 border-b border-[#0b8043]">
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
                           
+                          {/* Left: Search Bar */}
                           <div className="w-full sm:w-80 shrink-0 relative">
                             <div className="relative group w-full">
                               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -157,24 +152,27 @@ export default function LeaderboardPage() {
                             </div>
                           </div>
 
-                          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                            <div className="w-full sm:w-auto px-5 py-3 bg-[#0b8043] rounded-lg flex items-center justify-center gap-2 shadow-sm">
-                              <span className="text-[13px] font-bold text-green-100">Total Members:</span>
-                              <span className="text-[15px] font-black text-white">{leaders.length}</span>
-                            </div>
-                            
+                          {/* Middle: Users Rank (White text, centered) */}
+                          <div className="flex-1 flex justify-center items-center w-full sm:w-auto">
                             <button 
                               onClick={() => {
                                 if (currentUserRef.current) {
                                   currentUserRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
                                 }
                               }}
-                              className="w-full sm:w-auto px-5 py-3 bg-white text-[#0f9d58] hover:bg-green-50 rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+                              className="text-white hover:text-green-100 flex items-center justify-center gap-2 transition-colors cursor-pointer"
                             >
-                              <span className="text-[13px] font-bold">Your Rank:</span>
-                              <span className="text-[15px] font-black">{currentUserRank ? currentUserRank : "--"}</span>
+                              <span className="text-[15px] font-bold">Your Rank:</span>
+                              <span className="text-[18px] font-black">{currentUserRank ? currentUserRank : "--"}</span>
                             </button>
                           </div>
+
+                          {/* Right: Total Members */}
+                          <div className="w-full sm:w-auto px-5 py-3 bg-[#0b8043] rounded-lg flex items-center justify-center gap-2 shadow-sm shrink-0">
+                            <span className="text-[13px] font-bold text-green-100">Total Members:</span>
+                            <span className="text-[15px] font-black text-white">{leaders.length}</span>
+                          </div>
+                          
                         </div>
                       </th>
                     </tr>
