@@ -35,10 +35,18 @@ export default function DashboardPage() {
 
   const [showYouText, setShowYouText] = useState(true);
   const [showSubscribe, setShowSubscribe] = useState(false);
-  
   const [hideModals, setHideModals] = useState(false);
 
+  // 🔥 PREMIUM DARK MODE STATE 🔥
+  const [isDark, setIsDark] = useState(false);
+
   useEffect(() => {
+    // Load Dark Mode Preference
+    const savedTheme = localStorage.getItem("arcade_theme");
+    if (savedTheme === "dark") {
+      setIsDark(true);
+    }
+
     if (localStorage.getItem("hide_arcade_banners") === "true") {
       setHideModals(true);
     }
@@ -56,6 +64,13 @@ export default function DashboardPage() {
       clearInterval(intervalSub);
     };
   }, []);
+
+  // Toggle Function for Dark Mode
+  const toggleDarkMode = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    localStorage.setItem("arcade_theme", newTheme ? "dark" : "light");
+  };
 
   const aprilLabs = [
     {
@@ -284,7 +299,6 @@ export default function DashboardPage() {
       return item.type === 'Course' || item.name.toLowerCase().includes('course');
     }
 
-    // 🔥 NEW FILTER LOGIC FOR FACILITATOR PROGRESS HISTORY (14 JULY ONWARDS) 🔥
     if (historyFilter === "Facilitator Progress History") {
       const lowerName = item.name.toLowerCase();
       const isBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
@@ -295,12 +309,12 @@ export default function DashboardPage() {
       const targetStartDate = new Date("2026-07-14T00:00:00");
       
       if (isBadge) {
-        return earnedDate >= targetStartDate; // Badges from 14 July
+        return earnedDate >= targetStartDate; 
       }
       if (isGame) {
         return aprilLabs.some(lab => 
           lab.matchStrings.some(match => lowerName.includes(match.toLowerCase()))
-        ); // Only July Arcade Games
+        ); 
       }
       return false; 
     }
@@ -327,7 +341,6 @@ export default function DashboardPage() {
     );
   }).length;
 
-  // 🔥 UPDATED LOGIC TO START COUNTING FROM 14 JULY 🔥
   const facilitatorSkillBadgesCount = history.filter(item => {
     const isBadge = item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     if (!isBadge) return false;
@@ -336,7 +349,6 @@ export default function DashboardPage() {
     const targetStartDate = new Date("2026-07-14T00:00:00");
     return earnedDate >= targetStartDate;
   }).length;
-
 
   const facilitatorMilestones = [
     { id: 1, title: 'Milestone 1', targetArcade: 6, targetSkills: 18, points: 5 },
@@ -350,16 +362,22 @@ export default function DashboardPage() {
   );
   const milestoneText = achievedMilestone ? achievedMilestone.title : "No Milestones Yet";
 
-  // Premium Backgrounds for Milestone Cards
-  const premiumCardStyles = [
-    "bg-gradient-to-br from-[#ffffff] to-[#f8f9fa] border-[#e8eaed]", // Card 1: Clean White/Silver
-    "bg-gradient-to-br from-[#f8fbff] to-[#e8f0fe] border-[#d2e3fc]", // Card 2: Premium Soft Blue
-    "bg-gradient-to-br from-[#fdfefe] to-[#e6f4ea] border-[#ceead6]", // Card 3: Premium Soft Green
-    "bg-gradient-to-br from-[#fffdf8] to-[#fef7e0] border-[#fce8e6]"  // Card 4: Premium Soft Gold
+  // Premium Backgrounds for Milestone Cards (Light and Dark)
+  const premiumCardStylesLight = [
+    "bg-gradient-to-br from-[#ffffff] to-[#f8f9fa] border-[#e8eaed]", 
+    "bg-gradient-to-br from-[#f8fbff] to-[#e8f0fe] border-[#d2e3fc]", 
+    "bg-gradient-to-br from-[#fdfefe] to-[#e6f4ea] border-[#ceead6]", 
+    "bg-gradient-to-br from-[#fffdf8] to-[#fef7e0] border-[#fce8e6]"  
+  ];
+  const premiumCardStylesDark = [
+    "bg-gradient-to-br from-[#16171a] to-[#0a0a0a] border-[#2a2d32]",
+    "bg-gradient-to-br from-[#0f172a] to-[#020617] border-[#1e293b]",
+    "bg-gradient-to-br from-[#064e3b] to-[#022c22] border-[#065f46]",
+    "bg-gradient-to-br from-[#451a03] to-[#271c19] border-[#78350f]"
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans relative">
+    <div className={`min-h-screen font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
       <Navbar />
 
       <main className="w-full mx-auto px-6 pt-24 pb-16 flex flex-col items-center">
@@ -368,17 +386,18 @@ export default function DashboardPage() {
           {points !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative animate-fade-in-up">
               
-              <div className="lg:col-span-4 flex flex-col w-full lg:border-r lg:border-[#dadce0] lg:pr-6">
+              <div className={`lg:col-span-4 flex flex-col w-full lg:border-r lg:pr-6 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 
-                {/* 🔥 LEFT CARD: SQUARE BORDER 🔥 */}
-                 <div className="bg-white rounded-xl shadow-sm border border-[#e8eaed] overflow-hidden relative flex flex-col transition-shadow duration-300 w-full min-h-[640px]">                  <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
+                {/* 🔥 LEFT CARD 🔥 */}
+                 <div className={`rounded-xl shadow-sm border overflow-hidden relative flex flex-col transition-all duration-300 w-full min-h-[640px] ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
+                  <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
                     <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white">
                       Arcade Points: {points}
                     </h3>
                   </div>
                   
                   <div className="px-8 pt-8 pb-10 flex flex-col items-center relative flex-grow">
-                    <div className="w-28 h-28 rounded-full border-[5px] border-white shadow-md flex items-center justify-center overflow-hidden mb-5 relative bg-[#137333] ring-4 ring-[#e6f4ea] transform transition-transform hover:scale-105">
+                    <div className={`w-28 h-28 rounded-full border-[5px] shadow-md flex items-center justify-center overflow-hidden mb-5 relative transform transition-transform hover:scale-105 ring-4 ${isDark ? 'bg-[#0d47a1] border-[#1a1b1e] ring-[#1a73e8]/30' : 'bg-[#137333] border-white ring-[#e6f4ea]'}`}>
                       {userAvatar ? (
                         <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
                       ) : (
@@ -386,7 +405,7 @@ export default function DashboardPage() {
                       )}
                     </div>
                     
-                    <h2 className="text-[26px] font-black text-[#202124] mb-4 text-center tracking-tight leading-tight">
+                    <h2 className={`text-[26px] font-black mb-4 text-center tracking-tight leading-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                       {userName || "Arcade Player"}
                     </h2>
 
@@ -406,20 +425,20 @@ export default function DashboardPage() {
                         onClick={() => document.getElementById('history-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} 
                         className="cursor-pointer text-center group transition-transform hover:scale-105"
                       >
-                        <div className="text-[28px] font-black text-[#202124]">{history.filter(item => item.type !== 'Skill Badge').length}</div>
-                        <div className="text-[13px] font-bold text-[#202124] uppercase tracking-wide mt-1">All Games</div>
+                        <div className={`text-[28px] font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{history.filter(item => item.type !== 'Skill Badge').length}</div>
+                        <div className={`text-[13px] font-bold uppercase tracking-wide mt-1 ${isDark ? 'text-[#8e949c]' : 'text-[#202124]'}`}>All Games</div>
                       </div>
-                      <div className="w-px h-full bg-[#dadce0] mx-2"></div>
+                      <div className={`w-px h-full mx-2 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#dadce0]'}`}></div>
                       <div 
                         onClick={() => router.push('/resources#completed-section')} 
                         className="cursor-pointer text-center group transition-transform hover:scale-105"
                       >
-                        <div className="text-[28px] font-black text-[#202124]">{totalSkillBadgesCount}</div>
-                        <div className="text-[13px] font-bold text-[#202124] uppercase tracking-wide mt-1">Skill Badges</div>
+                        <div className={`text-[28px] font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{totalSkillBadgesCount}</div>
+                        <div className={`text-[13px] font-bold uppercase tracking-wide mt-1 ${isDark ? 'text-[#8e949c]' : 'text-[#202124]'}`}>Skill Badges</div>
                       </div>
                     </div>
 
-                    <div className="text-center font-bold text-lg mb-6 text-[#b8860b]">
+                    <div className={`text-center font-bold text-lg mb-6 ${isDark ? 'text-[#fbbc04]' : 'text-[#b8860b]'}`}>
                       {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
                     </div>
 
@@ -432,23 +451,24 @@ export default function DashboardPage() {
                       </button>
                     </div>
 
-                    <div className="text-sm font-black text-[#1a73e8] border-t border-[#e8eaed] pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm">
+                    <div className={`text-sm font-black text-[#1a73e8] border-t pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm ${isDark ? 'border-[#2a2d32]' : 'border-[#e8eaed]'}`}>
                       Member since <span className="text-[#1a73e8] font-black">{getMemberSinceYear()}</span>
                     </div>
                   </div>
                 </div>
 
-              <div className="mt-6 bg-white rounded-xl shadow-sm border border-[#dadce0] p-6 text-center flex flex-col justify-center transition-all hover:shadow-md">                  <h4 className="text-[13px] font-black text-[#5f6368] uppercase tracking-widest mb-3">
+              <div className={`mt-6 rounded-xl shadow-sm border p-6 text-center flex flex-col justify-center transition-all hover:shadow-md ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
+                 <h4 className={`text-[13px] font-black uppercase tracking-widest mb-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                     Facilitator Progress
                   </h4>
                   <div className="inline-flex items-center justify-center gap-2">
                     {achievedMilestone ? (
                       <>
                         <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <span className="text-xl font-bold text-[#137333]">{milestoneText}</span>
+                        <span className={`text-xl font-bold ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>{milestoneText}</span>
                       </>
                     ) : (
-                      <span className="text-sm font-bold text-[#ea4335] bg-[#fce8e6] px-4 py-1.5 rounded-none">
+                      <span className={`text-sm font-bold px-4 py-1.5 rounded-none ${isDark ? 'text-[#f28b82] bg-[#3c1e1e]' : 'text-[#ea4335] bg-[#fce8e6]'}`}>
                         {milestoneText}
                       </span>
                     )}
@@ -462,17 +482,38 @@ export default function DashboardPage() {
                 
                 <div className="mb-8 w-full flex-grow">
                   
+                  {/* 🔥 PREMIUM DARK MODE TOGGLE HERE 🔥 */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 w-full gap-4">
-                    <h2 className="text-[28px] font-bold text-black tracking-normal">Facilitator Progress</h2>
                     
-                    <div className="flex items-center justify-between sm:justify-start gap-3 bg-white border border-[#dadce0] py-2 px-4 rounded-lg shadow-sm w-full sm:w-auto">
+                    <div className="flex items-center gap-4">
+                      <h2 className={`text-[28px] font-bold tracking-normal ${isDark ? 'text-white' : 'text-black'}`}>
+                        Facilitator Progress
+                      </h2>
+                      
+                      {/* Beautiful Toggle Switch */}
+                      <button
+                        onClick={toggleDarkMode}
+                        className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
+                        title="Toggle Dark Mode"
+                      >
+                        <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
+                          {isDark ? (
+                            <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                          ) : (
+                            <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
+                          )}
+                        </span>
+                      </button>
+                    </div>
+                    
+                    <div className={`flex items-center justify-between sm:justify-start gap-3 border py-2 px-4 rounded-lg shadow-sm w-full sm:w-auto ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                       <div className="flex flex-col">
-                        <span className="text-[11px] uppercase font-bold text-[#5f6368] leading-none mb-1">Referral Code</span>
-                        <span className="text-[16px] font-black text-black leading-none tracking-wide">GCAF26-IN-9SC-AE9</span>
+                        <span className={`text-[11px] uppercase font-bold leading-none mb-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Referral Code</span>
+                        <span className={`text-[16px] font-black leading-none tracking-wide ${isDark ? 'text-white' : 'text-black'}`}>GCAF26-IN-9SC-AE9</span>
                       </div>
                       <button 
                         onClick={handleCopyReferral} 
-                        className="text-[#5f6368] hover:text-black transition-colors ml-2 bg-gray-50 hover:bg-gray-100 p-2 rounded-md" 
+                        className={`transition-colors ml-2 p-2 rounded-md ${isDark ? 'text-[#8e949c] hover:text-white bg-[#202124] hover:bg-[#2a2d32]' : 'text-[#5f6368] hover:text-black bg-gray-50 hover:bg-gray-100'}`} 
                         title="Copy Referral Code"
                       >
                         {copiedReferral ? (
@@ -493,15 +534,13 @@ export default function DashboardPage() {
                         const isAchieved = facilitatorArcadeGamesCount >= milestone.targetArcade && facilitatorSkillBadgesCount >= milestone.targetSkills;
                         const totalPercent = Math.floor((arcadeProgress + skillsProgress) / 2);
 
-                        // 🔥 DIFFERENT PREMIUM COLORS FOR CARDS 🔥
-                        const cardStyle = premiumCardStyles[index % premiumCardStyles.length];
+                        const cardStyle = isDark ? premiumCardStylesDark[index % premiumCardStylesDark.length] : premiumCardStylesLight[index % premiumCardStylesLight.length];
 
                         return (
-                          // 🔥 CARDS SQUARE SHAPE 🔥
                           <div key={milestone.id} className={`${cardStyle} border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow`}>
                             <div className="flex justify-between items-center mb-5">
-                              <h3 className="font-bold text-lg text-[#202124] leading-none">{milestone.title}</h3>
-                              <span className="text-[14px] font-bold text-[#202124]">
+                              <h3 className={`font-bold text-lg leading-none ${isDark ? 'text-gray-100' : 'text-[#202124]'}`}>{milestone.title}</h3>
+                              <span className={`text-[14px] font-bold ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                                 {isAchieved ? '100%' : `${totalPercent}%`}
                               </span>
                             </div>
@@ -509,41 +548,38 @@ export default function DashboardPage() {
                             <div className="space-y-4 mb-6">
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  <span className="text-[#202124]">Arcade Games (July Only)</span> 
-                                  <span className="text-[#202124]">{Math.min(facilitatorArcadeGamesCount, milestone.targetArcade)} / {milestone.targetArcade}</span>
+                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Arcade Games (July Only)</span> 
+                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>{Math.min(facilitatorArcadeGamesCount, milestone.targetArcade)} / {milestone.targetArcade}</span>
                                 </div>
-                                {/* 🔥 PROGRESS BAR: SQUARE + BLUE 🔥 */}
-                                <div className="w-full bg-[#e5e7eb] h-2.5 rounded-none overflow-hidden border border-[#dadce0]">
+                                <div className={`w-full h-2.5 rounded-none overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
                                   <div className="bg-[#1a73e8] h-full rounded-none transition-all duration-1000 ease-out" style={{ width: `${arcadeProgress}%` }}></div>
                                 </div>
                               </div>
 
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  {/* 🔥 TEXT UPDATED TO 14 JULY 🔥 */}
-                                  <span className="text-[#202124]">Skill Badges (Post-July 14)</span> 
-                                  <span className="text-[#202124]">{Math.min(facilitatorSkillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
+                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Skill Badges (Post-July 14)</span> 
+                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>{Math.min(facilitatorSkillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
                                 </div>
-                                {/* 🔥 PROGRESS BAR: SQUARE + GREEN 🔥 */}
-                                <div className="w-full bg-[#e5e7eb] h-2.5 rounded-none overflow-hidden border border-[#dadce0]">
+                                <div className={`w-full h-2.5 rounded-none overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
                                   <div className="bg-[#34a853] h-full rounded-none transition-all duration-1000 ease-out" style={{ width: `${skillsProgress}%` }}></div>
                                 </div>
                               </div>
                             </div>
 
-                            <div className="pt-4 border-t border-[#f1f3f4] flex justify-between items-center min-h-[50px]">
-                              <span className="font-bold text-[#202124] text-[14px] lg:text-[15px]">Milestone Rewards</span>
+                            <div className={`pt-4 border-t flex justify-between items-center min-h-[50px] ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
+                              <span className={`font-bold text-[14px] lg:text-[15px] ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>Milestone Rewards</span>
                               {isAchieved ? (
                                 <div className="flex items-center gap-3">
                                   <div className="flex flex-col items-end">
-                                    <span className="text-[15px] md:text-[17px] font-extrabold text-[#137333] leading-tight">
+                                    <span className={`text-[15px] md:text-[17px] font-extrabold leading-tight ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>
                                       +{milestone.points} Bonus Pts
                                     </span>
-                                    <span className="text-[12px] font-bold text-[#5f6368] leading-none mt-0.5">
+                                    <span className={`text-[12px] font-bold leading-none mt-0.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                                       + {milestone.targetArcade} Game Pts
                                     </span>
                                   </div>
-                                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white ring-2 ring-[#34a853] shadow-md flex items-center justify-center bg-[#137333]">
+                                  <div className={`w-10 h-10 rounded-full overflow-hidden border-2 ring-2 shadow-md flex items-center justify-center ${isDark ? 'border-[#1a1b1e] ring-[#81c995] bg-[#0d47a1]' : 'border-white ring-[#34a853] bg-[#137333]'}`}>
                                     {userAvatar ? (
                                       <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
                                     ) : (
@@ -552,7 +588,7 @@ export default function DashboardPage() {
                                   </div>
                                 </div>
                               ) : (
-                                <span className="font-bold text-[#202124] text-[15px]">Not Yet</span>
+                                <span className={`font-bold text-[15px] ${isDark ? 'text-gray-400' : 'text-[#202124]'}`}>Not Yet</span>
                               )}
                             </div>
                           </div>
@@ -565,7 +601,7 @@ export default function DashboardPage() {
                 <div className="w-full mt-auto pt-6 flex flex-col items-center">
                   
                   <div className="text-center mb-11 w-full">
-                    <p className="text-[#137333] font-bold text-[16px] md:text-[18px] leading-snug">
+                    <p className={`font-bold text-[16px] md:text-[18px] leading-snug ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>
                       Complete the Ultimate + 10 Bonus Milestone to earn 90 points.{' '}
                       <a 
                         href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" 
@@ -579,21 +615,21 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-                    <button onClick={() => router.push('/calculator')} className="w-full bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124] font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
+                    <button onClick={() => router.push('/calculator')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
                       Points Calculator
                     </button>
-                    <button onClick={() => router.push('/chat')} className="w-full bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124] font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
+                    <button onClick={() => router.push('/chat')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
                       Arcade Chatbot
                     </button>
-                    <button onClick={() => router.push('/facilitator')} className="w-full bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124] font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
+                    <button onClick={() => router.push('/facilitator')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
                       Arcade Facilitator
                     </button>
 
-                    <button onClick={shareToWhatsApp} className="w-full bg-white border border-[#dadce0] hover:border-[#25D366] hover:bg-[#f0fbf4] text-[#202124] font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
+                    <button onClick={shareToWhatsApp} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] hover:border-[#25D366] hover:bg-[#0f1f15] text-gray-200' : 'bg-white border-[#dadce0] hover:border-[#25D366] hover:bg-[#f0fbf4] text-[#202124]'}`}>
                       <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/></svg>
                       Share Points
                     </button>
-                    <button onClick={() => router.push('/leaderboard')} className="w-full bg-white border border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124] font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
+                    <button onClick={() => router.push('/leaderboard')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
                       <svg className="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" /></svg>
                       View Top Rank
                     </button>
@@ -612,12 +648,12 @@ export default function DashboardPage() {
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
           
           {points !== null && (
-            <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.21s' }}>
-              <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
-                <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
+            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.21s' }}>
+              <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                   Arcade Prize Tiers
                 </h4>
-                <span className="text-[#202124] text-base font-medium">
+                <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                    <span className="font-bold">{getCurrentTier()}</span>
                 </span>
               </div>
@@ -628,7 +664,7 @@ export default function DashboardPage() {
                   const isAchieved = points >= tier.target;
                   
                   return (
-                    <div key={idx} className={`bg-[#353840] border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : 'border-[#5f6368]'}`}>
+                    <div key={idx} className={`border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : (isDark ? 'border-[#3c4043]' : 'border-[#5f6368]')} ${isDark ? 'bg-[#1e1e24]' : 'bg-[#353840]'}`}>
                       
                       <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative">
                         <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
@@ -637,7 +673,7 @@ export default function DashboardPage() {
                       <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
                       
                       <div className="w-full mt-auto flex flex-col gap-2">
-                        <div className="w-full h-2.5 bg-[#202124] rounded-full overflow-hidden border border-black/50 shadow-inner">
+                        <div className={`w-full h-2.5 rounded-full overflow-hidden border shadow-inner ${isDark ? 'bg-[#15171b] border-black/80' : 'bg-[#202124] border-black/50'}`}>
                           <div 
                             className={`h-full rounded-full bg-gradient-to-r ${tier.gradient} transition-all duration-1000 ease-out`}
                             style={{ width: `${progressPercentage}%` }}
@@ -663,9 +699,9 @@ export default function DashboardPage() {
                 })}
               </div>
 
-              <div className="mt-8 flex flex-col lg:flex-row justify-between items-center text-sm font-semibold text-[#5f6368] gap-4">
+              <div className={`mt-8 flex flex-col lg:flex-row justify-between items-center text-sm font-semibold gap-4 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                 <div className="flex items-center gap-2 lg:w-1/3">
-                  <svg className="w-4 h-4 text-[#80868b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <svg className={`w-4 h-4 ${isDark ? 'text-[#9aa0a6]' : 'text-[#80868b]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   Last refreshed: {lastRefreshed || "Just now"}
                 </div>
                 <div className="text-center lg:w-1/3 flex justify-center">
@@ -681,15 +717,15 @@ export default function DashboardPage() {
           )}
 
           {points !== null && (
-            <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '0.22s' }}>
+            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.22s' }}>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-                <h4 className="text-sm sm:text-base font-black text-[#5f6368] uppercase tracking-widest flex items-center gap-2">
+                <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                   <span className="text-xl"></span> JuLY Labs
                 </h4>
               </div>
 
               <div className="relative flex items-center justify-between w-full px-2 sm:px-4 mt-6 mb-8">
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 bg-[#f1f3f4] rounded-full z-0"></div>
+                <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 rounded-full z-0 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#f1f3f4]'}`}></div>
                 
                 <div 
                   className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" 
@@ -715,8 +751,8 @@ export default function DashboardPage() {
                         isCompleted 
                           ? 'border-[#34a853] bg-[#e6f4ea]' 
                           : isCurrent 
-                            ? 'border-[#fbbc04] bg-white scale-110 ring-2 ring-[#fbbc04]/30' 
-                            : 'border-[#dadce0] bg-[#f8f9fa]'
+                            ? (isDark ? 'border-[#fbbc04] bg-[#15171b] scale-110 ring-2 ring-[#fbbc04]/30' : 'border-[#fbbc04] bg-white scale-110 ring-2 ring-[#fbbc04]/30') 
+                            : (isDark ? 'border-[#3c4043] bg-[#2a2d32]' : 'border-[#dadce0] bg-[#f8f9fa]')
                       }`}>
                         {isCompleted && (
                           <svg className="w-3 h-3 md:w-4 md:h-4 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -733,12 +769,12 @@ export default function DashboardPage() {
                       </div>
 
                       <span className={`absolute -top-6 text-xs md:text-sm font-medium whitespace-nowrap ${
-                        isCompleted ? 'text-[#137333]' : isCurrent ? 'text-[#f29900]' : 'text-[#9aa0a6]'
+                        isCompleted ? (isDark ? 'text-[#81c995]' : 'text-[#137333]') : isCurrent ? 'text-[#f29900]' : (isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]')
                       }`}>
                         {isCompleted ? 'Completed' : isCurrent ? 'Current' : `Lab ${index + 1}`}
                       </span>
 
-                      <span className="absolute -bottom-8 text-[11px] md:text-xs font-medium text-[#5f6368] text-center w-full leading-tight hidden sm:block">
+                      <span className={`absolute -bottom-8 text-[11px] md:text-xs font-medium text-center w-full leading-tight hidden sm:block ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                         {shortName}
                       </span>
                     </div>
@@ -746,8 +782,8 @@ export default function DashboardPage() {
                 })}
               </div>
               
-              <div className="mt-10 sm:mt-12 w-full text-center border-t border-[#dadce0] pt-4">
-                <span className="text-sm sm:text-base font-bold text-black">
+              <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+                <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>
                   {completedLabs.length} / 6 JULY Labs Completed
                 </span>
               </div>
@@ -756,16 +792,16 @@ export default function DashboardPage() {
 
 
           {points !== null && (
-            <div className="bg-white border border-[#dadce0] rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden" style={{ animationDelay: '0.25s' }}>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b border-[#dadce0] pb-4">
-                <h4 className="text-2xl font-extrabold text-[#202124] tracking-tight flex items-center gap-3">
+            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.25s' }}>
+              <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                   JULY LABS LIVE !
                 </h4>
               </div>
               
               {pendingLabs.length > 0 && (
                 <div className="mb-10">
-                  <h5 className="text-sm font-black text-[#5f6368] uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                      <span className="w-2 h-2 rounded-full bg-[#ea4335]"></span>
                      Pending Labs ({pendingLabs.length})
                   </h5>
@@ -773,8 +809,8 @@ export default function DashboardPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                     {pendingLabs.map((lab) => (
                       <div key={`pending-${lab.id}`} className="flex flex-col items-center">
-                        <h5 className="text-[20px] lg:text-[22px] font-bold text-black mb-2 text-center">{lab.title}</h5>
-                        <p className="text-[14px] text-[#5f6368] font-bold mb-4 text-center">{lab.subtitle}</p>
+                        <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
+                        <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
 
                         <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
                           <img 
@@ -785,10 +821,10 @@ export default function DashboardPage() {
                         </div>
 
                         <div className="flex items-center justify-center gap-2 mb-2 w-full">
-                           <p className="text-[14px] md:text-[15px] font-bold text-[#3c4043] text-center m-0">
+                           <p className={`text-[14px] md:text-[15px] font-bold text-center m-0 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
                              Access code: {lab.accessCode}
                            </p>
-                           <button onClick={() => handleCopyCode(lab.accessCode)} className="text-[#5f6368] hover:text-[#1a73e8] transition-colors" title="Copy Code">
+                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`} title="Copy Code">
                              {copiedCode === lab.accessCode ? (
                                 <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                              ) : (
@@ -797,7 +833,7 @@ export default function DashboardPage() {
                            </button>
                         </div>
                         
-                        <p className="text-[14px] md:text-[15px] font-bold text-[#3c4043] mb-5 text-center">
+                        <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
                           Arcade points: {lab.points}
                         </p>
 
@@ -805,7 +841,7 @@ export default function DashboardPage() {
                           href={lab.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-white hover:bg-[#f8f9fa] text-[#1a73e8] font-bold text-[15px] py-2 px-8 rounded-full border border-[#dadce0] transition-all shadow-sm inline-block text-center"
+                          className={`font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center ${isDark ? 'bg-[#202124] border-[#3c4043] text-[#8ab4f8] hover:bg-[#2a2d32]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa]'}`}
                         >
                           Start Lab
                         </a>
@@ -817,7 +853,7 @@ export default function DashboardPage() {
 
               {completedLabs.length > 0 && (
                 <div>
-                  <h5 className={`text-sm font-black text-[#137333] uppercase tracking-widest mb-6 flex items-center gap-2 ${pendingLabs.length > 0 ? 'pt-6 border-t border-[#dadce0]' : ''}`}>
+                  <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#81c995]' : 'text-[#137333]'} ${pendingLabs.length > 0 ? (isDark ? 'pt-6 border-t border-[#2a2d32]' : 'pt-6 border-t border-[#dadce0]') : ''}`}>
                     <span className="w-2 h-2 rounded-full bg-[#34a853]"></span>
                     Completed Labs ({completedLabs.length})
                   </h5>
@@ -825,8 +861,8 @@ export default function DashboardPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                     {completedLabs.map((lab) => (
                       <div key={`completed-${lab.id}`} className="flex flex-col items-center group">
-                        <h5 className="text-[20px] lg:text-[22px] font-bold text-black mb-2 text-center">{lab.title}</h5>
-                        <p className="text-[14px] text-[#5f6368] font-bold mb-4 text-center">{lab.subtitle}</p>
+                        <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
+                        <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
 
                         <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[1.5px] z-20 flex items-center justify-center rounded-[12px] m-[1px]">
@@ -842,10 +878,10 @@ export default function DashboardPage() {
                         </div>
 
                         <div className="flex items-center justify-center gap-2 mb-2 w-full">
-                           <p className="text-[14px] md:text-[15px] font-bold text-[#3c4043] text-center m-0">
+                           <p className={`text-[14px] md:text-[15px] font-bold text-center m-0 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
                              Access code: {lab.accessCode}
                            </p>
-                           <button onClick={() => handleCopyCode(lab.accessCode)} className="text-[#5f6368] hover:text-[#1a73e8] transition-colors" title="Copy Code">
+                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`} title="Copy Code">
                              {copiedCode === lab.accessCode ? (
                                 <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                              ) : (
@@ -854,7 +890,7 @@ export default function DashboardPage() {
                            </button>
                         </div>
                         
-                        <p className="text-[14px] md:text-[15px] font-bold text-[#3c4043] mb-5 text-center">
+                        <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
                           Arcade points: {lab.points}
                         </p>
 
@@ -862,7 +898,7 @@ export default function DashboardPage() {
                           href={lab.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-white hover:bg-[#f4fbf7] text-[#137333] font-bold text-[15px] py-2 px-8 rounded-full border border-[#dadce0] transition-all shadow-sm inline-block text-center"
+                          className={`font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center ${isDark ? 'bg-[#0d2214] border-[#1e3b29] text-[#81c995] hover:bg-[#112d1b]' : 'bg-white border-[#dadce0] text-[#137333] hover:bg-[#f4fbf7]'}`}
                         >
                           COMPLETED
                         </a>
@@ -878,7 +914,7 @@ export default function DashboardPage() {
             <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
                 
-                <h4 className="text-base font-extrabold text-[#3c4043] uppercase tracking-wider flex items-center whitespace-nowrap">
+                <h4 className={`text-base font-extrabold uppercase tracking-wider flex items-center whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>
                   Completion Badges History
                 </h4>
                 
@@ -892,7 +928,7 @@ export default function DashboardPage() {
                        Skill Badges: {totalSkillBadgesCount}
                      </span>
                      
-                     {/* 🔥 NEW FACILITATOR PROGRESS BUTTON 🔥 */}
+                     {/* 🔥 FACILITATOR PROGRESS BUTTON 🔥 */}
                      <button 
                        onClick={() => setHistoryFilter(historyFilter === "Facilitator Progress History" ? "All Games" : "Facilitator Progress History")}
                        className={`px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm transition-all cursor-pointer ${
@@ -906,13 +942,13 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="relative w-full sm:w-56">
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <svg className={`absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     <input
                       type="text"
                       placeholder="Search labs..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-semibold text-[#202124] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm"
+                      className={`w-full pl-10 pr-4 py-2 border rounded-lg text-sm font-semibold focus:outline-none focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043] text-white focus:border-[#1a73e8]' : 'bg-white border-[#dadce0] text-[#202124] focus:border-[#1a73e8]'}`}
                     />
                   </div>
 
@@ -920,27 +956,26 @@ export default function DashboardPage() {
                     <select
                       value={historyFilter}
                       onChange={(e) => setHistoryFilter(e.target.value)}
-                      className="w-full appearance-none pl-4 pr-10 py-2 bg-white border border-[#dadce0] rounded-lg text-sm font-bold text-[#3c4043] focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer"
+                      className={`w-full appearance-none pl-4 pr-10 py-2 border rounded-lg text-sm font-bold focus:outline-none focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 focus:border-[#1a73e8]' : 'bg-white border-[#dadce0] text-[#3c4043] focus:border-[#1a73e8]'}`}
                     >
                       <option value="All Games">All Games</option>
                       <option value="Arcade Games">Arcade Games</option>
                       <option value="Skill Badges">Skill Badges</option>
                       <option value="Labs free course">Labs Free Course</option>
-                      {/* 🔥 NEW OPTION ADDED HERE TOO 🔥 */}
                       <option value="Facilitator Progress History">Facilitator Progress</option>
                     </select>
-                    <svg className="absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[#5f6368] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+                    <svg className={`absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 pointer-events-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
                   </div>
 
                 </div>
               </div>
               
-              <div className="bg-white border border-[#dadce0] rounded-lg overflow-hidden shadow-sm p-4">
+              <div className={`border rounded-lg overflow-hidden shadow-sm p-4 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                 <div className="max-h-[2000px] overflow-y-auto custom-scrollbar pr-2">
                   {filteredHistory.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                       {filteredHistory.map((item, i) => (
-                        <div key={i} className="flex flex-col items-center bg-white p-4 rounded-xl border border-transparent hover:border-[#dadce0] hover:shadow-md transition-all group">
+                        <div key={i} className={`flex flex-col items-center p-4 rounded-xl border border-transparent transition-all group ${isDark ? 'bg-[#1a1b1e] hover:border-[#3c4043] hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]' : 'bg-white hover:border-[#dadce0] hover:shadow-md'}`}>
                           
                           <div className="w-full h-40 mb-4 flex items-center justify-center">
                             {item.image ? (
@@ -950,20 +985,20 @@ export default function DashboardPage() {
                                 className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" 
                               />
                             ) : (
-                              <div className="w-20 h-20 bg-[#f8f9fa] border border-[#dadce0] rounded-full flex items-center justify-center text-3xl shadow-sm">🏅</div>
+                              <div className={`w-20 h-20 border rounded-full flex items-center justify-center text-3xl shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-[#f8f9fa] border-[#dadce0]'}`}>🏅</div>
                             )}
                           </div>
                           
-                          <h5 className="text-[16px] font-bold text-center text-[#202124] mb-1 line-clamp-2">
+                          <h5 className={`text-[16px] font-bold text-center mb-1 line-clamp-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                             {item.name}
                           </h5>
                           
-                          <p className="text-[14px] text-[#5f6368] text-center mb-3">
+                          <p className={`text-[14px] text-center mb-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                             {item.date.toLowerCase().includes('earned') ? item.date : `Earned ${item.date}`}
                           </p>
                           
                           <div className="mt-auto pt-2">
-                            <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-white border border-[#dadce0] shadow-sm ${item.points >= 2 ? 'text-[#137333]' : item.points === 1 ? 'text-[#1a73e8]' : 'text-[#9334e6]'}`}>
+                            <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold border shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'} ${item.points >= 2 ? (isDark ? 'text-[#81c995]' : 'text-[#137333]') : item.points === 1 ? (isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]') : 'text-[#9334e6]'}`}>
                               +{item.points} {item.points > 1 ? 'Points' : 'Point'}
                             </span>
                           </div>
@@ -972,7 +1007,7 @@ export default function DashboardPage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="p-12 text-center text-[#9aa0a6] font-medium text-lg">
+                    <div className={`p-12 text-center font-medium text-lg ${isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]'}`}>
                       No labs found matching your filter criteria.
                     </div>
                   )}
@@ -986,7 +1021,7 @@ export default function DashboardPage() {
               href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-[#5f6368] font-medium text-sm cursor-default hover:text-[#5f6368] no-underline"
+              className={`font-medium text-sm cursor-default no-underline ${isDark ? 'text-[#9aa0a6] hover:text-[#9aa0a6]' : 'text-[#5f6368] hover:text-[#5f6368]'}`}
             >
               You can also explore full Arcade Prize Tiers details here.
             </a>
@@ -998,8 +1033,8 @@ export default function DashboardPage() {
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #dadce0; border-radius: 20px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #bdc1c6; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: ${isDark ? '#3c4043' : '#dadce0'}; border-radius: 20px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: ${isDark ? '#5f6368' : '#bdc1c6'}; }
         
         .banner-slide-down {
           animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
