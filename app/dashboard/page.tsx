@@ -451,8 +451,13 @@ export default function DashboardPage() {
                       </button>
                     </div>
 
-                    <div className={`text-sm font-black text-[#1a73e8] border-t pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm ${isDark ? 'border-[#2a2d32]' : 'border-[#e8eaed]'}`}>
-                      Member since <span className="text-[#1a73e8] font-black">{getMemberSinceYear()}</span>
+                    {/* 🔥 UPDATED BONUS POINT OR MEMBER SINCE LOGIC HERE 🔥 */}
+                    <div className={`text-[16px] md:text-[17px] font-black text-[#1a73e8] border-t pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm ${isDark ? 'border-[#2a2d32]' : 'border-[#e8eaed]'}`}>
+                      {(breakdown?.bonus && breakdown.bonus > 0) ? (
+                        <>Total : <span className="text-[#1a73e8] font-black">{(points || 0) - breakdown.bonus}</span> + <span className="text-[#1a73e8] font-black">{breakdown.bonus}</span> Bonus Points</>
+                      ) : (
+                        <>Member since <span className="text-[#1a73e8] font-black">{getMemberSinceYear()}</span></>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -482,13 +487,17 @@ export default function DashboardPage() {
                 
                 <div className="mb-8 w-full flex-grow">
                   
-                  {/* 🔥 PREMIUM DARK MODE TOGGLE HERE 🔥 */}
+                  {/* 🔥 UPDATED THEME TOGGLE (BOX REMOVED) 🔥 */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 w-full gap-4">
                     
-                    <div className="flex items-center gap-4">
-                      <h2 className={`text-[28px] font-bold tracking-normal ${isDark ? 'text-white' : 'text-black'}`}>
-                        Facilitator Progress
-                      </h2>
+                    <h2 className={`text-[28px] font-bold tracking-normal ${isDark ? 'text-white' : 'text-black'}`}>
+                      Facilitator Progress
+                    </h2>
+                    
+                    <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+                      <span className={`text-[13px] uppercase font-bold tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                        Theme Mode
+                      </span>
                       
                       {/* Beautiful Toggle Switch */}
                       <button
@@ -503,24 +512,6 @@ export default function DashboardPage() {
                             <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
                           )}
                         </span>
-                      </button>
-                    </div>
-                    
-                    <div className={`flex items-center justify-between sm:justify-start gap-3 border py-2 px-4 rounded-lg shadow-sm w-full sm:w-auto ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
-                      <div className="flex flex-col">
-                        <span className={`text-[11px] uppercase font-bold leading-none mb-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Referral Code</span>
-                        <span className={`text-[16px] font-black leading-none tracking-wide ${isDark ? 'text-white' : 'text-black'}`}>GCAF26-IN-9SC-AE9</span>
-                      </div>
-                      <button 
-                        onClick={handleCopyReferral} 
-                        className={`transition-colors ml-2 p-2 rounded-md ${isDark ? 'text-[#8e949c] hover:text-white bg-[#202124] hover:bg-[#2a2d32]' : 'text-[#5f6368] hover:text-black bg-gray-50 hover:bg-gray-100'}`} 
-                        title="Copy Referral Code"
-                      >
-                        {copiedReferral ? (
-                           <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                        ) : (
-                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                        )}
                       </button>
                     </div>
                   </div>

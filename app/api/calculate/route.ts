@@ -266,17 +266,55 @@ export async function POST(req: Request) {
 
     console.log(`✅ Success! Found: ${userName}`);
 
-    // 🔥 DECIMAL CALCULATION (Math.floor HATA DIYA HAI) 🔥
-    const calculatedPoints = triviaPoints + gamePoints + (skillBadgesCount / 2);
+    // ==============================================================
+    // 🔥 NEW: MILESTONE BONUS CALCULATION 🔥
+    // ==============================================================
+    let facilitatorArcadeGamesCount = 0;
+    let facilitatorSkillBadgesCount = 0;
+    const targetStartDate = new Date("2026-07-14T00:00:00");
+
+    completionHistory.forEach(item => {
+      const lowerName = item.name.toLowerCase();
+      
+      if (item.type === 'Skill Badge') {
+        const earnedDate = new Date(item.date);
+        if (earnedDate >= targetStartDate) {
+          facilitatorSkillBadgesCount++;
+        }
+      } else {
+        const isJulyGame = [
+          'arcade voyage: cloud storage and data governance',
+          'arcade adventure: low-code development',
+          'arcade trail: google workspace administration',
+          'arcade base camp july 2026',
+          'arcade simulator: data mesh architect',
+          'safe spaces'
+        ].some(match => lowerName.includes(match));
+        
+        if (isJulyGame) {
+          facilitatorArcadeGamesCount++;
+        }
+      }
+    });
+
+    let bonusPoints = 0;
+    if (facilitatorArcadeGamesCount >= 12 && facilitatorSkillBadgesCount >= 66) bonusPoints = 35;
+    else if (facilitatorArcadeGamesCount >= 10 && facilitatorSkillBadgesCount >= 50) bonusPoints = 25;
+    else if (facilitatorArcadeGamesCount >= 8 && facilitatorSkillBadgesCount >= 34) bonusPoints = 15;
+    else if (facilitatorArcadeGamesCount >= 6 && facilitatorSkillBadgesCount >= 18) bonusPoints = 5;
+
+    // 🔥 DECIMAL CALCULATION WITH BONUS POINTS INCLUDED 🔥
+    const calculatedPoints = triviaPoints + gamePoints + (skillBadgesCount / 2) + bonusPoints;
 
     return NextResponse.json({
       totalPoints: calculatedPoints,
       breakdown: { 
         trivia: triviaPoints, 
         games: gamePoints, 
-        skills: skillBadgesCount 
+        skills: skillBadgesCount,
+        bonus: bonusPoints // 🔥 YE LINE BHI ADD KI HAI FRONTEND DISPLAY KE LIYE 🔥
       },
-      completionHistory, // 🔥 AUR YE LINE ADD KI HAI FRONTEND KE LIYE 🔥
+      completionHistory, 
       userName,
       userAvatar
     });
