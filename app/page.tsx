@@ -9,7 +9,6 @@ import PopupModal from "@/app/components/PopupModal";
 import { useState, useEffect } from "react"; 
 
 // 🔥 FIREBASE IMPORTS 🔥
-
 import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase"; 
 // 🔥 LEADERBOARD IMPORT FOR AVATARS 🔥
@@ -263,7 +262,6 @@ export default function HomePage() {
                 Arcade Facilitator Program
               </h3>
               
-              {/* 🔥 UPDATED: RSVP Link instead of hardcoded dates 🔥 */}
               <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[14px] md:text-[15px]">
                 <p>Lead your community and unlock exclusive Arcade rewards.</p>
                 <a 
@@ -313,25 +311,26 @@ export default function HomePage() {
           <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
             <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col w-full overflow-hidden border border-[#dadce0]">
               
-              {/* Profile / Avatar Header shifted inside the box */}
+              {/* 🔥 COLORED QUICK ACTIONS HEADER 🔥 */}
               <div 
-                className="flex items-center justify-between p-4 border-b border-[#dadce0] bg-[#f8f9fa] cursor-pointer group hover:bg-[#f1f3f4] transition-colors"
+                className="flex items-center justify-between p-4 border-b border-[#1a73e8] bg-[#1a73e8] cursor-pointer group hover:bg-[#1557b0] transition-colors"
                 onClick={() => router.push('/dashboard')}
               >
-                <span className="text-[#3c4043] font-bold text-[14px]">Quick Actions</span>
+                <span className="text-white font-bold text-[15px] tracking-wide">Quick Actions</span>
                 <div className="flex items-center gap-2.5">
-                  <span className="text-[#5f6368] text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors text-right max-w-[80px] truncate">
+                  <span className="text-blue-100 text-xs font-bold tracking-wide group-hover:text-white transition-colors text-right max-w-[80px] truncate">
                     {currentUserName || "You"}
                   </span>
                   <img 
                     src={imageError ? "/avatar.png" : currentUserAvatar} 
                     alt="Your Avatar" 
                     onError={() => setImageError(true)}
-                    className="w-9 h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-110 border-2 border-[#1a73e8] p-[2px] bg-white shadow-sm"
+                    className="w-9 h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-110 border-2 border-white/40 p-[2px] bg-white shadow-sm"
                   />
                 </div>
               </div>
 
+              {/* 🔥 UPDATED LIST WITHOUT CREDITS & CHATBOT 🔥 */}
               {[
                 { 
                   name: "Arcade Points Calculator", 
@@ -352,17 +351,7 @@ export default function HomePage() {
                   name: "Live Leaderboard", 
                   link: "/leaderboard", 
                   icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /> 
-                },
-                { 
-                  name: "Get 309 Credits", 
-                  link: "#credits-section", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0v3.75C20.25 20.653 16.556 22.5 12 22.5s-8.25-1.847-8.25-4.125v-3.75" /> 
-                },
-                { 
-                  name: "Arcade Chatbot", 
-                  link: "/chat", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /> 
-                },
+                }
               ].map((item, idx) => (
                 <a
                   key={idx}
