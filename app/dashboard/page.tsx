@@ -531,7 +531,7 @@ export default function DashboardPage() {
                           <div key={milestone.id} className={`${cardStyle} border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow`}>
                             <div className="flex justify-between items-center mb-5">
                               <h3 className={`font-bold text-lg leading-none ${isDark ? 'text-gray-100' : 'text-[#202124]'}`}>{milestone.title}</h3>
-                              <span className={`text-[14px] font-bold ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                              <span className={`text-[12px] font-bold px-3 py-1 rounded-full border shadow-sm ${isDark ? 'bg-[#0d2214] text-[#81c995] border-[#1e3b29]' : 'bg-[#e6f4ea] text-[#137333] border-[#ceead6]'}`}>
                                 {isAchieved ? '100%' : `${totalPercent}%`}
                               </span>
                             </div>
@@ -542,8 +542,8 @@ export default function DashboardPage() {
                                   <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Arcade Games (July Only)</span> 
                                   <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>{Math.min(facilitatorArcadeGamesCount, milestone.targetArcade)} / {milestone.targetArcade}</span>
                                 </div>
-                                <div className={`w-full h-2.5 rounded-none overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
-                                  <div className="bg-[#1a73e8] h-full rounded-none transition-all duration-1000 ease-out" style={{ width: `${arcadeProgress}%` }}></div>
+                                <div className={`w-full h-2.5 rounded-full overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
+                                  <div className="bg-[#1a73e8] h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${arcadeProgress}%` }}></div>
                                 </div>
                               </div>
 
@@ -552,8 +552,8 @@ export default function DashboardPage() {
                                   <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Skill Badges (Post-July 14)</span> 
                                   <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>{Math.min(facilitatorSkillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
                                 </div>
-                                <div className={`w-full h-2.5 rounded-none overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
-                                  <div className="bg-[#34a853] h-full rounded-none transition-all duration-1000 ease-out" style={{ width: `${skillsProgress}%` }}></div>
+                                <div className={`w-full h-2.5 rounded-full overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
+                                  <div className="bg-[#34a853] h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${skillsProgress}%` }}></div>
                                 </div>
                               </div>
                             </div>
@@ -832,7 +832,7 @@ export default function DashboardPage() {
                           href={lab.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center ${isDark ? 'bg-[#202124] border-[#3c4043] text-[#8ab4f8] hover:bg-[#2a2d32]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa]'}`}
+                          className="font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center text-white bg-[#1a73e8] hover:bg-[#1557b0] border-[#1557b0]"
                         >
                           Start Lab
                         </a>
@@ -856,11 +856,6 @@ export default function DashboardPage() {
                         <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
 
                         <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
-                           <div className="absolute inset-0 bg-black/40 backdrop-blur-[1.5px] z-20 flex items-center justify-center rounded-[12px] m-[1px]">
-                              <div className="w-14 h-14 bg-[#137333] rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
-                                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                              </div>
-                           </div>
                           <img 
                             src={lab.image} 
                             alt={lab.title} 
@@ -889,7 +884,7 @@ export default function DashboardPage() {
                           href={lab.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center ${isDark ? 'bg-[#0d2214] border-[#1e3b29] text-[#81c995] hover:bg-[#112d1b]' : 'bg-white border-[#dadce0] text-[#137333] hover:bg-[#f4fbf7]'}`}
+                          className={`font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center animate-pulse text-white ${isDark ? 'bg-[#137333] border-[#1e3b29] hover:bg-[#0f5c29]' : 'bg-[#34a853] border-[#137333] hover:bg-[#2b8c45]'}`}
                         >
                           COMPLETED
                         </a>

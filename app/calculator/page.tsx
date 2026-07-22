@@ -619,9 +619,9 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              {/* 🔥 REPLACED REFERRAL CODE WITH SUBSCRIBE LINK 🔥 */}
+              {/* 🔥 REPLACED REFERRAL CODE WITH SUBSCRIBE LINK (NO BOX/BORDER) 🔥 */}
               <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center justify-center">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-[14px] font-bold tracking-wide hover:underline inline-block px-4 py-2 rounded-lg border transition-colors ${isDark ? 'text-[#8ab4f8] hover:text-[#aecbfa] bg-[#1a73e8]/10 hover:bg-[#1a73e8]/20 border-[#1a73e8]/30' : 'text-[#1a73e8] hover:text-[#1557b0] bg-[#e8f0fe] hover:bg-[#d2e3fc] border-[#d2e3fc]'}`}>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-[14px] font-bold tracking-wide hover:underline inline-block transition-colors ${isDark ? 'text-[#8ab4f8] hover:text-[#aecbfa]' : 'text-[#1a73e8] hover:text-[#1557b0]'}`}>
                   Subscribe to Google Skills Arcade
                 </a>
               </div>
@@ -705,10 +705,10 @@ export default function CalculatorPage() {
                     
                     return (
                       <div key={idx} className="relative">
+                        {/* 🔥 REMOVED style={{ borderLeft: ... }} 🔥 */}
                         <button 
                           onClick={() => handleHistoryClick(item.url, idx)} 
                           className={`relative w-[175px] h-[54px] flex items-center gap-2.5 px-3 py-1 rounded-lg transition-all overflow-hidden group focus:outline-none hover:shadow-lg hover:scale-[1.02] ${isDark ? 'bg-[#1a1b1e] shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:bg-[#202124]' : 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]'}`}
-                          style={{ borderLeft: `4px solid ${themeColor}` }}
                           title={item.url}
                         >
                           <div className={`w-9 h-9 rounded-full shrink-0 shadow-sm border overflow-hidden relative z-10 ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
