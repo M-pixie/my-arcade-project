@@ -244,7 +244,7 @@ export default function FullPageChatBot() {
     } catch (err: any) {
       setLoading(false);
       setIsTyping(false);
-      setMessages((prev) => [...prev, { role: "bot", text: "429. That's an error.", timestamp: Date.now() }]);
+      setMessages((prev) => [...prev, { role: "bot", text: "Aw, Snap!", timestamp: Date.now() }]);
     } finally {
       setLoadingType(null);
     }
@@ -438,8 +438,8 @@ export default function FullPageChatBot() {
                     </ReactMarkdown>
 
                     {/* 🔥 Time & Copy Footer (Only for Bot) 🔥 */}
-                    {msg.role === "bot" && (
-                      <div className="flex items-center mt-1.5 justify-between gap-4">
+                  {msg.role === "bot" && msg.text !== "Aw, Snap!" && (
+                    <div className="flex items-center mt-1.5 justify-between gap-4">
                         
                         {/* Timestamp */}
                         <span className={`text-[10.5px] font-medium tracking-wide ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
