@@ -2,44 +2,9 @@
 
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 
 export default function FacilitatorPage() {
   const router = useRouter();
-  const [copied, setCopied] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    // Target date: 13 July 2026, 17:00:00 IST
-    const targetDate = new Date("July 13, 2026 17:00:00 GMT+0530").getTime();
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        clearInterval(interval);
-        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
-      } else {
-        setTimeLeft({
-          d: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          s: Math.floor((distance % (1000 * 60)) / 1000)
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   // COORDINATORS DATA
   const coordinatorsData = [
@@ -54,362 +19,209 @@ export default function FacilitatorPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#fcfcfc] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8]">
+      <div className="min-h-screen bg-[#f4f6f8] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pb-10">
         <Navbar />
 
-        <main className="pt-16">
+        <style>{`
+          .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+          .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+          .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #dadce0; border-radius: 10px; }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #9aa0a6; }
+        `}</style>
+
+        <main className="pt-24 px-4 sm:px-6 lg:px-8 max-w-[1350px] mx-auto">
           
-          {/* ================= ULTRA CLEAN PREMIUM HERO SECTION ================= */}
-          <section className="relative bg-white overflow-hidden pt-20 pb-8 px-4 sm:px-6">
-            <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center gap-6">
-              
-              {/* EXACT MATCH OF THE IMAGE FONT STYLE */}
-              <h1 className="text-4xl sm:text-5xl md:text-[56px] font-bold text-[#0f172a] tracking-tight mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+          {/* ================= PAGE HEADER ================= */}
+          <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                 Arcade Facilitator Program
               </h1>
+              <p className="text-[#5f6368] mt-1.5 font-medium text-[15px]">
+                Empowering the community to upskill, earn certifications, and claim Google Cloud swags.
+              </p>
+            </div>
+          </div>
+
+          {/* ================= BENTO GRID 1-PAGE LAYOUT ================= */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            {/* 🔥 LEFT COLUMN (Milestones & Top Performers) 🔥 */}
+            <div className="lg:col-span-8 flex flex-col gap-6">
               
-              {/* LIVE COUNTDOWN TIMER REPLACING "Enrolments soon.." */}
-              <div className="text-xl sm:text-2xl font-medium text-[#3c4043] mb-4 tracking-tight flex items-center justify-center gap-2">
-                Starting in
-                <div className={`flex gap-2 font-bold text-[#1a73e8] transition-opacity duration-300 ${isMounted ? 'opacity-100' : 'opacity-0'}`}>
-                  <span>{timeLeft.d}d</span>
-                  <span>{timeLeft.h}h</span>
-                  <span>{timeLeft.m}m</span>
-                  <span>{timeLeft.s}s</span>
+              {/* --- User Milestones Card --- */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div className="px-6 py-5 border-b border-[#e8eaed] bg-white">
+                  <h2 className="text-[19px] font-extrabold text-[#1a73e8] tracking-tight">User Milestones & Prizes</h2>
+                </div>
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    {/* 🔥 Original Yellow Theme Restored for Table Header 🔥 */}
+                    <thead className="bg-[#fbbc04] border-b border-[#e8eaed] text-[12px] uppercase tracking-wider font-extrabold text-white">
+                      <tr>
+                        <th className="px-6 py-4">Milestone</th>
+                        <th className="px-6 py-4">Requirement</th>
+                        <th className="px-6 py-4">Prizes / Points</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e8eaed]">
+                      <tr className="hover:bg-[#f8f9fa] transition-colors">
+                        <td className="px-6 py-4 font-black text-[#202124] text-[14px]">Milestone 1</td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]"><strong>6 Arcade Games</strong> & <strong>18 Skill Badges</strong></td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]">15 Arcade + 5 Bonus <br/><strong className="text-[#137333]">= 20 Total Pts</strong></td>
+                      </tr>
+                      <tr className="hover:bg-[#f8f9fa] transition-colors bg-[#f8f9fa]">
+                        <td className="px-6 py-4 font-black text-[#202124] text-[14px]">Milestone 2</td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]"><strong>8 Arcade Games</strong> & <strong>34 Skill Badges</strong></td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]">25 Arcade + 15 Bonus <br/><strong className="text-[#137333]">= 40 Total Pts</strong></td>
+                      </tr>
+                      <tr className="hover:bg-[#f8f9fa] transition-colors">
+                        <td className="px-6 py-4 font-black text-[#202124] text-[14px]">Milestone 3</td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]"><strong>10 Arcade Games</strong> & <strong>50 Skill Badges</strong></td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]">35 Arcade + 25 Bonus <br/><strong className="text-[#137333]">= 60 Total Pts</strong></td>
+                      </tr>
+                      <tr className="hover:bg-[#f8f9fa] transition-colors bg-[#f8f9fa]">
+                        <td className="px-6 py-4 font-black text-[#202124] text-[14px]">Ultimate</td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]"><strong>12 Arcade Games</strong> & <strong>66 Skill Badges</strong></td>
+                        <td className="px-6 py-4 text-[14px] text-[#3c4043]">45 Arcade + 35 Bonus <br/><strong className="text-[#137333]">= 80 Total Pts</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
-              {/* 🔥 UPDATED: RSVP Link Replacing Dates 🔥 */}
-              <div className="flex flex-col gap-2 text-[#5f6368] font-medium text-[15px] md:text-[17px] mb-6 mt-2">
-          
-                <a 
-                  href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-center gap-2 text-[#1a73e8] hover:text-[#1557b0] font-bold transition-all w-fit mx-auto mt-1"
-                >
-                  🔗 Facilitator Registration Form
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                  </svg>
+              {/* --- Top Performers Card --- */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div className="px-6 py-5 border-b border-[#e8eaed]">
+                  <h2 className="text-[19px] font-extrabold text-[#202124] tracking-tight">Top Performers 2025</h2>
+                </div>
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead className="bg-[#f8f9fa] border-b border-[#dadce0] text-[12px] uppercase tracking-wider font-bold text-[#5f6368]">
+                      <tr>
+                        <th className="px-6 py-3.5">Members</th>
+                        <th className="px-6 py-3.5 text-center">Skill Badges</th>
+                        <th className="px-6 py-3.5 text-center">Arcade Points</th>
+                        <th className="px-6 py-3.5 text-right">Connect</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e8eaed]">
+                      {coordinatorsData.map((coord, i) => (
+                        <tr key={i} className="hover:bg-[#f8f9fa] transition-colors">
+                          <td className="px-6 py-3.5 font-bold text-[#1a73e8] hover:underline">
+                            <a href={coord.linkedin} target="_blank" rel="noopener noreferrer">{coord.name}</a>
+                          </td>
+                          <td className="px-6 py-3.5 text-center font-bold text-[#202124] text-[14px]">{coord.badges}</td>
+                          <td className="px-6 py-3.5 text-center font-bold text-[#b06000] text-[14px]">{coord.points}</td>
+                          <td className="px-6 py-3.5 text-right">
+                             <a href={coord.profileUrl} target="_blank" rel="noopener noreferrer" className="inline-block text-[12px] bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8] px-3 py-1.5 rounded-md font-bold hover:bg-[#d2e3fc] transition-colors">
+                               Profile
+                             </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+            {/* 🔥 RIGHT COLUMN (Sidebar items) 🔥 */}
+            <div className="lg:col-span-4 flex flex-col gap-6">
+              
+              {/* --- Quick Action Buttons (2x2 Grid) --- */}
+              <div className="grid grid-cols-2 gap-3">
+                <button onClick={() => router.push("/calculator")} className="p-4 bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
+                  <svg className="w-6 h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                  <span className="text-[13px] font-extrabold tracking-wide">Calculator</span>
+                </button>
+                <button onClick={() => router.push("/leaderboard")} className="p-4 bg-[#e6f4ea] border border-[#ceead6] text-[#137333] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
+                  <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                  <span className="text-[13px] font-extrabold tracking-wide">Leaderboard</span>
+                </button>
+                <button onClick={() => router.push("/resources")} className="p-4 bg-[#fef7e0] border border-[#fde293] text-[#b06000] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
+                  <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                  <span className="text-[13px] font-extrabold tracking-wide">Skill Badges</span>
+                </button>
+                <button onClick={() => router.push("/dashboard")} className="p-4 bg-[#fce8e6] border border-[#fad2cf] text-[#c5221f] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
+                  <svg className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                  <span className="text-[13px] font-extrabold tracking-wide">Dashboard</span>
+                </button>
+              </div>
+
+              {/* --- Notice / Note Card --- */}
+              <div className="bg-gradient-to-br from-[#e8f0fe] to-[#f8f9fa] border border-[#d2e3fc] rounded-xl p-5 shadow-sm">
+                <h3 className="text-[14px] font-extrabold text-[#1a73e8] flex items-center gap-2 mb-2.5">
+                  <span className="text-lg">📌</span> Bonus Milestone Note
+                </h3>
+                <p className="text-[13.5px] text-[#3c4043] leading-relaxed mb-3.5">
+                  If you complete the "Bonus Milestone" along with Ultimate Milestone, you earn an extra 10 bonus points, thus making your total <strong>45 + 35 + 10 = 90 points</strong>.
+                </p>
+                <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" target="_blank" rel="noopener noreferrer" className="text-[13px] font-extrabold text-[#1a73e8] hover:text-[#1557b0] hover:underline flex items-center gap-1 w-fit transition-colors">
+                  See Eligibility Criteria <span className="text-lg leading-none">➔</span>
                 </a>
               </div>
 
-              {/* 🔥 INLINE GREY REFERRAL CODE STRIP 🔥 */}
-              <div className="w-full max-w-lg mx-auto flex flex-col gap-1.5 mb-12">
-                <span className="text-[13px] font-bold text-[#5f6368] uppercase tracking-wider text-center pl-1">
-                  Referral Code
-                </span>
-                <div className="flex items-center justify-center bg-[#f1f3f4] rounded-lg px-5 py-4 border border-[#dadce0]">
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="font-mono text-2xl sm:text-3xl text-black font-extrabold tracking-wider">
-                      GCAF26-IN-9SC-AE9
-                    </div>
-                    <button
-                      onClick={handleCopy}
-                      className="p-1 text-[#5f6368] hover:text-black transition-colors rounded-md"
-                      title="Copy Code"
-                    >
-                      {copied ? (
-                        <svg className="w-6 h-6 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                      ) : (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                      )}
-                    </button>
-                  </div>
-
-                </div>
-              </div>
-
-              {/* 🔥 ACTION BUTTONS (1 Row of 4, Different Google Theme Colors) 🔥 */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mx-auto mb-14">
+              {/* --- Facilitator & Team Card --- */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm p-6 relative overflow-hidden flex-1">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#e8f0fe] rounded-full blur-[40px] opacity-60 pointer-events-none"></div>
+                <h2 className="text-[17px] font-extrabold text-[#202124] mb-6 relative z-10">Facilitator & Team</h2>
                 
-                {/* 1. Calculate Points (Blue) */}
-                <button onClick={() => router.push("/calculator")} className="w-full px-4 py-4 bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#d2e3fc] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
-                  <svg className="w-5 h-5 text-[#1a73e8] group-hover:rotate-12 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                  <span>Calculator</span>
-                </button>
-                
-                {/* 2. Leaderboard (Green) */}
-                <button onClick={() => router.push("/leaderboard")} className="w-full px-4 py-4 bg-[#e6f4ea] border border-[#ceead6] text-[#137333] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#ceead6] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
-                  <svg className="w-5 h-5 text-[#137333] group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                  <span>Leaderboard</span>
-                </button>
-                
-                {/* 3. Skill Badges (Yellow) */}
-                <button onClick={() => router.push("/resources")} className="w-full px-4 py-4 bg-[#fef7e0] border border-[#fde293] text-[#b06000] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#fde293] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
-                  <svg className="w-5 h-5 text-[#b06000] group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                  <span>Skill Badges</span>
-                </button>
-                
-                {/* 4. Dashboard (Red/Pink) */}
-                <button onClick={() => router.push("/dashboard")} className="w-full px-4 py-4 bg-[#fce8e6] border border-[#fad2cf] text-[#c5221f] font-bold text-[14px] lg:text-[15px] rounded-lg hover:bg-[#fad2cf] shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2.5 group">
-                  <svg className="w-5 h-5 text-[#c5221f] transform group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                  <span>Dashboard</span>
-                </button>
-
-              </div>
-              </div>
-          </section>
-
-{/* ================= MILESTONES & SWAGS SECTION ================= */}
-<section className="pt-10 pb-24 px-6 bg-[#f8f9fa] border-y border-[#dadce0]">
-  <div className="max-w-5xl mx-auto">
-    
-    <h2 className="text-3xl sm:text-4xl font-bold text-[#1a73e8] tracking-tight mb-10 text-center">
-      User Milestones & Prizes
-    </h2>
-    
-    <div className="bg-white border border-[#cccccc] rounded-xl shadow-lg overflow-hidden mb-6">
-      {/* Table Header */}
-      <div className="grid grid-cols-12 text-sm md:text-lg lg:text-xl font-bold text-white bg-[#fbbc04]">
-        <div className="col-span-3 flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
-          Name
-        </div>
-        <div className="col-span-5 flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
-          Milestone Achieved
-        </div>
-        <div className="col-span-4 flex items-center justify-center py-4 md:py-6 px-4 md:px-6 text-center">
-          Prizes*
-        </div>
-      </div>
-
-      {/* Table Body */}
-      <div className="divide-y divide-[#e8eaed]">
-        
-        {/* Milestone 1 */}
-        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f1f3f4] transition-colors">
-          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
-            Milestone 1
-          </div>
-          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
-            Complete ANY <strong>6 Arcade Games</strong> & <strong>18 Skill Badges</strong>
-          </div>
-          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
-            15 Arcade + 5 Bonus Points<br />
-            <strong>= 20 Total Arcade Points</strong>
-          </div>
-        </div>
-
-        {/* Milestone 2 */}
-        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center bg-[#f8f9fa] hover:bg-[#f1f3f4] transition-colors">
-          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
-            Milestone 2
-          </div>
-          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
-            Complete ANY <strong>8 Arcade Games</strong> & <strong>34 Skill Badges</strong>
-          </div>
-          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
-            25 Arcade + 15 Bonus Points<br />
-            <strong>= 40 Total Arcade Points</strong>
-          </div>
-        </div>
-
-        {/* Milestone 3 */}
-        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center hover:bg-[#f1f3f4] transition-colors">
-          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
-            Milestone 3
-          </div>
-          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
-            Complete ANY <strong>10 Arcade Games</strong> & <strong>50 Skill Badges</strong>
-          </div>
-          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
-            35 Arcade + 25 Bonus Points<br />
-            <strong>= 60 Total Arcade Points</strong>
-          </div>
-        </div>
-
-        {/* Ultimate Milestone */}
-        <div className="grid grid-cols-12 gap-4 px-4 md:px-6 py-6 items-center bg-[#f8f9fa] hover:bg-[#f1f3f4] transition-colors">
-          <div className="col-span-3 text-center text-[#202124] text-sm md:text-lg">
-            Ultimate<br />Milestone
-          </div>
-          <div className="col-span-5 text-center text-[#202124] text-sm md:text-lg">
-            Complete ANY <strong>12 Arcade Games</strong> & <strong>66 Skill Badges</strong>
-          </div>
-          <div className="col-span-4 text-center text-[#202124] text-sm md:text-lg">
-            45 Arcade + 35 Bonus Points<br />
-            <strong>= 80 Total Arcade Points</strong>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    {/* 🔥 UPDATED: Note with Link instead of New Milestone 🔥 */}
-    <div className="bg-[#e8f0fe] border border-[#d2e3fc] rounded-lg p-4 mb-6 text-[#01070f] text-sm md:text-base font-medium shadow-sm">
-      <span className="font-bold text-[#0c0d0d] mr-1">Note:</span> If you complete the "Bonus Milestone" along with Ultimate Milestone, you can earn an extra 10 bonus points, thus making your total, 45 + 35 + 10 = 90 points.
-    </div>
-
-    {/* Notes Section */}
-    <div className="text-sm md:text-base text-[#5f6368] space-y-2 px-2">
-      <p>• You will only receive points for the milestone that you earn and not for the ones before that.</p>
-      <p>• Users become eligible to take part in the Bonus Milestone after they at-least complete "Milestone 1".</p>
-      
-      {/* Clickable Eligibility Criteria Link */}
-      <p className="mt-2">
-        <span className="font-bold text-[#202124]">See Eligibility Criteria :</span>{" "}
-        <a 
-          href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-[#1a73e8] underline hover:text-[#1557b0] transition-colors"
-        >
-          https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone
-        </a>
-      </p>
-    </div>
-
-  </div>
-</section>
-
-          {/* ================= BORDERLESS & OPEN CONTACT FACILITATOR WITH ANIMATED IMAGES ================= */}
-          <section id="contact-facilitator" className="py-20 px-6 bg-[#fcfcfc] border-b border-[#dadce0] relative overflow-hidden">
-            <style>{`
-              @keyframes customFloat {
-                0%, 100% { transform: translateY(0px); }
-                50% { transform: translateY(-12px); }
-              }
-              .float-anim-1 { animation: customFloat 4s ease-in-out infinite; }
-              .float-anim-2 { animation: customFloat 4s ease-in-out infinite 1s; }
-              .float-anim-3 { animation: customFloat 4s ease-in-out infinite 2s; }
-            `}</style>
-            
-            <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-[#e8f0fe] rounded-full blur-[100px] -translate-y-1/2 opacity-60 pointer-events-none"></div>
-
-            <div className="max-w-6xl mx-auto relative z-10">
-              <div className="text-center mb-16">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight">Arcade Facilitator & Team</h2>
-              </div>
-
-              <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12 lg:gap-20">
-                <div className="flex flex-col items-center justify-center flex-shrink-0 md:w-5/12">
-                  <div className="flex gap-6 sm:gap-8 mb-4">
-                    <div className="flex flex-col items-center float-anim-1">
-                      <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative">
-                        <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-full h-full object-cover object-top" />
-                      </a>
-                      <div className="mt-5 text-center">
-                        <h4 className="font-bold text-[#202124] text-[17px]">Manish</h4>
-                        <div className="inline-block mt-1 bg-[#e8f0fe] border border-[#d2e3fc] px-3 py-1 rounded-md shadow-sm">
-                          <span className="text-[11px] font-bold text-[#1a73e8] uppercase tracking-wide">Arcade Facilitator</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center float-anim-2">
-                      <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative">
-                        <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-full h-full object-cover object-top" />
-                      </a>
-                      <div className="mt-5 text-center">
-                        <h4 className="font-bold text-[#202124] text-[17px]">Anjali</h4>
-                        <div className="inline-block mt-1 bg-[#fef7e0] border border-[#fde293] px-3 py-1 rounded-md shadow-sm">
-                          <span className="text-[11px] font-bold text-[#b06000] uppercase tracking-wide">Arcade Facilitator</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-center float-anim-3 -mt-4 relative z-20">
-                    <a href="https://www.linkedin.com/in/rohit-kumar-b482752ab" target="_blank" rel="noopener noreferrer" className="w-40 h-40 sm:w-44 sm:h-44 rounded-full shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 block relative">
-                      <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-full h-full object-cover object-top" />
+                {/* 🔥 Updated Avatars Order: Anjali (1), Manish (2), Rohit (3) 🔥 */}
+                <div className="flex justify-between items-center mb-6 relative z-10 px-2">
+                  <div className="flex flex-col items-center">
+                    <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
+                      <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-14 h-14 rounded-full shadow-md object-cover object-top border-2 border-white" />
                     </a>
-                    <div className="mt-5 text-center">
-                      <h4 className="font-bold text-[#202124] text-[17px]">Rohit</h4>
-                      <div className="inline-block mt-1 bg-[#fce8e6] border border-[#fad2cf] px-3 py-1 rounded-md shadow-sm">
-                        <span className="text-[11px] font-bold text-[#c5221f] uppercase tracking-wide">Arcade Faciliatator</span>
-                      </div>
-                    </div>
+                    <span className="text-[12px] font-extrabold mt-2 text-[#202124]">Anjali</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
+                      <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-14 h-14 rounded-full shadow-md object-cover object-top border-2 border-white" />
+                    </a>
+                    <span className="text-[12px] font-extrabold mt-2 text-[#202124]">Manish</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <a href="https://www.linkedin.com/in/rohit-kumar-b482752ab" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
+                      <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-14 h-14 rounded-full shadow-md object-cover object-top border-2 border-white" />
+                    </a>
+                    <span className="text-[12px] font-extrabold mt-2 text-[#202124]">Rohit</span>
                   </div>
                 </div>
 
-                <div className="flex-1 flex flex-col justify-center">
-                  <p className="text-[#3c4043] text-[17px] leading-relaxed mb-8 text-center md:text-left font-normal">
-                    As a dedicated Google Cloud Arcade Facilitator in 2025 & 26, Manish & Anjali Patel , Rohit Kumar has demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts. He is passionate about empowering the community to upskill, earn certifications, and claim official Google Cloud swags.
-                  </p>
-
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white p-5 rounded-lg border border-[#e8eaed] shadow-sm mb-8">
-                    {[
-                      { icon: "🏆", title: "2x Ultimate", subtitle: "Cohort 1 & 2" },
-                      { icon: "👥", title: "2000+", subtitle: "People Guided" },
-                      { icon: "⭐", title: "20+", subtitle: "Coordinators" },
-                      { icon: "🎁", title: "Gifts & Certs", subtitle: "Distributed" }
-                    ].map((stat, i) => (
-                      <div key={i} className="flex flex-col items-center justify-center text-center group cursor-default">
-                        <div className="text-2xl mb-1.5 transform group-hover:-translate-y-1 transition-transform duration-300">{stat.icon}</div>
-                        <div className="font-bold text-[#202124] text-[14px]">{stat.title}</div>
-                        <div className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider mt-1">{stat.subtitle}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-                    <a href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 bg-[#25D366] hover:bg-[#128C7E] text-white text-[15px] font-bold rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none hover:-translate-y-0.5">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                      WhatsApp
-                    </a>
-                    <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 bg-[#0a66c2] hover:bg-[#004182] text-white text-[15px] font-bold rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none hover:-translate-y-0.5">
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                      LinkedIn
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ================= TOP PERFORMERS SECTION ================= */}
-          <section className="py-24 px-6 bg-[#f8f9fa] border-b border-[#dadce0]">
-            <div className="max-w-5xl mx-auto relative z-10">
-              <div className="text-center mb-16 relative z-10">
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#202124] tracking-tight mb-3">Top Performers Arcade 2025</h2>
-                <p className="text-[#5f6368] text-base max-w-2xl mx-auto leading-relaxed font-bold">
-                  The dedicated individuals helping our community achieve their milestones.
+                <p className="text-[13px] text-[#5f6368] leading-relaxed mb-6 relative z-10 font-medium">
+                  As dedicated Google Cloud Arcade Facilitators in 2025 & 26, Anjali Patel, Manish, and Rohit Kumar demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts.
                 </p>
-              </div>
 
-              <div className="bg-white border border-[#e8eaed] rounded-lg shadow-sm overflow-hidden mb-6">
-                <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-[#f1f3f4] border-b border-[#e8eaed] text-xs font-bold text-[#5f6368] uppercase tracking-wider">
-                  <div className="col-span-5">Members</div>
-                  <div className="col-span-3 text-center">Skill Badges</div>
-                  <div className="col-span-2 text-center">Arcade Points</div>
-                  <div className="col-span-2 text-right">Connect</div>
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-3 mb-6 relative z-10">
+                  <div className="bg-[#f8f9fa] p-3 rounded-lg text-center border border-[#e8eaed]">
+                    <div className="text-xl mb-1">🏆</div>
+                    <div className="text-[11px] font-black text-[#3c4043] tracking-wide">2x ULTIMATE</div>
+                  </div>
+                  <div className="bg-[#f8f9fa] p-3 rounded-lg text-center border border-[#e8eaed]">
+                    <div className="text-xl mb-1">👥</div>
+                    <div className="text-[11px] font-black text-[#3c4043] tracking-wide">2000+ GUIDED</div>
+                  </div>
                 </div>
 
-                <div className="divide-y divide-[#e8eaed]">
-                  {coordinatorsData.map((coord, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#f8f9fa] transition-colors">
-                      <div className="col-span-1 md:col-span-5 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                        <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="font-bold text-[#202124] hover:text-[#1a73e8] text-base transition-colors">
-                          {coord.name}
-                        </a>
-                      </div>
-                      <div className="col-span-1 md:col-span-5 grid grid-cols-2 gap-4 md:gap-0 mt-3 md:mt-0">
-                        <div className="md:col-span-1 flex flex-col md:items-center">
-                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-1">Skill Badges</span>
-                          <span className="font-bold text-[#202124] text-base">{coord.badges}</span>
-                        </div>
-                        <div className="md:col-span-1 flex flex-col md:items-center">
-                          <span className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider md:hidden mb-1">Arcade Pts</span>
-                          <span className="font-bold text-[#b06000] text-base">{coord.points}</span>
-                        </div>
-                      </div>
-                      <div className="col-span-1 md:col-span-2 flex items-center justify-start md:justify-end gap-3 mt-3 md:mt-0">
-                        <a href={coord.profileUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-4 py-2 bg-white border border-[#dadce0] text-[#1a73e8] text-sm font-bold rounded-lg hover:bg-[#f8f9fa] transition-colors shadow-sm">
-                          Profile
-                        </a>
-                        <a href={coord.linkedin} target="_blank" rel="noopener noreferrer" className="text-[#0a66c2] hover:text-[#004182] transition-colors" title="View LinkedIn Profile">
-                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        </a>
-                      </div>
-                    </div>
-                  ))}
+                {/* Contact Buttons */}
+                <div className="flex gap-3 relative z-10 mt-auto">
+                  <a href="https://wa.me/918538980608?text=Hi%20Manish%2C%20I%20have%20a%20query%20regarding%20Google%20Cloud%20Arcade%20labs%2C%20points%2C%20or%20swags." target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#25D366] text-white text-[13px] font-bold py-2.5 rounded-lg flex justify-center items-center gap-1.5 hover:bg-[#128C7E] shadow-sm transition-colors">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.347-.272.273-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    WhatsApp
+                  </a>
+                  <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="flex-1 bg-[#0a66c2] text-white text-[13px] font-bold py-2.5 rounded-lg flex justify-center items-center gap-1.5 hover:bg-[#004182] shadow-sm transition-colors">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                  </a>
                 </div>
               </div>
+
             </div>
-          </section>
 
+          </div>
         </main>
       </div>
     </>

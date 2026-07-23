@@ -330,7 +330,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 🔥 UPDATED LIST WITHOUT CREDITS & CHATBOT 🔥 */}
+              {/* 🔥 UPDATED LIST WITH THINNER PADDING & NEW ABOUT PAGE BUTTON 🔥 */}
               {[
                 { 
                   name: "Arcade Points Calculator", 
@@ -351,6 +351,11 @@ export default function HomePage() {
                   name: "Live Leaderboard", 
                   link: "/leaderboard", 
                   icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /> 
+                },
+                { 
+                  name: "About Page", 
+                  link: "/about", 
+                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /> 
                 }
               ].map((item, idx) => (
                 <a
@@ -365,20 +370,20 @@ export default function HomePage() {
                       router.push(item.link);
                     }
                   }}
-                  className="flex items-center justify-between px-5 py-[14px] border-b border-[#dadce0] last:border-none hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer group"
+                  className="flex items-center justify-between px-5 py-3 border-b border-[#dadce0] last:border-none hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-[38px] h-[38px] rounded-[8px] bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm transition-all duration-300 group-hover:bg-[#1a73e8] group-hover:text-white">
-                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <div className="w-[32px] h-[32px] rounded-[6px] bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm transition-all duration-300 group-hover:bg-[#1a73e8] group-hover:text-white">
+                      <svg className="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                         {item.icon}
                       </svg>
                     </div>
-                    <span className="font-[700] text-[15px] text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
+                    <span className="font-[700] text-[14px] text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
                       {item.name}
                     </span>
                   </div>
                   <span className="text-[#9aa0a6] group-hover:text-[#1a73e8] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transform transition-all">
-                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </span>

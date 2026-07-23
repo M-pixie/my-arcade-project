@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 // ======================================================================
 // FINAL & COMPLETE 93 SKILL BADGES DATA ARRAY
-// Pura data exact match kiya gaya hai images aur instructions ke hisaab se!
 // ======================================================================
 const initialBadgesData = [
   // PAGE 1
@@ -239,7 +238,7 @@ export default function ResourcesPage() {
     });
   }, [searchTerm, activeFilter, sortBy]);
 
-  // Splitting data into Pending and Completed for separate sections
+ // Splitting data into Pending and Completed for separate sections
   const pendingBadges = processedData.filter(badge => !autoCompletedIds.includes(badge.id));
   const completedBadges = processedData.filter(badge => autoCompletedIds.includes(badge.id));
 
@@ -251,7 +250,7 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pt-14 relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}> 
+    <div className={`min-h-screen font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pt-16 relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}> 
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes premiumFastBlink {
           0%   { background-color: ${isDark ? '#0a2e1b' : '#d1e7dd'}; border-color: ${isDark ? '#0f5132' : '#a3cfbb'}; }
@@ -280,11 +279,12 @@ export default function ResourcesPage() {
         )}
       </button>
 
-      {/* ================= SEARCH & ADVANCED FILTERS ================= */}
-      <section className={`sticky top-16 lg:top-[72px] z-30 backdrop-blur-md border-b shadow-sm transition-colors duration-300 ${isDark ? 'bg-[#15171b]/95 border-[#2a2d32]' : 'bg-white/95 border-[#dadce0]'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-5 pt-3">
+      {/* ================= SEARCH & ADVANCED FILTERS (FULL WIDTH, SINGLE LINE) ================= */}
+      <section className={`z-30 transition-colors duration-300 ${isDark ? 'bg-[#15171b]' : 'bg-white'}`}>
+        <div className="w-full max-w-[1440px] mx-auto px-4 lg:px-8 flex flex-col xl:flex-row items-center justify-between gap-4 pt-4 pb-2">
           
-          <div className="flex flex-nowrap items-center justify-start gap-2 sm:gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto pb-1 px-1 sm:px-0">
+          {/* Filters (No flex-wrap to prevent splitting onto two lines, enables horizontal scroll on tiny screens) */}
+          <div className="flex items-center justify-start gap-2 sm:gap-3 w-full xl:w-auto overflow-x-auto no-scrollbar shrink-0">
             {["All", "Introductory", "Intermediate", "Advanced"].map((f) => (
               <button
                 key={f}
@@ -300,39 +300,36 @@ export default function ResourcesPage() {
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+          <div className="flex items-center gap-3 w-full xl:w-auto overflow-x-auto no-scrollbar">
             
             {/* LIVE TRACKER BOX */}
             {isMounted && (
-              <div className="relative group/tracker w-full sm:w-auto">
+              <div className="relative group/tracker shrink-0">
                 <div className={`flex border rounded-md overflow-hidden text-sm w-full shadow-sm transition-colors ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
                   {/* Completed Tracker Box */}
                   <div 
                     onClick={() => scrollToSection('completed-section')}
-                    className={`px-3 py-2.5 font-bold border-r flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer transition-colors ${isDark ? 'bg-[#0f5132]/30 text-[#81c995] border-[#81c995]/20 hover:bg-[#0f5132]/50' : 'bg-[#d1e7dd] text-[#0f5132] border-[#0f5132]/20 hover:bg-[#c3e0cf]'}`}
+                    className={`px-3 py-2.5 font-bold border-r flex items-center gap-1.5 justify-center cursor-pointer transition-colors ${isDark ? 'bg-[#0f5132]/30 text-[#81c995] border-[#81c995]/20 hover:bg-[#0f5132]/50' : 'bg-[#d1e7dd] text-[#0f5132] border-[#0f5132]/20 hover:bg-[#c3e0cf]'}`}
                   >
                     <CheckCircle2 size={16} /> 
-                    <span className="hidden xl:inline">Completed:</span> 
+                    <span className="hidden sm:inline">Completed:</span> 
                     {autoCompletedIds.length}
                   </div>
                   {/* Pending Tracker Box */}
                   <div 
                     onClick={() => scrollToSection('pending-section')}
-                    className={`px-3 py-2.5 font-bold flex items-center gap-1.5 justify-center sm:justify-start w-1/2 sm:w-auto cursor-pointer transition-colors ${isDark ? 'bg-[#d93025]/20 text-[#f28b82] hover:bg-[#d93025]/30' : 'bg-[#fce8e6] text-[#d93025] hover:bg-[#f6d7d5]'}`}
+                    className={`px-3 py-2.5 font-bold flex items-center gap-1.5 justify-center cursor-pointer transition-colors ${isDark ? 'bg-[#d93025]/20 text-[#f28b82] hover:bg-[#d93025]/30' : 'bg-[#fce8e6] text-[#d93025] hover:bg-[#f6d7d5]'}`}
                   >
                     <Circle size={16} /> 
-                    <span className="hidden xl:inline">Pending:</span> 
+                    <span className="hidden sm:inline">Pending:</span> 
                     {initialBadgesData.length - autoCompletedIds.length}
                   </div>
-                </div>
-                <div className={`absolute top-full mt-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 text-[11px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover/tracker:opacity-100 transition-opacity duration-200 pointer-events-none z-50 ${isDark ? 'bg-white text-black' : 'bg-[#202124] text-white'}`}>
-                  Click to scroll to section
                 </div>
               </div>
             )}
 
             {/* Search Box */}
-            <div className="relative w-full sm:w-64">
+            <div className="relative w-full sm:w-56 shrink-0">
               <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDark ? 'text-gray-400' : 'text-[#9aa0a6]'}`} />
               <input 
                 type="text" 
@@ -344,7 +341,7 @@ export default function ResourcesPage() {
             </div>
 
             {/* Sort Dropdown */}
-            <div className="relative w-full sm:w-56">
+            <div className="relative w-full sm:w-44 shrink-0">
               <select 
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -358,85 +355,65 @@ export default function ResourcesPage() {
               </select>
               <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${isDark ? 'text-gray-400' : 'text-[#5f6368]'}`} />
             </div>
+
+            {/* 🔥 DARK MODE TOGGLE 🔥 */}
+            <button
+              onClick={toggleDarkMode}
+              className={`relative shrink-0 inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
+              title="Toggle Dark Mode"
+            >
+              <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-[26px]' : 'translate-x-1'}`}>
+                {isDark ? (
+                  <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                ) : (
+                  <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
+                )}
+              </span>
+            </button>
+
+            {/* 🔥 NEW CURVED CALCULATOR BUTTON 🔥 */}
+            <button 
+              onClick={() => router.push('/calculator')} 
+              className={`relative shrink-0 inline-flex h-9 items-center justify-center px-5 rounded-full font-bold text-[13px] shadow-sm transition-all ${isDark ? 'bg-[#8ab4f8] text-[#15171b] hover:bg-[#aecbfa]' : 'bg-[#1a73e8] text-white hover:bg-[#1557b0]'}`}
+            >
+              Calculator
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ================= CARDS GRID & HEADER BUTTONS ================= */}
-      <section className={`py-10 px-6 min-h-[600px] transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b]' : 'bg-[#f8f9fa]'}`}>
-        <div className="max-w-7xl mx-auto">
+      {/* ================= CARDS GRID SECTION ================= */}
+      <section className={`pt-8 pb-10 px-4 lg:px-8 min-h-[600px] transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b]' : 'bg-[#f8f9fa]'}`}>
+        <div className="w-full max-w-[1440px] mx-auto">
           
-          {/* Header & Premium Action Buttons Row */}
-          <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-8 gap-4">
-            <div className="flex items-center gap-4 border-l-4 border-[#1a73e8] pl-4">
+          {/* Header row with Title and Pending Centered */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 relative w-full md:min-h-[30px]">
+            {/* Left Side: Count */}
+            <div className="flex items-center gap-4 border-l-4 border-[#1a73e8] pl-4 md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2">
               <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                 {processedData.length} <span className={`font-normal ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Skill Badges Available</span>
               </h2>
-              
-              {/* 🔥 PREMIUM DARK MODE TOGGLE HERE 🔥 */}
-              <button
-                onClick={toggleDarkMode}
-                className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ml-2 ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                title="Toggle Dark Mode"
-              >
-                <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-8' : 'translate-x-1'}`}>
-                  {isDark ? (
-                    <svg className="w-3 h-3 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                  ) : (
-                    <svg className="w-3 h-3 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                  )}
-                </span>
-              </button>
             </div>
-            
-            <div className="flex flex-wrap items-center gap-3 justify-start xl:justify-end">
-              <button 
-                onClick={() => router.push('/calculator')} 
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 border px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all ${isDark ? 'bg-[#15171b] border-[#3c4043] text-[#8ab4f8] hover:bg-[#1a1b1e] hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8]'}`}
-              >
-                Calculate Points
-              </button>
-              
-              <button 
-                onClick={() => window.open('https://cloud.google.com/free', '_blank')} 
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 border px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all ${isDark ? 'bg-[#15171b] border-[#3c4043] text-[#8ab4f8] hover:bg-[#1a1b1e] hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8]'}`}
-              >
-                Required Credits
-              </button>
 
-              <button 
-                onClick={() => router.push('/leaderboard')} 
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 border px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all ${isDark ? 'bg-[#15171b] border-[#3c4043] text-[#8ab4f8] hover:bg-[#1a1b1e] hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8]'}`}
-              >
-                Leaderboard
-              </button>
-              <button 
-                onClick={() => router.push('/facilitator')} 
-                className={`flex-1 sm:flex-none flex items-center justify-center gap-2 border px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all ${isDark ? 'bg-[#15171b] border-[#3c4043] text-[#8ab4f8] hover:bg-[#1a1b1e] hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f8f9fa] hover:border-[#1a73e8]'}`}
-              >
-                Facilitator Program
-              </button>
-              <button 
-                onClick={() => router.push('/dashboard')} 
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[#1a73e8] text-white hover:bg-[#1557b0] px-5 py-2.5 rounded-md text-sm font-bold shadow-sm transition-all"
-              >
-                Open Dashboard
-              </button>
-            </div>
+            {/* Center Side: Pending Header (aligned with the left title) */}
+            {pendingBadges.length > 0 && (
+              <div className="w-full flex md:justify-center justify-start mt-4 md:mt-0">
+                <h5 className={`text-sm font-black uppercase tracking-widest flex items-center justify-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
+                  Pending Skill Badges ({pendingBadges.length})
+                </h5>
+              </div>
+            )}
           </div>
 
           {/* ================= SECTION 1: PENDING BADGES ================= */}
           {pendingBadges.length > 0 && (
-            <div id="pending-section" className="mb-12 scroll-mt-32">
-              <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ea4335]"></span>
-                Pending Skill Badges ({pendingBadges.length})
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="pending-section" className="mb-10 scroll-mt-32">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {pendingBadges.map((badge) => (
                   <div 
                     key={badge.id} 
-                    className={`group rounded-md p-5 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border bg-gradient-to-br ${isDark ? 'from-[#1a1b1e] to-[#15171b] border-[#3c4043] hover:border-[#8ab4f8]' : 'from-[#f8f9fa] to-[#e8eaed] border-[#dadce0] hover:border-[#1a73e8]'}`}
+                    className={`group rounded-xl p-5 flex flex-col hover:shadow-[0_12px_32px_rgba(26,115,232,0.08)] transition-all duration-400 relative border bg-gradient-to-br ${isDark ? 'from-[#1a1b1e] to-[#15171b] border-[#3c4043] hover:border-[#8ab4f8]' : 'from-[#f8f9fa] to-[#e8eaed] border-[#dadce0] hover:border-[#1a73e8]'}`}
                   >
                     {/* Small Icon & Tiny Text */}
                     <div className="flex flex-col items-start mb-3">
@@ -450,12 +427,8 @@ export default function ResourcesPage() {
                       </span>
                     </div>
 
-                    {/* Header Meta */}
+                    {/* Header Meta (REMOVED BDG-) */}
                     <div className="flex items-center gap-3 mb-3 pr-24">
-                      <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isDark ? 'text-[#5f6368]' : 'text-[#9aa0a6]'}`}>
-                        BDG-{badge.id}
-                      </span>
-                      <span className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></span>
                       <span className={`text-[10px] font-bold uppercase tracking-wider ${
                         badge.level === "Introductory" ? (isDark ? "text-[#81c995]" : "text-[#1e8e3e]") : 
                         badge.level === "Intermediate" ? (isDark ? "text-[#8ab4f8]" : "text-[#1a73e8]") : (isDark ? "text-[#f28b82]" : "text-[#d93025]")
@@ -469,7 +442,7 @@ export default function ResourcesPage() {
                       {badge.title}
                     </h3>
                     
-                    {/* Specs */}
+                    {/* Specs (ADDED Badge ID with Labs) */}
                     <div className={`mt-auto pt-3 border-t space-y-2 mb-4 ${isDark ? 'border-[#3c4043]/50' : 'border-[#dadce0]/50'}`}>
                       <div className="flex items-center text-sm font-medium group/info">
                         <Clock className={`w-3.5 h-3.5 mr-3 transition-colors group-hover/info:text-[#1a73e8] ${isDark ? 'text-gray-500 group-hover/info:text-[#8ab4f8]' : 'text-[#9aa0a6]'}`} />
@@ -477,7 +450,7 @@ export default function ResourcesPage() {
                       </div>
                       <div className="flex items-center text-sm font-medium group/info">
                         <Layers className={`w-3.5 h-3.5 mr-3 transition-colors group-hover/info:text-[#34a853] ${isDark ? 'text-gray-500 group-hover/info:text-[#81c995]' : 'text-[#9aa0a6]'}`} />
-                        <span className={isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}>{badge.labs}</span>
+                        <span className={isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}>{badge.labs} {parseInt(badge.id, 10)}</span>
                       </div>
                     </div>
 
@@ -486,7 +459,7 @@ export default function ResourcesPage() {
                       href={badge.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border bg-[#1a73e8] text-white border-[#1a73e8] hover:bg-[#1557b0]"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-lg transition-all duration-300 shadow-sm uppercase tracking-widest border bg-[#1a73e8] text-white border-[#1a73e8] hover:bg-[#1557b0]"
                     >
                       Start Learning <ExternalLink className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
@@ -499,26 +472,19 @@ export default function ResourcesPage() {
           {/* ================= SECTION 2: COMPLETED BADGES ================= */}
           {completedBadges.length > 0 && (
             <div id="completed-section" className="scroll-mt-32">
-              <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 pt-8 border-t ${isDark ? 'text-[#81c995] border-[#2a2d32]' : 'text-[#137333] border-[#dadce0]'}`}>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
-                Completed Skill Badges ({completedBadges.length})
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex justify-center mb-8">
+                <h5 className={`text-sm font-black uppercase tracking-widest flex items-center justify-center gap-2 pt-6 w-full border-t ${isDark ? 'text-[#81c995] border-[#2a2d32]' : 'text-[#137333] border-[#dadce0]'}`}>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>
+                  Completed Skill Badges ({completedBadges.length})
+                </h5>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {completedBadges.map((badge) => (
                   <div 
                     key={badge.id} 
-                    className="group rounded-md p-5 flex flex-col hover:shadow-[0_4px_12px_rgba(52,168,83,0.12)] transition-all duration-400 relative border completed-blink-card shadow-sm opacity-95"
+                    className="group rounded-xl p-5 flex flex-col hover:shadow-[0_4px_12px_rgba(52,168,83,0.12)] transition-all duration-400 relative border completed-blink-card shadow-sm opacity-95"
                   >
                     
-                    {/* Solid Single Circle Pulsing Green Tick Overlay */}
-                    {isMounted && (
-                      <div className="absolute top-4 right-4 z-10 flex flex-col items-center">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 animate-pulse ${isDark ? 'bg-[#1e8e3e] border-[#15171b] shadow-[0_0_12px_rgba(30,142,62,0.8)]' : 'bg-[#137333] border-white shadow-[0_0_12px_rgba(19,115,51,0.8)]'}`}>
-                          <Check className={`w-6 h-6 stroke-[3] ${isDark ? 'text-[#0a2e1b]' : 'text-white'}`} />
-                        </div>
-                      </div>
-                    )}
-
                     {/* Small Icon & Tiny Text */}
                     <div className="flex flex-col items-start mb-3 opacity-80">
                       <img 
@@ -531,12 +497,8 @@ export default function ResourcesPage() {
                       </span>
                     </div>
 
-                    {/* Header Meta */}
+                    {/* Header Meta (REMOVED BDG-) */}
                     <div className="flex items-center gap-3 mb-3 pr-24 opacity-80">
-                      <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isDark ? 'text-[#81c995]/70' : 'text-[#0f5132]/70'}`}>
-                        BDG-{badge.id}
-                      </span>
-                      <span className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#0f5132]' : 'bg-[#a3cfbb]'}`}></span>
                       <span className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[#81c995]' : 'text-[#0f5132]'}`}>
                         {badge.level}
                       </span>
@@ -547,7 +509,7 @@ export default function ResourcesPage() {
                       {badge.title}
                     </h3>
                     
-                    {/* Specs */}
+                    {/* Specs (ADDED Badge ID with Labs) */}
                     <div className={`mt-auto pt-3 border-t space-y-2 mb-4 opacity-90 ${isDark ? 'border-[#0f5132]/50' : 'border-[#a3cfbb]/50'}`}>
                       <div className="flex items-center text-sm font-medium">
                         <Clock className={`w-3.5 h-3.5 mr-3 ${isDark ? 'text-[#81c995]/70' : 'text-[#0f5132]/70'}`} />
@@ -555,7 +517,7 @@ export default function ResourcesPage() {
                       </div>
                       <div className="flex items-center text-sm font-medium">
                         <Layers className={`w-3.5 h-3.5 mr-3 ${isDark ? 'text-[#81c995]/70' : 'text-[#0f5132]/70'}`} />
-                        <span className={isDark ? 'text-[#81c995]' : 'text-[#0f5132]'}>{badge.labs}</span>
+                        <span className={isDark ? 'text-[#81c995]' : 'text-[#0f5132]'}>{badge.labs} {parseInt(badge.id, 10)}</span>
                       </div>
                     </div>
 
@@ -564,7 +526,7 @@ export default function ResourcesPage() {
                       href={badge.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-sm transition-all duration-300 shadow-sm uppercase tracking-widest border ${isDark ? 'bg-[#1e8e3e] text-[#0a2e1b] border-[#1e8e3e] hover:bg-[#137333] hover:text-white' : 'bg-[#137333] text-white border-[#137333] hover:bg-[#0d5023]'}`}
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-[13px] font-bold rounded-lg transition-all duration-300 shadow-sm uppercase tracking-widest border ${isDark ? 'bg-[#1e8e3e] text-[#0a2e1b] border-[#1e8e3e] hover:bg-[#137333] hover:text-white' : 'bg-[#137333] text-white border-[#137333] hover:bg-[#0d5023]'}`}
                     >
                       <CheckCircle2 className="w-4 h-4" /> Completed
                     </a>

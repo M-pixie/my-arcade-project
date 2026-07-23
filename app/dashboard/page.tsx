@@ -495,9 +495,7 @@ export default function DashboardPage() {
                     </h2>
                     
                     <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
-                      <span className={`text-[13px] uppercase font-bold tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                        Theme Mode
-                      </span>
+                      
                       
                       {/* Beautiful Toggle Switch */}
                       <button
