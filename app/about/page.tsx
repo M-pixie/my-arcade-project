@@ -163,8 +163,29 @@ export default function AboutPage() {
               </div>
             </div>
 
+            {/* KEY HIGHLIGHTS SECTION (Light Black Border all around) */}
+            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#707070] mt-12">
+              <h3 className="text-[#c0262c] font-bold text-[16px] border-b border-[#e0e0e0] pb-3 mb-4">Key Highlights</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <ul className="space-y-3 text-[14px] text-[#5f6368]">
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Automated Points Calculation</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Real-time Leaderboard</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>AI Chatbot Assistant</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>93+ Skill Badges Support</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Milestone & Tier Tracking</span></li>
+                </ul>
+                <ul className="space-y-3 text-[14px] text-[#5f6368]">
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Community Posts & Reviews</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Admin Panel & Moderation</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Dark / Light Mode</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>PWA Ready</span></li>
+                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>SEO Optimized</span></li>
+                </ul>
+              </div>
+            </div>
+
             {/* WHY PLAY SECTION (Light Black Border all around) */}
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#707070] mt-20">
+            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#707070] mt-8">
               <h3 className="text-[#c0262c] font-bold text-[16px] border-b border-[#e0e0e0] pb-3 mb-4">Why Play The Arcade?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <ul className="space-y-3 text-[14px] text-[#5f6368]">

@@ -223,7 +223,7 @@ export default function HomePage() {
       </div>
 
       <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10 relative z-10 mt-28 md:mt-24">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 w-full">
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 lg:gap-16 w-full">
           
           <div className="w-full lg:w-3/5 flex flex-col items-center lg:items-start text-center lg:text-left">
             <p className="text-gray-700 text-xl md:text-2xl max-w-xl font-medium leading-relaxed mb-8 mt-2">
@@ -277,14 +277,14 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/*  UPDATED: Yellow Premium Referral Code Section (Shortened Width)  */}
+              {/*  Yellow Premium Referral Code Section (Shortened Width)  */}
               <div className="mt-4 w-full max-w-[340px]">
                 <h4 className="text-[#5f6368] text-[12px] font-bold uppercase tracking-[0.1em] mb-2 ml-1">
                   Referral Code
                 </h4>
                 <div className="bg-[#fef7e0] border border-[#fbbc04] rounded-md p-3 md:px-4 flex items-center justify-between w-full shadow-sm">
                   <div className="font-mono text-black font-extrabold text-[17px] md:text-[19px] tracking-wider mt-0.5">
-                    GCAF26-IN-9SC-AE9
+                    Aw, Enrollment Closed
                   </div>
                   <button
                     onClick={handleCopyReferral}
@@ -307,88 +307,70 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/*  Premium White Card for Tools (RIGHT SIDE)  */}
-          <div className="relative z-10 w-full lg:w-[360px] flex justify-end">
-            <div className="bg-white rounded-[16px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col w-full overflow-hidden border border-[#dadce0]">
+          {/* 🌟 PREMIUM KEY HIGHLIGHTS (RIGHT SIDE - NO BOX, DIRECT ON PAGE) 🌟 */}
+          <div className="relative z-10 w-full lg:w-[360px] flex justify-end lg:-mt-4">
+            <div className="flex flex-col w-full">
               
-              {/* 🔥 COLORED QUICK ACTIONS HEADER 🔥 */}
-              <div 
-                className="flex items-center justify-between p-4 border-b border-[#1a73e8] bg-[#1a73e8] cursor-pointer group hover:bg-[#1557b0] transition-colors"
-                onClick={() => router.push('/dashboard')}
-              >
-                <span className="text-white font-bold text-[15px] tracking-wide">Quick Actions</span>
-                <div className="flex items-center gap-2.5">
-                  <span className="text-blue-100 text-xs font-bold tracking-wide group-hover:text-white transition-colors text-right max-w-[80px] truncate">
+              {/* HEADER WITH AVATAR - Minimalist Line Separator */}
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-200">
+                <h3 className="text-[#202124] font-bold text-[18px] md:text-[20px] tracking-tight">
+                  Key Highlights
+                </h3>
+                <div 
+                  className="flex items-center gap-2.5 cursor-pointer group"
+                  onClick={() => router.push('/dashboard')}
+                >
+                  <span className="text-[#5f6368] text-xs font-bold tracking-wide group-hover:text-[#1a73e8] transition-colors text-right max-w-[80px] truncate">
                     {currentUserName || "You"}
                   </span>
                   <img 
                     src={imageError ? "/avatar.png" : currentUserAvatar} 
                     alt="Your Avatar" 
                     onError={() => setImageError(true)}
-                    className="w-9 h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-110 border-2 border-white/40 p-[2px] bg-white shadow-sm"
+                    className="w-8 h-8 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 border border-[#dadce0] p-[2px] bg-white shadow-sm"
                   />
                 </div>
               </div>
 
-              {/* 🔥 UPDATED LIST WITH THINNER PADDING & NEW ABOUT PAGE BUTTON 🔥 */}
-              {[
-                { 
-                  name: "Arcade Points Calculator", 
-                  link: "/calculator", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /> 
-                },
-                { 
-                  name: "Skill Badges List", 
-                  link: "/resources", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /> 
-                },
-                { 
-                  name: "Facilitator Program", 
-                  link: "/facilitator", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /> 
-                },
-                { 
-                  name: "Live Leaderboard", 
-                  link: "/leaderboard", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /> 
-                },
-                { 
-                  name: "About Page", 
-                  link: "/about", 
-                  icon: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /> 
-                }
-              ].map((item, idx) => (
-                <a
-                  key={idx}
-                  href={item.link}
-                  onClick={(e) => {
-                    if(item.link.startsWith('#')) {
-                      e.preventDefault();
-                      document.getElementById(item.link.substring(1))?.scrollIntoView({ behavior: 'smooth' });
-                    } else if (item.link.startsWith('/')) {
-                      e.preventDefault();
-                      router.push(item.link);
-                    }
-                  }}
-                  className="flex items-center justify-between px-5 py-3 border-b border-[#dadce0] last:border-none hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-[32px] h-[32px] rounded-[6px] bg-[#e8f0fe] border border-[#d2e3fc] flex items-center justify-center text-[#1a73e8] shrink-0 shadow-sm transition-all duration-300 group-hover:bg-[#1a73e8] group-hover:text-white">
-                      <svg className="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                        {item.icon}
-                      </svg>
-                    </div>
-                    <span className="font-[700] text-[14px] text-[#202124] tracking-tight group-hover:text-[#1a73e8] transition-colors">
-                      {item.name}
-                    </span>
+              {/* MINIMALIST LIST (Plain Text & Links) */}
+              <div className="py-2 flex flex-col gap-3">
+                {[
+                  { name: "Automated Points Calculation", link: "/calculator" },
+                  { name: "Real-time Leaderboard", link: "/leaderboard" },
+                  { name: "AI Chatbot Assistant", link: "/chat" },
+                  { name: "96+ Skill Badges Support", link: "/resources" },
+                  { name: "Milestone & Tier Tracking", link: "/dashboard" },
+                  { name: "Community Posts & Reviews", link: "/post" }, // Link removed from here
+                  { name: "Admin Panel & Moderation", link: "/admin-nexus-2026" }, // Clickable Admin Panel
+                  { name: "About Page", link: "/about" }, // New specific about page link
+                  { name: "Dark / Light Mode", link: null },
+                  { name: "PWA Ready", link: null },
+                  { name: "SEO Optimized", link: null }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start group">
+                    <span className="text-black font-extrabold text-[18px] leading-none mr-3 mt-[1px]">•</span>
+                    {item.link ? (
+                      <a
+                        href={item.link}
+                        onClick={(e) => {
+                          if (item.link?.startsWith('/')) {
+                            e.preventDefault();
+                            router.push(item.link);
+                          }
+                        }}
+                        className="font-medium text-[15px] text-[#3c4043] group-hover:text-[#1a73e8] transition-colors duration-200 cursor-pointer"
+                      >
+                        {item.name}
+                      </a>
+                    ) : (
+                      <span className="font-medium text-[15px] text-[#5f6368]">
+                        {item.name}
+                      </span>
+                    )}
                   </div>
-                  <span className="text-[#9aa0a6] group-hover:text-[#1a73e8] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transform transition-all">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </a>
-              ))}
+                ))}
+              </div>
+
             </div>
           </div>
 
