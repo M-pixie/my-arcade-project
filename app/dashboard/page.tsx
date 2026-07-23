@@ -539,7 +539,7 @@ export default function DashboardPage() {
                             <div className="space-y-4 mb-6">
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Arcade Games (July Only)</span> 
+                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Arcade Games</span> 
                                   <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>{Math.min(facilitatorArcadeGamesCount, milestone.targetArcade)} / {milestone.targetArcade}</span>
                                 </div>
                                 <div className={`w-full h-2.5 rounded-full overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
@@ -549,7 +549,7 @@ export default function DashboardPage() {
 
                               <div>
                                 <div className="flex justify-between text-[15px] font-bold mb-2">
-                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Skill Badges (Post-July 14)</span> 
+                                  <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>Skill Badges </span> 
                                   <span className={isDark ? 'text-gray-300' : 'text-[#202124]'}>{Math.min(facilitatorSkillBadgesCount, milestone.targetSkills)} / {milestone.targetSkills}</span>
                                 </div>
                                 <div className={`w-full h-2.5 rounded-full overflow-hidden border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-[#e5e7eb] border-[#dadce0]'}`}>
