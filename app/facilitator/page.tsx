@@ -81,7 +81,7 @@ export default function FacilitatorPage() {
                         <td className="px-6 py-4 text-[14px] text-[#3c4043]">35 Arcade + 25 Bonus <br/><strong className="text-[#137333]">= 60 Total Pts</strong></td>
                       </tr>
                       <tr className="hover:bg-[#f8f9fa] transition-colors bg-[#f8f9fa]">
-                        <td className="px-6 py-4 font-black text-[#202124] text-[14px]">Ultimate</td>
+                        <td className="px-6 py-4 font-black text-[#202124] text-[14px]">ULTIMATE</td>
                         <td className="px-6 py-4 text-[14px] text-[#3c4043]"><strong>12 Arcade Games</strong> & <strong>66 Skill Badges</strong></td>
                         <td className="px-6 py-4 text-[14px] text-[#3c4043]">45 Arcade + 35 Bonus <br/><strong className="text-[#137333]">= 80 Total Pts</strong></td>
                       </tr>
