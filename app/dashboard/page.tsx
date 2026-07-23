@@ -699,7 +699,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <div className="text-center lg:text-right lg:w-1/3">
-                  Explore Arcade Tier details <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:underline font-bold">here.</a>
+                  Explore Arcade Prize details <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:underline font-bold">here.</a>
                 </div>
               </div>
             </div>
