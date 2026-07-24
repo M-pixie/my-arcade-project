@@ -4,7 +4,7 @@
   <br />
   <br />
 
-  # 🎮 Arcade Calculator Hub
+  # 🎮 Google Arcade Nexus
   **The Ultimate Companion for Google Cloud Skills Boost Arcade**
 
   [![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=for-the-badge&logo=next.js)](#)
@@ -22,7 +22,7 @@
 
 ## 📖 About The Project
 
-The **Arcade Calculator Hub** is a high-performance, comprehensive web platform designed specifically for participants of the Google Cloud Skills Boost Arcade program. 
+The **Arcade Nexus Platform** is a high-performance, comprehensive web platform designed specifically for participants of the Google Cloud Skills Boost Arcade program. 
 
 **The Problem:** Participants previously lacked a centralized, automated way to track their progress, calculate their earned points, and stay connected with the community and facilitator updates.
 
