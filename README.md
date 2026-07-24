@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/screenshots/banner.png" alt="Google Arcade Nexus Banner" width="100%" />
+  <img src="public/screenshots/banner.png" alt="Google Arcade Nexus Banner" width="100%" />
 
   <br />
   <br />
