@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="public/screenshots/banner.png" alt="Google Arcade Nexus Banner" width="100%" />
-
+<img src="https://raw.githubusercontent.com/M-pixie/my-arcade-project/main/public/screenshots/banner.png" alt="Google Arcade Nexus Banner" width="100%" />
   <br />
   <br />
 
@@ -227,12 +226,12 @@ npm run lint
 
 | Dashboard View | Leaderboard View |
 | :---: | :---: |
-| <img src="./public/screenshots/dashboard.png" alt="Dashboard" width="100%" /> | <img src="./public/screenshots/leaderboard.png" alt="Leaderboard" width="100%" /> |
+| <img src="https://raw.githubusercontent.com/M-pixie/my-arcade-project/main/public/screenshots/dashboard.png" alt="Dashboard" width="100%" /> | <img src="https://raw.githubusercontent.com/M-pixie/my-arcade-project/main/public/screenshots/leaderboard.png" alt="Leaderboard" width="100%" /> |
 | *Smart User Dashboard* | *Real-time Global Leaderboard* |
 
 | Points Calculator | AI Chat Interface |
 | :---: | :---: |
-| <img src="./public/screenshots/calculator.png" alt="Calculator" width="100%" /> | <img src="./public/screenshots/ai-chat.png" alt="AI Chat" width="100%" /> |
+| <img src="https://raw.githubusercontent.com/M-pixie/my-arcade-project/main/public/screenshots/calculator.png" alt="Calculator" width="100%" /> | <img src="https://raw.githubusercontent.com/M-pixie/my-arcade-project/main/public/screenshots/ai-chat.png" alt="AI Chat" width="100%" /> |
 | *Automated Cloud Skills Tracking* | *Gemini-powered Assistant* |
 
 ---
