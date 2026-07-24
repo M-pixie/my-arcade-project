@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/1200x300/000000/FFFFFF?text=Arcade+Calculator+Banner" alt="Arcade Calculator Banner" width="100%" />
+  <img src="./public/screenshots/banner.png" alt="Google Arcade Nexus Banner" width="100%" />
 
   <br />
   <br />
@@ -223,14 +223,16 @@ npm run lint
 
 ## 📸 Screenshots
 
+
+
 | Dashboard View | Leaderboard View |
 | :---: | :---: |
-| <img src="https://via.placeholder.com/500x300/111827/FFFFFF?text=Dashboard+Screenshot" alt="Dashboard" width="100%" /> | <img src="https://via.placeholder.com/500x300/111827/FFFFFF?text=Leaderboard+Screenshot" alt="Leaderboard" width="100%" /> |
+| <img src="./public/screenshots/dashboard.png" alt="Dashboard" width="100%" /> | <img src="./public/screenshots/leaderboard.png" alt="Leaderboard" width="100%" /> |
 | *Smart User Dashboard* | *Real-time Global Leaderboard* |
 
 | Points Calculator | AI Chat Interface |
 | :---: | :---: |
-| <img src="https://via.placeholder.com/500x300/111827/FFFFFF?text=Calculator+Screenshot" alt="Calculator" width="100%" /> | <img src="https://via.placeholder.com/500x300/111827/FFFFFF?text=AI+Chat+Screenshot" alt="AI Chat" width="100%" /> |
+| <img src="./public/screenshots/calculator.png" alt="Calculator" width="100%" /> | <img src="./public/screenshots/ai-chat.png" alt="AI Chat" width="100%" /> |
 | *Automated Cloud Skills Tracking* | *Gemini-powered Assistant* |
 
 ---
