@@ -622,7 +622,7 @@ export default function CalculatorPage() {
               {/* 🔥 REPLACED REFERRAL CODE WITH SUBSCRIBE LINK (NO BOX/BORDER) 🔥 */}
               <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center justify-center">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-[14px] font-bold tracking-wide hover:underline inline-block transition-colors ${isDark ? 'text-[#8ab4f8] hover:text-[#aecbfa]' : 'text-[#1a73e8] hover:text-[#1557b0]'}`}>
-                  Subscribe to Google Skills Arcade
+                  Subscribe to Google Arcade
                 </a>
               </div>
 
@@ -679,7 +679,7 @@ export default function CalculatorPage() {
                 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
                   <p className={`text-base font-bold ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                    Recent Profiles History
+                    Recent Profiles Search
                   </p>
                   
                   <div className="flex items-center gap-2">
