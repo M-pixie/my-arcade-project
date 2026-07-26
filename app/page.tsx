@@ -227,7 +227,7 @@ export default function HomePage() {
           
           <div className="w-full lg:w-3/5 flex flex-col items-center lg:items-start text-center lg:text-left">
             <p className="text-gray-700 text-xl md:text-2xl max-w-xl font-medium leading-relaxed mb-8 mt-2">
-              Calculate points, monitor live rankings, and track your entire Arcade journey in one sleek dashboard.
+              Crunch points, track live leaderboards, and own your Arcade journey in one seamless dashboard.
             </p>
 
             {/* 🔥 Buttons Section 🔥 */}
@@ -284,7 +284,7 @@ export default function HomePage() {
                 </h4>
                 <div className="bg-[#fef7e0] border border-[#fbbc04] rounded-md p-3 md:px-4 flex items-center justify-between w-full shadow-sm">
                   <div className="font-mono text-black font-extrabold text-[17px] md:text-[19px] tracking-wider mt-0.5">
-                    Aw, Enrollment Closed
+                    Oh, Enrollment Closed
                   </div>
                   <button
                     onClick={handleCopyReferral}
