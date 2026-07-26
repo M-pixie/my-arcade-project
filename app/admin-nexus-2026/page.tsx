@@ -194,16 +194,16 @@ export default function AdminDashboard() {
   // 🔥 LOADING SCREEN 🔥
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center font-sans">
         <span className="flex h-4 w-4 relative">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f41256] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 bg-[#f41256]"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d58] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-4 w-4 bg-[#0f9d58]"></span>
         </span>
       </div>
     );
   }
 
-  // 🔥 1. PREMIUM DARK LOGIN SCREEN 🔥
+  // 🔥 1. LOGIN SCREEN (LAYOUT NAVBAR WILL SHOW HERE) 🔥
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-[#f41256]/30">
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
             <div className="flex-1 h-[1px] bg-[#2a2d32]"></div>
           </div>
 
-          {/* Email / Sign Up Buttons (Added onClick Handlers for Security warning) */}
+          {/* Email / Sign Up Buttons */}
           <button 
             onClick={handleEmailAuthClick}
             className="w-full py-3 bg-[#e11d48] hover:bg-[#be123c] text-white font-semibold text-[15px] rounded-xl transition-all shadow-md focus:outline-none mb-3"
@@ -292,43 +292,27 @@ export default function AdminDashboard() {
     );
   }
 
-  // 🔥 2. ADMIN DASHBOARD 🔥
+  // 🔥 2. FULL-SCREEN DASHBOARD (COVERS LAYOUT NAVBAR AUTOMATICALLY) 🔥
   return (
-    <div className="min-h-screen bg-[#0a0a0a] font-sans flex flex-col items-center">
+    <div className="fixed inset-0 z-[100] bg-[#f8f9fa] h-screen w-screen overflow-y-auto font-sans flex flex-col items-center text-[#202124]">
       
-      {/* 🔥 FIXED TOP-RIGHT LOGOUT NAVBAR 🔥 */}
-      <div className="w-full bg-[#1a1b1e] border-b border-[#2a2d32] px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-md">
-        <h1 className="text-xl md:text-2xl font-black text-white flex items-center gap-2">
-          Live Database
-          <span className="flex h-2.5 w-2.5 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34a853] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34a853]"></span>
-          </span>
-        </h1>
-        
-        {/* LOGOUT IN THE TOP RIGHT CORNER */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 text-sm font-bold text-[#f41256] bg-[#f41256]/10 border border-[#f41256]/20 hover:bg-[#f41256] hover:text-white px-5 py-2.5 rounded-lg transition-all focus:outline-none"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-          Lock & Exit
-        </button>
-      </div>
-
       {/* Main Content Area */}
-      <div className="w-full max-w-6xl flex flex-col gap-8 p-4 md:p-8 mt-4">
+      <div className="w-full max-w-7xl flex flex-col gap-10 p-4 md:p-8 mt-4">
         
         {/* ================= LEADERBOARD SECTION ================= */}
-        <div className="w-full flex flex-col gap-2">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-white">User Points Leaderboard</h2>
-            <div className="flex justify-end px-1">
-              <div className="relative flex flex-col items-end w-48 sm:w-64">
-                <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-md transition-colors w-full ${
+        <div className="w-full flex flex-col gap-4">
+          
+          {/* Header Row: Title & Action Controls */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#dadce0] pb-4">
+            <h2 className="text-2xl font-bold text-[#202124]">User Points Leaderboard</h2>
+            
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Search Box */}
+              <div className="relative flex flex-col w-48 sm:w-64">
+                <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-full transition-colors w-full ${
                   isNoMatch 
-                    ? 'border-white text-white bg-red-600' 
-                    : 'text-[#5f6368] border-[#dadce0] bg-white focus-within:border-[#0f9d58]'
+                    ? 'border-red-500 text-red-700 bg-red-50' 
+                    : 'text-[#5f6368] border-[#dadce0] bg-white focus-within:border-[#1a73e8]'
                 }`}>
                   <input
                     type="text"
@@ -336,13 +320,13 @@ export default function AdminDashboard() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}
                     placeholder="Search user..."
-                    className={`bg-transparent border-none outline-none w-full text-sm font-bold py-1 ${
-                      isNoMatch ? 'text-white placeholder-[#ffcccc]' : 'text-[#202124] placeholder-[#9aa0a6]'
+                    className={`bg-transparent border-none outline-none w-full text-sm font-medium py-1 ${
+                      isNoMatch ? 'text-red-700 placeholder-red-300' : 'text-[#202124] placeholder-[#9aa0a6]'
                     }`}
                   />
                   <button 
                     onClick={handleSearchClick}
-                    className="shrink-0 p-1 hover:text-[#0f9d58] transition-colors focus:outline-none"
+                    className="shrink-0 p-1 hover:text-[#1a73e8] transition-colors focus:outline-none"
                     title="Click to find user"
                   >
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -351,16 +335,35 @@ export default function AdminDashboard() {
                   </button>
                 </div>
                 {isNoMatch && (
-                  <span className="text-[11px] font-bold text-yellow-300 absolute top-full mt-1 right-1">
+                  <span className="text-[11px] font-bold text-red-500 absolute top-full mt-1 right-1">
                     No user found
                   </span>
                 )}
               </div>
+
+              {/* Logout Button (Red Curve) */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-5 py-2 bg-[#ea4335] text-white hover:bg-[#d32f2f] rounded-full text-sm font-bold transition-all shadow-sm focus:outline-none"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                Logout
+              </button>
+
+              {/* Back Button */}
+              <button
+                onClick={() => router.back()}
+                className="flex items-center gap-1.5 px-5 py-2 bg-white text-[#5f6368] border border-[#dadce0] hover:bg-[#f1f3f4] rounded-full text-sm font-bold transition-all shadow-sm focus:outline-none"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                Back
+              </button>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-2xl border border-[#dadce0] w-full overflow-hidden">
-            <div className="w-full overflow-x-auto max-h-[500px] overflow-y-auto custom-scrollbar">
+          {/* Table Container - max-h 600px to show up to 10 rows before scrolling */}
+          <div className="bg-white rounded-lg shadow-sm border border-[#dadce0] w-full overflow-hidden">
+            <div className="w-full overflow-x-auto max-h-[600px] overflow-y-auto custom-scrollbar">
               {loading ? (
                 <div className="p-10 text-center text-[#5f6368] font-bold">Syncing live data...</div>
               ) : users.length > 0 ? (
@@ -434,12 +437,12 @@ export default function AdminDashboard() {
         </div>
 
         {/* ================= SWAG POSTS MANAGEMENT ================= */}
-        <div className="w-full flex flex-col gap-4 mt-4">
-          <div className="flex items-center justify-between border-b border-[#2a2d32] pb-2">
-            <h2 className="text-2xl font-bold text-white">
+        <div className="w-full flex flex-col gap-4 mt-6">
+          <div className="flex items-center justify-between border-b border-[#dadce0] pb-4">
+            <h2 className="text-2xl font-bold text-[#202124]">
               Swag Posts Moderation
             </h2>
-            <span className="text-[#9aa0a6] text-[15px] font-bold">
+            <span className="text-[#5f6368] bg-white border border-[#dadce0] px-4 py-1.5 rounded-full text-[14px] font-bold">
               Total Posts: {posts.length}
             </span>
           </div>
@@ -451,7 +454,7 @@ export default function AdminDashboard() {
               </div>
             ) : posts.length > 0 ? (
               posts.map((post) => (
-                <div key={post.id} className="bg-white rounded-xl shadow-2xl border border-[#dadce0] p-5 flex flex-col lg:flex-row gap-6 hover:shadow-lg transition-shadow">
+                <div key={post.id} className="bg-white rounded-xl shadow-sm border border-[#dadce0] p-5 flex flex-col lg:flex-row gap-6 hover:shadow-md transition-shadow">
                   
                   {/* LEFT: POST INFO */}
                   <div className="flex-1 flex flex-col">
