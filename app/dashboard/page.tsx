@@ -491,7 +491,7 @@ export default function DashboardPage() {
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 w-full gap-4">
                     
                     <h2 className={`text-[28px] font-bold tracking-normal ${isDark ? 'text-white' : 'text-black'}`}>
-                      Facilitator Progress
+                      User Facilitator Progress
                     </h2>
                     
                     <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
