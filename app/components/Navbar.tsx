@@ -12,7 +12,6 @@ export default function Navbar() {
 
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png"); 
-  const [showUserName, setShowUserName] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   // 🔥 MAGIC REFRESH FUNCTION 🔥
@@ -45,14 +44,6 @@ export default function Navbar() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!currentUserName) return;
-    const interval = setInterval(() => {
-      setShowUserName((prev) => !prev);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [currentUserName]);
-
   const handleLogoClick = () => {
     // Agar home page pe nahi hain, toh pichle page par back kar do
     if (pathname !== "/") {
@@ -70,7 +61,6 @@ export default function Navbar() {
     { name: "Swags Post", href: "/post" },
     { name: "About", href: "/about" },
     { name: "Help", href: "/chat" },
-    { name: "Admin", href: "/admin-nexus-2026" },
   ];
 
   return (
@@ -83,15 +73,11 @@ export default function Navbar() {
             onClick={handleLogoClick}
             className="flex items-center gap-2 group cursor-pointer focus:outline-none"
           >
-            <div className="hidden sm:grid [grid-template-areas:'stack'] items-center text-left">
-              <span className={`[grid-area:stack] text-lg font-bold text-[#202124] tracking-tight transition-opacity duration-700 ease-in-out truncate max-w-[150px] ${showUserName && currentUserName ? 'opacity-0' : 'opacity-100'}`}>
-                Arcade Nexus
+            <div className="hidden sm:block text-left">
+              {/* Only shows Name if exists, otherwise Arcade Nexus. Bold & No Truncate */}
+              <span className="text-lg font-bold text-[#202124] tracking-tight transition-all duration-300">
+                {currentUserName ? currentUserName : "Arcade Nexus"}
               </span>
-              {currentUserName && (
-                <span className={`[grid-area:stack] text-lg font-bold text-[#202124] tracking-tight transition-opacity duration-700 ease-in-out truncate max-w-[150px] ${showUserName ? 'opacity-100' : 'opacity-0'}`}>
-                  {currentUserName}
-                </span>
-              )}
             </div>
           </button>
         </div>
@@ -102,14 +88,14 @@ export default function Navbar() {
             const isActive = pathname === link.href;
             return (
               <div key={link.name} className="relative group">
-                {/* 🔥 Premium Outline/Curve Styling (Colorless Background) 🔥 */}
+                {/* 🔥 Premium Solid Blue Active State 🔥 */}
                 <Link 
                   href={link.href} 
                   prefetch={true}
-                  className={`block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+                  className={`block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     isActive 
-                      ? "border-[#1a73e8] text-[#1a73e8] bg-transparent" 
-                      : "border-transparent text-[#5f6368] hover:border-[#dadce0] hover:text-[#202124] bg-transparent"
+                      ? "bg-[#1a73e8] text-white shadow-sm" 
+                      : "text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] bg-transparent"
                   }`}
                 >
                   {link.name}
@@ -131,7 +117,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <button className="md:hidden p-2 text-[#5f6368] hover:text-[#202124] hover:bg-[#f8f9fa] rounded-sm transition" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="md:hidden p-2 text-[#5f6368] hover:text-[#202124] hover:bg-[#f1f3f4] rounded-full transition" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? (
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
             ) : (
@@ -154,10 +140,10 @@ export default function Navbar() {
                   href={link.href}
                   prefetch={true}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-full text-base font-medium transition-all duration-300 border ${
+                  className={`block px-4 py-3 rounded-full text-base font-medium transition-all duration-300 ${
                     isActive 
-                      ? "border-[#1a73e8] text-[#1a73e8] bg-transparent" 
-                      : "border-transparent text-[#5f6368] hover:border-[#dadce0] hover:text-[#202124] bg-transparent"
+                      ? "bg-[#1a73e8] text-white shadow-sm" 
+                      : "text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] bg-transparent"
                   }`}
                 >
                   {link.name}

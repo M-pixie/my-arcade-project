@@ -31,15 +31,38 @@ export default function FacilitatorPage() {
 
         <main className="pt-24 px-4 sm:px-6 lg:px-8 max-w-[1350px] mx-auto">
           
-          {/* ================= PAGE HEADER ================= */}
-          <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          {/* ================= PAGE HEADER & QUICK BUTTONS ================= */}
+          <div className="mb-8 flex flex-col xl:flex-row xl:items-end justify-between gap-6">
             <div>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                Arcade Facilitator Program
+              Facilitator Program
               </h1>
               <p className="text-[#5f6368] mt-1.5 font-medium text-[15px]">
-                Empowering the community to upskill, earn certifications, and claim Google Cloud swags.
+                Empowering the community to upskill, earn certifications, and claim Google swags.
               </p>
+            </div>
+
+            {/* 🔥 4 Premium Buttons moved to Top Right 🔥 */}
+            <div className="flex flex-wrap items-center gap-3">
+              <button onClick={() => router.push("/calculator")} className="flex items-center gap-2 px-4 py-2.5 bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8] rounded-xl hover:-translate-y-1 hover:shadow-md transition-all group">
+                <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                <span className="text-[13px] font-extrabold tracking-wide">Calculator</span>
+              </button>
+              
+              <button onClick={() => router.push("/leaderboard")} className="flex items-center gap-2 px-4 py-2.5 bg-[#e6f4ea] border border-[#ceead6] text-[#137333] rounded-xl hover:-translate-y-1 hover:shadow-md transition-all group">
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                <span className="text-[13px] font-extrabold tracking-wide">Leaderboard</span>
+              </button>
+              
+              <button onClick={() => router.push("/resources")} className="flex items-center gap-2 px-4 py-2.5 bg-[#fef7e0] border border-[#fde293] text-[#b06000] rounded-xl hover:-translate-y-1 hover:shadow-md transition-all group">
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                <span className="text-[13px] font-extrabold tracking-wide">Skill Badges</span>
+              </button>
+              
+              <button onClick={() => router.push("/dashboard")} className="flex items-center gap-2 px-4 py-2.5 bg-[#fce8e6] border border-[#fad2cf] text-[#c5221f] rounded-xl hover:-translate-y-1 hover:shadow-md transition-all group">
+                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                <span className="text-[13px] font-extrabold tracking-wide">Dashboard</span>
+              </button>
             </div>
           </div>
 
@@ -56,7 +79,6 @@ export default function FacilitatorPage() {
                 </div>
                 <div className="overflow-x-auto custom-scrollbar">
                   <table className="w-full text-left border-collapse min-w-[600px]">
-                    {/* 🔥 Original Yellow Theme Restored for Table Header 🔥 */}
                     <thead className="bg-[#fbbc04] border-b border-[#e8eaed] text-[12px] uppercase tracking-wider font-extrabold text-white">
                       <tr>
                         <th className="px-6 py-4">Milestone</th>
@@ -130,67 +152,41 @@ export default function FacilitatorPage() {
             {/* 🔥 RIGHT COLUMN (Sidebar items) 🔥 */}
             <div className="lg:col-span-4 flex flex-col gap-6">
               
-              {/* --- Quick Action Buttons (2x2 Grid) --- */}
-              <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => router.push("/calculator")} className="p-4 bg-[#e8f0fe] border border-[#d2e3fc] text-[#1a73e8] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
-                  <svg className="w-6 h-6 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                  <span className="text-[13px] font-extrabold tracking-wide">Calculator</span>
-                </button>
-                <button onClick={() => router.push("/leaderboard")} className="p-4 bg-[#e6f4ea] border border-[#ceead6] text-[#137333] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
-                  <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                  <span className="text-[13px] font-extrabold tracking-wide">Leaderboard</span>
-                </button>
-                <button onClick={() => router.push("/resources")} className="p-4 bg-[#fef7e0] border border-[#fde293] text-[#b06000] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
-                  <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                  <span className="text-[13px] font-extrabold tracking-wide">Skill Badges</span>
-                </button>
-                <button onClick={() => router.push("/dashboard")} className="p-4 bg-[#fce8e6] border border-[#fad2cf] text-[#c5221f] rounded-xl flex flex-col items-center justify-center gap-2.5 hover:-translate-y-1 hover:shadow-md transition-all group">
-                  <svg className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                  <span className="text-[13px] font-extrabold tracking-wide">Dashboard</span>
-                </button>
-              </div>
-
-              {/* --- Notice / Note Card --- */}
-              <div className="bg-gradient-to-br from-[#e8f0fe] to-[#f8f9fa] border border-[#d2e3fc] rounded-xl p-5 shadow-sm">
-                <h3 className="text-[14px] font-extrabold text-[#1a73e8] flex items-center gap-2 mb-2.5">
-                  <span className="text-lg">📌</span> Bonus Milestone Note
-                </h3>
-                <p className="text-[13.5px] text-[#3c4043] leading-relaxed mb-3.5">
-                  If you complete the "Bonus Milestone" along with Ultimate Milestone, you earn an extra 10 bonus points, thus making your total <strong>45 + 35 + 10 = 90 points</strong>.
-                </p>
-                <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" target="_blank" rel="noopener noreferrer" className="text-[13px] font-extrabold text-[#1a73e8] hover:text-[#1557b0] hover:underline flex items-center gap-1 w-fit transition-colors">
-                  See Eligibility Criteria <span className="text-lg leading-none">➔</span>
-                </a>
-              </div>
-
-              {/* --- Facilitator & Team Card --- */}
-              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm p-6 relative overflow-hidden flex-1">
+              {/* --- Facilitator & Team Card (AT TOP) --- */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm p-6 relative overflow-hidden flex flex-col">
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#e8f0fe] rounded-full blur-[40px] opacity-60 pointer-events-none"></div>
-                <h2 className="text-[17px] font-extrabold text-[#202124] mb-6 relative z-10">Facilitator & Team</h2>
+                <h2 className="text-[17px] font-extrabold text-[#202124] mb-6 relative z-10 text-center">Facilitator & Team</h2>
                 
-                {/* 🔥 Updated Avatars Order: Anjali (1), Manish (2), Rohit (3) 🔥 */}
-                <div className="flex justify-between items-center mb-6 relative z-10 px-2">
+                {/* 🔥 Updated Avatars Layout: All Three Side-by-Side (Portrait & Curve) 🔥 */}
+                <div className="flex justify-center flex-wrap gap-4 sm:gap-5 mb-6 relative z-10 w-full">
+                  
+                  {/* Anjali */}
                   <div className="flex flex-col items-center">
                     <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
-                      <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-14 h-14 rounded-full shadow-md object-cover object-top border-2 border-white" />
+                      <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-20 sm:w-24 h-28 sm:h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
                     </a>
-                    <span className="text-[12px] font-extrabold mt-2 text-[#202124]">Anjali</span>
+                    <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Anjali</span>
                   </div>
+                  
+                  {/* Manish */}
                   <div className="flex flex-col items-center">
                     <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
-                      <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-14 h-14 rounded-full shadow-md object-cover object-top border-2 border-white" />
+                      <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-20 sm:w-24 h-28 sm:h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
                     </a>
-                    <span className="text-[12px] font-extrabold mt-2 text-[#202124]">Manish</span>
+                    <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Manish</span>
                   </div>
+
+                  {/* Rohit */}
                   <div className="flex flex-col items-center">
                     <a href="https://www.linkedin.com/in/rohit-kumar-b482752ab" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
-                      <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-14 h-14 rounded-full shadow-md object-cover object-top border-2 border-white" />
+                      <img src="https://i.postimg.cc/cHVvphLB/IMG-20260222-221651.jpg" alt="Rohit" className="w-20 sm:w-24 h-28 sm:h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
                     </a>
-                    <span className="text-[12px] font-extrabold mt-2 text-[#202124]">Rohit</span>
+                    <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Rohit</span>
                   </div>
+
                 </div>
 
-                <p className="text-[13px] text-[#5f6368] leading-relaxed mb-6 relative z-10 font-medium">
+                <p className="text-[13px] text-[#5f6368] leading-relaxed mb-6 relative z-10 font-medium text-center">
                   As dedicated Google Cloud Arcade Facilitators in 2025 & 26, Anjali Patel, Manish, and Rohit Kumar demonstrated exceptional leadership by securing the prestigious Ultimate Milestone Winner title in both Cohorts.
                 </p>
 
@@ -221,11 +217,24 @@ export default function FacilitatorPage() {
                 {/* --- New Cohort Winners List Section --- */}
                 <div className="mt-5 relative z-10 bg-[#f8f9fa] p-3 rounded-lg border border-[#e8eaed]">
                   <ul className="text-[12px] text-[#5f6368] space-y-1.5 font-medium list-disc pl-4">
-                    <li>Google Arcade Facilitator Cohort 1 2025 - ultimate winner (Manish & Ankana)</li>
-                    <li>Google Arcade Facilitator Cohort 2 2025 - ultimate winner (Manish & Anjali)</li>
-                    <li>Google Arcade Facilitator 2026 - Ongoing (Manish & Rohit)</li>
+                    <li>Google Arcade Facilitator Cohort 1 2025 - Ultimate winner ( Manish )</li>
+                    <li>Google Arcade Facilitator Cohort 2 2025 - Ultimate winner ( Manish & Anjali )</li>
+                    <li>Google Arcade Facilitator 2026 - Ongoing </li>
                   </ul>
                 </div>
+              </div>
+
+              {/* --- Notice / Note Card --- */}
+              <div className="bg-gradient-to-br from-[#e8f0fe] to-[#f8f9fa] border border-[#d2e3fc] rounded-xl p-5 shadow-sm">
+                <h3 className="text-[14px] font-extrabold text-[#1a73e8] flex items-center gap-2 mb-2.5">
+                  <span className="text-lg">📌</span> Bonus Milestone Note
+                </h3>
+                <p className="text-[13.5px] text-[#3c4043] leading-relaxed mb-3.5">
+                  If you complete the "Bonus Milestone" along with Ultimate Milestone, you earn an extra 10 bonus points, thus making your total <strong>45 + 35 + 10 = 90 points</strong>.
+                </p>
+                <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" target="_blank" rel="noopener noreferrer" className="text-[13px] font-extrabold text-[#1a73e8] hover:text-[#1557b0] hover:underline flex items-center gap-1 w-fit transition-colors">
+                  See Eligibility Criteria <span className="text-lg leading-none">➔</span>
+                </a>
               </div>
 
             </div>

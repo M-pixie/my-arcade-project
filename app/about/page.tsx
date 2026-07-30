@@ -84,14 +84,12 @@ export default function AboutPage() {
                 {activeTab === 'features' && (
                   <div className="divide-y divide-[#e0e0e0]">
                     {featuresList.map((item, index) => (
-                      // 🔥 Alert popup removed, direct redirect to link 🔥
                       <Link 
                         href={item.link} 
                         key={index} 
                         className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full"
                       >
                         <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          {/* 🔥 Grayscale removed for default clear view 🔥 */}
                           <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
                           <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
                             {item.badge}
@@ -116,7 +114,6 @@ export default function AboutPage() {
                     {officialLinks.map((item, index) => (
                       <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full">
                         <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          {/* 🔥 Grayscale removed for default clear view 🔥 */}
                           <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
                           <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
                             {item.badge}
@@ -141,7 +138,6 @@ export default function AboutPage() {
                     {communityLinks.map((item, index) => (
                       <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full">
                         <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          {/* 🔥 Grayscale removed for default clear view 🔥 */}
                           <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
                           <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
                             {item.badge}
@@ -203,12 +199,43 @@ export default function AboutPage() {
 
           {/* ================= RIGHT COLUMN (HELP & LEGAL) ================= */}
           <div className="lg:col-span-1 space-y-6">
+
+            {/* 🔥 UPDATED FOUNDERS BOX (Aligned to top, Manish First) 🔥 */}
+            <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col p-6 items-center text-center relative">
+              <div className="absolute top-0 left-0 w-full h-12 bg-gradient-to-r from-[#fef8eb] to-[#fffdf5] border-b border-[#e0e0e0]"></div>
+              
+              <div className="flex justify-center gap-6 mb-6 mt-1 w-full relative z-10">
+                
+                {/* Manish */}
+                <div className="flex flex-col items-center">
+                  <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
+                    <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-24 h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
+                  </a>
+                  <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Manish Kr.</span>
+                  <span className="text-[11px] text-[#5f6368] font-bold mt-1 tracking-wide">Founder & CEO</span>
+                </div>
+
+                {/* Anjali */}
+                <div className="flex flex-col items-center">
+                  <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
+                    <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-24 h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
+                  </a>
+                  <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Anjali Patel</span>
+                  <span className="text-[11px] text-[#5f6368] font-bold mt-1 tracking-wide">Founder & CEO</span>
+                </div>
+                
+              </div>
+              
+              <div className="bg-[#fef8eb] text-[#b06000] border border-[#fde293] px-4 py-2.5 rounded-lg text-[12.5px] font-extrabold w-full tracking-wide shadow-sm">
+                Developed By Manish & Anjali
+              </div>
+            </div>
             
-            {/* HELP CENTER BOX (Light Black Border all around) */}
+            {/* HELP CENTER BOX */}
             <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col">
               <div className="bg-[#fef8eb] p-6 flex flex-col items-center justify-center relative border-b border-[#e0e0e0]">
                  <div className="bg-white rounded-full px-6 py-2 text-[14px] font-bold text-[#c0262c] mb-3 shadow-sm border border-[#e0e0e0]">
-                    Help center
+                   Help center
                  </div>
                  <div className="text-[12px] text-[#5f6368] mb-2 text-center">Can I help you?</div>
                  <div className="text-5xl drop-shadow-sm">👨‍💻</div>
@@ -229,27 +256,32 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* PRIVACY POLICY (Light Black Border all around) */}
-            <div className="bg-white rounded-lg p-5 shadow-sm border border-[#707070] hover:shadow-md transition-shadow cursor-pointer flex gap-4 items-start group">
-               {/* 🔥 Grayscale removed 🔥 */}
-               <div className="text-4xl transition-all mt-1">🔒</div>
-               <div>
-                 <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Privacy Policy</h3>
-                 <p className="text-[12px] text-[#5f6368] leading-snug mb-1">We do not store personal data. Standard log files are used.</p>
-                 <p className="text-[12px] text-[#5f6368] leading-snug mb-1">• No tracking cookies or pixels are utilized.</p>
-                 <p className="text-[12px] text-[#5f6368] leading-snug">• Your progression data remains secure locally.</p>
+            {/* 🔥 COMBINED PRIVACY POLICY & TERMS BOX 🔥 */}
+            <div className="bg-white rounded-lg p-5 shadow-sm border border-[#707070] hover:shadow-md transition-shadow flex flex-col gap-5 group">
+               
+               {/* Privacy Policy Section */}
+               <div className="flex gap-4 items-start cursor-pointer">
+                 <div className="text-4xl transition-all mt-1">🔒</div>
+                 <div>
+                   <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Privacy Policy</h3>
+                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">We do not store personal data. Standard log files are used.</p>
+                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">• No tracking cookies or pixels are utilized.</p>
+                   <p className="text-[12px] text-[#5f6368] leading-snug">• Your progression data remains secure locally.</p>
+                 </div>
                </div>
-            </div>
 
-            {/* TERMS & CONDITIONS (Light Black Border all around) */}
-            <div className="bg-white rounded-lg p-5 shadow-sm border border-[#707070] hover:shadow-md transition-shadow cursor-pointer flex gap-4 items-start group">
-               {/* 🔥 Grayscale removed 🔥 */}
-               <div className="text-4xl transition-all mt-1">📝</div>
-               <div>
-                 <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Terms & Conditions</h3>
-                 <p className="text-[12px] text-[#5f6368] leading-snug mb-1">Provided "as is" to help the community. Final authority lies with Google.</p>
-                 <p className="text-[12px] text-[#5f6368] leading-snug mb-1">• Unofficial toolkits carry no official warranties.</p>
-                 <p className="text-[12px] text-[#5f6368] leading-snug">• Users must comply with Google Cloud guidelines at all times.</p>
+               {/* Divider */}
+               <div className="border-t border-[#e0e0e0] w-full"></div>
+
+               {/* Terms & Conditions Section */}
+               <div className="flex gap-4 items-start cursor-pointer">
+                 <div className="text-4xl transition-all mt-1">📝</div>
+                 <div>
+                   <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Terms & Conditions</h3>
+                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">Provided "as is" to help the community. Final authority lies with Google.</p>
+                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">• Unofficial toolkits carry no official warranties.</p>
+                   <p className="text-[12px] text-[#5f6368] leading-snug">• Users must comply with Google Cloud guidelines at all times.</p>
+                 </div>
                </div>
             </div>
 

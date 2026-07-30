@@ -224,15 +224,25 @@ export default function Footer() {
               This project was independently designed and developed together by <strong className="text-[#202124]">Manish</strong> and <strong className="text-[#202124]">Anjali</strong> to assist the Google Cloud Arcade community.
             </p>
             
-            <div className="flex items-center gap-2 text-[14px] font-semibold text-[#5f6368] bg-white px-5 py-2.5 rounded-full border border-[#dadce0] shadow-sm mt-1">
-              <span>Powered by</span> 
-              <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:text-white hover:bg-[#1a73e8] px-3 py-1 rounded-full transition-all duration-300">
-                Manish Kumar
-              </a> 
-              <span className="text-[#bdc1c6]">&</span> 
-              <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:text-white hover:bg-[#1a73e8] px-3 py-1 rounded-full transition-all duration-300">
-                Anjali Patel
-              </a>
+            {/* 🔥 NO CURVE BOX - CLEAN CIRCULAR PICS ONLY 🔥 */}
+            <div className="flex items-center gap-3 mt-1">
+              <span className="text-[14px] font-bold text-[#5f6368] tracking-wide">Powered by</span>
+              <div className="flex items-center gap-2">
+                <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" title="Manish Kumar" className="block hover:scale-110 transition-transform">
+                  <img 
+                    src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" 
+                    alt="Manish Kumar" 
+                    className="w-9 h-9 rounded-full object-cover object-top border-2 border-white shadow-sm" 
+                  />
+                </a>
+                <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" title="Anjali Patel" className="block hover:scale-110 transition-transform">
+                  <img 
+                    src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" 
+                    alt="Anjali Patel" 
+                    className="w-9 h-9 rounded-full object-cover object-top border-2 border-white shadow-sm" 
+                  />
+                </a>
+              </div>
             </div>
 
           </div>
