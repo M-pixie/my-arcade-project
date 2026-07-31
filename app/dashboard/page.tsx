@@ -362,6 +362,11 @@ export default function DashboardPage() {
   );
   const milestoneText = achievedMilestone ? achievedMilestone.title : "No Milestones Yet";
 
+  // 🔥 ADDED THIS FOR NEXT MILESTONE LOGIC 🔥
+  const nextMilestone = facilitatorMilestones.find(
+    (m) => facilitatorArcadeGamesCount < m.targetArcade || facilitatorSkillBadgesCount < m.targetSkills
+  );
+
   // Premium Backgrounds for Milestone Cards (Light and Dark)
   const premiumCardStylesLight = [
     "bg-gradient-to-br from-[#ffffff] to-[#f8f9fa] border-[#e8eaed]", 
@@ -487,31 +492,87 @@ export default function DashboardPage() {
                 
                 <div className="mb-8 w-full flex-grow">
                   
-                  {/* 🔥 UPDATED THEME TOGGLE (BOX REMOVED) 🔥 */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 w-full gap-4">
-                    
-                    <h2 className={`text-[28px] font-bold tracking-normal ${isDark ? 'text-white' : 'text-black'}`}>
-                      User Facilitator Progress
-                    </h2>
-                    
-                    <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
-                      
-                      
-                      {/* Beautiful Toggle Switch */}
-                      <button
-                        onClick={toggleDarkMode}
-                        className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                        title="Toggle Dark Mode"
-                      >
-                        <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
-                          {isDark ? (
-                            <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                          ) : (
-                            <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                          )}
-                        </span>
-                      </button>
-                    </div>
+                  {/* 🔥 UPDATED PREMIUM MOTIVATION SECTION WITH INLINE TOGGLE 🔥 */}
+                  <div className="mb-8 w-full">
+                    {!nextMilestone ? (
+                      <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                         {/* Text Block */}
+                         <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
+                           <h2 className={`text-base md:text-lg font-bold mb-1 flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                             🎉 Congratulations! <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>Ultimate Milestone</span> Achieved! 
+                             <span className="inline-block animate-cool-emoji ml-3 text-[24px]">😎</span>
+                           </h2>
+                           <p className={`text-[13px] md:text-[14px] font-medium mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                              Great job! You have completely crushed it with <span className="text-[#1a73e8] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#1a73e8] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
+                           </p>
+                         </div>
+                         {/* Toggle Button Box inside right corner */}
+                         <div className={`shrink-0 flex items-center justify-end sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+                           <button
+                             onClick={toggleDarkMode}
+                             className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
+                             title="Toggle Dark Mode"
+                           >
+                             <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
+                               {isDark ? (
+                                 <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                               ) : (
+                                 <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
+                               )}
+                             </span>
+                           </button>
+                         </div>
+                      </div>
+                    ) : (
+                      <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                         {/* Text Block */}
+                         <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
+                           <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                              {achievedMilestone ? (
+                                <>
+                                  Great job on <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>{achievedMilestone.title}</span>! Let's aim for <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>{nextMilestone.title}</span>
+                                  <span className="inline-block animate-cool-emoji ml-3 text-[24px]">🤩</span>
+                                </>
+                              ) : (
+                                <>
+                                  You haven't reached <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>{nextMilestone.title}</span> yet. Let's get started!
+                                  <span className="inline-block animate-sad-emoji ml-3 text-[24px]">🥺</span>
+                                </>
+                              )}
+                           </h2>
+                           <div className={`text-[13px] md:text-[14px] font-semibold flex flex-wrap gap-2 items-center mt-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                              <span className="text-[#1a73e8]">Action Required:</span> 
+                              {facilitatorArcadeGamesCount < nextMilestone.targetArcade && (
+                                <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-2 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
+                                  Need {nextMilestone.targetArcade - facilitatorArcadeGamesCount} more Games
+                                </span>
+                              )}
+                              {facilitatorArcadeGamesCount < nextMilestone.targetArcade && facilitatorSkillBadgesCount < nextMilestone.targetSkills && <span> & </span>}
+                              {facilitatorSkillBadgesCount < nextMilestone.targetSkills && (
+                                <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-2 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
+                                  Need {nextMilestone.targetSkills - facilitatorSkillBadgesCount} more Skill Badges
+                                </span>
+                              )}
+                           </div>
+                         </div>
+                         {/* Toggle Button Box inside right corner */}
+                         <div className={`shrink-0 flex items-center justify-end sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+                           <button
+                             onClick={toggleDarkMode}
+                             className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
+                             title="Toggle Dark Mode"
+                           >
+                             <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
+                               {isDark ? (
+                                 <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                               ) : (
+                                 <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
+                               )}
+                             </span>
+                           </button>
+                         </div>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="relative w-full">
@@ -587,22 +648,8 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <div className="w-full mt-auto pt-6 flex flex-col items-center">
+                <div className="w-full mt-auto pt-8 flex flex-col items-center">
                   
-                  <div className="text-center mb-11 w-full">
-                    <p className={`font-bold text-[16px] md:text-[18px] leading-snug ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>
-                      Complete the Ultimate + 10 Bonus Milestone to earn 90 points.{' '}
-                      <a 
-                        href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-[#1a73e8] hover:underline ml-1"
-                      >
-                        See Eligibility Criteria
-                      </a>
-                    </p>
-                  </div>
-
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                     <button onClick={() => router.push('/calculator')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
                       Points Calculator
@@ -873,7 +920,7 @@ export default function DashboardPage() {
                              )}
                            </button>
                         </div>
-                        
+                          
                         <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
                           Arcade points: {lab.points}
                         </p>
@@ -1039,6 +1086,24 @@ export default function DashboardPage() {
         @keyframes float-3 {
           0%, 100% { transform: translate(0, 0); }
           50% { transform: translate(2px, -1px); }
+        }
+
+        @keyframes wiggle-sunglasses {
+          0%, 100% { transform: rotate(-5deg) translateY(0); }
+          50% { transform: rotate(5deg) translateY(-3px); }
+        }
+        .animate-cool-emoji {
+          display: inline-block;
+          animation: wiggle-sunglasses 2s ease-in-out infinite;
+        }
+
+        @keyframes sad-wiggle {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(2px); }
+        }
+        .animate-sad-emoji {
+          display: inline-block;
+          animation: sad-wiggle 3s ease-in-out infinite;
         }
 
         .animate-float-1 { animation: float-1 4s ease-in-out infinite; }
