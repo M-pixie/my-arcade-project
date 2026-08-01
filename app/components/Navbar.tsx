@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,6 +15,37 @@ export default function Navbar() {
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png"); 
   const [imageError, setImageError] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "metadata", "chatStats"), 
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const total = data.totalMessages || 0;
+          
+          if (pathname === "/chat") {
+            localStorage.setItem("arcade_last_seen_messages", total.toString());
+            setUnreadCount(0);
+          } else {
+            if (!localStorage.getItem("arcade_last_seen_messages")) {
+              localStorage.setItem("arcade_last_seen_messages", total.toString());
+              setUnreadCount(0);
+            } else {
+              const lastSeen = parseInt(localStorage.getItem("arcade_last_seen_messages") || "0");
+              const unread = total - lastSeen;
+              setUnreadCount(unread > 0 ? unread : 0);
+            }
+          }
+        }
+      },
+      (error) => {
+        console.warn("Notification badge disabled: Firebase permission denied. Please update Firestore Rules.");
+      }
+    );
+
+    return () => unsub();
+  }, [pathname]);
 
   // 🔥 MAGIC REFRESH FUNCTION 🔥
   const refreshUserData = () => {
@@ -92,13 +125,25 @@ export default function Navbar() {
                 <Link 
                   href={link.href} 
                   prefetch={true}
-                  className={`block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`relative block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     isActive 
                       ? "bg-[#1a73e8] text-white shadow-sm" 
                       : "text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] bg-transparent"
                   }`}
                 >
-                  {link.name}
+                  <span className="flex items-center gap-2.5">
+                    {link.name}
+                    {link.name === "Help" && (
+                      <div className="relative flex items-center justify-center">
+                        <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        {unreadCount > 0 && (
+                          <span className="absolute -top-1 -right-2 flex items-center justify-center w-[16px] h-[16px] bg-red-500 text-white text-[9px] font-bold rounded-full shadow-sm animate-pulse border-[1.5px] border-white">
+                            {unreadCount > 99 ? '99+' : unreadCount}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </span>
                 </Link>
               </div>
             );
@@ -146,7 +191,21 @@ export default function Navbar() {
                       : "text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] bg-transparent"
                   }`}
                 >
-                  {link.name}
+                  <span className="flex items-center justify-between">
+                    <span className="flex items-center gap-3">
+                      {link.name}
+                      {link.name === "Help" && (
+                        <div className="relative flex items-center justify-center">
+                          <svg className="w-[22px] h-[22px] text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                          {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-[17px] h-[17px] bg-red-500 text-white text-[9px] font-bold rounded-full shadow-sm animate-pulse border-[1.5px] border-white">
+                              {unreadCount > 99 ? '99+' : unreadCount}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </span>
+                  </span>
                 </Link>
               );
             })}
