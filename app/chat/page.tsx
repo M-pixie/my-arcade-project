@@ -31,6 +31,13 @@ export default function FullPageChatBot() {
   const [realCommunityChats, setRealCommunityChats] = useState<any[]>([]); // Sidebar Chat List
   const [user, setUser] = useState<any>(null);
   const [replyingTo, setReplyingTo] = useState<{id: string, senderName: string, text: string} | null>(null);
+  
+  // 🔥 New states for Community Upload & Typing
+  const [communitySelectedMedia, setCommunitySelectedMedia] = useState<string | null>(null);
+  const [communityMediaType, setCommunityMediaType] = useState<"image" | "video" | null>(null);
+  const [communityTypingUsers, setCommunityTypingUsers] = useState<{[key: string]: boolean}>({});
+  const communityFileInputRef = useRef<HTMLInputElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // === AUTHENTICATION LOGIC ===
   useEffect(() => {
@@ -134,8 +141,23 @@ export default function FullPageChatBot() {
       }
     );
 
-    return () => unsubscribe();
-  }, [activeTab, activeCommunityChat]);
+    // Typing listener
+    const typingQ = query(collection(db, "chats", activeCommunityChat, "typing"), where("isTyping", "==", true));
+    const typingUnsub = onSnapshot(typingQ, (snapshot) => {
+      const typingUsers: {[key: string]: boolean} = {};
+      snapshot.forEach(docSnap => {
+        if (docSnap.id !== user?.uid) {
+          typingUsers[docSnap.data().username] = true;
+        }
+      });
+      setCommunityTypingUsers(typingUsers);
+    }, (err) => console.warn("Typing listener disabled due to rules."));
+
+    return () => {
+      unsubscribe();
+      typingUnsub();
+    };
+  }, [activeTab, activeCommunityChat, user]);
 
   // === TIMERS AND LOCAL STORAGE ===
   useEffect(() => {
@@ -208,6 +230,23 @@ export default function FullPageChatBot() {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => setSelectedImage(reader.result as string);
+    }
+  };
+
+  const handleCommunityMediaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 800 * 1024) {
+        alert("File is too large! Please select an image or video smaller than 800KB (Firestore limit).");
+        return;
+      }
+      const isVideo = file.type.startsWith("video/");
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setCommunitySelectedMedia(reader.result as string);
+        setCommunityMediaType(isVideo ? "video" : "image");
+      };
     }
   };
 
@@ -369,33 +408,77 @@ export default function FullPageChatBot() {
 
   // === COMMUNITY SEND MESSAGE LOGIC 🔥 ===
   const sendCommunityMessage = async () => {
-    if (!communityInput.trim() || !user || !activeCommunityChat) return;
+    if ((!communityInput.trim() && !communitySelectedMedia) || !user || !activeCommunityChat) return;
     const textToSend = communityInput;
     setCommunityInput(""); 
     const currentReply = replyingTo;
     setReplyingTo(null);
+    const mediaToSend = communitySelectedMedia;
+    const mediaTypeToSend = communityMediaType;
+    setCommunitySelectedMedia(null);
+    setCommunityMediaType(null);
 
     try {
       const username = getCurrentUser();
-      await addDoc(collection(db, "chats", activeCommunityChat, "messages"), {
+      
+      const payload: any = {
         text: textToSend,
         senderName: username,
         avatar: user.photoURL || username.charAt(0).toUpperCase(),
         timestamp: serverTimestamp(),
         isDeleted: false,
-        replyTo: currentReply
-      });
+      };
+      
+      if (currentReply) payload.replyTo = currentReply;
+      if (mediaToSend) {
+        payload.media = mediaToSend;
+        payload.mediaType = mediaTypeToSend;
+      }
+
+      await addDoc(collection(db, "chats", activeCommunityChat, "messages"), payload);
 
       const statsRef = doc(db, "metadata", "chatStats");
       try {
         await updateDoc(statsRef, { totalMessages: increment(1) });
       } catch (err) {
-        await setDoc(statsRef, { totalMessages: 1 });
+        setDoc(statsRef, { totalMessages: 1 }).catch(() => {}); // ignore if rules deny
+      }
+      
+      // Stop typing on send
+      if (user && activeCommunityChat) {
+        setDoc(doc(db, "chats", activeCommunityChat, "typing", user.uid), {
+          isTyping: false,
+          username: username,
+          timestamp: serverTimestamp()
+        }).catch(() => {});
       }
     } catch (error) {
       console.error("Failed to send message", error);
       alert("Error sending message to community.");
     }
+  };
+
+  const handleCommunityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommunityInput(e.target.value);
+    
+    if (!activeCommunityChat || !user) return;
+    
+    // Set typing to true
+    setDoc(doc(db, "chats", activeCommunityChat, "typing", user.uid), {
+      isTyping: true,
+      username: getCurrentUser(),
+      timestamp: serverTimestamp()
+    }).catch(() => {}); // ignore permission errors silently
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    
+    typingTimeoutRef.current = setTimeout(() => {
+      setDoc(doc(db, "chats", activeCommunityChat, "typing", user.uid), {
+        isTyping: false,
+        username: getCurrentUser(),
+        timestamp: serverTimestamp()
+      }).catch(() => {});
+    }, 2000);
   };
 
   const deleteCommunityMessage = async (msgId: string) => {
@@ -885,6 +968,15 @@ export default function FullPageChatBot() {
                                 )}
                                 
                                 <div className={`px-4 py-2 text-[14px] leading-relaxed shadow-sm backdrop-blur-md ${isMe ? 'rounded-2xl rounded-tr-sm' : 'rounded-2xl rounded-tl-sm'} ${isDarkMode ? (isMe ? 'bg-gradient-to-br from-[#2a2d30] to-[#1e1f20] border border-[#3a3c3e] text-white' : 'bg-gradient-to-br from-[#1e1f20] to-[#151617] border border-[#2a2c2e] text-gray-100') : (isMe ? 'bg-gradient-to-br from-[#e8f0fe] to-[#d2e3fc] border border-[#c3d9fb] text-black' : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200 text-black')} ${msg.isDeleted ? 'italic opacity-60' : ''}`}>
+                                  {msg.media && (
+                                    <div className="mb-2 max-w-[200px] sm:max-w-[250px]">
+                                      {msg.mediaType === "video" ? (
+                                        <video src={msg.media} controls className="w-full rounded-lg" />
+                                      ) : (
+                                        <img src={msg.media} alt="Uploaded media" className="w-full rounded-lg" />
+                                      )}
+                                    </div>
+                                  )}
                                   {msg.text}
                                 </div>
                               </div>
@@ -926,8 +1018,32 @@ export default function FullPageChatBot() {
 
               {/* Community Input Area */}
               <div className="p-3 sm:p-4 pb-6 relative">
+                
+                {/* Typing Indicator */}
+                {Object.keys(communityTypingUsers).length > 0 && (
+                  <div className={`absolute bottom-full left-4 mb-1 text-[12px] italic ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} animate-pulse z-10`}>
+                    {Object.keys(communityTypingUsers).join(', ')} {Object.keys(communityTypingUsers).length === 1 ? 'is' : 'are'} typing...
+                  </div>
+                )}
+                
+                {/* Media Preview */}
+                {communitySelectedMedia && (
+                  <div className={`absolute bottom-full left-4 mb-2 p-2 rounded-lg border shadow-lg ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'} z-20`}>
+                    <div className="relative">
+                      {communityMediaType === "video" ? (
+                        <video src={communitySelectedMedia} className="h-20 w-auto rounded" />
+                      ) : (
+                        <img src={communitySelectedMedia} className="h-20 w-auto rounded" alt="Preview" />
+                      )}
+                      <button onClick={() => { setCommunitySelectedMedia(null); setCommunityMediaType(null); }} className="absolute -top-2 -right-2 bg-red-500 text-white p-0.5 rounded-full shadow hover:scale-110">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {replyingTo && (
-                  <div className={`absolute bottom-full left-4 right-4 mb-2 p-2.5 rounded-lg border shadow-lg flex justify-between items-center ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'}`}>
+                  <div className={`absolute bottom-full left-4 right-4 mb-2 p-2.5 rounded-lg border shadow-lg flex justify-between items-center ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'} z-20`}>
                     <div className="flex flex-col overflow-hidden">
                       <span className={`text-[11px] font-bold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Replying to {replyingTo.senderName}</span>
                       <span className={`text-[13px] truncate ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{replyingTo.text}</span>
@@ -940,14 +1056,28 @@ export default function FullPageChatBot() {
                 
                 <div className="max-w-3xl mx-auto flex gap-2 items-center">
                   <div className={`flex-1 flex items-center gap-2 py-2 px-3 rounded-full border shadow-sm ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-gray-100 border-transparent'}`}>
-                    <button className={`p-1.5 rounded-full transition ${isDarkMode ? 'text-white hover:bg-[#333538]' : 'text-black hover:bg-gray-200'}`} title="Attach File">
+                    
+                    {/* Hidden file input */}
+                    <input 
+                      type="file"
+                      ref={communityFileInputRef}
+                      onChange={handleCommunityMediaChange}
+                      accept="image/*,video/*"
+                      className="hidden"
+                    />
+
+                    <button onClick={() => communityFileInputRef.current?.click()} className={`p-1.5 rounded-full transition ${isDarkMode ? 'text-white hover:bg-[#333538]' : 'text-black hover:bg-gray-200'}`} title="Attach File">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
                     </button>
                     <input 
                       type="text" 
                       value={communityInput}
-                      onChange={(e) => setCommunityInput(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && communityInput.trim() && sendCommunityMessage()}
+                      onChange={handleCommunityInput}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && (communityInput.trim() || communitySelectedMedia)) {
+                           sendCommunityMessage();
+                        }
+                      }}
                       placeholder="Message the community..." 
                       className={`flex-1 bg-transparent border-none text-[15px] font-medium focus:outline-none focus:ring-0 px-2 ${isDarkMode ? 'text-white placeholder-gray-500' : 'text-black placeholder-gray-500'}`}
                       disabled={!activeCommunityChat}
@@ -958,7 +1088,7 @@ export default function FullPageChatBot() {
                   </div>
                   <button 
                     onClick={sendCommunityMessage}
-                    disabled={!communityInput.trim() || !activeCommunityChat}
+                    disabled={(!communityInput.trim() && !communitySelectedMedia) || !activeCommunityChat}
                     className={`p-2.5 rounded-full transition flex items-center justify-center disabled:opacity-50 ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}
                   >
                     <svg className="w-5 h-5 translate-x-[1px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" /></svg>
