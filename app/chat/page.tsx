@@ -18,22 +18,24 @@ export default function FullPageChatBot() {
   const [loading, setLoading] = useState(false);
   const [loadingType, setLoadingType] = useState<"text" | "image" | null>(null); 
   const [isTyping, setIsTyping] = useState(false); 
-  const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   
+  const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(true);
   
   const [recentChats, setRecentChats] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
   const imageInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const speakerRef = useRef(isSpeakerOn);
-  
   const stopTypingRef = useRef(false);
 
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-
   const [now, setNow] = useState(Date.now());
+
+  // Active Tab Toggle State ("ai" | "community")
+  const [activeTab, setActiveTab] = useState<"ai" | "community">("ai");
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30000);
@@ -69,8 +71,10 @@ export default function FullPageChatBot() {
   }, [isSpeakerOn]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading, isTyping]);
+    if (activeTab === "ai") {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    }
+  }, [messages, loading, isTyping, activeTab]);
 
   const handleChatScroll = () => {
     if (!scrollRef.current) return;
@@ -89,6 +93,7 @@ export default function FullPageChatBot() {
 
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
+      if (activeTab !== "ai") return;
       const items = e.clipboardData?.items;
       if (!items) return;
       for (let i = 0; i < items.length; i++) {
@@ -104,7 +109,7 @@ export default function FullPageChatBot() {
     };
     document.addEventListener("paste", handlePaste);
     return () => document.removeEventListener("paste", handlePaste);
-  }, []);
+  }, [activeTab]);
 
   const speakText = (text: string) => {
     if (!window.speechSynthesis) return;
@@ -162,8 +167,14 @@ export default function FullPageChatBot() {
     return `${days} days ago`;
   };
 
-  const startNewChat = () => {
+  const startNewChat = () => setMessages([]);
+  const clearRecents = () => {
+    setRecentChats([]);
+    localStorage.removeItem("arcade_recent_searches");
+  };
+  const clearChatHistory = () => {
     setMessages([]);
+    localStorage.setItem("arcade_chat_history", JSON.stringify([]));
   };
 
   const sendMessage = async () => {
@@ -250,68 +261,108 @@ export default function FullPageChatBot() {
     }
   };
 
-  const clearRecents = () => {
-    setRecentChats([]);
-    localStorage.removeItem("arcade_recent_searches");
-  };
-
-  const clearChatHistory = () => {
-    setMessages([]);
-    localStorage.setItem("arcade_chat_history", JSON.stringify([]));
-  }
-
   const theme = {
-    bgMain: isDarkMode ? "bg-[#131314]" : "bg-[#F0F2F5]",
+    bgMain: isDarkMode ? "bg-[#131314]" : "bg-white",
     bgSidebar: isDarkMode ? "bg-[#1e1f20]" : "bg-[#f8f9fa]",
-    bgChatArea: isDarkMode ? "bg-[#131314]" : "bg-[#ffffff]",
-    textMain: isDarkMode ? "text-gray-100" : "text-[#202124]",
-    textMuted: isDarkMode ? "text-gray-400" : "text-gray-500",
-    
-    botBubble: isDarkMode ? "bg-[#1e1f20] border border-[#333538] text-gray-100 shadow-sm" : "bg-white border border-gray-200 text-gray-800 shadow-sm",
-    userBubble: isDarkMode ? "bg-[#282a2c] text-gray-100" : "bg-[#f0f4f9] text-gray-900", 
-    
-    inputBox: isDarkMode ? "bg-[#1e1f20] border-transparent text-white" : "bg-[#f0f4f9] border-transparent text-gray-900",
+    bgChatArea: isDarkMode ? "bg-[#131314]" : "bg-white",
+    botBubble: isDarkMode ? "bg-transparent text-gray-200" : "bg-transparent text-gray-800",
+    userBubble: isDarkMode ? "bg-[#1e1f20] text-gray-100" : "bg-[#f0f4f9] text-black", 
+    inputBox: isDarkMode ? "bg-[#1e1f20] border border-[#333538] text-white" : "bg-gray-100 border border-transparent text-black",
   };
 
   if (!isClient) return null; 
 
   return (
     <>
-      <div className={`flex w-full h-[100dvh] font-sans pt-[60px] ${theme.bgMain}`}>
+      <div className={`flex w-full h-[100dvh] font-sans pt-[65px] ${theme.bgMain}`}>
         
         {/* 👈 LEFT SIDEBAR */}
-        <div className={`w-64 flex flex-col hidden md:flex h-full ${theme.bgSidebar} border-r ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
-          <div className="p-3 flex flex-col gap-0.5 pt-4">
-            <h2 className={`text-[15px] font-bold mb-2 tracking-wide px-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>Arcade Nexus</h2>
+        <div className={`w-72 flex flex-col hidden md:flex h-full ${theme.bgSidebar} border-r ${isDarkMode ? 'border-[#333538]' : 'border-gray-200'}`}>
+          
+          <div className="px-4 pt-3 pb-4 flex flex-col gap-3">
+            <div className="flex justify-between items-center px-1 mb-2">
+              <h2 className={`text-[16px] font-bold tracking-wide ${isDarkMode ? 'text-white' : 'text-black'}`}>Arcade Nexus</h2>
+              
+              <div className="flex gap-1.5">
+                <button 
+                  onClick={toggleSpeaker} 
+                  className={`p-1.5 rounded-md transition flex items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#333538]' : 'text-gray-600 hover:text-black hover:bg-gray-200'}`} 
+                  title={isSpeakerOn ? "Turn off voice" : "Turn on voice"}
+                >
+                  {isSpeakerOn ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                  )}
+                </button>
+
+                <button 
+                  onClick={() => setIsDarkMode(!isDarkMode)} 
+                  className={`p-1.5 rounded-md transition flex items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#333538]' : 'text-gray-600 hover:text-black hover:bg-gray-200'}`} 
+                  title="Toggle Theme"
+                >
+                  {isDarkMode ? (
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                  )}
+                </button>
+
+                <button 
+                  onClick={startNewChat} 
+                  className={`p-1.5 rounded-md transition flex items-center justify-center ${isDarkMode ? 'bg-[#333538] text-white hover:bg-[#404347]' : 'bg-black text-white hover:bg-gray-800'}`} 
+                  title="New Chat"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                </button>
+              </div>
+            </div>
+
+            <div className={`flex p-1 rounded-lg ${isDarkMode ? 'bg-[#131314] border border-[#333538]' : 'bg-gray-200 border border-transparent'}`}>
+              <button 
+                onClick={() => setActiveTab("ai")}
+                className={`flex-1 py-1.5 rounded-md text-[13px] font-semibold transition-all ${activeTab === "ai" ? (isDarkMode ? 'bg-[#333538] text-white shadow-sm' : 'bg-white text-black shadow-sm') : (isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black')}`}
+              >
+                AI Chat
+              </button>
+              <button 
+                onClick={() => setActiveTab("community")}
+                className={`flex-1 py-1.5 rounded-md text-[13px] font-semibold transition-all ${activeTab === "community" ? (isDarkMode ? 'bg-[#333538] text-white shadow-sm' : 'bg-white text-black shadow-sm') : (isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black')}`}
+              >
+                Community
+              </button>
+            </div>
             
-            <a href="/" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Home</a>
-            <a href="/calculator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Calculator</a>
-            <a href="/dashboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Dashboard</a>
-            <a href="/leaderboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Leaderboard</a>
-            
-            <a href="/resources" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 mt-1 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Skill Badges</a>
-            <a href="/facilitator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full flex items-center gap-3 rounded-md ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}>Facilitator</a>
+            <div className="flex flex-col gap-0.5 mt-2">
+              <a href="/" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full rounded-md ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}>Home</a>
+              <a href="/calculator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full rounded-md ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}>Calculator</a>
+              <a href="/dashboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full rounded-md ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}>Dashboard</a>
+              <a href="/leaderboard" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full rounded-md ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}>Leaderboard</a>
+              <a href="/resources" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full rounded-md ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}>Skill Badges</a>
+              <a href="/facilitator" className={`text-[14px] font-medium px-2 py-1.5 transition-colors w-full rounded-md ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}>Facilitator</a>
+            </div>
           </div>
 
-          <div className={`p-4 overflow-y-auto hide-scrollbar border-t mt-2 ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <div className={`p-4 overflow-y-auto hide-scrollbar border-t flex-1 ${isDarkMode ? 'border-[#333538]' : 'border-gray-200'}`}>
             <div className="flex justify-between items-center mb-3 px-1">
-              <h3 className={`text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>Recent Searches</h3>
-              <button onClick={clearRecents} className="text-xs text-red-400 hover:text-red-500 font-medium transition">Clear</button>
+              <h3 className={`text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Recent</h3>
+              <div className="flex gap-3">
+                {messages.length > 0 && activeTab === "ai" && (
+                  <button onClick={clearChatHistory} className="text-xs text-red-400 hover:text-red-500 font-medium transition">Clear Chat</button>
+                )}
+                <button onClick={clearRecents} className="text-xs text-red-400 hover:text-red-500 font-medium transition">Clear History</button>
+              </div>
             </div>
             <div className="flex flex-col gap-1">
-              {recentChats.length === 0 ? (
-                <p className={`text-[13px] italic px-1 ${isDarkMode ? 'text-gray-600' : 'text-gray-500'}`}>No recent searches</p>
-              ) : (
-                recentChats.map((chat, idx) => (
-                  <div 
-                    key={idx} 
-                    onClick={() => setInput(chat)}
-                    className={`text-[13px] px-2 py-2 rounded-md truncate cursor-pointer transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
-                  >
-                    {chat}
-                  </div>
-                ))
-              )}
+              {recentChats.map((chat, idx) => (
+                <div 
+                  key={idx} 
+                  onClick={() => { if (activeTab === "ai") setInput(chat); }}
+                  className={`text-[13px] px-2 py-2 rounded-md truncate cursor-pointer transition-colors ${isDarkMode ? 'text-white hover:bg-[#282a2c]' : 'text-black hover:bg-gray-200'}`}
+                >
+                  {chat}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -319,265 +370,243 @@ export default function FullPageChatBot() {
         {/* 👉 RIGHT CHAT AREA */}
         <div className={`flex-1 flex flex-col h-full relative ${theme.bgChatArea}`}>
           
-          <div className="p-3 sm:px-6 flex justify-between items-center z-10 transition-colors duration-300 bg-transparent">
-            <div className="flex-1 flex items-center gap-2 sm:gap-3">
-              <button onClick={() => window.history.back()} className={`md:hidden p-1.5 rounded-full ${theme.textMuted} hover:text-gray-300 transition-colors`}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-
-              <div className={`w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-full flex items-center justify-center shadow-sm ${isDarkMode ? 'bg-[#282a2c] text-white' : 'bg-[#1a73e8] text-white'}`}>
-                <span className="text-lg sm:text-xl translate-x-[1px]">Ai</span>
-              </div>
-            </div>
-
-            <div className="flex-2 flex flex-col items-center justify-center text-center">
-              <span className={`text-[12px] sm:text-[15px] font-medium tracking-wide whitespace-nowrap sm:whitespace-normal ${theme.textMain}`}>
-                Ask Arcade Nexus
-              </span>
-            </div>
-            
-            <div className="flex-1 flex justify-end items-center gap-1 sm:gap-2">
-              
-              {messages.length > 0 && (
-                <button 
-                  onClick={clearChatHistory} 
-                  className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c] hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
-                  title="Clear Chat"
-                >
-                  <svg className="w-4 h-4 sm:w-[18px] sm:h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-              )}
-
-              <button 
-                onClick={startNewChat} 
-                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c] hover:text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
-                title="New Chat"
-              >
-                <svg className="w-4 h-4 sm:w-[18px] sm:h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-              </button>
-
-              <button 
-                onClick={() => setIsDarkMode(!isDarkMode)} 
-                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
-                title="Toggle Theme"
-              >
-                {isDarkMode ? (
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
-                ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                )}
-              </button>
-
-              <button 
-                onClick={toggleSpeaker} 
-                className={`p-2 sm:p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-[#1e1f20] text-gray-300 hover:bg-[#282a2c]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} 
-                title={isSpeakerOn ? "Turn off voice" : "Turn on voice"}
-              >
-                {isSpeakerOn ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-                )}
-              </button>
-            </div>
+          <div className="md:hidden absolute top-4 left-4 z-50">
+            <button onClick={() => window.history.back()} className={`p-2 rounded-lg bg-black/10 backdrop-blur-md ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
+            </button>
           </div>
 
-          {/* 💬 Messages Area */}
-          <div ref={scrollRef} onScroll={handleChatScroll} className="flex-1 p-4 md:px-8 md:py-6 overflow-y-auto space-y-6 scroll-smooth hide-scrollbar">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`flex flex-col w-full ${msg.role === "user" ? "items-end" : "items-start"}`}>
+          {activeTab === "ai" ? (
+            <>
+              {/* 💬 AI Messages Area - Center Aligned (Gemini Style) */}
+              <div ref={scrollRef} onScroll={handleChatScroll} className="flex-1 p-4 pt-12 md:px-8 md:pt-8 overflow-y-auto scroll-smooth hide-scrollbar flex flex-col items-center">
                 
-                {msg.image && (
-                  <img 
-                    src={msg.image} 
-                    alt="Uploaded" 
-                    className="max-w-[75%] sm:max-w-[50%] max-h-56 object-contain mb-2 rounded-xl shadow-sm border border-gray-200/20" 
-                  />
-                )}
-                
-                {msg.text && msg.text.trim() !== "" && (
-                  <div className={`relative max-w-[95%] sm:max-w-[85%] px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed ${
-                    msg.role === "user" 
-                      ? `${theme.userBubble} rounded-[20px] rounded-br-[4px]` 
-                      : `${theme.botBubble} rounded-[18px] rounded-tl-[4px]` 
-                  }`}>
-                    <ReactMarkdown 
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        a: ({node, ...props}) => (
-                          <a 
-                            {...props} 
-                            className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-[#1a73e8] hover:text-[#1557b0]'} underline underline-offset-2 transition-colors break-words font-medium`} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                          />
-                        ),
-                        ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mt-2 mb-2 space-y-1.5" />,
-                        ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mt-2 mb-2 space-y-1.5" />,
-                        p: ({node, ...props}) => <p {...props} className="mb-2 last:mb-0 whitespace-pre-wrap" />,
-                        strong: ({node, ...props}) => <strong {...props} className="font-bold" />,
-                        pre: ({ children }) => (
-                          <pre className={`${isDarkMode ? 'bg-[#131314] border-[#333538]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-3 shadow-inner`}>
-                            {children}
-                          </pre>
-                        ),
-                        code: ({ node, className, children, ...props }: any) => {
-                          const isInline = !className && !String(children).includes('\n');
-                          if (isInline) {
-                            return (
-                              <code {...props} className={`${isDarkMode ? 'bg-[#131314] text-gray-300 border-gray-700' : 'bg-gray-100 text-[#1a73e8] border-gray-200'} px-1.5 py-0.5 rounded-md text-[13px] font-mono border`}>
-                                {children}
-                              </code>
-                            );
-                          }
-                          return <code className={className} {...props}>{children}</code>;
-                        }
-                      }}
-                    >
-                      {msg.text}
-                    </ReactMarkdown>
+                <div className="w-full max-w-3xl flex flex-col gap-8">
+                  {messages.length === 0 && (
+                     <div className="flex flex-col items-center justify-center h-[50vh] opacity-50">
+                        <span className={`text-3xl font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>How can I help you today?</span>
+                     </div>
+                  )}
 
-                    {/* 🔥 Time & Copy Footer (Only for Bot) 🔥 */}
-                  {msg.role === "bot" && msg.text !== "Aw, Snap!" && (
-                    <div className="flex items-center mt-1.5 justify-between gap-4">
+                  {messages.map((msg, idx) => (
+                    <div key={idx} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                      
+                      {/* 👤 USER MESSAGE (Curved Bubble Design) */}
+                      {msg.role === "user" ? (
+                        <div className="flex flex-col items-end max-w-[85%] sm:max-w-[70%]">
+                          {msg.image && (
+                            <img src={msg.image} alt="Uploaded" className="max-w-full max-h-56 object-contain mb-3 rounded-2xl border border-gray-200/20 shadow-sm" />
+                          )}
+                          <div className={`px-5 py-3 text-[15px] leading-relaxed rounded-3xl ${theme.userBubble}`}>
+                            {msg.text}
+                          </div>
+                        </div>
+                      ) : (
                         
-                        {/* Timestamp */}
-                        <span className={`text-[10.5px] font-medium tracking-wide ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                          {formatTimeAgo(msg.timestamp)}
-                        </span>
+                        /* 🤖 AI MESSAGE (No Box, Pure Text Flow) */
+                        <div className="flex flex-col items-start w-full">
+                          <div className={`w-full text-[15px] leading-relaxed ${theme.botBubble}`}>
+                            <ReactMarkdown 
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                a: ({node, ...props}) => (
+                                  <a 
+                                    {...props} 
+                                    className={`${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-[#1a73e8] hover:text-[#1557b0]'} underline underline-offset-2 transition-colors break-words font-medium`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                  />
+                                ),
+                                ul: ({node, ...props}) => <ul {...props} className="list-disc pl-5 mt-2 mb-2 space-y-1.5" />,
+                                ol: ({node, ...props}) => <ol {...props} className="list-decimal pl-5 mt-2 mb-2 space-y-1.5" />,
+                                p: ({node, ...props}) => <p {...props} className="mb-4 last:mb-0 whitespace-pre-wrap" />,
+                                strong: ({node, ...props}) => <strong {...props} className="font-bold" />,
+                                pre: ({ children }) => (
+                                  <pre className={`${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-[#f1f3f4] border-gray-200'} p-4 rounded-xl overflow-x-auto text-[13px] font-mono border my-4 shadow-sm`}>
+                                    {children}
+                                  </pre>
+                                ),
+                                code: ({ node, className, children, ...props }: any) => {
+                                  const isInline = !className && !String(children).includes('\n');
+                                  if (isInline) {
+                                    return (
+                                      <code {...props} className={`${isDarkMode ? 'bg-[#1e1f20] text-gray-300 border-gray-700' : 'bg-gray-100 text-[#1a73e8] border-gray-200'} px-1.5 py-0.5 rounded-md text-[13px] font-mono border`}>
+                                        {children}
+                                      </code>
+                                    );
+                                  }
+                                  return <code className={className} {...props}>{children}</code>;
+                                }
+                              }}
+                            >
+                              {msg.text}
+                            </ReactMarkdown>
+                          </div>
 
-                        {/* Copy Button */}
-                        {(!isTyping || idx !== messages.length - 1) && (
-                          <button
-                            onClick={() => handleCopyText(msg.text, idx)}
-                            className={`text-[11.5px] font-medium flex items-center gap-1.5 px-2 py-1 rounded-md transition-all ${
-                              copiedIndex === idx ? 'text-green-500 bg-green-500/10' : `${isDarkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-[#282a2c]' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'}`
-                            }`}
-                            title="Copy Text"
-                          >
-                            {copiedIndex === idx ? (
-                              <>
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                                Copied!
-                              </>
-                            ) : (
-                              <>
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                Copy
-                              </>
-                            )}
-                          </button>
+                          {/* Footer Actions (Timestamp & Copy Button) */}
+                          {msg.text !== "Aw, Snap!" && (
+                            <div className="flex items-center mt-2 justify-between gap-4 w-full">
+                              <span className={`text-[11px] font-medium tracking-wide ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                                {formatTimeAgo(msg.timestamp)}
+                              </span>
+
+                              {(!isTyping || idx !== messages.length - 1) && (
+                                <button
+                                  onClick={() => handleCopyText(msg.text, idx)}
+                                  className={`text-[12px] font-medium flex items-center gap-1.5 p-1.5 rounded-full transition-all ${
+                                    copiedIndex === idx ? 'text-green-500' : `${isDarkMode ? 'text-gray-500 hover:text-gray-300 hover:bg-[#1e1f20]' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'}`
+                                  }`}
+                                  title="Copy Text"
+                                >
+                                  {copiedIndex === idx ? (
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                  ) : (
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  
+                  {loading && (
+                    <div className="flex flex-col items-start w-full animate-fade-in">
+                      <div className="py-2 flex items-center">
+                        {loadingType === "image" ? (
+                          <div className="flex items-center gap-3">
+                            <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${isDarkMode ? 'border-gray-400' : 'border-[#1a73e8]'}`}></div>
+                            <span className={`text-[14px] font-medium ${isDarkMode ? 'text-gray-400' : 'text-[#1a73e8]'}`}>Analyzing image...</span>
+                          </div>
+                        ) : (
+                          <div className="flex gap-1.5 items-center px-2">
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`} style={{ animationDelay: '0ms' }}></div>
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`} style={{ animationDelay: '150ms' }}></div>
+                            <div className={`w-2 h-2 rounded-full animate-bounce ${isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`} style={{ animationDelay: '300ms' }}></div>
+                          </div>
                         )}
                       </div>
-                    )}
-
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {/* 🔥 LOADING LAYOUT */}
-            {loading && (
-              <div className="flex flex-col items-start w-full animate-fade-in">
-                <div className={`px-4 py-3 pb-3 ${theme.botBubble} rounded-[18px] rounded-tl-[4px] flex items-center`}>
-                  {loadingType === "image" ? (
-                    <div className="flex items-center gap-2.5">
-                      <div className={`w-[15px] h-[15px] border-[2px] border-t-transparent rounded-full animate-spin ${isDarkMode ? 'border-gray-400' : 'border-[#1a73e8]'}`}></div>
-                      <span className={`text-[14px] font-semibold ${isDarkMode ? 'text-gray-300' : 'text-[#1a73e8]'}`}>Analyzing image...</span>
-                    </div>
-                  ) : (
-                    <div className="flex gap-1.5 items-center">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                     </div>
                   )}
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* ⌨️ Input Area */}
-          <div className="p-3 sm:p-4 transition-colors duration-300 relative z-20 bg-transparent">
-            
-            {selectedImage && (
-              <div className="absolute bottom-[65px] left-4 sm:left-8 z-30">
-                <div className={`relative inline-block p-1.5 rounded-xl shadow-2xl border ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'}`}>
-                  <img src={selectedImage} alt="Preview" className="h-20 sm:h-28 object-cover rounded-lg shadow-sm" />
+              {/* ⌨️ AI Input Bar */}
+              <div className="p-3 sm:p-4 pb-6 transition-colors duration-300 relative z-20">
+                {selectedImage && (
+                  <div className="absolute bottom-[75px] left-1/2 -translate-x-1/2 z-30 max-w-3xl w-full px-4">
+                    <div className={`relative inline-block p-1.5 rounded-xl shadow-2xl border ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-white border-gray-200'}`}>
+                      <img src={selectedImage} alt="Preview" className="h-24 sm:h-32 object-cover rounded-lg shadow-sm" />
+                      <button 
+                        onClick={() => setSelectedImage(null)}
+                        className="absolute -top-3 -right-3 bg-gray-700 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg hover:bg-gray-600 hover:scale-110 transition-transform border-2 border-transparent"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="max-w-3xl mx-auto flex gap-2 items-center">
+                  <div className={`flex-1 flex gap-2 items-center py-2 px-2 sm:px-3 rounded-full transition-all ${theme.inputBox} ${isDarkMode ? 'focus-within:bg-[#282a2c]' : 'focus-within:bg-white focus-within:shadow-md'} shadow-sm`}>
+                    <button 
+                      onClick={() => imageInputRef.current?.click()} 
+                      className={`p-2 rounded-full transition ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#333538]' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
+                      title="Upload Screenshot"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </button>
+                    <input type="file" accept="image/*" ref={imageInputRef} onChange={handleImageChange} className="hidden" />
+
+                    <input
+                      type="text"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && !loading && !isTyping && (input.trim() || selectedImage) && sendMessage()}
+                      disabled={loading || isTyping} 
+                      placeholder="Ask me anything..."
+                      className="flex-1 bg-transparent border-none text-[15px] font-medium focus:outline-none focus:ring-0 px-1 placeholder-gray-500"
+                    />
+                    
+                    {(loading || isTyping) ? (
+                      <button 
+                        onClick={stopResponse} 
+                        className={`p-2 rounded-full transition shadow-sm flex items-center justify-center ${isDarkMode ? 'bg-[#333538] text-red-400 hover:bg-[#404347]' : 'bg-gray-200 text-red-500 hover:bg-gray-300'}`}
+                        title="Stop Response"
+                      >
+                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z" /></svg>
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={sendMessage} 
+                        disabled={(!input.trim() && !selectedImage)}
+                        className={`p-2 rounded-full disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm flex items-center justify-center group ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}
+                      >
+                         <svg className="w-5 h-5 translate-x-[1px] group-hover:translate-x-[3px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" /></svg>
+                      </button>
+                    )}
+                  </div>
+
                   <button 
-                    onClick={() => setSelectedImage(null)}
-                    className="absolute -top-3 -right-3 bg-gray-700 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg hover:bg-gray-600 hover:scale-110 transition-transform border-2 border-transparent"
+                    onClick={scrollToPosition}
+                    className={`p-2 rounded-full transition-colors flex shrink-0 items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
+                    title={isAtBottom ? "Scroll to Top" : "Scroll to Bottom"}
                   >
-                    ✕
+                    {isAtBottom ? (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
+                    )}
                   </button>
                 </div>
               </div>
-            )}
-
-            <div className="max-w-5xl mx-auto flex gap-2 sm:gap-4 items-center px-1">
-              
-              <div className={`flex-1 flex gap-2 items-center py-1 px-1.5 sm:py-1.5 sm:px-2 rounded-xl transition-all ${theme.inputBox} ${isDarkMode ? 'focus-within:bg-[#282a2c]' : 'focus-within:bg-white'} shadow-sm`}>
+            </>
+          ) : (
+            
+            /* 💬 Community Realtime Chat UI */
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
+              <div className="flex-1 p-4 pt-12 md:px-8 md:pt-8 overflow-y-auto space-y-6 hide-scrollbar flex flex-col items-center">
                 
-                <button 
-                  onClick={() => imageInputRef.current?.click()}
-                  className={`p-1.5 sm:p-2 rounded-lg transition ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#333538]' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
-                  title="Upload Screenshot"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-[22px] sm:h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-                </button>
-                
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  ref={imageInputRef} 
-                  onChange={handleImageChange} 
-                  className="hidden" 
-                />
-
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && !loading && !isTyping && (input.trim() || selectedImage) && sendMessage()}
-                  disabled={loading || isTyping} 
-                  placeholder="Ask me anything or paste a screenshot..."
-                  className="flex-1 bg-transparent border-none text-[14px] sm:text-[15px] font-medium focus:outline-none focus:ring-0 px-1 sm:px-2 placeholder-gray-500"
-                />
-                
-                {(loading || isTyping) ? (
-                  <button 
-                    onClick={stopResponse} 
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg transition shadow-md flex items-center justify-center ${isDarkMode ? 'bg-[#333538] text-red-400 hover:bg-[#404347]' : 'bg-gray-200 text-red-500 hover:bg-gray-300'}`}
-                    title="Stop Response"
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z" /></svg>
-                  </button>
-                ) : (
-                  <button 
-                    onClick={sendMessage} 
-                    disabled={(!input.trim() && !selectedImage)}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition shadow-md flex items-center justify-center group ${isDarkMode ? 'bg-[#282a2c] text-gray-200 hover:bg-[#333538]' : 'bg-[#1a73e8] text-white hover:bg-blue-600'}`}
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 translate-x-[1px] group-hover:translate-x-[3px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg>
-                  </button>
-                )}
+                <div className="w-full max-w-3xl flex flex-col items-start gap-1">
+                  {/* Avatar immediately adjacent/beside name */}
+                  <div className="flex items-center gap-2">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>AP</div>
+                    <span className={`text-[14px] font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>Anjali P.</span>
+                    <span className={`text-[11px] font-medium ml-2 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>11:32 AM</span>
+                  </div>
+                  <div className={`ml-10 px-4 py-3 rounded-3xl text-[15px] ${isDarkMode ? 'bg-[#1e1f20] text-white' : 'bg-gray-100 text-black'}`}>
+                    Realtime community chat interface is active!
+                  </div>
+                </div>
 
               </div>
 
-              <button 
-                onClick={scrollToPosition}
-                className={`p-2 sm:p-2.5 rounded-lg transition-colors flex shrink-0 items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white hover:bg-[#282a2c]' : 'text-gray-500 hover:text-[#1a73e8] hover:bg-gray-200'}`}
-                title={isAtBottom ? "Scroll to Top" : "Scroll to Bottom"}
-              >
-                {isAtBottom ? (
-                  <svg className="w-6 h-6 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg>
-                ) : (
-                  <svg className="w-6 h-6 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
-                )}
-              </button>
-
+              {/* Community Input Area */}
+              <div className="p-3 sm:p-4 pb-6">
+                <div className="max-w-3xl mx-auto flex gap-2 items-center">
+                  <div className={`flex-1 flex items-center gap-2 py-2 px-3 rounded-full border shadow-sm ${isDarkMode ? 'bg-[#1e1f20] border-[#333538]' : 'bg-gray-100 border-transparent'}`}>
+                    <button className={`p-1.5 rounded-full transition ${isDarkMode ? 'text-white hover:bg-[#333538]' : 'text-black hover:bg-gray-200'}`} title="Attach File">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                    </button>
+                    <input 
+                      type="text" 
+                      placeholder="Message the community..." 
+                      className={`flex-1 bg-transparent border-none text-[15px] font-medium focus:outline-none focus:ring-0 px-2 ${isDarkMode ? 'text-white placeholder-gray-500' : 'text-black placeholder-gray-500'}`}
+                    />
+                    <button className={`p-1.5 rounded-full transition ${isDarkMode ? 'text-white hover:bg-[#333538]' : 'text-black hover:bg-gray-200'}`} title="Voice Note">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                    </button>
+                  </div>
+                  <button className={`p-2.5 rounded-full transition flex items-center justify-center ${isDarkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
+                    <svg className="w-5 h-5 translate-x-[1px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+
+          )}
 
         </div>
       </div>
