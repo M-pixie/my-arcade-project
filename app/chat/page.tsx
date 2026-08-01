@@ -101,9 +101,17 @@ export default function FullPageChatBot() {
           id: doc.id,
           ...doc.data()
         }));
+        // Filter out DMs that don't belong to the current user
+        const visibleChats = chats.filter((c: any) => {
+          if (c.type !== "dm") return true; // group chats visible to all
+          if (c.members && c.members.includes(user.uid)) return true; // I am a member (creator)
+          if (c.name.toLowerCase() === user.displayName?.toLowerCase()) return true; // It's meant for me
+          return false;
+        });
+
         // Sort chats manually by createdAt timestamp (descending)
-        chats.sort((a: any, b: any) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
-        setRealCommunityChats(chats);
+        visibleChats.sort((a: any, b: any) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+        setRealCommunityChats(visibleChats);
       },
       (error) => {
         console.warn("Chats listener disabled: Firebase permission denied. Please update Firestore Rules.");
@@ -288,6 +296,24 @@ export default function FullPageChatBot() {
     localStorage.setItem("arcade_chat_history", JSON.stringify([]));
   };
 
+  const clearCommunityChatMessages = async () => {
+    if (!activeCommunityChat) return;
+    const confirmClear = window.confirm("Are you sure you want to completely clear this chat for everyone? This cannot be undone.");
+    if (!confirmClear) return;
+    
+    try {
+      const msgsQuery = query(collection(db, "chats", activeCommunityChat, "messages"));
+      const snapshot = await getDocs(msgsQuery);
+      
+      const deletePromises = snapshot.docs.map(docSnap => deleteDoc(docSnap.ref));
+      await Promise.all(deletePromises);
+      alert("Chat cleared successfully!");
+    } catch (err) {
+      console.error("Failed to clear community chat", err);
+      alert("Failed to clear chat! Check Firebase rules.");
+    }
+  };
+
   // === CREATE NEW GROUP LOGIC 🔥 ===
   const createNewGroup = async () => {
     if (!user) return;
@@ -316,9 +342,10 @@ export default function FullPageChatBot() {
 
     try {
       const newChatRef = await addDoc(collection(db, "chats"), {
-        name: personName.trim(), // The person you are chatting with
+        name: personName.trim(), 
+        creatorName: user.displayName,
         type: "dm",
-        members: [user.uid], // Simplification for test: only you as member first to see it
+        members: [user.uid, personName.trim().toLowerCase()], 
         createdAt: serverTimestamp()
       });
       setActiveCommunityChat(newChatRef.id);
@@ -639,21 +666,22 @@ export default function FullPageChatBot() {
                         <p className={`text-[12px] font-medium italic ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>No active chats yet. Start a new one!</p>
                       </div>
                     ) : (
-                      realCommunityChats.map((chat) => (
-                        <div 
+                      realCommunityChats.map(chat => (
+                        <button 
                           key={chat.id} 
-                          onClick={() => setActiveCommunityChat(chat.id)} 
-                          className={`flex items-center gap-3 px-2 py-2 rounded-md cursor-pointer transition-colors ${
-                            activeCommunityChat === chat.id 
-                              ? (isDarkMode ? 'bg-[#282a2c] text-white' : 'bg-gray-200 text-black')
-                              : (isDarkMode ? 'text-gray-300 hover:bg-[#1e1f20]' : 'text-gray-600 hover:bg-gray-100')
-                          }`}
+                          onClick={() => {
+                            setActiveCommunityChat(chat.id);
+                            if (window.innerWidth < 768) setMobileMenuOpen(false);
+                          }}
+                          className={`flex items-center gap-3 w-full p-2.5 rounded-lg text-[13px] font-medium transition ${activeCommunityChat === chat.id ? (isDarkMode ? 'bg-[#333538] text-white' : 'bg-gray-200 text-black') : (isDarkMode ? 'text-gray-400 hover:bg-[#333538] hover:text-gray-200' : 'text-gray-600 hover:bg-gray-100')}`}
                         >
-                          <div className={`w-6 h-6 rounded-full flex shrink-0 items-center justify-center font-bold text-[10px] ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                            {chat.type === "group" ? "G" : chat.name.charAt(0).toUpperCase()}
+                          <div className={`w-7 h-7 rounded-full flex shrink-0 items-center justify-center font-bold text-white shadow-sm ${chat.type === 'dm' ? 'bg-indigo-500' : 'bg-gray-600'}`}>
+                            {(chat.type === "dm" && chat.creatorName && chat.members?.[0] !== user.uid ? chat.creatorName : chat.name).charAt(0).toUpperCase()}
                           </div>
-                          <span className="text-[13px] font-medium truncate">{chat.name}</span>
-                        </div>
+                          <span className="truncate">
+                            {chat.type === "dm" && chat.creatorName && chat.members?.[0] !== user.uid ? chat.creatorName : chat.name}
+                          </span>
+                        </button>
                       ))
                     )
                   ) : (
@@ -916,11 +944,18 @@ export default function FullPageChatBot() {
               {activeCommunityChat && (
                 <div className="absolute top-0 left-0 right-0 z-10 pt-5 flex justify-center items-start pointer-events-none">
                   <h3 
-                    onClick={clearMyMessages}
+                    onClick={clearCommunityChatMessages}
                     className={`cursor-pointer pointer-events-auto text-[17px] font-extrabold tracking-tight transition-colors drop-shadow-sm ${isDarkMode ? 'text-gray-200 hover:text-red-400' : 'text-gray-800 hover:text-red-500'}`}
                     title="Clear your messages"
                   >
-                    {realCommunityChats.find(c => c.id === activeCommunityChat)?.name || "Community Chat"}
+                    {(() => {
+                      const chat = realCommunityChats.find(c => c.id === activeCommunityChat);
+                      if (!chat) return "Community Chat";
+                      if (chat.type === "dm" && chat.creatorName && chat.members?.[0] !== user.uid) {
+                        return chat.creatorName;
+                      }
+                      return chat.name;
+                    })()}
                   </h3>
                 </div>
               )}
