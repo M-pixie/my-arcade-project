@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ Key Direct (Production mein isko .env mein rakhna!)
-const API_KEY = "AQ.Ab8RN6Ktrgr2HsBieDDeJYPbr77K2rpit0o0-cLZ2I2coIwSGA"; 
-
 export const dynamic = "force-dynamic";
 // 🚀 EDGE RUNTIME for blazing fast responses
 export const runtime = "edge";
@@ -11,6 +8,16 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { message, image } = body;
+
+    // ✅ SECURE API KEY (Fetched safely from .env.local)
+    const API_KEY = process.env.GEMINI_API_KEY;
+
+    if (!API_KEY) {
+      return NextResponse.json(
+        { reply: "❌ Server configuration error: API Key is missing." },
+        { status: 500 }
+      );
+    }
 
     // 🧠 THE ULTIMATE SUPER-POWERFUL SYSTEM PROMPT
     const systemInstruction = `
@@ -69,7 +76,7 @@ export async function POST(req: NextRequest) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
     // ✅ DYNAMIC PARTS ARRAY: Handle both text and image smartly
-    const userParts = [{ text: message || "Analyzing image.." }];
+    const userParts: any[] = [{ text: message || "Analyzing image.." }];
     
     if (image) {
       // Decode Base64 from frontend
@@ -112,7 +119,7 @@ export async function POST(req: NextRequest) {
     const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't process that. Please try again.";
     return NextResponse.json({ reply: botReply });
 
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ reply: error.message }, { status: 500 });
   }
 }
