@@ -72,26 +72,34 @@ export default function DashboardPage() {
     localStorage.setItem("arcade_theme", newTheme ? "dark" : "light");
   };
 
-  const aprilLabs = [
+  const julyLabs = [
     {
-      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/voyuge-july.png', accessCode: '1q-bucket-58231', points: 1, link: 'https://www.skills.google/games/7315', matchStrings: ['Arcade Voyage: Cloud Storage and Data Governance']
+      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/voyuge-aug.png', accessCode: '1q-sheets-29185', points: 1, link: 'https://www.skills.google/games/7398', matchStrings: ['Arcade Voyage: Google Sheets']
     },
     {
-      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/adv-july.png', accessCode: '1q-lowcode-92316', points: 1,  link: 'https://www.skills.google/games/7314', matchStrings: ['Arcade Adventure: Low-Code Development']
+      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/adv-aug.png', accessCode: '1q-datamgt-92372', points: 1,  link: 'https://www.skills.google/games/7395', matchStrings: ['Arcade Adventure: Data Vault']
     },
     {
-      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/trail-july.png', accessCode: '1q-workspace-31069', points: 1,  link: 'https://www.skills.google/games/7316', matchStrings: ['Arcade Trail: Google Workspace Administration']
+      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/trail-aug.png', accessCode: '1q-delivery-31058', points: 1,  link: 'https://www.skills.google/games/7396', matchStrings: ['Arcade Trail: Cloud Delivery Systems']
     },
     {
-      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/basecamp-july.png', accessCode: '1q-basecamp-07511', points: 1,  link: 'https://www.skills.google/games/7313', matchStrings: ['Arcade Base Camp July 2026']
+      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/bc-aug.png', accessCode: '1q-basecamp-10219', points: 1,  link: 'https://www.skills.google/games/7394', matchStrings: ['Arcade Base Camp August 2026']
     },
     {
-      id: 'data mesh', title: 'Arcade Simulator: Data Mesh Architect', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/special-july.png', accessCode: '1q-datamesh-16451', points: 1,  link: 'https://www.skills.google/games/7317', matchStrings: ['Arcade Simulator: Data Mesh Architect']
+      id: 'data mesh', title: 'Arcade Simulator: Network Security Engineer', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulater-aug.png', accessCode: '1q-network-51470', points: 1,  link: 'https://www.skills.google/games/7397', matchStrings: ['Arcade Simulator: Network Security Engineer']
     },
     {
-      id: 'safe', title: 'Safe Spaces', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/new-special-game.png', accessCode: '1q-security-19110', points: 1,  link: 'https://www.skills.google/games/7318', matchStrings: ['Safe Spaces']
+      id: 'safe', title: 'Spans and Plans', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/special-aug.png', accessCode: '1q-security-19110', points: 1,  link: 'https://www.skills.google/games/7399', matchStrings: ['Spans and Plans']
     }
   ];
+
+  // 🔥 YAHAN APNE AUGUST LABS FILL KRNA HAI 🔥
+  const augustLabs = [
+    // Example format:
+    //{ id: 'aug_1', title: 'August Voyage', subtitle: 'New Lab', image: '', accessCode: 'abc-123', points: 1, link: '', matchStrings: ['August Voyage Match'] }
+  ];
+
+  const allFacilitatorLabs = [...julyLabs, ...augustLabs];
 
   const arcadeTiersData = [
     { name: 'Arcade Trooper', target: 50, image: 'https://services.google.com/fh/files/misc/arcade-trooper.svg', gradient: 'from-[#8ab4f8] to-[#1a73e8]', spots: '6000 spots' },
@@ -113,8 +121,8 @@ export default function DashboardPage() {
     );
   };
 
-  const pendingLabs = aprilLabs.filter(lab => !isLabCompleted(lab.matchStrings));
-  const completedLabs = aprilLabs.filter(lab => isLabCompleted(lab.matchStrings));
+  const pendingLabs = julyLabs.filter(lab => !isLabCompleted(lab.matchStrings));
+  const completedLabs = julyLabs.filter(lab => isLabCompleted(lab.matchStrings));
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -299,6 +307,7 @@ export default function DashboardPage() {
       return item.type === 'Course' || item.name.toLowerCase().includes('course');
     }
 
+    // 🔥 FIXED: NOW DATE-BASED SO IT NEVER MISSES JULY OR AUGUST GAMES 🔥
     if (historyFilter === "Facilitator Progress History") {
       const lowerName = item.name.toLowerCase();
       const isBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
@@ -306,15 +315,10 @@ export default function DashboardPage() {
       const isGame = !isBadge && !isCourse;
       
       const earnedDate = new Date(item.date);
-      const targetStartDate = new Date("2026-07-14T00:00:00");
+      const targetStartDate = new Date("2026-07-1T00:00:00");
       
-      if (isBadge) {
+      if (isBadge || isGame) {
         return earnedDate >= targetStartDate; 
-      }
-      if (isGame) {
-        return aprilLabs.some(lab => 
-          lab.matchStrings.some(match => lowerName.includes(match.toLowerCase()))
-        ); 
       }
       return false; 
     }
@@ -330,15 +334,18 @@ export default function DashboardPage() {
     return !isBadge && !isCourse;
   }).length;
 
+  // 🔥 FIXED: NOW DATE-BASED FOR PROGRESS BARS 🔥
   const facilitatorArcadeGamesCount = history.filter(item => {
     const lower = item.name.toLowerCase();
     const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
     const isCourse = item.type === 'Course' || lower.includes('course');
     const isGame = !isBadge && !isCourse;
     
-    return isGame && aprilLabs.some(lab => 
-      lab.matchStrings.some(match => lower.includes(match.toLowerCase()))
-    );
+    if (!isGame) return false;
+
+    const earnedDate = new Date(item.date);
+    const targetStartDate = new Date("2026-07-14T00:00:00");
+    return earnedDate >= targetStartDate;
   }).length;
 
   const facilitatorSkillBadgesCount = history.filter(item => {
@@ -362,12 +369,10 @@ export default function DashboardPage() {
   );
   const milestoneText = achievedMilestone ? achievedMilestone.title : "No Milestones Yet";
 
-  // 🔥 ADDED THIS FOR NEXT MILESTONE LOGIC 🔥
   const nextMilestone = facilitatorMilestones.find(
     (m) => facilitatorArcadeGamesCount < m.targetArcade || facilitatorSkillBadgesCount < m.targetSkills
   );
 
-  // Premium Backgrounds for Milestone Cards (Light and Dark)
   const premiumCardStylesLight = [
     "bg-gradient-to-br from-[#ffffff] to-[#f8f9fa] border-[#e8eaed]", 
     "bg-gradient-to-br from-[#f8fbff] to-[#e8f0fe] border-[#d2e3fc]", 
@@ -393,7 +398,6 @@ export default function DashboardPage() {
               
               <div className={`lg:col-span-4 flex flex-col w-full lg:border-r lg:pr-6 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 
-                {/* 🔥 LEFT CARD 🔥 */}
                  <div className={`rounded-xl shadow-sm border overflow-hidden relative flex flex-col transition-all duration-300 w-full min-h-[640px] ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
                   <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
                     <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white">
@@ -456,7 +460,6 @@ export default function DashboardPage() {
                       </button>
                     </div>
 
-                    {/* 🔥 UPDATED BONUS POINT OR MEMBER SINCE LOGIC HERE 🔥 */}
                     <div className={`text-[16px] md:text-[17px] font-black text-[#1a73e8] border-t pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm ${isDark ? 'border-[#2a2d32]' : 'border-[#e8eaed]'}`}>
                       {(breakdown?.bonus && breakdown.bonus > 0) ? (
                         <>Total : <span className="text-[#1a73e8] font-black">{(points || 0) - breakdown.bonus}</span> + <span className="text-[#1a73e8] font-black">{breakdown.bonus}</span> Bonus Points</>
@@ -492,11 +495,9 @@ export default function DashboardPage() {
                 
                 <div className="mb-8 w-full flex-grow">
                   
-                  {/* 🔥 UPDATED PREMIUM MOTIVATION SECTION WITH INLINE TOGGLE 🔥 */}
                   <div className="mb-8 w-full">
                     {!nextMilestone ? (
                       <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                         {/* Text Block */}
                          <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
                            <h2 className={`text-base md:text-lg font-bold mb-1 flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                              🎉 Congratulations! <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>Ultimate Milestone</span> Achieved! 
@@ -506,7 +507,6 @@ export default function DashboardPage() {
                               Great job! You have completely crushed it with <span className="text-[#1a73e8] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#1a73e8] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
                            </p>
                          </div>
-                         {/* Toggle Button Box inside right corner */}
                          <div className={`shrink-0 flex items-center justify-end sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                            <button
                              onClick={toggleDarkMode}
@@ -525,7 +525,6 @@ export default function DashboardPage() {
                       </div>
                     ) : (
                       <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                         {/* Text Block */}
                          <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
                            <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                               {achievedMilestone ? (
@@ -555,7 +554,6 @@ export default function DashboardPage() {
                               )}
                            </div>
                          </div>
-                         {/* Toggle Button Box inside right corner */}
                          <div className={`shrink-0 flex items-center justify-end sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                            <button
                              onClick={toggleDarkMode}
@@ -756,7 +754,7 @@ export default function DashboardPage() {
             <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.22s' }}>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
                 <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                  <span className="text-xl"></span> JuLY Labs
+                  <span className="text-xl"></span> August Labs
                 </h4>
               </div>
 
@@ -820,18 +818,17 @@ export default function DashboardPage() {
               
               <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>
-                  {completedLabs.length} / 6 JULY Labs Completed
+                  {completedLabs.length} / 6 August Labs Completed
                 </span>
               </div>
             </div>
           )}
 
-
           {points !== null && (
             <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.25s' }}>
               <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  JULY LABS LIVE !
+                  August LABS LIVE !
                 </h4>
               </div>
               
@@ -941,6 +938,52 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* 🔥 NEW FACILITATOR PROGRAM SECTION (FROM IMAGE) 🔥 */}
+          {points !== null && (
+            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#fbbc04]/50' : 'bg-[#1a1b1e] border-[#fbbc04]/80'}`} style={{ animationDelay: '0.28s' }}>
+              <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
+                {/* Left Image Placeholder */}
+                <div className="w-full md:w-1/3 flex justify-center items-center">
+                  <img
+                    src="https://services.google.com/fh/files/misc/arcade_facilitator_banner_2026.png" /* TODO: Daal Dena image ka link yahan */
+                    alt="Facilitator Program 2026"
+                    className="max-w-[280px] w-full object-contain drop-shadow-lg"
+                  />
+                </div>
+
+                {/* Right Content */}
+                <div className="w-full md:w-2/3 flex flex-col justify-center text-left">
+                  <h2 className="text-3xl md:text-4xl font-black text-[#fbbc04] mb-3" style={{ fontFamily: 'monospace, sans-serif', letterSpacing: '-0.5px' }}>
+                    Google Cloud Arcade Facilitator 2026
+                  </h2>
+                  <p className="text-white text-lg font-medium mb-6">
+                    The Arcade Facilitator Program is live—enroll here to get started.
+                  </p>
+
+                  <a
+                    href="https://rsvp.withgoogle.com/events/arcade-facilitator/home" /* TODO: Daal Dena Start ka link yahan */
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#fbbc04] hover:bg-[#f29900] text-black font-black text-[18px] py-2 px-8 rounded flex items-center justify-center w-max mb-6 transition-colors"
+                  >
+                    START!
+                  </a>
+
+                  {/* Bonus Milestone Box */}
+                  <div className="bg-[#2a2d32]/40 border border-[#444746] rounded-xl p-5 flex flex-col sm:flex-row gap-4 items-start shadow-inner">
+                    <div className="text-3xl flex-shrink-0 drop-shadow-md">🏆</div>
+                    <div>
+                      <h4 className="text-[#fbbc04] font-bold text-sm uppercase tracking-widest mb-1.5">Bonus Milestone</h4>
+                      <p className="text-gray-300 text-[14px] leading-relaxed font-medium">
+                        Once you are in, you can earn 10 Arcade Points by building your first AI Agent in the <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" className="text-[#fbbc04] underline hover:text-[#f29900]">Bonus Milestone</a>. Check the <a href="https://discuss.google.dev/t/arcade-facilitator-2026-bonus-milestone/3864" className="text-[#fbbc04] underline hover:text-[#f29900]">full details</a> and <a href="https://docs.google.com/document/d/1RjwwiKY0fGyMm9wt5t4exXaA7pM3IU45FBOOPtmgUdo/" className="text-[#fbbc04] underline hover:text-[#f29900]">instructions</a> to get started!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {points !== null && (
             <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
@@ -959,7 +1002,6 @@ export default function DashboardPage() {
                        Skill Badges: {totalSkillBadgesCount}
                      </span>
                      
-                     {/* 🔥 FACILITATOR PROGRESS BUTTON 🔥 */}
                      <button 
                        onClick={() => setHistoryFilter(historyFilter === "Facilitator Progress History" ? "All Games" : "Facilitator Progress History")}
                        className={`px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm transition-all cursor-pointer ${

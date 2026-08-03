@@ -7,7 +7,7 @@ export default function Footer() {
   const router = useRouter();
   
   // 🔥 Updated to match your exact request
-  const lastUpdated = "23 July 2026 18:58 IST";
+  const lastUpdated = "03 August 2026 20:58 IST";
 
   return (
     <footer className="bg-[#f4f7fc] pt-24 pb-8 font-sans border-t border-[#e2e8f0]">
@@ -215,7 +215,7 @@ export default function Footer() {
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1a73e8]"></span>
                 </span>
                 <span className="text-[11px] text-[#1a73e8] font-bold uppercase tracking-widest">
-                  Updated: {lastUpdated}
+                  Updated:  {lastUpdated}
                 </span>
               </div>
             </div>

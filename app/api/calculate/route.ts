@@ -244,7 +244,10 @@ export async function POST(req: Request) {
           title.includes('logic log') || // june
           title.includes('work meets play: cloud canvas') || // june
           title.includes('safe spaces') || // july
-          title.includes('arcade simulator: data mesh architect') // july
+          title.includes('arcade simulator: data mesh architect') || // july
+          title.includes('arcade simulator: network security engineer') ||  // August 
+          title.includes('spans and plans')  // August
+
 
         ) {
           gamePoints += 1;
