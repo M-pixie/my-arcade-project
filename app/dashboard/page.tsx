@@ -147,6 +147,7 @@ export default function DashboardPage() {
     setLoading(false);
   };
 
+  // 🔥 SILENT BACKGROUND REFRESH LOGIC HERE 🔥
   useEffect(() => {
     const targetUrl = localStorage.getItem("current_processing_url");
     const cachedDataString = localStorage.getItem("arcade_user_data");
@@ -164,13 +165,14 @@ export default function DashboardPage() {
       setProfileUrl(targetUrl);
       if (cachedData && cachedData.profileUrl === targetUrl) {
         loadDataFromCache(cachedData);
-        localStorage.removeItem("current_processing_url");
+        fetchDataAndCalculate(targetUrl, true); // Silent fetch in background
       } else {
-        fetchDataAndCalculate(targetUrl);
+        fetchDataAndCalculate(targetUrl, false);
       }
     } else if (cachedData) {
       setProfileUrl(cachedData.profileUrl);
       loadDataFromCache(cachedData);
+      fetchDataAndCalculate(cachedData.profileUrl, true); // Silent fetch in background
     } else {
       router.push("/calculator"); 
     }
@@ -193,8 +195,11 @@ export default function DashboardPage() {
     return () => unsub();
   }, [userUniqueId, points]);
 
-  const fetchDataAndCalculate = async (url: string) => {
-    setLoading(true);
+  // 🔥 UPDATED FETCH FUNCTION WITH IS-SILENT PARAMETER 🔥
+  const fetchDataAndCalculate = async (url: string, isSilent: boolean = false) => {
+    if (!isSilent) {
+      setLoading(true);
+    }
     setError(null);
     try {
       const res = await fetch("/api/calculate", { 
@@ -206,8 +211,8 @@ export default function DashboardPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Failed to calculate points.");
-        setLoading(false);
+        if (!isSilent) setError(data.error || "Failed to calculate points.");
+        if (!isSilent) setLoading(false);
         return;
       }
 
@@ -244,9 +249,9 @@ export default function DashboardPage() {
       }
 
     } catch (err) {
-      setError("Please check your internet connection and try again.");
+      if (!isSilent) setError("Please check your internet connection and try again.");
     } finally {
-      setLoading(false);
+      if (!isSilent) setLoading(false);
       localStorage.removeItem("current_processing_url"); 
     }
   };
@@ -307,7 +312,6 @@ export default function DashboardPage() {
       return item.type === 'Course' || item.name.toLowerCase().includes('course');
     }
 
-    // 🔥 FIXED: NOW DATE-BASED SO IT NEVER MISSES JULY OR AUGUST GAMES 🔥
     if (historyFilter === "Facilitator Progress History") {
       const lowerName = item.name.toLowerCase();
       const isBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
@@ -334,7 +338,6 @@ export default function DashboardPage() {
     return !isBadge && !isCourse;
   }).length;
 
-  // 🔥 FIXED: NOW DATE-BASED FOR PROGRESS BARS 🔥
   const facilitatorArcadeGamesCount = history.filter(item => {
     const lower = item.name.toLowerCase();
     const isBadge = item.type === 'Skill Badge' || lower.includes('badge');
@@ -500,27 +503,41 @@ export default function DashboardPage() {
                       <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
                          <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
                            <h2 className={`text-base md:text-lg font-bold mb-1 flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                             🎉 Congratulations! <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>Ultimate Milestone</span> Achieved! 
-                             <span className="inline-block animate-cool-emoji ml-3 text-[24px]">😎</span>
+                              🎉 Congratulations! <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>Ultimate Milestone</span> Achieved! 
+                              <span className="inline-block animate-cool-emoji ml-3 text-[24px]">😎</span>
                            </h2>
                            <p className={`text-[13px] md:text-[14px] font-medium mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                               Great job! You have completely crushed it with <span className="text-[#1a73e8] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#1a73e8] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
                            </p>
                          </div>
-                         <div className={`shrink-0 flex items-center justify-end sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-                           <button
-                             onClick={toggleDarkMode}
-                             className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                             title="Toggle Dark Mode"
-                           >
-                             <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
-                               {isDark ? (
-                                 <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                               ) : (
-                                 <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                               )}
-                             </span>
-                           </button>
+                         {/* 🔥 UI UPDATE: Auto Refresh Icon and Last Refreshed Text here 🔥 */}
+                         <div className={`shrink-0 flex flex-col items-end justify-center sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+                           <div className="flex items-center gap-4">
+                             <div className="flex items-center gap-1.5" title="Auto-refreshing in background">
+                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#1a73e8]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                               </svg>
+                               <span className={`text-xs font-bold ${loading ? 'text-[#1a73e8]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
+                                 {loading ? 'Refreshing' : 'Synced'}
+                               </span>
+                             </div>
+                             <button
+                               onClick={toggleDarkMode}
+                               className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
+                               title="Toggle Dark Mode"
+                             >
+                               <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
+                                 {isDark ? (
+                                   <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                                 ) : (
+                                   <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
+                                 )}
+                               </span>
+                             </button>
+                           </div>
+                           <span className={`text-[11px] font-medium mt-2 block w-full text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                             Last refreshed: {lastRefreshed || "Just now"}
+                           </span>
                          </div>
                       </div>
                     ) : (
@@ -554,20 +571,34 @@ export default function DashboardPage() {
                               )}
                            </div>
                          </div>
-                         <div className={`shrink-0 flex items-center justify-end sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-                           <button
-                             onClick={toggleDarkMode}
-                             className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                             title="Toggle Dark Mode"
-                           >
-                             <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
-                               {isDark ? (
-                                 <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                               ) : (
-                                 <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                               )}
-                             </span>
-                           </button>
+                         {/* 🔥 UI UPDATE: Auto Refresh Icon and Last Refreshed Text here 🔥 */}
+                         <div className={`shrink-0 flex flex-col items-end justify-center sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+                           <div className="flex items-center gap-4">
+                             <div className="flex items-center gap-1.5" title="Auto-refreshing in background">
+                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#1a73e8]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                               </svg>
+                               <span className={`text-xs font-bold ${loading ? 'text-[#1a73e8]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
+                                 {loading ? 'Refreshing' : 'Synced'}
+                               </span>
+                             </div>
+                             <button
+                               onClick={toggleDarkMode}
+                               className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
+                               title="Toggle Dark Mode"
+                             >
+                               <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
+                                 {isDark ? (
+                                   <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                                 ) : (
+                                   <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
+                                 )}
+                               </span>
+                             </button>
+                           </div>
+                           <span className={`text-[11px] font-medium mt-2 block w-full text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                             Last refreshed: {lastRefreshed || "Just now"}
+                           </span>
                          </div>
                       </div>
                     )}
