@@ -954,10 +954,10 @@ export default function DashboardPage() {
                 {/* Right Content */}
                 <div className="w-full md:w-2/3 flex flex-col justify-center text-left">
                   <h2 className="text-3xl md:text-4xl font-black text-[#fbbc04] mb-3" style={{ fontFamily: 'monospace, sans-serif', letterSpacing: '-0.5px' }}>
-                    Google Cloud Arcade Facilitator 2026
+                    Google Arcade Facilitator 2026
                   </h2>
                   <p className="text-white text-lg font-medium mb-6">
-                    The Arcade Facilitator Program is live—enroll here to get started.
+                    The Arcade Facilitator Program is live.
                   </p>
 
                   <a
