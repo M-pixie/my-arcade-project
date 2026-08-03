@@ -89,7 +89,7 @@ export default function DashboardPage() {
       id: 'data mesh', title: 'Arcade Simulator: Network Security Engineer', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulater-aug.png', accessCode: '1q-network-51470', points: 1,  link: 'https://www.skills.google/games/7397', matchStrings: ['Arcade Simulator: Network Security Engineer']
     },
     {
-      id: 'safe', title: 'Spans and Plans', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/special-aug.png', accessCode: '1q-security-19110', points: 1,  link: 'https://www.skills.google/games/7399', matchStrings: ['Spans and Plans']
+      id: 'safe', title: 'Spans and Plans', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/special-aug.png', accessCode: '1q-schema-27083', points: 1,  link: 'https://www.skills.google/games/7399', matchStrings: ['Spans and Plans']
     }
   ];
 
