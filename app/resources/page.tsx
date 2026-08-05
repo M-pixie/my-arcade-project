@@ -34,7 +34,7 @@ const initialBadgesData = [
   { id: "18", title: "Using the Google Cloud Speech API", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/756" },
   { id: "19", title: "Use APIs to Work with Cloud Storage", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/755" },
   { id: "20", title: "The Basics of Google Cloud Compute", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/754" },
-  { id: "21", title: "Get Started with Sensitive Data Protection", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/750" },
+  { id: "21", title: "Implement Sensitive Data Protection on Google Cloud", duration: "30", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/750" },
   { id: "22", title: "Analyze Images with the Cloud Vision API", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/633" },
   { id: "23", title: "Secure Lakehouse Data", duration: "15", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/751" },
   { id: "24", title: "Enrich Metadata and Discovery of Lakehouse Data", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/753" },

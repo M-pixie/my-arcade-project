@@ -28,7 +28,7 @@ const skillBadgesMasterList = [
   "Using the Google Cloud Speech API",
   "Use APIs to Work with Cloud Storage",
   "The Basics of Google Cloud Compute", 
-  "Get Started with Sensitive Data Protection", 
+  "Implement Sensitive Data Protection on Google Cloud", 
   "Analyze Images with the Cloud Vision API",
   "Secure Lakehouse Data", 
   "Enrich Metadata and Discovery of BigLake Data",
