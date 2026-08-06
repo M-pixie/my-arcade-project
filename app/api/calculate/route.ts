@@ -277,24 +277,14 @@ export async function POST(req: Request) {
     const targetStartDate = new Date("2026-07-14T00:00:00");
 
     completionHistory.forEach(item => {
-      const lowerName = item.name.toLowerCase();
+      const earnedDate = new Date(item.date);
       
-      if (item.type === 'Skill Badge') {
-        const earnedDate = new Date(item.date);
-        if (earnedDate >= targetStartDate) {
+      // Agar date 14 July 2026 ya uske baad ki hai, tabhi count hoga
+      if (earnedDate >= targetStartDate) {
+        if (item.type === 'Skill Badge') {
           facilitatorSkillBadgesCount++;
-        }
-      } else {
-        const isJulyGame = [
-          'arcade voyage: cloud storage and data governance',
-          'arcade adventure: low-code development',
-          'arcade trail: google workspace administration',
-          'arcade base camp july 2026',
-          'arcade simulator: data mesh architect',
-          'safe spaces'
-        ].some(match => lowerName.includes(match));
-        
-        if (isJulyGame) {
+        } else {
+          // Baaki sab (Games & Trivia) yahan automatically count ho jayenge
           facilitatorArcadeGamesCount++;
         }
       }
@@ -306,6 +296,7 @@ export async function POST(req: Request) {
     else if (facilitatorArcadeGamesCount >= 8 && facilitatorSkillBadgesCount >= 34) bonusPoints = 15;
     else if (facilitatorArcadeGamesCount >= 6 && facilitatorSkillBadgesCount >= 18) bonusPoints = 5;
 
+    
     // 🔥 DECIMAL CALCULATION WITH BONUS POINTS INCLUDED 🔥
     const calculatedPoints = triviaPoints + gamePoints + (skillBadgesCount / 2) + bonusPoints;
 
