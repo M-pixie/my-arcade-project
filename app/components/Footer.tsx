@@ -91,7 +91,7 @@ export default function Footer() {
             
             {/* Normal Bold Text */}
             <h3 className="text-[18px] font-bold text-[#202124] mb-3 leading-tight">
-              Profile Analyzed
+              Users Enrolled
             </h3>
             
             <div className="text-[34px] font-black text-[#1a73e8] tracking-tight mb-8 z-10">
