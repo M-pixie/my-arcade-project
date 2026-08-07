@@ -376,17 +376,18 @@ export default function DashboardPage() {
     (m) => facilitatorArcadeGamesCount < m.targetArcade || facilitatorSkillBadgesCount < m.targetSkills
   );
 
+  // 🔥 UPDATED VIBRANT/CHAMKILA GOOGLE COLORS 🔥
   const premiumCardStylesLight = [
-    "bg-gradient-to-br from-[#ffffff] to-[#f8f9fa] border-[#e8eaed]", 
-    "bg-gradient-to-br from-[#f8fbff] to-[#e8f0fe] border-[#d2e3fc]", 
-    "bg-gradient-to-br from-[#fdfefe] to-[#e6f4ea] border-[#ceead6]", 
-    "bg-gradient-to-br from-[#fffdf8] to-[#fef7e0] border-[#fce8e6]"  
+    "bg-gradient-to-br from-[#d2e3fc] to-[#aecbfa] border-[#8ab4f8]", // Blueish
+    "bg-gradient-to-br from-[#fad2cf] to-[#f6aea9] border-[#f28b82]", // Reddish
+    "bg-gradient-to-br from-[#feefc3] to-[#fde293] border-[#fdd663]", // Yellowish
+    "bg-gradient-to-br from-[#ceead6] to-[#a8dab5] border-[#81c995]"  // Greenish
   ];
   const premiumCardStylesDark = [
-    "bg-gradient-to-br from-[#16171a] to-[#0a0a0a] border-[#2a2d32]",
-    "bg-gradient-to-br from-[#0f172a] to-[#020617] border-[#1e293b]",
-    "bg-gradient-to-br from-[#064e3b] to-[#022c22] border-[#065f46]",
-    "bg-gradient-to-br from-[#451a03] to-[#271c19] border-[#78350f]"
+    "bg-gradient-to-br from-[#1a73e8]/30 to-[#174ea6]/30 border-[#1a73e8]/50", // Vibrant Blue
+    "bg-gradient-to-br from-[#ea4335]/30 to-[#a50e0e]/30 border-[#ea4335]/50", // Vibrant Red
+    "bg-gradient-to-br from-[#fbbc04]/30 to-[#e37400]/30 border-[#fbbc04]/50", // Vibrant Yellow
+    "bg-gradient-to-br from-[#34a853]/30 to-[#0d652d]/30 border-[#34a853]/50"  // Vibrant Green
   ];
 
   return (
@@ -402,19 +403,25 @@ export default function DashboardPage() {
               <div className={`lg:col-span-4 flex flex-col w-full lg:border-r lg:pr-6 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 
                  <div className={`rounded-xl shadow-sm border overflow-hidden relative flex flex-col transition-all duration-300 w-full min-h-[640px] ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
-                  <div className="bg-[#1a73e8] py-5 text-center relative overflow-hidden">
-                    <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white">
+                  
+                  {/* 🔥 UPDATED GRADIENT RESULT HEADER 🔥 */}
+                  <div className="bg-gradient-to-r from-[#50c8d9] via-[#9a76e7] to-[#ee849c] py-5 text-center relative overflow-hidden">
+                    <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white drop-shadow-md">
                       Arcade Points: {points}
                     </h3>
                   </div>
                   
                   <div className="px-8 pt-8 pb-10 flex flex-col items-center relative flex-grow">
-                    <div className={`w-28 h-28 rounded-full border-[5px] shadow-md flex items-center justify-center overflow-hidden mb-5 relative transform transition-transform hover:scale-105 ring-4 ${isDark ? 'bg-[#0d47a1] border-[#1a1b1e] ring-[#1a73e8]/30' : 'bg-[#137333] border-white ring-[#e6f4ea]'}`}>
-                      {userAvatar ? (
-                        <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-5xl text-white font-bold">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
-                      )}
+                    
+                    {/* 🔥 UPDATED VERIFIED GOOGLE BORDER AVATAR 🔥 */}
+                    <div className="w-[120px] h-[120px] rounded-full p-[4px] mb-5 relative transform transition-transform hover:scale-105 shadow-md flex items-center justify-center" style={{ background: 'conic-gradient(#4285F4 0deg 90deg, #DB4437 90deg 180deg, #F4B400 180deg 270deg, #0F9D58 270deg 360deg)' }}>
+                      <div className={`w-full h-full rounded-full border-[4px] flex items-center justify-center overflow-hidden ${isDark ? 'bg-[#1a1b1e] border-[#1a1b1e]' : 'bg-[#1a73e8] border-white'}`}>
+                        {userAvatar ? (
+                          <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-5xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                        )}
+                      </div>
                     </div>
                     
                     <h2 className={`text-[26px] font-black mb-4 text-center tracking-tight leading-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>
@@ -510,7 +517,6 @@ export default function DashboardPage() {
                               Great job! You have completely crushed it with <span className="text-[#1a73e8] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#1a73e8] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
                            </p>
                          </div>
-                         {/* 🔥 UI UPDATE: Auto Refresh Icon and Last Refreshed Text here 🔥 */}
                          <div className={`shrink-0 flex flex-col items-end justify-center sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                            <div className="flex items-center gap-4">
                              <div className="flex items-center gap-1.5" title="Auto-refreshing in background">
@@ -571,7 +577,6 @@ export default function DashboardPage() {
                               )}
                            </div>
                          </div>
-                         {/* 🔥 UI UPDATE: Auto Refresh Icon and Last Refreshed Text here 🔥 */}
                          <div className={`shrink-0 flex flex-col items-end justify-center sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                            <div className="flex items-center gap-4">
                              <div className="flex items-center gap-1.5" title="Auto-refreshing in background">
@@ -612,6 +617,10 @@ export default function DashboardPage() {
                         const skillsProgress = Math.min(100, (facilitatorSkillBadgesCount / milestone.targetSkills) * 100);
                         const isAchieved = facilitatorArcadeGamesCount >= milestone.targetArcade && facilitatorSkillBadgesCount >= milestone.targetSkills;
                         const totalPercent = Math.floor((arcadeProgress + skillsProgress) / 2);
+                        
+                        // 🔥 REWARD DISPLAY LOGIC 🔥
+                        const isHighestAchieved = achievedMilestone && achievedMilestone.id === milestone.id;
+                        const isPreviouslyAchieved = isAchieved && !isHighestAchieved;
 
                         const cardStyle = isDark ? premiumCardStylesDark[index % premiumCardStylesDark.length] : premiumCardStylesLight[index % premiumCardStylesLight.length];
 
@@ -648,7 +657,9 @@ export default function DashboardPage() {
 
                             <div className={`pt-4 border-t flex justify-between items-center min-h-[50px] ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
                               <span className={`font-bold text-[14px] lg:text-[15px] ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>Milestone Rewards</span>
-                              {isAchieved ? (
+                              
+                              {/* 🔥 UPDATED REWARD CONDITIONS 🔥 */}
+                              {isHighestAchieved ? (
                                 <div className="flex items-center gap-3">
                                   <div className="flex flex-col items-end">
                                     <span className={`text-[15px] md:text-[17px] font-extrabold leading-tight ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>
@@ -666,6 +677,8 @@ export default function DashboardPage() {
                                     )}
                                   </div>
                                 </div>
+                              ) : isPreviouslyAchieved ? (
+                                <span className={`font-bold text-[15px] ${isDark ? 'text-gray-400' : 'text-[#202124]'}`}>{milestone.title} Done</span>
                               ) : (
                                 <span className={`font-bold text-[15px] ${isDark ? 'text-gray-400' : 'text-[#202124]'}`}>Not Yet</span>
                               )}
