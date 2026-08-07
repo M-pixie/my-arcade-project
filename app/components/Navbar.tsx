@@ -106,8 +106,7 @@ export default function Navbar() {
             onClick={handleLogoClick}
             className="flex items-center gap-2 group cursor-pointer focus:outline-none"
           >
-            {/* 🔥 FIXED FOR MOBILE: Removed hidden sm:block so it always shows on left 🔥 */}
-            <div className="block text-left">
+            <div className="hidden sm:block text-left">
               {/* Only shows Name if exists, otherwise Arcade Nexus. Bold & No Truncate */}
               <span className="text-lg font-bold text-[#202124] tracking-tight transition-all duration-300">
                 {currentUserName ? currentUserName : "Arcade Nexus"}
