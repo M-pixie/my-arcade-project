@@ -32,7 +32,7 @@ const getCardTheme = (name: string) => {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
   return cardColors[Math.abs(hash) % cardColors.length];
-};
+}
 
 interface RecentProfile {
   url: string;
@@ -368,12 +368,12 @@ export default function CalculatorPage() {
     <div className={`min-h-screen font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-6 pt-24 pb-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16">
         
         {/* 🔥 MODAL FOR AUTO CALCULATE 🔥 */}
         {showAutoCalcModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in-modal">
-            <div className={`rounded-lg shadow-xl w-[90%] max-w-sm p-6 animate-scale-up-modal ${isDark ? 'bg-[#1a1b1e] border border-[#3c4043]' : 'bg-white'}`}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in-modal">
+            <div className={`rounded-lg shadow-xl w-full max-w-sm p-6 animate-scale-up-modal ${isDark ? 'bg-[#1a1b1e] border border-[#3c4043]' : 'bg-white'}`}>
               <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>Enable Auto Calculate?</h3>
               <p className={`text-[14px] mb-6 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                 Points will calculate automatically when you open the page.
@@ -392,8 +392,8 @@ export default function CalculatorPage() {
 
         {/* 🔥 MODAL FOR RESET DATA 🔥 */}
         {showResetModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in-modal">
-            <div className={`rounded-lg shadow-xl w-[90%] max-w-sm p-6 animate-scale-up-modal ${isDark ? 'bg-[#1a1b1e] border border-[#3c4043]' : 'bg-white'}`}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in-modal">
+            <div className={`rounded-lg shadow-xl w-full max-w-sm p-6 animate-scale-up-modal ${isDark ? 'bg-[#1a1b1e] border border-[#3c4043]' : 'bg-white'}`}>
               <div className="flex items-center gap-3 mb-3">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isDark ? 'bg-[#3c1e1e] text-[#f28b82]' : 'bg-[#fce8e6] text-[#d93025]'}`}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -418,7 +418,7 @@ export default function CalculatorPage() {
         )}
 
         <div className="text-center mb-10 flex justify-center items-center">
-          <h1 className={`text-3xl md:text-5xl font-medium tracking-tight leading-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+          <h1 className={`text-3xl md:text-5xl font-medium tracking-tight leading-tight px-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
             Arcade Calculator
           </h1>
         </div>
@@ -484,18 +484,18 @@ export default function CalculatorPage() {
             .gem-dot-3 { top: 8px; left: 9.5px; animation: collide-3 0.6s ease-in-out infinite; }
           `}</style>
 
-          <div className="p-8 md:p-12 mt-1">
+          <div className="p-4 sm:p-8 md:p-12 mt-1">
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-              <p className={`text-sm md:text-base font-bold mt-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+              <p className={`text-sm md:text-base font-bold sm:mt-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                 Paste your public profile url here
               </p>
               
-              <div className="flex items-center gap-4 mt-2">
+              <div className="flex items-center gap-4 sm:mt-2 w-full sm:w-auto justify-end">
                 <div className="flex items-center gap-2 border-r pr-4 border-[#dadce0] dark:border-[#3c4043]">
                   {/* 🔥 THEME ICON 🔥 */}
                   <svg className={`w-5 h-5 opacity-80 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Theme">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 14.899A7 7 0 1115.617 3.207 4 4 0 0115 10c0 1.105.895 2 2 2a4 4 0 10-4 4 4 4 0 01-9 1.101zM11 16a1 1 0 100-2 1 1 0 000 2zm-4-4a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 100-2 1 1 0 000 2zm5-1a1 1 0 100-2 1 1 0 000 2z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 14.899A7 7 0 1115.617 3.207 4 4 0 0115 10c0 1.105.895 2 2 2a4 4 0 10-4 4 4 4 4 0 01-9 1.101zM11 16a1 1 0 100-2 1 1 0 000 2zm-4-4a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 100-2 1 1 0 000 2zm5-1a1 1 0 100-2 1 1 0 000 2z"/>
                   </svg>
                   
                   <button
@@ -534,7 +534,7 @@ export default function CalculatorPage() {
             <div className="mb-6">
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
-                className={`relative border-2 rounded-full transition-colors duration-75 p-1 flex items-center shadow-sm bg-transparent ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-white" : "border-[#dadce0] focus-within:border-black")}`}
+                className={`relative border-2 rounded-full transition-colors duration-75 p-1 sm:p-1.5 flex flex-row items-center shadow-sm bg-transparent w-full ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-white" : "border-[#dadce0] focus-within:border-black")}`}
               >
                 {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-6 right-6 h-[2px] bg-transparent overflow-hidden z-0">
@@ -542,7 +542,7 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                <label className={`absolute -top-3 left-6 px-2 text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed]" : "text-[#4e342e]") : (isDark ? "text-white" : "text-black")}`}>
+                <label className={`absolute -top-3 left-6 px-2 text-xs sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed]" : "text-[#4e342e]") : (isDark ? "text-white" : "text-black")}`}>
                   {isLoading ? (
                     loadingStep === 'wave' ? (
                       <div className="flex items-center gap-[3px] h-5 px-1">
@@ -567,13 +567,13 @@ export default function CalculatorPage() {
                 </label>
                 
                 {calcState !== 'idle' ? (
-                  <div className={`flex-1 h-[48px] px-5 flex items-center justify-between overflow-hidden whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                    <span className="truncate">{profileUrl}</span>
+                  <div className={`flex-1 h-[40px] sm:h-[48px] px-3 sm:px-5 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                    <span className="truncate text-sm sm:text-base">{profileUrl}</span>
                     {isPaused && (
                       <button 
                         onClick={() => setCalcState('idle')}
                         title="Cancel Calculation"
-                        className={`ml-2 transition-colors p-1 ${isDark ? 'text-[#9aa0a6] hover:text-white' : 'text-[#9aa0a6] hover:text-black'}`}
+                        className={`ml-2 transition-colors p-1 shrink-0 ${isDark ? 'text-[#9aa0a6] hover:text-white' : 'text-[#9aa0a6] hover:text-black'}`}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
@@ -589,15 +589,15 @@ export default function CalculatorPage() {
                     onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
                     spellCheck="false"
-                    className={`flex-1 px-5 py-3 text-base bg-transparent outline-none relative z-10 w-full ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#202124] placeholder-[#9aa0a6]'}`}
+                    className={`flex-1 px-3 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#202124] placeholder-[#9aa0a6]'}`}
                   />
                 )}
                 
-                {/* 🔥 INNER PREMIUM GRADIENT PILL BUTTON 🔥 */}
+                {/* 🔥 INNER PREMIUM GRADIENT PILL BUTTON - AS IT WAS 🔥 */}
                 <button 
                   onClick={handleMainButtonClick}
                   disabled={calcState !== 'idle' && calcState !== 'paused'}
-                  className="ml-2 h-[48px] px-8 rounded-full text-sm sm:text-base font-bold transition-all duration-300 shadow-md active:scale-95 flex items-center justify-center whitespace-nowrap bg-gradient-to-r from-[#50c8d9] via-[#9a76e7] to-[#ee849c] text-white hover:opacity-90 shadow-[0_0_15px_rgba(154,118,231,0.3)]"
+                  className="ml-2 h-[40px] sm:h-[48px] px-4 sm:px-8 shrink-0 rounded-full text-sm sm:text-base font-bold transition-all duration-300 shadow-md active:scale-95 flex items-center justify-center whitespace-nowrap bg-gradient-to-r from-[#50c8d9] via-[#9a76e7] to-[#ee849c] text-white hover:opacity-90 shadow-[0_0_15px_rgba(154,118,231,0.3)]"
                 >
                   {isLoading ? "Wait..." : isPaused ? "Resume" : "Calculate"}
                 </button>
@@ -611,7 +611,7 @@ export default function CalculatorPage() {
                     </svg>
                     {error}
                   </div>
-                  <div className={`text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className={`text-[12px] sm:text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     <p>• Please make your public profile visible again in your settings.</p>
                     <p>• Your profile has extra characters at the start or end.</p>
                     <p>• Please check your internet connections.</p>
@@ -628,13 +628,13 @@ export default function CalculatorPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto items-center justify-center">
+              <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto md:mx-0 items-start md:items-center justify-center pl-2 md:pl-0">
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-[14px] font-bold tracking-wide hover:underline inline-block transition-colors ${isDark ? 'text-white' : 'text-black'}`}>
                   Subscribe to Google Arcade
                 </a>
               </div>
 
-              <div className={`text-sm font-medium md:text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>
+              <div className={`text-sm font-medium pl-2 md:pl-0 md:text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>
                 Last Calculate : {recentUrls.length > 0 ? timeAgo(recentUrls[0].time) : "Never"}
               </div>
             </div>
@@ -664,16 +664,17 @@ export default function CalculatorPage() {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 ml-1 w-fit">
+                {/* 🔥 RESPONSIVE HISTORY GRID 🔥 */}
+                <div className="grid grid-cols-1 min-[400px]:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 w-full">
                   {recentUrls.map((item, idx) => {
                     const themeColor = getCardTheme(item.name || "Arcade");
                     
                     return (
-                      <div key={idx} className="relative">
+                      <div key={idx} className="relative w-full">
                         {/* 🔥 FULLY ROUNDED HISTORY PILL 🔥 */}
                         <button 
                           onClick={() => handleHistoryClick(item.url, idx)} 
-                          className={`relative w-[175px] h-[54px] flex items-center gap-2.5 pl-2.5 pr-4 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-lg hover:scale-[1.02] ${isDark ? 'bg-[#1a1b1e] shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:bg-[#202124]' : 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]'}`}
+                          className={`relative w-full h-[54px] flex items-center gap-3 pl-2.5 pr-4 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-lg hover:scale-[1.02] ${isDark ? 'bg-[#1a1b1e] shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:bg-[#202124]' : 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]'}`}
                           title={item.url}
                         >
                           <div className={`w-9 h-9 rounded-full shrink-0 shadow-sm border overflow-hidden relative z-10 ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
@@ -694,8 +695,8 @@ export default function CalculatorPage() {
                             )}
                           </div>
                           
-                          <div className="flex flex-col items-center justify-center z-10 w-full overflow-hidden">
-                            <span className={`text-[13px] font-bold truncate w-full text-center tracking-tight ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                          <div className="flex flex-col items-start justify-center z-10 overflow-hidden w-full">
+                            <span className={`text-[13px] font-bold truncate max-w-full tracking-tight ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                               {item.name || "Arcade Player"}
                             </span>
                             {item.points !== undefined && (
@@ -718,38 +719,39 @@ export default function CalculatorPage() {
           <div className="relative w-full">
             <div className={`hidden md:block absolute left-6 top-6 bottom-10 w-[2px] ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
             
-            <div className="relative flex flex-col md:flex-row gap-6 mb-12 w-full">
-              <div className={`relative z-10 w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>1</div>
-              <div className={`flex-1 w-full border rounded-2xl p-6 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                <h3 className={`text-2xl font-bold mb-3 flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  <span className={`text-xl font-extrabold ${isDark ? 'text-white' : 'text-black'}`}>➔</span> Sign in to Google Skills
+            <div className="relative flex flex-col md:flex-row gap-4 md:gap-6 mb-8 md:mb-12 w-full">
+              <div className={`relative z-10 w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md md:mt-0 mt-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>1</div>
+              <div className={`flex-1 w-full border rounded-2xl p-5 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                <h3 className={`text-xl md:text-2xl font-bold mb-3 flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+                  <span className={`text-lg md:text-xl font-extrabold ${isDark ? 'text-white' : 'text-black'}`}>➔</span> Sign in to Google Skills
                 </h3>
-                <p className={`mb-5 text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                <p className={`mb-5 text-[14px] md:text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                   Access the Google Skills platform and sign in with your Google account.<br className="hidden md:block"/>Navigate to the Google Skills website and sign in with your Google account to access your profile.
                 </p>
-                <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-colors mb-8 shadow-sm ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-colors mb-6 md:mb-8 shadow-sm text-sm md:text-base ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
+                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                   Go to Google Skills
                 </a>
                 <div className={`rounded-xl overflow-hidden border ${isDark ? 'border-[#3c4043] bg-[#1a1b1e]' : 'border-[#dadce0] bg-[#f8f9fa]'}`}>
-                  <img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-[102%] max-w-none h-auto object-cover -mb-[5%]" />
+                  {/* 🔥 IMAGE OVERFLOW FIXED 🔥 */}
+                  <img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-full h-auto object-cover rounded-b-xl" />
                 </div>
               </div>
             </div>
 
-            <div className="relative flex flex-col md:flex-row gap-6 mb-12 w-full">
-              <div className={`relative z-10 w-12 h-12 shrink-0 rounded-full flex items-center justify-center text-xl font-bold shadow-md md:mt-0 mt-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>2</div>
-              <div className={`flex-1 w-full border rounded-2xl p-6 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                <h3 className={`text-2xl font-bold mb-3 flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  <span className={`text-lg flex items-center justify-center w-7 h-7 rounded-full border-2 ${isDark ? 'border-white text-white' : 'border-black text-black'}`}>👤</span> Access Your Public Profile
+            <div className="relative flex flex-col md:flex-row gap-4 md:gap-6 mb-8 md:mb-12 w-full">
+              <div className={`relative z-10 w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md md:mt-0 mt-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>2</div>
+              <div className={`flex-1 w-full border rounded-2xl p-5 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                <h3 className={`text-xl md:text-2xl font-bold mb-3 flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+                  <span className={`text-base md:text-lg flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full border-2 ${isDark ? 'border-white text-white' : 'border-black text-black'}`}>👤</span> Access Your Public Profile
                 </h3>
-                <p className={`mb-5 text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                <p className={`mb-5 text-[14px] md:text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                   After logging in navigate to the following link to access your Google Skills account settings.<br className="hidden md:block"/>On this Account Settings page scroll down to 'Public Profile' section.
                 </p>
-                <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-colors mb-8 shadow-sm ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-colors mb-6 md:mb-8 shadow-sm text-sm md:text-base ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
+                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                   Go to Account Settings
