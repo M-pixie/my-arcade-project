@@ -197,7 +197,7 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
 
         {/* ================= HERO SECTION ================= */}
-        <section className="relative pt-28 pb-12 bg-white overflow-hidden min-h-[85vh] flex items-center">
+        <section className="relative pt-24 md:pt-28 pb-12 bg-white overflow-hidden min-h-[85vh] flex items-center">
           
           <style>{`
             .custom-scrollbar::-webkit-scrollbar {
@@ -209,8 +209,8 @@ export default function HomePage() {
             }
           `}</style>
 
-          {/* EXACT IMAGE REPLICATION: Dark Navy Swooping Background - Adjusted to avoid cutting text */}
-          <div className="absolute top-0 right-0 w-[110%] h-[120%] bg-[#081229] rounded-bl-[40%] sm:rounded-bl-[60%] lg:rounded-bl-[70%] z-0 translate-x-[25%] -translate-y-[55%] lg:-translate-y-[65%]"></div>
+          {/* EXACT IMAGE REPLICATION: Dark Navy Swooping Background - Adjusted to avoid cutting text on Mobile */}
+          <div className="absolute top-0 right-0 w-[150%] md:w-[110%] h-[100%] md:h-[120%] bg-[#081229] rounded-bl-[35%] md:rounded-bl-[60%] lg:rounded-bl-[70%] z-0 translate-x-[45%] -translate-y-[80%] md:translate-x-[25%] md:-translate-y-[55%] lg:-translate-y-[65%]"></div>
           
           {/* Subtle Dot Pattern on White Left Area */}
           <div className="absolute inset-0 z-0 opacity-40 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#cbd5e1 2px, transparent 2px)', backgroundSize: '24px 24px', maskImage: 'radial-gradient(ellipse at left center, black 10%, transparent 60%)', WebkitMaskImage: 'radial-gradient(ellipse at left center, black 10%, transparent 60%)' }}></div>
@@ -218,20 +218,20 @@ export default function HomePage() {
           <div className="w-full relative z-10">
             <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10">
               
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-16 lg:gap-10 w-full mt-4 lg:mt-8">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 lg:gap-10 w-full mt-8 md:mt-8">
                 
                 {/* 🌟 LEFT COLUMN (Title, Buttons, Programs) 🌟 */}
-                <div className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12">
+                <div className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
                   
                   {/* Left Aligned Main Title */}
-                  <h1 className="text-[46px] md:text-[56px] font-extrabold text-[#0f172a] tracking-tight m-0 leading-[1.1]">
+                  <h1 className="text-[40px] md:text-[56px] font-extrabold text-[#0f172a] tracking-tight m-0 leading-[1.15] md:leading-[1.1]">
                     Arcade Nexus
                   </h1>
                   
                   {/* Blue Underline Accent */}
-                  <div className="w-12 h-1.5 bg-[#2563eb] rounded-full mt-3 mb-6 mx-auto lg:mx-0"></div>
+                  <div className="w-12 h-1.5 bg-[#2563eb] rounded-full mt-4 mb-6 mx-auto lg:mx-0"></div>
 
-                  <p className="text-[#475569] text-[18px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8">
+                  <p className="text-[#475569] text-[16px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8 px-2 md:px-0">
                     Crunch points, track live leaderboards, and own your Arcade journey in one seamless dashboard.
                   </p>
 
@@ -239,7 +239,7 @@ export default function HomePage() {
                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-12 w-full max-w-2xl">
                     <button
                       onClick={() => router.push('/calculator')}
-                      className="px-6 py-3 bg-[#2563eb] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:bg-[#1d4ed8] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5"
+                      className="px-6 py-3 bg-[#2563eb] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:bg-[#1d4ed8] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center"
                     >
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                       Arcade Calculator
@@ -249,7 +249,7 @@ export default function HomePage() {
                       href="https://go.cloudskillsboost.google/arcade"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-3 bg-white text-[#2563eb] font-bold text-[14px] rounded-lg border border-[#cbd5e1] shadow-sm hover:bg-blue-50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5"
+                      className="px-6 py-3 bg-white text-[#2563eb] font-bold text-[14px] rounded-lg border border-[#cbd5e1] shadow-sm hover:bg-blue-50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center"
                     >
                       <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                       Start Labs here
@@ -259,7 +259,7 @@ export default function HomePage() {
                       href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-3 bg-[#e11d48] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.4)] hover:bg-[#be123c] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5"
+                      className="px-6 py-3 bg-[#e11d48] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.4)] hover:bg-[#be123c] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center"
                     >
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                       Subscribe for Arcade
@@ -267,18 +267,18 @@ export default function HomePage() {
                   </div>
 
                   {/*  Facilitator Program Box  */}
-                  <div className="flex flex-col gap-2 text-left w-full max-w-lg mt-2">
-                    <h3 className="text-[22px] font-bold text-[#0f172a] tracking-tight">
+                  <div className="flex flex-col gap-2 text-center lg:text-left w-full max-w-lg mt-2 px-4 lg:px-0">
+                    <h3 className="text-[20px] md:text-[22px] font-bold text-[#0f172a] tracking-tight">
                       Arcade Facilitator Program
                     </h3>
-                    <p className="text-[#475569] font-medium text-[15px] mb-2">
+                    <p className="text-[#475569] font-medium text-[14px] md:text-[15px] mb-2">
                       Lead your community and unlock exclusive Arcade rewards.
                     </p>
                     <a 
                       href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-2 text-[#2563eb] hover:text-[#1d4ed8] font-bold transition-all w-fit"
+                      className="group flex items-center justify-center lg:justify-start gap-2 text-[#2563eb] hover:text-[#1d4ed8] font-bold transition-all w-full lg:w-fit"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                       Facilitator Registration Form
@@ -287,12 +287,12 @@ export default function HomePage() {
                   </div>
 
                   {/*  Referral Code Section  */}
-                  <div className="mt-8 w-full max-w-[340px]">
+                  <div className="mt-8 w-full max-w-[340px] mx-auto lg:mx-0">
                     <h4 className="text-[#64748b] text-[11px] font-extrabold uppercase tracking-widest mb-2">
                       Referral Code
                     </h4>
                     <div className="bg-transparent border border-[#cbd5e1] rounded-lg p-3 px-4 flex items-center justify-between w-full">
-                      <div className="font-mono text-[#0f172a] font-bold text-[15px] tracking-wide">
+                      <div className="font-mono text-[#0f172a] font-bold text-[14px] md:text-[15px] tracking-wide">
                         Oh, Enrollment Closed
                       </div>
                       <button
@@ -312,7 +312,7 @@ export default function HomePage() {
                 </div>
 
                 {/* 🌟 PREMIUM KEY HIGHLIGHTS 3D CARD (RIGHT SIDE) 🌟 */}
-                <div className="relative z-20 w-full lg:w-[480px] flex justify-center lg:justify-end mt-12 lg:mt-0 lg:pl-10" style={{ perspective: '1200px' }}>
+                <div className="relative z-20 w-full lg:w-[480px] flex justify-center lg:justify-end mt-8 lg:mt-0 lg:pl-10 pb-8 lg:pb-0" style={{ perspective: '1200px' }}>
                   
                   {/* Subtle Background Shadow/Glow Card */}
                   <div 
@@ -330,7 +330,7 @@ export default function HomePage() {
                     
                     {/* Header inside Card */}
                     <div className="flex items-center justify-between pb-5 mb-4 border-b border-blue-400/30">
-                      <h3 className="text-white font-bold text-[20px] md:text-[22px] tracking-tight">
+                      <h3 className="text-white font-bold text-[18px] md:text-[22px] tracking-tight">
                         Key Highlights
                       </h3>
                       <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/dashboard')}>
@@ -376,12 +376,12 @@ export default function HomePage() {
                                   router.push(item.link);
                                 }
                               }}
-                              className="font-medium text-[14px] md:text-[15px] text-white hover:text-blue-100 transition-colors duration-200 cursor-pointer w-full text-left"
+                              className="font-medium text-[13px] md:text-[15px] text-white hover:text-blue-100 transition-colors duration-200 cursor-pointer w-full text-left"
                             >
                               {item.name}
                             </a>
                           ) : (
-                            <span className="font-medium text-[14px] md:text-[15px] text-white/90 w-full text-left">
+                            <span className="font-medium text-[13px] md:text-[15px] text-white/90 w-full text-left">
                               {item.name}
                             </span>
                           )}
