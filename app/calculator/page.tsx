@@ -493,9 +493,15 @@ export default function CalculatorPage() {
               
               <div className="flex items-center gap-4 sm:mt-2 w-full sm:w-auto justify-end">
                 <div className="flex items-center gap-2 border-r pr-4 border-[#dadce0] dark:border-[#3c4043]">
-                  {/* 🔥 THEME ICON 🔥 */}
+                  {/* 🔥 SUN/MOON ICON 🔥 */}
                   <svg className={`w-5 h-5 opacity-80 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Theme">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 14.899A7 7 0 1115.617 3.207 4 4 0 0115 10c0 1.105.895 2 2 2a4 4 0 10-4 4 4 4 4 0 01-9 1.101zM11 16a1 1 0 100-2 1 1 0 000 2zm-4-4a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 100-2 1 1 0 000 2zm5-1a1 1 0 100-2 1 1 0 000 2z"/>
+                    {isDark ? (
+                      // Moon Icon
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    ) : (
+                      // Sun Icon
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    )}
                   </svg>
                   
                   <button
@@ -530,11 +536,11 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* 🔥 PREMIUM PILL CONTAINER 🔥 */}
+            {/* 🔥 PREMIUM PILL CONTAINER (Original Theme restored with Blue Focus added) 🔥 */}
             <div className="mb-6">
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
-                className={`relative border-2 rounded-full transition-colors duration-75 p-1 sm:p-1.5 flex flex-row items-center shadow-sm bg-transparent w-full ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-white" : "border-[#dadce0] focus-within:border-black")}`}
+                className={`group relative border-2 rounded-full transition-colors duration-75 p-1 sm:p-1.5 flex flex-row items-center shadow-sm bg-transparent w-full ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-[#8ab4f8]" : "border-[#dadce0] focus-within:border-[#1a73e8]")}`}
               >
                 {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-6 right-6 h-[2px] bg-transparent overflow-hidden z-0">
@@ -542,7 +548,7 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                <label className={`absolute -top-3 left-6 px-2 text-xs sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed]" : "text-[#4e342e]") : (isDark ? "text-white" : "text-black")}`}>
+                <label className={`absolute -top-3 left-6 px-2 text-xs sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed] group-focus-within:text-[#8ab4f8]" : "text-[#4e342e] group-focus-within:text-[#1a73e8]") : (isDark ? "text-white group-focus-within:text-[#8ab4f8]" : "text-black group-focus-within:text-[#1a73e8]")}`}>
                   {isLoading ? (
                     loadingStep === 'wave' ? (
                       <div className="flex items-center gap-[3px] h-5 px-1">
