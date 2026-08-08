@@ -8,6 +8,7 @@ import { db } from "@/lib/firebase";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); 
   
   const router = useRouter();
   const pathname = usePathname();
@@ -47,7 +48,6 @@ export default function Navbar() {
     return () => unsub();
   }, [pathname]);
 
-  // 🔥 MAGIC REFRESH FUNCTION 🔥
   const refreshUserData = () => {
     try {
       const savedData = localStorage.getItem("arcade_user_data");
@@ -78,9 +78,16 @@ export default function Navbar() {
   }, []);
 
   const handleLogoClick = () => {
-    // Agar home page pe nahi hain, toh pichle page par back kar do
     if (pathname !== "/") {
       router.back();
+    }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setMobileMenuOpen(false);
     }
   };
 
@@ -98,44 +105,63 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 w-full h-16 bg-white/90 backdrop-blur-md border-b border-[#dadce0] z-50">
-      <div className="max-w-7xl mx-auto h-full px-4 md:px-6 flex items-center justify-between">
+      {/* Container ki width badha di aur side spaces ko theek kar diya gaya hai */}
+      <div className="w-full mx-auto h-full px-4 md:px-8 flex items-center justify-between">
 
-        {/* ================= LEFT: LOGO (NOW ACTS AS BACK BUTTON) ================= */}
-        <div className="flex items-center">
+        {/* ================= LEFT: BACK BUTTON & SEARCH BAR ================= */}
+        <div className="flex items-center gap-3 sm:gap-5">
+          
           <button 
             onClick={handleLogoClick}
-            className="flex items-center gap-2 group cursor-pointer focus:outline-none"
+            className="p-2 -ml-2 rounded-full hover:bg-[#f1f3f4] text-[#5f6368] hover:text-[#202124] transition-colors cursor-pointer focus:outline-none shrink-0"
+            title="Go Back"
           >
-            <div className="hidden sm:block text-left">
-              {/* Only shows Name if exists, otherwise Arcade Nexus. Bold & No Truncate */}
-              <span className="text-lg font-bold text-[#202124] tracking-tight transition-all duration-300">
-                {currentUserName ? currentUserName : "Arcade Nexus"}
-              </span>
-            </div>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
           </button>
+
+          {/* 🔥 SEARCH EVERYTHING INPUT (DESKTOP) 🔥 */}
+          <form onSubmit={handleSearch} className="hidden lg:flex relative items-center">
+            <svg 
+              className="absolute left-3 w-4 h-4 text-[#5f6368]" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input 
+              type="text"
+              placeholder="Search arcade.."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-4 py-1.5 w-56 lg:w-64 xl:w-80 rounded-full bg-[#f1f3f4] text-sm text-[#202124] placeholder-[#5f6368] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1a73e8] border border-transparent focus:border-transparent transition-all duration-300"
+            />
+          </form>
         </div>
 
         {/* ================= CENTER: NAVIGATION (DESKTOP) ================= */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* 'overflow-x-auto' hata diya hai taaki slider na aaye */}
+        <nav className="hidden md:flex items-center justify-center gap-1 flex-1 px-4">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <div key={link.name} className="relative group">
-                {/* 🔥 Premium Solid Blue Active State 🔥 */}
                 <Link 
                   href={link.href} 
                   prefetch={true}
-                  className={`relative block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`relative block px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     isActive 
                       ? "bg-[#1a73e8] text-white shadow-sm" 
                       : "text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] bg-transparent"
                   }`}
                 >
-                  <span className="flex items-center gap-2.5">
+                  <span className="flex items-center gap-2">
                     {link.name}
                     {link.name === "Help" && (
                       <div className="relative flex items-center justify-center">
-                        <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                         {unreadCount > 0 && (
                           <span className="absolute -top-1 -right-2 flex items-center justify-center w-[16px] h-[16px] bg-red-500 text-white text-[9px] font-bold rounded-full shadow-sm animate-pulse border-[1.5px] border-white">
                             {unreadCount > 99 ? '99+' : unreadCount}
@@ -151,7 +177,7 @@ export default function Navbar() {
         </nav>
 
         {/* ================= RIGHT: AVATAR & MOBILE TOGGLE ================= */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0 justify-end">
           <Link href="/dashboard" prefetch={true} className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0" title="Go to Dashboard">
             <img 
               src={imageError ? "/avatar.png" : currentUserAvatar} 
@@ -175,7 +201,26 @@ export default function Navbar() {
       {/* ================= MOBILE MENU ================= */}
       {mobileMenuOpen && (
         <nav className="absolute top-full left-0 w-full md:hidden bg-white border-b border-[#dadce0] shadow-lg z-50">
-          <div className="px-4 py-4 space-y-1">
+          <div className="px-4 py-4 space-y-2">
+            
+            <form onSubmit={handleSearch} className="relative flex items-center mb-4">
+              <svg 
+                className="absolute left-3 w-5 h-5 text-[#5f6368]" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input 
+                type="text"
+                placeholder="Search A to Z..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 w-full rounded-full bg-[#f1f3f4] text-base text-[#202124] placeholder-[#5f6368] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#1a73e8] transition-all duration-300"
+              />
+            </form>
+
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               
@@ -196,7 +241,7 @@ export default function Navbar() {
                       {link.name}
                       {link.name === "Help" && (
                         <div className="relative flex items-center justify-center">
-                          <svg className="w-[22px] h-[22px] text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                          <svg className="w-[22px] h-[22px] text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                           {unreadCount > 0 && (
                             <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-[17px] h-[17px] bg-red-500 text-white text-[9px] font-bold rounded-full shadow-sm animate-pulse border-[1.5px] border-white">
                               {unreadCount > 99 ? '99+' : unreadCount}
@@ -212,7 +257,6 @@ export default function Navbar() {
           </div>
         </nav>
       )}
-
     </header>
   );
 }

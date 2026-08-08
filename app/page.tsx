@@ -17,24 +17,6 @@ import { subscribeLeaderboard } from "@/lib/leaderboard";
 export default function HomePage() {
   const router = useRouter();
 
-  // 🔥 State for Campaign Code Copy Button
-  const [isCopied, setIsCopied] = useState(false);
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText("qlcampaign=6m-ctsdq-27");
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
-  };
-
-  // 🔥 NEW: State for Referral Code Copy Button
-  const [isReferralCopied, setIsReferralCopied] = useState(false);
-
-  const handleCopyReferral = () => {
-    navigator.clipboard.writeText("GCAF26-IN-9SC-AE9");
-    setIsReferralCopied(true);
-    setTimeout(() => setIsReferralCopied(false), 2000);
-  };
-
   // 🔥 State for Premium Problem Box Form
   const [formName, setFormName] = useState("");
   const [formCategory, setFormCategory] = useState("Swags Delivery / Issue");
@@ -43,6 +25,9 @@ export default function HomePage() {
 
   // 🔥 Tab State for Premium Guide Section
   const [activeGuideTab, setActiveGuideTab] = useState('start');
+
+  // 🔥 COUNTDOWN TIMER STATE
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   const startSteps = [
     { link: "https://share.google/mn0xUfmd49TA9RPc1", title: "Sign in Account", desc: "Sign up on Cloud Skills Boost and set up your Arcade profile.", icon: "👤", badge: "Step 1" },
@@ -83,27 +68,21 @@ export default function HomePage() {
   // 🔥 LEADERBOARD STATES
   const [leaders, setLeaders] = useState<any[]>([]);
   
-  // 🔥 NEW: State for Current User Profile (SYNCED WITH NAVBAR LOGIC)
+  // 🔥 NEW: State for Current User Profile
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png");
   const [imageError, setImageError] = useState(false);
 
-  
-  // 🔥 MAGIC REFRESH FUNCTION FOR HOMEPAGE AVATAR & NAME 🔥
   const refreshUserData = () => {
     try {
       const savedData = localStorage.getItem("arcade_user_data") || localStorage.getItem("arcadeUserData");
       if (savedData) {
         const parsed = JSON.parse(savedData);
-        
-        // Avatar logic
         const newAvatar = parsed.userAvatar || parsed.photoURL;
         if (newAvatar) {
           setCurrentUserAvatar(newAvatar);
           setImageError(false); 
         }
-
-        // Name logic
         const newName = parsed.userName || parsed.name;
         if (newName) {
           setCurrentUserName(newName);
@@ -115,20 +94,31 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    // Initial fetch
     refreshUserData();
-    
-    // Listeners for real-time updates
     window.addEventListener("arcadeDataUpdated", refreshUserData);
     window.addEventListener("storage", refreshUserData);
 
     const unsubLeaderboard = subscribeLeaderboard((data) => setLeaders(data));
 
-    const savedPrintoVote = localStorage.getItem("printoVote") as "received" | "not_received" | null;
-    if (savedPrintoVote) setPrintoVote(savedPrintoVote);
+    // TIMER LOGIC: Targeting 14 September 2026, 23:59 GMT+5:30
+    const targetDate = new Date("2026-09-14T23:59:00+05:30").getTime();
+    
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
 
-    const savedWhiteSquareVote = localStorage.getItem("whiteSquareVote") as "received" | "not_received" | null;
-    if (savedWhiteSquareVote) setWhiteSquareVote(savedWhiteSquareVote);
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((difference % (1000 * 60)) / 1000),
+        });
+      } else {
+        clearInterval(interval);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    }, 1000);
 
     const q = query(collection(db, "swagReviews"), orderBy("createdAt", "desc"));
     const unsubReviews = onSnapshot(q, (snapshot) => {
@@ -136,57 +126,25 @@ export default function HomePage() {
       setReviews(fetchedReviews);
     });
 
-    const statsRef = doc(db, "swagStats", "cohort2");
-    const unsubStats = onSnapshot(statsRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setGlobalPrinto({ received: data.printoReceived || 0, not_received: data.printoNotReceived || 0 });
-        setGlobalWs({ received: data.wsReceived || 0, not_received: data.wsNotReceived || 0 });
-      } else {
-        setDoc(statsRef, { printoReceived: 0, printoNotReceived: 0, wsReceived: 0, wsNotReceived: 0 });
-      }
-    });
-
     return () => {
       window.removeEventListener("arcadeDataUpdated", refreshUserData);
       window.removeEventListener("storage", refreshUserData);
       unsubLeaderboard();
       unsubReviews();
-      unsubStats();
+      clearInterval(interval);
     };
   }, []);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let text = `Hi Manish, I am ${formName}.\n\nI have a query regarding: *${formCategory}*`;
-    
-    if (formSubCategory) {
-      text += `\nSpecifics: *${formSubCategory}*`;
-    }
-    
+    if (formSubCategory) text += `\nSpecifics: *${formSubCategory}*`;
     text += `\n\nMessage:\n${formMessage}`;
     const whatsappUrl = `https://wa.me/918538980608?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
-    
     setFormName("");
     setFormMessage("");
     setFormSubCategory("");
-  };
-
-  const handleReviewSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if(!reviewText.trim() || !reviewName.trim()) return;
-    
-    const newReview = {
-      name: reviewName,
-      time: new Date().toLocaleDateString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-      text: reviewText,
-      vendor: reviewVendor,
-      createdAt: new Date().getTime() 
-    };
-    
-    await addDoc(collection(db, "swagReviews"), newReview);
-    setReviewText("");
   };
 
   return (
@@ -200,19 +158,21 @@ export default function HomePage() {
         <section className="relative pt-24 md:pt-28 pb-12 bg-white overflow-hidden min-h-[85vh] flex items-center">
           
           <style>{`
-            .custom-scrollbar::-webkit-scrollbar {
-              width: 6px;
+            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
+            
+            /* 🔥 KEYFRAMES FOR AUTO 3D MOVEMENT 🔥 */
+            @keyframes auto3d {
+              0% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); }
+              50% { transform: rotateY(-5deg) rotateX(10deg) rotateZ(2deg) translateY(-12px); box-shadow: 0 35px 60px -15px rgba(37,99,235,0.7); }
+              100% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); }
             }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-              background-color: rgba(0,0,0,0.1);
-              border-radius: 10px;
+            .animate-auto-3d {
+              animation: auto3d 6s ease-in-out infinite;
+              transform-style: preserve-3d;
             }
           `}</style>
-
-          {/* EXACT IMAGE REPLICATION: Dark Navy Swooping Background - Adjusted to avoid cutting text on Mobile */}
-          <div className="absolute top-0 right-0 w-[150%] md:w-[110%] h-[100%] md:h-[120%] bg-[#081229] rounded-bl-[35%] md:rounded-bl-[60%] lg:rounded-bl-[70%] z-0 translate-x-[45%] -translate-y-[80%] md:translate-x-[25%] md:-translate-y-[55%] lg:-translate-y-[65%]"></div>
           
-          {/* Subtle Dot Pattern on White Left Area */}
           <div className="absolute inset-0 z-0 opacity-40 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#cbd5e1 2px, transparent 2px)', backgroundSize: '24px 24px', maskImage: 'radial-gradient(ellipse at left center, black 10%, transparent 60%)', WebkitMaskImage: 'radial-gradient(ellipse at left center, black 10%, transparent 60%)' }}></div>
 
           <div className="w-full relative z-10">
@@ -220,53 +180,37 @@ export default function HomePage() {
               
               <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 lg:gap-10 w-full mt-8 md:mt-8">
                 
-                {/* 🌟 LEFT COLUMN (Title, Buttons, Programs) 🌟 */}
+                {/* 🌟 LEFT COLUMN 🌟 */}
                 <div className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
                   
-                  {/* Left Aligned Main Title */}
                   <h1 className="text-[40px] md:text-[56px] font-extrabold text-[#0f172a] tracking-tight m-0 leading-[1.15] md:leading-[1.1]">
                     Arcade Nexus
                   </h1>
                   
-                  {/* Blue Underline Accent */}
                   <div className="w-12 h-1.5 bg-[#2563eb] rounded-full mt-4 mb-6 mx-auto lg:mx-0"></div>
 
                   <p className="text-[#475569] text-[16px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8 px-2 md:px-0">
                     Crunch points, track live leaderboards, and own your Arcade journey in one seamless dashboard.
                   </p>
 
-                  {/* 🔥 Buttons Section 🔥 */}
-                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-12 w-full max-w-2xl">
-                    <button
-                      onClick={() => router.push('/calculator')}
-                      className="px-6 py-3 bg-[#2563eb] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:bg-[#1d4ed8] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center"
-                    >
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10 w-full max-w-2xl">
+                    <button onClick={() => router.push('/calculator')} className="px-6 py-3 bg-[#2563eb] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:bg-[#1d4ed8] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                       Arcade Calculator
                     </button>
                     
-                    <a
-                      href="https://go.cloudskillsboost.google/arcade"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 py-3 bg-white text-[#2563eb] font-bold text-[14px] rounded-lg border border-[#cbd5e1] shadow-sm hover:bg-blue-50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center"
-                    >
+                    <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white text-[#2563eb] font-bold text-[14px] rounded-lg border border-[#cbd5e1] shadow-sm hover:bg-blue-50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                       Start Labs here
                     </a>
-                    
-                    <a
-                      href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-6 py-3 bg-[#e11d48] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.4)] hover:bg-[#be123c] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center"
-                    >
+
+                    {/* 🔥 SUBSCRIBE BUTTON IS BACK 🔥 */}
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-[#e11d48] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.4)] hover:bg-[#be123c] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                       Subscribe for Arcade
                     </a>
                   </div>
 
-                  {/*  Facilitator Program Box  */}
                   <div className="flex flex-col gap-2 text-center lg:text-left w-full max-w-lg mt-2 px-4 lg:px-0">
                     <h3 className="text-[20px] md:text-[22px] font-bold text-[#0f172a] tracking-tight">
                       Arcade Facilitator Program
@@ -274,61 +218,55 @@ export default function HomePage() {
                     <p className="text-[#475569] font-medium text-[14px] md:text-[15px] mb-2">
                       Lead your community and unlock exclusive Arcade rewards.
                     </p>
-                    <a 
-                      href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-center lg:justify-start gap-2 text-[#2563eb] hover:text-[#1d4ed8] font-bold transition-all w-full lg:w-fit"
-                    >
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-center lg:justify-start gap-2 text-[#2563eb] hover:text-[#1d4ed8] font-bold transition-all w-full lg:w-fit">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                       Facilitator Registration Form
                       <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                   </div>
 
-                  {/*  Referral Code Section  */}
-                  <div className="mt-8 w-full max-w-[340px] mx-auto lg:mx-0">
-                    <h4 className="text-[#64748b] text-[11px] font-extrabold uppercase tracking-widest mb-2">
-                      Referral Code
+                  {/* 🔥 TIMER SECTION 🔥 */}
+                  <div className="mt-8 w-full max-w-[420px] mx-auto lg:mx-0">
+                    <h4 className="text-[#e11d48] text-[12px] md:text-[13px] font-extrabold uppercase tracking-widest mb-3 flex items-center justify-center lg:justify-start gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#e11d48] animate-pulse"></span>
+                      Program Ending In
                     </h4>
-                    <div className="bg-transparent border border-[#cbd5e1] rounded-lg p-3 px-4 flex items-center justify-between w-full">
-                      <div className="font-mono text-[#0f172a] font-bold text-[14px] md:text-[15px] tracking-wide">
-                        Oh, Enrollment Closed
+                    <div className="bg-white border-2 border-[#f1f5f9] rounded-2xl p-4 md:p-5 flex items-center justify-between shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]">
+                      <div className="flex flex-col items-center w-16">
+                        <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.days}</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-[#64748b] uppercase mt-1">Days</span>
                       </div>
-                      <button
-                        onClick={handleCopyReferral}
-                        className="text-[#64748b] hover:text-[#0f172a] transition-colors"
-                        title="Copy Referral Code"
-                      >
-                        {isReferralCopied ? (
-                          <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                        ) : (
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                        )}
-                      </button>
+                      <span className="text-2xl font-black text-[#cbd5e1] pb-4">:</span>
+                      <div className="flex flex-col items-center w-16">
+                        <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-[#64748b] uppercase mt-1">Hrs</span>
+                      </div>
+                      <span className="text-2xl font-black text-[#cbd5e1] pb-4">:</span>
+                      <div className="flex flex-col items-center w-16">
+                        <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-[#64748b] uppercase mt-1">Mins</span>
+                      </div>
+                      <span className="text-2xl font-black text-[#cbd5e1] pb-4">:</span>
+                      <div className="flex flex-col items-center w-16">
+                        <span className="text-3xl md:text-4xl font-black text-[#e11d48] tabular-nums tracking-tight">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-[#e11d48] uppercase mt-1">Secs</span>
+                      </div>
                     </div>
                   </div>
 
                 </div>
 
-                {/* 🌟 PREMIUM KEY HIGHLIGHTS 3D CARD (RIGHT SIDE) 🌟 */}
-                <div className="relative z-20 w-full lg:w-[480px] flex justify-center lg:justify-end mt-8 lg:mt-0 lg:pl-10 pb-8 lg:pb-0" style={{ perspective: '1200px' }}>
+                {/* 🌟 PREMIUM AUTO-MOVING 3D CARD (RIGHT SIDE) 🌟 */}
+                <div className="relative z-20 w-full lg:w-[480px] flex justify-center lg:justify-end mt-12 lg:mt-0 lg:pl-10 pb-8 lg:pb-0" style={{ perspective: '1200px' }}>
                   
-                  {/* Subtle Background Shadow/Glow Card */}
                   <div 
-                    className="absolute inset-0 bg-white rounded-[24px] shadow-2xl z-0" 
-                    style={{ transform: 'rotateY(-10deg) rotateX(2deg) rotateZ(1deg) translateX(25px) translateY(15px)', opacity: 0.8 }}
+                    className="absolute inset-0 bg-white rounded-[24px] shadow-2xl z-0 animate-auto-3d" 
+                    style={{ opacity: 0.8 }}
                   ></div>
                   
-                  {/* Main Blue Tilted Card */}
                   <div 
-                    className="w-full max-w-[420px] bg-[#2563eb] rounded-[24px] shadow-[0_25px_50px_-12px_rgba(37,99,235,0.6)] p-6 md:p-8 relative z-10 border border-blue-400/20"
-                    style={{ transform: 'rotateY(-15deg) rotateX(4deg) rotateZ(-1deg)', transformStyle: 'preserve-3d', transition: 'transform 0.5s ease-out' }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = 'rotateY(-5deg) rotateX(2deg) rotateZ(0deg)'}
-                    onMouseOut={(e) => e.currentTarget.style.transform = 'rotateY(-15deg) rotateX(4deg) rotateZ(-1deg)'}
+                    className="w-full max-w-[420px] bg-[#2563eb] rounded-[24px] shadow-[0_25px_50px_-12px_rgba(37,99,235,0.6)] p-6 md:p-8 relative z-10 border border-blue-400/20 animate-auto-3d"
                   >
-                    
-                    {/* Header inside Card */}
                     <div className="flex items-center justify-between pb-5 mb-4 border-b border-blue-400/30">
                       <h3 className="text-white font-bold text-[18px] md:text-[22px] tracking-tight">
                         Key Highlights
@@ -346,20 +284,14 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* List Items inside Card */}
                     <div className="flex flex-col gap-0">
                       {[
                         { name: "Automated Points Calculation", link: "/calculator", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/> },
                         { name: "Real-time Leaderboard", link: "/leaderboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M4 14h4v6H4zm6-6h4v12h-4zm6-4h4v16h-4z"/> },
                         { name: "AI Chatbot Assistant", link: "/chat", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/> },
                         { name: "96+ Skill Badges Support", link: "/resources", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/> },
-                        { name: "Milestone & Tier Tracking", link: "/dashboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143z"/> },
-                        { name: "Community Posts & Reviews", link: "/post", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/> },
-                        { name: "Admin Panel & Moderation", link: "/admin-nexus-2026", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/> },
-                        { name: "About Page", link: "/about", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/> },
-                        { name: "Dark / Light Mode", link: null, icon: <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/> },
-                        { name: "PWA Ready", link: null, icon: <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/> },
-                        { name: "SEO Optimized", link: null, icon: <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/> }
+                        { name: "Milestone Tracking", link: "/dashboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143z"/> },
+                        { name: "Community Posts", link: "/post", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/> }
                       ].map((item, idx) => (
                         <div key={idx} className="flex items-center group py-2.5 border-b border-blue-400/20 last:border-0 relative">
                           <div className="bg-white/10 rounded-[10px] p-1.5 w-8 h-8 flex items-center justify-center mr-3.5 text-white shadow-sm shrink-0">
@@ -397,293 +329,77 @@ export default function HomePage() {
           </div>
         </section>
 
-{/* =================  NEW PREMIUM TABBED GUIDE SECTION  ================= */}
-<section className="relative z-10 pt-4 pb-24 bg-gray-50 border-t border-gray-100">
-  <div className="max-w-4xl mx-auto px-6">
-    
-    <div className="text-center mb-10 relative z-10">
-      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-5 drop-shadow-sm">
-        Start Arcade Labs
-      </h2>
-    </div>
+        {/* ================= NEW PREMIUM TABBED GUIDE SECTION ================= */}
+        <section className="relative z-10 pt-4 pb-24 bg-gray-50 border-t border-gray-100">
+          <div className="max-w-6xl mx-auto px-6">
+            
+            <div className="text-center mb-10 relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-5 drop-shadow-sm">
+                Start Arcade Labs
+              </h2>
+            </div>
 
-    {/* TABBED INTERFACE */}
-    <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden flex flex-col">
-      
-      {/* Tab Headers */}
-      <div className="flex flex-col sm:flex-row border-b border-gray-200">
-        <button 
-          onClick={() => setActiveGuideTab('start')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}
-        >
-          Arcade Labs Start
-        </button>
-        <button 
-          onClick={() => setActiveGuideTab('tools')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}
-        >
-          Arcade Tools
-        </button>
-        <button 
-          onClick={() => setActiveGuideTab('points')}
-          className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}
-        >
-          Points System
-        </button>
-      </div>
-      
-      {/* Tab Content Area */}
-      <div className="h-[auto] max-h-[450px] overflow-y-auto custom-scrollbar">
-        
-        {/* 1. How to Start Content */}
-        {activeGuideTab === 'start' && (
-          <div className="divide-y divide-gray-100 animate-fade-in">
-            {startSteps.map((item, index) => (
-              <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full">
-                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
-                  <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
-                    {item.badge}
-                  </span>
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
-                    {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1">→</span>
-                  </h3>
-                  <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">
-                    {item.desc}
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        )}
-
-        {/* 2. Arcade Tools Content */}
-        {activeGuideTab === 'tools' && (
-          <div className="divide-y divide-gray-100 animate-fade-in">
-            {arcadeTools.map((item, index) => (
-              <Link href={item.link} key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full">
-                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
-                  <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                  <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
-                    {item.badge}
-                  </span>
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">
-                    {item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                  </h3>
-                  <div className="text-gray-600 text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed">
-                    <span className="text-[#1a73e8] font-bold text-[14px]">🔗</span> {item.desc}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {/* 3. Points System Content */}
-        {activeGuideTab === 'points' && (
-          <div className="divide-y divide-gray-100 animate-fade-in">
-            {pointsSystem.map((item, index) => (
-              <div key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full">
-                <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
-                  <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                  <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">
-                    {item.badge}
-                  </span>
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <h3 className="text-gray-900 font-bold text-[18px] transition-colors">
-                    {item.title}
-                  </h3>
-                  <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">
-                    {item.desc}
-                  </div>
-                </div>
+            <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden flex flex-col">
+              <div className="flex flex-col sm:flex-row border-b border-gray-200">
+                <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}>Arcade Labs Start</button>
+                <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}>Arcade Tools</button>
+                <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}>Points System</button>
               </div>
-            ))}
-          </div>
-        )}
-
-      </div>
-    </div>
-
-  </div>
-</section>
-
-      {/* ================= FREE CREDITS GUIDE ================= */}
-<section id="credits-section" className="relative z-10 py-16 bg-[#ffffff] border-b border-[#dadce0] overflow-hidden font-sans">
-  <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-    
-    <div className="mb-16">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#202124] mb-3">Get Free 750 Credits</h2>
-        <p className="text-[#5f6368] text-lg">Follow along with this step-by-step video guide</p>
-      </div>
-      
-      {/* YouTube Video Embed */}
-      <div className="relative max-w-5xl mx-auto rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#dadce0] aspect-video bg-black">
-        <iframe 
-          className="absolute inset-0 w-full h-full"
-          src="https://www.youtube.com/embed/WVdUW1wJwyI" 
-          title="How to get your free credits or monthly credits pass? | Google Skills Campaigns" 
-          frameBorder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerPolicy="strict-origin-when-cross-origin" 
-          allowFullScreen>
-        </iframe>
-      </div>
-    </div>
-    
-    {/*  UPDATED PREMIUM BLUE CREDIT BOX  */}
-    <div className="bg-[#1a73e8] border border-[#1557b0] rounded-xl p-6 md:p-8 mb-16 shadow-lg relative transition-all max-w-5xl mx-auto text-white">
-      <button 
-        onClick={handleCopyCode}
-        className="absolute top-5 right-5 md:top-6 md:right-6 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-[14px] font-bold flex items-center gap-2 border border-white/20 transition-colors cursor-pointer group shadow-sm"
-        title="Copy code"
-      >
-        <span className="text-white tracking-wide">6z-DEVBR-15::FjUNJM3E2wESE1X7D5W0yw</span>
-        {isCopied ? (
-          <span className="text-green-300 flex items-center p-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-            </svg>
-          </span>
-        ) : (
-          <span className="text-white p-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-          </span>
-        )}
-      </button>
-      
-      <div className="flex items-start gap-3 mb-5 mt-4 md:mt-0">
-        <div className="text-yellow-300 text-2xl shrink-0 mt-0.5">🔗</div>
-        <div className="pr-0 md:pr-48"> 
-          <h3 className="text-xl font-bold text-white mb-1.5 tracking-wide">Special Credit Link</h3>
-          <p className="text-blue-100 text-sm">
-            Use this exclusive link to receive your <strong className="text-white bg-white/20 px-2 py-0.5 rounded ml-1">759credits</strong>
-          </p>
-          <p className="text-blue-200 text-xs font-semibold mt-3 flex items-center gap-1.5">
-            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-            Last updated & verified: February 2026
-          </p>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg p-3 flex flex-col md:flex-row items-center justify-between gap-3 shadow-inner">
-        <div className="flex-1 w-full overflow-hidden px-2">
-          <p className="text-[11px] text-[#5f6368] font-bold uppercase mb-0.5">Special Link:</p>
-          <div className="text-sm text-[#1a73e8] font-medium block truncate w-full">
-            https://www.skills.google/catalog?<span className="bg-[#e8f0fe] text-[#1a73e8] px-1.5 py-0.5 rounded font-bold border border-[#d2e3fc]">6z-DEVBR-15::FjUNJM3E2wESE1X7D5W0yw</span>
-          </div>
-        </div>
-        <a 
-          href="https://www.skills.google/catalog?keywords=GSP282&event=Your" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-full md:w-auto px-6 py-2.5 bg-[#202124] hover:bg-[#3c4043] text-white font-bold text-sm rounded-lg shadow-md transition-all text-center flex items-center justify-center gap-2 whitespace-nowrap"
-        >
-          Open Link
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
-      </div>
-    </div>
-
-    {/*  SHORTENED TIMELINE DESIGN FOR STEP BY STEP GUIDE  */}
-    <div className="mb-16 max-w-5xl mx-auto px-2">
-      <h3 className="text-2xl md:text-3xl font-bold text-[#202124] mb-10 text-center">Step-by-Step Guide</h3>
-      
-      <div className="relative ml-4 md:ml-8">
-        {/* Vertical Connector Line */}
-        <div className="absolute top-4 bottom-0 left-[19px] w-[3px] bg-[#e8eaed] z-0"></div>
-
-        <div className="space-y-6 md:space-y-8 relative z-10">
-          {[
-            { 
-              title: "Sign Out First", 
-              icon: "🚪",
-              desc: "Log out of your current Google Skills account before doing anything else.", 
-              alert: { type: "important", text: "Crucial: Credits won't apply if you're already logged in." }
-            },
-            { 
-              title: "Open Special Link", 
-              icon: "🔗",
-              desc: "Click the exclusive blue link provided above. It contains your unique activation code.", 
-              alert: null
-            },
-            { 
-              title: "Sign In", 
-              icon: "🔑",
-              desc: "Log back in using the Google account where you want to earn your badges.", 
-              alert: null
-            },
-            { 
-              title: "Get 9 Credits", 
-              icon: "🎁",
-              desc: "You will instantly receive 9 initial credits in your account.", 
-              alert: null,
-              badge: "9 Credits"
-            },
-            { 
-              title: "Start a Lab", 
-              icon: "💻",
-              desc: "Search the catalog and start 'A Tour of Google Cloud Hands-on Labs'.", 
-              alert: null
-            },
-            { 
-              title: "Score 100%", 
-              icon: "💯",
-              desc: "Complete the lab instructions fully and ensure you get a 100/100 score.", 
-              alert: { type: "important", text: "Partial completion won't unlock the remaining credits." }
-            },
-            { 
-              title: "Verify 750 Credits", 
-              icon: "✅",
-              desc: "Check your Billing page to confirm all remaining credits are added.", 
-              alert: null,
-              badge: "750 Total Credits"
-            }
-          ].map((step, index) => (
-            <div key={index} className="relative flex items-start gap-4 md:gap-6">
               
-              {/* Connected Circle Bullet */}
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#1a73e8] text-white font-bold text-sm shrink-0 border-4 border-white shadow-sm z-10 mt-2">
-                {index + 1}
-              </div>
-
-              {/* Content Card */}
-              <div className="flex-1 p-5 rounded-xl bg-white border border-[#dadce0] shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-md">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
-                  <h4 className="text-lg font-bold text-[#202124] flex items-center gap-2">
-                    <span>{step.icon}</span> {step.title}
-                  </h4>
-                  {step.badge && (
-                    <span className="inline-block px-3 py-1 bg-[#e8f0fe] text-[#1a73e8] text-xs font-bold rounded-md border border-[#d2e3fc] w-fit">
-                      {step.badge}
-                    </span>
-                  )}
-                </div>
-                <p className="text-[#5f6368] text-[14px] leading-relaxed mb-2">{step.desc}</p>
-                
-                {step.alert && (
-                  <div className={`mt-2 p-2.5 rounded-md text-[13px] font-medium border flex gap-2 items-start ${step.alert.type === 'important' ? 'bg-[#fff9e6] text-[#b06000] border-[#ffecb3]' : 'bg-[#e6f4ea] text-[#0d652d] border-[#ceead6]'}`}>
-                    <span className="mt-0.5">{step.alert.type === 'important' ? '⚠️' : '💡'}</span>
-                    <span>{step.alert.text}</span>
+              <div className="h-[auto] max-h-[450px] overflow-y-auto custom-scrollbar">
+                {activeGuideTab === 'start' && (
+                  <div className="divide-y divide-gray-100 animate-fade-in grid grid-cols-1 md:grid-cols-2">
+                    {startSteps.map((item, index) => (
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full border-b border-gray-100 md:border-b-0 md:[&:nth-child(1)]:border-b md:[&:nth-child(2)]:border-b md:[&:nth-child(odd)]:border-r">
+                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
+                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                          <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                          <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">{item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1">→</span></h3>
+                          <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">{item.desc}</div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+                {activeGuideTab === 'tools' && (
+                  <div className="divide-y divide-gray-100 animate-fade-in grid grid-cols-1 md:grid-cols-2">
+                    {arcadeTools.map((item, index) => (
+                      <Link href={item.link} key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full border-b border-gray-100 md:border-b-0 md:[&:nth-child(1)]:border-b md:[&:nth-child(2)]:border-b md:[&:nth-child(odd)]:border-r">
+                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
+                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                          <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                          <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">{item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span></h3>
+                          <div className="text-gray-600 text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed"><span className="text-[#1a73e8] font-bold text-[14px]">🔗</span> {item.desc}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {activeGuideTab === 'points' && (
+                  <div className="divide-y divide-gray-100 animate-fade-in grid grid-cols-1 md:grid-cols-2">
+                    {pointsSystem.map((item, index) => (
+                      <div key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full border-b border-gray-100 md:border-b-0 md:[&:nth-child(odd)]:border-r">
+                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
+                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                          <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
+                        </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                          <h3 className="text-gray-900 font-bold text-[18px] transition-colors">{item.title}</h3>
+                          <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">{item.desc}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
 
-  </div>
-</section>
+          </div>
+        </section>
 
         {/* ================= PREMIUM PROBLEM / MESSAGE BOX ================= */}
         <div className="py-12 max-w-4xl mx-auto px-6 bg-white">
@@ -716,7 +432,6 @@ export default function HomePage() {
                 </div>
               </div>
               
-              {/* Conditional Sub-Category Dropdown */}
               {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue" || formCategory === "Arcade Points Calculation") && (
                 <div className="flex flex-col gap-2.5">
                   <label className="text-sm font-semibold text-[#3c4043]">
@@ -727,26 +442,14 @@ export default function HomePage() {
                   <div className="relative">
                     <select required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
                       <option value="" disabled hidden>Select an option</option>
-                      
                       {formCategory === "Swags Delivery / Issue" && (
-                        <>
-                          <option value="Printos">Printos Services</option>
-                          <option value="Whitesquare">Whitesquare International</option>
-                        </>
+                        <><option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option></>
                       )}
-                      
                       {formCategory === "Labs Completion Issue" && (
-                        <>
-                          <option value="Arcade Monthly Labs">Arcade Monthly Labs</option>
-                          <option value="Skill Badges">Skill Badges</option>
-                        </>
+                        <><option value="Arcade Monthly Labs">Arcade Monthly Labs</option><option value="Skill Badges">Skill Badges</option></>
                       )}
-                      
                       {formCategory === "Arcade Points Calculation" && (
-                        <>
-                          <option value="Points Count Issue">Points Count Issue</option>
-                          <option value="Invalid Public Profile Issue">Invalid Public Profile Issue</option>
-                        </>
+                        <><option value="Points Count Issue">Points Count Issue</option><option value="Invalid Public Profile Issue">Invalid Public Profile Issue</option></>
                       )}
                     </select>
                   </div>
@@ -776,19 +479,6 @@ export default function HomePage() {
       </main>
 
       <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f8f9fa; 
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #1a73e8; 
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #1557b0; 
-        }
         .animate-fade-in {
           animation: fadeIn 0.3s ease-in-out;
         }
