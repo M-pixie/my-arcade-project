@@ -217,7 +217,7 @@ export default function FacilitatorPage() {
                 {/* --- New Cohort Winners List Section --- */}
                 <div className="mt-5 relative z-10 bg-[#f8f9fa] p-3 rounded-lg border border-[#e8eaed]">
                   <ul className="text-[12px] text-[#5f6368] space-y-1.5 font-medium list-disc pl-4">
-                    <li>Google Arcade Facilitator Cohort 1 2025 - Ultimate winner ( Manish )</li>
+                    <li>Google Arcade Facilitator Cohort 1 2025 - Ultimate winner ( Manish & Ankana[Microsoft] )</li>
                     <li>Google Arcade Facilitator Cohort 2 2025 - Ultimate winner ( Manish & Anjali )</li>
                     <li>Google Arcade Facilitator 2026 - Ongoing </li>
                   </ul>
