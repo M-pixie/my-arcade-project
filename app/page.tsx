@@ -152,10 +152,15 @@ export default function HomePage() {
       <PopupModal />
       <Navbar />
 
-      <main className="min-h-screen bg-white text-[#202124] overflow-hidden selection:bg-[#e8f0fe] selection:text-[#1a73e8] font-sans">
+      <main className="min-h-screen bg-[#f8fafc] text-[#0f172a] overflow-hidden selection:bg-blue-500/20 selection:text-blue-900 font-sans relative">
+        
+        {/* Animated Background Gradients (Light) */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-400/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-400/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-[30%] right-[10%] w-[30%] h-[30%] bg-rose-300/20 rounded-full blur-[100px] pointer-events-none"></div>
 
         {/* ================= HERO SECTION ================= */}
-        <section className="relative pt-24 md:pt-28 pb-12 bg-white overflow-hidden min-h-[85vh] flex items-center">
+        <section className="relative pt-24 md:pt-28 pb-12 overflow-hidden min-h-[85vh] flex items-center">
           
           <style>{`
             .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -163,9 +168,9 @@ export default function HomePage() {
             
             /* 🔥 KEYFRAMES FOR AUTO 3D MOVEMENT 🔥 */
             @keyframes auto3d {
-              0% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); }
-              50% { transform: rotateY(-5deg) rotateX(10deg) rotateZ(2deg) translateY(-12px); box-shadow: 0 35px 60px -15px rgba(37,99,235,0.7); }
-              100% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); }
+              0% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
+              50% { transform: rotateY(-5deg) rotateX(10deg) rotateZ(2deg) translateY(-12px); box-shadow: 0 35px 60px -15px rgba(37, 99, 235, 0.25); }
+              100% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
             }
             .animate-auto-3d {
               animation: auto3d 6s ease-in-out infinite;
@@ -173,7 +178,7 @@ export default function HomePage() {
             }
           `}</style>
           
-          <div className="absolute inset-0 z-0 opacity-40 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#cbd5e1 2px, transparent 2px)', backgroundSize: '24px 24px', maskImage: 'radial-gradient(ellipse at left center, black 10%, transparent 60%)', WebkitMaskImage: 'radial-gradient(ellipse at left center, black 10%, transparent 60%)' }}></div>
+          <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#64748b 2px, transparent 2px)', backgroundSize: '30px 30px', maskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)' }}></div>
 
           <div className="w-full relative z-10">
             <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10">
@@ -183,42 +188,42 @@ export default function HomePage() {
                 {/* 🌟 LEFT COLUMN 🌟 */}
                 <div className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
                   
-                  <h1 className="text-[40px] md:text-[56px] font-extrabold text-[#0f172a] tracking-tight m-0 leading-[1.15] md:leading-[1.1]">
-                    Arcade Nexus
+                  <h1 className="text-[40px] md:text-[64px] font-black text-[#0f172a] tracking-tight m-0 leading-[1.15] md:leading-[1.1]">
+                    Arcade <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow-sm">Nexus</span>
                   </h1>
                   
-                  <div className="w-12 h-1.5 bg-[#2563eb] rounded-full mt-4 mb-6 mx-auto lg:mx-0"></div>
+                  <div className="w-16 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full mt-5 mb-6 mx-auto lg:mx-0 shadow-[0_4px_10px_rgba(59,130,246,0.3)]"></div>
 
-                  <p className="text-[#475569] text-[16px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8 px-2 md:px-0">
+                  <p className="text-slate-600 text-[16px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8 px-2 md:px-0">
                     Crunch points, track live leaderboards, and own your Arcade journey in one seamless dashboard.
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10 w-full max-w-2xl">
-                    <button onClick={() => router.push('/calculator')} className="px-6 py-3 bg-[#2563eb] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:bg-[#1d4ed8] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                    <button onClick={() => router.push('/calculator')} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(79,70,229,0.5)] hover:shadow-[0_12px_25px_-6px_rgba(79,70,229,0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                       Arcade Calculator
                     </button>
                     
-                    <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white text-[#2563eb] font-bold text-[14px] rounded-lg border border-[#cbd5e1] shadow-sm hover:bg-blue-50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                    <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white/80 backdrop-blur-md text-[#2563eb] font-bold text-[14px] rounded-lg border border-blue-100 shadow-sm hover:bg-white hover:text-blue-700 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                       Start Labs here
                     </a>
 
                     {/* 🔥 SUBSCRIBE BUTTON IS BACK 🔥 */}
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-[#e11d48] text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.4)] hover:bg-[#be123c] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.5)] hover:shadow-[0_12px_25px_-6px_rgba(225,29,72,0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                       Subscribe for Arcade
                     </a>
                   </div>
 
-                  <div className="flex flex-col gap-2 text-center lg:text-left w-full max-w-lg mt-2 px-4 lg:px-0">
-                    <h3 className="text-[20px] md:text-[22px] font-bold text-[#0f172a] tracking-tight">
-                      Arcade Facilitator Program
+                  <div className="flex flex-col gap-2 text-center lg:text-left w-full max-w-lg mt-2 px-6 py-5 bg-white/70 rounded-2xl border border-[#e2e8f0] backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all">
+                    <h3 className="text-[18px] md:text-[20px] font-bold text-[#0f172a] tracking-tight flex items-center gap-2 justify-center lg:justify-start">
+                      <span className="text-[#2563eb]">⚡</span> Arcade Facilitator Program
                     </h3>
-                    <p className="text-[#475569] font-medium text-[14px] md:text-[15px] mb-2">
+                    <p className="text-slate-600 font-medium text-[13px] md:text-[14px] mb-1">
                       Lead your community and unlock exclusive Arcade rewards.
                     </p>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-center lg:justify-start gap-2 text-[#2563eb] hover:text-[#1d4ed8] font-bold transition-all w-full lg:w-fit">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScjkkpNBMs0xR_EvqwLFQZRRVXccQQTLl-pUA37NvzvUQ3NJQ/viewform" target="_blank" rel="noopener noreferrer" className="group flex items-center justify-center lg:justify-start gap-1.5 text-[#2563eb] hover:text-[#1d4ed8] font-bold transition-all w-full lg:w-fit text-[14px]">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                       Facilitator Registration Form
                       <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -231,25 +236,25 @@ export default function HomePage() {
                       <span className="w-2.5 h-2.5 rounded-full bg-[#e11d48] animate-pulse"></span>
                       Program Ending In
                     </h4>
-                    <div className="bg-white border-2 border-[#f1f5f9] rounded-2xl p-4 md:p-5 flex items-center justify-between shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]">
+                    <div className="bg-white/80 backdrop-blur-md border border-[#e2e8f0] rounded-2xl p-4 md:p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow">
                       <div className="flex flex-col items-center w-16">
                         <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.days}</span>
-                        <span className="text-[10px] md:text-[11px] font-bold text-[#64748b] uppercase mt-1">Days</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase mt-1">Days</span>
                       </div>
-                      <span className="text-2xl font-black text-[#cbd5e1] pb-4">:</span>
+                      <span className="text-2xl font-black text-slate-300 pb-4">:</span>
                       <div className="flex flex-col items-center w-16">
                         <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.hours.toString().padStart(2, '0')}</span>
-                        <span className="text-[10px] md:text-[11px] font-bold text-[#64748b] uppercase mt-1">Hrs</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase mt-1">Hrs</span>
                       </div>
-                      <span className="text-2xl font-black text-[#cbd5e1] pb-4">:</span>
+                      <span className="text-2xl font-black text-slate-300 pb-4">:</span>
                       <div className="flex flex-col items-center w-16">
                         <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.minutes.toString().padStart(2, '0')}</span>
-                        <span className="text-[10px] md:text-[11px] font-bold text-[#64748b] uppercase mt-1">Mins</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase mt-1">Mins</span>
                       </div>
-                      <span className="text-2xl font-black text-[#cbd5e1] pb-4">:</span>
+                      <span className="text-2xl font-black text-slate-300 pb-4">:</span>
                       <div className="flex flex-col items-center w-16">
-                        <span className="text-3xl md:text-4xl font-black text-[#e11d48] tabular-nums tracking-tight">{timeLeft.seconds.toString().padStart(2, '0')}</span>
-                        <span className="text-[10px] md:text-[11px] font-bold text-[#e11d48] uppercase mt-1">Secs</span>
+                        <span className="text-3xl md:text-4xl font-black text-rose-500 tabular-nums tracking-tight drop-shadow-sm">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-rose-500 uppercase mt-1">Secs</span>
                       </div>
                     </div>
                   </div>
@@ -260,26 +265,25 @@ export default function HomePage() {
                 <div className="relative z-20 w-full lg:w-[480px] flex justify-center lg:justify-end mt-12 lg:mt-0 lg:pl-10 pb-8 lg:pb-0" style={{ perspective: '1200px' }}>
                   
                   <div 
-                    className="absolute inset-0 bg-white rounded-[24px] shadow-2xl z-0 animate-auto-3d" 
-                    style={{ opacity: 0.8 }}
+                    className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-[24px] shadow-[0_20px_50px_rgba(59,130,246,0.4)] z-0 animate-auto-3d blur-[8px] opacity-60" 
                   ></div>
                   
                   <div 
-                    className="w-full max-w-[420px] bg-[#2563eb] rounded-[24px] shadow-[0_25px_50px_-12px_rgba(37,99,235,0.6)] p-6 md:p-8 relative z-10 border border-blue-400/20 animate-auto-3d"
+                    className="w-full max-w-[420px] bg-white/80 backdrop-blur-2xl rounded-[24px] shadow-[0_15px_35px_rgba(0,0,0,0.1)] p-6 md:p-8 relative z-10 border border-white/60 animate-auto-3d"
                   >
-                    <div className="flex items-center justify-between pb-5 mb-4 border-b border-blue-400/30">
-                      <h3 className="text-white font-bold text-[18px] md:text-[22px] tracking-tight">
+                    <div className="flex items-center justify-between pb-5 mb-4 border-b border-slate-200">
+                      <h3 className="text-[#0f172a] font-black text-[18px] md:text-[22px] tracking-tight">
                         Key Highlights
                       </h3>
                       <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/dashboard')}>
-                        <span className="text-blue-100 text-[11px] font-semibold tracking-wide group-hover:text-white transition-colors text-right max-w-[70px] truncate">
+                        <span className="text-slate-500 text-[11px] font-bold tracking-wide group-hover:text-blue-600 transition-colors text-right max-w-[70px] truncate">
                           {currentUserName || "Monalisa N..."}
                         </span>
                         <img 
                           src={imageError ? "/avatar.png" : currentUserAvatar} 
                           alt="Your Avatar" 
                           onError={() => setImageError(true)}
-                          className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 border-2 border-white/20 bg-blue-800"
+                          className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 border-2 border-white bg-blue-100 shadow-sm"
                         />
                       </div>
                     </div>
@@ -293,8 +297,8 @@ export default function HomePage() {
                         { name: "Milestone Tracking", link: "/dashboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143z"/> },
                         { name: "Community Posts", link: "/post", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/> }
                       ].map((item, idx) => (
-                        <div key={idx} className="flex items-center group py-2.5 border-b border-blue-400/20 last:border-0 relative">
-                          <div className="bg-white/10 rounded-[10px] p-1.5 w-8 h-8 flex items-center justify-center mr-3.5 text-white shadow-sm shrink-0">
+                        <div key={idx} className="flex items-center group py-2.5 border-b border-slate-100 last:border-0 relative">
+                          <div className="bg-blue-50 group-hover:bg-blue-100 transition-colors rounded-[10px] p-1.5 w-8 h-8 flex items-center justify-center mr-3.5 text-blue-600 shadow-sm shrink-0">
                             <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                               {item.icon}
                             </svg>
@@ -308,12 +312,12 @@ export default function HomePage() {
                                   router.push(item.link);
                                 }
                               }}
-                              className="font-medium text-[13px] md:text-[15px] text-white hover:text-blue-100 transition-colors duration-200 cursor-pointer w-full text-left"
+                              className="font-bold text-[13px] md:text-[15px] text-slate-700 hover:text-blue-600 transition-colors duration-200 cursor-pointer w-full text-left"
                             >
                               {item.name}
                             </a>
                           ) : (
-                            <span className="font-medium text-[13px] md:text-[15px] text-white/90 w-full text-left">
+                            <span className="font-bold text-[13px] md:text-[15px] text-slate-700 w-full text-left">
                               {item.name}
                             </span>
                           )}
@@ -330,66 +334,66 @@ export default function HomePage() {
         </section>
 
         {/* ================= NEW PREMIUM TABBED GUIDE SECTION ================= */}
-        <section className="relative z-10 pt-4 pb-24 bg-gray-50 border-t border-gray-100">
+        <section className="relative z-10 pt-16 pb-24 border-t border-[#e2e8f0] bg-white">
           <div className="max-w-6xl mx-auto px-6">
             
             <div className="text-center mb-10 relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-5 drop-shadow-sm">
+              <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] tracking-tight mb-5 drop-shadow-sm">
                 Start Arcade Labs
               </h2>
             </div>
 
-            <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden flex flex-col">
-              <div className="flex flex-col sm:flex-row border-b border-gray-200">
-                <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'start' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}>Arcade Labs Start</button>
-                <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 border-b sm:border-b-0 sm:border-r border-gray-200 ${activeGuideTab === 'tools' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}>Arcade Tools</button>
-                <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeGuideTab === 'points' ? 'bg-[#1a73e8] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-[#1a73e8]'}`}>Points System</button>
+            <div className="bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-[#e2e8f0] overflow-hidden flex flex-col">
+              <div className="flex flex-col sm:flex-row border-b border-[#e2e8f0] bg-slate-50/50">
+                <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-all duration-200 border-b sm:border-b-0 sm:border-r border-[#e2e8f0] ${activeGuideTab === 'start' ? 'bg-white text-blue-600 border-b-[3px] border-b-blue-600 shadow-sm' : 'bg-transparent text-slate-500 hover:bg-white hover:text-slate-800'}`}>Arcade Labs Start</button>
+                <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-all duration-200 border-b sm:border-b-0 sm:border-r border-[#e2e8f0] ${activeGuideTab === 'tools' ? 'bg-white text-blue-600 border-b-[3px] border-b-blue-600 shadow-sm' : 'bg-transparent text-slate-500 hover:bg-white hover:text-slate-800'}`}>Arcade Tools</button>
+                <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-4 text-center font-bold text-[14px] sm:text-[15px] transition-all duration-200 ${activeGuideTab === 'points' ? 'bg-white text-blue-600 border-b-[3px] border-b-blue-600 shadow-sm' : 'bg-transparent text-slate-500 hover:bg-white hover:text-slate-800'}`}>Points System</button>
               </div>
               
               <div className="h-[auto] max-h-[450px] overflow-y-auto custom-scrollbar">
                 {activeGuideTab === 'start' && (
-                  <div className="divide-y divide-gray-100 animate-fade-in grid grid-cols-1 md:grid-cols-2">
+                  <div className="divide-y divide-[#e2e8f0] animate-fade-in grid grid-cols-1 md:grid-cols-2">
                     {startSteps.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full border-b border-gray-100 md:border-b-0 md:[&:nth-child(1)]:border-b md:[&:nth-child(2)]:border-b md:[&:nth-child(odd)]:border-r">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
-                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-blue-50/50 group transition-colors duration-200 w-full border-b border-[#e2e8f0] md:border-b-0 md:[&:nth-child(1)]:border-b md:[&:nth-child(2)]:border-b md:[&:nth-child(odd)]:border-r md:border-[#e2e8f0]">
+                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e2e8f0] pr-4 mr-5">
+                          <span className="text-[26px] mb-2 transition-transform group-hover:scale-110">{item.icon}</span>
                           <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">{item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1">→</span></h3>
-                          <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">{item.desc}</div>
+                          <h3 className="text-[#0f172a] font-bold text-[18px] group-hover:text-blue-600 transition-colors">{item.title} <span className="font-sans font-bold text-blue-600 ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span></h3>
+                          <div className="text-slate-500 text-[15px] mt-1.5 leading-relaxed">{item.desc}</div>
                         </div>
                       </a>
                     ))}
                   </div>
                 )}
                 {activeGuideTab === 'tools' && (
-                  <div className="divide-y divide-gray-100 animate-fade-in grid grid-cols-1 md:grid-cols-2">
+                  <div className="divide-y divide-[#e2e8f0] animate-fade-in grid grid-cols-1 md:grid-cols-2">
                     {arcadeTools.map((item, index) => (
-                      <Link href={item.link} key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full border-b border-gray-100 md:border-b-0 md:[&:nth-child(1)]:border-b md:[&:nth-child(2)]:border-b md:[&:nth-child(odd)]:border-r">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
-                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
+                      <Link href={item.link} key={index} className="flex p-5 hover:bg-blue-50/50 group transition-colors duration-200 w-full border-b border-[#e2e8f0] md:border-b-0 md:[&:nth-child(1)]:border-b md:[&:nth-child(2)]:border-b md:[&:nth-child(odd)]:border-r md:border-[#e2e8f0]">
+                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e2e8f0] pr-4 mr-5">
+                          <span className="text-[26px] mb-2 transition-transform group-hover:scale-110">{item.icon}</span>
                           <span className="bg-[#1a73e8] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-gray-900 font-bold text-[18px] group-hover:text-[#1a73e8] transition-colors">{item.title} <span className="font-sans font-bold text-[#1a73e8] ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span></h3>
-                          <div className="text-gray-600 text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed"><span className="text-[#1a73e8] font-bold text-[14px]">🔗</span> {item.desc}</div>
+                          <h3 className="text-[#0f172a] font-bold text-[18px] group-hover:text-blue-600 transition-colors">{item.title} <span className="font-sans font-bold text-blue-600 ml-1 opacity-0 group-hover:opacity-100 transition-opacity">→</span></h3>
+                          <div className="text-slate-500 text-[15px] mt-1.5 flex items-center gap-2 leading-relaxed"><span className="text-blue-500 font-bold text-[14px]">🔗</span> {item.desc}</div>
                         </div>
                       </Link>
                     ))}
                   </div>
                 )}
                 {activeGuideTab === 'points' && (
-                  <div className="divide-y divide-gray-100 animate-fade-in grid grid-cols-1 md:grid-cols-2">
+                  <div className="divide-y divide-[#e2e8f0] animate-fade-in grid grid-cols-1 md:grid-cols-2">
                     {pointsSystem.map((item, index) => (
-                      <div key={index} className="flex p-5 hover:bg-gray-50 group transition-colors duration-200 w-full border-b border-gray-100 md:border-b-0 md:[&:nth-child(odd)]:border-r">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-gray-200 pr-4 mr-5">
-                          <span className="text-[26px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-[#0ea5e9] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
+                      <div key={index} className="flex p-5 hover:bg-blue-50/50 group transition-colors duration-200 w-full border-b border-[#e2e8f0] md:border-b-0 md:[&:nth-child(odd)]:border-r md:border-[#e2e8f0]">
+                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e2e8f0] pr-4 mr-5">
+                          <span className="text-[26px] mb-2 transition-transform group-hover:scale-110">{item.icon}</span>
+                          <span className="bg-[#8b5cf6] text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center shadow-sm">{item.badge}</span>
                         </div>
                         <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-gray-900 font-bold text-[18px] transition-colors">{item.title}</h3>
-                          <div className="text-gray-600 text-[15px] mt-1.5 leading-relaxed">{item.desc}</div>
+                          <h3 className="text-[#0f172a] font-bold text-[18px] group-hover:text-[#8b5cf6] transition-colors">{item.title}</h3>
+                          <div className="text-slate-500 text-[15px] mt-1.5 leading-relaxed">{item.desc}</div>
                         </div>
                       </div>
                     ))}
@@ -402,13 +406,14 @@ export default function HomePage() {
         </section>
 
         {/* ================= PREMIUM PROBLEM / MESSAGE BOX ================= */}
-        <div className="py-12 max-w-4xl mx-auto px-6 bg-white">
-          <div className="bg-white border border-[#dadce0] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden transition-shadow hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]">
-            <div className="bg-[#f8f9fa] border-b border-[#dadce0] p-8 md:p-10 text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-[#1a73e8]"></div>
-              <h3 className="text-2xl md:text-3xl font-medium text-[#202124] mb-3">Problem Submission Form</h3>
+        <div className="py-16 max-w-4xl mx-auto px-6 relative">
+          <div className="absolute inset-0 bg-blue-100 blur-[80px] rounded-full z-0 opacity-60"></div>
+          <div className="bg-white/80 backdrop-blur-xl border border-[#e2e8f0] rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.08)] overflow-hidden relative z-10 transition-shadow hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
+            <div className="bg-slate-50/80 border-b border-[#e2e8f0] p-8 md:p-10 text-center relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+              <h3 className="text-2xl md:text-3xl font-black text-[#0f172a] mb-3">Problem Submission Form</h3>
               <p className="text-base mt-2">
-                <span className="bg-[#e8f0fe] text-[#1a73e8] px-3 py-1 rounded-md font-medium inline-block border border-[#d2e3fc]">
+                <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-md font-bold inline-block border border-blue-200">
                   Drop a message regarding your Swags, Labs, or Arcade Points. Our community team will look into it directly.
                 </span>
               </p>
@@ -416,13 +421,13 @@ export default function HomePage() {
             <form onSubmit={handleFormSubmit} className="p-8 md:p-10 flex flex-col gap-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2.5">
-                  <label className="text-sm font-semibold text-[#3c4043]">Your Name</label>
-                  <input type="text" required value={formName} onChange={(e) => setFormName(e.target.value)} className="px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] placeholder-[#9aa0a6]" placeholder="Enter your full name" />
+                  <label className="text-sm font-bold text-slate-700">Your Name</label>
+                  <input type="text" required value={formName} onChange={(e) => setFormName(e.target.value)} className="px-4 py-3.5 bg-white border border-[#cbd5e1] rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 placeholder-slate-400" placeholder="Enter your full name" />
                 </div>
                 <div className="flex flex-col gap-2.5">
-                  <label className="text-sm font-semibold text-[#3c4043]">Issue Category</label>
+                  <label className="text-sm font-bold text-slate-700">Issue Category</label>
                   <div className="relative">
-                    <select value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                    <select value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="w-full px-4 py-3.5 bg-white border border-[#cbd5e1] rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 cursor-pointer appearance-none">
                       <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
                       <option value="Labs Completion Issue">Labs Completion Issue</option>
                       <option value="Arcade Points Calculation">Arcade Points Calculation</option>
@@ -434,13 +439,13 @@ export default function HomePage() {
               
               {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue" || formCategory === "Arcade Points Calculation") && (
                 <div className="flex flex-col gap-2.5">
-                  <label className="text-sm font-semibold text-[#3c4043]">
+                  <label className="text-sm font-bold text-slate-700">
                     {formCategory === "Swags Delivery / Issue" && "Select Vendor"}
                     {formCategory === "Labs Completion Issue" && "Select Lab Type"}
                     {formCategory === "Arcade Points Calculation" && "Select Point Issue"}
                   </label>
                   <div className="relative">
-                    <select required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="w-full px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] cursor-pointer">
+                    <select required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="w-full px-4 py-3.5 bg-white border border-[#cbd5e1] rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 cursor-pointer appearance-none">
                       <option value="" disabled hidden>Select an option</option>
                       {formCategory === "Swags Delivery / Issue" && (
                         <><option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option></>
@@ -457,20 +462,20 @@ export default function HomePage() {
               )}
 
               <div className="flex flex-col gap-2.5">
-                <label className="text-sm font-semibold text-[#3c4043]">Describe Your Problem</label>
-                <textarea required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={5} className="px-4 py-3.5 bg-white border border-[#dadce0] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#e8f0fe] focus:border-[#1a73e8] transition-all text-[#202124] resize-none placeholder-[#9aa0a6]" placeholder="Explain your doubt or issue in detail here..."></textarea>
+                <label className="text-sm font-bold text-slate-700">Describe Your Problem</label>
+                <textarea required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={5} className="px-4 py-3.5 bg-white border border-[#cbd5e1] rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-800 resize-none placeholder-slate-400" placeholder="Explain your doubt or issue in detail here..."></textarea>
               </div>
-              <button type="submit" className="mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1a73e8] hover:bg-[#1557b0] text-white text-base font-semibold rounded-lg shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all focus:outline-none">
+              <button type="submit" className="mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-base font-bold rounded-lg shadow-[0_8px_20px_rgba(79,70,229,0.3)] transform hover:-translate-y-1 transition-all focus:outline-none">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                 Send Request Securely
               </button>
-              <p className="text-center text-xs text-[#80868b] mt-1">* This will securely redirect your query to our official WhatsApp support channel.</p>
+              <p className="text-center text-xs text-slate-500 mt-2 font-medium">* This will securely redirect your query to our official WhatsApp support channel.</p>
             </form>
           </div>
         </div>
 
         {/* ================= WIDER FAQ SECTION ================= */}
-        <section className="w-full max-w-5xl mx-auto px-6 pt-2 pb-12 mb-8">
+        <section className="w-full max-w-5xl mx-auto px-6 pt-12 pb-16 relative z-20 mt-8">
           <div className="w-full">
             <FAQ />
           </div>
