@@ -165,17 +165,6 @@ export default function HomePage() {
           <style>{`
             .custom-scrollbar::-webkit-scrollbar { width: 6px; }
             .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
-            
-            /* 🔥 KEYFRAMES FOR AUTO 3D MOVEMENT 🔥 */
-            @keyframes auto3d {
-              0% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
-              50% { transform: rotateY(-5deg) rotateX(10deg) rotateZ(2deg) translateY(-12px); box-shadow: 0 35px 60px -15px rgba(37, 99, 235, 0.25); }
-              100% { transform: rotateY(-15deg) rotateX(4deg) rotateZ(-1deg) translateY(0px); box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
-            }
-            .animate-auto-3d {
-              animation: auto3d 6s ease-in-out infinite;
-              transform-style: preserve-3d;
-            }
           `}</style>
           
           <div className="absolute inset-0 z-0 opacity-[0.15] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#64748b 2px, transparent 2px)', backgroundSize: '30px 30px', maskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)', WebkitMaskImage: 'radial-gradient(ellipse at center, black 10%, transparent 70%)' }}></div>
@@ -186,7 +175,7 @@ export default function HomePage() {
               <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 lg:gap-10 w-full mt-8 md:mt-8">
                 
                 {/* 🌟 LEFT COLUMN 🌟 */}
-                <div className="w-full lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
+                <div className="w-full lg:w-[45%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
                   
                   <h1 className="text-[40px] md:text-[64px] font-black text-[#0f172a] tracking-tight m-0 leading-[1.15] md:leading-[1.1]">
                     Arcade <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow-sm">Nexus</span>
@@ -209,7 +198,6 @@ export default function HomePage() {
                       Start Labs here
                     </a>
 
-                    {/* 🔥 SUBSCRIBE BUTTON IS BACK 🔥 */}
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-[14px] rounded-lg shadow-[0_8px_20px_-6px_rgba(225,29,72,0.5)] hover:shadow-[0_12px_25px_-6px_rgba(225,29,72,0.7)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2.5 w-full sm:w-auto justify-center">
                       <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                       Subscribe for Arcade
@@ -230,13 +218,88 @@ export default function HomePage() {
                     </a>
                   </div>
 
-                  {/* 🔥 TIMER SECTION 🔥 */}
-                  <div className="mt-8 w-full max-w-[420px] mx-auto lg:mx-0">
-                    <h4 className="text-[#e11d48] text-[12px] md:text-[13px] font-extrabold uppercase tracking-widest mb-3 flex items-center justify-center lg:justify-start gap-2">
+                </div>
+
+                {/* 🌟 PREMIUM BUTTON GRID & TIMER (RIGHT SIDE) 🌟 */}
+                <div className="relative z-20 w-full lg:w-[50%] flex flex-col justify-center mt-12 lg:mt-0 lg:pl-10 pb-8 lg:pb-0">
+                  
+                  {/* Title & Avatar Pill */}
+                  <div className="flex items-center justify-between pb-6 w-full">
+                    <h3 className="text-[#0f172a] font-black text-[22px] md:text-[26px] tracking-tight">
+                      Quick Access
+                    </h3>
+                    <div 
+                      className="flex items-center gap-2 cursor-pointer group bg-white/70 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm hover:shadow-[0_4px_15px_rgba(0,0,0,0.05)] hover:border-blue-300 transition-all" 
+                      onClick={() => router.push('/dashboard')}
+                    >
+                      <span className="text-slate-600 text-[12px] font-bold tracking-wide group-hover:text-blue-600 transition-colors max-w-[80px] sm:max-w-[120px] truncate">
+                        {currentUserName || "Monalisa N..."}
+                      </span>
+                      <img 
+                        src={imageError ? "/avatar.png" : currentUserAvatar} 
+                        alt="Your Avatar" 
+                        onError={() => setImageError(true)}
+                        className="w-7 h-7 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 border-2 border-white bg-blue-100 shadow-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Button Grid directly on the page */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                    {[
+                      { name: "Points Calculator", link: "/calculator", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/> },
+                      { name: "Live Leaderboard", link: "/leaderboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M4 14h4v6H4zm6-6h4v12h-4zm6-4h4v16h-4z"/> },
+                      { name: "AI Chat Assistant", link: "/chat", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/> },
+                      { name: "Skill Badges Guide", link: "/resources", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/> },
+                      { name: "Milestone Tracking", link: "/dashboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143z"/> },
+                      { name: "Community Posts", link: "/post", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/> },
+                      { name: "Admin Panel", link: "/admin-nexus-2026", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/> },
+                      { name: "About Platform", link: "/about", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/> },
+                    ].map((item, idx) => (
+                      <div key={idx} className="w-full">
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            onClick={(e) => {
+                              if (item.link?.startsWith('/')) {
+                                e.preventDefault();
+                                router.push(item.link);
+                              }
+                            }}
+                            className="flex items-center gap-3.5 p-3.5 bg-white/70 backdrop-blur-md rounded-[14px] border border-slate-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_rgba(59,130,246,0.12)] hover:border-blue-300 hover:-translate-y-0.5 transition-all cursor-pointer group"
+                          >
+                            <div className="bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 rounded-lg p-2 flex items-center justify-center shrink-0">
+                              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                                {item.icon}
+                              </svg>
+                            </div>
+                            <span className="font-bold text-[13.5px] leading-snug text-slate-700 group-hover:text-blue-700 transition-colors duration-300">
+                              {item.name}
+                            </span>
+                          </a>
+                        ) : (
+                          <div className="flex items-center gap-3.5 p-3.5 bg-white/70 backdrop-blur-md rounded-[14px] border border-slate-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)]">
+                            <div className="bg-slate-100 text-slate-500 rounded-lg p-2 flex items-center justify-center shrink-0">
+                              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                                {item.icon}
+                              </svg>
+                            </div>
+                            <span className="font-bold text-[13.5px] leading-snug text-slate-500">
+                              {item.name}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 🔥 TIMER SECTION (MOVED TO RIGHT) 🔥 */}
+                  <div className="mt-8 w-full">
+                    <h4 className="text-[#e11d48] text-[12px] md:text-[13px] font-extrabold uppercase tracking-widest mb-3 flex items-center justify-center sm:justify-start gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#e11d48] animate-pulse"></span>
                       Program Ending In
                     </h4>
-                    <div className="bg-white/80 backdrop-blur-md border border-[#e2e8f0] rounded-2xl p-4 md:p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow">
+                    <div className="bg-white/80 backdrop-blur-md border border-[#e2e8f0] rounded-2xl p-4 md:p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)] transition-shadow w-full">
                       <div className="flex flex-col items-center w-16">
                         <span className="text-3xl md:text-4xl font-black text-[#0f172a] tabular-nums tracking-tight">{timeLeft.days}</span>
                         <span className="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase mt-1">Days</span>
@@ -259,73 +322,6 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                </div>
-
-                {/* 🌟 PREMIUM AUTO-MOVING 3D CARD (RIGHT SIDE) 🌟 */}
-                <div className="relative z-20 w-full lg:w-[480px] flex justify-center lg:justify-end mt-12 lg:mt-0 lg:pl-10 pb-8 lg:pb-0" style={{ perspective: '1200px' }}>
-                  
-                  <div 
-                    className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-[24px] shadow-[0_20px_50px_rgba(59,130,246,0.4)] z-0 animate-auto-3d blur-[8px] opacity-60" 
-                  ></div>
-                  
-                  <div 
-                    className="w-full max-w-[420px] bg-white/80 backdrop-blur-2xl rounded-[24px] shadow-[0_15px_35px_rgba(0,0,0,0.1)] p-6 md:p-8 relative z-10 border border-white/60 animate-auto-3d"
-                  >
-                    <div className="flex items-center justify-between pb-5 mb-4 border-b border-slate-200">
-                      <h3 className="text-[#0f172a] font-black text-[18px] md:text-[22px] tracking-tight">
-                        Key Highlights
-                      </h3>
-                      <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/dashboard')}>
-                        <span className="text-slate-500 text-[11px] font-bold tracking-wide group-hover:text-blue-600 transition-colors text-right max-w-[70px] truncate">
-                          {currentUserName || "Monalisa N..."}
-                        </span>
-                        <img 
-                          src={imageError ? "/avatar.png" : currentUserAvatar} 
-                          alt="Your Avatar" 
-                          onError={() => setImageError(true)}
-                          className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 border-2 border-white bg-blue-100 shadow-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-0">
-                      {[
-                        { name: "Automated Points Calculation", link: "/calculator", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/> },
-                        { name: "Real-time Leaderboard", link: "/leaderboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M4 14h4v6H4zm6-6h4v12h-4zm6-4h4v16h-4z"/> },
-                        { name: "AI Chatbot Assistant", link: "/chat", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/> },
-                        { name: "96+ Skill Badges Support", link: "/resources", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/> },
-                        { name: "Milestone Tracking", link: "/dashboard", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143z"/> },
-                        { name: "Community Posts", link: "/post", icon: <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/> }
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex items-center group py-2.5 border-b border-slate-100 last:border-0 relative">
-                          <div className="bg-blue-50 group-hover:bg-blue-100 transition-colors rounded-[10px] p-1.5 w-8 h-8 flex items-center justify-center mr-3.5 text-blue-600 shadow-sm shrink-0">
-                            <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                              {item.icon}
-                            </svg>
-                          </div>
-                          {item.link ? (
-                            <a
-                              href={item.link}
-                              onClick={(e) => {
-                                if (item.link?.startsWith('/')) {
-                                  e.preventDefault();
-                                  router.push(item.link);
-                                }
-                              }}
-                              className="font-bold text-[13px] md:text-[15px] text-slate-700 hover:text-blue-600 transition-colors duration-200 cursor-pointer w-full text-left"
-                            >
-                              {item.name}
-                            </a>
-                          ) : (
-                            <span className="font-bold text-[13px] md:text-[15px] text-slate-700 w-full text-left">
-                              {item.name}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-
-                  </div>
                 </div>
 
               </div>
