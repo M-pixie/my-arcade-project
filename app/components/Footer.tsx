@@ -8,7 +8,7 @@ import { subscribeLeaderboard } from "@/lib/leaderboard"; // 🔥 Added to get l
 export default function Footer() {
   const router = useRouter();
   
-  const lastUpdated = "05 AUGUST 2026 16:58 IST";
+  const lastUpdated = "09 AUGUST 2026 17:40 IST";
   
   // 🔥 Backend se total members laane ka logic
   const [leaderboardCount, setLeaderboardCount] = useState(0);
@@ -27,12 +27,10 @@ export default function Footer() {
         {/* 🔥 TOP SECTION: Animated Star Logo, Title & Subtitle 🔥 */}
         <div className="flex flex-col items-center text-center mb-12">
           
-          {/* 🔥 BADA STAR WITH SPINNING CIRCLE ANIMATION 🔥 */}
+          {/* 🔥 BADA STAR 🔥 */}
           <div className="relative mb-6 flex items-center justify-center w-20 h-20">
-            {/* Spinning dashed ring */}
-            <div className="absolute inset-0 border-[3px] border-dashed border-[#1a73e8] rounded-full animate-[spin_8s_linear_infinite] opacity-50"></div>
-            {/* Big Star */}
-            <svg className="w-10 h-10 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
+            {/* Big Star (Size increased from w-10 h-10 to w-16 h-16) */}
+            <svg className="w-16 h-16 text-[#1a73e8]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
             </svg>
           </div>

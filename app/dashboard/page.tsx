@@ -376,18 +376,18 @@ export default function DashboardPage() {
     (m) => facilitatorArcadeGamesCount < m.targetArcade || facilitatorSkillBadgesCount < m.targetSkills
   );
 
-  // 🔥 UPDATED VIBRANT/CHAMKILA GOOGLE COLORS 🔥
+  // 🔥 UPDATED CLEAN PREMIUM GOOGLE COLORS 🔥
   const premiumCardStylesLight = [
-    "bg-gradient-to-br from-[#d2e3fc] to-[#aecbfa] border-[#8ab4f8]", // Blueish
-    "bg-gradient-to-br from-[#fad2cf] to-[#f6aea9] border-[#f28b82]", // Reddish
-    "bg-gradient-to-br from-[#feefc3] to-[#fde293] border-[#fdd663]", // Yellowish
-    "bg-gradient-to-br from-[#ceead6] to-[#a8dab5] border-[#81c995]"  // Greenish
+    "bg-white border-t-[6px] border-t-[#1a73e8]", // Blue Top
+    "bg-white border-t-[6px] border-t-[#ea4335]", // Red Top
+    "bg-white border-t-[6px] border-t-[#fbbc04]", // Yellow Top
+    "bg-white border-t-[6px] border-t-[#34a853]"  // Green Top
   ];
   const premiumCardStylesDark = [
-    "bg-gradient-to-br from-[#1a73e8]/30 to-[#174ea6]/30 border-[#1a73e8]/50", // Vibrant Blue
-    "bg-gradient-to-br from-[#ea4335]/30 to-[#a50e0e]/30 border-[#ea4335]/50", // Vibrant Red
-    "bg-gradient-to-br from-[#fbbc04]/30 to-[#e37400]/30 border-[#fbbc04]/50", // Vibrant Yellow
-    "bg-gradient-to-br from-[#34a853]/30 to-[#0d652d]/30 border-[#34a853]/50"  // Vibrant Green
+    "bg-[#15171b] border-t-[6px] border-t-[#8ab4f8] border-x-[#3c4043] border-b-[#3c4043]", 
+    "bg-[#15171b] border-t-[6px] border-t-[#f28b82] border-x-[#3c4043] border-b-[#3c4043]", 
+    "bg-[#15171b] border-t-[6px] border-t-[#fdd663] border-x-[#3c4043] border-b-[#3c4043]", 
+    "bg-[#15171b] border-t-[6px] border-t-[#81c995] border-x-[#3c4043] border-b-[#3c4043]"  
   ];
 
   return (
@@ -400,7 +400,7 @@ export default function DashboardPage() {
           {points !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative animate-fade-in-up">
               
-              <div className={`lg:col-span-4 flex flex-col w-full lg:border-r lg:pr-6 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+              <div className="lg:col-span-4 flex flex-col w-full lg:pr-6">
                 
                  <div className={`rounded-xl shadow-sm border overflow-hidden relative flex flex-col transition-all duration-300 w-full min-h-[640px] ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
                   
@@ -483,20 +483,28 @@ export default function DashboardPage() {
               <div className={`mt-6 rounded-xl shadow-sm border p-6 text-center flex flex-col justify-center transition-all hover:shadow-md ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                  <h4 className={`text-[13px] font-black uppercase tracking-widest mb-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                     Facilitator Progress
-                  </h4>
-                  <div className="inline-flex items-center justify-center gap-2">
-                    {achievedMilestone ? (
-                      <>
-                        <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <span className={`text-xl font-bold ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>{milestoneText}</span>
-                      </>
-                    ) : (
-                      <span className={`text-sm font-bold px-4 py-1.5 rounded-none ${isDark ? 'text-[#f28b82] bg-[#3c1e1e]' : 'text-[#ea4335] bg-[#fce8e6]'}`}>
-                        {milestoneText}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                 </h4>
+                 <div className="flex flex-col items-center justify-center gap-1.5">
+                   <div className="inline-flex items-center justify-center gap-2">
+                     {achievedMilestone ? (
+                       <>
+                         <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                         <span className={`text-xl font-bold ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>{milestoneText}</span>
+                       </>
+                     ) : (
+                       <span className={`text-sm font-bold px-4 py-1.5 rounded-none ${isDark ? 'text-[#f28b82] bg-[#3c1e1e]' : 'text-[#ea4335] bg-[#fce8e6]'}`}>
+                         {milestoneText}
+                       </span>
+                     )}
+                   </div>
+                   {/* Ye naya block add kiya gaya hai Bonus Points dikhane ke liye */}
+                   {achievedMilestone && (
+                     <span className={`text-[14px] font-extrabold tracking-wide ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
+                       +{achievedMilestone.points} Bonus Points
+                     </span>
+                   )}
+                 </div>
+               </div>
 
               </div>
 
@@ -507,26 +515,37 @@ export default function DashboardPage() {
                   
                   <div className="mb-8 w-full">
                     {!nextMilestone ? (
-                      <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                      <div className="py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden bg-transparent">
                          <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
                            <h2 className={`text-base md:text-lg font-bold mb-1 flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                              🎉 Congratulations! <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>Ultimate Milestone</span> Achieved! 
+                              🎉 Congratulations! <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">Ultimate Milestone</span> Achieved! 
                               <span className="inline-block animate-cool-emoji ml-3 text-[24px]">😎</span>
                            </h2>
-                           <p className={`text-[13px] md:text-[14px] font-medium mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                              Great job! You have completely crushed it with <span className="text-[#1a73e8] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#1a73e8] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
+                           <p className={`text-[13px] md:text-[14px] font-medium mt-2 sm:ml-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                              Great job! You have completely crushed it with <span className="text-[#0284c7] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#0284c7] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
                            </p>
                          </div>
-                         <div className={`shrink-0 flex flex-col items-end justify-center sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+                         <div className="shrink-0 flex flex-col items-end justify-center sm:pl-4 w-full sm:w-auto pt-2 sm:pt-0">
                            <div className="flex items-center gap-4">
-                             <div className="flex items-center gap-1.5" title="Auto-refreshing in background">
-                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#1a73e8]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <button 
+                               onClick={() => {
+                                 if (profileUrl) {
+                                   fetchDataAndCalculate(profileUrl, false);
+                                 } else {
+                                   window.location.reload();
+                                 }
+                               }}
+                               disabled={loading}
+                               className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity disabled:cursor-not-allowed outline-none" 
+                               title="Click to refresh progress"
+                             >
+                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#0284c7]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                </svg>
-                               <span className={`text-xs font-bold ${loading ? 'text-[#1a73e8]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
+                               <span className={`text-xs font-bold ${loading ? 'text-[#0284c7]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
                                  {loading ? 'Refreshing' : 'Synced'}
                                </span>
-                             </div>
+                             </button>
                              <button
                                onClick={toggleDarkMode}
                                className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
@@ -547,23 +566,23 @@ export default function DashboardPage() {
                          </div>
                       </div>
                     ) : (
-                      <div className={`p-4 md:p-5 rounded-xl shadow-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                      <div className="py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden bg-transparent">
                          <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
                            <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                               {achievedMilestone ? (
                                 <>
-                                  Great job on <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>{achievedMilestone.title}</span>! Let's aim for <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>{nextMilestone.title}</span>
+                                  Great job on <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">{achievedMilestone.title}</span>! Let's aim for <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">{nextMilestone.title}</span>
                                   <span className="inline-block animate-cool-emoji ml-3 text-[24px]">🤩</span>
                                 </>
                               ) : (
                                 <>
-                                  You haven't reached <span className={`px-2 py-0.5 rounded-md font-extrabold mx-1.5 border shadow-sm ${isDark ? 'bg-[#1a73e8]/20 text-[#8ab4f8] border-[#1a73e8]/30' : 'bg-[#e8f0fe] text-[#1a73e8] border-[#d2e3fc]'}`}>{nextMilestone.title}</span> yet. Let's get started!
+                                  You haven't reached <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">{nextMilestone.title}</span> yet. Let's get started!
                                   <span className="inline-block animate-sad-emoji ml-3 text-[24px]">🥺</span>
                                 </>
                               )}
                            </h2>
-                           <div className={`text-[13px] md:text-[14px] font-semibold flex flex-wrap gap-2 items-center mt-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                              <span className="text-[#1a73e8]">Action Required:</span> 
+                           <div className={`text-[13px] md:text-[14px] font-semibold flex flex-wrap gap-2 items-center mt-4 sm:ml-4 lg:ml-6 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                              <span className="text-[#0284c7]">Action Required:</span> 
                               {facilitatorArcadeGamesCount < nextMilestone.targetArcade && (
                                 <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-2 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
                                   Need {nextMilestone.targetArcade - facilitatorArcadeGamesCount} more Games
@@ -577,16 +596,27 @@ export default function DashboardPage() {
                               )}
                            </div>
                          </div>
-                         <div className={`shrink-0 flex flex-col items-end justify-center sm:pl-4 sm:border-l w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+                         <div className="shrink-0 flex flex-col items-end justify-center sm:pl-4 w-full sm:w-auto pt-2 sm:pt-0">
                            <div className="flex items-center gap-4">
-                             <div className="flex items-center gap-1.5" title="Auto-refreshing in background">
-                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#1a73e8]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <button 
+                               onClick={() => {
+                                 if (profileUrl) {
+                                   fetchDataAndCalculate(profileUrl, false);
+                                 } else {
+                                   window.location.reload();
+                                 }
+                               }}
+                               disabled={loading}
+                               className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity disabled:cursor-not-allowed outline-none" 
+                               title="Click to refresh progress"
+                             >
+                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#0284c7]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                </svg>
-                               <span className={`text-xs font-bold ${loading ? 'text-[#1a73e8]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
+                               <span className={`text-xs font-bold ${loading ? 'text-[#0284c7]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
                                  {loading ? 'Refreshing' : 'Synced'}
                                </span>
-                             </div>
+                             </button>
                              <button
                                onClick={toggleDarkMode}
                                className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
@@ -608,6 +638,7 @@ export default function DashboardPage() {
                       </div>
                     )}
                   </div>
+                  
                   
                   <div className="relative w-full">
                     
@@ -622,10 +653,13 @@ export default function DashboardPage() {
                         const isHighestAchieved = achievedMilestone && achievedMilestone.id === milestone.id;
                         const isPreviouslyAchieved = isAchieved && !isHighestAchieved;
 
-                        const cardStyle = isDark ? premiumCardStylesDark[index % premiumCardStylesDark.length] : premiumCardStylesLight[index % premiumCardStylesLight.length];
+                        // Agar achieve ho gaya to grey bg, warna simple white/dark bg
+                       // Completed me background white hi rahega, bas border thoda dark grey (light black) ho jayega
+                       const cardStyle = isAchieved ? (isDark ? 'bg-[#15171b] border-2 border-[#7f8489]' : 'bg-white border-2 border-[#9aa0a6]') 
+                      : (isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]');
 
                         return (
-                          <div key={milestone.id} className={`${cardStyle} border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow`}>
+                          <div key={milestone.id} className={`${cardStyle} border rounded-[36px] p-5 shadow-sm hover:shadow-md transition-shadow`}>
                             <div className="flex justify-between items-center mb-5">
                               <h3 className={`font-bold text-lg leading-none ${isDark ? 'text-gray-100' : 'text-[#202124]'}`}>{milestone.title}</h3>
                               <span className={`text-[12px] font-bold px-3 py-1 rounded-full border shadow-sm ${isDark ? 'bg-[#0d2214] text-[#81c995] border-[#1e3b29]' : 'bg-[#e6f4ea] text-[#137333] border-[#ceead6]'}`}>
