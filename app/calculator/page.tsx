@@ -507,58 +507,45 @@ export default function CalculatorPage() {
                 Paste your public profile url here
               </p>
               
-              <div className="flex items-center gap-4 sm:mt-2 w-full sm:w-auto justify-end">
-                <div className="flex items-center gap-2 border-r pr-4 border-[#dadce0] dark:border-[#3c4043]">
-                  {/* 🔥 SUN/MOON ICON 🔥 */}
-                  <svg className={`w-5 h-5 opacity-80 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Theme">
-                    {isDark ? (
-                      // Moon Icon
+              <div className="flex items-center gap-2 sm:mt-2 w-full sm:w-auto justify-end">
+                {/* 🔥 SMART CLICKABLE THEME ICON 🔥 */}
+                <button
+                  onClick={toggleDarkMode}
+                  className={`p-2 rounded-full transition-colors flex items-center justify-center ${isDark ? 'bg-[#2a2d32] text-white hover:bg-[#3c4043]' : 'bg-[#e8eaed] text-[#202124] hover:bg-[#dadce0]'}`}
+                  title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                  {isDark ? (
+                    // Moon Icon
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    ) : (
-                      // Sun Icon
+                    </svg>
+                  ) : (
+                    // Sun Icon
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    )}
-                  </svg>
-                  
-                  <button
-                    onClick={toggleDarkMode}
-                    className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                    title="Toggle Dark Mode"
-                  >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-7' : 'translate-x-1'}`}>
-                      {isDark ? (
-                        <svg className="w-2.5 h-2.5 text-black" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                      ) : (
-                        <svg className="w-2.5 h-2.5 text-black" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                      )}
-                    </span>
-                  </button>
-                </div>
+                    </svg>
+                  )}
+                </button>
 
-                <div className="flex items-center gap-2">
-                  {/* 🔥 AUTO CALCULATE ICON 🔥 */}
-                  <svg className={`w-5 h-5 opacity-80 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Auto Calculate">
+                {/* 🔥 SMART CLICKABLE AUTO CALCULATE ICON 🔥 */}
+                <button
+                  onClick={handleAutoCalcToggle}
+                  className={`p-2 rounded-full transition-colors flex items-center justify-center ${autoCalculate ? (isDark ? 'bg-[#2a2d32] text-green-400' : 'bg-[#e8eaed] text-green-600') : (isDark ? 'bg-transparent text-[#5f6368] hover:bg-[#2a2d32] hover:text-white' : 'bg-transparent text-[#9aa0a6] hover:bg-[#e8eaed] hover:text-black')}`}
+                  title={autoCalculate ? "Auto Calculate Enabled" : "Enable Auto Calculate"}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  
-                  <label className="flex items-center cursor-pointer select-none group shrink-0">
-                    <div className="relative">
-                      <input type="checkbox" className="sr-only" checked={autoCalculate} onChange={handleAutoCalcToggle} />
-                      <div className={`block w-11 h-6 rounded-full transition-all duration-300 ease-in-out ${autoCalculate ? (isDark ? 'bg-white' : 'bg-black') : (isDark ? 'bg-[#3c4043] group-hover:bg-[#5f6368]' : 'bg-[#dadce0] group-hover:bg-[#d1d5db]')}`}></div>
-                      <div className={`dot absolute left-[3px] top-[3px] rounded-full transition-transform duration-300 ease-in-out shadow-sm ${autoCalculate ? 'transform translate-x-5' : ''} ${isDark ? (autoCalculate ? 'bg-black' : 'bg-gray-300') : 'bg-white'}`} style={{ width: '18px', height: '18px' }}></div>
-                    </div>
-                  </label>
-                </div>
+                </button>
               </div>
             </div>
 
-            {/* 🔥 NEW LAYOUT: INPUT & BUTTON SIDE-BY-SIDE MATCHING HEIGHT 🔥 */}
-            <div className="mb-6 flex flex-col sm:flex-row items-stretch gap-3">
-              
-              {/* INPUT CONTAINER (Has identical fixed height as the button) */}
+            {/* 🔥 NEW LAYOUT: INPUT & PREMIUM BUTTON INTEGRATED IN ONE BOX 🔥 */}
+            <div className="mb-6">
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
-                className={`group relative flex-1 min-w-0 border-2 rounded-lg transition-colors duration-75 px-2 flex flex-row items-center shadow-sm bg-transparent w-full h-[52px] sm:h-[58px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-[#8ab4f8]" : "border-[#dadce0] focus-within:border-[#1a73e8]")}`}
+                
+                className={`group relative min-w-0 border-2 rounded-xl transition-colors duration-200 p-1.5 flex flex-row items-center shadow-sm w-full h-[60px] sm:h-[68px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-transparent border-[#dadce0] focus-within:border-blue-600")}`}
               >
                 {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-6 right-6 h-[2px] bg-transparent overflow-hidden z-0">
@@ -566,7 +553,8 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                <label className={`absolute -top-3 left-6 px-2 text-xs sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed] group-focus-within:text-[#8ab4f8]" : "text-[#4e342e] group-focus-within:text-[#1a73e8]") : (isDark ? "text-white group-focus-within:text-[#8ab4f8]" : "text-black group-focus-within:text-[#1a73e8]")}`}>
+                {/* 🔥 LABEL BACKGROUND PERFECTLY MATCHES PARENT CARD BACKGROUND 🔥 */}
+                <label className={`absolute -top-3 left-6 px-2 text-xs sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed] group-focus-within:text-[#8ab4f8]" : "text-[#4e342e] group-focus-within:text-blue-600") : (isDark ? "text-white group-focus-within:text-[#8ab4f8]" : "text-black group-focus-within:text-blue-600")}`}>
                   {isLoading ? (
                     loadingStep === 'wave' ? (
                       <div className="flex items-center gap-[3px] h-5 px-1">
@@ -591,8 +579,8 @@ export default function CalculatorPage() {
                 </label>
                 
                 {calcState !== 'idle' ? (
-                  <div className={`flex-1 h-full px-3 sm:px-4 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                    <span className="truncate text-sm sm:text-base">{profileUrl}</span>
+                  <div className={`flex-1 h-full px-4 sm:px-6 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                    <span className="truncate text-sm sm:text-base font-medium">{profileUrl}</span>
                     {isPaused && (
                       <button 
                         onClick={() => setCalcState('idle')}
@@ -613,33 +601,33 @@ export default function CalculatorPage() {
                     onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
                     spellCheck="false"
-                    className={`flex-1 h-full px-3 sm:px-4 text-sm sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#202124] placeholder-[#9aa0a6]'}`}
+                    className={`flex-1 h-full px-4 sm:px-6 text-sm sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 font-medium ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#202124] placeholder-[#9aa0a6]'}`}
                   />
                 )}
-              </div>
-              
-              {/* 🔥 REDESIGNED MINIMALIST BUTTON (Padding px-6 sm:px-8 adjusted for normal width) 🔥 */}
-              <button 
-                onClick={handleMainButtonClick}
-                disabled={calcState !== 'idle' && calcState !== 'paused'}
-                className="h-[52px] sm:h-[58px] px-6 sm:px-8 shrink-0 rounded-lg text-[16px] sm:text-[17px] font-semibold tracking-wide transition-all duration-200 active:scale-95 flex items-center justify-center gap-3.5 whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-80 shadow-sm"
-              >
-                {isLoading ? (
-                  <span className="flex items-center">
-                    Calculating<span className="progressive-dots"></span>
-                  </span>
-                ) : isPaused ? (
-                  "Resume"
-                ) : (
-                  <>
-                    Calculate
-                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </>
-                )}
-              </button>
 
+                {/* 🔥 BLUE PREMIUM BUTTON INSIDE THE BOX WITH UPDATED ARROW 🔥 */}
+                <button 
+                  onClick={handleMainButtonClick}
+                  disabled={calcState !== 'idle' && calcState !== 'paused'}
+                  className={`h-full px-5 sm:px-8 shrink-0 rounded-lg text-[15px] sm:text-[16px] font-bold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-2.5 whitespace-nowrap shadow-sm disabled:opacity-70 bg-blue-600 text-white hover:bg-blue-700`}
+                >
+                  {isLoading ? (
+                    <span className="flex items-center">
+                      Wait<span className="progressive-dots"></span>
+                    </span>
+                  ) : isPaused ? (
+                    "Resume"
+                  ) : (
+                    <>
+                      Calculate
+                      {/* Exact matching sleek arrow design like the screenshot */}
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {error && (
@@ -662,7 +650,7 @@ export default function CalculatorPage() {
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center pl-2">
                   <input id="remember-me" type="checkbox" className={`w-4 h-4 rounded-sm cursor-pointer ${isDark ? 'border-[#5f6368] bg-[#202124] text-white focus:ring-white' : 'border-[#dadce0] text-black focus:ring-black focus:ring-offset-0'}`} checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                  <label htmlFor="remember-me" className={`ml-3 text-sm font-medium cursor-pointer select-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>Remember Me.</label>
+                  <label htmlFor="remember-me" className={`ml-3 text-sm font-medium cursor-pointer select-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>Remember Me</label>
                 </div>
               </div>
 
@@ -677,24 +665,25 @@ export default function CalculatorPage() {
               </div>
             </div>
 
+            {/* 🔥 COMPACT RECENT PROFILES SECTION 🔥 */}
             {recentUrls.length > 0 && (
-              <div className={`mt-6 pt-6 border-t animate-fade-in-up ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
+              <div className={`mt-4 pt-5 border-t animate-fade-in-up ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
                 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
-                  <p className={`text-base font-bold ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                    Recent Profiles Search
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                  <p className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Recent Profiles
                   </p>
                   
-                  <div className="flex items-center gap-2">
-                    <button onClick={clearHistory} className={`flex items-center gap-2 text-sm bg-transparent px-3 py-1.5 rounded-lg font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-white hover:bg-[#2a2d32]' : 'text-[#202124] hover:text-black hover:bg-[#f1f3f4]'}`}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1">
+                    <button onClick={clearHistory} className={`flex items-center gap-1.5 text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-[#2a2d32]' : 'text-gray-500 hover:text-black hover:bg-[#f1f3f4]'}`}>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
-                      Clear History
+                      Clear
                     </button>
                     
-                    <button onClick={() => setShowResetModal(true)} className={`flex items-center gap-2 text-sm bg-transparent px-3 py-1.5 rounded-lg font-bold transition-colors ${isDark ? 'text-[#f28b82] hover:text-[#d93025] hover:bg-[#3c1e1e]' : 'text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6]'}`}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button onClick={() => setShowResetModal(true)} className={`flex items-center gap-1.5 text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors ${isDark ? 'text-[#f28b82] hover:text-[#d93025] hover:bg-[#3c1e1e]' : 'text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6]'}`}>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
                       Reset
@@ -702,23 +691,22 @@ export default function CalculatorPage() {
                   </div>
                 </div>
                 
-                {/* 🔥 RESPONSIVE HISTORY GRID 🔥 */}
-                <div className="grid grid-cols-1 min-[400px]:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 w-full">
+                {/* 🔥 RESPONSIVE COMPACT HISTORY GRID 🔥 */}
+                <div className="grid grid-cols-2 min-[500px]:grid-cols-3 md:grid-cols-4 gap-2.5 w-full">
                   {recentUrls.map((item, idx) => {
                     const themeColor = getCardTheme(item.name || "Arcade");
                     
                     return (
                       <div key={idx} className="relative w-full">
-                        {/* 🔥 FULLY ROUNDED HISTORY PILL 🔥 */}
                         <button 
                           onClick={() => handleHistoryClick(item.url, idx)} 
-                          className={`relative w-full h-[54px] flex items-center gap-3 pl-2.5 pr-4 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-lg hover:scale-[1.02] ${isDark ? 'bg-[#1a1b1e] shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:bg-[#202124]' : 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]'}`}
+                          className={`relative w-full h-[44px] flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-md hover:scale-[1.02] border ${isDark ? 'bg-[#1a1b1e] border-[#3c4043] hover:bg-[#202124]' : 'bg-white border-[#f1f3f4] hover:border-[#dadce0]'}`}
                           title={item.url}
                         >
-                          <div className={`w-9 h-9 rounded-full shrink-0 shadow-sm border overflow-hidden relative z-10 ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
+                          <div className={`w-7 h-7 rounded-full shrink-0 shadow-sm overflow-hidden relative z-10 ${isDark ? 'bg-[#202124]' : 'bg-gray-100'}`}>
                             {copiedIndex === idx ? (
                               <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-[#1a1b1e]' : 'bg-white'}`}>
-                                <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                                 </svg>
                               </div>
@@ -726,7 +714,7 @@ export default function CalculatorPage() {
                               item.avatar ? (
                                 <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-white font-medium text-[14px]" style={{ backgroundColor: themeColor }}>
+                                <div className="w-full h-full flex items-center justify-center text-white font-medium text-[12px]" style={{ backgroundColor: themeColor }}>
                                   {item.name ? item.name.charAt(0).toUpperCase() : "U"}
                                 </div>
                               )
@@ -734,11 +722,11 @@ export default function CalculatorPage() {
                           </div>
                           
                           <div className="flex flex-col items-start justify-center z-10 overflow-hidden w-full">
-                            <span className={`text-[13px] font-bold truncate max-w-full tracking-tight ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                            <span className={`text-[12px] font-bold truncate max-w-full tracking-tight leading-tight ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                               {item.name || "Arcade Player"}
                             </span>
                             {item.points !== undefined && (
-                              <span className={`text-[12px] font-semibold mt-[2px] leading-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                              <span className={`text-[10px] font-semibold mt-[1px] leading-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                                 {item.points} Pts
                               </span>
                             )}
