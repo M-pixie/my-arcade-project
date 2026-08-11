@@ -482,6 +482,22 @@ export default function CalculatorPage() {
             .gem-dot-1 { top: 0px; left: 4.75px; animation: collide-1 0.6s ease-in-out infinite; }
             .gem-dot-2 { top: 8px; left: 0px; animation: collide-2 0.6s ease-in-out infinite; }
             .gem-dot-3 { top: 8px; left: 9.5px; animation: collide-3 0.6s ease-in-out infinite; }
+
+            /* 🔥 SIMPLE PROGRESSIVE DOTS FOR CALCULATING... 🔥 */
+            @keyframes dots-step {
+              0% { content: ""; }
+              25% { content: "."; }
+              50% { content: ".."; }
+              75% { content: "..."; }
+              100% { content: ""; }
+            }
+            .progressive-dots::after {
+              content: "";
+              display: inline-block;
+              width: 14px;
+              text-align: left;
+              animation: dots-step 1.5s infinite step-start;
+            }
           `}</style>
 
           <div className="p-4 sm:p-8 md:p-12 mt-1">
@@ -536,15 +552,17 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* 🔥 PREMIUM PILL CONTAINER (Original Theme restored with Blue Focus added) 🔥 */}
-            <div className="mb-6">
+            {/* 🔥 NEW LAYOUT: INPUT & BUTTON SIDE-BY-SIDE MATCHING HEIGHT 🔥 */}
+            <div className="mb-6 flex flex-col sm:flex-row items-stretch gap-3">
+              
+              {/* INPUT CONTAINER (Has identical fixed height as the button) */}
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
-                className={`group relative border-2 rounded-full transition-colors duration-75 p-1 sm:p-1.5 flex flex-row items-center shadow-sm bg-transparent w-full ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-[#8ab4f8]" : "border-[#dadce0] focus-within:border-[#1a73e8]")}`}
+                className={`group relative flex-1 min-w-0 border-2 rounded-lg transition-colors duration-75 px-2 flex flex-row items-center shadow-sm bg-transparent w-full h-[52px] sm:h-[58px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "border-[#3c4043] focus-within:border-[#8ab4f8]" : "border-[#dadce0] focus-within:border-[#1a73e8]")}`}
               >
                 {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-6 right-6 h-[2px] bg-transparent overflow-hidden z-0">
-                    <div className={`h-full animate-slow-fill rounded-full ${isDark ? 'bg-white' : 'bg-black'}`}></div>
+                    <div className={`h-full animate-slow-fill rounded-b-lg ${isDark ? 'bg-white' : 'bg-black'}`}></div>
                   </div>
                 )}
 
@@ -573,7 +591,7 @@ export default function CalculatorPage() {
                 </label>
                 
                 {calcState !== 'idle' ? (
-                  <div className={`flex-1 h-[40px] sm:h-[48px] px-3 sm:px-5 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                  <div className={`flex-1 h-full px-3 sm:px-4 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                     <span className="truncate text-sm sm:text-base">{profileUrl}</span>
                     {isPaused && (
                       <button 
@@ -595,36 +613,50 @@ export default function CalculatorPage() {
                     onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
                     spellCheck="false"
-                    className={`flex-1 px-3 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#202124] placeholder-[#9aa0a6]'}`}
+                    className={`flex-1 h-full px-3 sm:px-4 text-sm sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#202124] placeholder-[#9aa0a6]'}`}
                   />
                 )}
-                
-                {/* 🔥 INNER PREMIUM GRADIENT PILL BUTTON - AS IT WAS 🔥 */}
-                <button 
-                  onClick={handleMainButtonClick}
-                  disabled={calcState !== 'idle' && calcState !== 'paused'}
-                  className="ml-2 h-[40px] sm:h-[48px] px-4 sm:px-8 shrink-0 rounded-full text-sm sm:text-base font-bold transition-all duration-300 shadow-md active:scale-95 flex items-center justify-center whitespace-nowrap bg-gradient-to-r from-[#50c8d9] via-[#9a76e7] to-[#ee849c] text-white hover:opacity-90 shadow-[0_0_15px_rgba(154,118,231,0.3)]"
-                >
-                  {isLoading ? "Wait..." : isPaused ? "Resume" : "Calculate"}
-                </button>
               </div>
-            
-              {error && (
-                <div className="mt-3 flex flex-col pl-2">
-                  <div className={`flex items-center gap-2 text-sm font-medium ${isDark ? 'text-[#f28b82]' : 'text-[#d93025]'}`}>
-                    <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              
+              {/* 🔥 REDESIGNED MINIMALIST BUTTON (Padding px-6 sm:px-8 adjusted for normal width) 🔥 */}
+              <button 
+                onClick={handleMainButtonClick}
+                disabled={calcState !== 'idle' && calcState !== 'paused'}
+                className="h-[52px] sm:h-[58px] px-6 sm:px-8 shrink-0 rounded-lg text-[16px] sm:text-[17px] font-semibold tracking-wide transition-all duration-200 active:scale-95 flex items-center justify-center gap-3.5 whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-80 shadow-sm"
+              >
+                {isLoading ? (
+                  <span className="flex items-center">
+                    Calculating<span className="progressive-dots"></span>
+                  </span>
+                ) : isPaused ? (
+                  "Resume"
+                ) : (
+                  <>
+                    Calculate
+                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
                     </svg>
-                    {error}
-                  </div>
-                  <div className={`text-[12px] sm:text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    <p>• Please make your public profile visible again in your settings.</p>
-                    <p>• Your profile has extra characters at the start or end.</p>
-                    <p>• Please check your internet connections.</p>
-                  </div>
-                </div>
-              )}
+                  </>
+                )}
+              </button>
+
             </div>
+
+            {error && (
+              <div className="mb-6 flex flex-col pl-2">
+                <div className={`flex items-center gap-2 text-sm font-medium ${isDark ? 'text-[#f28b82]' : 'text-[#d93025]'}`}>
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {error}
+                </div>
+                <div className={`text-[12px] sm:text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <p>• Please make your public profile visible again in your settings.</p>
+                  <p>• Your profile has extra characters at the start or end.</p>
+                  <p>• Please check your internet connections.</p>
+                </div>
+              </div>
+            )}
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
               <div className="flex flex-wrap items-center gap-6">
