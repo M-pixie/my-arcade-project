@@ -104,7 +104,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full h-16 bg-[#1a73e8] shadow-md border-b border-blue-700 z-50">
+    <header className="fixed top-0 left-0 w-full h-16 bg-[#f8f9fa] border-b border-[#dadce0] z-50">
       <div className="w-full mx-auto h-full px-4 md:px-8 flex items-center justify-between">
 
         {/* ================= LEFT: BACK BUTTON & SEARCH BAR ================= */}
@@ -112,7 +112,7 @@ export default function Navbar() {
           
           <button 
             onClick={handleLogoClick}
-            className="p-2 -ml-2 rounded-full text-white hover:bg-white hover:text-[#1a73e8] transition-colors cursor-pointer focus:outline-none shrink-0"
+            className="p-2 -ml-2 rounded-full text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] transition-colors cursor-pointer focus:outline-none shrink-0"
             title="Go Back"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -135,7 +135,7 @@ export default function Navbar() {
               placeholder="Search arcade.."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-1.5 w-56 lg:w-64 xl:w-80 rounded-full bg-white text-sm text-[#202124] placeholder-[#5f6368] focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300"
+              className="pl-9 pr-4 py-2 w-56 lg:w-64 xl:w-80 rounded-full bg-[#f1f3f4] border border-transparent text-sm text-[#202124] placeholder-[#5f6368] focus:bg-white focus:border-[#dadce0] focus:shadow-sm focus:outline-none transition-all duration-300"
             />
           </form>
         </div>
@@ -149,10 +149,10 @@ export default function Navbar() {
                 <Link 
                   href={link.href} 
                   prefetch={true}
-                  className={`relative block px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                  className={`relative block px-3 py-2 rounded-full text-sm transition-all duration-300 whitespace-nowrap ${
                     isActive 
-                      ? "bg-white text-[#1a73e8] shadow-sm font-bold" 
-                      : "text-white hover:bg-white hover:text-[#1a73e8] bg-transparent"
+                      ? "bg-[#e8f0fe] text-[#1a73e8] font-bold" 
+                      : "text-[#5f6368] font-medium hover:bg-[#f1f3f4] hover:text-[#202124]"
                   }`}
                 >
                   <span className="flex items-center gap-2">
@@ -161,7 +161,7 @@ export default function Navbar() {
                       <div className="relative flex items-center justify-center">
                         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                         {unreadCount > 0 && (
-                          <span className="absolute -top-1 -right-2 flex items-center justify-center w-[16px] h-[16px] bg-red-500 text-white text-[9px] font-bold rounded-full shadow-sm animate-pulse border-[1.5px] border-white">
+                          <span className="absolute -top-1 -right-2 flex items-center justify-center w-[16px] h-[16px] bg-[#d93025] text-white text-[9px] font-bold rounded-full animate-pulse border-[1.5px] border-[#f8f9fa]">
                             {unreadCount > 99 ? '99+' : unreadCount}
                           </span>
                         )}
@@ -176,7 +176,7 @@ export default function Navbar() {
 
         {/* ================= RIGHT: AVATAR & MOBILE TOGGLE ================= */}
         <div className="flex items-center gap-3 sm:gap-4 shrink-0 justify-end">
-          <Link href="/dashboard" prefetch={true} className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0 border-2 border-transparent hover:border-white" title="Go to Dashboard">
+          <Link href="/dashboard" prefetch={true} className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0 border-2 border-transparent hover:border-[#dadce0]" title="Go to Dashboard">
             <img 
               src={imageError ? "/avatar.png" : currentUserAvatar} 
               alt={currentUserName || "User"} 
@@ -186,7 +186,7 @@ export default function Navbar() {
           </Link>
 
           <button 
-            className="md:hidden p-2 text-white hover:text-[#1a73e8] hover:bg-white rounded-full transition" 
+            className="md:hidden p-2 text-[#5f6368] hover:text-[#202124] hover:bg-[#f1f3f4] rounded-full transition" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
@@ -200,7 +200,7 @@ export default function Navbar() {
 
       {/* ================= MOBILE MENU ================= */}
       {mobileMenuOpen && (
-        <nav className="absolute top-full left-0 w-full md:hidden bg-[#1a73e8] border-b border-blue-700 shadow-lg z-50">
+        <nav className="absolute top-full left-0 w-full md:hidden bg-[#f8f9fa] border-b border-[#dadce0] z-50">
           <div className="px-4 py-4 space-y-2">
             
             <form onSubmit={handleSearch} className="relative flex items-center mb-4">
@@ -217,7 +217,7 @@ export default function Navbar() {
                 placeholder="Search A to Z..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full rounded-full bg-white text-base text-[#202124] placeholder-[#5f6368] focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300"
+                className="pl-10 pr-4 py-2.5 w-full rounded-full bg-[#f1f3f4] border border-transparent text-base text-[#202124] placeholder-[#5f6368] focus:bg-white focus:border-[#dadce0] focus:shadow-sm focus:outline-none transition-all duration-300"
               />
             </form>
 
@@ -230,10 +230,10 @@ export default function Navbar() {
                   href={link.href}
                   prefetch={true}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-full text-base font-medium transition-all duration-300 ${
+                  className={`block px-4 py-3 rounded-full text-base transition-all duration-300 ${
                     isActive 
-                      ? "bg-white text-[#1a73e8] shadow-sm font-bold" 
-                      : "text-white hover:bg-white hover:text-[#1a73e8] bg-transparent"
+                      ? "bg-[#e8f0fe] text-[#1a73e8] font-bold" 
+                      : "text-[#5f6368] font-medium hover:bg-[#f1f3f4] hover:text-[#202124]"
                   }`}
                 >
                   <span className="flex items-center justify-between">
@@ -243,7 +243,7 @@ export default function Navbar() {
                         <div className="relative flex items-center justify-center">
                           <svg className="w-[22px] h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                           {unreadCount > 0 && (
-                            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-[17px] h-[17px] bg-red-500 text-white text-[9px] font-bold rounded-full shadow-sm animate-pulse border-[1.5px] border-white">
+                            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-[17px] h-[17px] bg-[#d93025] text-white text-[9px] font-bold rounded-full animate-pulse border-[1.5px] border-[#f8f9fa]">
                               {unreadCount > 99 ? '99+' : unreadCount}
                             </span>
                           )}
