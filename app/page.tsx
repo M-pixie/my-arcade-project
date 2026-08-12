@@ -377,12 +377,12 @@ export default function HomePage() {
           `}</style>
 
           <div className="w-full relative z-10">
-            <div className="max-w-[85rem] mx-auto px-6 w-full flex flex-col gap-10">
+            <div className="max-w-[85rem] mx-auto px-4 sm:px-6 w-full flex flex-col gap-10">
               
               <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 lg:gap-10 w-full mt-8 md:mt-8">
                 
-                {/* 🌟 LEFT COLUMN - Now 40% Width 🌟 */}
-                <div className="w-full lg:w-[40%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
+                {/* 🌟 LEFT COLUMN - Perfect Sizing 🌟 */}
+                <div className="w-full lg:w-[45%] flex flex-col items-center lg:items-start text-center lg:text-left pt-6 lg:pt-12 relative z-20">
                   
                   <h1 className="text-[40px] md:text-[64px] font-black text-[#0f172a] tracking-tight m-0 leading-[1.15] md:leading-[1.1]">
                     Arcade <span className="text-blue-600 drop-shadow-sm">Nexus</span>
@@ -393,54 +393,55 @@ export default function HomePage() {
                     <div className="h-1.5 bg-[#0f172a] w-[45%]"></div>
                   </div>
 
-                  <p className="text-slate-600 text-[16px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8 px-2 md:px-0">
+                  <p className="text-slate-600 text-[15px] sm:text-[16px] md:text-[20px] max-w-lg font-medium leading-relaxed mb-8 px-2 md:px-0">
                     Crunch points, track live leaderboards, and own your Arcade journey in one seamless dashboard.
                   </p>
 
-                  {/* 🔥 ALL 4 BUTTONS (BLUE) IN A 2x2 GRID 🔥 */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 w-full max-w-xl mx-auto lg:mx-0">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 w-full">
-                      <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  {/* 🔥 EXACT 2x2 GRID FOR 4 BLUE BUTTONS (RESPONSIVE & EQUAL) 🔥 */}
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-10 w-full max-w-[500px] mx-auto lg:mx-0">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform?pli=1" target="_blank" rel="noopener noreferrer" className="px-3 sm:px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] sm:text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-row items-center justify-center gap-1.5 sm:gap-2.5 w-full text-center">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-90 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.898 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                       Subscribe
                     </a>
                     
-                    <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 w-full">
-                      <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="px-3 sm:px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] sm:text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-row items-center justify-center gap-1.5 sm:gap-2.5 w-full text-center">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-90 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                       Start Labs
                     </a>
 
-                    <Link href="/facilitator" className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 w-full">
-                      <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    <Link href="/facilitator" className="px-3 sm:px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] sm:text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-row items-center justify-center gap-1.5 sm:gap-2.5 w-full text-center">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-90 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                       Facilitator
                     </Link>
 
-                    <Link href="/resources" className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 w-full">
-                      <svg className="w-5 h-5 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    <Link href="/resources" className="px-3 sm:px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[13px] sm:text-[14px] rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-row items-center justify-center gap-1.5 sm:gap-2.5 w-full text-center">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-90 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                       Skill Badges
                     </Link>
                   </div>
 
                 </div>
 
-                {/* 🌟 CALCULATOR INTEGRATION (RIGHT SIDE) - Now 60% Width and Shifted Right 🌟 */}
-                <div className="relative z-20 w-full lg:w-[60%] flex flex-col justify-center mt-12 lg:mt-0 lg:pl-16 pb-8 lg:pb-0">
+                {/* 🌟 CALCULATOR INTEGRATION (RIGHT SIDE) - Fixed Desktop Stretching & Mobile Input Hide 🌟 */}
+                <div className="relative z-20 w-full lg:w-[55%] flex flex-col justify-center mt-6 lg:mt-0 lg:pl-10 xl:pl-16 pb-8 lg:pb-0 max-w-2xl mx-auto lg:max-w-none">
                   <div className="rounded-xl border shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden w-full relative transition-all duration-1000 ease-in-out bg-white border-[#dadce0] min-h-[380px] flex flex-col justify-center">
                     
-                    <div className="p-6 sm:p-10 md:p-14">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
-                        <p className="text-2xl font-bold text-[#202124]">
+                    <div className="p-4 sm:p-8 md:p-12">
+                      <div className="flex flex-row items-center justify-between mb-8 gap-4">
+                        <p className="text-xl sm:text-2xl font-bold text-[#202124]">
                           Arcade Calculator
                         </p>
                         
-                        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <div className="flex items-center justify-end">
                           <button onClick={handleAutoCalcToggle} className={`p-2 rounded-full transition-colors flex items-center justify-center ${autoCalculate ? 'bg-[#e8eaed] text-green-600' : 'bg-transparent text-[#9aa0a6] hover:bg-[#e8eaed] hover:text-black'}`} title={autoCalculate ? "Auto Calculate Enabled" : "Enable Auto Calculate"}>
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                           </button>
                         </div>
                       </div>
 
-                      <div className="mb-8">
-                        <div onAnimationEnd={() => setIsShaking(false)} className={`group relative min-w-0 border-2 rounded-xl transition-colors duration-200 p-1.5 flex flex-row items-center shadow-sm w-full h-[52px] sm:h-[56px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : "bg-transparent border-[#dadce0] focus-within:border-blue-600"}`}>
+                      {/* 🔥 FULLY RESPONSIVE INPUT BOX 🔥 */}
+                      <div className="mb-6">
+                        <div onAnimationEnd={() => setIsShaking(false)} className={`group relative min-w-0 border-2 rounded-xl transition-colors duration-200 p-1 sm:p-1.5 flex flex-row items-center shadow-sm w-full h-[56px] sm:h-[64px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : "bg-transparent border-[#dadce0] focus-within:border-blue-600"}`}>
                           
                           {isLoading && !error && userPoints === null && (
                             <div className="absolute -bottom-[2px] left-6 right-6 h-[2px] bg-transparent overflow-hidden z-0">
@@ -448,7 +449,7 @@ export default function HomePage() {
                             </div>
                           )}
 
-                          <label className={`absolute -top-3 left-6 px-2 text-xs sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 bg-white ${error && !hideRedLine ? "text-[#d93025]" : (userName && !isLoading && !isPaused) ? "text-[#4e342e] group-focus-within:text-blue-600" : "text-black group-focus-within:text-blue-600"}`}>
+                          <label className={`absolute -top-3 left-4 sm:left-6 px-2 text-[11px] sm:text-sm font-bold flex items-center transition-all duration-300 ease-in-out z-10 bg-white ${error && !hideRedLine ? "text-[#d93025]" : (userName && !isLoading && !isPaused) ? "text-[#4e342e] group-focus-within:text-blue-600" : "text-black group-focus-within:text-blue-600"}`}>
                             {isLoading ? (
                               loadingStep === 'wave' ? (
                                 <div className="flex items-center gap-[3px] h-5 px-1">
@@ -469,35 +470,35 @@ export default function HomePage() {
                           </label>
                           
                           {calcState !== 'idle' ? (
-                            <div className="flex-1 h-full px-4 sm:px-6 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 text-[#202124]">
-                              <span className="truncate text-sm sm:text-base font-medium">{profileUrl}</span>
+                            <div className="flex-1 h-full px-3 sm:px-5 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 text-[#202124]">
+                              <span className="truncate text-[13px] sm:text-base font-medium pr-2">{profileUrl}</span>
                               {isPaused && (
-                                <button onClick={() => setCalcState('idle')} title="Cancel Calculation" className="ml-2 transition-colors p-1 shrink-0 text-[#9aa0a6] hover:text-black">
+                                <button onClick={() => setCalcState('idle')} title="Cancel Calculation" className="transition-colors p-1 shrink-0 text-[#9aa0a6] hover:text-black">
                                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
                               )}
                             </div>
                           ) : (
-                            <input type="text" placeholder="https://www.skills.google/public_profiles/..." value={profileUrl} onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }} onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }} spellCheck="false" className="flex-1 h-full px-4 sm:px-6 text-sm sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 font-medium text-[#202124] placeholder-[#9aa0a6]" />
+                            <input type="text" placeholder="https://www.skills.google/public_profiles/..." value={profileUrl} onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }} onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }} spellCheck="false" className="flex-1 h-full px-3 sm:px-5 text-[13px] sm:text-base bg-transparent outline-none relative z-10 w-full min-w-0 font-medium text-[#202124] placeholder-[#9aa0a6]" />
                           )}
 
-                          <button onClick={handleMainButtonClick} disabled={calcState !== 'idle' && calcState !== 'paused'} className="h-full px-4 sm:px-5 shrink-0 rounded-lg text-[15px] sm:text-[15px] w-[110px] sm:w-[135px] font-bold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-2 whitespace-nowrap shadow-sm disabled:opacity-70 bg-blue-600 text-white hover:bg-blue-700">
+                          <button onClick={handleMainButtonClick} disabled={calcState !== 'idle' && calcState !== 'paused'} className="h-full px-3 sm:px-6 shrink-0 rounded-lg text-[13px] sm:text-[16px] font-bold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap shadow-sm disabled:opacity-70 bg-blue-600 text-white hover:bg-blue-700 w-auto">
                             {isLoading ? (
                               <span className="flex items-center">Wait<span className="progressive-dots"></span></span>
                             ) : isPaused ? ("Resume") : (
-                              <>Calculate<svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg></>
+                              <>Calculate<svg className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7" /></svg></>
                             )}
                           </button>
                         </div>
                       </div>
 
                       {error && (
-                        <div className="mb-8 flex flex-col pl-2">
-                          <div className="flex items-center gap-2 text-sm font-medium text-[#d93025]">
+                        <div className="mb-6 flex flex-col pl-2">
+                          <div className="flex items-center gap-2 text-[13px] sm:text-sm font-medium text-[#d93025]">
                             <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
                             {error}
                           </div>
-                          <div className="text-[12px] sm:text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5 text-gray-600">
+                          <div className="text-[11px] sm:text-[13px] font-medium pl-6 pt-1 flex flex-col gap-0.5 text-gray-600">
                             <p>• Please make your public profile visible again in your settings.</p>
                             <p>• Your profile has extra characters at the start or end.</p>
                             <p>• Please check your internet connections.</p>
@@ -505,57 +506,55 @@ export default function HomePage() {
                         </div>
                       )}
 
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                        <div className="flex flex-wrap items-center gap-6">
-                          <div className="flex items-center pl-2">
-                            <input id="remember-me" type="checkbox" className="w-4 h-4 rounded-sm cursor-pointer border-[#dadce0] text-black focus:ring-black focus:ring-offset-0" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                            <label htmlFor="remember-me" className="ml-3 text-sm font-medium cursor-pointer select-none text-[#3c4043]">Remember Me</label>
-                          </div>
+                      <div className="flex flex-row items-center justify-between gap-2 mb-2 sm:mb-4">
+                        <div className="flex items-center pl-1 sm:pl-2">
+                          <input id="remember-me" type="checkbox" className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-sm cursor-pointer border-[#dadce0] text-black focus:ring-black focus:ring-offset-0" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                          <label htmlFor="remember-me" className="ml-2 sm:ml-3 text-[12px] sm:text-sm font-medium cursor-pointer select-none text-[#3c4043]">Remember Me</label>
                         </div>
-                        <div className="text-sm font-medium pl-2 md:pl-0 md:text-right text-[#3c4043]">
+                        <div className="text-[11px] sm:text-sm font-medium text-right text-[#3c4043]">
                           Calculated: {recentUrls.length > 0 ? timeAgo(recentUrls[0].time) : "Never"}
                         </div>
                       </div>
 
                       {recentUrls.length > 0 && (
-                        <div className="mt-5 pt-6 border-t animate-fade-in-up border-[#f1f3f4]">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-2">
-                            <p className="text-sm font-bold uppercase tracking-wider text-gray-500">Recent Profiles</p>
-                            <div className="flex items-center gap-2">
-                              <button onClick={clearHistory} className="flex items-center gap-1.5 text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors text-gray-500 hover:text-black hover:bg-[#f1f3f4]">
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear
+                        <div className="mt-4 sm:mt-5 pt-5 sm:pt-6 border-t animate-fade-in-up border-[#f1f3f4]">
+                          <div className="flex flex-row items-center justify-between mb-4 sm:mb-5 gap-2">
+                            <p className="text-[12px] sm:text-sm font-bold uppercase tracking-wider text-gray-500">Recent Profiles</p>
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                              <button onClick={clearHistory} className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors text-gray-500 hover:text-black hover:bg-[#f1f3f4]">
+                                <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear
                               </button>
-                              <button onClick={() => setShowResetModal(true)} className="flex items-center gap-1.5 text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6]">
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Reset
+                              <button onClick={() => setShowResetModal(true)} className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6]">
+                                <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Reset
                               </button>
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-2 min-[500px]:grid-cols-3 gap-3 w-full">
+                          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 gap-2.5 sm:gap-3 w-full">
                             {recentUrls.map((item, idx) => {
                               const themeColor = getCardTheme(item.name || "Arcade");
                               return (
                                 <div key={idx} className="relative w-full">
-                                  <button onClick={() => handleHistoryClick(item.url, idx)} className="relative w-full h-[46px] flex items-center gap-3 pl-2 pr-3 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-md hover:scale-[1.02] border bg-white border-[#f1f3f4] hover:border-[#dadce0]" title={item.url}>
-                                    <div className="w-8 h-8 rounded-full shrink-0 shadow-sm overflow-hidden relative z-10 bg-gray-100">
+                                  <button onClick={() => handleHistoryClick(item.url, idx)} className="relative w-full h-[42px] sm:h-[46px] flex items-center gap-2.5 sm:gap-3 pl-1.5 sm:pl-2 pr-2.5 sm:pr-3 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-md hover:scale-[1.02] border bg-white border-[#f1f3f4] hover:border-[#dadce0]" title={item.url}>
+                                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full shrink-0 shadow-sm overflow-hidden relative z-10 bg-gray-100">
                                       {copiedIndex === idx ? (
                                         <div className="w-full h-full flex items-center justify-center bg-white">
-                                          <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                                          <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                                         </div>
                                       ) : (
                                         item.avatar ? (
                                           <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                         ) : (
-                                          <div className="w-full h-full flex items-center justify-center text-white font-medium text-[13px]" style={{ backgroundColor: themeColor }}>
+                                          <div className="w-full h-full flex items-center justify-center text-white font-medium text-[12px] sm:text-[13px]" style={{ backgroundColor: themeColor }}>
                                             {item.name ? item.name.charAt(0).toUpperCase() : "U"}
                                           </div>
                                         )
                                       )}
                                     </div>
                                     <div className="flex flex-col items-start justify-center z-10 overflow-hidden w-full">
-                                      <span className="text-[13px] font-bold truncate max-w-full tracking-tight leading-tight text-[#202124]">{item.name || "Arcade Player"}</span>
+                                      <span className="text-[12px] sm:text-[13px] font-bold truncate max-w-full tracking-tight leading-tight text-[#202124]">{item.name || "Arcade Player"}</span>
                                       {item.points !== undefined && (
-                                        <span className="text-[11px] font-semibold mt-[2px] leading-none text-[#5f6368]">{item.points} Pts</span>
+                                        <span className="text-[10px] sm:text-[11px] font-semibold mt-[1px] sm:mt-[2px] leading-none text-[#5f6368]">{item.points} Pts</span>
                                       )}
                                     </div>
                                   </button>
