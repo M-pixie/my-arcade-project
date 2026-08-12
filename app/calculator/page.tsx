@@ -539,13 +539,12 @@ export default function CalculatorPage() {
                 </button>
               </div>
             </div>
-
-            {/* 🔥 NEW LAYOUT: REDUCED HEIGHT FOR PREMIUM LOOK 🔥 */}
-            <div className="mb-6">
-              <div 
-                onAnimationEnd={() => setIsShaking(false)}
-                className={`group relative min-w-0 border-2 rounded-xl transition-colors duration-200 p-1.5 flex flex-row items-center shadow-sm w-full h-[52px] sm:h-[56px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-transparent border-[#dadce0] focus-within:border-blue-600")}`}
-              >
+{/* 🔥 NEW LAYOUT: HEIGHT INCREASED FOR BETTER LOOK 🔥 */}
+<div className="mb-6">
+  <div 
+    onAnimationEnd={() => setIsShaking(false)}
+    className={`group relative min-w-0 border-2 rounded-xl transition-colors duration-200 p-1.5 flex flex-row items-center shadow-sm w-full h-[60px] sm:h-[64px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-transparent border-[#dadce0] focus-within:border-blue-600")}`}
+  >
                 {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[2px] left-6 right-6 h-[2px] bg-transparent overflow-hidden z-0">
                     <div className={`h-full animate-slow-fill rounded-b-lg ${isDark ? 'bg-white' : 'bg-black'}`}></div>
