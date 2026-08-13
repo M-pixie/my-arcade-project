@@ -80,7 +80,8 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-black overflow-hidden font-sans relative">
         
         {/* ================= MINIMALIST HERO & FEATURES SECTION ================= */}
-        <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden min-h-[90vh] flex flex-col items-center justify-start text-center px-4 sm:px-6">
+        {/* Fixed min-h issue and adjusted padding */}
+        <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 overflow-hidden flex flex-col items-center justify-start text-center px-4 sm:px-6">
           <div className="w-full max-w-[85rem] mx-auto z-10 flex flex-col items-center">
             
             {/* Heading in Blue */}
@@ -93,7 +94,7 @@ export default function HomePage() {
               Everything you need in one powerful platform. Calculate your points, track live leaderboards, get facilitator guidance, and claim your rewards.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full mb-20">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full mb-14">
               <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[15px] rounded-md transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto">
                 Get Started
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
@@ -104,7 +105,7 @@ export default function HomePage() {
             </div>
 
             {/* 🔥 MINIMALIST FEATURES GRID 🔥 */}
-            <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-4 text-left">
+            <div id="features" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl text-left">
               {[
                 { title: "Arcade Calculator", desc: "Instantly calculate your Arcade points from your public profile URL with 100% accuracy.", link: "/calculator" },
                 { title: "Smart Dashboard", desc: "Visualize your progress, track completed labs, and monitor your recent activities.", link: "/dashboard" },
