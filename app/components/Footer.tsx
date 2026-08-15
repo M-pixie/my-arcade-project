@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import VisitCounter from "@/app/components/VisitCounter";
 import { subscribeLeaderboard } from "@/lib/leaderboard";
+// 🔥 Firebase imports for actual Live Online tracking 🔥
+import { doc, setDoc, deleteDoc, collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Footer() {
   const router = useRouter();
@@ -11,10 +14,12 @@ export default function Footer() {
   
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);
-  const [onlineUsers, setOnlineUsers] = useState(15);
+  
+  // 🔥 REAL-TIME ONLINE USERS STATE 🔥
+  const [onlineUsers, setOnlineUsers] = useState(1);
 
+  // 1. Leaderboard & Stats Logic
   useEffect(() => {
-    // Fetching Leaderboard & Profile Analyzed Stats
     const unsub = subscribeLeaderboard((data) => {
       setLeaderboardCount(data.length);
       
@@ -23,21 +28,64 @@ export default function Footer() {
       }, 0);
       setProfilesAnalyzed(totalAnalyzed);
     });
+    return () => unsub();
+  }, []);
 
-    // Simulated Live Online Users Logic
-    setOnlineUsers(Math.floor(Math.random() * 12) + 20);
-    const interval = setInterval(() => {
-      setOnlineUsers((prev) => {
-        const fluctuation = Math.floor(Math.random() * 5) - 2;
-        const newVal = prev + fluctuation;
-        return newVal < 8 ? 8 : (newVal > 65 ? 65 : newVal);
-      });
-    }, 12000); 
+  // 2. 🔥 ACTUAL LIVE ONLINE TRACKING LOGIC 🔥
+  useEffect(() => {
+    if (!db) return;
+
+    // Har user ka ek unique session ID create hoga
+    const sessionId = Math.random().toString(36).substring(2, 15);
+    const presenceRef = doc(db, 'live_users', sessionId);
+
+    // Database me user ki entry update karne ka function
+    const setOnlineStatus = async () => {
+      try {
+        await setDoc(presenceRef, { lastActive: Date.now() }, { merge: true });
+      } catch (error) {
+        console.error("Live presence error:", error);
+      }
+    };
+
+    // Pehli baar status set karo, fir har 30 sec me update karo (Heartbeat)
+    setOnlineStatus();
+    const heartbeat = setInterval(setOnlineStatus, 30000);
+
+    // Jab tab close ho jaye toh database se entry uda do
+    const cleanup = () => {
+      deleteDoc(presenceRef).catch(() => {});
+    };
+    window.addEventListener('beforeunload', cleanup);
 
     return () => {
-      unsub();
-      clearInterval(interval);
+      clearInterval(heartbeat);
+      window.removeEventListener('beforeunload', cleanup);
+      cleanup(); // Component unmount hone par bhi hatao
     };
+  }, []);
+
+  // 3. 🔥 LIVE USERS LISTENER 🔥
+  useEffect(() => {
+    if (!db) return;
+
+    const liveUsersRef = collection(db, 'live_users');
+    const unsub = onSnapshot(liveUsersRef, (snapshot) => {
+      const now = Date.now();
+      let activeCount = 0;
+      
+      snapshot.forEach(doc => {
+        // Sirf un logo ko gino jo pichle 60 second (60000ms) me active the
+        if (now - doc.data().lastActive < 60000) {
+          activeCount++;
+        }
+      });
+      
+      // Kam se kam 1 count hamesha dikhega (yaani jo khud use kar raha hai)
+      setOnlineUsers(Math.max(activeCount, 1));
+    });
+
+    return () => unsub();
   }, []);
 
   return (
@@ -60,7 +108,7 @@ export default function Footer() {
               An independent, community-driven platform designed by <span className="font-bold text-[#202124]">Manish</span> and <span className="font-bold text-[#202124]">Anjali</span>. Built to help Google Cloud Arcade learners effortlessly track progress, analyze achievements, and stay connected.
             </p>
 
-            {/* Connect Moved Here for Better Balance */}
+            {/* Connect Section */}
             <div>
               <h3 className="text-[11px] font-black text-[#202124] uppercase tracking-wider mb-3">Connect</h3>
               <div className="flex gap-3">
@@ -77,7 +125,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 2. NAVIGATION LINKS (Col Span 4) - Combined wrapper for better alignment */}
+          {/* 2. NAVIGATION LINKS (Col Span 4) */}
           <div className="lg:col-span-4 flex justify-between sm:justify-start sm:gap-20 lg:gap-12 pl-0 lg:pl-6">
             
             {/* Platform Links */}
@@ -138,7 +186,7 @@ export default function Footer() {
             
           </div>
 
-          {/* 3. METRICS CARDS (Col Span 4) - Sleek & Compact */}
+          {/* 3. METRICS CARDS (Col Span 4) */}
           <div className="lg:col-span-4">
             <div className="grid grid-cols-2 gap-3">
               
@@ -166,7 +214,7 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Card 4 - Clean Live Online */}
+              {/* Card 4 - 🔥 Real-time Live Online 🔥 */}
               <div className="bg-[#f8f9fc] border border-[#e8eaed] rounded-xl p-4 transition-colors hover:border-[#dadce0]">
                 <p className="text-[10px] font-bold text-[#5f6368] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#1e8e3e] animate-pulse"></span>
