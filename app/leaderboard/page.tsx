@@ -266,7 +266,7 @@ export default function LeaderboardPage() {
           
           {/* 1. Title */}
           <div className="w-full xl:w-[220px] shrink-0 flex flex-col text-center xl:text-left">
-            <h1 className="text-[20px] font-black tracking-tight text-[#202124] leading-tight"Rankings</h1>
+            <h1 className="text-[20px] font-black tracking-tight text-[#202124] leading-tight">Rankings</h1>
             <p className="text-[#5f6368] font-medium text-[12px] mt-0.5">Tracking all active performers.</p>
           </div>
 
