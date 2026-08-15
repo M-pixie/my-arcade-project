@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import Link from "next/link"; // 🔥 Link import kiya yahan 🔥
+import { useEffect, useState, useRef, useMemo } from "react";
+import Link from "next/link";
 import { subscribeLeaderboard } from "@/lib/leaderboard";
 import { 
-  Trophy, Home, Calculator, LayoutDashboard, 
-  Award, Users, HelpCircle, Search, Bell
+  Trophy, Search, Bell, Medal, Users, Award, Shield
 } from "lucide-react";
 
 type Leader = {
@@ -15,308 +14,432 @@ type Leader = {
   photoURL?: string;
   points?: number;
   profileUrl?: string;
+  badges?: string; 
+  milestone?: string;
 };
 
+// 124 Active Members Data
+const RAW_ACTIVE_MEMBERS = [
+  { name: "AADITYA VARDHAN", skill: 51, game: 11, milestone: "Milestone 3" },
+  { name: "ADITYA MONDAL", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "ADITYA RAJ", skill: 0, game: 1, milestone: "Not Yet" },
+  { name: "AISHWARYA KANCHU", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "AJIT CHAUDHARY", skill: 38, game: 1, milestone: "Not Yet" },
+  { name: "AJITKUMAR MAURYA", skill: 5, game: 2, milestone: "Not Yet" },
+  { name: "AMAN KUSHWAHA", skill: 6, game: 2, milestone: "Not Yet" },
+  { name: "AMAN SINGH CHAUHAN", skill: 1, game: 2, milestone: "Not Yet" },
+  { name: "AMISH RAJ", skill: 6, game: 0, milestone: "Not Yet" },
+  { name: "AMISHA KUMARI", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "ANIKA CHOUDHURY", skill: 66, game: 11, milestone: "Milestone 3" },
+  { name: "ANUSHKA SINGH", skill: 0, game: 3, milestone: "Not Yet" },
+  { name: "APURVA LAKHE", skill: 10, game: 1, milestone: "Not Yet" },
+  { name: "ARPIT DUBEY", skill: 40, game: 7, milestone: "Milestone 1" },
+  { name: "ASBAB KHAN", skill: 39, game: 5, milestone: "Not Yet" },
+  { name: "ASHUTOSH SUBHASH MINDE", skill: 24, game: 6, milestone: "Milestone 1" },
+  { name: "AYUSHA SANJUKTHA CHEKKA", skill: 22, game: 6, milestone: "Milestone 1" },
+  { name: "BALRAM", skill: 7, game: 0, milestone: "Not Yet" },
+  { name: "BERNARDO RIFFO", skill: 32, game: 7, milestone: "Milestone 1" },
+  { name: "BIJOY BISWAS", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "BRAJESH KUMAR", skill: 1, game: 1, milestone: "Not Yet" },
+  { name: "CHEEPURUPALLI SATWIK", skill: 50, game: 9, milestone: "Milestone 2" },
+  { name: "CHIRAG VAISHNAV", skill: 2, game: 0, milestone: "Not Yet" },
+  { name: "DHARMALA MONALI REDDY", skill: 6, game: 1, milestone: "Not Yet" },
+  { name: "DHARSHINI V", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "DIPIKA VAMAN KANTAPPA POOJARI", skill: 48, game: 5, milestone: "Not Yet" },
+  { name: "DIVYAM AGRAWAL", skill: 26, game: 6, milestone: "Milestone 1" },
+  { name: "DIYA MANDAL", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "E SANTHOSH KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "ESHAMA ARA", skill: 19, game: 6, milestone: "Milestone 1" },
+  { name: "G.PAVANI", skill: 12, game: 6, milestone: "Not Yet" },
+  { name: "GAGANDEEP KAUR", skill: 18, game: 3, milestone: "Not Yet" },
+  { name: "GAUTAM KUMAR", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "GHANSHYAM KUMAR", skill: 50, game: 5, milestone: "Not Yet" },
+  { name: "GULAM MOHAMMAD", skill: 8, game: 2, milestone: "Not Yet" },
+  { name: "GUNJAN KUMARI", skill: 21, game: 1, milestone: "Not Yet" },
+  { name: "HAJARE AYUSH", skill: 37, game: 8, milestone: "Milestone 2" },
+  { name: "HARDIK GUPTA", skill: 0, game: 5, milestone: "Not Yet" },
+  { name: "HARSH PANDA", skill: 15, game: 6, milestone: "Not Yet" },
+  { name: "HARSH SHARMA", skill: 60, game: 11, milestone: "Milestone 3" },
+  { name: "HARSHVARDHAN PANDEY", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "HIMANI TYAGI", skill: 7, game: 2, milestone: "Not Yet" },
+  { name: "HIMANSHU SHARMA", skill: 38, game: 6, milestone: "Milestone 1" },
+  { name: "INDRAJIT MISHRA", skill: 52, game: 11, milestone: "Milestone 3" },
+  { name: "JANANI SURYA KALA", skill: 6, game: 0, milestone: "Not Yet" },
+  { name: "JANHAVI TALODHIKAR", skill: 9, game: 0, milestone: "Not Yet" },
+  { name: "JAYASHREE MANDAL", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "KARNATI PRAGNA SRI", skill: 2, game: 0, milestone: "Not Yet" },
+  { name: "KARTHEEK THANGELLA", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "KAUSHAL DUBEY", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "KAUSHAL LOYA", skill: 17, game: 5, milestone: "Not Yet" },
+  { name: "KAVETI RISHI TEJA", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "KISHOUR J", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "KKESHAV LOYA", skill: 1, game: 1, milestone: "Not Yet" },
+  { name: "KONDA BHASKAR REDDY", skill: 59, game: 4, milestone: "Not Yet" },
+  { name: "KRISHNA", skill: 7, game: 0, milestone: "Not Yet" },
+  { name: "KUNAL KUMAR", skill: 1, game: 4, milestone: "Not Yet" },
+  { name: "LOKESH KUMAR SAH", skill: 0, game: 1, milestone: "Not Yet" },
+  { name: "LOVELY KUMARI", skill: 18, game: 1, milestone: "Not Yet" },
+  { name: "MADHUMITHA S", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "MANDEEP KAUR", skill: 22, game: 6, milestone: "Milestone 1" },
+  { name: "MANISH KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "MANSI THAKUR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "MASUM ANAND", skill: 2, game: 0, milestone: "Not Yet" },
+  { name: "MD SAMSE ALAM", skill: 1, game: 1, milestone: "Not Yet" },
+  { name: "MD TANVEER HUSSAIN", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "MEGHA DALAL", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "MILAN DEORI", skill: 0, game: 1, milestone: "Not Yet" },
+  { name: "MOHAMMAD TAUFIQUE", skill: 18, game: 7, milestone: "Milestone 1" },
+  { name: "MONISHA MONDAL", skill: 4, game: 3, milestone: "Not Yet" },
+  { name: "MONU KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "MUNNA KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "NAMPALLY HARISH", skill: 69, game: 12, milestone: "Ultimate Milestone" },
+  { name: "NEERAJ KUMAR", skill: 52, game: 10, milestone: "Milestone 3" },
+  { name: "NIHARIKA", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "NIHARIKA SANGAM", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "NIKHIL", skill: 2, game: 0, milestone: "Not Yet" },
+  { name: "NIKHIL KUMAR", skill: 1, game: 1, milestone: "Not Yet" },
+  { name: "NIKHIL KUMAR", skill: 15, game: 0, milestone: "Not Yet" },
+  { name: "NITYAY SANJAY JIWTODE", skill: 18, game: 4, milestone: "Not Yet" },
+  { name: "NOURAN MUHAMMAD ABDELHAKIM MUHAMMAD", skill: 13, game: 3, milestone: "Not Yet" },
+  { name: "NUVVULA VARUN KRISHNA", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "PARI GUPTA", skill: 0, game: 5, milestone: "Not Yet" },
+  { name: "PIYUSH KUMAR", skill: 20, game: 4, milestone: "Not Yet" },
+  { name: "PRATIKSHA DESHMUKH", skill: 24, game: 8, milestone: "Milestone 1" },
+  { name: "PRATIKSHA RAMCHANDRA KHADE", skill: 8, game: 2, milestone: "Not Yet" },
+  { name: "PRITHA ROY", skill: 11, game: 6, milestone: "Not Yet" },
+  { name: "PRITHVI KUMAR", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "PRIYANSH NARANG", skill: 4, game: 3, milestone: "Not Yet" },
+  { name: "PRIYANSHU KUMAR", skill: 2, game: 0, milestone: "Not Yet" },
+  { name: "PRIYLATA", skill: 7, game: 0, milestone: "Not Yet" },
+  { name: "PROVINCE KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "PULLAGURA CHARANMAYEE", skill: 1, game: 4, milestone: "Not Yet" },
+  { name: "RADHA", skill: 3, game: 0, milestone: "Not Yet" },
+  { name: "RAHUL YADAV", skill: 3, game: 1, milestone: "Not Yet" },
+  { name: "RAJ GUPTA", skill: 0, game: 2, milestone: "Not Yet" },
+  { name: "RAJKUMAR DAS", skill: 66, game: 12, milestone: "Ultimate Milestone" },
+  { name: "RAMANDEEP RIMPY", skill: 42, game: 6, milestone: "Milestone 1" },
+  { name: "RAUSHAN KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "RITU BHARTI", skill: 8, game: 0, milestone: "Not Yet" },
+  { name: "ROHIT KUMAR BHARDWAJ", skill: 2, game: 0, milestone: "Not Yet" },
+  { name: "SAMIRA SAMROSE", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "SAMRATH GUPTA", skill: 16, game: 0, milestone: "Not Yet" },
+  { name: "SANIKA KESHAV DHOKARE", skill: 1, game: 4, milestone: "Not Yet" },
+  { name: "SANTOSH KUMAR MALLICK", skill: 35, game: 9, milestone: "Milestone 2" },
+  { name: "SAURABH KUMAR", skill: 62, game: 0, milestone: "Not Yet" },
+  { name: "SHABNAM RAZA", skill: 0, game: 1, milestone: "Not Yet" },
+  { name: "SHREYA GUPTA", skill: 0, game: 5, milestone: "Not Yet" },
+  { name: "SHRUTI KUMARI", skill: 9, game: 0, milestone: "Not Yet" },
+  { name: "SHUBHAM", skill: 40, game: 10, milestone: "Milestone 2" },
+  { name: "SOHOM NATH", skill: 11, game: 6, milestone: "Not Yet" },
+  { name: "SONU KUMAR", skill: 1, game: 1, milestone: "Not Yet" },
+  { name: "SPARSH KOTIYA", skill: 77, game: 11, milestone: "Milestone 3" },
+  { name: "SURUCHI KUMARI", skill: 4, game: 4, milestone: "Not Yet" },
+  { name: "TANUSHKA DAS", skill: 5, game: 0, milestone: "Not Yet" },
+  { name: "THANNEERU DINESH", skill: 1, game: 0, milestone: "Not Yet" },
+  { name: "UJJWAL RAJ", skill: 9, game: 0, milestone: "Not Yet" },
+  { name: "VAISHNAVI PRASAD RAMANNAVAR", skill: 32, game: 11, milestone: "Milestone 1" },
+  { name: "VARSHA KUMARI", skill: 6, game: 1, milestone: "Not Yet" },
+  { name: "VEDANT BHAUMIK", skill: 6, game: 0, milestone: "Not Yet" },
+  { name: "VICKY KUMAR", skill: 36, game: 5, milestone: "Not Yet" },
+  { name: "VIKAS", skill: 67, game: 12, milestone: "Ultimate Milestone" },
+  { name: "VISHAL KUMAR", skill: 23, game: 8, milestone: "Milestone 1" },
+  { name: "VISHAL KUMAR", skill: 1, game: 0, milestone: "Not Yet" }
+];
+
+// Helper to determine sorting value under the hood
+function getSortScore(skill: number, game: number, milestone: string) {
+  let base = 0;
+  if (milestone.includes("Ultimate")) base = 40000;
+  else if (milestone.includes("Milestone 3")) base = 30000;
+  else if (milestone.includes("Milestone 2")) base = 20000;
+  else if (milestone.includes("Milestone 1")) base = 10000;
+  return base + (skill * 10) + (game * 50);
+}
+
 export default function LeaderboardPage() {
-  const [leaders, setLeaders] = useState<Leader[]>([]);
+  const [arcadeLeaders, setArcadeLeaders] = useState<Leader[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState<"arcade" | "facilitator">("arcade");
   
   const [currentUserName, setCurrentUserName] = useState<string | null>(null); 
   const [currentUserUniqueId, setCurrentUserUniqueId] = useState<string | null>(null);
-  
   const currentUserRef = useRef<HTMLTableRowElement>(null as any);
+
+  // Generate the full 343 members list with internal sorting
+  const facilitatorLeaders = useMemo(() => {
+    const active = RAW_ACTIVE_MEMBERS.map(m => ({
+      name: m.name, skill: m.skill, game: m.game, milestone: m.milestone,
+      score: getSortScore(m.skill, m.game, m.milestone)
+    }));
+
+    // Generating remaining 219 inactive members
+    const inactive = Array.from({ length: 219 }).map((_, i) => ({
+      name: `Inactive Member ${i + 1}`, skill: 0, game: 0, milestone: "Not Yet",
+      score: -1 
+    }));
+
+    const combined = [...active, ...inactive].sort((a, b) => b.score - a.score);
+
+    return combined.map((member, index) => ({
+      id: `fac_${index}`,
+      rank: index + 1,
+      name: member.name,
+      badges: `${member.skill} Skill • ${member.game} Game`,
+      milestone: member.milestone
+    }));
+  }, []);
 
   useEffect(() => {
     const unsub = subscribeLeaderboard((data) => {
-      setLeaders(data); // 🔥 Hamesha original backend data hi aayega, no mock data 🔥
+      setArcadeLeaders(data); 
     });
-
     try {
       const savedData = localStorage.getItem("arcade_user_data");
       if (savedData) {
         const parsed = JSON.parse(savedData);
-        if (parsed) {
-          if (parsed.userName) setCurrentUserName(parsed.userName);
-          if (parsed.userUniqueId) setCurrentUserUniqueId(parsed.userUniqueId);
-        }
+        if (parsed.userName) setCurrentUserName(parsed.userName);
+        if (parsed.userUniqueId) setCurrentUserUniqueId(parsed.userUniqueId);
       }
     } catch (e) {
       console.error("Error reading user data", e);
     }
-
     return () => unsub();
   }, []);
 
-  // 🔥 AUTO-SCROLL LOGIC WAPAS ADD KIYA 🔥
-  useEffect(() => {
-    if (currentUserRef.current && leaders.length > 0) {
-      setTimeout(() => {
-        currentUserRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 600);
-    }
-  }, [leaders, currentUserName, currentUserUniqueId]);
-
   const isExactCurrentUser = (user: Leader) => {
     if (!currentUserName) return false;
-    if (currentUserUniqueId && user.profileUrl) {
-      return user.profileUrl.includes(currentUserUniqueId);
-    }
+    if (currentUserUniqueId && user.profileUrl) return user.profileUrl.includes(currentUserUniqueId);
     return user.name === currentUserName;
   };
 
-  const searchResults = leaders.filter((user) =>
-    user.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const currentList = activeTab === "arcade" ? arcadeLeaders : facilitatorLeaders;
+  const displayList = searchTerm.trim().length > 0 
+    ? currentList.filter((user) => user.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+    : currentList;
 
-  const displayList = searchTerm.trim().length > 0 ? searchResults : leaders;
-  
-  // CURRENT USER DATA
-  const currentUserData = leaders.find((l) => isExactCurrentUser(l));
+  const currentUserData = arcadeLeaders.find((l) => isExactCurrentUser(l));
+
+  useEffect(() => {
+    if (activeTab === "arcade" && currentUserRef.current && arcadeLeaders.length > 0) {
+      setTimeout(() => currentUserRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 600);
+    }
+  }, [arcadeLeaders, activeTab]);
 
   return (
-    <>
-      <style>{`
-        /* 🔥 CARD BLINK ANIMATION 🔥 */
-        @keyframes card-border-blink {
-          0%, 100% { border-color: #1a73e8; box-shadow: 0 0 8px rgba(26, 115, 232, 0.4); }
-          50% { border-color: #e8eaed; box-shadow: none; }
-        }
-        .animate-card-blink {
-          animation: card-border-blink 1.5s infinite ease-in-out;
-        }
-      `}</style>
-
-      <div className="flex flex-col h-screen bg-[#f8f9fc] text-[#3c4043] font-sans overflow-hidden">
-        
-        {/* TOP NAVBAR */}
-        <header className="h-[60px] bg-white border-b border-[#e8eaed] flex items-center justify-between px-6 shrink-0 z-10">
-          <div className="font-bold text-[16px] text-[#202124] w-[260px]">
-            {currentUserData?.name || currentUserName || "Loading..."}
+    <div className="flex flex-col h-screen bg-[#f8f9fc] text-[#202124] font-sans overflow-hidden">
+      
+      {/* PREMIUM MINIMAL TOP NAVBAR */}
+      <header className="h-[64px] bg-white border-b border-[#dadce0] flex items-center justify-between px-6 shrink-0 shadow-sm z-10">
+        <div className="flex items-center gap-8">
+          <div className="font-bold text-[18px] tracking-tight text-[#1a73e8] flex items-center gap-2">
+            <Trophy className="w-5 h-5" /> ARCADE HUB
           </div>
-          
-          <nav className="hidden xl:flex items-center gap-6 text-[13px] font-medium text-[#5f6368]">
-            <span className="cursor-pointer hover:text-[#202124]">Home</span>
-            <span className="cursor-pointer hover:text-[#202124]">Calculator</span>
-            <span className="cursor-pointer hover:text-[#202124]">Dashboard</span>
-            <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full cursor-pointer">Leaderboard</span>
-            <span className="cursor-pointer hover:text-[#202124]">Skill Badges</span>
-            <span className="cursor-pointer hover:text-[#202124]">Facilitator</span>
-            <span className="cursor-pointer hover:text-[#202124]">Help</span>
+          <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#5f6368]">
+            <Link href="/" className="hover:text-[#1a73e8] transition-colors">Home</Link>
+            <Link href="/calculator" className="hover:text-[#1a73e8] transition-colors">Calculator</Link>
+            <span className="text-[#1a73e8] border-b-[3px] border-[#1a73e8] pb-1 cursor-default pt-1">Leaderboard</span>
           </nav>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <button className="text-[#5f6368] hover:text-[#202124]">
-              <Bell className="w-5 h-5" />
-            </button>
+        <div className="flex items-center gap-5">
+          <button className="text-[#5f6368] hover:text-[#202124] bg-[#f1f3f4] p-2 rounded-full transition-colors">
+            <Bell className="w-5 h-5" />
+          </button>
+          <div className="flex items-center gap-3 pl-5 border-l border-[#dadce0]">
             <img 
               src={currentUserData?.photoURL || "/avatar.png"} 
               alt="Profile" 
-              className="w-8 h-8 rounded-full object-cover border border-[#dadce0] bg-[#e8eaed]"
+              className="w-9 h-9 rounded-full object-cover border border-[#dadce0] bg-[#f8f9fc]"
+            />
+            <span className="font-semibold text-[14px] text-[#3c4043]">
+              {currentUserData?.name || currentUserName || "Guest"}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* MAIN LAYOUT */}
+      <main className="flex-1 overflow-y-auto w-full max-w-[1300px] mx-auto p-4 md:p-8">
+        
+        {/* UNIFIED SINGLE-LINE PREMIUM PANEL */}
+        <div className="bg-white rounded-[16px] border border-[#dadce0] shadow-sm p-4 mb-6 w-full flex flex-col xl:flex-row items-center gap-4 md:gap-6 justify-between">
+          
+          {/* 1. Title */}
+          <div className="shrink-0 flex flex-col xl:w-[220px]">
+            <h1 className="text-[20px] font-black tracking-tight text-[#202124] leading-tight">Leaderboard</h1>
+            <p className="text-[#5f6368] font-medium text-[12px] mt-0.5">Tracking all active performers.</p>
+          </div>
+
+          {/* 2. Search Box */}
+          <div className="relative flex-1 w-full min-w-[200px] max-w-[400px]">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9aa0a6]" />
+            <input 
+              type="text" 
+              placeholder="Search for a player..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-[#f8f9fc] border border-[#e8eaed] rounded-full py-2.5 pl-11 pr-4 text-[14px] font-medium focus:ring-2 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] focus:bg-white outline-none transition-all placeholder:text-[#9aa0a6]"
             />
           </div>
-        </header>
-
-        <div className="flex flex-1 overflow-hidden">
           
-          {/* LEFT SIDEBAR */}
-          <aside className="w-[280px] bg-white border-r border-[#e8eaed] flex flex-col justify-between overflow-y-auto hidden md:flex shrink-0">
-            {/* 🔥 YAHAN TUMHARA EXACT REDIRECT LOGIC LAGAYA HAI 🔥 */}
-            <nav className="flex flex-col gap-1 px-4 py-4">
-              <SidebarItem icon={<Home size={18} />} label="Home" href="/" />
-              <SidebarItem icon={<Calculator size={18} />} label="Calculator" href="/calculator" />
-              <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard" href="/dashboard" />
-              <SidebarItem icon={<Award size={18} />} label="Skill Badges" href="/resources" />
-              <SidebarItem icon={<Users size={18} />} label="Facilitator" href="/facilitator" />
-              <SidebarItem icon={<HelpCircle size={18} />} label="Help" href="/chat" />
-            </nav>
-
-            <div className="px-5 pb-6">
-              {/* BLINKING CURRENT USER CARD */}
-              <div className="p-5 bg-[#f8f9fc] rounded-2xl border-[2px] animate-card-blink flex flex-col items-center text-center relative transition-all">
-                
-                {currentUserData?.photoURL ? (
-                  <img 
-                    src={currentUserData.photoURL} 
-                    alt={currentUserData.name || "User"} 
-                    className="w-14 h-14 rounded-full object-cover mb-2 border border-[#dadce0]"
-                  />
-                ) : (
-                  <div className="w-14 h-14 bg-[#4285f4] text-white rounded-full flex items-center justify-center text-xl font-bold mb-2">
-                    {currentUserName ? currentUserName.charAt(0).toUpperCase() : 'U'}
-                  </div>
-                )}
-                
-                <h4 className="font-black text-[16px] text-[#202124]">
-                  {currentUserData?.name || currentUserName || "User"}
-                </h4>
-                
-                <span className="bg-[#e8f0fe] text-[#4285f4] text-[11px] font-black px-2.5 py-0.5 rounded mt-1.5 uppercase tracking-wider">
-                  You
-                </span>
-                
-                <div className="mt-4 pt-4 border-t border-[#dadce0] w-full flex justify-around">
-                  <div className="flex flex-col items-center">
-                    <p className="text-[12px] font-bold text-[#5f6368] mb-1">Your Rank</p>
-                    <p className="font-black text-[18px] text-[#202124] flex items-center gap-1">
-                      {currentUserData?.rank || "--"} <span className="text-[#fbbc04]">🏆</span>
-                    </p>
-                  </div>
-                  <div className="w-px bg-[#dadce0] h-full"></div>
-                  <div className="flex flex-col items-center">
-                    <p className="text-[12px] font-bold text-[#5f6368] mb-1">Total Points</p>
-                    <p className="font-black text-[18px] text-[#202124]">
-                      {currentUserData?.points ?? "--"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+          {/* 3. Stats Block */}
+          <div className="flex items-center justify-center gap-6 shrink-0 bg-[#f8f9fc] px-5 py-2.5 rounded-full border border-[#e8eaed]">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-[#5f6368] uppercase tracking-wider">Members</span>
+              <span className="text-[16px] font-black text-[#1a73e8] leading-none">{currentList.length}</span>
             </div>
-          </aside>
-
-          {/* MAIN CONTENT */}
-          <main className="flex-1 overflow-y-auto bg-white m-4 rounded-xl border border-[#e8eaed] shadow-sm flex flex-col">
-            
-            <div className="p-6 md:px-8 md:py-6">
-              
-              <div className="flex flex-col xl:flex-row items-center justify-between mb-8 gap-4 border border-[#e8eaed] p-4 rounded-xl">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-[#e8f0fe] rounded-full flex items-center justify-center shrink-0">
-                    <Trophy className="w-7 h-7 text-[#4285f4]" />
-                  </div>
-                  <div>
-                    <h1 className="text-[22px] font-bold text-[#202124]">Leaderboard</h1>
-                    <p className="text-[#5f6368] text-[13px]">Top performers on the Arcade Calculator</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 w-full xl:w-auto">
-                  <div className="relative flex-1 xl:w-[280px]">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9aa0a6]" />
-                    <input 
-                      type="text" 
-                      placeholder="Search player..." 
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full bg-[#f1f3f4] border-none rounded-lg py-2 pl-9 pr-4 text-[13px] focus:ring-2 focus:ring-[#1a73e8] outline-none"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-3 bg-[#fff8e1] border border-[#fce8b2] rounded-lg px-4 py-2 shrink-0">
-                    <div className="text-[#fbbc04]"><Trophy className="w-5 h-5" fill="currentColor" /></div>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-[#5f6368]">Your Rank</span>
-                      <span className="text-[14px] font-bold leading-none text-[#202124]">
-                        {currentUserData?.rank || "--"}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 bg-[#f8f9fc] border border-[#e8eaed] rounded-lg px-4 py-2 shrink-0">
-                    <div className="text-[#fbbc04]"><Award className="w-5 h-5" fill="currentColor" /></div>
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-[#5f6368]">Total Users</span>
-                      <span className="text-[14px] font-bold leading-none text-[#202124]">{leaders.length}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-[#e8eaed]">
-                      <th className="px-4 py-3 text-[11px] font-bold text-[#5f6368] uppercase tracking-wider w-24 text-center">Rank</th>
-                      <th className="px-4 py-3 text-[11px] font-bold text-[#5f6368] uppercase tracking-wider">Player</th>
-                      <th className="px-4 py-3 text-[11px] font-bold text-[#5f6368] uppercase tracking-wider text-right w-32">Points</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#f1f3f4]">
-                    {displayList.length > 0 ? (
-                      displayList.map((user) => (
-                        <LeaderTableRow 
-                          key={user.id} 
-                          user={user} 
-                          isCurrentUser={isExactCurrentUser(user)} 
-                          innerRef={isExactCurrentUser(user) ? currentUserRef : null} 
-                        />
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={3} className="p-8 text-center text-[#5f6368] font-medium">
-                          {searchTerm ? "No player found with that name." : "Loading players..."}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
+            <div className="w-px h-5 bg-[#dadce0]"></div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-[#5f6368] uppercase tracking-wider">Your Rank</span>
+              <span className="text-[16px] font-black text-[#1a73e8] leading-none">{currentUserData?.rank || "--"}</span>
             </div>
-          </main>
+          </div>
 
+          {/* 4. Premium Toggles */}
+          <div className="flex items-center bg-[#f1f3f4] p-1 rounded-full border border-[#dadce0] shrink-0">
+            <button 
+              onClick={() => setActiveTab("arcade")}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full text-[13px] font-bold transition-all ${
+                activeTab === "arcade" ? "bg-[#1a73e8] text-white shadow-md" : "text-[#5f6368] hover:text-[#202124]"
+              }`}
+            >
+              <Medal className="w-4 h-4" /> Arcade
+            </button>
+            <button 
+              onClick={() => setActiveTab("facilitator")}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full text-[13px] font-bold transition-all ${
+                activeTab === "facilitator" ? "bg-[#1a73e8] text-white shadow-md" : "text-[#5f6368] hover:text-[#202124]"
+              }`}
+            >
+              <Users className="w-4 h-4" /> Facilitator
+            </button>
+          </div>
         </div>
-      </div>
-    </>
+
+        {/* DATA TABLE */}
+        <div className="w-full overflow-hidden border border-[#dadce0] rounded-[16px] bg-white shadow-sm">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-[#f8f9fc] border-b border-[#dadce0]">
+                <th className="px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider w-24 text-center">Rank</th>
+                <th className="px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider">Player Name</th>
+                
+                {activeTab === "arcade" ? (
+                  <th className="px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider text-right w-40">Total Points</th>
+                ) : (
+                  <>
+                    <th className="px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider">Badges</th>
+                    <th className="px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider text-right">Milestone Achieved</th>
+                  </>
+                )}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#f1f3f4]">
+              {displayList.length > 0 ? (
+                displayList.map((user) => (
+                  <LeaderTableRow 
+                    key={user.id} 
+                    user={user} 
+                    isCurrentUser={isExactCurrentUser(user)} 
+                    innerRef={isExactCurrentUser(user) ? currentUserRef : null}
+                    tab={activeTab}
+                  />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={activeTab === "facilitator" ? 4 : 3} className="p-16 text-center text-[#5f6368] font-semibold text-[15px]">
+                    {searchTerm ? "No matching player found." : "Loading leaderboard data..."}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+      </main>
+    </div>
   );
 }
 
-// 🔥 YAHAN TUMHARA COMPONENT LINK ME CHANGE HUA HAI 🔥
-function SidebarItem({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) {
-  return (
-    <Link href={href} className="w-full flex items-center gap-4 px-4 py-3 rounded-lg text-[#5f6368] hover:bg-[#f1f3f4] hover:text-[#202124] transition-colors text-[14px] font-medium">
-      <span className="text-[#5f6368]">{icon}</span>
-      <span>{label}</span>
-    </Link>
-  );
-}
-
-// Table Row Component
-function LeaderTableRow({ user, isCurrentUser = false, innerRef = null }: { user: Leader; isCurrentUser?: boolean; innerRef?: any }) {
-  let rowClass = "hover:bg-[#f8f9fc] transition-colors bg-white";
-  let rankDisplay = <span className="text-[#5f6368] font-bold text-[14px]">{user.rank}</span>;
+// PREMIUM TABLE ROW COMPONENT
+function LeaderTableRow({ 
+  user, 
+  isCurrentUser = false, 
+  innerRef = null,
+  tab
+}: { 
+  user: Leader; 
+  isCurrentUser?: boolean; 
+  innerRef?: any;
+  tab: "arcade" | "facilitator";
+}) {
+  const isTop3 = user.rank <= 3;
   
-  if (user.rank === 1) {
-    rankDisplay = <span className="text-[#fbbc04] flex items-center justify-center gap-1.5 text-[14px] font-bold"><Trophy className="w-4 h-4" fill="currentColor" /> 1</span>;
-  } else if (user.rank === 2) {
-    rankDisplay = <span className="text-[#bdc1c6] flex items-center justify-center gap-1.5 text-[14px] font-bold"><Trophy className="w-4 h-4" fill="currentColor" /> 2</span>;
-  } else if (user.rank === 3) {
-    rankDisplay = <span className="text-[#d87c53] flex items-center justify-center gap-1.5 text-[14px] font-bold"><Trophy className="w-4 h-4" fill="currentColor" /> 3</span>;
-  }
+  let rankIcon = <span className="text-[#5f6368] font-bold text-[15px]">{user.rank}</span>;
+  if (user.rank === 1) rankIcon = <span className="text-[#fbbc04] font-black flex justify-center items-center gap-1.5"><Trophy className="w-4 h-4"/> 1</span>;
+  if (user.rank === 2) rankIcon = <span className="text-[#9aa0a6] font-black flex justify-center items-center gap-1.5"><Trophy className="w-4 h-4"/> 2</span>;
+  if (user.rank === 3) rankIcon = <span className="text-[#d87c53] font-black flex justify-center items-center gap-1.5"><Trophy className="w-4 h-4"/> 3</span>;
 
   return (
-    <tr ref={innerRef} className={rowClass}>
-      <td className="px-4 py-4 text-center w-24">
-        {rankDisplay}
+    <tr 
+      ref={innerRef} 
+      className={`transition-colors hover:bg-[#f8f9fc] ${isCurrentUser ? 'bg-[#e8f0fe]' : 'bg-white'}`}
+    >
+      <td className="px-6 py-5 text-center w-24 align-middle">
+        {rankIcon}
       </td>
       
-      <td className="px-4 py-4">
-        <div className="flex items-center gap-3">
+      <td className="px-6 py-5 align-middle">
+        <div className="flex items-center gap-4">
           <img 
             src={user.photoURL || "/avatar.png"} 
             alt={user.name} 
-            className="w-9 h-9 rounded-full object-cover shrink-0 bg-[#e8eaed]" 
+            className="w-10 h-10 rounded-full object-cover shrink-0 border border-[#dadce0] bg-[#f8f9fc]" 
             onError={(e) => {
-              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${user.name}&background=random&color=fff`;
+              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${user.name}&background=e8f0fe&color=1a73e8`;
             }}
           />
-          
-          <span className={`text-[14px] font-bold ${user.rank === 1 ? 'text-[#202124]' : 'text-[#3c4043]'}`}>
-            {user.name || "Anonymous"}
-          </span>
-          
-          {isCurrentUser && (
-            <span className="bg-[#e8f0fe] text-[#1a73e8] px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ml-1">
-              You
+          <div className="flex items-center gap-2">
+            <span className={`text-[15px] font-bold ${isTop3 ? 'text-[#202124]' : 'text-[#3c4043]'}`}>
+              {user.name || "Anonymous"}
             </span>
-          )}
+            {isCurrentUser && (
+              <span className="bg-[#1a73e8] text-white px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">
+                You
+              </span>
+            )}
+          </div>
         </div>
       </td>
-      
-      <td className="px-4 py-4 text-right">
-        <span className={`text-[15px] font-black ${user.rank === 1 ? 'text-[#1a73e8]' : 'text-[#202124]'}`}>
-          {user.points?.toLocaleString() ?? 0}
-        </span>
-      </td>
+
+      {tab === "facilitator" ? (
+        <>
+          <td className="px-6 py-5 align-middle">
+            <div className="flex items-center gap-2 text-[#5f6368] font-bold text-[13px]">
+              <Award className="w-4 h-4 text-[#1a73e8]" />
+              {user.badges}
+            </div>
+          </td>
+          <td className="px-6 py-5 text-right align-middle">
+            <span className={`inline-flex items-center gap-1.5 text-[12px] font-bold px-3 py-1.5 rounded-full ${
+              user.milestone?.includes("Ultimate") ? "bg-[#fff8e1] text-[#e37400] ring-1 ring-[#fce8b2]" :
+              user.milestone?.includes("Milestone 3") ? "bg-[#e6f4ea] text-[#0d652d] ring-1 ring-[#ceead6]" :
+              user.milestone?.includes("Milestone 2") ? "bg-[#e8f0fe] text-[#1a73e8] ring-1 ring-[#d2e3fc]" :
+              user.milestone?.includes("Milestone 1") ? "bg-[#f8f9fc] text-[#5f6368] ring-1 ring-[#dadce0]" :
+              "bg-transparent text-[#9aa0a6]"
+            }`}>
+              {user.milestone?.includes("Ultimate") && <Shield className="w-3.5 h-3.5" />}
+              {user.milestone}
+            </span>
+          </td>
+        </>
+      ) : (
+        <td className="px-6 py-5 text-right align-middle">
+          <span className={`text-[16px] font-black ${isTop3 ? 'text-[#1a73e8]' : 'text-[#202124]'}`}>
+            {user.points?.toLocaleString() ?? 0}
+          </span>
+        </td>
+      )}
     </tr>
   );
 }
