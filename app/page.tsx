@@ -37,12 +37,12 @@ export default function HomePage() {
     { title: "Facilitator Page", desc: "Get expert guidance, FAQs, and connect with community leads.", link: "/facilitator", icon: "🤝", badge: "Lead" }
   ];
 
+  // REMOVED: Special Badges item to keep it equal (4 items)
   const pointsSystem = [
     { title: "Arcade Adventure", desc: "Standard track progression (1 game badge = 1 point)", icon: "🗺️", badge: "1 Pt" },
     { title: "Arcade Voyage", desc: "Intermediate cloud challenges (1 game badge = 1 point)", icon: "⛵", badge: "1 Pt" },
     { title: "Arcade Trail", desc: "Advanced guided paths (1 game badge = 1 point)", icon: "🛤️", badge: "1 Pt" },
-    { title: "Skill Badges", desc: "90+ Skills Badges available (2 badges = 1 point)", icon: "🏅", badge: "0.5 Pt" },
-    { title: "Special Badges", desc: "Limited-time exclusive (1 game badge = 2 points)", icon: "🌟", badge: "2 Pts" }
+    { title: "Skill Badges", desc: "90+ Skills Badges available (2 badges = 1 point)", icon: "🏅", badge: "0.5 Pt" }
   ];
 
   // 🔥 GLOBAL FIREBASE STATES
@@ -143,41 +143,43 @@ export default function HomePage() {
               </p>
             </div>
             
+            {/* REMOVED lg:items-start so both columns stretch to the same height naturally */}
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
               
               {/* Left Column: Resources List */}
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-[600px]">
+              {/* Added h-full to make it take up the full stretched height of the grid cell */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
                 <div className="border-b border-gray-200 bg-gray-50 flex">
-                  <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
-                  <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeGuideTab === 'tools' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Platform Tools</button>
-                  <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-4 text-sm font-semibold transition-colors ${activeGuideTab === 'points' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Points System</button>
+                  <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
+                  <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'tools' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Platform Tools</button>
+                  <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'points' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Points System</button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                  <div className="space-y-4">
+                <div className="flex-1 p-4 sm:p-5">
+                  <div className="space-y-3 sm:space-y-4">
                     {activeGuideTab === 'start' && startSteps.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-colors">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-2xl">{item.icon}</div>
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
+                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
-                          <p className="mt-1 text-sm text-gray-600">{item.desc}</p>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </a>
                     ))}
                     {activeGuideTab === 'tools' && arcadeTools.map((item, index) => (
-                      <Link href={item.link} key={index} className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-colors">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-2xl">{item.icon}</div>
+                      <Link href={item.link} key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
+                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
-                          <p className="mt-1 text-sm text-gray-600">{item.desc}</p>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </Link>
                     ))}
                     {activeGuideTab === 'points' && pointsSystem.map((item, index) => (
-                      <div key={index} className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-colors">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-2xl">{item.icon}</div>
+                      <div key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
+                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
-                          <p className="mt-1 text-sm text-gray-600">{item.desc}</p>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </div>
                     ))}
@@ -186,59 +188,62 @@ export default function HomePage() {
               </div>
 
               {/* Right Column: Support Form */}
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 flex flex-col h-[600px]">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Support</h3>
-                <form onSubmit={handleFormSubmit} className="flex flex-col gap-5 flex-1 overflow-y-auto custom-scrollbar pr-2">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
-                    <div className="mt-2">
-                      <input type="text" id="name" required value={formName} onChange={(e) => setFormName(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Jane Doe" />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">Issue Category</label>
-                    <div className="mt-2">
-                      <select id="category" value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
-                        <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
-                        <option value="Labs Completion Issue">Labs Completion Issue</option>
-                        <option value="Arcade Points Calculation">Arcade Points Calculation</option>
-                        <option value="Other Queries">Other Queries</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue" || formCategory === "Arcade Points Calculation") && (
+              {/* Added h-full and slightly adjusted gap/padding to perfectly align with the 4-item left column */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col h-full justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Support</h3>
+                  <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
                     <div>
-                      <label htmlFor="subcat" className="block text-sm font-medium leading-6 text-gray-900">Specific Details</label>
+                      <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
                       <div className="mt-2">
-                        <select id="subcat" required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
-                          <option value="" disabled hidden>Select an option</option>
-                          {formCategory === "Swags Delivery / Issue" && (
-                            <><option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option></>
-                          )}
-                          {formCategory === "Labs Completion Issue" && (
-                            <><option value="Arcade Monthly Labs">Arcade Monthly Labs</option><option value="Skill Badges">Skill Badges</option></>
-                          )}
-                          {formCategory === "Arcade Points Calculation" && (
-                            <><option value="Points Count Issue">Points Count Issue</option><option value="Invalid Public Profile Issue">Invalid Public Profile Issue</option></>
-                          )}
+                        <input type="text" id="name" required value={formName} onChange={(e) => setFormName(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Jane Doe" />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">Issue Category</label>
+                      <div className="mt-2">
+                        <select id="category" value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
+                          <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
+                          <option value="Labs Completion Issue">Labs Completion Issue</option>
+                          <option value="Arcade Points Calculation">Arcade Points Calculation</option>
+                          <option value="Other Queries">Other Queries</option>
                         </select>
                       </div>
                     </div>
-                  )}
+                    
+                    {(formCategory === "Swags Delivery / Issue" || formCategory === "Labs Completion Issue" || formCategory === "Arcade Points Calculation") && (
+                      <div>
+                        <label htmlFor="subcat" className="block text-sm font-medium leading-6 text-gray-900">Specific Details</label>
+                        <div className="mt-2">
+                          <select id="subcat" required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
+                            <option value="" disabled hidden>Select an option</option>
+                            {formCategory === "Swags Delivery / Issue" && (
+                              <><option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option></>
+                            )}
+                            {formCategory === "Labs Completion Issue" && (
+                              <><option value="Arcade Monthly Labs">Arcade Monthly Labs</option><option value="Skill Badges">Skill Badges</option></>
+                            )}
+                            {formCategory === "Arcade Points Calculation" && (
+                              <><option value="Points Count Issue">Points Count Issue</option><option value="Invalid Public Profile Issue">Invalid Public Profile Issue</option></>
+                            )}
+                          </select>
+                        </div>
+                      </div>
+                    )}
 
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium leading-6 text-gray-900">Message</label>
-                    <div className="mt-2">
-                      <textarea id="message" required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 resize-none" placeholder="Please describe your issue in detail..."></textarea>
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium leading-6 text-gray-900">Message</label>
+                      <div className="mt-2">
+                        <textarea id="message" required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 resize-none" placeholder="Please describe your issue in detail..."></textarea>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <button type="submit" className="mt-auto block w-full rounded-md bg-blue-600 px-3.5 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors">
-                    Submit Request
-                  </button>
-                </form>
+                  </form>
+                </div>
+                
+                <button onClick={handleFormSubmit} type="submit" className="mt-6 block w-full rounded-md bg-blue-600 px-3.5 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors">
+                  Submit Request
+                </button>
               </div>
 
             </div>
@@ -253,14 +258,6 @@ export default function HomePage() {
         </div>
         
       </main>
-
-      <style jsx>{`
-        /* Minimalist Scrollbar for Enterprise look */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-      `}</style>
     </>
   );
 }
