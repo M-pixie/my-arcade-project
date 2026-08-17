@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     `;
 
     // ⚡ FASTER MULTIMODAL MODEL FOR INSTANT REPLIES & IMAGES
-    const modelName = "gemini-flash-latest"; 
+    const modelName = "gemini-3.6-flash"; 
     
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
