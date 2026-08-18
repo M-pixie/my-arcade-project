@@ -417,14 +417,14 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        <div className="text-center mb-10 flex justify-center items-center">
+        <div className="text-center mb-8 md:mb-10 flex justify-center items-center">
           <h1 className={`text-3xl md:text-5xl font-medium tracking-tight leading-tight px-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
             Arcade Calculator
           </h1>
         </div>
 
         {/* 🔥 MAIN CARD 🔥 */}
-        <div className={`rounded-xl border shadow-sm overflow-hidden mb-8 relative transition-all duration-1000 ease-in-out ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+        <div className={`rounded-xl border shadow-sm mb-8 relative transition-all duration-1000 ease-in-out ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
           
           <style>{`
             @keyframes slow-fill { 0% { width: 0%; } 20% { width: 30%; } 50% { width: 65%; } 80% { width: 85%; } 100% { width: 95%; } }
@@ -500,14 +500,15 @@ export default function CalculatorPage() {
             }
           `}</style>
 
-          <div className="p-4 sm:p-8 md:p-12 mt-1">
+          <div className="p-5 sm:p-8 md:p-12">
             
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-              <p className={`text-sm md:text-base font-bold sm:mt-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+            {/* 🔥 FIXED HEADER: SAME LINE ON MOBILE 🔥 */}
+            <div className="flex flex-row items-center justify-between mb-6 w-full">
+              <p className={`text-[13px] sm:text-base font-bold ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                 Paste your public profile url here
               </p>
               
-              <div className="flex items-center gap-2 sm:mt-2 w-full sm:w-auto justify-end">
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 {/* 🔥 SMART CLICKABLE THEME ICON 🔥 */}
                 <button
                   onClick={toggleDarkMode}
@@ -516,12 +517,12 @@ export default function CalculatorPage() {
                 >
                   {isDark ? (
                     // Moon Icon
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                   ) : (
                     // Sun Icon
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   )}
@@ -533,29 +534,28 @@ export default function CalculatorPage() {
                   className={`p-2 rounded-full transition-colors flex items-center justify-center ${autoCalculate ? (isDark ? 'bg-[#2a2d32] text-green-400' : 'bg-[#e8eaed] text-green-600') : (isDark ? 'bg-transparent text-[#5f6368] hover:bg-[#2a2d32] hover:text-white' : 'bg-transparent text-[#9aa0a6] hover:bg-[#e8eaed] hover:text-black')}`}
                   title={autoCalculate ? "Auto Calculate Enabled" : "Enable Auto Calculate"}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </button>
               </div>
             </div>
 
-            {/* 🔥 NEW LAYOUT: PREMIUM DESIGN MATCHING REFERENCE IMAGE 🔥 */}
-            <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch w-full">
+            {/* 🔥 FIXED INPUT ROW: PROPER LABEL Z-INDEX & BG 🔥 */}
+            <div className="mb-6 flex flex-col sm:flex-row gap-4 items-stretch w-full">
               
-              {/* 🔥 SEPARATED INPUT BOX 🔥 */}
               <div 
                 onAnimationEnd={() => setIsShaking(false)}
-                className={`group relative flex-1 min-w-0 border rounded-[4px] transition-colors duration-200 flex flex-row items-center shadow-sm w-full h-[52px] sm:h-[56px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-white border-[#b0b3b8] focus-within:border-[#314391]")}`}
+                className={`group relative flex-1 min-w-0 border rounded-lg transition-colors duration-200 flex flex-row items-center shadow-sm w-full h-[52px] sm:h-[56px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-white border-[#b0b3b8] focus-within:border-[#314391]")}`}
               >
                 {isLoading && !error && userPoints === null && (
                   <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-transparent overflow-hidden z-0">
-                    <div className={`h-full animate-slow-fill rounded-b-[4px] ${isDark ? 'bg-[#8ab4f8]' : 'bg-[#314391]'}`}></div>
+                    <div className={`h-full animate-slow-fill rounded-b-lg ${isDark ? 'bg-[#8ab4f8]' : 'bg-[#314391]'}`}></div>
                   </div>
                 )}
 
-                {/* 🔥 FLOATING LABEL (PRESERVED) 🔥 */}
-                <label className={`absolute -top-2.5 left-3 px-1.5 text-[11px] sm:text-[12px] font-bold flex items-center transition-all duration-300 ease-in-out z-10 ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed] group-focus-within:text-[#8ab4f8]" : "text-[#314391] group-focus-within:text-[#314391]") : (isDark ? "text-white group-focus-within:text-[#8ab4f8]" : "text-[#5f6368] group-focus-within:text-[#314391]")}`}>
+                {/* 🔥 FLOATING LABEL OVERLAP FIX 🔥 */}
+                <label className={`absolute -top-2.5 left-3 px-1.5 text-[11px] sm:text-[12px] font-bold flex items-center z-20 transition-all duration-300 ease-in-out leading-none truncate max-w-[85%] sm:max-w-[90%] ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed] group-focus-within:text-[#8ab4f8]" : "text-[#314391] group-focus-within:text-[#314391]") : (isDark ? "text-white group-focus-within:text-[#8ab4f8]" : "text-[#5f6368] group-focus-within:text-[#314391]")}`}>
                   {isLoading ? (
                     loadingStep === 'wave' ? (
                       <div className="flex items-center gap-[3px] h-4 px-1">
@@ -580,8 +580,8 @@ export default function CalculatorPage() {
                 </label>
                 
                 {calcState !== 'idle' ? (
-                  <div className={`flex-1 h-full px-4 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                    <span className="truncate text-sm sm:text-[15px] font-normal">{profileUrl}</span>
+                  <div className={`flex-1 h-full px-4 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 z-10 relative ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                    <span className="truncate text-[13px] sm:text-[15px] font-normal">{profileUrl}</span>
                     {isPaused && (
                       <button 
                         onClick={() => setCalcState('idle')}
@@ -602,16 +602,16 @@ export default function CalculatorPage() {
                     onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
                     spellCheck="false"
-                    className={`flex-1 h-full px-4 text-sm sm:text-[15px] bg-transparent outline-none relative z-10 w-full min-w-0 font-normal ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#3c4043] placeholder-[#70757a]'}`}
+                    className={`flex-1 h-full px-4 text-[13px] sm:text-[15px] bg-transparent outline-none relative z-10 w-full min-w-0 font-normal ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#3c4043] placeholder-[#70757a]'}`}
                   />
                 )}
               </div>
 
-              {/* 🔥 SEPARATED BUTTON MATCHING REFERENCE IMAGE 🔥 */}
+              {/* Calculate Button */}
               <button 
                 onClick={handleMainButtonClick}
                 disabled={calcState !== 'idle' && calcState !== 'paused'}
-                className={`h-[52px] sm:h-[56px] w-full sm:w-auto px-8 sm:px-12 shrink-0 rounded-[4px] text-[15px] sm:text-[16px] font-semibold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center whitespace-nowrap shadow-sm disabled:opacity-70 ${isDark ? 'bg-[#314391] text-white hover:bg-[#253372]' : 'bg-[#314391] text-white hover:bg-[#253372]'}`}
+                className={`h-[52px] sm:h-[56px] w-full sm:w-auto px-8 shrink-0 rounded-lg text-[15px] sm:text-[16px] font-semibold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center whitespace-nowrap shadow-sm disabled:opacity-70 ${isDark ? 'bg-[#314391] text-white hover:bg-[#253372]' : 'bg-[#314391] text-white hover:bg-[#253372]'}`}
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -641,43 +641,43 @@ export default function CalculatorPage() {
               </div>
             )}
 
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-              <div className="flex flex-wrap items-center gap-6">
-                <div className="flex items-center pl-2">
+            {/* 🔥 FIXED BOTTOM ACTION ROW: RESPONSIVE ALIGNMENT 🔥 */}
+            <div className="flex flex-row flex-wrap items-center justify-between gap-y-4 gap-x-2 mb-6 w-full">
+              
+              <div className="flex items-center gap-4 sm:gap-6">
+                <div className="flex items-center pl-1 sm:pl-2">
                   <input id="remember-me" type="checkbox" className={`w-4 h-4 rounded-sm cursor-pointer ${isDark ? 'border-[#5f6368] bg-[#202124] text-white focus:ring-white' : 'border-[#dadce0] text-black focus:ring-black focus:ring-offset-0'}`} checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                  <label htmlFor="remember-me" className={`ml-3 text-sm font-medium cursor-pointer select-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>Remember Me</label>
+                  <label htmlFor="remember-me" className={`ml-2 sm:ml-3 text-[13px] sm:text-sm font-medium cursor-pointer select-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>Remember Me</label>
                 </div>
-              </div>
-
-              <div className="flex flex-col w-full md:w-auto md:flex-1 max-w-[340px] mx-auto md:mx-0 items-start md:items-center justify-center pl-2 md:pl-0">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-[14px] font-bold tracking-wide hover:underline inline-block transition-colors ${isDark ? 'text-white' : 'text-black'}`}>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-[13px] sm:text-[14px] font-bold tracking-wide hover:underline transition-colors ${isDark ? 'text-white' : 'text-black'}`}>
                   Subscribe
                 </a>
               </div>
 
-              <div className={`text-sm font-medium pl-2 md:pl-0 md:text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>
+              <div className={`text-[12px] sm:text-sm font-medium text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>
                 Calculated : {recentUrls.length > 0 ? timeAgo(recentUrls[0].time) : "Never"}
               </div>
+              
             </div>
 
             {/* 🔥 COMPACT RECENT PROFILES SECTION WITH FLEX PILL DESIGN 🔥 */}
             {recentUrls.length > 0 && (
               <div className={`mt-4 pt-5 border-t animate-fade-in-up ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
                 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-                  <p className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+                  <p className={`text-[13px] sm:text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     Recent Profiles
                   </p>
                   
                   <div className="flex items-center gap-1">
-                    <button onClick={clearHistory} className={`flex items-center gap-1.5 text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-[#2a2d32]' : 'text-gray-500 hover:text-black hover:bg-[#f1f3f4]'}`}>
+                    <button onClick={clearHistory} className={`flex items-center gap-1.5 text-[11px] sm:text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-[#2a2d32]' : 'text-gray-500 hover:text-black hover:bg-[#f1f3f4]'}`}>
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                       Clear
                     </button>
                     
-                    <button onClick={() => setShowResetModal(true)} className={`flex items-center gap-1.5 text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors ${isDark ? 'text-[#f28b82] hover:text-[#d93025] hover:bg-[#3c1e1e]' : 'text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6]'}`}>
+                    <button onClick={() => setShowResetModal(true)} className={`flex items-center gap-1.5 text-[11px] sm:text-[12px] bg-transparent px-2 py-1 rounded-md font-bold transition-colors ${isDark ? 'text-[#f28b82] hover:text-[#d93025] hover:bg-[#3c1e1e]' : 'text-[#d93025] hover:text-[#b3261e] hover:bg-[#fce8e6]'}`}>
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
