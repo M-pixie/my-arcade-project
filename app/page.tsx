@@ -10,9 +10,15 @@ import { useState, useEffect } from "react";
 // 🔥 FIREBASE IMPORTS 🔥
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase"; 
+import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
 
 export default function HomePage() {
   const router = useRouter();
+
+  // 🔥 STATE: Hero Input
+  const [heroUrl, setHeroUrl] = useState("");
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [heroError, setHeroError] = useState<string | null>(null);
 
   // 🔥 STATE: Premium Problem Box Form
   const [formName, setFormName] = useState("");
@@ -37,7 +43,6 @@ export default function HomePage() {
     { title: "Facilitator Page", desc: "Get expert guidance, FAQs, and connect with community leads.", link: "/facilitator", icon: "🤝", badge: "Lead" }
   ];
 
-  // REMOVED: Special Badges item to keep it equal (4 items)
   const pointsSystem = [
     { title: "Arcade Adventure", desc: "Standard track progression (1 game badge = 1 point)", icon: "🗺️", badge: "1 Pt" },
     { title: "Arcade Voyage", desc: "Intermediate cloud challenges (1 game badge = 1 point)", icon: "⛵", badge: "1 Pt" },
@@ -60,6 +65,71 @@ export default function HomePage() {
     };
   }, []);
 
+  // 🔥 DIRECT CALCULATION LOGIC 🔥
+  const handleHeroSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const targetUrl = heroUrl.trim();
+    if (!targetUrl) return;
+
+    setHeroError(null);
+    setIsCalculating(true);
+
+    const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
+    if (!urlPattern.test(targetUrl)) {
+      setHeroError("Please enter a valid Public Profile URL.");
+      setIsCalculating(false);
+      return;
+    }
+
+    localStorage.setItem("arcade_url", targetUrl);
+
+    try {
+      const res = await fetch("/api/calculate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: targetUrl }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setHeroError(data.error || "Failed to calculate points. Check URL.");
+        setIsCalculating(false);
+        return;
+      }
+
+      const extractedId = targetUrl.split('/').pop() || null;
+      const cacheObj = {
+        profileUrl: targetUrl,
+        points: data.totalPoints,
+        breakdown: data.breakdown,
+        history: data.completionHistory || [],
+        userName: data.userName || null,
+        userAvatar: data.userAvatar || null,
+        userUniqueId: extractedId
+      };
+
+      localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
+      localStorage.setItem("current_processing_url", targetUrl);
+
+      try {
+        await savePublicUserToLeaderboard({
+          name: data.userName || "Arcade Player",
+          photoURL: data.userAvatar || "/avatar.png",
+          points: data.totalPoints,
+          profileUrl: targetUrl
+        });
+      } catch (saveErr) {
+        console.error("Leaderboard Save Error:", saveErr);
+      }
+
+      router.push("/dashboard");
+    } catch (err) {
+      setHeroError("Connection failed. Check your internet and retry.");
+      setIsCalculating(false);
+    }
+  };
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let text = `Hi Manish, I am ${formName}.\n\nI have a query regarding: *${formCategory}*`;
@@ -73,33 +143,120 @@ export default function HomePage() {
   return (
     <>
       <PopupModal />
+      <style>{`
+        /* 🔥 MOVING AURORA BACKGROUND CSS 🔥 */
+        .hero-aurora-bg {
+          background: linear-gradient(-45deg, #130026, #3b0a66, #1c0040, #4b0a70);
+          background-size: 400% 400%;
+          animation: auroraBG 15s ease infinite;
+          position: relative;
+          overflow: hidden;
+        }
+        @keyframes auroraBG {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .hero-aurora-bg::before {
+          content: "";
+          position: absolute;
+          top: -50%; left: -50%; width: 200%; height: 200%;
+          background: radial-gradient(circle at 50% 50%, rgba(255, 0, 150, 0.15), transparent 60%),
+                      radial-gradient(circle at 80% 20%, rgba(0, 200, 255, 0.15), transparent 50%);
+          animation: auroraMove 20s linear infinite alternate;
+          pointer-events: none;
+        }
+        @keyframes auroraMove {
+          0% { transform: rotate(0deg) scale(1); }
+          100% { transform: rotate(10deg) scale(1.1); }
+        }
+      `}</style>
 
-      <main className="min-h-screen bg-white text-gray-900 font-sans selection:bg-blue-200 selection:text-blue-900">
-        
-        {/* ================= ENTERPRISE HERO SECTION ================= */}
-        <div className="bg-white pt-20 pb-12 sm:pt-28 sm:pb-16">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-3xl text-center">
-              <h1 className="text-5xl sm:text-6xl font-black tracking-tight text-[#1d4ed8] mb-6">
-                Arcade Nexus Hub
-              </h1>
-              <p className="text-base sm:text-lg leading-7 text-black mb-10 font-medium">
-                Everything you need in one powerful platform. Calculate your points, track live leaderboards, get facilitator guidance, and claim your rewards.
-              </p>
-              <div className="flex items-center justify-center gap-4">
-                <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="rounded-md bg-[#2563eb] px-6 py-2.5 text-sm font-bold text-white hover:bg-blue-600 transition-colors">
-                  Get Started &rarr;
-                </a>
-                <button onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-md bg-white px-6 py-2.5 text-sm font-bold text-black border border-gray-200 hover:bg-gray-50 transition-colors">
+      <main className="min-h-screen bg-white text-gray-900 font-sans selection:bg-purple-300 selection:text-purple-900">
+
+        {/* ================= PREMIUM HERO SECTION (AURORA DESIGN) ================= */}
+        <div className="hero-aurora-bg pt-32 pb-24 sm:pt-40 sm:pb-32 px-6 lg:px-8 text-center text-white relative shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-10">
+          <div className="mx-auto max-w-4xl relative z-10">
+
+            {/* Glowing Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md border border-pink-500/50 bg-white/5 backdrop-blur-md mb-8 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+              <span className="text-[#ec4899] font-black text-[13px]">#1</span>
+              <span className="text-white text-[11px] sm:text-xs font-bold tracking-widest uppercase">
+                Arcade Nexus Platform
+              </span>
+            </div>
+
+            {/* Main Heading */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+              Hi, I'm <span className="text-[#ec4899]">Nexus</span>. Let's create your <br className="hidden md:block"/> Arcade survival guide.
+            </h1>
+
+            <p className="text-sm sm:text-base text-gray-300/90 mb-12 max-w-2xl mx-auto font-medium">
+              Whether you're still planning or already grinding, we curate what matters for your Google Cloud Arcade journey.
+            </p>
+
+            {/* EXACT MATCH: Dark Brownish/Purple Input Box */}
+            <form onSubmit={handleHeroSubmit} className="max-w-[700px] mx-auto w-full relative flex items-center bg-[#493c47] border border-[#813661] rounded-2xl p-1.5 shadow-2xl transition-all focus-within:border-[#ac4280]">
+              <div className="pl-4 pr-1 shrink-0 flex items-center justify-center">
+                {/* Sparkle SVG matching the reference */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#c8498b]">
+                  <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <input 
+                type="text" 
+                value={heroUrl}
+                onChange={(e) => setHeroUrl(e.target.value)}
+                placeholder="Paste your public profile URL here..." 
+                className="flex-1 bg-transparent border-none outline-none text-[#e5e7eb] px-3 placeholder:text-[#a199a0] text-[15px] font-medium h-10 sm:h-12 w-full disabled:opacity-50" 
+                required
+                disabled={isCalculating}
+              />
+              <button 
+                type="submit" 
+                disabled={isCalculating}
+                className="w-10 h-10 sm:w-[42px] sm:h-[42px] rounded-xl bg-gradient-to-b from-[#a42b82] to-[#6c145e] flex items-center justify-center text-white shrink-0 hover:brightness-110 transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] disabled:opacity-70"
+              >
+                {isCalculating ? (
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m-6-6l6 6-6 6" />
+                  </svg>
+                )}
+              </button>
+            </form>
+
+            {/* Error Message Display */}
+            {heroError && (
+              <div className="text-red-300 text-sm mt-3 font-medium bg-red-500/10 inline-block px-4 py-1.5 rounded-lg border border-red-500/20 backdrop-blur-md shadow-sm animate-fade-in-up">
+                {heroError}
+              </div>
+            )}
+
+            {/* Suggested Prompts / Quick Actions EXACT MATCH */}
+            <div className="mt-8 flex flex-col items-center">
+              <span className="text-[#a199a0] text-[12px] mb-3 font-medium">Suggested actions</span>
+              <div className="flex flex-wrap justify-center gap-3">
+                <button onClick={() => router.push('/dashboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
+                  View Smart Dashboard
+                </button>
+                <button onClick={() => router.push('/leaderboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
+                  Check Leaderboard Rank
+                </button>
+                <button onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
                   Explore Features
                 </button>
               </div>
             </div>
+
           </div>
         </div>
 
         {/* ================= ENTERPRISE FEATURES GRID ================= */}
-        <div id="features" className="pb-16 sm:pb-24 bg-white mt-8">
+        <div id="features" className="py-16 sm:py-24 bg-white relative z-20 -mt-6 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:max-w-none">
               <dl className="grid max-w-xl grid-cols-1 gap-x-12 gap-y-8 sm:grid-cols-2 lg:max-w-none lg:grid-cols-3">
@@ -111,9 +268,9 @@ export default function HomePage() {
                   { title: "Skill Badges Guide", desc: "Discover available skill badges, point weightages, and the most efficient paths.", link: "/resources", icon: <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg> },
                   { title: "Swags & Community", desc: "Share unboxing experiences, check swag delivery updates, and engage.", link: "/post", icon: <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg> }
                 ].map((feature, idx) => (
-                  <Link href={feature.link} key={idx} className="group flex flex-col relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:border-blue-200">
-                    <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
-                      <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 group-hover:bg-blue-500 transition-colors">
+                  <Link href={feature.link} key={idx} className="group flex flex-col relative bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-lg transition-all hover:border-purple-200">
+                    <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 mb-2 group-hover:text-purple-700 transition-colors">
+                      <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 transition-all">
                         {feature.icon}
                       </div>
                       {feature.title}
@@ -121,7 +278,7 @@ export default function HomePage() {
                     <dd className="flex flex-auto flex-col text-base leading-7 text-gray-600">
                       <p className="flex-auto">{feature.desc}</p>
                       <p className="mt-6">
-                        <span className="text-sm font-semibold leading-6 text-blue-600 group-hover:text-blue-500 transition-colors">
+                        <span className="text-sm font-semibold leading-6 text-purple-600 group-hover:text-purple-500 transition-colors">
                           Learn more <span aria-hidden="true" className="group-hover:translate-x-1 inline-block transition-transform">→</span>
                         </span>
                       </p>
@@ -142,43 +299,41 @@ export default function HomePage() {
                 Access quick start guides or submit a formal query to our support team. We're here to help you maximize your Google Cloud Arcade experience.
               </p>
             </div>
-            
-            {/* REMOVED lg:items-start so both columns stretch to the same height naturally */}
+
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              
+
               {/* Left Column: Resources List */}
-              {/* Added h-full to make it take up the full stretched height of the grid cell */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
                 <div className="border-b border-gray-200 bg-gray-50 flex">
-                  <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
-                  <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'tools' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Platform Tools</button>
-                  <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'points' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Points System</button>
+                  <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
+                  <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'tools' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Platform Tools</button>
+                  <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'points' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Points System</button>
                 </div>
                 <div className="flex-1 p-4 sm:p-5">
                   <div className="space-y-3 sm:space-y-4">
                     {activeGuideTab === 'start' && startSteps.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 hover:shadow-sm transition-all">
                         <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{item.badge}</span></h3>
                           <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </a>
                     ))}
                     {activeGuideTab === 'tools' && arcadeTools.map((item, index) => (
-                      <Link href={item.link} key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
+                      <Link href={item.link} key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 hover:shadow-sm transition-all">
                         <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{item.badge}</span></h3>
                           <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </Link>
                     ))}
                     {activeGuideTab === 'points' && pointsSystem.map((item, index) => (
-                      <div key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
+                      <div key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 hover:shadow-sm transition-all">
                         <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{item.badge}</span></h3>
                           <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </div>
@@ -188,7 +343,6 @@ export default function HomePage() {
               </div>
 
               {/* Right Column: Support Form */}
-              {/* Added h-full and slightly adjusted gap/padding to perfectly align with the 4-item left column */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col h-full justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Support</h3>
@@ -196,14 +350,14 @@ export default function HomePage() {
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
                       <div className="mt-2">
-                        <input type="text" id="name" required value={formName} onChange={(e) => setFormName(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Jane Doe" />
+                        <input type="text" id="name" required value={formName} onChange={(e) => setFormName(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6" placeholder="Jane Doe" />
                       </div>
                     </div>
                     
                     <div>
                       <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">Issue Category</label>
                       <div className="mt-2">
-                        <select id="category" value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
+                        <select id="category" value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 bg-white">
                           <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
                           <option value="Labs Completion Issue">Labs Completion Issue</option>
                           <option value="Arcade Points Calculation">Arcade Points Calculation</option>
@@ -216,7 +370,7 @@ export default function HomePage() {
                       <div>
                         <label htmlFor="subcat" className="block text-sm font-medium leading-6 text-gray-900">Specific Details</label>
                         <div className="mt-2">
-                          <select id="subcat" required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
+                          <select id="subcat" required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 bg-white">
                             <option value="" disabled hidden>Select an option</option>
                             {formCategory === "Swags Delivery / Issue" && (
                               <><option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option></>
@@ -235,13 +389,13 @@ export default function HomePage() {
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium leading-6 text-gray-900">Message</label>
                       <div className="mt-2">
-                        <textarea id="message" required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 resize-none" placeholder="Please describe your issue in detail..."></textarea>
+                        <textarea id="message" required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 resize-none" placeholder="Please describe your issue in detail..."></textarea>
                       </div>
                     </div>
                   </form>
                 </div>
                 
-                <button onClick={handleFormSubmit} type="submit" className="mt-6 block w-full rounded-md bg-blue-600 px-3.5 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors">
+                <button onClick={handleFormSubmit} type="submit" className="mt-6 block w-full rounded-md bg-purple-600 px-3.5 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 transition-colors">
                   Submit Request
                 </button>
               </div>
@@ -251,9 +405,33 @@ export default function HomePage() {
         </div>
 
         {/* ================= ENTERPRISE FAQ SECTION ================= */}
-        <div className="bg-white pt-16 pb-8">
+        <div className="bg-white pt-16 pb-12">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <FAQ />
+          </div>
+        </div>
+
+        {/* ================= PREMIUM CTA BANNER ================= */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 relative my-16 sm:my-24 z-20 w-full">
+          <div className="w-full rounded-[2rem] overflow-hidden relative shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#2a1340] via-[#5c1958] to-[#2a1340] opacity-90"></div>
+            
+            <div className="absolute inset-0 opacity-30">
+               <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#ec4899] via-transparent to-transparent opacity-60 mix-blend-screen"></div>
+               <svg className="absolute bottom-0 w-full h-auto text-[#1c0c28]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.4" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,224,1152,197.3C1248,171,1344,160,1392,154.7L1440,149L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+               <svg className="absolute bottom-0 w-full h-auto text-[#3e1346]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.3" d="M0,160L60,149.3C120,139,240,117,360,138.7C480,160,600,224,720,234.7C840,245,960,203,1080,160C1200,117,1320,75,1380,53.3L1440,32L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+            </div>
+
+            <div className="relative z-10 py-12 sm:py-16 px-6 flex flex-col items-center justify-center text-center">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 tracking-tight">
+                Ready to level up?
+              </h2>
+              <button onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }} className="bg-gradient-to-r from-[#d8358d] to-[#aa2575] hover:from-[#e8439d] hover:to-[#b92c81] text-white px-8 py-3.5 rounded-full font-bold text-[15px] sm:text-[17px] tracking-wide transition-all shadow-[0_0_20px_rgba(216,53,141,0.5)] hover:shadow-[0_0_30px_rgba(216,53,141,0.7)] hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto">
+                Calculate Points Now
+              </button>
+            </div>
           </div>
         </div>
         

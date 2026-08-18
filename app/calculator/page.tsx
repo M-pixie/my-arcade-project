@@ -611,7 +611,7 @@ export default function CalculatorPage() {
               <button 
                 onClick={handleMainButtonClick}
                 disabled={calcState !== 'idle' && calcState !== 'paused'}
-                className={`h-[52px] sm:h-[56px] px-8 sm:px-12 shrink-0 rounded-[4px] text-[15px] sm:text-[16px] font-semibold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center whitespace-nowrap shadow-sm disabled:opacity-70 ${isDark ? 'bg-[#314391] text-white hover:bg-[#253372]' : 'bg-[#314391] text-white hover:bg-[#253372]'}`}
+                className={`h-[52px] sm:h-[56px] w-full sm:w-auto px-8 sm:px-12 shrink-0 rounded-[4px] text-[15px] sm:text-[16px] font-semibold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center whitespace-nowrap shadow-sm disabled:opacity-70 ${isDark ? 'bg-[#314391] text-white hover:bg-[#253372]' : 'bg-[#314391] text-white hover:bg-[#253372]'}`}
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -660,7 +660,7 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* 🔥 COMPACT RECENT PROFILES SECTION 🔥 */}
+            {/* 🔥 COMPACT RECENT PROFILES SECTION WITH FLEX PILL DESIGN 🔥 */}
             {recentUrls.length > 0 && (
               <div className={`mt-4 pt-5 border-t animate-fade-in-up ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
                 
@@ -685,23 +685,23 @@ export default function CalculatorPage() {
                     </button>
                   </div>
                 </div>
-                
-                {/* 🔥 RESPONSIVE COMPACT HISTORY GRID 🔥 */}
-                <div className="grid grid-cols-2 min-[500px]:grid-cols-3 md:grid-cols-4 gap-2.5 w-full">
+
+                {/* 🔥 COMPACT FLEX WRAP FOR PILL DESIGN 🔥 */}
+                <div className="flex flex-wrap gap-2 sm:gap-3 w-full">
                   {recentUrls.map((item, idx) => {
                     const themeColor = getCardTheme(item.name || "Arcade");
                     
                     return (
-                      <div key={idx} className="relative w-full">
+                      <div key={idx} className="relative shrink-0 max-w-full">
                         <button 
                           onClick={() => handleHistoryClick(item.url, idx)} 
-                          className={`relative w-full h-[44px] flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-md hover:scale-[1.02] border ${isDark ? 'bg-[#1a1b1e] border-[#3c4043] hover:bg-[#202124]' : 'bg-white border-[#f1f3f4] hover:border-[#dadce0]'}`}
+                          className={`relative h-[40px] sm:h-[44px] flex items-center gap-2.5 pl-1.5 pr-4 py-1 rounded-full transition-all overflow-hidden group focus:outline-none hover:shadow-md hover:scale-[1.02] border ${isDark ? 'bg-[#1a1b1e] border-[#3c4043] hover:bg-[#202124]' : 'bg-white border-[#f1f3f4] hover:border-[#dadce0]'}`}
                           title={item.url}
                         >
-                          <div className={`w-7 h-7 rounded-full shrink-0 shadow-sm overflow-hidden relative z-10 ${isDark ? 'bg-[#202124]' : 'bg-gray-100'}`}>
+                          <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full shrink-0 shadow-sm overflow-hidden relative z-10 flex items-center justify-center ${isDark ? 'bg-[#202124]' : 'bg-gray-100'}`}>
                             {copiedIndex === idx ? (
                               <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-[#1a1b1e]' : 'bg-white'}`}>
-                                <svg className="w-3.5 h-3.5" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4" style={{ color: themeColor }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                                 </svg>
                               </div>
@@ -709,19 +709,19 @@ export default function CalculatorPage() {
                               item.avatar ? (
                                 <img src={item.avatar} alt="Avatar" className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-white font-medium text-[12px]" style={{ backgroundColor: themeColor }}>
+                                <div className="w-full h-full flex items-center justify-center text-white font-medium text-[11px] sm:text-[13px]" style={{ backgroundColor: themeColor }}>
                                   {item.name ? item.name.charAt(0).toUpperCase() : "U"}
                                 </div>
                               )
                             )}
                           </div>
                           
-                          <div className="flex flex-col items-start justify-center z-10 overflow-hidden w-full">
-                            <span className={`text-[12px] font-bold truncate max-w-full tracking-tight leading-tight ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                          <div className="flex flex-col items-start justify-center z-10 text-left mr-1">
+                            <span className={`text-[12px] sm:text-[13px] font-bold truncate max-w-[120px] sm:max-w-[150px] tracking-tight leading-tight ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                               {item.name || "Arcade Player"}
                             </span>
                             {item.points !== undefined && (
-                              <span className={`text-[10px] font-semibold mt-[1px] leading-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                              <span className={`text-[10px] sm:text-[11px] font-semibold mt-[1px] leading-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                                 {item.points} Pts
                               </span>
                             )}
@@ -733,6 +733,7 @@ export default function CalculatorPage() {
                 </div>
               </div>
             )}
+
           </div>
         </div>
       

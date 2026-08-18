@@ -86,18 +86,14 @@ export default function DashboardPage() {
       id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/bc-aug.png', accessCode: '1q-basecamp-10219', points: 1,  link: 'https://www.skills.google/games/7394', matchStrings: ['Arcade Base Camp August 2026']
     },
     {
-      id: 'data mesh', title: 'Arcade Simulator: Network Security Engineer', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulater-aug.png', accessCode: '1q-network-51470', points: 1,  link: 'https://www.skills.google/games/7397', matchStrings: ['Arcade Simulator: Network Security Engineer']
+      id: 'data mesh', title: 'Arcade Simulator: Network Security', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulater-aug.png', accessCode: '1q-network-51470', points: 1,  link: 'https://www.skills.google/games/7397', matchStrings: ['Arcade Simulator: Network Security Engineer']
     },
     {
       id: 'safe', title: 'Spans and Plans', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/special-aug.png', accessCode: '1q-schema-27083', points: 1,  link: 'https://www.skills.google/games/7399', matchStrings: ['Spans and Plans']
     }
   ];
 
-  // 🔥 YAHAN APNE AUGUST LABS FILL KRNA HAI 🔥
-  const augustLabs = [
-    // Example format:
-    //{ id: 'aug_1', title: 'August Voyage', subtitle: 'New Lab', image: '', accessCode: 'abc-123', points: 1, link: '', matchStrings: ['August Voyage Match'] }
-  ];
+  const augustLabs = [];
 
   const allFacilitatorLabs = [...julyLabs, ...augustLabs];
 
@@ -147,7 +143,6 @@ export default function DashboardPage() {
     setLoading(false);
   };
 
-  // 🔥 SILENT BACKGROUND REFRESH LOGIC HERE 🔥
   useEffect(() => {
     const targetUrl = localStorage.getItem("current_processing_url");
     const cachedDataString = localStorage.getItem("arcade_user_data");
@@ -165,14 +160,14 @@ export default function DashboardPage() {
       setProfileUrl(targetUrl);
       if (cachedData && cachedData.profileUrl === targetUrl) {
         loadDataFromCache(cachedData);
-        fetchDataAndCalculate(targetUrl, true); // Silent fetch in background
+        fetchDataAndCalculate(targetUrl, true);
       } else {
         fetchDataAndCalculate(targetUrl, false);
       }
     } else if (cachedData) {
       setProfileUrl(cachedData.profileUrl);
       loadDataFromCache(cachedData);
-      fetchDataAndCalculate(cachedData.profileUrl, true); // Silent fetch in background
+      fetchDataAndCalculate(cachedData.profileUrl, true);
     } else {
       router.push("/calculator"); 
     }
@@ -195,7 +190,6 @@ export default function DashboardPage() {
     return () => unsub();
   }, [userUniqueId, points]);
 
-  // 🔥 UPDATED FETCH FUNCTION WITH IS-SILENT PARAMETER 🔥
   const fetchDataAndCalculate = async (url: string, isSilent: boolean = false) => {
     if (!isSilent) {
       setLoading(true);
@@ -318,8 +312,9 @@ export default function DashboardPage() {
       const isCourse = item.type === 'Course' || lowerName.includes('course');
       const isGame = !isBadge && !isCourse;
       
-      const earnedDate = new Date(item.date);
-      const targetStartDate = new Date("2026-07-1T00:00:00");
+      const cleanDate = item.date.replace(/Earned/i, '').trim();
+      const earnedDate = new Date(cleanDate);
+      const targetStartDate = new Date("2026-07-14T00:00:00");
       
       if (isBadge || isGame) {
         return earnedDate >= targetStartDate; 
@@ -346,7 +341,8 @@ export default function DashboardPage() {
     
     if (!isGame) return false;
 
-    const earnedDate = new Date(item.date);
+    const cleanDate = item.date.replace(/Earned/i, '').trim();
+    const earnedDate = new Date(cleanDate);
     const targetStartDate = new Date("2026-07-14T00:00:00");
     return earnedDate >= targetStartDate;
   }).length;
@@ -355,7 +351,8 @@ export default function DashboardPage() {
     const isBadge = item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     if (!isBadge) return false;
 
-    const earnedDate = new Date(item.date);
+    const cleanDate = item.date.replace(/Earned/i, '').trim();
+    const earnedDate = new Date(cleanDate);
     const targetStartDate = new Date("2026-07-14T00:00:00");
     return earnedDate >= targetStartDate;
   }).length;
@@ -370,25 +367,12 @@ export default function DashboardPage() {
   const achievedMilestone = [...facilitatorMilestones].reverse().find(
     (m) => facilitatorArcadeGamesCount >= m.targetArcade && facilitatorSkillBadgesCount >= m.targetSkills
   );
+  
   const milestoneText = achievedMilestone ? achievedMilestone.title : "No Milestones Yet";
 
   const nextMilestone = facilitatorMilestones.find(
     (m) => facilitatorArcadeGamesCount < m.targetArcade || facilitatorSkillBadgesCount < m.targetSkills
   );
-
-  // 🔥 UPDATED CLEAN PREMIUM GOOGLE COLORS 🔥
-  const premiumCardStylesLight = [
-    "bg-white border-t-[6px] border-t-[#1a73e8]", // Blue Top
-    "bg-white border-t-[6px] border-t-[#ea4335]", // Red Top
-    "bg-white border-t-[6px] border-t-[#fbbc04]", // Yellow Top
-    "bg-white border-t-[6px] border-t-[#34a853]"  // Green Top
-  ];
-  const premiumCardStylesDark = [
-    "bg-[#15171b] border-t-[6px] border-t-[#8ab4f8] border-x-[#3c4043] border-b-[#3c4043]", 
-    "bg-[#15171b] border-t-[6px] border-t-[#f28b82] border-x-[#3c4043] border-b-[#3c4043]", 
-    "bg-[#15171b] border-t-[6px] border-t-[#fdd663] border-x-[#3c4043] border-b-[#3c4043]", 
-    "bg-[#15171b] border-t-[6px] border-t-[#81c995] border-x-[#3c4043] border-b-[#3c4043]"  
-  ];
 
   return (
     <div className={`min-h-screen font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
@@ -403,86 +387,85 @@ export default function DashboardPage() {
               <div className="lg:col-span-4 flex flex-col w-full lg:pr-6">
                 
                  <div className={`rounded-xl shadow-sm border overflow-hidden relative flex flex-col transition-all duration-300 w-full min-h-[640px] ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
-                  
-                  {/* 🔥 UPDATED GRADIENT RESULT HEADER 🔥 */}
-                  <div className="bg-gradient-to-r from-[#50c8d9] via-[#9a76e7] to-[#ee849c] py-5 text-center relative overflow-hidden">
-                    <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white drop-shadow-md">
-                      Arcade Points: {points}
-                    </h3>
-                  </div>
-                  
-                  <div className="px-8 pt-8 pb-10 flex flex-col items-center relative flex-grow">
-                    
-                    {/* 🔥 UPDATED VERIFIED GOOGLE BORDER AVATAR 🔥 */}
-                    <div className="w-[120px] h-[120px] rounded-full p-[4px] mb-5 relative transform transition-transform hover:scale-105 shadow-md flex items-center justify-center" style={{ background: 'conic-gradient(#4285F4 0deg 90deg, #DB4437 90deg 180deg, #F4B400 180deg 270deg, #0F9D58 270deg 360deg)' }}>
-                      <div className={`w-full h-full rounded-full border-[4px] flex items-center justify-center overflow-hidden ${isDark ? 'bg-[#1a1b1e] border-[#1a1b1e]' : 'bg-[#1a73e8] border-white'}`}>
-                        {userAvatar ? (
-                          <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-5xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <h2 className={`text-[26px] font-black mb-4 text-center tracking-tight leading-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                      {userName || "Arcade Player"}
-                    </h2>
+                 
+                 {/* 🔥 UPDATED TO SOLID PREMIUM BLUE GRADIENT 🔥 */}
+                 <div className="bg-gradient-to-r from-[#4285F4] to-[#1a73e8] py-5 text-center relative overflow-hidden">
+                   <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white drop-shadow-md">
+                     Arcade Points: {points}
+                   </h3>
+                 </div>
+                 
+                 <div className="px-8 pt-8 pb-10 flex flex-col items-center relative flex-grow">
+                   
+                   <div className="w-[120px] h-[120px] rounded-full p-[4px] mb-5 relative transform transition-transform hover:scale-105 shadow-md flex items-center justify-center" style={{ background: 'conic-gradient(#4285F4 0deg 90deg, #DB4437 90deg 180deg, #F4B400 180deg 270deg, #0F9D58 270deg 360deg)' }}>
+                     <div className={`w-full h-full rounded-full border-[4px] flex items-center justify-center overflow-hidden ${isDark ? 'bg-[#1a1b1e] border-[#1a1b1e]' : 'bg-[#1a73e8] border-white'}`}>
+                       {userAvatar ? (
+                         <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                       ) : (
+                         <span className="text-5xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                       )}
+                     </div>
+                   </div>
+                   
+                   <h2 className={`text-[26px] font-black mb-4 text-center tracking-tight leading-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+                     {userName || "Arcade Player"}
+                   </h2>
 
-                    <button 
-                      onClick={handleCopyProfile}
-                      className={`text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm hover:shadow-md flex items-center gap-2 mb-8 w-max mx-auto ${copied ? 'bg-[#34a853] text-white ring-2 ring-[#ceead6]' : 'bg-[#1a73e8] hover:bg-[#1557b0] text-white'}`}
-                    >
-                      {copied ? (
-                        <>Copied <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg></>
-                      ) : (
-                        <>Copy Profile <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></>
-                      )}
-                    </button>
+                   <button 
+                     onClick={handleCopyProfile}
+                     className={`text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm hover:shadow-md flex items-center gap-2 mb-8 w-max mx-auto ${copied ? 'bg-[#34a853] text-white ring-2 ring-[#ceead6]' : 'bg-[#1a73e8] hover:bg-[#1557b0] text-white'}`}
+                   >
+                     {copied ? (
+                       <>Copied <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg></>
+                     ) : (
+                       <>Copy Profile <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></>
+                     )}
+                   </button>
 
-                    <div className="flex justify-around w-full mb-8">
-                      <div 
-                        onClick={() => document.getElementById('history-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} 
-                        className="cursor-pointer text-center group transition-transform hover:scale-105"
-                      >
-                        <div className={`text-[28px] font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{history.filter(item => item.type !== 'Skill Badge').length}</div>
-                        <div className={`text-[13px] font-bold uppercase tracking-wide mt-1 ${isDark ? 'text-[#8e949c]' : 'text-[#202124]'}`}>All Games</div>
-                      </div>
-                      <div className={`w-px h-full mx-2 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#dadce0]'}`}></div>
-                      <div 
-                        onClick={() => router.push('/resources#completed-section')} 
-                        className="cursor-pointer text-center group transition-transform hover:scale-105"
-                      >
-                        <div className={`text-[28px] font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{totalSkillBadgesCount}</div>
-                        <div className={`text-[13px] font-bold uppercase tracking-wide mt-1 ${isDark ? 'text-[#8e949c]' : 'text-[#202124]'}`}>Skill Badges</div>
-                      </div>
-                    </div>
+                   <div className="flex justify-around w-full mb-8">
+                     <div 
+                       onClick={() => document.getElementById('history-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} 
+                       className="cursor-pointer text-center group transition-transform hover:scale-105"
+                     >
+                       <div className={`text-[28px] font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{history.filter(item => item.type !== 'Skill Badge').length}</div>
+                       <div className={`text-[13px] font-bold uppercase tracking-wide mt-1 ${isDark ? 'text-[#8e949c]' : 'text-[#202124]'}`}>All Games</div>
+                     </div>
+                     <div className={`w-px h-full mx-2 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#dadce0]'}`}></div>
+                     <div 
+                       onClick={() => router.push('/resources#completed-section')} 
+                       className="cursor-pointer text-center group transition-transform hover:scale-105"
+                     >
+                       <div className={`text-[28px] font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{totalSkillBadgesCount}</div>
+                       <div className={`text-[13px] font-bold uppercase tracking-wide mt-1 ${isDark ? 'text-[#8e949c]' : 'text-[#202124]'}`}>Skill Badges</div>
+                     </div>
+                   </div>
 
-                    <div className={`text-center font-bold text-lg mb-6 ${isDark ? 'text-[#fbbc04]' : 'text-[#b8860b]'}`}>
-                      {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
-                    </div>
+                   <div className={`text-center font-bold text-lg mb-6 ${isDark ? 'text-[#fbbc04]' : 'text-[#b8860b]'}`}>
+                     {points !== null && points >= 50 ? getCurrentTier() : "User Progress Report"}
+                   </div>
 
-                    <div className="flex w-full gap-3 mb-6">
-                      <button 
-                        onClick={() => router.push('/leaderboard')}
-                        className="flex-1 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold py-2.5 px-4 rounded-full shadow-sm transition-all text-sm flex items-center justify-center"
-                      >
-                        Rank {realRank || "-"}
-                      </button>
-                    </div>
+                   <div className="flex w-full gap-3 mb-6">
+                     <button 
+                       onClick={() => router.push('/leaderboard')}
+                       className="flex-1 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold py-2.5 px-4 rounded-full shadow-sm transition-all text-sm flex items-center justify-center"
+                     >
+                       Rank {realRank || "-"}
+                     </button>
+                   </div>
 
-                    <div className={`text-[16px] md:text-[17px] font-black text-[#1a73e8] border-t pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm ${isDark ? 'border-[#2a2d32]' : 'border-[#e8eaed]'}`}>
-                      {(breakdown?.bonus && breakdown.bonus > 0) ? (
-                        <>Total : <span className="text-[#1a73e8] font-black">{(points || 0) - breakdown.bonus}</span> + <span className="text-[#1a73e8] font-black">{breakdown.bonus}</span> Bonus Points</>
-                      ) : (
-                        <>Member since <span className="text-[#1a73e8] font-black">{getMemberSinceYear()}</span></>
-                      )}
-                    </div>
-                  </div>
+                   <div className={`text-[16px] md:text-[17px] font-black text-[#1a73e8] border-t pt-8 w-full text-center mt-auto tracking-wide uppercase drop-shadow-sm ${isDark ? 'border-[#2a2d32]' : 'border-[#e8eaed]'}`}>
+                     {(breakdown?.bonus && breakdown.bonus > 0) ? (
+                       <>Total : <span className="text-[#1a73e8] font-black">{(points || 0) - breakdown.bonus}</span> + <span className="text-[#1a73e8] font-black">{breakdown.bonus}</span> Bonus Points</>
+                     ) : (
+                       <>Member since <span className="text-[#1a73e8] font-black">{getMemberSinceYear()}</span></>
+                     )}
+                   </div>
+                 </div>
                 </div>
 
               <div className={`mt-6 rounded-xl shadow-sm border p-6 text-center flex flex-col justify-center transition-all hover:shadow-md ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                  <h4 className={`text-[13px] font-black uppercase tracking-widest mb-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                    Facilitator Progress
+                   Facilitator Progress
                  </h4>
                  <div className="flex flex-col items-center justify-center gap-1.5">
                    <div className="inline-flex items-center justify-center gap-2">
@@ -497,7 +480,6 @@ export default function DashboardPage() {
                        </span>
                      )}
                    </div>
-                   {/* Ye naya block add kiya gaya hai Bonus Points dikhane ke liye */}
                    {achievedMilestone && (
                      <span className={`text-[14px] font-extrabold tracking-wide ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
                        +{achievedMilestone.points} Bonus Points
@@ -513,132 +495,106 @@ export default function DashboardPage() {
                 
                 <div className="mb-8 w-full flex-grow">
                   
-                  <div className="mb-8 w-full">
-                    {!nextMilestone ? (
-                      <div className="py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden bg-transparent">
-                         <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
-                           <h2 className={`text-base md:text-lg font-bold mb-1 flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                              🎉 Congratulations! <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">Ultimate Milestone</span> Achieved! 
-                              <span className="inline-block animate-cool-emoji ml-3 text-[24px]">😎</span>
-                           </h2>
-                           <p className={`text-[13px] md:text-[14px] font-medium mt-2 sm:ml-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                              Great job! You have completely crushed it with <span className="text-[#0284c7] font-bold">{facilitatorArcadeGamesCount} Games</span> and <span className="text-[#0284c7] font-bold">{facilitatorSkillBadgesCount} Skill Badges</span>!
-                           </p>
-                         </div>
-                         <div className="shrink-0 flex flex-col items-end justify-center sm:pl-4 w-full sm:w-auto pt-2 sm:pt-0">
-                           <div className="flex items-center gap-4">
-                             <button 
-                               onClick={() => {
-                                 if (profileUrl) {
-                                   fetchDataAndCalculate(profileUrl, false);
-                                 } else {
-                                   window.location.reload();
-                                 }
-                               }}
-                               disabled={loading}
-                               className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity disabled:cursor-not-allowed outline-none" 
-                               title="Click to refresh progress"
-                             >
-                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#0284c7]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                               </svg>
-                               <span className={`text-xs font-bold ${loading ? 'text-[#0284c7]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
-                                 {loading ? 'Refreshing' : 'Synced'}
-                               </span>
-                             </button>
-                             <button
-                               onClick={toggleDarkMode}
-                               className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                               title="Toggle Dark Mode"
-                             >
-                               <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
-                                 {isDark ? (
-                                   <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                                 ) : (
-                                   <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                                 )}
-                               </span>
-                             </button>
-                           </div>
-                           <span className={`text-[11px] font-medium mt-2 block w-full text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                             Last refreshed: {lastRefreshed || "Just now"}
-                           </span>
-                         </div>
+                  <div className={`mb-6 p-5 sm:p-6 rounded-2xl border shadow-sm relative overflow-hidden flex flex-col justify-between gap-4 transition-all hover:shadow-md ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
+                    
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                      {/* Left Header Info */}
+                      <div className="flex-1">
+                        <h3 className={`text-[12px] font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                          Facilitator Progress
+                        </h3>
+                        <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap gap-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                          {achievedMilestone ? (
+                            <>
+                              🎉 Congratulations! <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">Ultimate Milestone</span> Achieved! 
+                              <span className="inline-block animate-cool-emoji text-[20px]">😎</span>
+                            </>
+                          ) : (
+                            <>
+                              Keep Going! Let's aim for <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{nextMilestone?.title}</span> 
+                              <span className="inline-block animate-sad-emoji text-[20px]">🔥</span>
+                            </>
+                          )}
+                        </h2>
                       </div>
-                    ) : (
-                      <div className="py-2 flex flex-col sm:flex-row items-start sm:items-center justify-between relative overflow-hidden bg-transparent">
-                         <div className="flex-1 flex flex-col justify-center pr-4 mb-4 sm:mb-0">
-                           <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                              {achievedMilestone ? (
-                                <>
-                                  Great job on <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">{achievedMilestone.title}</span>! Let's aim for <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">{nextMilestone.title}</span>
-                                  <span className="inline-block animate-cool-emoji ml-3 text-[24px]">🤩</span>
-                                </>
-                              ) : (
-                                <>
-                                  You haven't reached <span className="px-3 py-0.5 rounded-full font-normal mx-1.5 shadow-sm bg-[#1a73e8] text-white">{nextMilestone.title}</span> yet. Let's get started!
-                                  <span className="inline-block animate-sad-emoji ml-3 text-[24px]">🥺</span>
-                                </>
-                              )}
-                           </h2>
-                           <div className={`text-[13px] md:text-[14px] font-semibold flex flex-wrap gap-2 items-center mt-4 sm:ml-4 lg:ml-6 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                              <span className="text-[#0284c7]">Action Required:</span> 
-                              {facilitatorArcadeGamesCount < nextMilestone.targetArcade && (
-                                <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-2 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
-                                  Need {nextMilestone.targetArcade - facilitatorArcadeGamesCount} more Games
-                                </span>
-                              )}
-                              {facilitatorArcadeGamesCount < nextMilestone.targetArcade && facilitatorSkillBadgesCount < nextMilestone.targetSkills && <span> & </span>}
-                              {facilitatorSkillBadgesCount < nextMilestone.targetSkills && (
-                                <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-2 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
-                                  Need {nextMilestone.targetSkills - facilitatorSkillBadgesCount} more Skill Badges
-                                </span>
-                              )}
-                           </div>
-                         </div>
-                         <div className="shrink-0 flex flex-col items-end justify-center sm:pl-4 w-full sm:w-auto pt-2 sm:pt-0">
-                           <div className="flex items-center gap-4">
-                             <button 
-                               onClick={() => {
-                                 if (profileUrl) {
-                                   fetchDataAndCalculate(profileUrl, false);
-                                 } else {
-                                   window.location.reload();
-                                 }
-                               }}
-                               disabled={loading}
-                               className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity disabled:cursor-not-allowed outline-none" 
-                               title="Click to refresh progress"
-                             >
-                               <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#0284c7]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                               </svg>
-                               <span className={`text-xs font-bold ${loading ? 'text-[#0284c7]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
-                                 {loading ? 'Refreshing' : 'Synced'}
-                               </span>
-                             </button>
-                             <button
-                               onClick={toggleDarkMode}
-                               className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none shadow-inner border ${isDark ? 'bg-[#131416] border-[#3c4043]' : 'bg-[#e8eaed] border-[#dadce0]'}`}
-                               title="Toggle Dark Mode"
-                             >
-                               <span className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-md flex items-center justify-center ${isDark ? 'translate-x-9' : 'translate-x-1'}`}>
-                                 {isDark ? (
-                                   <svg className="w-3.5 h-3.5 text-[#1a73e8]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                                 ) : (
-                                   <svg className="w-3.5 h-3.5 text-[#f9ab00]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 011.415 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.22 15.636a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-1.414a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm1.414-4.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z" clipRule="evenodd"></path></svg>
-                                 )}
-                               </span>
-                             </button>
-                           </div>
-                           <span className={`text-[11px] font-medium mt-2 block w-full text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                             Last refreshed: {lastRefreshed || "Just now"}
-                           </span>
-                         </div>
+
+                      {/* Right Action Buttons */}
+                      <div className={`shrink-0 flex items-center gap-3 p-1.5 rounded-full border shadow-sm ${isDark ? 'bg-[#1a1c21] border-[#3c4043]' : 'bg-gray-50 border-[#e8eaed]'}`}>
+                        <button 
+                          onClick={() => {
+                            if (profileUrl) {
+                              fetchDataAndCalculate(profileUrl, false);
+                            } else {
+                              window.location.reload();
+                            }
+                          }}
+                          disabled={loading}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors ${isDark ? 'hover:bg-[#2a2d32]' : 'hover:bg-[#e8eaed]'}`}
+                          title="Click to refresh progress"
+                        >
+                          <svg className={`w-4 h-4 ${loading ? 'animate-spin text-[#0284c7]' : 'text-[#34a853]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          <span className={`text-[11px] font-bold ${loading ? 'text-[#0284c7]' : (isDark ? 'text-[#81c995]' : 'text-[#137333]')}`}>
+                            {loading ? 'Refreshing' : 'Synced'}
+                          </span>
+                        </button>
+                        <div className={`w-px h-4 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
+                        <button
+                          onClick={toggleDarkMode}
+                          className={`p-1.5 mr-1 rounded-full transition-colors ${isDark ? 'hover:bg-[#3c4043] text-gray-200' : 'hover:bg-[#dadce0] text-orange-500'}`}
+                          title="Toggle Dark Mode"
+                        >
+                          {isDark ? (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                          )}
+                        </button>
                       </div>
-                    )}
+                    </div>
+
+                    <div className={`w-full h-px ${isDark ? 'bg-[#2a2d32]' : 'bg-[#f1f3f4]'}`}></div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      {/* Games, Badges & Milestone Compact Grid */}
+                      <div className="flex items-center gap-6">
+                        <div className="flex flex-col">
+                          <span className={`text-[22px] font-black leading-none ${isDark ? 'text-white' : 'text-[#202124]'}`}>{facilitatorArcadeGamesCount}</span>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider mt-1.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Games</span>
+                        </div>
+                        <div className={`w-px h-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
+                        <div className="flex flex-col">
+                          <span className={`text-[22px] font-black leading-none ${isDark ? 'text-white' : 'text-[#202124]'}`}>{facilitatorSkillBadgesCount}</span>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider mt-1.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Badges</span>
+                        </div>
+                        <div className={`w-px h-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
+                        <div className="flex flex-col">
+                          <span className={`text-[15px] font-bold text-[#1a73e8] leading-tight`}>{achievedMilestone ? achievedMilestone.title : "None Yet"}</span>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Milestone</span>
+                        </div>
+                      </div>
+
+                      {/* Action Required Tag */}
+                      {!achievedMilestone && nextMilestone && (
+                        <div className={`text-[11px] font-semibold flex flex-wrap justify-end gap-1.5 items-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                          <span className="text-[#0284c7]">Action Required:</span> 
+                          {facilitatorArcadeGamesCount < nextMilestone.targetArcade && (
+                            <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-1.5 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
+                              {nextMilestone.targetArcade - facilitatorArcadeGamesCount} Games
+                            </span>
+                          )}
+                          {facilitatorSkillBadgesCount < nextMilestone.targetSkills && (
+                            <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-1.5 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
+                              {nextMilestone.targetSkills - facilitatorSkillBadgesCount} Badges
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                   </div>
-                  
                   
                   <div className="relative w-full">
                     
@@ -649,17 +605,14 @@ export default function DashboardPage() {
                         const isAchieved = facilitatorArcadeGamesCount >= milestone.targetArcade && facilitatorSkillBadgesCount >= milestone.targetSkills;
                         const totalPercent = Math.floor((arcadeProgress + skillsProgress) / 2);
                         
-                        // 🔥 REWARD DISPLAY LOGIC 🔥
                         const isHighestAchieved = achievedMilestone && achievedMilestone.id === milestone.id;
                         const isPreviouslyAchieved = isAchieved && !isHighestAchieved;
 
-                        // Agar achieve ho gaya to grey bg, warna simple white/dark bg
-                       // Completed me background white hi rahega, bas border thoda dark grey (light black) ho jayega
                        const cardStyle = isAchieved ? (isDark ? 'bg-[#15171b] border-2 border-[#7f8489]' : 'bg-white border-2 border-[#9aa0a6]') 
                       : (isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]');
 
                         return (
-                          <div key={milestone.id} className={`${cardStyle} border rounded-[36px] p-5 shadow-sm hover:shadow-md transition-shadow`}>
+                          <div key={milestone.id} className={`${cardStyle} border rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow`}>
                             <div className="flex justify-between items-center mb-5">
                               <h3 className={`font-bold text-lg leading-none ${isDark ? 'text-gray-100' : 'text-[#202124]'}`}>{milestone.title}</h3>
                               <span className={`text-[12px] font-bold px-3 py-1 rounded-full border shadow-sm ${isDark ? 'bg-[#0d2214] text-[#81c995] border-[#1e3b29]' : 'bg-[#e6f4ea] text-[#137333] border-[#ceead6]'}`}>
@@ -692,7 +645,6 @@ export default function DashboardPage() {
                             <div className={`pt-4 border-t flex justify-between items-center min-h-[50px] ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
                               <span className={`font-bold text-[14px] lg:text-[15px] ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>Milestone Rewards</span>
                               
-                              {/* 🔥 UPDATED REWARD CONDITIONS 🔥 */}
                               {isHighestAchieved ? (
                                 <div className="flex items-center gap-3">
                                   <div className="flex flex-col items-end">
@@ -724,27 +676,18 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
+                {/* 🔥 UPDATED TO 3 RESPONSIVE BLUE BUTTONS 🔥 */}
                 <div className="w-full mt-auto pt-8 flex flex-col items-center">
-                  
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-                    <button onClick={() => router.push('/calculator')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
+                    <button onClick={() => router.push('/calculator')} className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
                       Points Calculator
                     </button>
-                    <button onClick={() => router.push('/chat')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
-                      Arcade Chatbot
-                    </button>
-                    <button onClick={() => router.push('/facilitator')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
-                      Arcade Facilitator
-                    </button>
 
-                    <button onClick={shareToWhatsApp} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] hover:border-[#25D366] hover:bg-[#0f1f15] text-gray-200' : 'bg-white border-[#dadce0] hover:border-[#25D366] hover:bg-[#f0fbf4] text-[#202124]'}`}>
-                      <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/></svg>
+                    <button onClick={shareToWhatsApp} className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.002 0h-.004C5.373 0 0 5.373 0 12c0 2.123.553 4.122 1.543 5.867L.085 23.316l5.59-1.464C7.382 22.84 9.614 23.4 12 23.4c6.627 0 12-5.373 12-12S18.627 0 12.002 0zm0 21.45c-1.802 0-3.535-.466-5.1-1.348l-.366-.217-3.793.994.996-3.698-.238-.378A9.452 9.452 0 012.55 12c0-5.215 4.236-9.45 9.452-9.45s9.45 4.235 9.45 9.45-4.234 9.45-9.45 9.45zm5.198-6.85c-.285-.143-1.685-.83-1.946-.925-.262-.095-.453-.143-.643.143-.19.285-.736.925-.903 1.115-.166.19-.333.214-.618.071-.286-.143-1.203-.443-2.292-1.25-.848-.628-1.42-1.405-1.586-1.69-.167-.285-.018-.439.125-.582.129-.128.286-.333.428-.5.143-.166.19-.285.286-.475.095-.19.048-.356-.024-.5-.071-.143-.643-1.552-.88-2.124-.233-.556-.47-.48-.643-.489-.166-.008-.357-.008-.547-.008-.19 0-.5.071-.762.357-.262.285-1 .975-1 2.378s1.024 2.758 1.167 2.948c.143.19 2.012 3.072 4.872 4.306.68.293 1.213.468 1.626.598.683.214 1.305.183 1.794.111.547-.08 1.685-.688 1.923-1.353.238-.665.238-1.235.166-1.353-.071-.119-.262-.19-.547-.333z"/></svg>
                       Share Points
                     </button>
-                    <button onClick={() => router.push('/leaderboard')} className={`w-full font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2 border ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 hover:border-[#1a73e8] hover:bg-[#1a1b1e]' : 'bg-white border-[#dadce0] hover:border-[#1a73e8] hover:bg-[#e8f0fe] text-[#202124]'}`}>
-                      <svg className="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" /></svg>
-                      View Top Rank
-                    </button>
+                    
                     <button onClick={() => router.push('/resources')} className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold py-3 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center text-sm gap-2">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18m0 0l-6-6m6 6l-6 6" /></svg>
                       Skill Badges List
@@ -760,7 +703,7 @@ export default function DashboardPage() {
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
           
           {points !== null && (
-            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.21s' }}>
+            <div className="w-full animate-fade-in-up" style={{ animationDelay: '0.21s' }}>
               <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                   Arcade Prize Tiers
@@ -811,25 +754,14 @@ export default function DashboardPage() {
                 })}
               </div>
 
-              <div className={`mt-8 flex flex-col lg:flex-row justify-between items-center text-sm font-semibold gap-4 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                <div className="flex items-center gap-2 lg:w-1/3">
-                  <svg className={`w-4 h-4 ${isDark ? 'text-[#9aa0a6]' : 'text-[#80868b]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  Last refreshed: {lastRefreshed || "Just now"}
-                </div>
-                <div className="text-center lg:w-1/3 flex justify-center">
-                  <span className="inline-flex items-center justify-center bg-[#1a73e8] text-white px-6 py-2.5 rounded-full text-[15px] font-bold shadow-md hover:shadow-lg transition-all whitespace-nowrap tracking-wide">
-                     {getCurrentTier()}
-                  </span>
-                </div>
-                <div className="text-center lg:text-right lg:w-1/3">
-                  Explore Arcade Prize details <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className="text-[#1a73e8] hover:underline font-bold">here.</a>
-                </div>
-              </div>
             </div>
           )}
 
           {points !== null && (
-            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.22s' }}>
+            <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
+              
+              <div className={`w-full h-px mb-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
+
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
                 <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                   <span className="text-xl"></span> August Labs
@@ -903,7 +835,7 @@ export default function DashboardPage() {
           )}
 
           {points !== null && (
-            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`} style={{ animationDelay: '0.25s' }}>
+            <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
               <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                   August LABS LIVE !
@@ -987,13 +919,22 @@ export default function DashboardPage() {
                            <p className={`text-[14px] md:text-[15px] font-bold text-center m-0 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
                              Access code: {lab.accessCode}
                            </p>
-                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`} title="Copy Code">
-                             {copiedCode === lab.accessCode ? (
-                                <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                             ) : (
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                             )}
-                           </button>
+                           <button 
+  onClick={() => handleCopyCode(lab.accessCode)} 
+  className={`transition-all flex items-center justify-center p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] hover:bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe]'}`} 
+  title="Copy Code"
+>
+  {copiedCode === lab.accessCode ? (
+    <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+    </svg>
+  ) : (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  )}
+</button>
                         </div>
                           
                         <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
@@ -1016,54 +957,11 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* 🔥 NEW FACILITATOR PROGRAM SECTION (FROM IMAGE) 🔥 */}
           {points !== null && (
-            <div className={`border rounded-xl p-6 md:p-8 shadow-sm animate-fade-in-up relative overflow-hidden ${isDark ? 'bg-[#15171b] border-[#fbbc04]/50' : 'bg-[#1a1b1e] border-[#fbbc04]/80'}`} style={{ animationDelay: '0.28s' }}>
-              <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
-                {/* Left Image Placeholder */}
-                <div className="w-full md:w-1/3 flex justify-center items-center">
-                  <img
-                    src="https://services.google.com/fh/files/misc/arcade_facilitator_banner_2026.png" /* TODO: Daal Dena image ka link yahan */
-                    alt="Facilitator Program 2026"
-                    className="max-w-[280px] w-full object-contain drop-shadow-lg"
-                  />
-                </div>
+            <div id="history-section" className="animate-fade-in-up scroll-mt-24 w-full" style={{animationDelay: '0.3s'}}>
+              
+              <div className={`w-full h-px mt-4 mb-10 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
 
-                {/* Right Content */}
-                <div className="w-full md:w-2/3 flex flex-col justify-center text-left">
-                  <h2 className="text-3xl md:text-4xl font-black text-[#fbbc04] mb-3" style={{ fontFamily: 'monospace, sans-serif', letterSpacing: '-0.5px' }}>
-                    Google Arcade Facilitator 2026
-                  </h2>
-                  <p className="text-white text-lg font-medium mb-6">
-                    The Arcade Facilitator Program is live.
-                  </p>
-
-                  <a
-                    href="https://rsvp.withgoogle.com/events/arcade-facilitator/home" /* TODO: Daal Dena Start ka link yahan */
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-[#fbbc04] hover:bg-[#f29900] text-black font-black text-[18px] py-2 px-8 rounded flex items-center justify-center w-max mb-6 transition-colors"
-                  >
-                    START!
-                  </a>
-
-                  {/* Bonus Milestone Box */}
-                  <div className="bg-[#2a2d32]/40 border border-[#444746] rounded-xl p-5 flex flex-col sm:flex-row gap-4 items-start shadow-inner">
-                    <div className="text-3xl flex-shrink-0 drop-shadow-md">🏆</div>
-                    <div>
-                      <h4 className="text-[#fbbc04] font-bold text-sm uppercase tracking-widest mb-1.5">Bonus Milestone</h4>
-                      <p className="text-gray-300 text-[14px] leading-relaxed font-medium">
-                        Once you are in, you can earn 10 Arcade Points by building your first AI Agent in the <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone" className="text-[#fbbc04] underline hover:text-[#f29900]">Bonus Milestone</a>. Check the <a href="https://discuss.google.dev/t/arcade-facilitator-2026-bonus-milestone/3864" className="text-[#fbbc04] underline hover:text-[#f29900]">full details</a> and <a href="https://docs.google.com/document/d/1RjwwiKY0fGyMm9wt5t4exXaA7pM3IU45FBOOPtmgUdo/" className="text-[#fbbc04] underline hover:text-[#f29900]">instructions</a> to get started!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {points !== null && (
-            <div id="history-section" className="animate-fade-in-up scroll-mt-24" style={{animationDelay: '0.3s'}}>
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
                 
                 <h4 className={`text-base font-extrabold uppercase tracking-wider flex items-center whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>
@@ -1121,12 +1019,12 @@ export default function DashboardPage() {
                 </div>
               </div>
               
-              <div className={`border rounded-lg overflow-hidden shadow-sm p-4 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
+              <div className="w-full mt-4">
                 <div className="max-h-[2000px] overflow-y-auto custom-scrollbar pr-2">
                   {filteredHistory.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                       {filteredHistory.map((item, i) => (
-                        <div key={i} className={`flex flex-col items-center p-4 rounded-xl border border-transparent transition-all group ${isDark ? 'bg-[#1a1b1e] hover:border-[#3c4043] hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)]' : 'bg-white hover:border-[#dadce0] hover:shadow-md'}`}>
+                        <div key={i} className="flex flex-col items-center p-2 transition-all group hover:-translate-y-1">
                           
                           <div className="w-full h-40 mb-4 flex items-center justify-center">
                             {item.image ? (
