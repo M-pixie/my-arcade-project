@@ -44,21 +44,14 @@ interface RecentProfile {
 
 export default function CalculatorPage() {
   const [profileUrl, setProfileUrl] = useState("");
-  // 🔥 PAUSE/RESUME STATE (idle, loading, paused)
   const [calcState, setCalcState] = useState<'idle' | 'loading' | 'paused'>('idle');
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const [error, setError] = useState<string | null>(null);
-  
   const [rememberMe, setRememberMe] = useState(false);
   const [hideRedLine, setHideRedLine] = useState(false);
-  
   const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  
-  // 🔥 STATES FOR TIMER 🔥
-  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
-  const [isMounted, setIsMounted] = useState(false);
   
   const [isShaking, setIsShaking] = useState(false);
   const [userPoints, setUserPoints] = useState<number | null>(null);
@@ -67,48 +60,15 @@ export default function CalculatorPage() {
 
   const [autoCalculate, setAutoCalculate] = useState(false);
   const [showAutoCalcModal, setShowAutoCalcModal] = useState(false);
-  
-  // 🔥 NEW STATES FOR RESET MODAL & ANIMATION PHASES
   const [showResetModal, setShowResetModal] = useState(false);
   const [loadingStep, setLoadingStep] = useState<'wave' | 'collide'>('wave');
-
-  // 🔥 DARK MODE STATE 🔥
   const [isDark, setIsDark] = useState(false);
 
   const router = useRouter();
 
-  // 🔥 TIMER EFFECT 🔥
   useEffect(() => {
-    setIsMounted(true);
-    // Target date: 13 July 2026, 17:00:00 IST
-    const targetDate = new Date("July 13, 2026 17:00:00 GMT+0530").getTime();
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        clearInterval(interval);
-        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
-      } else {
-        setTimeLeft({
-          d: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          s: Math.floor((distance % (1000 * 60)) / 1000)
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    // Load Dark Mode Preference
     const savedTheme = localStorage.getItem("arcade_theme");
-    if (savedTheme === "dark") {
-      setIsDark(true);
-    }
+    if (savedTheme === "dark") setIsDark(true);
 
     const savedAuto = localStorage.getItem("arcade_auto_calc") === "true";
     if (savedAuto) setAutoCalculate(true);
@@ -117,18 +77,13 @@ export default function CalculatorPage() {
     if (savedUrl) {
       setProfileUrl(savedUrl);
       setRememberMe(true);
-      
       if (savedAuto) {
-        setTimeout(() => {
-          proceedToDashboard(savedUrl, true);
-        }, 600);
+        setTimeout(() => { proceedToDashboard(savedUrl, true); }, 600);
       }
     }
     
     const savedRecentUrls = localStorage.getItem("recent_arcade_urls_v3"); 
-    if (savedRecentUrls) {
-      setRecentUrls(JSON.parse(savedRecentUrls));
-    }
+    if (savedRecentUrls) setRecentUrls(JSON.parse(savedRecentUrls));
 
     const savedData = localStorage.getItem("arcade_user_data");
     if (savedData) {
@@ -145,21 +100,17 @@ export default function CalculatorPage() {
     }
   }, []);
 
-  // Toggle Function for Dark Mode
   const toggleDarkMode = () => {
     const newTheme = !isDark;
     setIsDark(newTheme);
     localStorage.setItem("arcade_theme", newTheme ? "dark" : "light");
   };
 
-  // 🔥 ANIMATION PHASE CONTROLLER 🔥
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (calcState === 'loading') {
-      setLoadingStep('wave'); // Start with slow wave
-      timer = setTimeout(() => {
-        setLoadingStep('collide'); // Shift to fast Gemini collide after 1.2s
-      }, 1200);
+      setLoadingStep('wave');
+      timer = setTimeout(() => { setLoadingStep('collide'); }, 1200);
     }
     return () => clearTimeout(timer);
   }, [calcState]);
@@ -179,9 +130,7 @@ export default function CalculatorPage() {
     setShowAutoCalcModal(false);
   };
 
-  const cancelAutoCalc = () => {
-    setShowAutoCalcModal(false);
-  };
+  const cancelAutoCalc = () => setShowAutoCalcModal(false);
 
   const saveToHistory = (urlToSave: string, name?: string, avatar?: string | null, points?: number) => {
     setRecentUrls((prevUrls) => {
@@ -220,7 +169,6 @@ export default function CalculatorPage() {
     setRememberMe(false);
     setError(null);
     setCalcState('idle');
-
     setShowResetModal(false);
   };
 
@@ -244,7 +192,6 @@ export default function CalculatorPage() {
     }, 10);
   };
 
-  // 🔥 CORE CALCULATE FUNCTION 🔥
   const proceedToDashboard = async (overrideUrl?: string | any, isAutoRun: boolean = false) => {
     const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
 
@@ -256,7 +203,6 @@ export default function CalculatorPage() {
     }
 
     const shouldRemember = isAutoRun ? true : rememberMe;
-    
     if (shouldRemember) {
       localStorage.setItem("arcade_url", targetUrl);
     } else {
@@ -271,7 +217,6 @@ export default function CalculatorPage() {
       return;
     }
 
-    // 🔥 PREPARE FOR FETCH & ABORT CONTROLLER
     setCalcState('loading'); 
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
@@ -281,7 +226,7 @@ export default function CalculatorPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: targetUrl }),
-        signal // Attach the signal to allow aborting
+        signal
       });
 
       const data = await res.json();
@@ -323,26 +268,18 @@ export default function CalculatorPage() {
       router.push("/dashboard");
 
     } catch (err: any) {
-      // Ignore error if we intentionally aborted it (Paused)
-      if (err.name === 'AbortError') {
-        console.log('Calculation Paused');
-        return;
-      }
-
+      if (err.name === 'AbortError') return;
       setError("Connection failed. Check your internet and retry.");
       setCalcState('idle');
       triggerShake(); 
     }
   };
 
-  // 🔥 HANDLER FOR MAIN BUTTON CLICKS (PLAY/PAUSE/RESUME) 🔥
   const handleMainButtonClick = () => {
     if (calcState === 'idle') {
       proceedToDashboard();
     } else if (calcState === 'loading') {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort(); // Cancel network request
-      }
+      if (abortControllerRef.current) abortControllerRef.current.abort();
       setCalcState('paused');
     } else if (calcState === 'paused') {
       proceedToDashboard();
@@ -353,11 +290,9 @@ export default function CalculatorPage() {
     setProfileUrl(url);
     setError(null);
     setHideRedLine(false);
-    
     navigator.clipboard.writeText(url);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 1000);
-
     proceedToDashboard(url);
   };
 
@@ -365,12 +300,11 @@ export default function CalculatorPage() {
   const isPaused = calcState === 'paused';
 
   return (
-    <div className={`min-h-screen font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
+    <div className={`min-h-screen w-full overflow-x-hidden font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-16">
+      <main className="w-full max-w-7xl mx-auto px-3 sm:px-6 pt-20 sm:pt-24 pb-12 sm:pb-16">
         
-        {/* 🔥 MODAL FOR AUTO CALCULATE 🔥 */}
         {showAutoCalcModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in-modal">
             <div className={`rounded-lg shadow-xl w-full max-w-sm p-6 animate-scale-up-modal ${isDark ? 'bg-[#1a1b1e] border border-[#3c4043]' : 'bg-white'}`}>
@@ -390,7 +324,6 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        {/* 🔥 MODAL FOR RESET DATA 🔥 */}
         {showResetModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in-modal">
             <div className={`rounded-lg shadow-xl w-full max-w-sm p-6 animate-scale-up-modal ${isDark ? 'bg-[#1a1b1e] border border-[#3c4043]' : 'bg-white'}`}>
@@ -417,20 +350,18 @@ export default function CalculatorPage() {
           </div>
         )}
 
-        <div className="text-center mb-8 md:mb-10 flex justify-center items-center">
-          <h1 className={`text-3xl md:text-5xl font-medium tracking-tight leading-tight px-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+        <div className="text-center mb-6 sm:mb-10 flex justify-center items-center w-full">
+          <h1 className={`text-2xl sm:text-3xl md:text-5xl font-medium tracking-tight leading-tight px-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
             Arcade Calculator
           </h1>
         </div>
 
         {/* 🔥 MAIN CARD 🔥 */}
-        <div className={`rounded-xl border shadow-sm mb-8 relative transition-all duration-1000 ease-in-out ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+        <div className={`w-full max-w-full overflow-hidden rounded-xl border shadow-sm mb-6 sm:mb-8 relative transition-all duration-1000 ease-in-out ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
           
           <style>{`
             @keyframes slow-fill { 0% { width: 0%; } 20% { width: 30%; } 50% { width: 65%; } 80% { width: 85%; } 100% { width: 95%; } }
             .animate-slow-fill { animation: slow-fill 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; position: absolute; left: 0; top: 0; }
-            @keyframes tooltip-pop { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.95); } 15% { opacity: 1; transform: translate(-50%, 0) scale(1); } 85% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -5px) scale(0.95); } }
-            .animate-tooltip-pop { animation: tooltip-pop 2s cubic-bezier(0.16, 1, 0.3, 1) forwards; pointer-events: none; }
             @keyframes fast-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
             .animate-fast-shake { animation: fast-shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
             @keyframes fade-in-modal { from { opacity: 0; } to { opacity: 1; } }
@@ -438,7 +369,6 @@ export default function CalculatorPage() {
             .animate-fade-in-modal { animation: fade-in-modal 0.2s ease-out forwards; }
             .animate-scale-up-modal { animation: scale-up-modal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
             
-            /* 🔥 PHASE 1: INITIAL WAVE ANIMATION 🔥 */
             @keyframes wave-bounce {
               0%, 100% { transform: translateY(0); opacity: 0.4; }
               50% { transform: translateY(-3.5px); opacity: 1; }
@@ -447,7 +377,6 @@ export default function CalculatorPage() {
             .dot-wave-2 { animation: wave-bounce 1s infinite ease-in-out; animation-delay: 0.15s; }
             .dot-wave-3 { animation: wave-bounce 1s infinite ease-in-out; animation-delay: 0.3s; }
 
-            /* 🔥 PHASE 2: FAST GEMINI TRIANGULAR COLLISION 🔥 */
             @keyframes rotate-gemini {
               0% { transform: rotate(0deg) scale(0.9); }
               100% { transform: rotate(360deg) scale(0.9); }
@@ -471,19 +400,16 @@ export default function CalculatorPage() {
               position: relative;
               animation: rotate-gemini 1s linear infinite;
             }
-            
             .gem-dot {
               position: absolute;
               width: 4.5px;
               height: 4.5px;
               border-radius: 50%;
             }
-            
             .gem-dot-1 { top: 0px; left: 4.75px; animation: collide-1 0.6s ease-in-out infinite; }
             .gem-dot-2 { top: 8px; left: 0px; animation: collide-2 0.6s ease-in-out infinite; }
             .gem-dot-3 { top: 8px; left: 9.5px; animation: collide-3 0.6s ease-in-out infinite; }
 
-            /* 🔥 SIMPLE PROGRESSIVE DOTS FOR CALCULATING... 🔥 */
             @keyframes dots-step {
               0% { content: ""; }
               25% { content: "."; }
@@ -500,35 +426,31 @@ export default function CalculatorPage() {
             }
           `}</style>
 
-          <div className="p-5 sm:p-8 md:p-12">
+          <div className="arcade-mobile-wrap p-4 sm:p-8 md:p-12">
             
-            {/* 🔥 FIXED HEADER: SAME LINE ON MOBILE 🔥 */}
-            <div className="flex flex-row items-center justify-between mb-6 w-full">
-              <p className={`text-[13px] sm:text-base font-bold ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+            {/* Top Row: Label & Icons */}
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4 w-full">
+              <p className={`text-[12px] sm:text-base font-bold leading-snug max-w-[75%] sm:max-w-none ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                 Paste your public profile url here
               </p>
               
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                {/* 🔥 SMART CLICKABLE THEME ICON 🔥 */}
                 <button
                   onClick={toggleDarkMode}
                   className={`p-2 rounded-full transition-colors flex items-center justify-center ${isDark ? 'bg-[#2a2d32] text-white hover:bg-[#3c4043]' : 'bg-[#e8eaed] text-[#202124] hover:bg-[#dadce0]'}`}
                   title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
                 >
                   {isDark ? (
-                    // Moon Icon
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                   ) : (
-                    // Sun Icon
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   )}
                 </button>
 
-                {/* 🔥 SMART CLICKABLE AUTO CALCULATE ICON 🔥 */}
                 <button
                   onClick={handleAutoCalcToggle}
                   className={`p-2 rounded-full transition-colors flex items-center justify-center ${autoCalculate ? (isDark ? 'bg-[#2a2d32] text-green-400' : 'bg-[#e8eaed] text-green-600') : (isDark ? 'bg-transparent text-[#5f6368] hover:bg-[#2a2d32] hover:text-white' : 'bg-transparent text-[#9aa0a6] hover:bg-[#e8eaed] hover:text-black')}`}
@@ -541,88 +463,74 @@ export default function CalculatorPage() {
               </div>
             </div>
 
-            {/* 🔥 FIXED INPUT ROW: PROPER LABEL Z-INDEX & BG 🔥 */}
-            <div className="mb-6 flex flex-col sm:flex-row gap-4 items-stretch w-full">
-              
-              <div 
-                onAnimationEnd={() => setIsShaking(false)}
-                className={`group relative flex-1 min-w-0 border rounded-lg transition-colors duration-200 flex flex-row items-center shadow-sm w-full h-[52px] sm:h-[56px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-white border-[#b0b3b8] focus-within:border-[#314391]")}`}
-              >
-                {isLoading && !error && userPoints === null && (
-                  <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-transparent overflow-hidden z-0">
-                    <div className={`h-full animate-slow-fill rounded-b-lg ${isDark ? 'bg-[#8ab4f8]' : 'bg-[#314391]'}`}></div>
-                  </div>
-                )}
-
-                {/* 🔥 FLOATING LABEL OVERLAP FIX 🔥 */}
-                <label className={`absolute -top-2.5 left-3 px-1.5 text-[11px] sm:text-[12px] font-bold flex items-center z-20 transition-all duration-300 ease-in-out leading-none truncate max-w-[85%] sm:max-w-[90%] ${isDark ? 'bg-[#15171b]' : 'bg-white'} ${error && !hideRedLine ? (isDark ? "text-[#f28b82]" : "text-[#d93025]") : (userName && !isLoading && !isPaused) ? (isDark ? "text-[#e8eaed] group-focus-within:text-[#8ab4f8]" : "text-[#314391] group-focus-within:text-[#314391]") : (isDark ? "text-white group-focus-within:text-[#8ab4f8]" : "text-[#5f6368] group-focus-within:text-[#314391]")}`}>
-                  {isLoading ? (
-                    loadingStep === 'wave' ? (
-                      <div className="flex items-center gap-[3px] h-4 px-1">
-                        <div className={`w-[4px] h-[4px] rounded-full dot-wave-1 ${isDark ? 'bg-white' : 'bg-black'}`}></div>
-                        <div className={`w-[4px] h-[4px] rounded-full dot-wave-2 ${isDark ? 'bg-white' : 'bg-black'}`}></div>
-                        <div className={`w-[4px] h-[4px] rounded-full dot-wave-3 ${isDark ? 'bg-white' : 'bg-black'}`}></div>
-                      </div>
-                    ) : (
-                      <div className="flex items-center h-4 px-1">
-                        <div className="gem-container" style={{ transform: 'scale(0.6)' }}>
-                          <div className={`gem-dot gem-dot-1 ${isDark ? 'bg-white' : 'bg-black'}`}></div>
-                          <div className={`gem-dot gem-dot-2 ${isDark ? 'bg-white' : 'bg-black'}`}></div>
-                          <div className={`gem-dot gem-dot-3 ${isDark ? 'bg-white' : 'bg-black'}`}></div>
-                        </div>
-                      </div>
-                    )
-                  ) : isPaused ? (
-                    "Calculation Paused"
-                  ) : (
-                    userName ? userName : "Enter Public Profile Url" 
-                  )}
-                </label>
-                
-                {calcState !== 'idle' ? (
-                  <div className={`flex-1 h-full px-4 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 z-10 relative ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                    <span className="truncate text-[13px] sm:text-[15px] font-normal">{profileUrl}</span>
-                    {isPaused && (
-                      <button 
-                        onClick={() => setCalcState('idle')}
-                        title="Cancel Calculation"
-                        className={`ml-2 transition-colors p-1 shrink-0 ${isDark ? 'text-[#9aa0a6] hover:text-white' : 'text-[#9aa0a6] hover:text-black'}`}
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <input
-                    type="text"
-                    placeholder="https://www.skills.google/public_profiles/..."
-                    value={profileUrl}
-                    onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
-                    spellCheck="false"
-                    className={`flex-1 h-full px-4 text-[13px] sm:text-[15px] bg-transparent outline-none relative z-10 w-full min-w-0 font-normal ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#3c4043] placeholder-[#70757a]'}`}
-                  />
-                )}
-              </div>
-
-              {/* Calculate Button */}
-              <button 
-                onClick={handleMainButtonClick}
-                disabled={calcState !== 'idle' && calcState !== 'paused'}
-                className={`h-[52px] sm:h-[56px] w-full sm:w-auto px-8 shrink-0 rounded-lg text-[15px] sm:text-[16px] font-semibold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center whitespace-nowrap shadow-sm disabled:opacity-70 ${isDark ? 'bg-[#314391] text-white hover:bg-[#253372]' : 'bg-[#314391] text-white hover:bg-[#253372]'}`}
-              >
+            {/* 🔥 PERMANENT FIX: STATIC CLEAN LABEL ABOVE INPUT (NO OVERLAP) 🔥 */}
+            <div className="mb-6 flex flex-col gap-2 w-full">
+              <span className={`text-[12px] font-bold tracking-wide ${isDark ? 'text-[#8ab4f8]' : 'text-[#314391]'}`}>
                 {isLoading ? (
-                  <span className="flex items-center">
-                    Wait<span className="progressive-dots"></span>
-                  </span>
+                  loadingStep === 'wave' ? "Loading..." : "Processing..."
                 ) : isPaused ? (
-                  "Resume"
+                  "Calculation Paused"
                 ) : (
-                  "Calculate" 
+                  userName ? `Welcome back, ${userName}` : "Public Profile Link"
                 )}
-              </button>
+              </span>
+
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch w-full min-w-0">
+                <div 
+                  onAnimationEnd={() => setIsShaking(false)}
+                  className={`group relative flex-1 min-w-0 max-w-full border rounded-lg transition-colors duration-200 flex flex-row items-center shadow-sm w-full min-h-[52px] sm:h-[56px] ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? "border-[#d93025]" : (isDark ? "bg-transparent border-[#3c4043] focus-within:border-[#8ab4f8]" : "bg-white border-[#b0b3b8] focus-within:border-[#314391]")}`}
+                >
+                  {isLoading && !error && userPoints === null && (
+                    <div className="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-transparent overflow-hidden z-0">
+                      <div className={`h-full animate-slow-fill rounded-b-lg ${isDark ? 'bg-[#8ab4f8]' : 'bg-[#314391]'}`}></div>
+                    </div>
+                  )}
+
+                  {calcState !== 'idle' ? (
+                    <div className={`flex-1 h-full px-4 flex items-center justify-between overflow-hidden whitespace-nowrap min-w-0 z-10 relative ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
+                      <span className="truncate text-[13px] sm:text-[15px] font-normal">{profileUrl}</span>
+                      {isPaused && (
+                        <button 
+                          onClick={() => setCalcState('idle')}
+                          title="Cancel Calculation"
+                          className={`ml-2 transition-colors p-1 shrink-0 ${isDark ? 'text-[#9aa0a6] hover:text-white' : 'text-[#9aa0a6] hover:text-black'}`}
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="https://www.skills.google/public_profiles/..."
+                      value={profileUrl}
+                      onChange={(e) => { setProfileUrl(e.target.value); setError(null); setHideRedLine(false); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
+                      spellCheck="false"
+                      className={`flex-1 h-full min-w-0 px-3 sm:px-4 text-[12px] sm:text-[15px] bg-transparent outline-none relative z-10 w-full min-w-0 font-normal ${isDark ? 'text-white placeholder-[#5f6368]' : 'text-[#3c4043] placeholder-[#70757a]'}`}
+                    />
+                  )}
+                </div>
+
+                {/* Calculate Button */}
+                <button 
+                  onClick={handleMainButtonClick}
+                  disabled={calcState !== 'idle' && calcState !== 'paused'}
+                  className={`h-[52px] sm:h-[56px] w-full sm:w-auto px-4 sm:px-8 shrink-0 rounded-lg text-[15px] sm:text-[16px] font-semibold tracking-wide transition-all duration-200 active:scale-[0.97] flex items-center justify-center whitespace-nowrap shadow-sm disabled:opacity-70 ${isDark ? 'bg-[#314391] text-white hover:bg-[#253372]' : 'bg-[#314391] text-white hover:bg-[#253372]'}`}
+                >
+                  {isLoading ? (
+                    <span className="flex items-center">
+                      Wait<span className="progressive-dots"></span>
+                    </span>
+                  ) : isPaused ? (
+                    "Resume"
+                  ) : (
+                    "Calculate" 
+                  )}
+                </button>
+              </div>
             </div>
 
             {error && (
@@ -641,10 +549,9 @@ export default function CalculatorPage() {
               </div>
             )}
 
-            {/* 🔥 FIXED BOTTOM ACTION ROW: RESPONSIVE ALIGNMENT 🔥 */}
-            <div className="flex flex-row flex-wrap items-center justify-between gap-y-4 gap-x-2 mb-6 w-full">
-              
-              <div className="flex items-center gap-4 sm:gap-6">
+            {/* Bottom Row Actions */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 w-full min-w-0">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 w-full sm:w-auto">
                 <div className="flex items-center pl-1 sm:pl-2">
                   <input id="remember-me" type="checkbox" className={`w-4 h-4 rounded-sm cursor-pointer ${isDark ? 'border-[#5f6368] bg-[#202124] text-white focus:ring-white' : 'border-[#dadce0] text-black focus:ring-black focus:ring-offset-0'}`} checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
                   <label htmlFor="remember-me" className={`ml-2 sm:ml-3 text-[13px] sm:text-sm font-medium cursor-pointer select-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>Remember Me</label>
@@ -654,16 +561,14 @@ export default function CalculatorPage() {
                 </a>
               </div>
 
-              <div className={`text-[12px] sm:text-sm font-medium text-right ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>
+              <div className={`text-[12px] sm:text-sm font-medium text-left sm:text-right w-full sm:w-auto ${isDark ? 'text-[#9aa0a6]' : 'text-[#3c4043]'}`}>
                 Calculated : {recentUrls.length > 0 ? timeAgo(recentUrls[0].time) : "Never"}
               </div>
-              
             </div>
 
-            {/* 🔥 COMPACT RECENT PROFILES SECTION WITH FLEX PILL DESIGN 🔥 */}
+            {/* Recent Profiles Section */}
             {recentUrls.length > 0 && (
               <div className={`mt-4 pt-5 border-t animate-fade-in-up ${isDark ? 'border-[#3c4043]' : 'border-[#f1f3f4]'}`}>
-                
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                   <p className={`text-[13px] sm:text-sm font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     Recent Profiles
@@ -686,11 +591,9 @@ export default function CalculatorPage() {
                   </div>
                 </div>
 
-                {/* 🔥 COMPACT FLEX WRAP FOR PILL DESIGN 🔥 */}
                 <div className="flex flex-wrap gap-2 sm:gap-3 w-full">
                   {recentUrls.map((item, idx) => {
                     const themeColor = getCardTheme(item.name || "Arcade");
-                    
                     return (
                       <div key={idx} className="relative shrink-0 max-w-full">
                         <button 
@@ -737,17 +640,17 @@ export default function CalculatorPage() {
           </div>
         </div>
       
-        <div className={`mt-6 mb-10 w-full border-t pt-8 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+        <div className={`mt-5 sm:mt-6 mb-8 sm:mb-10 w-full border-t pt-6 sm:pt-8 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
           <div className="relative w-full">
             <div className={`hidden md:block absolute left-6 top-6 bottom-10 w-[2px] ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
             
             <div className="relative flex flex-col md:flex-row gap-4 md:gap-6 mb-8 md:mb-12 w-full">
               <div className={`relative z-10 w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md md:mt-0 mt-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>1</div>
-              <div className={`flex-1 w-full border rounded-2xl p-5 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                <h3 className={`text-xl md:text-2xl font-bold mb-3 flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+              <div className={`flex-1 min-w-0 w-full max-w-full border rounded-2xl p-4 sm:p-5 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                <h3 className={`text-lg sm:text-xl md:text-2xl font-bold mb-3 flex items-start sm:items-center gap-2 leading-snug ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                   <span className={`text-lg md:text-xl font-extrabold ${isDark ? 'text-white' : 'text-black'}`}>➔</span> Sign in to Google Skills
                 </h3>
-                <p className={`mb-5 text-[14px] md:text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                <p className={`mb-5 text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                   Access the Google Skills platform and sign in with your Google account.<br className="hidden md:block"/>Navigate to the Google Skills website and sign in with your Google account to access your profile.
                 </p>
                 <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-colors mb-6 md:mb-8 shadow-sm text-sm md:text-base ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
@@ -757,7 +660,6 @@ export default function CalculatorPage() {
                   Go to Google Skills
                 </a>
                 <div className={`rounded-xl overflow-hidden border ${isDark ? 'border-[#3c4043] bg-[#1a1b1e]' : 'border-[#dadce0] bg-[#f8f9fa]'}`}>
-                  {/* 🔥 IMAGE OVERFLOW FIXED 🔥 */}
                   <img src="https://i.ibb.co/R4bb64LP/find-ppu-ss-s-1.png" alt="Step 1 Guide" className="w-full h-auto object-cover rounded-b-xl" />
                 </div>
               </div>
@@ -765,11 +667,11 @@ export default function CalculatorPage() {
 
             <div className="relative flex flex-col md:flex-row gap-4 md:gap-6 mb-8 md:mb-12 w-full">
               <div className={`relative z-10 w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow-md md:mt-0 mt-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>2</div>
-              <div className={`flex-1 w-full border rounded-2xl p-5 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                <h3 className={`text-xl md:text-2xl font-bold mb-3 flex items-center gap-2 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
+              <div className={`flex-1 min-w-0 w-full max-w-full border rounded-2xl p-4 sm:p-5 md:p-8 shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                <h3 className={`text-lg sm:text-xl md:text-2xl font-bold mb-3 flex items-start sm:items-center gap-2 leading-snug ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                   <span className={`text-base md:text-lg flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full border-2 ${isDark ? 'border-white text-white' : 'border-black text-black'}`}>👤</span> Access Your Public Profile
                 </h3>
-                <p className={`mb-5 text-[14px] md:text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                <p className={`mb-5 text-[13px] sm:text-[14px] md:text-[15px] leading-relaxed ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                   After logging in navigate to the following link to access your Google Skills account settings.<br className="hidden md:block"/>On this Account Settings page scroll down to 'Public Profile' section.
                 </p>
                 <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold transition-colors mb-6 md:mb-8 shadow-sm text-sm md:text-base ${isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'}`}>
