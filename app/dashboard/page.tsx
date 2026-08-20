@@ -381,7 +381,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className={`min-h-screen font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
+    <div className={`min-h-screen w-full overflow-x-hidden font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f8f9fa] text-[#202124]'}`}>
       <Navbar />
 
       <main className="w-full mx-auto px-6 pt-24 pb-16 flex flex-col items-center">
