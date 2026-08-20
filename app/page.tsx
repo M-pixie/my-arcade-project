@@ -54,6 +54,12 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<{name: string, time: string, text: string, vendor: string}[]>([]); 
 
   useEffect(() => {
+    // Load previously saved URL to keep it in the input box
+    const savedUrl = localStorage.getItem("arcade_url");
+    if (savedUrl) {
+      setHeroUrl(savedUrl);
+    }
+
     const q = query(collection(db, "swagReviews"), orderBy("createdAt", "desc"));
     const unsubReviews = onSnapshot(q, (snapshot) => {
       const fetchedReviews = snapshot.docs.map(doc => doc.data() as any);
@@ -81,6 +87,7 @@ export default function HomePage() {
       return;
     }
 
+    // Save URL locally so it doesn't get removed
     localStorage.setItem("arcade_url", targetUrl);
 
     try {
@@ -218,9 +225,7 @@ export default function HomePage() {
                 className="w-10 h-10 sm:w-[42px] sm:h-[42px] rounded-xl bg-gradient-to-b from-[#a42b82] to-[#6c145e] flex items-center justify-center text-white shrink-0 hover:brightness-110 transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] disabled:opacity-70"
               >
                 {isCalculating ? (
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
+                  <div className="w-5 h-5 border-[3px] border-white/30 border-t-white rounded-full animate-spin"></div>
                 ) : (
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m-6-6l6 6-6 6" />
@@ -240,14 +245,14 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col items-center">
               <span className="text-[#a199a0] text-[12px] mb-3 font-medium">Suggested actions</span>
               <div className="flex flex-wrap justify-center gap-3">
+                <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="bg-[#3e2e3d]/80 border border-[#64495f] text-white text-[13px] font-bold px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a] inline-flex items-center justify-center">
+                  Start Labs Here
+                </a>
                 <button onClick={() => router.push('/dashboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
                   View Smart Dashboard
                 </button>
                 <button onClick={() => router.push('/leaderboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
                   Check Leaderboard Rank
-                </button>
-                <button onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
-                  Explore Features
                 </button>
               </div>
             </div>
@@ -426,11 +431,14 @@ export default function HomePage() {
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 tracking-tight">
                 Ready to level up?
               </h2>
-              <button onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }} className="bg-gradient-to-r from-[#d8358d] to-[#aa2575] hover:from-[#e8439d] hover:to-[#b92c81] text-white px-8 py-3.5 rounded-full font-bold text-[15px] sm:text-[17px] tracking-wide transition-all shadow-[0_0_20px_rgba(216,53,141,0.5)] hover:shadow-[0_0_30px_rgba(216,53,141,0.7)] hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto">
-                Calculate Points Now
-              </button>
+              <a 
+                href="https://go.cloudskillsboost.google/arcade" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-gradient-to-r from-[#d8358d] to-[#aa2575] hover:from-[#e8439d] hover:to-[#b92c81] text-white px-8 py-3.5 rounded-full font-bold text-[15px] sm:text-[17px] tracking-wide transition-all shadow-[0_0_20px_rgba(216,53,141,0.5)] hover:shadow-[0_0_30px_rgba(216,53,141,0.7)] hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto"
+              >
+                Start Labs Now
+              </a>
             </div>
           </div>
         </div>

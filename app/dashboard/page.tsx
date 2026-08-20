@@ -90,7 +90,13 @@ export default function DashboardPage() {
     },
     {
       id: 'safe', title: 'Spans and Plans', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/special-aug.png', accessCode: '1q-schema-27083', points: 1,  link: 'https://www.skills.google/games/7399', matchStrings: ['Spans and Plans']
+
+    },
+    {
+      id: 're trail', title: 'Arcade Re-Trail: Vaults & Vectors', subtitle: 'Arcade Re-trail', image: 'https://services.google.com/fh/files/misc/arcade_retrail_aug2026.png', accessCode: '1q-vaults-39213', points: 1,  link: 'https://www.skills.google/games/7426', matchStrings: ['Arcade Re-Trail: Vaults & Vectors']
+
     }
+
   ];
 
   const augustLabs = [];
@@ -497,23 +503,22 @@ export default function DashboardPage() {
                   
                   <div className={`mb-6 p-5 sm:p-6 rounded-2xl border shadow-sm relative overflow-hidden flex flex-col justify-between gap-4 transition-all hover:shadow-md ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                     
-                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                       {/* Left Header Info */}
-                      <div className="flex-1">
+                      <div className="flex-1 w-full">
                         <h3 className={`text-[12px] font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                           Facilitator Progress
                         </h3>
+                        
                         <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap gap-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                           {achievedMilestone ? (
                             <>
-                              🎉 Congratulations! <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">Ultimate Milestone</span> Achieved! 
-                              <span className="inline-block animate-cool-emoji text-[20px]">😎</span>
+                              Congratulations! <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{achievedMilestone.title}</span> Achieved! 
                             </>
                           ) : (
                             <>
                               Keep Going! Let's aim for <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{nextMilestone?.title}</span> 
-                              <span className="inline-block animate-sad-emoji text-[20px]">🔥</span>
                             </>
                           )}
                         </h2>
@@ -557,42 +562,69 @@ export default function DashboardPage() {
 
                     <div className={`w-full h-px ${isDark ? 'bg-[#2a2d32]' : 'bg-[#f1f3f4]'}`}></div>
 
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-6 w-full">
                       {/* Games, Badges & Milestone Compact Grid */}
-                      <div className="flex items-center gap-6">
-                        <div className="flex flex-col">
+                      <div className="flex items-center gap-5 shrink-0 w-full lg:w-auto justify-center lg:justify-start">
+                        <div className="flex flex-col items-center lg:items-start">
                           <span className={`text-[22px] font-black leading-none ${isDark ? 'text-white' : 'text-[#202124]'}`}>{facilitatorArcadeGamesCount}</span>
                           <span className={`text-[10px] font-bold uppercase tracking-wider mt-1.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Games</span>
                         </div>
                         <div className={`w-px h-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col items-center lg:items-start">
                           <span className={`text-[22px] font-black leading-none ${isDark ? 'text-white' : 'text-[#202124]'}`}>{facilitatorSkillBadgesCount}</span>
                           <span className={`text-[10px] font-bold uppercase tracking-wider mt-1.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Badges</span>
                         </div>
                         <div className={`w-px h-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col items-center lg:items-start">
                           <span className={`text-[15px] font-bold text-[#1a73e8] leading-tight`}>{achievedMilestone ? achievedMilestone.title : "None Yet"}</span>
                           <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Milestone</span>
                         </div>
                       </div>
 
-                      {/* Action Required Tag */}
-                      {!achievedMilestone && nextMilestone && (
-                        <div className={`text-[11px] font-semibold flex flex-wrap justify-end gap-1.5 items-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                          <span className="text-[#0284c7]">Action Required:</span> 
-                          {facilitatorArcadeGamesCount < nextMilestone.targetArcade && (
-                            <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-1.5 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
-                              {nextMilestone.targetArcade - facilitatorArcadeGamesCount} Games
-                            </span>
-                          )}
-                          {facilitatorSkillBadgesCount < nextMilestone.targetSkills && (
-                            <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-1.5 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
-                              {nextMilestone.targetSkills - facilitatorSkillBadgesCount} Badges
-                            </span>
-                          )}
+                      {/* Middle: Points & Swags */}
+                      <div className="flex items-center justify-center gap-5 flex-1 w-full lg:w-auto border-y py-3 lg:border-y-0 lg:py-0 border-dashed border-[#dadce0] dark:border-[#3c4043]">
+                        <div className="flex flex-col text-center">
+                          <span className="text-[10px] uppercase tracking-wider opacity-70">Total Points</span>
+                          <span className={`text-[17px] font-black ${isDark ? 'text-white' : 'text-black'}`}>{points || 0}</span>
                         </div>
-                      )}
+                        <div className={`w-px h-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
+                        <div className="flex flex-col text-center">
+                          <span className="text-[10px] uppercase tracking-wider opacity-70">Swags Tier</span>
+                          <span className={`text-[17px] font-black ${isDark ? 'text-[#81c995]' : 'text-[#137333]'}`}>{points !== null && points >= 50 ? getCurrentTier() : "Pending"}</span>
+                        </div>
+                      </div>
+
+                      {/* Right Side: Avatar + Name (Google style) */}
+                      <div className="flex items-center justify-center lg:justify-end gap-3 shrink-0 w-full lg:w-auto">
+                        <span className={`text-[14px] font-bold ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</span>
+                        <div className="w-10 h-10 rounded-full p-[2.5px] shadow-sm flex items-center justify-center" style={{ background: 'conic-gradient(#4285F4 0deg 90deg, #DB4437 90deg 180deg, #F4B400 180deg 270deg, #0F9D58 270deg 360deg)' }}>
+                          <div className={`w-full h-full rounded-full border-[2px] overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#1a1b1e] border-[#1a1b1e]' : 'bg-white border-white'}`}>
+                            {userAvatar ? (
+                               <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                               <span className="text-white font-bold text-sm bg-[#1a73e8] w-full h-full flex items-center justify-center">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Action Required Tag */}
+                    {!achievedMilestone && nextMilestone && (
+                      <div className={`text-[11px] font-semibold flex flex-wrap justify-center lg:justify-end gap-1.5 items-center mt-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
+                        <span className="text-[#0284c7]">Action Required:</span> 
+                        {facilitatorArcadeGamesCount < nextMilestone.targetArcade && (
+                          <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-1.5 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
+                            {nextMilestone.targetArcade - facilitatorArcadeGamesCount} Games
+                          </span>
+                        )}
+                        {facilitatorSkillBadgesCount < nextMilestone.targetSkills && (
+                          <span className="text-[#ea4335] bg-[#fce8e6] dark:bg-[#ea4335]/10 px-1.5 py-0.5 rounded border border-[#fce8e6] dark:border-[#ea4335]/20">
+                            {nextMilestone.targetSkills - facilitatorSkillBadgesCount} Badges
+                          </span>
+                        )}
+                      </div>
+                    )}
 
                   </div>
                   
@@ -828,7 +860,7 @@ export default function DashboardPage() {
               
               <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>
-                  {completedLabs.length} / 6 August Labs Completed
+                  {completedLabs.length} / 7 August Labs Completed
                 </span>
               </div>
             </div>

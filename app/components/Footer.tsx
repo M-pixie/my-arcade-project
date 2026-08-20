@@ -10,7 +10,7 @@ import { db } from "@/lib/firebase";
 
 export default function Footer() {
   const router = useRouter();
-  const lastUpdated = "15 AUGUST 2026 14:16 IST";
+  const lastUpdated = "20 AUGUST 2026 13:01 IST";
   
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);
