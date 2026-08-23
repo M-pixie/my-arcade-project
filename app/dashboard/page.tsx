@@ -506,19 +506,21 @@ export default function DashboardPage() {
                     <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                       {/* Left Header Info */}
                       <div className="flex-1 w-full">
-                        <h3 className={`text-[12px] font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                          Facilitator Progress
-                        </h3>
+                        <div className="flex-1 w-full">
+                      <h3
+                        className={`text-base font-medium mb-2 ${
+                        isDark ? "text-[#8ab4f8]" : "text-[#1a73e8]"}`}
+                             >Facilitator progress</h3>
+                          </div>
                         
                         <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap gap-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                           {achievedMilestone ? (
                             <>
-                              Congratulations! <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{achievedMilestone.title}</span> Achieved! 
+                              Congratulations <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{achievedMilestone.title}</span>
                             </>
                           ) : (
                             <>
-                              Keep Going! Let's aim for <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{nextMilestone?.title}</span> 
+                             Keep Moving Forward <span className="px-3 py-0.5 rounded-full text-sm font-normal shadow-sm bg-[#1a73e8] text-white">{nextMilestone?.title}</span> 
                             </>
                           )}
                         </h2>
@@ -805,7 +807,7 @@ export default function DashboardPage() {
                 
                 <div 
                   className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" 
-                  style={{ width: `${(completedLabs.length / 6) * 100}%` }}
+                  style={{ width: `${(completedLabs.length / 7) * 100}%` }}
                 ></div>
 
                 {[...completedLabs, ...pendingLabs].map((lab, index) => {
@@ -870,7 +872,7 @@ export default function DashboardPage() {
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
               <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  August LABS LIVE !
+                  August Labs
                 </h4>
               </div>
               
