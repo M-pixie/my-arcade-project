@@ -195,7 +195,7 @@ export default function HomePage() {
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-            Your <span className="text-[#ec4899]">Google Cloud Arcade</span> <br className="hidden md:block"/> journey, made simpler.
+            Welcome to <span className="text-[#ec4899]">Arcade Nexus,</span> <br className="hidden md:block"/>Arcade journey made simpler.
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300/90 mb-12 max-w-2xl mx-auto font-medium">

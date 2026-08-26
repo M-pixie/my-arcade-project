@@ -18,132 +18,43 @@ type Leader = {
   milestone?: string;
 };
 
-// 124 Active Members Data
-const RAW_ACTIVE_MEMBERS = [
-  { name: "AADITYA VARDHAN", skill: 51, game: 11, milestone: "Milestone 3" },
-  { name: "ADITYA MONDAL", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "ADITYA RAJ", skill: 0, game: 1, milestone: "Not Yet" },
-  { name: "AISHWARYA KANCHU", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "AJIT CHAUDHARY", skill: 38, game: 1, milestone: "Not Yet" },
-  { name: "AJITKUMAR MAURYA", skill: 5, game: 2, milestone: "Not Yet" },
-  { name: "AMAN KUSHWAHA", skill: 6, game: 2, milestone: "Not Yet" },
-  { name: "AMAN SINGH CHAUHAN", skill: 1, game: 2, milestone: "Not Yet" },
-  { name: "AMISH RAJ", skill: 6, game: 0, milestone: "Not Yet" },
-  { name: "AMISHA KUMARI", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "ANIKA CHOUDHURY", skill: 66, game: 11, milestone: "Milestone 3" },
-  { name: "ANUSHKA SINGH", skill: 0, game: 3, milestone: "Not Yet" },
-  { name: "APURVA LAKHE", skill: 10, game: 1, milestone: "Not Yet" },
-  { name: "ARPIT DUBEY", skill: 40, game: 7, milestone: "Milestone 1" },
-  { name: "ASBAB KHAN", skill: 39, game: 5, milestone: "Not Yet" },
-  { name: "ASHUTOSH SUBHASH MINDE", skill: 24, game: 6, milestone: "Milestone 1" },
-  { name: "AYUSHA SANJUKTHA CHEKKA", skill: 22, game: 6, milestone: "Milestone 1" },
-  { name: "BALRAM", skill: 7, game: 0, milestone: "Not Yet" },
-  { name: "BERNARDO RIFFO", skill: 32, game: 7, milestone: "Milestone 1" },
-  { name: "BIJOY BISWAS", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "BRAJESH KUMAR", skill: 1, game: 1, milestone: "Not Yet" },
-  { name: "CHEEPURUPALLI SATWIK", skill: 50, game: 9, milestone: "Milestone 2" },
-  { name: "CHIRAG VAISHNAV", skill: 2, game: 0, milestone: "Not Yet" },
-  { name: "DHARMALA MONALI REDDY", skill: 6, game: 1, milestone: "Not Yet" },
-  { name: "DHARSHINI V", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "DIPIKA VAMAN KANTAPPA POOJARI", skill: 48, game: 5, milestone: "Not Yet" },
-  { name: "DIVYAM AGRAWAL", skill: 26, game: 6, milestone: "Milestone 1" },
-  { name: "DIYA MANDAL", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "E SANTHOSH KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "ESHAMA ARA", skill: 19, game: 6, milestone: "Milestone 1" },
-  { name: "G.PAVANI", skill: 12, game: 6, milestone: "Not Yet" },
-  { name: "GAGANDEEP KAUR", skill: 18, game: 3, milestone: "Not Yet" },
-  { name: "GAUTAM KUMAR", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "GHANSHYAM KUMAR", skill: 50, game: 5, milestone: "Not Yet" },
-  { name: "GULAM MOHAMMAD", skill: 8, game: 2, milestone: "Not Yet" },
-  { name: "GUNJAN KUMARI", skill: 21, game: 1, milestone: "Not Yet" },
-  { name: "HAJARE AYUSH", skill: 37, game: 8, milestone: "Milestone 2" },
-  { name: "HARDIK GUPTA", skill: 0, game: 5, milestone: "Not Yet" },
-  { name: "HARSH PANDA", skill: 15, game: 6, milestone: "Not Yet" },
-  { name: "HARSH SHARMA", skill: 60, game: 11, milestone: "Milestone 3" },
-  { name: "HARSHVARDHAN PANDEY", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "HIMANI TYAGI", skill: 7, game: 2, milestone: "Not Yet" },
-  { name: "HIMANSHU SHARMA", skill: 38, game: 6, milestone: "Milestone 1" },
-  { name: "INDRAJIT MISHRA", skill: 52, game: 11, milestone: "Milestone 3" },
-  { name: "JANANI SURYA KALA", skill: 6, game: 0, milestone: "Not Yet" },
-  { name: "JANHAVI TALODHIKAR", skill: 9, game: 0, milestone: "Not Yet" },
-  { name: "JAYASHREE MANDAL", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "KARNATI PRAGNA SRI", skill: 2, game: 0, milestone: "Not Yet" },
-  { name: "KARTHEEK THANGELLA", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "KAUSHAL DUBEY", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "KAUSHAL LOYA", skill: 17, game: 5, milestone: "Not Yet" },
-  { name: "KAVETI RISHI TEJA", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "KISHOUR J", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "KKESHAV LOYA", skill: 1, game: 1, milestone: "Not Yet" },
-  { name: "KONDA BHASKAR REDDY", skill: 59, game: 4, milestone: "Not Yet" },
-  { name: "KRISHNA", skill: 7, game: 0, milestone: "Not Yet" },
-  { name: "KUNAL KUMAR", skill: 1, game: 4, milestone: "Not Yet" },
-  { name: "LOKESH KUMAR SAH", skill: 0, game: 1, milestone: "Not Yet" },
-  { name: "LOVELY KUMARI", skill: 18, game: 1, milestone: "Not Yet" },
-  { name: "MADHUMITHA S", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "MANDEEP KAUR", skill: 22, game: 6, milestone: "Milestone 1" },
-  { name: "MANISH KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "MANSI THAKUR", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "MASUM ANAND", skill: 2, game: 0, milestone: "Not Yet" },
-  { name: "MD SAMSE ALAM", skill: 1, game: 1, milestone: "Not Yet" },
-  { name: "MD TANVEER HUSSAIN", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "MEGHA DALAL", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "MILAN DEORI", skill: 0, game: 1, milestone: "Not Yet" },
-  { name: "MOHAMMAD TAUFIQUE", skill: 18, game: 7, milestone: "Milestone 1" },
-  { name: "MONISHA MONDAL", skill: 4, game: 3, milestone: "Not Yet" },
-  { name: "MONU KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "MUNNA KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
+// Only 35 Milestone Achievers Data 
+const MILESTONE_ACHIEVERS = [
+  { name: "SPARSH KOTIYA", skill: 80, game: 12, milestone: "Ultimate Milestone" },
+  { name: "HARSH SHARMA", skill: 79, game: 12, milestone: "Ultimate Milestone" },
   { name: "NAMPALLY HARISH", skill: 69, game: 12, milestone: "Ultimate Milestone" },
-  { name: "NEERAJ KUMAR", skill: 52, game: 10, milestone: "Milestone 3" },
-  { name: "NIHARIKA", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "NIHARIKA SANGAM", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "NIKHIL", skill: 2, game: 0, milestone: "Not Yet" },
-  { name: "NIKHIL KUMAR", skill: 1, game: 1, milestone: "Not Yet" },
-  { name: "NIKHIL KUMAR", skill: 15, game: 0, milestone: "Not Yet" },
-  { name: "NITYAY SANJAY JIWTODE", skill: 18, game: 4, milestone: "Not Yet" },
-  { name: "NOURAN MUHAMMAD ABDELHAKIM MUHAMMAD", skill: 13, game: 3, milestone: "Not Yet" },
-  { name: "NUVVULA VARUN KRISHNA", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "PARI GUPTA", skill: 0, game: 5, milestone: "Not Yet" },
-  { name: "PIYUSH KUMAR", skill: 20, game: 4, milestone: "Not Yet" },
-  { name: "PRATIKSHA DESHMUKH", skill: 24, game: 8, milestone: "Milestone 1" },
-  { name: "PRATIKSHA RAMCHANDRA KHADE", skill: 8, game: 2, milestone: "Not Yet" },
-  { name: "PRITHA ROY", skill: 11, game: 6, milestone: "Not Yet" },
-  { name: "PRITHVI KUMAR", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "PRIYANSH NARANG", skill: 4, game: 3, milestone: "Not Yet" },
-  { name: "PRIYANSHU KUMAR", skill: 2, game: 0, milestone: "Not Yet" },
-  { name: "PRIYLATA", skill: 7, game: 0, milestone: "Not Yet" },
-  { name: "PROVINCE KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "PULLAGURA CHARANMAYEE", skill: 1, game: 4, milestone: "Not Yet" },
-  { name: "RADHA", skill: 3, game: 0, milestone: "Not Yet" },
-  { name: "RAHUL YADAV", skill: 3, game: 1, milestone: "Not Yet" },
-  { name: "RAJ GUPTA", skill: 0, game: 2, milestone: "Not Yet" },
-  { name: "RAJKUMAR DAS", skill: 66, game: 12, milestone: "Ultimate Milestone" },
-  { name: "RAMANDEEP RIMPY", skill: 42, game: 6, milestone: "Milestone 1" },
-  { name: "RAUSHAN KUMAR", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "RITU BHARTI", skill: 8, game: 0, milestone: "Not Yet" },
-  { name: "ROHIT KUMAR BHARDWAJ", skill: 2, game: 0, milestone: "Not Yet" },
-  { name: "SAMIRA SAMROSE", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "SAMRATH GUPTA", skill: 16, game: 0, milestone: "Not Yet" },
-  { name: "SANIKA KESHAV DHOKARE", skill: 1, game: 4, milestone: "Not Yet" },
+  { name: "CHEEPURUPALLI SATWIK", skill: 68, game: 13, milestone: "Ultimate Milestone" },
+  { name: "VIKAS", skill: 67, game: 13, milestone: "Ultimate Milestone" },
+  { name: "AADITYA VARDHAN", skill: 67, game: 12, milestone: "Ultimate Milestone" },
+  { name: "RAJKUMAR DAS", skill: 66, game: 13, milestone: "Ultimate Milestone" },
+  { name: "ANIKA CHOUDHURY", skill: 67, game: 12, milestone: "Ultimate Milestone" },
+  { name: "VISHAL KUMAR", skill: 66, game: 10, milestone: "Milestone 3" },
+  { name: "INDRAJIT MISHRA", skill: 62, game: 12, milestone: "Milestone 3" },
+  { name: "SHUBHAM", skill: 60, game: 12, milestone: "Milestone 3" },
+  { name: "HARSH PANDA", skill: 61, game: 10, milestone: "Milestone 3" },
+  { name: "HAJARE AYUSH", skill: 56, game: 12, milestone: "Milestone 3" },
+  { name: "GHANSHYAM KUMAR", skill: 56, game: 10, milestone: "Milestone 3" },
+  { name: "NEERAJ KUMAR", skill: 52, game: 11, milestone: "Milestone 3" },
+  { name: "DIPIKA VAMAN KANTAPPA POOJARI", skill: 65, game: 9, milestone: "Milestone 2" },
+  { name: "AJIT CHAUDHARY", skill: 65, game: 8, milestone: "Milestone 2" },
+  { name: "ASBAB KHAN", skill: 58, game: 8, milestone: "Milestone 2" },
+  { name: "VICKY KUMAR", skill: 47, game: 11, milestone: "Milestone 2" },
+  { name: "HIMANSHU SHARMA", skill: 45, game: 10, milestone: "Milestone 2" },
+  { name: "VAISHNAVI PRASAD RAMANNAVAR", skill: 35, game: 13, milestone: "Milestone 2" },
+  { name: "BERNARDO RIFFO", skill: 38, game: 8, milestone: "Milestone 2" },
   { name: "SANTOSH KUMAR MALLICK", skill: 35, game: 9, milestone: "Milestone 2" },
-  { name: "SAURABH KUMAR", skill: 62, game: 0, milestone: "Not Yet" },
-  { name: "SHABNAM RAZA", skill: 0, game: 1, milestone: "Not Yet" },
-  { name: "SHREYA GUPTA", skill: 0, game: 5, milestone: "Not Yet" },
-  { name: "SHRUTI KUMARI", skill: 9, game: 0, milestone: "Not Yet" },
-  { name: "SHUBHAM", skill: 40, game: 10, milestone: "Milestone 2" },
-  { name: "SOHOM NATH", skill: 11, game: 6, milestone: "Not Yet" },
-  { name: "SONU KUMAR", skill: 1, game: 1, milestone: "Not Yet" },
-  { name: "SPARSH KOTIYA", skill: 77, game: 11, milestone: "Milestone 3" },
-  { name: "SURUCHI KUMARI", skill: 4, game: 4, milestone: "Not Yet" },
-  { name: "TANUSHKA DAS", skill: 5, game: 0, milestone: "Not Yet" },
-  { name: "THANNEERU DINESH", skill: 1, game: 0, milestone: "Not Yet" },
-  { name: "UJJWAL RAJ", skill: 9, game: 0, milestone: "Not Yet" },
-  { name: "VAISHNAVI PRASAD RAMANNAVAR", skill: 32, game: 11, milestone: "Milestone 1" },
-  { name: "VARSHA KUMARI", skill: 6, game: 1, milestone: "Not Yet" },
-  { name: "VEDANT BHAUMIK", skill: 6, game: 0, milestone: "Not Yet" },
-  { name: "VICKY KUMAR", skill: 36, game: 5, milestone: "Not Yet" },
-  { name: "VIKAS", skill: 67, game: 12, milestone: "Ultimate Milestone" },
-  { name: "VISHAL KUMAR", skill: 23, game: 8, milestone: "Milestone 1" },
-  { name: "VISHAL KUMAR", skill: 1, game: 0, milestone: "Not Yet" }
+  { name: "AYUSHA SANJUKTHA CHEKKA", skill: 34, game: 9, milestone: "Milestone 2" },
+  { name: "PRATIKSHA DESHMUKH", skill: 34, game: 8, milestone: "Milestone 2" },
+  { name: "ARPIT DUBEY", skill: 54, game: 7, milestone: "Milestone 1" },
+  { name: "RAMANDEEP RIMPY", skill: 43, game: 6, milestone: "Milestone 1" },
+  { name: "DIVYAM AGRAWAL", skill: 34, game: 7, milestone: "Milestone 1" },
+  { name: "MOHAMMAD TAUFIQUE", skill: 28, game: 12, milestone: "Milestone 1" },
+  { name: "MANDEEP KAUR", skill: 26, game: 8, milestone: "Milestone 1" },
+  { name: "NITYAY SANJAY JIWTODE", skill: 26, game: 7, milestone: "Milestone 1" },
+  { name: "GAGANDEEP KAUR", skill: 24, game: 6, milestone: "Milestone 1" },
+  { name: "ASHUTOSH SUBHASH MINDE", skill: 24, game: 6, milestone: "Milestone 1" },
+  { name: "G.PAVANI", skill: 18, game: 9, milestone: "Milestone 1" },
+  { name: "ESHAMA ARA", skill: 19, game: 6, milestone: "Milestone 1" }
 ];
 
 // Helper to determine sorting value under the hood
@@ -165,20 +76,14 @@ export default function LeaderboardPage() {
   const [currentUserUniqueId, setCurrentUserUniqueId] = useState<string | null>(null);
   const currentUserRef = useRef<HTMLTableRowElement>(null as any);
 
-  // Generate the full 343 members list with internal sorting
+  // Generate the members list with internal sorting (Only Achievers)
   const facilitatorLeaders = useMemo(() => {
-    const active = RAW_ACTIVE_MEMBERS.map(m => ({
+    const active = MILESTONE_ACHIEVERS.map(m => ({
       name: m.name, skill: m.skill, game: m.game, milestone: m.milestone,
       score: getSortScore(m.skill, m.game, m.milestone)
     }));
 
-    // Generating remaining 219 inactive members
-    const inactive = Array.from({ length: 219 }).map((_, i) => ({
-      name: `Inactive Member ${i + 1}`, skill: 0, game: 0, milestone: "Not Yet",
-      score: -1 
-    }));
-
-    const combined = [...active, ...inactive].sort((a, b) => b.score - a.score);
+    const combined = [...active].sort((a, b) => b.score - a.score);
 
     return combined.map((member, index) => ({
       id: `fac_${index}`,
@@ -266,8 +171,8 @@ export default function LeaderboardPage() {
           
           {/* 1. Title */}
           <div className="w-full xl:w-[220px] shrink-0 flex flex-col text-center xl:text-left">
-            <h1 className="text-[20px] font-black tracking-tight text-[#202124] leading-tight">Rankings</h1>
-            <p className="text-[#5f6368] font-medium text-[12px] mt-0.5">Tracking all active performers.</p>
+            <h1 className="text-[20px] font-black tracking-tight text-[#202124] leading-tight">Leaderboard</h1>
+            <p className="text-[#5f6368] font-medium text-[12px] mt-0.5">Tracking all milestone achievers.</p>
           </div>
 
           {/* 2. Search Box */}
@@ -329,7 +234,7 @@ export default function LeaderboardPage() {
                 ) : (
                   <>
                     <th className="px-4 md:px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider whitespace-nowrap">Badges</th>
-                    <th className="px-4 md:px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider text-right whitespace-nowrap">Milestone Achieved</th>
+                    <th className="px-4 md:px-6 py-4 text-[12px] font-bold text-[#5f6368] uppercase tracking-wider text-right whitespace-nowrap">26 August Report</th>
                   </>
                 )}
               </tr>
@@ -348,7 +253,7 @@ export default function LeaderboardPage() {
               ) : (
                 <tr>
                   <td colSpan={activeTab === "facilitator" ? 4 : 3} className="p-16 text-center text-[#5f6368] font-semibold text-[15px]">
-                    {searchTerm ? "No matching player found." : "Loading leaderboard data..."}
+                    {searchTerm ? "No matching player found." : "Loading Arcade players..."}
                   </td>
                 </tr>
               )}
