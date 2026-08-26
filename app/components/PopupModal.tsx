@@ -1,134 +1,212 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function PopupModal() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Aapka Link Variable
-  const WHATSAPP_LINK = "https://chat.whatsapp.com/KqEzksayDXQFiDHMv0JqYY";
+  const BONUS_MILESTONE_LINK =
+    "https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone";
+
+  const VERIFICATION_FORM_LINK =
+    "https://docs.google.com/forms/d/e/1FAIpQLSdq6-5RPthTa4D_o7xfgM0We_pnFWmj80ByiZfEl9ov1yZ3iw/viewform";
+
+  // New version key = old "Don't show again" state automatically reset
+  const POPUP_STORAGE_KEY = "bonus_milestone_popup_seen_v2";
 
   useEffect(() => {
-    // Sirf localStorage check karenge (Permanent memory)
-    const hasSeenModal = localStorage.getItem("arcade_popup_seen");
+    const hasSeenModal = localStorage.getItem(POPUP_STORAGE_KEY);
+
     if (!hasSeenModal) {
       const timer = setTimeout(() => {
         setIsOpen(true);
       }, 1000);
+
       return () => clearTimeout(timer);
     }
   }, []);
 
-  const handleClose = (action: string) => {
+  const handleClose = (action: "close" | "done") => {
     setIsOpen(false);
-    if (action === "joined") {
-      localStorage.setItem("arcade_popup_seen", "true");
-    }
-    if (action === "later") {
-      sessionStorage.setItem("arcade_popup_seen", "true");
+
+    if (action === "done") {
+      localStorage.setItem(POPUP_STORAGE_KEY, "true");
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-[#0a0a0b]/80 backdrop-blur-md animate-in fade-in duration-300">
-      
-      {/* === AMBIENT GLOWS FOR PREMIUM VIBE === */}
-      <div className="absolute top-1/2 left-[30%] -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-[#f41256] opacity-[0.05] blur-[100px] rounded-full pointer-events-none"></div>
-      <div className="absolute top-1/2 right-[30%] translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-[#7c3aed] opacity-[0.05] blur-[100px] rounded-full pointer-events-none"></div>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#070708]/80 px-4 backdrop-blur-[8px] animate-in fade-in duration-300">
 
-      {/* === MAIN MODAL CONTAINER === */}
-      <div className="relative w-full max-w-[340px] bg-[#1a1b1e] rounded-2xl border border-[#2a2d32] shadow-[0_0_50px_rgba(0,0,0,0.6)] p-6 animate-in zoom-in-95 duration-300 font-sans overflow-hidden">
-        
-        {/* Close Button */}
-        <button 
-          onClick={() => handleClose("later")}
-          className="absolute top-4 right-4 text-[#80868b] hover:text-white bg-transparent hover:bg-[#2a2d32] rounded-full p-1.5 transition-colors focus:outline-none"
+      {/* Soft ambient glows */}
+      <div className="pointer-events-none absolute left-[15%] top-[20%] h-[220px] w-[220px] rounded-full bg-fuchsia-500/[0.06] blur-[90px]" />
+      <div className="pointer-events-none absolute bottom-[15%] right-[15%] h-[220px] w-[220px] rounded-full bg-violet-500/[0.06] blur-[90px]" />
+
+      {/* Modal */}
+      <div className="relative w-full max-w-[440px] overflow-hidden rounded-[24px] border border-[#2a2d32] bg-[#1a1b1e] shadow-[0_25px_80px_rgba(0,0,0,0.65)] animate-in zoom-in-95 duration-300">
+
+        {/* Close */}
+        <button
+          onClick={() => handleClose("close")}
+          aria-label="Close"
+          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[#23252a] text-[#80868b] transition-all hover:bg-[#2d3036] hover:text-white"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </button>
 
-        {/* HEADER */}
-        <div className="text-center mt-2 mb-5">
-          <h2 className="text-[1.15rem] font-bold text-white leading-tight tracking-tight">Facilitator Program '26</h2>
-          <p className="text-[#8e949c] text-xs mt-1.5">Registration Last Date: 20th July.</p>
-        </div>
+        <div className="px-6 py-6 sm:px-7 sm:py-7">
 
-        {/* HIGHLIGHTED CARD (Channel + QR) */}
-        <div className="bg-[#15171b] border border-[#2a2d32] rounded-xl p-3.5 mb-5 shadow-inner">
-          <div className="flex items-center justify-between mb-3.5">
-            <div className="flex items-center gap-3">
-              {/* WA Logo */}
-              <div className="w-8 h-8 rounded-lg bg-[#25D366] flex items-center justify-center text-white shrink-0 border border-[#1fae51] shadow-sm">
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </div>
-              <div>
-                <h3 className="text-gray-200 font-semibold text-sm leading-none">WhatsApp Channel</h3>
-                <p className="text-[#25D366] text-[10px] font-medium mt-1">Quick Updates Only</p>
-              </div>
-            </div>
-            
-            {/* QR CODE Box (Kept white for scannability, but premium border) */}
-            <div className="bg-white p-1 rounded-lg border border-[#3c4043] shadow-sm">
-               <img 
-                 src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(WHATSAPP_LINK)}`}
-                 alt="QR Code" 
-                 className="w-9 h-9 object-cover rounded-md" 
-               />
+          {/* Badge */}
+          <div className="mb-5 flex justify-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#34373d] bg-[#202124] px-3.5 py-1.5">
+              <span className="text-sm">🏆</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#aeb4bc]">
+                Bonus Milestone
+              </span>
             </div>
           </div>
 
-          {/* Follow Channel Button */}
-          <a 
-            href={WHATSAPP_LINK} 
-            target="_blank"
-            rel="noreferrer"
-            className="w-full flex items-center justify-center gap-1.5 py-2.5 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-xs font-bold rounded-lg border border-[#25D366]/30 shadow-sm transition-all focus:outline-none tracking-wide"
-          >
-            Arcade Group
-          </a>
-        </div>
+          {/* Heading */}
+          <div className="text-center">
+            <h2 className="text-[1.8rem] font-bold leading-tight tracking-[-0.025em] text-white sm:text-[2rem]">
+              Earn Extra{" "}
+              <span className="text-[#8ab4f8]">10 Points</span>
+            </h2>
 
-        {/* Divider text */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="h-px flex-1 bg-[#2a2d32]"></div>
-          <span className="text-[10px] text-[#5f6368] font-bold uppercase tracking-widest">Join Community</span>
-          <div className="h-px flex-1 bg-[#2a2d32]"></div>
-        </div>
+            <p className="mx-auto mt-3 max-w-[350px] text-[13px] leading-5 text-[#9aa0a6] sm:text-sm">
+              Complete the Bonus Milestone and submit your AI Agent
+              for verification to claim your extra Arcade Points.
+            </p>
+          </div>
 
-        {/* WhatsApp Group ONLY */}
-        <div className="mb-6">
-          <a 
-            href={WHATSAPP_LINK} 
-            target="_blank"
-            rel="noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#128C7E] hover:bg-[#075E54] text-white text-xs font-bold rounded-lg border border-[#0b6b5f] shadow-sm transition-all tracking-wide"
-          >
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-            WhatsApp Group
-          </a>
-        </div>
+          {/* Main Info Card */}
+          <div className="mt-6 rounded-2xl border border-[#2a2d32] bg-[#15171b] p-4.5 sm:p-5">
 
-        {/* BOTTOM ACTIONS */}
-        <div className="flex items-center gap-3">
-          {/* Don't Show Again Button */}
-          <button 
-            onClick={() => handleClose("joined")}
-            className="flex-1 py-2.5 bg-[#15171b] hover:bg-[#202124] text-[#8e949c] hover:text-white text-xs font-bold rounded-xl border border-[#2a2d32] shadow-sm transition-all"
-          >
-            Don't Show Again
-          </button>
-          
-          {/* Remind Later Button */}
-          <button 
-            onClick={() => handleClose("later")}
-            className="flex-1 py-2.5 bg-transparent hover:bg-[#2a2d32] text-white text-xs font-bold rounded-xl border border-[#3c4043] hover:border-[#5f6368] shadow-sm transition-all"
-          >
-            Remind Later
-          </button>
-        </div>
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#202124] text-lg shadow-inner">
+                ✨
+              </div>
 
+              <div>
+                <h3 className="text-[13px] font-bold text-[#e8eaed] sm:text-sm">
+                  What you need to do
+                </h3>
+
+                <p className="mt-1.5 text-[11px] leading-5 text-[#8e949c] sm:text-xs">
+                  Complete the required milestone steps and create
+                  your{" "}
+                  <span className="font-semibold text-[#d9dce1]">
+                    first AI Agent
+                  </span>
+                  . Then submit the official verification form.
+                </p>
+              </div>
+            </div>
+
+            {/* Reward */}
+            <div className="mt-4 flex items-center justify-between rounded-xl border border-[#2a2d32] bg-[#101113] px-3.5 py-3">
+              <span className="text-[11px] font-medium text-[#80868b]">
+                Bonus Reward
+              </span>
+
+              <span className="text-base font-bold text-white">
+                +10 Points
+              </span>
+            </div>
+          </div>
+
+          {/* Deadline */}
+          <div className="mt-3 flex items-center gap-3 rounded-xl border border-[#4b2a2a] bg-[#241719] px-3.5 py-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#302023] text-sm">
+              ⏰
+            </div>
+
+            <div>
+              <p className="text-[9px] font-bold uppercase tracking-[0.13em] text-[#f28b82]">
+                Submission Deadline
+              </p>
+
+              <p className="mt-0.5 text-[11px] font-semibold text-[#e8eaed] sm:text-xs">
+                14 September 2026 · 11:59 PM IST
+              </p>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="mt-6 grid grid-cols-2 gap-3">
+
+            <a
+              href={BONUS_MILESTONE_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-[#3c4043] bg-[#202124] px-3 py-3 text-[11px] font-bold text-[#e8eaed] transition-all hover:bg-[#2a2d32] hover:border-[#4a4e54] sm:text-xs"
+            >
+              View Milestone
+
+              <svg
+                className="h-3.5 w-3.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7 17L17 7M7 7h10v10"
+                />
+              </svg>
+            </a>
+
+            <a
+              href={VERIFICATION_FORM_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 rounded-xl bg-[#1a73e8] px-3 py-3 text-[11px] font-bold text-white shadow-[0_5px_15px_rgba(26,115,232,0.2)] transition-all hover:bg-[#1967d2] sm:text-xs"
+            >
+              Open Verification Form
+
+              <svg
+                className="h-3.5 w-3.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7 17L17 7M7 7h10v10"
+                />
+              </svg>
+            </a>
+
+          </div>
+
+          {/* Don't show again */}
+          <div className="mt-5 text-center">
+            <button
+              onClick={() => handleClose("done")}
+              className="text-[12px] font-semibold text-[#8e949c] transition-colors hover:text-white sm:text-[13px]"
+            >
+              Don't show this again
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
   );

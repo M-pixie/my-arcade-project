@@ -195,11 +195,11 @@ export default function HomePage() {
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-              Hi, I'm <span className="text-[#ec4899]">Nexus</span>. Let's create your <br className="hidden md:block"/> Arcade survival guide.
+            Your <span className="text-[#ec4899]">Google Cloud Arcade</span> <br className="hidden md:block"/> journey, made simpler.
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300/90 mb-12 max-w-2xl mx-auto font-medium">
-              Whether you're still planning or already grinding, we curate what matters for your Google Cloud Arcade journey.
+              Calculate your points, track progress, discover useful resources, and stay ahead of every Arcade challenge.
             </p>
 
             {/* EXACT MATCH: Dark Brownish/Purple Input Box */}
@@ -249,10 +249,10 @@ export default function HomePage() {
                   Start Labs Here
                 </a>
                 <button onClick={() => router.push('/dashboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
-                  View Smart Dashboard
+                  Smart Dashboard
                 </button>
                 <button onClick={() => router.push('/leaderboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
-                  Check Leaderboard Rank
+                  Leaderboard Rank
                 </button>
               </div>
             </div>

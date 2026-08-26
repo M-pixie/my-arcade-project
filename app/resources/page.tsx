@@ -127,9 +127,13 @@ const initialBadgesData = [
   { id: "93", title: "Develop and Secure APIs with Apigee X", duration: "45", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/714" },
   { id: "94", title: "Orchestrate Multi-agent Workflows with Gemini Enterprise", duration: "60", labs: "Skill Badge", level: "Introductory", link: "https://www.skills.google/course_templates/1682" },
 
-  { id: "95", title: "[DEPRECATED] Designing Network Security in Google Cloud", duration: "165", labs: "Skill Badge", level: "Advance", link: "https://www.skills.google/course_templates/1421" }, // not confirem ..
+  { id: "95", title: "[DEPRECATED] Designing Network Security in Google Cloud", duration: "165", labs: "Skill Badge", level: "Advance", link: "https://www.skills.google/course_templates/1421" },
+   
+  { id: "96", title: "Design and Implement Network Security in Google Cloud", duration: "90", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1736" },
 
-  { id: "96", title: "DEPRECATED Build Google Cloud Infrastructure for Azure Professionals", duration: "165", labs: "Skill Badge", level: "Advance", link: "https://www.skills.google/course_templates/xxx" } // not confirm yet..
+   { id: "97", title: "Use Agent Skills with Multi-Agent Systems", duration: "105", labs: "Skill Badge", level: "Intermediate", link: "https://www.skills.google/course_templates/1842" },
+
+{ id: "98", title: "DEPRECATED Build Google Cloud Infrastructure for Azure Professionals", duration: "165", labs: "Skill Badge", level: "Advance", link: "https://www.skills.google/course_templates/xxx" } // not confirm yet..
   
 ];
 

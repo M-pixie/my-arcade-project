@@ -510,7 +510,7 @@ export default function DashboardPage() {
                       <h3
                         className={`text-base font-medium mb-2 ${
                         isDark ? "text-[#8ab4f8]" : "text-[#1a73e8]"}`}
-                             >Facilitator progress</h3>
+                             >Facilitator Report 2026</h3>
                           </div>
                         
                         <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap gap-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>

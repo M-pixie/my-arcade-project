@@ -10,6 +10,8 @@ export const dynamic = 'force-dynamic';
 
 const skillBadgesMasterList = [
   "Manage Kubernetes in Google Cloud",
+  "Use Agent Skills with Multi-Agent Systems",
+  "Design and Implement Network Security in Google Cloud",
   "[Deprecated] Classify Images with TensorFlow on Google Cloud", 
   "Derive Insights from BigQuery Data",
   "Share Data Using Google Data Cloud", 
