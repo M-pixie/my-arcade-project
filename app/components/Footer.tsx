@@ -7,10 +7,15 @@ import { subscribeLeaderboard } from "@/lib/leaderboard";
 // 🔥 Firebase imports for actual Live Online tracking 🔥
 import { doc, setDoc, deleteDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import {
+  Star, Calculator, LayoutGrid, BarChart3, BadgeCheck, UserPlus,
+  CircleDollarSign, BookOpen, MessageCircle, Linkedin, Download,
+  Eye, UserRoundPlus, ChartNoAxesCombined, Radio, ShieldCheck, Clock3, Heart,
+} from "lucide-react";
 
 export default function Footer() {
   const router = useRouter();
-  const lastUpdated = "27 AUGUST 2026 01:22 IST";
+  const lastUpdated = "29 AUGUST 2026 13:50 IST";
   
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);
@@ -89,191 +94,218 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="w-full mt-10">
-      
-      {/* ================= DARK THEME FOOTER ================= */}
-      <div className="bg-gradient-to-b from-[#1c0c28] to-[#2a1340] pt-16 pb-10 font-sans w-full relative z-10 border-t border-white/5 shadow-inner">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          
-          {/* ================= MAIN CONTENT GRID ================= */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 mb-16">
-            
-            {/* 1. BRAND & DESCRIPTION & CONNECT (Col Span 4) */}
-            <div className="lg:col-span-4 flex flex-col pr-0 lg:pr-6">
-              <div className="flex items-center gap-3 mb-6">
-                <svg className="w-8 h-8 text-[#ec4899]" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                </svg>
-                <span className="text-[26px] font-black tracking-tight text-white">Arcade Nexus</span>
+    <footer className="w-full">
+      {/* ================= PREMIUM COSMIC FOOTER UI ================= */}
+      <div className="relative w-full overflow-hidden border-t border-white/10 bg-[#090615] font-sans text-white">
+
+        {/* Ambient cosmic background */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-32 -top-32 h-72 w-72 rounded-full bg-fuchsia-600/10 blur-3xl" />
+          <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-violet-600/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl" />
+          <div className="absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_20%_30%,white_0.7px,transparent_0.8px),radial-gradient(circle_at_70%_20%,white_0.6px,transparent_0.7px),radial-gradient(circle_at_85%_75%,white_0.7px,transparent_0.8px),radial-gradient(circle_at_35%_85%,white_0.5px,transparent_0.6px)] [background-size:170px_170px,230px_230px,190px_190px,260px_260px]" />
+        </div>
+
+        <div className="relative mx-auto max-w-[1480px] px-5 py-12 sm:px-8 lg:px-10 lg:py-14">
+
+          {/* ================= MAIN HORIZONTAL PANEL ================= */}
+          <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] shadow-[0_25px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+
+            {/* subtle glow lines */}
+            <div className="pointer-events-none absolute -left-20 top-10 h-48 w-48 rounded-full border border-fuchsia-400/10 blur-[1px]" />
+            <div className="pointer-events-none absolute -left-12 top-16 h-36 w-36 rounded-full border border-violet-400/10" />
+            <div className="pointer-events-none absolute right-10 top-0 h-px w-64 bg-gradient-to-r from-transparent via-fuchsia-400/40 to-transparent" />
+
+            <div className="grid grid-cols-1 gap-0 xl:grid-cols-[1.05fr_0.9fr_1.45fr]">
+
+              {/* ================= BRAND ================= */}
+              <div className="relative p-7 sm:p-9 lg:p-10">
+                <div className="flex items-center gap-4">
+                  <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-fuchsia-400/30 bg-fuchsia-500/[0.06] shadow-[0_0_35px_rgba(236,72,153,0.18)]">
+                    <div className="absolute inset-1 rounded-full border border-violet-400/20" />
+                    <div className="absolute -inset-2 rounded-full border border-white/[0.04]" />
+                    <svg className="relative h-7 w-7 text-fuchsia-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                  </div>
+
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-fuchsia-300/80">Community Platform</p>
+                    <h2 className="mt-1 text-[25px] font-extrabold tracking-tight text-white sm:text-[28px]">
+                      Arcade Nexus
+                    </h2>
+                  </div>
+                </div>
+
+                <p className="mt-7 max-w-[430px] text-[14px] font-medium leading-7 text-slate-300/90 sm:text-[15px]">
+                  An independent, community-driven platform designed by <span className="font-bold text-white">Manish</span> and <span className="font-bold text-white">Anjali</span>. Built to help Google Cloud Arcade learners effortlessly track progress, analyze achievements, and stay connected.
+                </p>
+
+                {/* Connect */}
+                <div className="mt-7">
+                  <h3 className="mb-3 text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Connect</h3>
+                  <div className="flex gap-2.5">
+                    <a href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" target="_blank" rel="noopener noreferrer" className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/50 hover:bg-emerald-500/10 hover:text-emerald-300" title="WhatsApp Community">
+                      <svg className="h-[18px] w-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/arcade-nexus/" target="_blank" rel="noopener noreferrer" className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-sky-400/50 hover:bg-sky-500/10 hover:text-sky-300" title="LinkedIn">
+                      <svg className="h-[18px] w-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="https://expo.dev/artifacts/eas/xmR9GpsFdcWwb9TAT9qCC6.apk" target="_blank" rel="noopener noreferrer" className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-fuchsia-400/50 hover:bg-fuchsia-500/10 hover:text-fuchsia-300" title="Download Android App">
+                      <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    </a>
+                  </div>
+                </div>
               </div>
-              
-              <p className="text-[15px] text-gray-300 leading-relaxed mb-8 font-medium">
-                An independent, community-driven platform designed by <span className="font-bold text-white">Manish</span> and <span className="font-bold text-white">Anjali</span>. Built to help Google Cloud Arcade learners effortlessly track progress, analyze achievements, and stay connected.
+
+              {/* ================= NAVIGATION ================= */}
+              <div className="grid grid-cols-2 gap-8 border-y border-white/[0.07] p-7 sm:p-9 lg:border-y-0 lg:border-x lg:p-10">
+                <div>
+                  <h3 className="mb-5 text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Platform</h3>
+                  <ul className="space-y-4">
+                    <li>
+                      <button onClick={() => router.push("/calculator")} className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        Calculator
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => router.push("/dashboard")} className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v6a2 2 0 01-2 2h-2a2 2 0 01-2-2v-6z" /></svg>
+                        Dashboard
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => router.push("/leaderboard")} className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                        Leaderboard
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => router.push("/resources")} className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        Skill Badges
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="mb-5 text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Resources</h3>
+                  <ul className="space-y-4">
+                    <li>
+                      <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                        Enrollment
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Points System
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 text-[14px] font-medium text-slate-300 transition-all hover:translate-x-1 hover:text-white">
+                        <svg className="h-[18px] w-[18px] text-slate-500 transition-colors group-hover:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        Syllabus
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* ================= METRICS ================= */}
+              <div className="p-6 sm:p-8 lg:p-9">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+
+                  <div className="group relative overflow-hidden rounded-2xl border border-fuchsia-400/25 bg-gradient-to-br from-fuchsia-500/[0.10] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-fuchsia-400/45 hover:shadow-[0_12px_35px_rgba(236,72,153,0.12)] sm:p-5">
+                    <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-fuchsia-500/10 blur-2xl" />
+                    <div className="relative">
+                      <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border border-fuchsia-400/20 bg-fuchsia-400/[0.08] text-fuchsia-300 shadow-[0_0_18px_rgba(236,72,153,0.10)]">
+                        <Eye className="h-[19px] w-[19px]" strokeWidth={1.8} />
+                      </div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">Total Visitors</p>
+                      <div className="mt-1 text-[25px] font-black tracking-tight text-white sm:text-[29px]"><VisitCounter /></div>
+                    </div>
+                  </div>
+
+                  <div className="group relative overflow-hidden rounded-2xl border border-sky-400/25 bg-gradient-to-br from-sky-500/[0.08] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-sky-400/45 hover:shadow-[0_12px_35px_rgba(56,189,248,0.10)] sm:p-5">
+                    <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-sky-500/10 blur-2xl" />
+                    <div className="relative">
+                      <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border border-sky-400/20 bg-sky-400/[0.08] text-sky-300 shadow-[0_0_18px_rgba(56,189,248,0.10)]">
+                        <UserRoundPlus className="h-[19px] w-[19px]" strokeWidth={1.8} />
+                      </div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">Users Enrolled</p>
+                      <div className="mt-1 text-[25px] font-black tracking-tight text-white sm:text-[29px]">{leaderboardCount.toLocaleString()}</div>
+                    </div>
+                  </div>
+
+                  <div className="group relative overflow-hidden rounded-2xl border border-violet-400/25 bg-gradient-to-br from-violet-500/[0.08] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/45 hover:shadow-[0_12px_35px_rgba(139,92,246,0.10)] sm:p-5">
+                    <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-violet-500/10 blur-2xl" />
+                    <div className="relative">
+                      <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border border-violet-400/20 bg-violet-400/[0.08] text-violet-300 shadow-[0_0_18px_rgba(139,92,246,0.10)]">
+                        <ChartNoAxesCombined className="h-[19px] w-[19px]" strokeWidth={1.8} />
+                      </div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">Profiles Analyzed</p>
+                      <div className="mt-1 text-[25px] font-black tracking-tight text-white sm:text-[29px]">{profilesAnalyzed.toLocaleString()}</div>
+                    </div>
+                  </div>
+
+                  <div className="group relative overflow-hidden rounded-2xl border border-pink-500/35 bg-gradient-to-br from-pink-500/[0.12] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-pink-400/60 hover:shadow-[0_12px_35px_rgba(236,72,153,0.15)] sm:p-5">
+                    <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-pink-500/15 blur-2xl" />
+                    <div className="relative">
+                      <div className="mb-4 flex h-8 w-8 items-center justify-center rounded-lg border border-pink-400/25 bg-pink-400/10 text-pink-300">
+                        <Radio className="h-[18px] w-[18px] animate-pulse" strokeWidth={1.8} />
+                      </div>
+                      <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-pink-300">
+                        Live Online
+                      </p>
+                      <div className="mt-1 text-[25px] font-black tracking-tight text-white sm:text-[29px]">{onlineUsers}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ================= DISCLAIMER ================= */}
+            <div className="border-t border-white/[0.07] px-7 py-5 sm:px-9 lg:px-10">
+              <p className="text-[11px] font-medium leading-6 text-slate-500 sm:text-[12px]">
+                <span className="font-bold text-slate-300">Disclaimer: </span> Arcade Nexus is an independent, community-driven platform for Google Cloud Arcade learners and is not affiliated with or endorsed by Google. All trademarks belong to their respective owners.
               </p>
-
-              {/* Connect Section */}
-              <div>
-                <h3 className="text-[13px] font-black text-gray-200 uppercase tracking-widest mb-5">Connect</h3>
-                <div className="flex gap-4">
-                  <a href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#25D366] hover:border-[#25D366] transition-all shadow-md" title="WhatsApp Community">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.888.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.978z"/></svg>
-                  </a>
-                  <a href="https://www.linkedin.com/company/arcade-nexus/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#0A66C2] hover:border-[#0A66C2] transition-all shadow-md" title="LinkedIn">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                  </a>
-                  <a href="https://expo.dev/artifacts/eas/xmR9GpsFdcWwb9TAT9qCC6.apk" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-[#ec4899] hover:border-[#ec4899] transition-all shadow-md" title="Download Android App">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                  </a>
-                </div>
-              </div>
             </div>
 
-            {/* 2. NAVIGATION LINKS (Col Span 4) */}
-            <div className="lg:col-span-4 flex justify-between sm:justify-start sm:gap-20 lg:gap-16 pl-0 lg:pl-6 mt-8 lg:mt-0">
-              
-              {/* Platform Links */}
-              <div>
-                <h3 className="text-[13px] font-black text-gray-200 uppercase tracking-widest mb-6">Platform</h3>
-                <ul className="space-y-5">
-                  <li>
-                    <button onClick={() => router.push("/calculator")} className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors text-left flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                      Calculator
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => router.push("/dashboard")} className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors text-left flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v6a2 2 0 01-2 2h-2a2 2 0 01-2-2v-6z" /></svg>
-                      Dashboard
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => router.push("/leaderboard")} className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors text-left flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                      Leaderboard
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => router.push("/resources")} className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors text-left flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                      Skill Badges
-                    </button>
-                  </li>
-                </ul>
+            {/* ================= BOTTOM BAR ================= */}
+            <div className="flex flex-col gap-5 border-t border-white/[0.07] px-7 py-5 sm:px-9 md:flex-row md:items-center md:justify-between lg:px-10">
+              <div className="text-[11px] font-medium text-slate-500 sm:text-[12px]">
+                © {new Date().getFullYear()} Arcade Nexus. All rights reserved.
               </div>
 
-              {/* Resources Links */}
-              <div>
-                <h3 className="text-[13px] font-black text-gray-200 uppercase tracking-widest mb-6">Resources</h3>
-                <ul className="space-y-5">
-                  <li>
-                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors inline-flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                      Enrollment
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors inline-flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      Points System
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="text-[16px] font-medium text-gray-300 hover:text-pink-400 transition-colors inline-flex items-center gap-3 group">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                      Syllabus
-                    </a>
-                  </li>
-                </ul>
+              <div className="order-first rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[10px] font-medium text-slate-500 md:order-none sm:text-[11px]">
+                Last updated: <span className="font-bold text-slate-300">{lastUpdated}</span>
               </div>
-              
-            </div>
 
-            {/* 3. METRICS CARDS (Col Span 4) */}
-            <div className="lg:col-span-4 mt-8 lg:mt-0">
-              <div className="grid grid-cols-2 gap-4 sm:gap-5">
-                
-                {/* Card 1 */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 transition-all hover:bg-white/10 hover:border-white/20 backdrop-blur-sm shadow-lg">
-                  <p className="text-[11px] sm:text-[12px] font-bold text-gray-300 uppercase tracking-widest mb-2.5">Total Visitors</p>
-                  <div className="text-[26px] sm:text-[30px] font-black text-white leading-none">
-                    <VisitCounter />
-                  </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 sm:text-[10px]">Developed by</span>
+                <div className="flex -space-x-2">
+                  <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" title="Manish" className="relative transition-transform duration-300 hover:z-10 hover:scale-110">
+                    <img
+                      src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg"
+                      alt="Manish"
+                      className="h-9 w-9 rounded-full object-cover object-top border-2 border-[#10091b] ring-1 ring-white/15 shadow-lg sm:h-10 sm:w-10"
+                    />
+                  </a>
+                  <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" title="Anjali Patel" className="relative transition-transform duration-300 hover:z-10 hover:scale-110">
+                    <img
+                      src="https://i.postimg.cc/Nf2ykWb1/1000111442.png"
+                      alt="Anjali Patel"
+                      className="h-9 w-9 rounded-full object-cover object-top border-2 border-[#10091b] ring-1 ring-white/15 shadow-lg sm:h-10 sm:w-10"
+                    />
+                  </a>
                 </div>
-                
-                {/* Card 2 */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 transition-all hover:bg-white/10 hover:border-white/20 backdrop-blur-sm shadow-lg">
-                  <p className="text-[11px] sm:text-[12px] font-bold text-gray-300 uppercase tracking-widest mb-2.5">Users Enrolled</p>
-                  <div className="text-[26px] sm:text-[30px] font-black text-white leading-none">
-                    {leaderboardCount.toLocaleString()}
-                  </div>
-                </div>
-
-                {/* Card 3 */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 transition-all hover:bg-white/10 hover:border-white/20 backdrop-blur-sm shadow-lg">
-                  <p className="text-[11px] sm:text-[12px] font-bold text-gray-300 uppercase tracking-widest mb-2.5">Profiles Analyzed</p>
-                  <div className="text-[26px] sm:text-[30px] font-black text-white leading-none">
-                    {profilesAnalyzed.toLocaleString()}
-                  </div>
-                </div>
-
-                {/* Card 4 - 🔥 Real-time Live Online 🔥 */}
-                <div className="bg-[#1c0f1c] border border-pink-500/30 rounded-2xl p-5 sm:p-6 transition-all hover:border-pink-500/50 backdrop-blur-sm shadow-[inset_0_0_20px_rgba(236,72,153,0.05)]">
-                  <p className="text-[11px] sm:text-[12px] font-bold text-pink-400 uppercase tracking-widest mb-2.5 flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse shadow-[0_0_8px_rgba(236,72,153,0.8)]"></span>
-                    Online
-                  </p>
-                  <div className="text-[26px] sm:text-[30px] font-black text-white leading-none">
-                    {onlineUsers}
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
-
-          {/* ================= BOTTOM SECTIONS ================= */}
-          
-          {/* DISCLAIMER */}
-          <div className="py-8 border-t border-white/10 mt-8">
-            <p className="text-[13px] text-gray-400 text-center sm:text-left font-medium leading-relaxed max-w-4xl">
-              <span className="font-bold text-gray-300">Disclaimer:</span> This website is an independent, community-built tool and is not an official website of Google. All trademarks belong to their respective owners.
-            </p>
-          </div>
-
-          {/* COPYRIGHT & CREDITS */}
-          <div className="border-t border-white/10 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            <div className="text-[13px] font-medium text-gray-400">
-              © {new Date().getFullYear()} Arcade Nexus. All rights reserved.
-            </div>
-            
-            <div className="text-[13px] text-gray-400 font-medium bg-white/5 px-5 py-2 rounded-full border border-white/5">
-              Last updated: <span className="font-bold text-gray-200">{lastUpdated}</span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <span className="text-[13px] text-gray-400 font-bold uppercase tracking-widest">Developed by</span>
-              <div className="flex -space-x-2.5">
-                <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" title="Manish" className="hover:z-10 transition-transform hover:scale-110">
-                  <img 
-                    src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" 
-                    alt="Manish" 
-                    className="w-10 h-10 rounded-full object-cover object-top border-2 border-[#1c0c28] ring-1 ring-white/20 shadow-lg" 
-                  />
-                </a>
-                <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" title="Anjali Patel" className="hover:z-10 transition-transform hover:scale-110">
-                  <img 
-                    src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" 
-                    alt="Anjali Patel" 
-                    className="w-10 h-10 rounded-full object-cover object-top border-2 border-[#1c0c28] ring-1 ring-white/20 shadow-lg" 
-                  />
-                </a>
-              </div>
-            </div>
-
-          </div>
-
         </div>
       </div>
     </footer>
