@@ -233,7 +233,7 @@ export default function HomePage() {
               Calculate your points, track progress, discover useful resources, and stay ahead of every Arcade challenge.
             </p>
 
-            {/* 🔥 ANIMATED INPUT WRAPPER - NOW WHITE */}
+            {/* 🔥 ANIMATED INPUT WRAPPER - WHITE */}
             <div className="max-w-[700px] mx-auto w-full relative">
               <div className={`relative flex items-center justify-center overflow-hidden rounded-2xl transition-all ${isCalculating ? 'p-[2px]' : 'p-0'}`}>
                 
@@ -263,7 +263,7 @@ export default function HomePage() {
                     disabled={isCalculating}
                     className="w-10 h-10 sm:w-[42px] sm:h-[42px] rounded-xl bg-blue-600 flex items-center justify-center text-white shrink-0 hover:bg-blue-700 transition-all shadow-sm disabled:opacity-70"
                   >
-                    {/* 🔥 LIVE SECONDS TIMER INSTEAD OF SPINNER */}
+                    {/* 🔥 LIVE SECONDS TIMER */}
                     {isCalculating ? (
                       <span className="font-bold text-sm sm:text-[15px] animate-pulse">{elapsedSecs}s</span>
                     ) : (
@@ -282,7 +282,7 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* 🔥 WHITE RESULT CARD WITH BLUE DASHBOARD BUTTON */}
+            {/* 🔥 WHITE RESULT CARD WITH CLICKABLE AVATAR */}
             {showResult && calcResult && (
               <div className="mt-6 mx-auto max-w-[700px] w-full bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-2xl relative animate-fade-in-up text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 
@@ -297,7 +297,12 @@ export default function HomePage() {
                 </button>
                 
                 <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <div className="w-14 h-14 shrink-0 rounded-full border-2 border-blue-500 p-0.5 overflow-hidden bg-gray-100">
+                  {/* Clickable Avatar pointing to dashboard */}
+                  <div 
+                    onClick={() => router.push('/dashboard')}
+                    title="Go to Dashboard"
+                    className="w-14 h-14 shrink-0 rounded-full border-2 border-blue-500 p-0.5 overflow-hidden bg-gray-100 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all"
+                  >
                     {calcResult.userAvatar ? (
                       <img src={calcResult.userAvatar} alt="" className="w-full h-full object-cover rounded-full" />
                     ) : (
@@ -371,9 +376,9 @@ export default function HomePage() {
                   { title: "Skill Badges Guide", desc: "Discover available skill badges, point weightages, and the most efficient paths.", link: "/resources", icon: <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg> },
                   { title: "Swags & Community", desc: "Share unboxing experiences, check swag delivery updates, and engage.", link: "/post", icon: <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg> }
                 ].map((feature, idx) => (
-                  <Link href={feature.link} key={idx} className="group flex flex-col relative bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-lg transition-all hover:border-purple-200">
-                    <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 mb-2 group-hover:text-purple-700 transition-colors">
-                      <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 transition-all">
+                  <Link href={feature.link} key={idx} className="group flex flex-col relative bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-lg transition-all hover:border-blue-200">
+                    <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
+                      <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 transition-all">
                         {feature.icon}
                       </div>
                       {feature.title}
@@ -381,7 +386,7 @@ export default function HomePage() {
                     <dd className="flex flex-auto flex-col text-base leading-7 text-gray-600">
                       <p className="flex-auto">{feature.desc}</p>
                       <p className="mt-6">
-                        <span className="text-sm font-semibold leading-6 text-purple-600 group-hover:text-purple-500 transition-colors">
+                        <span className="text-sm font-semibold leading-6 text-blue-600 group-hover:text-blue-500 transition-colors">
                           Learn more <span aria-hidden="true" className="group-hover:translate-x-1 inline-block transition-transform">→</span>
                         </span>
                       </p>
@@ -406,35 +411,35 @@ export default function HomePage() {
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
                 <div className="border-b border-gray-200 bg-gray-50 flex">
-                  <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
-                  <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'tools' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Platform Tools</button>
-                  <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'points' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Points System</button>
+                  <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
+                  <button onClick={() => setActiveGuideTab('tools')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'tools' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Platform Tools</button>
+                  <button onClick={() => setActiveGuideTab('points')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'points' ? 'text-blue-600 border-b-2 border-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Points System</button>
                 </div>
                 <div className="flex-1 p-4 sm:p-5">
                   <div className="space-y-3 sm:space-y-4">
                     {activeGuideTab === 'start' && startSteps.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 hover:shadow-sm transition-all">
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
                         <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{item.badge}</span></h3>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
                           <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </a>
                     ))}
                     {activeGuideTab === 'tools' && arcadeTools.map((item, index) => (
-                      <Link href={item.link} key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 hover:shadow-sm transition-all">
+                      <Link href={item.link} key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
                         <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{item.badge}</span></h3>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
                           <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </Link>
                     ))}
                     {activeGuideTab === 'points' && pointsSystem.map((item, index) => (
-                      <div key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 hover:shadow-sm transition-all">
+                      <div key={index} className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm transition-all">
                         <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl sm:text-2xl">{item.icon}</div>
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">{item.badge}</span></h3>
+                          <h3 className="text-sm font-semibold text-gray-900">{item.title} <span className="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{item.badge}</span></h3>
                           <p className="mt-1 text-xs sm:text-sm text-gray-600">{item.desc}</p>
                         </div>
                       </div>
@@ -450,14 +455,14 @@ export default function HomePage() {
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
                       <div className="mt-2">
-                        <input type="text" id="name" required value={formName} onChange={(e) => setFormName(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6" placeholder="Jane Doe" />
+                        <input type="text" id="name" required value={formName} onChange={(e) => setFormName(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Jane Doe" />
                       </div>
                     </div>
                     
                     <div>
                       <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">Issue Category</label>
                       <div className="mt-2">
-                        <select id="category" value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 bg-white">
+                        <select id="category" value={formCategory} onChange={(e) => { setFormCategory(e.target.value); setFormSubCategory(""); }} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
                           <option value="Swags Delivery / Issue">Swags Delivery / Issue</option>
                           <option value="Labs Completion Issue">Labs Completion Issue</option>
                           <option value="Arcade Points Calculation">Arcade Points Calculation</option>
@@ -470,7 +475,7 @@ export default function HomePage() {
                       <div>
                         <label htmlFor="subcat" className="block text-sm font-medium leading-6 text-gray-900">Specific Details</label>
                         <div className="mt-2">
-                          <select id="subcat" required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 bg-white">
+                          <select id="subcat" required value={formSubCategory} onChange={(e) => setFormSubCategory(e.target.value)} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 bg-white">
                             <option value="" disabled hidden>Select an option</option>
                             {formCategory === "Swags Delivery / Issue" && (
                               <><option value="Printos">Printos Services</option><option value="Whitesquare">Whitesquare International</option></>
@@ -489,13 +494,13 @@ export default function HomePage() {
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium leading-6 text-gray-900">Message</label>
                       <div className="mt-2">
-                        <textarea id="message" required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6 resize-none" placeholder="Please describe your issue in detail..."></textarea>
+                        <textarea id="message" required value={formMessage} onChange={(e) => setFormMessage(e.target.value)} rows={4} className="block w-full rounded-md border-0 py-2.5 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 resize-none" placeholder="Please describe your issue in detail..."></textarea>
                       </div>
                     </div>
                   </form>
                 </div>
                 
-                <button onClick={handleFormSubmit} type="submit" className="mt-6 block w-full rounded-md bg-purple-600 px-3.5 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 transition-colors">
+                <button onClick={handleFormSubmit} type="submit" className="mt-6 block w-full rounded-md bg-blue-600 px-3.5 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors">
                   Submit Request
                 </button>
               </div>
@@ -511,15 +516,18 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ================= PREMIUM CTA BANNER ================= */}
+        {/* ================= BLUE CTA BANNER ================= */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative my-16 sm:my-24 z-20 w-full">
           <div className="w-full rounded-[2rem] overflow-hidden relative shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#2a1340] via-[#5c1958] to-[#2a1340] opacity-90"></div>
+            {/* Base dark blue gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0f172a] opacity-95"></div>
             
-            <div className="absolute inset-0 opacity-30">
-               <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#ec4899] via-transparent to-transparent opacity-60 mix-blend-screen"></div>
-               <svg className="absolute bottom-0 w-full h-auto text-[#1c0c28]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.4" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,224,1152,197.3C1248,171,1344,160,1392,154.7L1440,149L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
-               <svg className="absolute bottom-0 w-full h-auto text-[#3e1346]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.3" d="M0,160L60,149.3C120,139,240,117,360,138.7C480,160,600,224,720,234.7C840,245,960,203,1080,160C1200,117,1320,75,1380,53.3L1440,32L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+            <div className="absolute inset-0 opacity-40">
+               {/* Lighter blue overlay in top right */}
+               <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#3b82f6] via-transparent to-transparent opacity-70 mix-blend-screen"></div>
+               {/* Background wave SVGs recolored to deep blues */}
+               <svg className="absolute bottom-0 w-full h-auto text-[#172554]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.4" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,224,1152,197.3C1248,171,1344,160,1392,154.7L1440,149L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+               <svg className="absolute bottom-0 w-full h-auto text-[#1e3a8a]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.3" d="M0,160L60,149.3C120,139,240,117,360,138.7C480,160,600,224,720,234.7C840,245,960,203,1080,160C1200,117,1320,75,1380,53.3L1440,32L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
             </div>
 
             <div className="relative z-10 py-12 sm:py-16 px-6 flex flex-col items-center justify-center text-center">
@@ -530,7 +538,7 @@ export default function HomePage() {
                 href="https://go.cloudskillsboost.google/arcade" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="bg-gradient-to-r from-[#d8358d] to-[#aa2575] hover:from-[#e8439d] hover:to-[#b92c81] text-white px-8 py-3.5 rounded-full font-bold text-[15px] sm:text-[17px] tracking-wide transition-all shadow-[0_0_20px_rgba(216,53,141,0.5)] hover:shadow-[0_0_30px_rgba(216,53,141,0.7)] hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto"
+                className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 text-white px-8 py-3.5 rounded-full font-bold text-[15px] sm:text-[17px] tracking-wide transition-all shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:shadow-[0_0_30px_rgba(59,130,246,0.7)] hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 Start Labs Now
               </a>
