@@ -15,7 +15,7 @@ import {
 
 export default function Footer() {
   const router = useRouter();
-  const lastUpdated = "29 AUGUST 2026 13:50 IST";
+  const lastUpdated = "03 SEPTEMBER 2026 10:31 IST";
   
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);

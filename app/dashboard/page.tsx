@@ -74,29 +74,25 @@ export default function DashboardPage() {
 
   const julyLabs = [
     {
-      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/voyuge-aug.png', accessCode: '1q-sheets-29185', points: 1, link: 'https://www.skills.google/games/7398', matchStrings: ['Arcade Voyage: Google Sheets']
+      id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/sepvoy.png', accessCode: ' 1q-microservice-9210', points: 1, link: 'https://www.skills.google/games/7442', matchStrings: ['Arcade Voyage: App Modernization']
     },
     {
-      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/adv-aug.png', accessCode: '1q-datamgt-92372', points: 1,  link: 'https://www.skills.google/games/7395', matchStrings: ['Arcade Adventure: Data Vault']
+      id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/advsep.png', accessCode: '1q-architecture-01381', points: 1,  link: 'https://www.skills.google/games/7441', matchStrings: ['Arcade Adventure: Modern Cloud Architecture']
     },
     {
-      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/trail-aug.png', accessCode: '1q-delivery-31058', points: 1,  link: 'https://www.skills.google/games/7396', matchStrings: ['Arcade Trail: Cloud Delivery Systems']
+      id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/septrail.png', accessCode: '1q-vpcpeering-3469', points: 1,  link: 'https://www.skills.google/games/7443', matchStrings: ['Arcade Trail: Data Engineering and Security']
     },
     {
-      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/bc-aug.png', accessCode: '1q-basecamp-10219', points: 1,  link: 'https://www.skills.google/games/7394', matchStrings: ['Arcade Base Camp August 2026']
+      id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/bcsep.png', accessCode: '1q-basecamp-09304', points: 1,  link: 'https://www.skills.google/games/7444', matchStrings: ['Arcade Base Camp September 2026']
     },
     {
-      id: 'data mesh', title: 'Arcade Simulator: Network Security', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulater-aug.png', accessCode: '1q-network-51470', points: 1,  link: 'https://www.skills.google/games/7397', matchStrings: ['Arcade Simulator: Network Security Engineer']
+      id: 'data mesh', title: 'Arcade Simulator: DevOps Engineer', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulatorsep.png', accessCode: '1q-devops-065131', points: 1,  link: 'https://www.skills.google/games/7445', matchStrings: ['Arcade Simulator: DevOps Engineer']
     },
     {
-      id: 'safe', title: 'Spans and Plans', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/special-aug.png', accessCode: '1q-schema-27083', points: 1,  link: 'https://www.skills.google/games/7399', matchStrings: ['Spans and Plans']
-
-    },
-    {
-      id: 're trail', title: 'Arcade Re-Trail: Vaults & Vectors', subtitle: 'Arcade Re-trail', image: 'https://services.google.com/fh/files/misc/arcade_retrail_aug2026.png', accessCode: '1q-vaults-39213', points: 1,  link: 'https://www.skills.google/games/7426', matchStrings: ['Arcade Re-Trail: Vaults & Vectors']
+      id: 'safe', title: 'Pitch Perfect', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/specialsepo.png', accessCode: '1q-analysis-5026', points: 1,  link: 'https://www.skills.google/games/7446', matchStrings: ['Pitch Perfect']
 
     }
-
+   
   ];
 
   const augustLabs = [];
@@ -798,7 +794,7 @@ export default function DashboardPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
                 <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                  <span className="text-xl"></span> August Labs
+                  <span className="text-xl"></span> September Labs
                 </h4>
               </div>
 
@@ -862,7 +858,7 @@ export default function DashboardPage() {
               
               <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>
-                  {completedLabs.length} / 7 August Labs Completed
+                  {completedLabs.length} / 7 September Labs Completed
                 </span>
               </div>
             </div>
@@ -872,7 +868,7 @@ export default function DashboardPage() {
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
               <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  August Labs
+                  September Labs
                 </h4>
               </div>
               
@@ -954,21 +950,21 @@ export default function DashboardPage() {
                              Access code: {lab.accessCode}
                            </p>
                            <button 
-  onClick={() => handleCopyCode(lab.accessCode)} 
-  className={`transition-all flex items-center justify-center p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] hover:bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe]'}`} 
-  title="Copy Code"
->
-  {copiedCode === lab.accessCode ? (
-    <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-    </svg>
-  ) : (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-    </svg>
-  )}
-</button>
+                         onClick={() => handleCopyCode(lab.accessCode)} 
+                        className={`transition-all flex items-center justify-center p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] hover:bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe]'}`} 
+                            title="Copy Code"
+                            >
+                      {copiedCode === lab.accessCode ? (
+                     <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                       ) : (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                       )}
+                        </button>
                         </div>
                           
                         <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>

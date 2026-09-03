@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import FAQ from "@/app/components/FAQ";
 import PopupModal from "@/app/components/PopupModal";
-import { useState, useEffect } from "react"; 
+import { useState, useEffect, useRef } from "react"; 
 
 // 🔥 FIREBASE IMPORTS 🔥
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
@@ -15,10 +15,17 @@ import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
 export default function HomePage() {
   const router = useRouter();
 
-  // 🔥 STATE: Hero Input
+  // 🔥 STATE: Hero Input & Results
   const [heroUrl, setHeroUrl] = useState("");
   const [isCalculating, setIsCalculating] = useState(false);
   const [heroError, setHeroError] = useState<string | null>(null);
+  const [elapsedSecs, setElapsedSecs] = useState(0);
+  
+  const [calcResult, setCalcResult] = useState<any>(null);
+  const [showResult, setShowResult] = useState(false);
+  
+  const autoCloseTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const calculationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // 🔥 STATE: Premium Problem Box Form
   const [formName, setFormName] = useState("");
@@ -50,15 +57,11 @@ export default function HomePage() {
     { title: "Skill Badges", desc: "90+ Skills Badges available (2 badges = 1 point)", icon: "🏅", badge: "0.5 Pt" }
   ];
 
-  // 🔥 GLOBAL FIREBASE STATES
   const [reviews, setReviews] = useState<{name: string, time: string, text: string, vendor: string}[]>([]); 
 
   useEffect(() => {
-    // Load previously saved URL to keep it in the input box
     const savedUrl = localStorage.getItem("arcade_url");
-    if (savedUrl) {
-      setHeroUrl(savedUrl);
-    }
+    if (savedUrl) setHeroUrl(savedUrl);
 
     const q = query(collection(db, "swagReviews"), orderBy("createdAt", "desc"));
     const unsubReviews = onSnapshot(q, (snapshot) => {
@@ -68,26 +71,34 @@ export default function HomePage() {
 
     return () => {
       unsubReviews();
+      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
+      if (calculationIntervalRef.current) clearInterval(calculationIntervalRef.current);
     };
   }, []);
 
-  // 🔥 DIRECT CALCULATION LOGIC 🔥
   const handleHeroSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const targetUrl = heroUrl.trim();
     if (!targetUrl) return;
 
     setHeroError(null);
+    setShowResult(false);
     setIsCalculating(true);
+    
+    // 🔥 Start the live seconds counter
+    setElapsedSecs(0);
+    calculationIntervalRef.current = setInterval(() => {
+      setElapsedSecs(prev => prev + 1);
+    }, 1000);
 
     const urlPattern = /^https:\/\/www\.skills\.google\/public_profiles\/[a-zA-Z0-9-]+$/;
     if (!urlPattern.test(targetUrl)) {
       setHeroError("Please enter a valid Public Profile URL.");
       setIsCalculating(false);
+      if (calculationIntervalRef.current) clearInterval(calculationIntervalRef.current);
       return;
     }
 
-    // Save URL locally so it doesn't get removed
     localStorage.setItem("arcade_url", targetUrl);
 
     try {
@@ -102,6 +113,7 @@ export default function HomePage() {
       if (!res.ok) {
         setHeroError(data.error || "Failed to calculate points. Check URL.");
         setIsCalculating(false);
+        if (calculationIntervalRef.current) clearInterval(calculationIntervalRef.current);
         return;
       }
 
@@ -119,21 +131,29 @@ export default function HomePage() {
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
       localStorage.setItem("current_processing_url", targetUrl);
 
-      try {
-        await savePublicUserToLeaderboard({
-          name: data.userName || "Arcade Player",
-          photoURL: data.userAvatar || "/avatar.png",
-          points: data.totalPoints,
-          profileUrl: targetUrl
-        });
-      } catch (saveErr) {
-        console.error("Leaderboard Save Error:", saveErr);
-      }
+      void savePublicUserToLeaderboard({
+        name: data.userName || "Arcade Player",
+        photoURL: data.userAvatar || "/avatar.png",
+        points: data.totalPoints,
+        profileUrl: targetUrl
+      }).catch(err => console.error(err));
 
-      router.push("/dashboard");
+      // Show inline result instead of redirecting
+      setCalcResult(data);
+      setShowResult(true);
+
+      // Auto-close after 1 minute
+      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = setTimeout(() => {
+        setShowResult(false);
+      }, 60000);
+
     } catch (err) {
       setHeroError("Connection failed. Check your internet and retry.");
+    } finally {
+      // Clear calculation states and timer
       setIsCalculating(false);
+      if (calculationIntervalRef.current) clearInterval(calculationIntervalRef.current);
     }
   };
 
@@ -151,7 +171,6 @@ export default function HomePage() {
     <>
       <PopupModal />
       <style>{`
-        /* 🔥 MOVING AURORA BACKGROUND CSS 🔥 */
         .hero-aurora-bg {
           background: linear-gradient(-45deg, #130026, #3b0a66, #1c0040, #4b0a70);
           background-size: 400% 400%;
@@ -177,85 +196,164 @@ export default function HomePage() {
           0% { transform: rotate(0deg) scale(1); }
           100% { transform: rotate(10deg) scale(1.1); }
         }
+        @keyframes spin-border {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .animate-spin-border {
+          animation: spin-border 2.5s linear infinite;
+        }
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.4s ease-out forwards;
+        }
       `}</style>
 
-      <main className="min-h-screen bg-white text-gray-900 font-sans selection:bg-purple-300 selection:text-purple-900">
+      <main className="min-h-screen bg-white text-gray-900 font-sans selection:bg-blue-300 selection:text-blue-900">
 
-        {/* ================= PREMIUM HERO SECTION (AURORA DESIGN) ================= */}
+        {/* ================= PREMIUM HERO SECTION ================= */}
         <div className="hero-aurora-bg pt-32 pb-24 sm:pt-40 sm:pb-32 px-6 lg:px-8 text-center text-white relative shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-10">
           <div className="mx-auto max-w-4xl relative z-10">
 
-            {/* Glowing Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md border border-pink-500/50 bg-white/5 backdrop-blur-md mb-8 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
-              <span className="text-[#ec4899] font-black text-[13px]">#1</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md border border-blue-500/50 bg-white/5 backdrop-blur-md mb-8 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+              <span className="text-blue-400 font-black text-[13px]">#1</span>
               <span className="text-white text-[11px] sm:text-xs font-bold tracking-widest uppercase">
                 Arcade Nexus Platform
               </span>
             </div>
 
-            {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-            Welcome to <span className="text-[#ec4899]">Arcade Nexus,</span> <br className="hidden md:block"/>Arcade journey made simpler.
+            Welcome to <span className="text-blue-400">Arcade Nexus,</span> <br className="hidden md:block"/>Arcade journey made simpler.
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300/90 mb-12 max-w-2xl mx-auto font-medium">
               Calculate your points, track progress, discover useful resources, and stay ahead of every Arcade challenge.
             </p>
 
-            {/* EXACT MATCH: Dark Brownish/Purple Input Box */}
-            <form onSubmit={handleHeroSubmit} className="max-w-[700px] mx-auto w-full relative flex items-center bg-[#493c47] border border-[#813661] rounded-2xl p-1.5 shadow-2xl transition-all focus-within:border-[#ac4280]">
-              <div className="pl-4 pr-1 shrink-0 flex items-center justify-center">
-                {/* Sparkle SVG matching the reference */}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#c8498b]">
-                  <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <input 
-                type="text" 
-                value={heroUrl}
-                onChange={(e) => setHeroUrl(e.target.value)}
-                placeholder="Paste your public profile URL here..." 
-                className="flex-1 bg-transparent border-none outline-none text-[#e5e7eb] px-3 placeholder:text-[#a199a0] text-[15px] font-medium h-10 sm:h-12 w-full disabled:opacity-50" 
-                required
-                disabled={isCalculating}
-              />
-              <button 
-                type="submit" 
-                disabled={isCalculating}
-                className="w-10 h-10 sm:w-[42px] sm:h-[42px] rounded-xl bg-gradient-to-b from-[#a42b82] to-[#6c145e] flex items-center justify-center text-white shrink-0 hover:brightness-110 transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] disabled:opacity-70"
-              >
-                {isCalculating ? (
-                  <div className="w-5 h-5 border-[3px] border-white/30 border-t-white rounded-full animate-spin"></div>
-                ) : (
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m-6-6l6 6-6 6" />
-                  </svg>
+            {/* 🔥 ANIMATED INPUT WRAPPER - NOW WHITE */}
+            <div className="max-w-[700px] mx-auto w-full relative">
+              <div className={`relative flex items-center justify-center overflow-hidden rounded-2xl transition-all ${isCalculating ? 'p-[2px]' : 'p-0'}`}>
+                
+                {isCalculating && (
+                  <div className="absolute inset-[-100%] z-0 flex items-center justify-center">
+                    <div className="h-[200%] w-[200%] animate-spin-border bg-[conic-gradient(from_0deg,transparent_0_240deg,#3b82f6_360deg)]" />
+                  </div>
                 )}
-              </button>
-            </form>
 
-            {/* Error Message Display */}
+                <form onSubmit={handleHeroSubmit} className="relative z-10 flex w-full items-center bg-white border border-gray-200 rounded-2xl p-1.5 shadow-2xl transition-all focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
+                  <div className="pl-4 pr-1 shrink-0 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-blue-600">
+                      <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <input 
+                    type="text" 
+                    value={heroUrl}
+                    onChange={(e) => setHeroUrl(e.target.value)}
+                    placeholder="Paste your public profile URL here..." 
+                    className="flex-1 bg-transparent border-none outline-none text-gray-900 px-3 placeholder:text-gray-400 text-[15px] font-medium h-10 sm:h-12 w-full disabled:opacity-50" 
+                    required
+                    disabled={isCalculating}
+                  />
+                  <button 
+                    type="submit" 
+                    disabled={isCalculating}
+                    className="w-10 h-10 sm:w-[42px] sm:h-[42px] rounded-xl bg-blue-600 flex items-center justify-center text-white shrink-0 hover:bg-blue-700 transition-all shadow-sm disabled:opacity-70"
+                  >
+                    {/* 🔥 LIVE SECONDS TIMER INSTEAD OF SPINNER */}
+                    {isCalculating ? (
+                      <span className="font-bold text-sm sm:text-[15px] animate-pulse">{elapsedSecs}s</span>
+                    ) : (
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m-6-6l6 6-6 6" />
+                      </svg>
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
+
             {heroError && (
               <div className="text-red-300 text-sm mt-3 font-medium bg-red-500/10 inline-block px-4 py-1.5 rounded-lg border border-red-500/20 backdrop-blur-md shadow-sm animate-fade-in-up">
                 {heroError}
               </div>
             )}
 
-            {/* Suggested Prompts / Quick Actions EXACT MATCH */}
-            <div className="mt-8 flex flex-col items-center">
-              <span className="text-[#a199a0] text-[12px] mb-3 font-medium">Suggested actions</span>
-              <div className="flex flex-wrap justify-center gap-3">
-                <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="bg-[#3e2e3d]/80 border border-[#64495f] text-white text-[13px] font-bold px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a] inline-flex items-center justify-center">
-                  Start Labs Here
-                </a>
-                <button onClick={() => router.push('/dashboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
-                  Smart Dashboard
+            {/* 🔥 WHITE RESULT CARD WITH BLUE DASHBOARD BUTTON */}
+            {showResult && calcResult && (
+              <div className="mt-6 mx-auto max-w-[700px] w-full bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-2xl relative animate-fade-in-up text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                
+                <button 
+                  onClick={() => setShowResult(false)} 
+                  className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition-colors"
+                  title="Close"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
-                <button onClick={() => router.push('/leaderboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
-                  Leaderboard Rank
-                </button>
+                
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                  <div className="w-14 h-14 shrink-0 rounded-full border-2 border-blue-500 p-0.5 overflow-hidden bg-gray-100">
+                    {calcResult.userAvatar ? (
+                      <img src={calcResult.userAvatar} alt="" className="w-full h-full object-cover rounded-full" />
+                    ) : (
+                      <span className="flex items-center justify-center w-full h-full text-xl font-bold text-gray-700">
+                        {calcResult.userName?.charAt(0) || "U"}
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-bold text-gray-900 truncate">{calcResult.userName || "Arcade Player"}</h3>
+                    <p className="text-blue-600 text-sm font-semibold mt-0.5">Total Points: <span className="text-xl ml-1 text-gray-900">{calcResult.totalPoints}</span></p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-5 w-full sm:w-auto justify-start sm:justify-end border-t sm:border-t-0 sm:border-l border-gray-200 pt-4 sm:pt-0 sm:pl-6">
+                  <div className="text-center">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Game Badges</p>
+                    <p className="text-lg font-bold text-gray-900 mt-0.5">{calcResult.breakdown?.games || 0}</p>
+                  </div>
+                  <div className="w-px h-8 bg-gray-200"></div>
+                  <div className="text-center">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Skill Badges</p>
+                    <p className="text-lg font-bold text-gray-900 mt-0.5">{calcResult.breakdown?.skills || 0}</p>
+                  </div>
+                </div>
+
+                <div className="w-full sm:w-auto shrink-0 flex justify-end">
+                  <button 
+                    onClick={() => router.push('/dashboard')} 
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                  >
+                    Full Dashboard
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
+
+            {!showResult && (
+              <div className="mt-8 flex flex-col items-center">
+                <span className="text-[#a199a0] text-[12px] mb-3 font-medium">Suggested actions</span>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="bg-[#3e2e3d]/80 border border-[#64495f] text-white text-[13px] font-bold px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a] inline-flex items-center justify-center">
+                    Start Labs Here
+                  </a>
+                  <button onClick={() => router.push('/dashboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
+                    Smart Dashboard
+                  </button>
+                  <button onClick={() => router.push('/leaderboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
+                    Leaderboard Rank
+                  </button>
+                </div>
+              </div>
+            )}
 
           </div>
         </div>
@@ -306,8 +404,6 @@ export default function HomePage() {
             </div>
 
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-
-              {/* Left Column: Resources List */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
                 <div className="border-b border-gray-200 bg-gray-50 flex">
                   <button onClick={() => setActiveGuideTab('start')} className={`flex-1 py-3 sm:py-4 px-1 text-xs sm:text-sm font-semibold transition-colors ${activeGuideTab === 'start' ? 'text-purple-600 border-b-2 border-purple-600 bg-white' : 'text-gray-500 hover:text-gray-700'}`}>Getting Started</button>
@@ -347,7 +443,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right Column: Support Form */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8 flex flex-col h-full justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Support</h3>

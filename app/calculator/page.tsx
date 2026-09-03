@@ -335,11 +335,11 @@ export default function CalculatorPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 backdrop-blur-sm">
             <div className={`w-full max-w-md rounded-2xl border p-6 shadow-2xl ${isDark ? 'border-[#2f3339] bg-[#17191d]' : 'border-[#e5e7eb] bg-white'}`}>
               <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>Enable Auto Calculate?</h3>
-              <p className={`mt-2 text-sm leading-6 ${isDark ? 'text-gray-400' : 'text-[#6b7280]'}`}>
+              <p className={`mt-2 text-sm leading-6 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                 Points will calculate automatically when you open the page.
               </p>
               <div className="mt-6 flex gap-3">
-                <button onClick={cancelAutoCalc} className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${isDark ? 'border-[#34383f] text-gray-200 hover:bg-[#202328]' : 'border-[#dfe3e8] text-[#374151] hover:bg-[#f5f5f5]'}`}>
+                <button onClick={cancelAutoCalc} className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${isDark ? 'border-[#34383f] text-[#D7CCC8] hover:bg-[#202328]' : 'border-[#dfe3e8] text-[#5D4037] hover:bg-[#f5f5f5]'}`}>
                   Cancel
                 </button>
                 <button onClick={confirmAutoCalc} className="flex-1 rounded-xl bg-[#343a8f] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#2d327e]">
@@ -361,13 +361,13 @@ export default function CalculatorPage() {
                 </div>
                 <div>
                   <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>Reset data?</h3>
-                  <p className={`mt-1.5 text-sm leading-6 ${isDark ? 'text-gray-400' : 'text-[#6b7280]'}`}>
+                  <p className={`mt-1.5 text-sm leading-6 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                     This clears your saved profile, recent history and calculator preferences.
                   </p>
                 </div>
               </div>
               <div className="mt-6 flex gap-3">
-                <button onClick={() => setShowResetModal(false)} className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${isDark ? 'border-[#34383f] text-gray-200 hover:bg-[#202328]' : 'border-[#dfe3e8] text-[#374151] hover:bg-[#f5f5f5]'}`}>
+                <button onClick={() => setShowResetModal(false)} className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${isDark ? 'border-[#34383f] text-[#D7CCC8] hover:bg-[#202328]' : 'border-[#dfe3e8] text-[#5D4037] hover:bg-[#f5f5f5]'}`}>
                   Cancel
                 </button>
                 <button onClick={handleResetData} className="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-700">
@@ -382,18 +382,20 @@ export default function CalculatorPage() {
           <h1 className={`text-3xl font-semibold tracking-[-0.03em] sm:text-4xl ${isDark ? 'text-white' : 'text-[#202123]'}`}>
             Arcade Calculator
           </h1>
-          <p className={`mx-auto mt-3 max-w-2xl text-sm leading-6 sm:text-[15px] ${isDark ? 'text-gray-400' : 'text-[#6b7280]'}`}>
+          <p className={`mx-auto mt-3 max-w-2xl text-sm leading-6 sm:text-[15px] ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
             Calculate your Google Skills Arcade points from your public profile in seconds.
           </p>
         </header>
 
         <section className={`mt-8 rounded-2xl border shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:mt-10 ${isDark ? 'border-[#2b2f35] bg-[#17191d]' : 'border-[#e4e7eb] bg-white'}`}>
           <style>{`
-            @keyframes fast-shimmer {
-              0% { transform: translateX(-120%); }
-              100% { transform: translateX(420%); }
+            @keyframes spin-border {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
             }
-            .animate-fast-shimmer { animation: fast-shimmer 1.15s ease-in-out infinite; }
+            .animate-spin-border {
+              animation: spin-border 2.5s linear infinite;
+            }
             @keyframes fast-shake {
               0%, 100% { transform: translateX(0); }
               20% { transform: translateX(-7px); }
@@ -408,7 +410,7 @@ export default function CalculatorPage() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className={`text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-[#202123]'}`}>Public profile URL</p>
-                <p className={`mt-1 text-xs leading-5 sm:text-sm ${isDark ? 'text-gray-500' : 'text-[#8a8f98]'}`}>
+                <p className={`mt-1 text-xs leading-5 sm:text-sm ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                   Paste your Google Skills public profile link below.
                 </p>
               </div>
@@ -431,7 +433,7 @@ export default function CalculatorPage() {
                 <button
                   onClick={handleAutoCalcToggle}
                   title={autoCalculate ? 'Auto calculate enabled' : 'Enable auto calculate'}
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${autoCalculate ? (isDark ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700') : (isDark ? 'border-[#34383f] text-gray-400 hover:bg-[#202328]' : 'border-[#e4e7eb] text-[#7b818b] hover:bg-[#f7f7f8]')}`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${autoCalculate ? (isDark ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' : 'border-emerald-200 bg-emerald-50 text-emerald-700') : (isDark ? 'border-[#34383f] text-[#D7CCC8] hover:bg-[#202328]' : 'border-[#e4e7eb] text-[#5D4037] hover:bg-[#f7f7f8]')}`}
                 >
                   <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -454,54 +456,59 @@ export default function CalculatorPage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
+                
+                {/* 🔥 ANIMATED BORDER WRAPPER */}
                 <div
                   onAnimationEnd={() => setIsShaking(false)}
-                  className={`group relative flex min-h-14 flex-1 items-center overflow-hidden rounded-xl border transition-colors ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? 'border-red-500' : (isDark ? 'border-[#3a3f46] bg-[#111317] focus-within:border-[#8ab4f8]' : 'border-[#d8dce1] bg-white focus-within:border-[#9ca3af]')}`}
+                  className={`relative flex min-h-14 flex-1 items-center overflow-hidden rounded-xl transition-all ${isShaking ? 'animate-fast-shake' : ''} ${error && !hideRedLine ? 'border-[2px] border-red-500 p-0' : (isLoading ? 'p-[2px]' : (isDark ? 'border border-[#3a3f46] p-0 focus-within:border-[#8ab4f8]' : 'border border-[#d8dce1] p-0 focus-within:border-[#9ca3af]'))}`}
                 >
                   {isLoading && !error && (
-                    <div className="absolute inset-x-0 bottom-0 h-0.5 overflow-hidden">
-                      <div className={`h-full w-1/4 animate-fast-shimmer rounded-full ${isDark ? 'bg-[#8ab4f8]' : 'bg-[#343a8f]'}`} />
+                    <div className="absolute inset-[-100%] z-0 flex items-center justify-center">
+                      <div className={`h-[200%] w-[200%] animate-spin-border ${isDark ? 'bg-[conic-gradient(from_0deg,transparent_0_240deg,#8ab4f8_360deg)]' : 'bg-[conic-gradient(from_0deg,transparent_0_240deg,#343a8f_360deg)]'}`} />
                     </div>
                   )}
 
-                  {calcState !== 'idle' ? (
-                    <div className={`flex h-full min-w-0 flex-1 items-center justify-between px-4 ${isDark ? 'text-gray-200' : 'text-[#202123]'}`}>
-                      <span className="truncate text-sm sm:text-[15px]">{profileUrl}</span>
-                      {isPaused && (
-                        <button onClick={() => setCalcState('idle')} title="Cancel calculation" className={`ml-2 shrink-0 rounded-md p-1.5 ${isDark ? 'text-gray-400 hover:bg-[#202328] hover:text-white' : 'text-[#7b818b] hover:bg-[#f3f4f6] hover:text-[#202123]'}`}>
-                          <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <input
-                      type="text"
-                      placeholder="https://www.skills.google/public_profiles/..."
-                      value={profileUrl}
-                      onChange={(e) => {
-                        const next = e.target.value;
-                        setProfileUrl(next);
-                        setError(null);
-                        setHideRedLine(false);
-                        setUserName(null);
-                        setUserAvatar(null);
-                        setUserPoints(null);
-                        try {
-                          const cached = JSON.parse(localStorage.getItem('arcade_user_data') || 'null');
-                          if (cached?.profileUrl === next.trim()) {
-                            if (cached.userName) setUserName(cached.userName);
-                            if (cached.userAvatar) setUserAvatar(cached.userAvatar);
-                            if (typeof cached.points === 'number') setUserPoints(cached.points);
-                          }
-                        } catch {}
-                      }}
-                      onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
-                      spellCheck="false"
-                      className={`h-full w-full bg-transparent px-4 text-sm outline-none sm:text-[15px] ${isDark ? 'text-white placeholder:text-[#737983]' : 'text-[#202123] placeholder:text-[#9aa0a6]'}`}
-                    />
-                  )}
+                  {/* Inner Box Content */}
+                  <div className={`relative z-10 flex h-full min-h-[54px] w-full items-center justify-between rounded-[10px] px-4 ${isDark ? 'bg-[#111317]' : 'bg-white'}`}>
+                    {calcState !== 'idle' ? (
+                      <div className={`flex w-full items-center justify-between ${isDark ? 'text-gray-200' : 'text-[#202123]'}`}>
+                        <span className="truncate text-sm sm:text-[15px]">{profileUrl}</span>
+                        {isPaused && (
+                          <button onClick={() => setCalcState('idle')} title="Cancel calculation" className={`ml-2 shrink-0 rounded-md p-1.5 ${isDark ? 'text-[#D7CCC8] hover:bg-[#202328] hover:text-white' : 'text-[#5D4037] hover:bg-[#f3f4f6] hover:text-[#202123]'}`}>
+                            <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder="https://www.skills.google/public_profiles/..."
+                        value={profileUrl}
+                        onChange={(e) => {
+                          const next = e.target.value;
+                          setProfileUrl(next);
+                          setError(null);
+                          setHideRedLine(false);
+                          setUserName(null);
+                          setUserAvatar(null);
+                          setUserPoints(null);
+                          try {
+                            const cached = JSON.parse(localStorage.getItem('arcade_user_data') || 'null');
+                            if (cached?.profileUrl === next.trim()) {
+                              if (cached.userName) setUserName(cached.userName);
+                              if (cached.userAvatar) setUserAvatar(cached.userAvatar);
+                              if (typeof cached.points === 'number') setUserPoints(cached.points);
+                            }
+                          } catch {}
+                        }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
+                        spellCheck="false"
+                        className={`h-full w-full bg-transparent text-sm outline-none sm:text-[15px] ${isDark ? 'text-white placeholder:text-[#BCAAA4]' : 'text-[#202123] placeholder:text-[#A1887F]'}`}
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <button
@@ -524,7 +531,7 @@ export default function CalculatorPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className={`truncate text-sm font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>{userName}</p>
-                    {userPoints !== null && <p className={`mt-0.5 text-xs ${isDark ? 'text-gray-500' : 'text-[#7b818b]'}`}>{userPoints} points saved locally</p>}
+                    <p className={`mt-0.5 text-xs ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>{userPoints} points saved locally</p>
                   </div>
                   <span className={`hidden text-xs font-medium sm:block ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Ready to calculate</span>
                 </div>
@@ -539,7 +546,7 @@ export default function CalculatorPage() {
                   </svg>
                   <span>{error}</span>
                 </div>
-                <p className={`mt-2 pl-6 text-xs leading-5 ${isDark ? 'text-gray-500' : 'text-[#6b7280]'}`}>
+                <p className={`mt-2 pl-6 text-xs leading-5 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                   Check that your profile is public, the URL is correct, and your connection is stable.
                 </p>
               </div>
@@ -548,12 +555,12 @@ export default function CalculatorPage() {
             {(calculationMs || (userPoints !== null && userName)) && !isLoading && !isPaused && (
               <div className="mt-4 flex flex-wrap items-center gap-2.5">
                 {calculationMs && (
-                  <span className={`rounded-full border px-3 py-1.5 text-xs font-medium ${isDark ? 'border-[#34383f] bg-[#111317] text-gray-300' : 'border-[#e5e7eb] bg-[#fafafa] text-[#4b5563]'}`}>
+                  <span className={`rounded-full border px-3 py-1.5 text-xs font-medium ${isDark ? 'border-[#34383f] bg-[#111317] text-[#D7CCC8]' : 'border-[#e5e7eb] bg-[#fafafa] text-[#5D4037]'}`}>
                     Calculated in {(calculationMs / 1000).toFixed(2)}s
                   </span>
                 )}
                 {lastCalculatedAt && (
-                  <span className={`rounded-full border px-3 py-1.5 text-xs font-medium ${isDark ? 'border-[#34383f] bg-[#111317] text-gray-400' : 'border-[#e5e7eb] bg-white text-[#6b7280]'}`}>
+                  <span className={`rounded-full border px-3 py-1.5 text-xs font-medium ${isDark ? 'border-[#34383f] bg-[#111317] text-[#D7CCC8]' : 'border-[#e5e7eb] bg-white text-[#5D4037]'}`}>
                     {timeAgo(lastCalculatedAt)}
                   </span>
                 )}
@@ -570,7 +577,7 @@ export default function CalculatorPage() {
                   Subscribe
                 </a>
               </div>
-              <span className={`text-sm ${isDark ? 'text-gray-500' : 'text-[#7b818b]'}`}>
+              <span className={`text-sm ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                 {lastCalculatedAt ? `Calculated ${timeAgo(lastCalculatedAt)}` : recentUrls.length > 0 ? `Last used ${timeAgo(recentUrls[0].time)}` : 'Ready when you are'}
               </span>
             </div>
@@ -580,10 +587,10 @@ export default function CalculatorPage() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <h2 className={`text-base font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>Recent profiles</h2>
-                    <p className={`mt-1 text-sm ${isDark ? 'text-gray-500' : 'text-[#7b818b]'}`}>Tap a profile to recalculate it.</p>
+                    <p className={`mt-1 text-sm ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>Tap a profile to recalculate it.</p>
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={clearHistory} className={`rounded-lg px-2.5 py-2 text-xs font-medium transition-colors ${isDark ? 'text-gray-400 hover:bg-[#202328] hover:text-white' : 'text-[#6b7280] hover:bg-[#f5f5f5] hover:text-[#202123]'}`}>
+                    <button onClick={clearHistory} className={`rounded-lg px-2.5 py-2 text-xs font-medium transition-colors ${isDark ? 'text-[#D7CCC8] hover:bg-[#202328] hover:text-white' : 'text-[#5D4037] hover:bg-[#f5f5f5] hover:text-[#202123]'}`}>
                       Clear
                     </button>
                     <button onClick={() => setShowResetModal(true)} className={`rounded-lg px-2.5 py-2 text-xs font-medium transition-colors ${isDark ? 'text-red-300 hover:bg-red-500/10' : 'text-red-600 hover:bg-red-50'}`}>
@@ -624,14 +631,14 @@ export default function CalculatorPage() {
                               </span>
                             )}
                           </div>
-                          <div className={`mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm ${isDark ? 'text-gray-500' : 'text-[#7b818b]'}`}>
+                          <div className={`mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                             <span>{typeof item.points === 'number' ? `${item.points} pts` : 'No points saved'}</span>
                             <span>{timeAgo(item.time)}</span>
                             {item.durationMs ? <span>{(item.durationMs / 1000).toFixed(1)}s</span> : null}
                           </div>
                         </div>
 
-                        <svg className={`h-4.5 w-4.5 shrink-0 transition-transform group-hover:translate-x-0.5 ${isDark ? 'text-gray-600' : 'text-[#b0b6bf]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className={`h-4.5 w-4.5 shrink-0 transition-transform group-hover:translate-x-0.5 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                         </svg>
                       </button>
@@ -647,40 +654,73 @@ export default function CalculatorPage() {
           <div className="mx-auto max-w-4xl">
             <p className={`text-xs font-semibold uppercase tracking-[0.16em] ${isDark ? 'text-[#8ab4f8]' : 'text-[#5b63b6]'}`}>Quick setup</p>
             <h2 className={`mt-2 text-xl font-semibold tracking-tight ${isDark ? 'text-white' : 'text-[#202123]'}`}>Get your public profile URL</h2>
-            <p className={`mt-2 text-sm leading-6 ${isDark ? 'text-gray-500' : 'text-[#7b818b]'}`}>Two quick steps. No screenshots or extra clutter.</p>
+            <p className={`mt-2 text-sm leading-6 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>Two quick steps. No screenshots or extra clutter.</p>
 
-            <div className="mt-5 space-y-3">
-              <div className={`flex items-start gap-4 rounded-xl border px-4 py-4 ${isDark ? 'border-[#2d3238] bg-[#121419]' : 'border-[#e8ebee] bg-white'}`}>
-                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${isDark ? 'bg-white text-black' : 'bg-[#202123] text-white'}`}>1</span>
-                <div>
-                  <p className={`text-sm font-semibold sm:text-[15px] ${isDark ? 'text-white' : 'text-[#202123]'}`}>Sign in to Google Skills</p>
-                  <ul className={`mt-2 space-y-1.5 text-sm leading-6 ${isDark ? 'text-gray-500' : 'text-[#6b7280]'}`}>
-                    <li>• Open Google Skills and sign in with your Google account.</li>
-                    <li>• Use the account whose Arcade progress you want to calculate.</li>
-                  </ul>
-                  <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className={`mt-2.5 inline-flex text-sm font-medium hover:underline ${isDark ? 'text-[#8ab4f8]' : 'text-[#4f5ab7]'}`}>
+            <div className="mt-6 grid gap-6 sm:grid-cols-2">
+              {/* 🔥 GRAPHIC 1: Sign in Mockup */}
+              <div className={`flex flex-col overflow-hidden rounded-2xl border ${isDark ? 'border-[#2d3238] bg-[#121419]' : 'border-[#e8ebee] bg-white'}`}>
+                <div className={`flex h-40 flex-col items-center justify-center border-b p-4 ${isDark ? 'border-[#2d3238] bg-[#0f1115]' : 'border-[#e8ebee] bg-[#f8f9fa]'}`}>
+                  <div className={`flex h-16 w-16 items-center justify-center rounded-full shadow-sm ${isDark ? 'bg-[#1a1d24]' : 'bg-white'}`}>
+                    <svg className="h-8 w-8 text-[#4285F4]" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path className="text-[#34A853]" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path className="text-[#FBBC05]" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                      <path className="text-[#EA4335]" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                    </svg>
+                  </div>
+                  <div className={`mt-4 rounded-full px-6 py-2 text-xs font-semibold shadow-sm ${isDark ? 'bg-[#343a8f] text-white' : 'bg-[#1a73e8] text-white'}`}>
+                    Sign in to Google Skills
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3">
+                    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${isDark ? 'bg-white text-black' : 'bg-[#202123] text-white'}`}>1</span>
+                    <p className={`text-sm font-semibold sm:text-[15px] ${isDark ? 'text-white' : 'text-[#202123]'}`}>Sign in</p>
+                  </div>
+                  <p className={`mt-3 text-sm leading-6 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
+                    Open Google Skills and sign in with the account you use for the Arcade.
+                  </p>
+                  <a href="https://www.skills.google/" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-flex text-sm font-medium hover:underline ${isDark ? 'text-[#8ab4f8]' : 'text-[#4f5ab7]'}`}>
                     Open Google Skills ↗
                   </a>
                 </div>
               </div>
 
-              <div className={`flex items-start gap-4 rounded-xl border px-4 py-4 ${isDark ? 'border-[#2d3238] bg-[#121419]' : 'border-[#e8ebee] bg-white'}`}>
-                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${isDark ? 'bg-white text-black' : 'bg-[#202123] text-white'}`}>2</span>
-                <div>
-                  <p className={`text-sm font-semibold sm:text-[15px] ${isDark ? 'text-white' : 'text-[#202123]'}`}>Copy your Public Profile URL</p>
-                  <ul className={`mt-2 space-y-1.5 text-sm leading-6 ${isDark ? 'text-gray-500' : 'text-[#6b7280]'}`}>
-                    <li>• Open Account Settings.</li>
-                    <li>• Find Public Profile and copy the profile URL.</li>
-                    <li>• Paste it above and press Calculate.</li>
-                  </ul>
-                  <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className={`mt-2.5 inline-flex text-sm font-medium hover:underline ${isDark ? 'text-[#8ab4f8]' : 'text-[#4f5ab7]'}`}>
+              {/* 🔥 GRAPHIC 2: Browser Bar Mockup */}
+              <div className={`flex flex-col overflow-hidden rounded-2xl border ${isDark ? 'border-[#2d3238] bg-[#121419]' : 'border-[#e8ebee] bg-white'}`}>
+                <div className={`flex h-40 flex-col items-center justify-center border-b p-6 ${isDark ? 'border-[#2d3238] bg-[#0f1115]' : 'border-[#e8ebee] bg-[#f8f9fa]'}`}>
+                  <div className={`flex w-full items-center gap-2 rounded-lg border px-3 py-2.5 shadow-sm ${isDark ? 'border-[#424852] bg-[#1a1d24]' : 'border-[#d8dce1] bg-white'}`}>
+                    <svg className={`h-4 w-4 shrink-0 ${isDark ? 'text-[#8ab4f8]' : 'text-[#343a8f]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                    </svg>
+                    <div className="min-w-0 flex-1">
+                      <div className={`truncate text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                        skills.google/public_profiles/<span className="font-semibold text-blue-500">12345</span>
+                      </div>
+                    </div>
+                    <div className={`rounded-md p-1 ${isDark ? 'bg-[#343a8f]/20 text-[#8ab4f8]' : 'bg-[#e8f0fe] text-[#1a73e8]'}`}>
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3">
+                    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${isDark ? 'bg-white text-black' : 'bg-[#202123] text-white'}`}>2</span>
+                    <p className={`text-sm font-semibold sm:text-[15px] ${isDark ? 'text-white' : 'text-[#202123]'}`}>Copy URL</p>
+                  </div>
+                  <p className={`mt-3 text-sm leading-6 ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
+                    Go to Account Settings, find your Public Profile, and copy the link to paste here.
+                  </p>
+                  <a href="https://www.skills.google/my_account/profile" target="_blank" rel="noopener noreferrer" className={`mt-4 inline-flex text-sm font-medium hover:underline ${isDark ? 'text-[#8ab4f8]' : 'text-[#4f5ab7]'}`}>
                     Open Account Settings ↗
                   </a>
                 </div>
               </div>
             </div>
 
-            <div className={`mt-4 rounded-xl border px-4 py-3 text-sm leading-6 ${isDark ? 'border-[#2d3238] bg-[#121419] text-gray-500' : 'border-[#e8ebee] bg-[#fafafa] text-[#6b7280]'}`}>
+            <div className={`mt-6 rounded-xl border px-4 py-3 text-sm leading-6 ${isDark ? 'border-[#2d3238] bg-[#121419] text-[#D7CCC8]' : 'border-[#e8ebee] bg-[#fafafa] text-[#5D4037]'}`}>
               Keep your Public Profile visible so the calculator can read it.
             </div>
           </div>
