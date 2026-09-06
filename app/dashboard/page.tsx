@@ -858,7 +858,7 @@ export default function DashboardPage() {
               
               <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
                 <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>
-                  {completedLabs.length} / 7 September Labs Completed
+                  {completedLabs.length} / 6 September Labs Completed
                 </span>
               </div>
             </div>
