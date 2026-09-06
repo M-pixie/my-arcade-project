@@ -13,12 +13,27 @@ import {
   Eye, UserRoundPlus, ChartNoAxesCombined, Radio, ShieldCheck, Clock3, Heart,
 } from "lucide-react";
 
+// Pre-defined random-looking positions and animation delays for the 10 flying avatars
+const avatarPositions = [
+  { left: "10%", duration: "6s", delay: "0s" },
+  { left: "25%", duration: "5s", delay: "2s" },
+  { left: "45%", duration: "7s", delay: "1s" },
+  { left: "60%", duration: "6.5s", delay: "3.5s" },
+  { left: "80%", duration: "5.5s", delay: "0.5s" },
+  { left: "15%", duration: "6s", delay: "4s" },
+  { left: "35%", duration: "7s", delay: "2.5s" },
+  { left: "55%", duration: "5s", delay: "0.8s" },
+  { left: "75%", duration: "6.5s", delay: "3s" },
+  { left: "85%", duration: "5.5s", delay: "1.5s" },
+];
+
 export default function Footer() {
   const router = useRouter();
   const lastUpdated = "03 SEPTEMBER 2026 10:31 IST";
   
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);
+  const [leaderboardAvatars, setLeaderboardAvatars] = useState<string[]>([]);
   
   // 🔥 REAL-TIME ONLINE USERS STATE 🔥
   const [onlineUsers, setOnlineUsers] = useState(1);
@@ -32,6 +47,12 @@ export default function Footer() {
         return acc + (user.calculationCount || 1);
       }, 0);
       setProfilesAnalyzed(totalAnalyzed);
+
+      // 🔥 Fetching avatars for the live floating bubbles animation 🔥
+      const avatars = data
+        .map((u: any) => u.photoURL || "https://i.postimg.cc/Nf2ykWb1/1000111442.png")
+        .slice(0, 20); // Pick a good variety
+      setLeaderboardAvatars(avatars);
     });
     return () => unsub();
   }, []);
@@ -95,6 +116,17 @@ export default function Footer() {
 
   return (
     <footer className="w-full">
+      {/* Custom Keyframes for Flying Avatars (Fuhare/Bubbles effect) */}
+      <style>{`
+        @keyframes floatUpBubbles {
+          0% { transform: translateY(0) scale(0.6); opacity: 0; }
+          15% { opacity: 0.9; transform: translateY(-40px) scale(0.9); }
+          50% { opacity: 1; transform: translateY(-90px) scale(1.15); } /* Scale up to look like it's coming forward */
+          85% { opacity: 0.9; transform: translateY(-140px) scale(0.9); }
+          100% { transform: translateY(-180px) scale(0.6); opacity: 0; }
+        }
+      `}</style>
+
       {/* ================= PREMIUM COSMIC FOOTER UI ================= */}
       <div className="relative w-full overflow-hidden border-t border-white/10 bg-[#0f172a] font-sans text-white">
 
@@ -221,7 +253,7 @@ export default function Footer() {
 
                   <div className="group relative overflow-hidden rounded-2xl border border-blue-400/25 bg-gradient-to-br from-blue-500/[0.10] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/45 hover:shadow-[0_12px_35px_rgba(59,130,246,0.12)] sm:p-5">
                     <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-blue-500/10 blur-2xl" />
-                    <div className="relative">
+                    <div className="relative z-10">
                       <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/[0.08] text-blue-300 shadow-[0_0_18px_rgba(59,130,246,0.10)]">
                         <Eye className="h-[19px] w-[19px]" strokeWidth={1.8} />
                       </div>
@@ -232,7 +264,7 @@ export default function Footer() {
 
                   <div className="group relative overflow-hidden rounded-2xl border border-sky-400/25 bg-gradient-to-br from-sky-500/[0.08] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-sky-400/45 hover:shadow-[0_12px_35px_rgba(56,189,248,0.10)] sm:p-5">
                     <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-sky-500/10 blur-2xl" />
-                    <div className="relative">
+                    <div className="relative z-10">
                       <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border border-sky-400/20 bg-sky-400/[0.08] text-sky-300 shadow-[0_0_18px_rgba(56,189,248,0.10)]">
                         <UserRoundPlus className="h-[19px] w-[19px]" strokeWidth={1.8} />
                       </div>
@@ -243,7 +275,7 @@ export default function Footer() {
 
                   <div className="group relative overflow-hidden rounded-2xl border border-indigo-400/25 bg-gradient-to-br from-indigo-500/[0.08] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400/45 hover:shadow-[0_12px_35px_rgba(99,102,241,0.10)] sm:p-5">
                     <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-indigo-500/10 blur-2xl" />
-                    <div className="relative">
+                    <div className="relative z-10">
                       <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-400/20 bg-indigo-400/[0.08] text-indigo-300 shadow-[0_0_18px_rgba(99,102,241,0.10)]">
                         <ChartNoAxesCombined className="h-[19px] w-[19px]" strokeWidth={1.8} />
                       </div>
@@ -252,18 +284,43 @@ export default function Footer() {
                     </div>
                   </div>
 
+                  {/* 🔥 LIVE ONLINE CARD WITH ANIMATED FLYING BUBBLE AVATARS 🔥 */}
                   <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/35 bg-gradient-to-br from-cyan-500/[0.12] to-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/60 hover:shadow-[0_12px_35px_rgba(6,182,212,0.15)] sm:p-5">
                     <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-cyan-500/15 blur-2xl" />
-                    <div className="relative">
+                    
+                    {/* Floating Avatars Background Layer */}
+                    <div className="pointer-events-none absolute inset-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_80%,transparent)]">
+                      {leaderboardAvatars.length > 0 && Array.from({ length: 10 }).map((_, i) => {
+                        const avatar = leaderboardAvatars[i % leaderboardAvatars.length];
+                        const pos = avatarPositions[i];
+                        return (
+                          <img 
+                            key={i} 
+                            src={avatar} 
+                            alt="Live user"
+                            className="absolute bottom-[-30px] h-7 w-7 rounded-full object-cover shadow-[0_4px_12px_rgba(6,182,212,0.5)] drop-shadow-md"
+                            style={{
+                              left: pos.left,
+                              animation: `floatUpBubbles ${pos.duration} linear ${pos.delay} infinite`
+                            }}
+                            onError={(e) => { e.currentTarget.src = "https://i.postimg.cc/Nf2ykWb1/1000111442.png" }}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Content on top */}
+                    <div className="relative z-10">
                       <div className="mb-4 flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-400/25 bg-cyan-400/10 text-cyan-300">
                         <Radio className="h-[18px] w-[18px] animate-pulse" strokeWidth={1.8} />
                       </div>
-                      <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-cyan-300">
+                      <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-cyan-300 drop-shadow-md">
                         Live Online
                       </p>
-                      <div className="mt-1 text-[25px] font-black tracking-tight text-white sm:text-[29px]">{onlineUsers}</div>
+                      <div className="mt-1 text-[25px] font-black tracking-tight text-white drop-shadow-md sm:text-[29px]">{onlineUsers}</div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
