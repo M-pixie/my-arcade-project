@@ -393,7 +393,7 @@ export default function DashboardPage() {
                  {/* 🔥 UPDATED TO SOLID PREMIUM BLUE GRADIENT 🔥 */}
                  <div className="bg-gradient-to-r from-[#4285F4] to-[#1a73e8] py-5 text-center relative overflow-hidden">
                    <h3 className="font-bold text-[36px] sm:text-[39px] tracking-normal relative z-10 text-white drop-shadow-md">
-                     Arcade Points: {points}
+                     Arcade Points {points}
                    </h3>
                  </div>
                  
@@ -506,7 +506,7 @@ export default function DashboardPage() {
                       <h3
                         className={`text-base font-medium mb-2 ${
                         isDark ? "text-[#8ab4f8]" : "text-[#1a73e8]"}`}
-                             >Facilitator Report 2026</h3>
+                             >Arcade Facilitator Report 2026</h3>
                           </div>
                         
                         <h2 className={`text-base md:text-lg font-bold flex items-center flex-wrap gap-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
@@ -575,7 +575,7 @@ export default function DashboardPage() {
                         <div className={`w-px h-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}></div>
                         <div className="flex flex-col items-center lg:items-start">
                           <span className={`text-[15px] font-bold text-[#1a73e8] leading-tight`}>{achievedMilestone ? achievedMilestone.title : "None Yet"}</span>
-                          <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Milestone</span>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}></span>
                         </div>
                       </div>
 
