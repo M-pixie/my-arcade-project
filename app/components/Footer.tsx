@@ -34,6 +34,7 @@ export default function Footer() {
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);
   const [leaderboardAvatars, setLeaderboardAvatars] = useState<string[]>([]);
+  const [avatarStartIndex, setAvatarStartIndex] = useState(0);
   
   // 🔥 REAL-TIME ONLINE USERS STATE 🔥
   const [onlineUsers, setOnlineUsers] = useState(1);
@@ -48,14 +49,23 @@ export default function Footer() {
       }, 0);
       setProfilesAnalyzed(totalAnalyzed);
 
-      // 🔥 Fetching avatars for the live floating bubbles animation 🔥
-      const avatars = data
-        .map((u: any) => u.photoURL || "https://i.postimg.cc/Nf2ykWb1/1000111442.png")
-        .slice(0, 20); // Pick a good variety
+      // 🔥 Fetching ALL avatars for the live floating bubbles animation 🔥
+      const avatars = data.map((u: any) => u.photoURL || "https://i.postimg.cc/Nf2ykWb1/1000111442.png");
       setLeaderboardAvatars(avatars);
     });
     return () => unsub();
   }, []);
+
+  // 🔥 Cycle through all 444+ avatars continuously every 6 seconds 🔥
+  useEffect(() => {
+    if (leaderboardAvatars.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setAvatarStartIndex((prevIndex) => (prevIndex + 10) % leaderboardAvatars.length);
+    }, 6000);
+    
+    return () => clearInterval(interval);
+  }, [leaderboardAvatars.length]);
 
   // 2. 🔥 ACTUAL LIVE ONLINE TRACKING LOGIC 🔥
   useEffect(() => {
@@ -291,7 +301,9 @@ export default function Footer() {
                     {/* Floating Avatars Background Layer */}
                     <div className="pointer-events-none absolute inset-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_80%,transparent)]">
                       {leaderboardAvatars.length > 0 && Array.from({ length: 10 }).map((_, i) => {
-                        const avatar = leaderboardAvatars[i % leaderboardAvatars.length];
+                        // Dynamically pick avatars from the full list cycling every few seconds
+                        const avatarIndex = (avatarStartIndex + i) % leaderboardAvatars.length;
+                        const avatar = leaderboardAvatars[avatarIndex];
                         const pos = avatarPositions[i];
                         return (
                           <img 
@@ -349,14 +361,14 @@ export default function Footer() {
                     <img
                       src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg"
                       alt="Manish"
-                      className="h-9 w-9 rounded-full object-cover object-top border-2 border-[#0f172a] ring-1 ring-white/15 shadow-lg sm:h-10 sm:w-10"
+                      className="h-9 w-9 rounded-full object-cover object-top shadow-lg sm:h-10 sm:w-10"
                     />
                   </a>
                   <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" title="Anjali Patel" className="relative transition-transform duration-300 hover:z-10 hover:scale-110">
                     <img
                       src="https://i.postimg.cc/Nf2ykWb1/1000111442.png"
                       alt="Anjali Patel"
-                      className="h-9 w-9 rounded-full object-cover object-top border-2 border-[#0f172a] ring-1 ring-white/15 shadow-lg sm:h-10 sm:w-10"
+                      className="h-9 w-9 rounded-full object-cover object-top shadow-lg sm:h-10 sm:w-10"
                     />
                   </a>
                 </div>
