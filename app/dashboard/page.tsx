@@ -475,7 +475,7 @@ export default function DashboardPage() {
                      
                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 w-full">
                        <div>
-                         <h3 className={`font-black text-[24px] sm:text-[26px] tracking-tight text-center sm:text-left ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Arcade Facilitator 2026</h3>
+                         <h3 className={`font-black text-[24px] sm:text-[26px] tracking-tight text-center sm:text-left ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
                          <span className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider mt-1 block text-center sm:text-left ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jul 13, 2026 - Sept 14, 2026</span>
                        </div>
                        
@@ -538,7 +538,7 @@ export default function DashboardPage() {
                          return (
                            <div key={m.id} className="flex-1 flex flex-col items-center px-1 sm:px-3 min-w-[70px]">
                              <span className={`text-[12px] sm:text-[15px] font-black mb-2 sm:mb-3 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>
-                               {m.title === 'Ultimate' ? 'Ult' : m.title}
+                               {m.title === 'Ultimate' ? 'Ultimate' : m.title}
                              </span>
                              
                              <div className={`w-full h-2.5 sm:h-3 rounded-full overflow-hidden ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}>
