@@ -100,7 +100,9 @@ export default function Navbar() {
     { name: "Facilitator", href: "/facilitator" },
     { name: "Swags Post", href: "/post" },
     { name: "About", href: "/about" },
+    { name: "Explore Events", href: "/members/google-events" },
     { name: "Help", href: "/chat" },
+  
   ];
 
   return (
