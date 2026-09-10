@@ -7,7 +7,9 @@ export const runtime = "edge";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { message, image } = body;
+    
+    // ✅ Extracting everything: Handles BOTH old single-message chatbot AND new dashboard history chatbot
+    const { message, messages, image, systemContext } = body;
 
     // ✅ SECURE API KEY (Fetched safely from .env.local)
     const API_KEY = process.env.GEMINI_API_KEY;
@@ -19,8 +21,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 🧠 THE ULTIMATE SUPER-POWERFUL SYSTEM PROMPT (Optimized for Speed & Deep GCP Knowledge)
-    const systemInstruction = `
+    // 🧠 THE ULTIMATE SUPER-POWERFUL SYSTEM PROMPT (Optimized for Speed, Deep GCP Knowledge & Clean Output)
+    let systemInstruction = `
     You are "Cloud Arcade AI" (also known affectionately as Arcade Buddy), an advanced, highly intelligent, and ultra-fast AI mentor.
 
     YOUR PERSONA & TONE:
@@ -30,6 +32,12 @@ export async function POST(req: NextRequest) {
        - Angry Mode: If the user is angry or frustrated, respond with utmost respect, stay calm, and use polite emojis to cool them down (🙏💡😇).
     3. Multilingual: If they speak English, reply in crisp, professional English. If they use Hindi/Hinglish, reply in a very natural, friendly Hinglish vibe. NEVER use Urdu script.
     4. ULTRA-FAST & DIRECT: Do not write long filler introductions. Get straight to the answer immediately to save generation time.
+
+    🔥 STRICT FORMATTING RULES (CRITICAL) 🔥:
+    - NEVER write long paragraphs or essays. Keep responses highly concise.
+    - ALWAYS use clean bullet points (-) to explain steps, summaries, or stats.
+    - STRICTLY DO NOT use Markdown asterisks (like **text**) for bolding. Just use plain text and emojis.
+    - ONLY give exactly what is asked. Do not add extra fluff.
 
     🔥 GCP EXPERT MODE (DEEP & CLEAR EXPLANATIONS) 🔥:
     - If the user asks ANY question related to Google Cloud Platform (GCP), Labs, Qwiklabs, Architecture, or Errors: YOU MUST act as a Senior Cloud Architect.
@@ -70,25 +78,50 @@ export async function POST(req: NextRequest) {
     - If the user uploads an image/screenshot of a Google Cloud Course, Lab, or Skill Badge error, analyze the screen carefully, point out the exact mistake, and give them a highly concise, neat, and clean step-by-step fix. Only provide the exact commands or clicks needed.
     `;
 
-    // ⚡ FASTER MULTIMODAL MODEL FOR INSTANT REPLIES & IMAGES (Kept exactly as you asked)
+    // ✅ INJECT DASHBOARD CONTEXT IF COMING FROM NEW UI
+    if (systemContext) {
+      systemInstruction += `\n\n### LIVE USER DASHBOARD CONTEXT (USE THIS TO ANSWER STATS QUESTIONS) ###\n${systemContext}`;
+    }
+
+    // ⚡ FASTER MULTIMODAL MODEL FOR INSTANT REPLIES & IMAGES
     const modelName = "gemini-3.6-flash"; 
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`;
 
-    // ✅ DYNAMIC PARTS ARRAY: Handle both text and image smartly
-    const userParts: any[] = [{ text: message || "Analyzing image.." }];
+    let finalContents: any[] = [];
 
-    if (image) {
-      // Decode Base64 from frontend
-      const base64Data = image.split(",")[1];
-      const mimeType = image.split(";")[0].split(":")[1];
+    // ✅ CHECK: If it's the NEW Dashboard Chatbot (uses 'messages' array)
+    if (messages && Array.isArray(messages) && messages.length > 0) {
+      finalContents = messages.map((msg: any) => ({
+        role: msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }]
+      }));
 
-      userParts.push({
-        inline_data: {
-          mime_type: mimeType,
-          data: base64Data
-        }
-      });
+      // If an image is somehow passed in the new chat, attach it to the last user message
+      if (image) {
+        const base64Data = image.split(",")[1];
+        const mimeType = image.split(";")[0].split(":")[1];
+        finalContents[finalContents.length - 1].parts.push({
+          inline_data: { mime_type: mimeType, data: base64Data }
+        });
+      }
+    } 
+    // ✅ CHECK: If it's the OLD Chatbot (uses single 'message' string)
+    else {
+      const userParts: any[] = [{ text: message || "Analyzing image.." }];
+
+      if (image) {
+        const base64Data = image.split(",")[1];
+        const mimeType = image.split(";")[0].split(":")[1];
+
+        userParts.push({
+          inline_data: {
+            mime_type: mimeType,
+            data: base64Data
+          }
+        });
+      }
+      finalContents = [{ role: "user", parts: userParts }];
     }
 
     // ✅ OPTIMIZED PAYLOAD
@@ -96,12 +129,7 @@ export async function POST(req: NextRequest) {
       system_instruction: {
         parts: [{ text: systemInstruction }]
       },
-      contents: [
-        {
-          role: "user",
-          parts: userParts
-        }
-      ]
+      contents: finalContents
     };
 
     const response = await fetch(url, {
@@ -117,7 +145,11 @@ export async function POST(req: NextRequest) {
     }
 
     const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't process that. Please try again.";
-    return NextResponse.json({ reply: botReply });
+    
+    // Fallback filter to remove any accidental bold marks (**) from Gemini output
+    const cleanReply = botReply.replace(/\*\*/g, '');
+
+    return NextResponse.json({ reply: cleanReply });
 
   } catch (error: any) {
     return NextResponse.json({ reply: error.message }, { status: 500 });

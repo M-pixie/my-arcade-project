@@ -40,6 +40,13 @@ export default function DashboardPage() {
 
   const [isDark, setIsDark] = useState(false);
 
+  // NEW STATES FOR ASK AI CHATBOT & LANGUAGE TOGGLE
+  const [showAiChat, setShowAiChat] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [messages, setMessages] = useState<any[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [aiLanguage, setAiLanguage] = useState<"English" | "Hinglish">("English");
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("arcade_theme");
     if (savedTheme === "dark") {
@@ -308,7 +315,6 @@ export default function DashboardPage() {
     return new Date(item.date.replace(/Earned/i, '').trim()) >= new Date("2026-07-13T00:00:00");
   }).length;
 
-  // Calculate stats strictly for "The Arcade" (Before July 13th)
   const arcadeOnlyGamesCount = Math.max(0, totalArcadeGamesCount - facilitatorArcadeGamesCount);
   const arcadeOnlySkillBadgesCount = Math.max(0, totalSkillBadgesCount - facilitatorSkillBadgesCount);
 
@@ -322,6 +328,51 @@ export default function DashboardPage() {
   const achievedMilestone = [...facilitatorMilestones].reverse().find(
     (m) => facilitatorArcadeGamesCount >= m.targetArcade && facilitatorSkillBadgesCount >= m.targetSkills
   );
+
+  // EXTREMELY STRICT AI PROMPT TO PREVENT ESSAYS & SCREENSHOT REQUESTS
+  const handleAskAi = async () => {
+    if (!chatInput.trim()) return;
+    
+    const newMsg = { role: "user", content: chatInput };
+    setMessages((prev) => [...prev, newMsg]);
+    setChatInput("");
+    setIsTyping(true);
+
+    try {
+      const sysPrompt = `IGNORE ALL PREVIOUS INSTRUCTIONS. You are strictly a Dashboard Stats Assistant for ${userName || "Player"}. 
+      DO NOT ask for screenshots, console logs, or images under any circumstances.
+      
+      Provide ONLY the requested dashboard stats using this live data:
+      - Points: ${points || 0}
+      - Tier: ${getCurrentTier()}
+      - Arcade Games: ${totalArcadeGamesCount}
+      - Skill Badges: ${totalSkillBadgesCount}
+      - Pending Labs: ${pendingLabs.length}
+      
+      STRICT RULES:
+      1. Language MUST BE ${aiLanguage}.
+      2. Format using simple bullet points (use '-' or '•'). Make sure there is a line break between points.
+      3. NO LONG PARAGRAPHS OR ESSAYS. Keep it extremely brief and clean.
+      4. ABSOLUTELY NO ASTERISKS (**). Do not use markdown bolding or formatting. Just plain text.
+      5. Only answer what is asked. Do not add extra fluff.`;
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [...messages, newMsg],
+          systemContext: sysPrompt
+        }),
+      });
+      
+      const data = await res.json();
+      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
+    } catch (error) {
+      console.error("AI Chat Error:", error);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   return (
     <div className={`min-h-screen w-full overflow-x-hidden font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f4f7f9] text-[#202124]'}`}>
@@ -421,10 +472,23 @@ export default function DashboardPage() {
                            <span className="w-1.5 h-1.5 bg-white rounded-full"></span>NEW
                          </span>
                        </div>
+
+                       {/* NEW ASK AI BUTTON (With Gemini Spin Hover) */}
+                       <div className="relative ml-2">
+                         <button
+                           onClick={() => setShowAiChat(true)}
+                           className={`group flex items-center gap-1.5 px-4 py-1.5 rounded-full border shadow-sm transition-all hover:scale-105 text-[13px] font-bold ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8]'}`}
+                         >
+                           <svg className="w-4 h-4 transition-all duration-700 group-hover:rotate-180 group-hover:scale-125 group-hover:text-[#c58af9]" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+                           </svg>
+                           Ask AI
+                         </button>
+                       </div>
                      </div>
 
                      {/* Right side: Links & Action Buttons */}
-                     <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto justify-center md:justify-end flex-wrap">
+                     <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto justify-center md:justify-end flex-wrap mt-3 md:mt-0">
                        <button onClick={() => router.push('/calculator')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
                          Calculator
                        </button>
@@ -558,31 +622,31 @@ export default function DashboardPage() {
                      {/* SMALL COMPACT PREMIUM BANNER INSTALLED HERE */}
                      {achievedMilestone ? (
                        <div className="w-full mb-8 flex flex-col sm:flex-row gap-0 rounded-lg overflow-hidden shadow-sm border border-[#e8eaed] dark:border-[#3c4043] animate-fade-in-up">
-                          {/* Left half: Achieved Block - Changed to Blue Gradient */}
-                          <div className="flex-1 bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-3 px-4 text-white flex justify-between items-center border-b sm:border-b-0 sm:border-r border-white/20">
-                             <div className="flex items-center gap-3">
-                               <span className="text-2xl drop-shadow-md">👑</span>
-                               <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">
-                                  {achievedMilestone.title}
-                               </div>
-                             </div>
-                             <div className="flex flex-col items-end justify-center h-full">
-                                <div className="text-xl font-black leading-none drop-shadow-sm">✓</div>
-                             </div>
-                          </div>
+                         {/* Left half: Achieved Block - Changed to Blue Gradient */}
+                         <div className="flex-1 bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-3 px-4 text-white flex justify-between items-center border-b sm:border-b-0 sm:border-r border-white/20">
+                            <div className="flex items-center gap-3">
+                              <span className="text-2xl drop-shadow-md">👑</span>
+                              <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">
+                                 {achievedMilestone.title}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-end justify-center h-full">
+                               <div className="text-xl font-black leading-none drop-shadow-sm">✓</div>
+                            </div>
+                         </div>
 
-                          {/* Right half: Bonus Points Block */}
-                          <div className="flex-1 bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-3 px-4 text-white flex justify-between items-center">
-                             <div className="flex items-center gap-3">
-                               <span className="text-2xl drop-shadow-md">⭐</span>
-                               <div className="font-black text-[15px] tracking-tight leading-tight flex items-center h-full">
-                                  Bonus Points
-                               </div>
-                             </div>
-                             <div className="flex flex-col items-end justify-center h-full">
-                                <div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div>
-                             </div>
-                          </div>
+                         {/* Right half: Bonus Points Block */}
+                         <div className="flex-1 bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-3 px-4 text-white flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                              <span className="text-2xl drop-shadow-md">⭐</span>
+                              <div className="font-black text-[15px] tracking-tight leading-tight flex items-center h-full">
+                                 Bonus Points
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-end justify-center h-full">
+                               <div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div>
+                            </div>
+                         </div>
                        </div>
                      ) : (
                         <div className="mb-6"></div>
@@ -775,9 +839,10 @@ export default function DashboardPage() {
                      Pending Labs ({pendingLabs.length})
                   </h5>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                  {/* PREMIUM GRID BORDER WRAPPER ADDED HERE */}
+                  <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l rounded-2xl overflow-hidden shadow-sm ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                     {pendingLabs.map((lab) => (
-                      <div key={`pending-${lab.id}`} className="flex flex-col items-center">
+                      <div key={`pending-${lab.id}`} className={`flex flex-col items-center p-6 border-b border-r transition-colors ${isDark ? 'border-[#3c4043] bg-[#15171b] hover:bg-[#1e1e24]' : 'border-[#dadce0] bg-white hover:bg-gray-50'}`}>
                         <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
                         <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
 
@@ -827,9 +892,10 @@ export default function DashboardPage() {
                     Completed Labs ({completedLabs.length})
                   </h5>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                  {/* PREMIUM GRID BORDER WRAPPER ADDED HERE */}
+                  <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l rounded-2xl overflow-hidden shadow-sm ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                     {completedLabs.map((lab) => (
-                      <div key={`completed-${lab.id}`} className="flex flex-col items-center group">
+                      <div key={`completed-${lab.id}`} className={`flex flex-col items-center p-6 border-b border-r transition-colors ${isDark ? 'border-[#3c4043] bg-[#15171b] hover:bg-[#1e1e24]' : 'border-[#dadce0] bg-white hover:bg-gray-50'}`}>
                         <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
                         <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
 
@@ -1009,6 +1075,72 @@ export default function DashboardPage() {
             </a>
           </div>
         </div>
+
+        {/* --- PREMIUM AI CHAT MODAL --- */}
+        {showAiChat && (
+          <div className={`fixed bottom-6 right-6 w-[350px] sm:w-[380px] h-[500px] rounded-2xl shadow-2xl flex flex-col z-[100] border overflow-hidden transition-all animate-fade-in-up ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-[#f8f9fa] border-[#dadce0]'}`}>
+            
+            {/* Header with Title and Language Toggle */}
+            <div className={`flex justify-between items-center px-4 py-3 border-b bg-gradient-to-r from-[#4285F4] to-[#8A2BE2] text-white`}>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse shadow-sm"></span>
+                <h3 className="font-bold text-[15px] tracking-wide">
+                  {userName ? userName.split(' ')[0] + "'s Assistant" : "Arcade Assistant"}
+                </h3>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className={`flex items-center p-0.5 rounded-full ${isDark ? 'bg-black/30' : 'bg-white/20'}`}>
+                  <button onClick={() => setAiLanguage('English')} className={`px-2.5 py-1 text-[10px] font-black tracking-wider rounded-full transition-all ${aiLanguage === 'English' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>EN</button>
+                  <button onClick={() => setAiLanguage('Hinglish')} className={`px-2.5 py-1 text-[10px] font-black tracking-wider rounded-full transition-all ${aiLanguage === 'Hinglish' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>HI</button>
+                </div>
+                <button onClick={() => setShowAiChat(false)} className="p-1.5 rounded-full transition-colors hover:bg-white/20 text-white">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Messages (whitespace-pre-wrap ADDED HERE FOR BULLETS) */}
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
+              <div className={`whitespace-pre-wrap leading-relaxed p-3 rounded-2xl rounded-tl-sm text-[13px] self-start max-w-[85%] shadow-sm ${isDark ? 'bg-[#2a2d32] text-gray-200' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}>
+                Hi {userName?.split(' ')[0] || 'Player'}! Main tumhare stats dekh sakta hu. Tumhare paas abhi {points || 0} points hain. Bolo, dashboard ke baare me kya janna hai?
+              </div>
+              
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`whitespace-pre-wrap leading-relaxed p-3 rounded-2xl text-[13px] max-w-[85%] shadow-sm ${msg.role === 'user' ? 'self-end bg-[#1a73e8] text-white rounded-tr-sm' : `self-start rounded-tl-sm ${isDark ? 'bg-[#2a2d32] text-gray-200' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}`}>
+                  {/* .replace is added to ensure AI bold markdown ** is stripped if it disobeys */}
+                  {msg.content.replace(/\*\*/g, '')}
+                </div>
+              ))}
+              
+              {isTyping && (
+                <div className={`p-3 rounded-2xl rounded-tl-sm text-[13px] self-start w-16 flex justify-center gap-1 shadow-sm ${isDark ? 'bg-[#2a2d32]' : 'bg-white border border-[#dadce0]'}`}>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-75"></span>
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-150"></span>
+                </div>
+              )}
+            </div>
+
+            {/* Input Field */}
+            <div className={`p-3 border-t ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+              <div className="relative">
+                <input 
+                  type="text" 
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
+                  placeholder="Ask anything..." 
+                  className={`w-full pl-4 pr-10 py-2.5 rounded-xl text-sm font-medium focus:outline-none transition-colors border ${isDark ? 'bg-[#2a2d32] text-white placeholder-gray-500 border-[#3c4043] focus:border-[#8ab4f8]' : 'bg-[#f1f3f4] text-[#202124] placeholder-gray-500 border-transparent focus:border-[#1a73e8]'}`}
+                />
+                <button onClick={handleAskAi} disabled={isTyping || !chatInput.trim()} className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 transition-transform hover:scale-110 disabled:opacity-50 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       <style jsx>{`
