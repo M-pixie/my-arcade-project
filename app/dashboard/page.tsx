@@ -12,7 +12,7 @@ export default function DashboardPage() {
   const [points, setPoints] = useState<number | null>(null);
   const [breakdown, setBreakdown] = useState<any>(null);
   const [history, setHistory] = useState<any[]>([]); 
-  
+
   const [historyFilter, setHistoryFilter] = useState("All Games");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -40,12 +40,29 @@ export default function DashboardPage() {
 
   const [isDark, setIsDark] = useState(false);
 
-  // NEW STATES FOR ASK AI CHATBOT & LANGUAGE TOGGLE
+  // --- NEW AI FEATURES STATES ---
   const [showAiChat, setShowAiChat] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [aiLanguage, setAiLanguage] = useState<"English" | "Hinglish">("English");
+
+  // Clear Chat Confirmation State
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+
+  // Vision / Image Upload States
+  const [chatImage, setChatImage] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Voice Command States
+  const [isListening, setIsListening] = useState(false);
+
+  // Dynamic Gamified Hype Message
+  const [hypeMessage, setHypeMessage] = useState<string | null>(null);
+
+  // Auto Scroll Ref
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("arcade_theme");
@@ -57,10 +74,18 @@ export default function DashboardPage() {
       setHideModals(true);
     }
 
+    // Load Chat History (Data Save Feature)
+    const savedChat = localStorage.getItem("arcade_ai_chat_history");
+    if (savedChat) {
+      try {
+        setMessages(JSON.parse(savedChat));
+      } catch (e) {}
+    }
+
     const intervalText = setInterval(() => {
       setShowYouText((prev) => !prev);
     }, 1000);
-    
+
     const intervalSub = setInterval(() => {
       setShowSubscribe((prev) => !prev);
     }, 5000);
@@ -82,6 +107,57 @@ export default function DashboardPage() {
       if (intervalId) clearInterval(intervalId);
     };
   }, [profileUrl]);
+
+  // Generate Hype Message based on Points
+  useEffect(() => {
+    if (points !== null) {
+      if (points === 0) {
+        setHypeMessage("Welcome to the Arcade! Let's conquer the cloud and grab that first point today! 🚀");
+      } else if (points > 0 && points < 50) {
+        setHypeMessage(`Great start, ${userName?.split(' ')[0] || 'Champ'}! You need ${50 - points} more points for the Arcade Trooper Swag! Keep grinding! 🔥`);
+      } else if (points >= 50 && points < 75) {
+        setHypeMessage(`Awesome! Trooper tier locked 🏆. Just ${75 - points} points to hit Arcade Ranger! You got this! ✨`);
+      } else {
+        setHypeMessage(`Absolute Legend! You're crushing the leaderboard with ${points} points! 👑🔥`);
+      }
+    }
+  }, [points, userName]);
+
+  // Auto Scroll to Bottom 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping]);
+
+  // GPT-Style Typewriter Effect
+  useEffect(() => {
+    if (messages.length === 0) return;
+    const lastIndex = messages.length - 1;
+    const lastMsg = messages[lastIndex];
+
+    if (lastMsg.role === "assistant" && lastMsg.isTypingStatus) {
+      const fullText = lastMsg.fullContent;
+      const currentText = lastMsg.content;
+
+      if (currentText.length < fullText.length) {
+        const timer = setTimeout(() => {
+          setMessages((prev) => {
+            const updated = [...prev];
+            // Types 3 characters at a time for smooth but fast GPT speed
+            updated[lastIndex] = { ...updated[lastIndex], content: fullText.slice(0, currentText.length + 3) };
+            return updated;
+          });
+        }, 15);
+        return () => clearTimeout(timer);
+      } else {
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[lastIndex] = { ...updated[lastIndex], isTypingStatus: false };
+          localStorage.setItem("arcade_ai_chat_history", JSON.stringify(updated));
+          return updated;
+        });
+      }
+    }
+  }, [messages]);
 
   const toggleDarkMode = () => {
     const newTheme = !isDark;
@@ -220,7 +296,7 @@ export default function DashboardPage() {
       if (data.completionHistory) setHistory(data.completionHistory);
       if (data.userName) setUserName(data.userName);
       if (data.userAvatar) setUserAvatar(data.userAvatar);
-      
+
       const extractedId = url.trim().split('/').pop() || null;
       setUserUniqueId(extractedId);
       if (!isSilent) setLastRefreshed(formatTime());
@@ -329,44 +405,152 @@ export default function DashboardPage() {
     (m) => facilitatorArcadeGamesCount >= m.targetArcade && facilitatorSkillBadgesCount >= m.targetSkills
   );
 
-  // EXTREMELY STRICT AI PROMPT TO PREVENT ESSAYS & SCREENSHOT REQUESTS
-  const handleAskAi = async () => {
-    if (!chatInput.trim()) return;
+  // --- VISION / IMAGE UPLOAD HANDLERS ---
+  const handleImageUpload = (e: any) => {
+    const file = e.target.files?.[0] || e.dataTransfer?.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setChatImage(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: any) => { e.preventDefault(); setIsDragging(true); };
+  const handleDragLeave = (e: any) => { e.preventDefault(); setIsDragging(false); };
+  const handleDrop = (e: any) => { e.preventDefault(); handleImageUpload(e); };
+
+  // --- CLEAR CHAT HANDLER ---
+  const handleClearChat = () => {
+    setMessages([]);
+    localStorage.removeItem("arcade_ai_chat_history");
+    setShowClearConfirm(false);
+  };
+
+  // --- VOICE COMMAND HANDLER ---
+  const startListening = () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert("Voice input is not supported in this browser. Try Chrome/Edge.");
+      return;
+    }
+    const recognition = new (window as any).webkitSpeechRecognition();
+    recognition.lang = aiLanguage === 'Hinglish' ? 'hi-IN' : 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setChatInput(transcript);
+    };
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
     
-    const newMsg = { role: "user", content: chatInput };
-    setMessages((prev) => [...prev, newMsg]);
+    recognition.start();
+  };
+
+  // MAIN AI CHAT SUBMIT LOGIC
+  const handleAskAi = async (promptOverride?: string) => {
+    const textToSubmit = promptOverride || chatInput;
+    if (!textToSubmit.trim() && !chatImage) return;
+
+    const newMsg = { role: "user", content: textToSubmit || "Analyze this image." };
+    const updatedMessages = [...messages, newMsg];
+    setMessages(updatedMessages);
+    localStorage.setItem("arcade_ai_chat_history", JSON.stringify(updatedMessages));
+    
+    const payloadContent = textToSubmit;
+    const payloadImage = chatImage;
+    
     setChatInput("");
+    setChatImage(null);
     setIsTyping(true);
 
     try {
-      const sysPrompt = `IGNORE ALL PREVIOUS INSTRUCTIONS. You are strictly a Dashboard Stats Assistant for ${userName || "Player"}. 
-      DO NOT ask for screenshots, console logs, or images under any circumstances.
-      
-      Provide ONLY the requested dashboard stats using this live data:
-      - Points: ${points || 0}
-      - Tier: ${getCurrentTier()}
-      - Arcade Games: ${totalArcadeGamesCount}
-      - Skill Badges: ${totalSkillBadgesCount}
-      - Pending Labs: ${pendingLabs.length}
-      
-      STRICT RULES:
-      1. Language MUST BE ${aiLanguage}.
-      2. Format using simple bullet points (use '-' or '•'). Make sure there is a line break between points.
-      3. NO LONG PARAGRAPHS OR ESSAYS. Keep it extremely brief and clean.
-      4. ABSOLUTELY NO ASTERISKS (**). Do not use markdown bolding or formatting. Just plain text.
-      5. Only answer what is asked. Do not add extra fluff.`;
+      const sysPrompt = `
+You are the Dashboard Stats Assistant and Cloud Expert.
+
+Language: ${aiLanguage}
+
+Rules:
+- Use simple bullet points.
+- Keep answers concise and clear.
+- Do not use ** markdown.
+- Answer exactly what the user asks.
+- Always use the live dashboard data provided separately.
+- Never invent dashboard statistics.
+`;
+
+const dashboardData = {
+  userName: userName || "Arcade Player",
+
+  points: points ?? 0,
+
+  rank: realRank,
+
+  totalArcadeGames: totalArcadeGamesCount,
+
+  totalSkillBadges: totalSkillBadgesCount,
+
+  pendingLabs: pendingLabs.map((lab) => lab.title),
+
+  completedLabs: completedLabs.map((lab) => lab.title),
+
+  breakdown: breakdown || {},
+
+  prizeTiers: arcadeTiersData.map((tier) => ({
+    name: tier.name,
+    target: tier.target,
+    spots: tier.spots,
+  })),
+
+  facilitator: {
+    startDate: "2026-07-13",
+    endDate: "2026-09-14",
+
+    games: facilitatorArcadeGamesCount,
+
+    skillBadges: facilitatorSkillBadgesCount,
+
+    achievedMilestone: achievedMilestone?.title || null,
+
+    bonusPoints: achievedMilestone?.points || 0,
+
+    milestones: facilitatorMilestones.map((m) => ({
+      id: m.id,
+      title: m.title,
+      targetGames: m.targetArcade,
+      targetSkills: m.targetSkills,
+      bonusPoints: m.points,
+    })),
+  },
+};
+
+      // Pass cleaned messages so AI context doesn't get messed up with raw typewriter properties
+      const cleanMessagesForApi = updatedMessages.map(m => ({
+          role: m.role,
+          content: m.fullContent || m.content
+      }));
 
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...messages, newMsg],
-          systemContext: sysPrompt
+          message: payloadContent, 
+          messages: cleanMessagesForApi,
+          image: payloadImage,
+          systemContext: sysPrompt,
+          dashboardData,
         }),
       });
-      
+
       const data = await res.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
+      
+      // Start typing effect
+      setMessages((prev) => [
+        ...prev, 
+        { role: "assistant", content: "", fullContent: data.reply, isTypingStatus: true }
+      ]);
     } catch (error) {
       console.error("AI Chat Error:", error);
     } finally {
@@ -374,20 +558,63 @@ export default function DashboardPage() {
     }
   };
 
+  // --- FORMAT CHAT TEXT FUNCTION ---
+  const formatChatText = (text: string, isUser: boolean) => {
+    const cleanText = text.replace(/\*\*/g, ""); // Remove asterisks
+    const urlRegex = /(https?:\/\/[^\s]+)/g; // Find links
+    const parts = cleanText.split(urlRegex);
+
+    return parts.map((part, i) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1 font-bold underline underline-offset-2 break-all transition-colors ${
+              isUser 
+                ? "text-white hover:text-gray-200" 
+                : (isDark ? "text-[#8ab4f8] hover:text-[#aecbfa]" : "text-[#1a73e8] hover:text-[#1557b0]")
+            }`}
+          >
+            {part}
+            {/* SVG Link Arrow Icon */}
+            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
+  };
+
   return (
     <div className={`min-h-screen w-full overflow-x-hidden font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f4f7f9] text-[#202124]'}`}>
       <Navbar />
 
-      <main className="w-full mx-auto px-4 sm:px-6 pt-24 pb-16 flex flex-col items-center">
-        
+      {/* DYNAMIC HYPE BANNER */}
+      {hypeMessage && (
+        <div className="w-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] pt-20 pb-2 px-4 shadow-sm animate-fade-in-up">
+          <div className="max-w-[1350px] mx-auto text-center">
+            <p className="text-white text-[13px] md:text-sm font-bold tracking-wide animate-pulse drop-shadow-md">
+               ✨ {hypeMessage}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <main className={`w-full mx-auto px-4 sm:px-6 pb-16 flex flex-col items-center ${hypeMessage ? 'pt-6' : 'pt-24'}`}>
+
         <div className="w-full max-w-[1350px]">
           {points !== null && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative animate-fade-in-up">
-              
+
               {/* Left Side: Premium Profile Card */}
               <div className="lg:col-span-3 xl:col-span-3 flex flex-col w-full">
                 <div className={`rounded-2xl shadow-sm border overflow-hidden relative flex flex-col transition-all h-full ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
-                  
+
                   {/* Top Gradient Header */}
                   <div className="flex bg-gradient-to-r from-[#4285F4] to-[#8A2BE2] text-white divide-x divide-white/20">
                     <div className="flex-1 py-5 text-center flex flex-col justify-center items-center">
@@ -412,7 +639,7 @@ export default function DashboardPage() {
                         )}
                       </div>
                     </div>
-                    
+
                     <h2 className={`text-xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>
                       {userName || "Arcade Player"}
                     </h2>
@@ -444,13 +671,13 @@ export default function DashboardPage() {
 
               {/* Right Side: Control Bar + Main Dashboard */}
               <div className="lg:col-span-9 xl:col-span-9 flex flex-col w-full gap-5">
-                
+
                 {/* RELATIVE WRAPPER FOR FLOATING AI OVERVIEW TO NOT PUSH CONTENT DOWN */}
                 <div className="relative w-full z-30">
 
                   {/* 1. Top Control Bar (Responsive) */}
                   <div className={`flex flex-col md:flex-row justify-between items-center px-4 md:px-5 py-3 rounded-2xl border shadow-sm ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
-                     
+
                      {/* Left side: Status Indicator & AI Overview Button */}
                      <div className="flex items-center gap-2 mb-3 md:mb-0 w-full md:w-auto justify-center md:justify-start">
                        <div className="w-2 h-2 rounded-full bg-[#34a853] shadow-sm"></div>
@@ -473,7 +700,7 @@ export default function DashboardPage() {
                          </span>
                        </div>
 
-                       {/* NEW ASK AI BUTTON (With Gemini Spin Hover) */}
+                       {/* ASK AI BUTTON */}
                        <div className="relative ml-2">
                          <button
                            onClick={() => setShowAiChat(true)}
@@ -493,18 +720,18 @@ export default function DashboardPage() {
                          Calculator
                        </button>
                        <div className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#5f6368]' : 'bg-[#dadce0]'}`}></div>
-                       
+
                        <button onClick={() => router.push('/leaderboard')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
                          Leaderboard
                        </button>
                        <div className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#5f6368]' : 'bg-[#dadce0]'}`}></div>
-                       
+
                        <button onClick={() => router.push('/resources')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
                          Skill Badges
                        </button>
-                       
+
                        <div className={`hidden sm:block w-px h-5 mx-1 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
-                       
+
                        {/* Dark Mode Toggle */}
                        <button onClick={toggleDarkMode} className={`p-1.5 rounded transition-colors flex items-center justify-center ${isDark ? 'hover:bg-[#2a2d32] text-gray-200' : 'hover:bg-[#f1f3f4] text-[#fbbc04]'}`}>
                          {isDark ? (
@@ -523,13 +750,13 @@ export default function DashboardPage() {
                     {/* AI Overview Panel (Floating On Top) */}
                   {showAiOverview && (
                     <div className="absolute top-[calc(100%+12px)] left-0 w-full z-50 animate-fade-in-up shadow-2xl rounded-[16px] p-[1.5px] overflow-hidden group">
-                      
+
                       {/* GEMINI STYLE ANIMATED GLOWING BORDER */}
                       <div className="absolute inset-[-150%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#9b72cb_30%,#4285F4_50%,transparent_70%)] opacity-70"></div>
-                      
+
                       {/* INNER CONTENT BOX */}
                       <div className={`relative w-full h-full rounded-[15px] p-5 flex flex-col sm:flex-row gap-4 transition-all duration-200 ${isDark ? 'bg-[#15171b]' : 'bg-[#f8f9fa]'}`}>
-                        
+
                         {/* FAST CLOSE 'X' BUTTON */}
                         <button onClick={() => setShowAiOverview(false)} className={`absolute top-3 right-3 p-1.5 rounded-full transition-colors z-50 ${isDark ? 'hover:bg-[#3c4043] text-gray-400' : 'hover:bg-gray-200 text-gray-500'}`}>
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -538,14 +765,14 @@ export default function DashboardPage() {
                         <div className="mt-1 flex-shrink-0 hidden sm:block">
                           <svg className="w-7 h-7 text-[#9b72cb] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
                         </div>
-                        
-                        {/* HIGHLIGHTED POINT-WISE SUMMARY (PROFESSIONAL GREY & THIN FONT) */}
+
+                        {/* HIGHLIGHTED POINT-WISE SUMMARY */}
                         <div className="flex flex-col gap-3 w-full pr-6">
                           <h3 className={`font-bold text-[17px] flex items-center gap-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
                              <svg className="w-5 h-5 sm:hidden text-[#9b72cb] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
                              AI Summary for {userName || "Player"}
                           </h3>
-                          
+
                           <div className={`grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 text-[14px] font-medium leading-relaxed mt-1 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
                             <div className="flex flex-col gap-3">
                               <p className="flex items-center gap-2">🎯 Total Points: <span className={`font-semibold px-2.5 py-0.5 rounded-md shadow-sm border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-200' : 'bg-white border-[#dadce0] text-[#3c4043]'}`}>{points || 0}</span></p>
@@ -565,115 +792,74 @@ export default function DashboardPage() {
 
                 </div>
 
-                {/* 2. Main Stats (Arcade 30% | Facilitator 70%) */}
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
-                  
-                   {/* Left: The Arcade (~30% width) */}
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                      <h3 className={`font-black text-[26px] tracking-tight text-center mt-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>The Arcade</h3>
                      <span className={`text-[11px] font-bold uppercase tracking-wider mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>
-                     
                      <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
 
                      {arcadeOnlyGamesCount === 0 && arcadeOnlySkillBadgesCount === 0 ? (
-                        <div className="mt-2 text-[13px] text-center font-bold text-gray-500 dark:text-gray-400 px-2 leading-relaxed">
-                          No labs completed between January and July 13.
-                        </div>
+                        <div className="mt-2 text-[13px] text-center font-bold text-gray-500 dark:text-gray-400 px-2 leading-relaxed">No labs completed between January and July 13.</div>
                      ) : (
                         <div className="flex justify-center gap-6 sm:gap-10 w-full mt-2">
                            <div className="flex flex-col items-center">
-                              <div className="flex items-center gap-1.5 mb-1.5 text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                                 <span className="w-2.5 h-2.5 rounded-full bg-[#1a73e8]"></span>Arcade Games
-                              </div>
+                              <div className="flex items-center gap-1.5 mb-1.5 text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider"><span className="w-2.5 h-2.5 rounded-full bg-[#1a73e8]"></span>Arcade Games</div>
                               <span className={`text-3xl sm:text-4xl font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{arcadeOnlyGamesCount}</span>
                            </div>
                            <div className="flex flex-col items-center">
-                              <div className="flex items-center gap-1.5 mb-1.5 text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                                 <span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>Skill Badges
-                              </div>
+                              <div className="flex items-center gap-1.5 mb-1.5 text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider"><span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>Skill Badges</div>
                               <span className={`text-3xl sm:text-4xl font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{arcadeOnlySkillBadgesCount}</span>
                            </div>
                         </div>
                      )}
 
-                     {/* Achieved Prize Tier Inside Arcade Box (Green Bordered Blue Button) */}
                      <div className="mt-8 flex flex-col items-center w-full">
-                       <div className={`px-4 py-2.5 w-full text-center rounded-lg shadow-sm font-black text-[14px] sm:text-[15px] bg-[#1a73e8] text-white border-2 border-[#34a853]`}>
-                         🏆 {getCurrentTier()}
-                       </div>
+                       <div className={`px-4 py-2.5 w-full text-center rounded-lg shadow-sm font-black text-[14px] sm:text-[15px] bg-[#1a73e8] text-white border-2 border-[#34a853]`}>🏆 {getCurrentTier()}</div>
                      </div>
                    </div>
 
-                   {/* Right: Facilitator Program (~68% width) */}
                    <div className="w-full md:w-[68%] flex flex-col px-2 md:pl-8 pt-6 md:pt-0">
-                     
                      <div className="flex flex-col items-center mb-6 w-full">
                         <h3 className={`font-black text-[24px] sm:text-[28px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
                         <span className={`text-[10px] sm:text-[12px] font-bold uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jul 13, 2026 - Sept 14, 2026</span>
                      </div>
-                     
-                     {/* Centered Games & Skill Badges */}
                      <div className="flex items-center gap-3 sm:gap-4 mb-6 flex-wrap justify-center w-full">
-                        <div className={`text-[15px] sm:text-[18px] font-extrabold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                           Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span>
-                        </div>
+                        <div className={`text-[15px] sm:text-[18px] font-extrabold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span></div>
                      </div>
 
-                     {/* SMALL COMPACT PREMIUM BANNER INSTALLED HERE */}
                      {achievedMilestone ? (
                        <div className="w-full mb-8 flex flex-col sm:flex-row gap-0 rounded-lg overflow-hidden shadow-sm border border-[#e8eaed] dark:border-[#3c4043] animate-fade-in-up">
-                         {/* Left half: Achieved Block - Changed to Blue Gradient */}
                          <div className="flex-1 bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-3 px-4 text-white flex justify-between items-center border-b sm:border-b-0 sm:border-r border-white/20">
                             <div className="flex items-center gap-3">
                               <span className="text-2xl drop-shadow-md">👑</span>
-                              <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">
-                                 {achievedMilestone.title}
-                              </div>
+                              <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">{achievedMilestone.title}</div>
                             </div>
-                            <div className="flex flex-col items-end justify-center h-full">
-                               <div className="text-xl font-black leading-none drop-shadow-sm">✓</div>
-                            </div>
+                            <div className="flex flex-col items-end justify-center h-full"><div className="text-xl font-black leading-none drop-shadow-sm">✓</div></div>
                          </div>
-
-                         {/* Right half: Bonus Points Block */}
                          <div className="flex-1 bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-3 px-4 text-white flex justify-between items-center">
                             <div className="flex items-center gap-3">
                               <span className="text-2xl drop-shadow-md">⭐</span>
-                              <div className="font-black text-[15px] tracking-tight leading-tight flex items-center h-full">
-                                 Bonus Points
-                              </div>
+                              <div className="font-black text-[15px] tracking-tight leading-tight flex items-center h-full">Bonus Points</div>
                             </div>
-                            <div className="flex flex-col items-end justify-center h-full">
-                               <div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div>
-                            </div>
+                            <div className="flex flex-col items-end justify-center h-full"><div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div></div>
                          </div>
                        </div>
                      ) : (
                         <div className="mb-6"></div>
                      )}
 
-                     {/* 4-Color Milestone Progress Bar (Free floating without box border) */}
                      <div className={`mt-auto p-2 sm:p-3 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
                        {facilitatorMilestones.map((m) => {
                          const arcadePerc = Math.min(100, (facilitatorArcadeGamesCount / m.targetArcade) * 100);
                          const skillPerc = Math.min(100, (facilitatorSkillBadgesCount / m.targetSkills) * 100);
                          const totalPerc = Math.floor((arcadePerc + skillPerc) / 2);
-
                          return (
                            <div key={m.id} className="flex-1 flex flex-col items-center px-2 sm:px-4 min-w-[70px]">
-                             <span className={`text-[13px] sm:text-[16px] font-black mb-2 sm:mb-3 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>
-                               {m.title === 'Ultimate' ? 'Ultimate' : m.title}
-                             </span>
-                             
+                             <span className={`text-[13px] sm:text-[16px] font-black mb-2 sm:mb-3 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>{m.title === 'Ultimate' ? 'Ultimate' : m.title}</span>
                              <div className={`w-full h-2.5 sm:h-3 rounded-full overflow-hidden ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}>
                                <div className={`h-full rounded-full ${m.colorClass} transition-all duration-1000 ease-out`} style={{ width: `${totalPerc}%` }}></div>
                              </div>
-                             
-                             <span className={`text-[13px] sm:text-[15px] font-black mt-2 sm:mt-3 tracking-wide ${isDark ? (totalPerc > 0 ? m.textClass : 'text-gray-500') : m.textClass}`}>
-                               {totalPerc}%
-                             </span>
-
-                             {/* Explicit counts underneath without Bonus Points */}
+                             <span className={`text-[13px] sm:text-[15px] font-black mt-2 sm:mt-3 tracking-wide ${isDark ? (totalPerc > 0 ? m.textClass : 'text-gray-500') : m.textClass}`}>{totalPerc}%</span>
                              <div className="flex flex-col text-[10px] sm:text-[12px] text-gray-500 dark:text-gray-400 font-bold mt-1.5 sm:mt-2 leading-tight text-center uppercase tracking-wider">
                                 <span>G: {Math.min(facilitatorArcadeGamesCount, m.targetArcade)}/{m.targetArcade}</span>
                                 <span className="mt-0.5">S: {Math.min(facilitatorSkillBadgesCount, m.targetSkills)}/{m.targetSkills}</span>
@@ -682,7 +868,6 @@ export default function DashboardPage() {
                          );
                        })}
                      </div>
-
                    </div>
                 </div>
 
@@ -692,53 +877,31 @@ export default function DashboardPage() {
         </div>
 
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
-          
           {points !== null && (
             <div id="tiers-section" className="w-full animate-fade-in-up scroll-mt-24" style={{ animationDelay: '0.21s' }}>
               <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  Arcade Prize Tiers
-                </h4>
-                <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                   <span className="font-bold">{getCurrentTier()}</span>
-                </span>
+                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>Arcade Prize Tiers</h4>
+                <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}><span className="font-bold">{getCurrentTier()}</span></span>
               </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {arcadeTiersData.map((tier, idx) => {
                   const progressPercentage = Math.min(100, (points / tier.target) * 100);
                   const isAchieved = points >= tier.target;
-                  
                   return (
                     <div key={idx} className={`border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : (isDark ? 'border-[#3c4043]' : 'border-[#5f6368]')} ${isDark ? 'bg-[#1e1e24]' : 'bg-[#353840]'}`}>
-                      
-                      <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative">
-                        <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
-                      </div>
-                      
+                      <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative"><img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" /></div>
                       <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
-                      
                       <div className="w-full mt-auto flex flex-col gap-2">
                         <div className={`w-full h-2.5 rounded-full overflow-hidden border shadow-inner ${isDark ? 'bg-[#15171b] border-black/80' : 'bg-[#202124] border-black/50'}`}>
-                          <div 
-                            className={`h-full rounded-full bg-gradient-to-r ${tier.gradient} transition-all duration-1000 ease-out`}
-                            style={{ width: `${progressPercentage}%` }}
-                          ></div>
+                          <div className={`h-full rounded-full bg-gradient-to-r ${tier.gradient} transition-all duration-1000 ease-out`} style={{ width: `${progressPercentage}%` }}></div>
                         </div>
-                        
                         <div className="flex justify-between items-center text-[11px] font-extrabold uppercase tracking-wide w-full">
-                           <span className={isAchieved ? "text-[#81c995]" : "text-[#9aa0a6]"}>
-                             {isAchieved ? "Achieved" : "In Progress"}
-                           </span>
+                           <span className={isAchieved ? "text-[#81c995]" : "text-[#9aa0a6]"}>{isAchieved ? "Achieved" : "In Progress"}</span>
                            <span className="text-[#e8eaed]">{points} / {tier.target} pts</span>
                         </div>
-                        
                         <div className="mt-3 text-center w-full">
-                          <span className="text-xs font-bold text-[#fbbc04] bg-[#fbbc04]/10 px-3 py-1.5 rounded-full border border-[#fbbc04]/20 tracking-wide block">
-                             {tier.spots}
-                          </span>
+                          <span className="text-xs font-bold text-[#fbbc04] bg-[#fbbc04]/10 px-3 py-1.5 rounded-full border border-[#fbbc04]/20 tracking-wide block">{tier.spots}</span>
                         </div>
-
                       </div>
                     </div>
                   );
@@ -749,27 +912,16 @@ export default function DashboardPage() {
 
           {points !== null && (
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
-              
               <div className={`w-full h-px mb-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
-
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-                <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                  <span className="text-xl"></span> September Labs
-                </h4>
+                <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}><span className="text-xl"></span> September Labs</h4>
               </div>
-
               <div className="relative flex items-center justify-between w-full px-2 sm:px-4 mt-6 mb-8">
                 <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 rounded-full z-0 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#f1f3f4]'}`}></div>
-                
-                <div 
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" 
-                  style={{ width: `${(completedLabs.length / 7) * 100}%` }}
-                ></div>
-
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" style={{ width: `${(completedLabs.length / 7) * 100}%` }}></div>
                 {[...completedLabs, ...pendingLabs].map((lab, index) => {
                   const isCompleted = isLabCompleted(lab.matchStrings);
                   const isCurrent = !isCompleted && index === completedLabs.length;
-                  
                   let shortName = lab.title;
                   if (lab.id === 'voyage') shortName = 'Arcade Voyage';
                   if (lab.id === 'adventure') shortName = 'Arcade Adventure';
@@ -780,20 +932,10 @@ export default function DashboardPage() {
 
                   return (
                     <div key={lab.id} className="relative z-10 flex flex-col items-center gap-2 px-1 w-1/6">
-                      
                       <div className={`w-5 h-5 md:w-7 md:h-7 rounded-full border-[4px] shadow-sm flex items-center justify-center transition-all ${
-                        isCompleted 
-                          ? 'border-[#34a853] bg-[#e6f4ea]' 
-                          : isCurrent 
-                            ? (isDark ? 'border-[#fbbc04] bg-[#15171b] scale-110 ring-2 ring-[#fbbc04]/30' : 'border-[#fbbc04] bg-white scale-110 ring-2 ring-[#fbbc04]/30') 
-                            : (isDark ? 'border-[#3c4043] bg-[#2a2d32]' : 'border-[#dadce0] bg-[#f8f9fa]')
+                        isCompleted ? 'border-[#34a853] bg-[#e6f4ea]' : isCurrent ? (isDark ? 'border-[#fbbc04] bg-[#15171b] scale-110 ring-2 ring-[#fbbc04]/30' : 'border-[#fbbc04] bg-white scale-110 ring-2 ring-[#fbbc04]/30') : (isDark ? 'border-[#3c4043] bg-[#2a2d32]' : 'border-[#dadce0] bg-[#f8f9fa]')
                       }`}>
-                        {isCompleted && (
-                          <svg className="w-3 h-3 md:w-4 md:h-4 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3.5" d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                        
+                        {isCompleted && <svg className="w-3 h-3 md:w-4 md:h-4 text-[#137333]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3.5" d="M5 13l4 4L19 7" /></svg>}
                         {isCurrent && (
                           <div className="relative flex items-center justify-center w-full h-full">
                              <div className="absolute w-6 h-6 md:w-8 md:h-8 bg-[#fbbc04] rounded-full animate-ping opacity-60"></div>
@@ -801,25 +943,16 @@ export default function DashboardPage() {
                           </div>
                         )}
                       </div>
-
-                      <span className={`absolute -top-6 text-xs md:text-sm font-medium whitespace-nowrap ${
-                        isCompleted ? (isDark ? 'text-[#81c995]' : 'text-[#137333]') : isCurrent ? 'text-[#f29900]' : (isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]')
-                      }`}>
+                      <span className={`absolute -top-6 text-xs md:text-sm font-medium whitespace-nowrap ${isCompleted ? (isDark ? 'text-[#81c995]' : 'text-[#137333]') : isCurrent ? 'text-[#f29900]' : (isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]')}`}>
                         {isCompleted ? 'Completed' : isCurrent ? 'Current' : `Lab ${index + 1}`}
                       </span>
-
-                      <span className={`absolute -bottom-8 text-[11px] md:text-xs font-medium text-center w-full leading-tight hidden sm:block ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                        {shortName}
-                      </span>
+                      <span className={`absolute -bottom-8 text-[11px] md:text-xs font-medium text-center w-full leading-tight hidden sm:block ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{shortName}</span>
                     </div>
                   );
                 })}
               </div>
-              
               <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-                <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>
-                  {completedLabs.length} / 6 September Labs Completed
-                </span>
+                <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>{completedLabs.length} / 6 September Labs Completed</span>
               </div>
             </div>
           )}
@@ -827,56 +960,37 @@ export default function DashboardPage() {
           {points !== null && (
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
               <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>
-                  September Labs
-                </h4>
+                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>September Labs</h4>
               </div>
-              
+
               {pendingLabs.length > 0 && (
                 <div className="mb-10">
                   <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                     <span className="w-2 h-2 rounded-full bg-[#ea4335]"></span>
-                     Pending Labs ({pendingLabs.length})
+                     <span className="w-2 h-2 rounded-full bg-[#ea4335]"></span> Pending Labs ({pendingLabs.length})
                   </h5>
-                  
-                  {/* PREMIUM GRID BORDER WRAPPER ADDED HERE */}
                   <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l rounded-2xl overflow-hidden shadow-sm ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                     {pendingLabs.map((lab) => (
                       <div key={`pending-${lab.id}`} className={`flex flex-col items-center p-6 border-b border-r transition-colors ${isDark ? 'border-[#3c4043] bg-[#15171b] hover:bg-[#1e1e24]' : 'border-[#dadce0] bg-white hover:bg-gray-50'}`}>
                         <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
                         <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
-
                         <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
-                          <img 
-                            src={lab.image} 
-                            alt={lab.title} 
-                            className="w-full object-contain rounded-[12px] shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300 z-10" 
-                          />
+                          <img src={lab.image} alt={lab.title} className="w-full object-contain rounded-[12px] shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300 z-10" />
                         </div>
-
-                        <div className="flex items-center justify-center gap-2 mb-2 w-full">
-                           <p className={`text-[14px] md:text-[15px] font-bold text-center m-0 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                             Access code: {lab.accessCode}
+                        <div className="flex items-center justify-center gap-2 w-full mb-3">
+                           <p className={`text-[13px] md:text-[14px] font-bold text-center m-0 flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
+                             Access code: 
+                             <span className={`px-2.5 py-1 rounded-md tracking-wider border shadow-sm ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8]'}`}>
+                                {lab.accessCode}
+                             </span>
                            </p>
-                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`} title="Copy Code">
-                             {copiedCode === lab.accessCode ? (
-                                <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                             ) : (
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                             )}
+                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] bg-[#f1f3f4]'}`} title="Copy Code">
+                             {copiedCode === lab.accessCode ? <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>}
                            </button>
                         </div>
-                        
-                        <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                          Arcade points: {lab.points}
-                        </p>
-
-                        <a 
-                          href={lab.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center text-white bg-[#1a73e8] hover:bg-[#1557b0] border-[#1557b0]"
-                        >
+                        <div className={`mb-5 px-4 py-1.5 rounded-full border shadow-sm ${isDark ? 'bg-yellow-900/20 border-yellow-700/50 text-yellow-500' : 'bg-yellow-50 border-yellow-200 text-yellow-700'}`}>
+                          <p className="text-[12px] font-black uppercase tracking-wider text-center m-0">Arcade points: {lab.points}</p>
+                        </div>
+                        <a href={lab.link} target="_blank" rel="noopener noreferrer" className="w-[85%] max-w-[280px] font-black text-[15px] py-2.5 rounded-full border transition-all shadow-sm flex justify-center items-center text-white bg-[#1a73e8] hover:bg-[#1557b0] border-[#1557b0]">
                           Start Lab
                         </a>
                       </div>
@@ -888,57 +1002,31 @@ export default function DashboardPage() {
               {completedLabs.length > 0 && (
                 <div>
                   <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#81c995]' : 'text-[#137333]'} ${pendingLabs.length > 0 ? (isDark ? 'pt-6 border-t border-[#2a2d32]' : 'pt-6 border-t border-[#dadce0]') : ''}`}>
-                    <span className="w-2 h-2 rounded-full bg-[#34a853]"></span>
-                    Completed Labs ({completedLabs.length})
+                    <span className="w-2 h-2 rounded-full bg-[#34a853]"></span> Completed Labs ({completedLabs.length})
                   </h5>
-                  
-                  {/* PREMIUM GRID BORDER WRAPPER ADDED HERE */}
                   <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l rounded-2xl overflow-hidden shadow-sm ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
                     {completedLabs.map((lab) => (
                       <div key={`completed-${lab.id}`} className={`flex flex-col items-center p-6 border-b border-r transition-colors ${isDark ? 'border-[#3c4043] bg-[#15171b] hover:bg-[#1e1e24]' : 'border-[#dadce0] bg-white hover:bg-gray-50'}`}>
                         <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
                         <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
-
                         <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
-                          <img 
-                            src={lab.image} 
-                            alt={lab.title} 
-                            className="w-full object-contain rounded-[12px] shadow-sm z-10" 
-                          />
+                          <img src={lab.image} alt={lab.title} className="w-full object-contain rounded-[12px] shadow-sm z-10" />
                         </div>
-
-                        <div className="flex items-center justify-center gap-2 mb-2 w-full">
-                           <p className={`text-[14px] md:text-[15px] font-bold text-center m-0 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                             Access code: {lab.accessCode}
+                        <div className="flex items-center justify-center gap-2 w-full mb-3">
+                           <p className={`text-[13px] md:text-[14px] font-bold text-center m-0 flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
+                             Access code: 
+                             <span className={`px-2.5 py-1 rounded-md tracking-wider border shadow-sm ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8]'}`}>
+                                {lab.accessCode}
+                             </span>
                            </p>
-                           <button 
-                             onClick={() => handleCopyCode(lab.accessCode)} 
-                             className={`transition-all flex items-center justify-center p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] hover:bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe]'}`} 
-                             title="Copy Code"
-                            >
-                            {copiedCode === lab.accessCode ? (
-                               <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                               </svg>
-                             ) : (
-                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                               </svg>
-                             )}
+                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] bg-[#f1f3f4]'}`} title="Copy Code">
+                            {copiedCode === lab.accessCode ? <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>}
                            </button>
                         </div>
-                          
-                        <p className={`text-[14px] md:text-[15px] font-bold mb-5 text-center ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                          Arcade points: {lab.points}
-                        </p>
-
-                        <a 
-                          href={lab.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`font-bold text-[15px] py-2 px-8 rounded-full border transition-all shadow-sm inline-block text-center text-white ${isDark ? 'bg-[#137333] border-[#1e3b29] hover:bg-[#0f5c29]' : 'bg-[#34a853] border-[#137333] hover:bg-[#2b8c45]'}`}
-                        >
+                        <div className={`mb-5 px-4 py-1.5 rounded-full border shadow-sm ${isDark ? 'bg-yellow-900/20 border-yellow-700/50 text-yellow-500' : 'bg-yellow-50 border-yellow-200 text-yellow-700'}`}>
+                          <p className="text-[12px] font-black uppercase tracking-wider text-center m-0">Arcade points: {lab.points}</p>
+                        </div>
+                        <a href={lab.link} target="_blank" rel="noopener noreferrer" className={`w-[85%] max-w-[280px] font-black text-[15px] py-2.5 rounded-full border transition-all shadow-sm flex justify-center items-center text-white ${isDark ? 'bg-[#137333] border-[#1e3b29] hover:bg-[#0f5c29]' : 'bg-[#34a853] border-[#137333] hover:bg-[#2b8c45]'}`}>
                           COMPLETED
                         </a>
                       </div>
@@ -951,54 +1039,21 @@ export default function DashboardPage() {
 
           {points !== null && (
             <div id="history-section" className="animate-fade-in-up scroll-mt-24 w-full" style={{animationDelay: '0.3s'}}>
-              
               <div className={`w-full h-px mt-4 mb-10 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
-
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
-                
-                <h4 className={`text-base font-extrabold uppercase tracking-wider flex items-center whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>
-                  Completion Badges History
-                </h4>
-                
+                <h4 className={`text-base font-extrabold uppercase tracking-wider flex items-center whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>Completion Badges History</h4>
                 <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1 lg:justify-end">
-                  
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-start sm:justify-end mr-0 sm:mr-4">
-                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm hidden md:inline-block">
-                       Arcade Games: {totalArcadeGamesCount}
-                     </span>
-                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm hidden md:inline-block">
-                       Skill Badges: {totalSkillBadgesCount}
-                     </span>
-                     
-                     <button 
-                       onClick={() => setHistoryFilter(historyFilter === "Facilitator Progress History" ? "All Games" : "Facilitator Progress History")}
-                       className={`px-4 py-1.5 rounded-full text-[13px] sm:text-sm font-bold whitespace-nowrap shadow-sm transition-all cursor-pointer ${
-                         historyFilter === "Facilitator Progress History" 
-                           ? "bg-[#137333] text-white ring-2 ring-[#34a853]" 
-                           : "bg-[#1a73e8] hover:bg-[#1557b0] text-white"
-                       }`}
-                     >
-                       Facilitator Progress History
-                     </button>
+                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm hidden md:inline-block">Arcade Games: {totalArcadeGamesCount}</span>
+                     <span className="bg-[#1a73e8] text-white px-4 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-sm hidden md:inline-block">Skill Badges: {totalSkillBadgesCount}</span>
+                     <button onClick={() => setHistoryFilter(historyFilter === "Facilitator Progress History" ? "All Games" : "Facilitator Progress History")} className={`px-4 py-1.5 rounded-full text-[13px] sm:text-sm font-bold whitespace-nowrap shadow-sm transition-all cursor-pointer ${historyFilter === "Facilitator Progress History" ? "bg-[#137333] text-white ring-2 ring-[#34a853]" : "bg-[#1a73e8] hover:bg-[#1557b0] text-white"}`}>Facilitator Progress History</button>
                   </div>
-
                   <div className="relative w-full sm:w-56">
                     <svg className={`absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input
-                      type="text"
-                      placeholder="Search labs..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className={`w-full pl-10 pr-4 py-2 border rounded-lg text-sm font-semibold focus:outline-none focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043] text-white focus:border-[#1a73e8]' : 'bg-white border-[#dadce0] text-[#202124] focus:border-[#1a73e8]'}`}
-                    />
+                    <input type="text" placeholder="Search labs..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-10 pr-4 py-2 border rounded-lg text-sm font-semibold focus:outline-none focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043] text-white focus:border-[#1a73e8]' : 'bg-white border-[#dadce0] text-[#202124] focus:border-[#1a73e8]'}`} />
                   </div>
-
                   <div className="relative w-full sm:w-44">
-                    <select
-                      value={historyFilter}
-                      onChange={(e) => setHistoryFilter(e.target.value)}
-                      className={`w-full appearance-none pl-4 pr-10 py-2 border rounded-lg text-sm font-bold focus:outline-none focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 focus:border-[#1a73e8]' : 'bg-white border-[#dadce0] text-[#3c4043] focus:border-[#1a73e8]'}`}
-                    >
+                    <select value={historyFilter} onChange={(e) => setHistoryFilter(e.target.value)} className={`w-full appearance-none pl-4 pr-10 py-2 border rounded-lg text-sm font-bold focus:outline-none focus:ring-1 focus:ring-[#1a73e8] transition-all shadow-sm cursor-pointer ${isDark ? 'bg-[#15171b] border-[#3c4043] text-gray-200 focus:border-[#1a73e8]' : 'bg-white border-[#dadce0] text-[#3c4043] focus:border-[#1a73e8]'}`}>
                       <option value="All Games">All Games</option>
                       <option value="Arcade Games">Arcade Games</option>
                       <option value="Skill Badges">Skill Badges</option>
@@ -1007,136 +1062,185 @@ export default function DashboardPage() {
                     </select>
                     <svg className={`absolute right-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 pointer-events-none ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
                   </div>
-
                 </div>
               </div>
-
               <div className="flex justify-end mt-2">
                  <button onClick={downloadCSV} className={`text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors flex items-center gap-1.5 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] hover:bg-[#3c4043] text-gray-300' : 'bg-white border-[#dadce0] hover:bg-gray-50 text-gray-700'}`}>
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    Download CSV
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> Download CSV
                  </button>
               </div>
-              
               <div className="w-full mt-4">
                 <div className="max-h-[2000px] overflow-y-auto custom-scrollbar pr-2">
                   {filteredHistory.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                       {filteredHistory.map((item, i) => (
                         <div key={i} className="flex flex-col items-center p-2 transition-all group hover:-translate-y-1">
-                          
                           <div className="w-full h-40 mb-4 flex items-center justify-center">
-                            {item.image ? (
-                              <img 
-                                src={item.image} 
-                                alt={item.name} 
-                                className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" 
-                              />
-                            ) : (
-                              <div className={`w-20 h-20 border rounded-full flex items-center justify-center text-3xl shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-[#f8f9fa] border-[#dadce0]'}`}>🏅</div>
-                            )}
+                            {item.image ? <img src={item.image} alt={item.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300" /> : <div className={`w-20 h-20 border rounded-full flex items-center justify-center text-3xl shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-[#f8f9fa] border-[#dadce0]'}`}>🏅</div>}
                           </div>
-                          
-                          <h5 className={`text-[16px] font-bold text-center mb-1 line-clamp-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>
-                            {item.name}
-                          </h5>
-                          
-                          <p className={`text-[14px] text-center mb-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                            {item.date.toLowerCase().includes('earned') ? item.date : `Earned ${item.date}`}
-                          </p>
-                          
+                          <h5 className={`text-[16px] font-bold text-center mb-1 line-clamp-2 ${isDark ? 'text-gray-200' : 'text-[#202124]'}`}>{item.name}</h5>
+                          <p className={`text-[14px] text-center mb-3 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{item.date.toLowerCase().includes('earned') ? item.date : `Earned ${item.date}`}</p>
                           <div className="mt-auto pt-2">
                             <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold border shadow-sm ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'} ${item.points >= 2 ? (isDark ? 'text-[#81c995]' : 'text-[#137333]') : item.points === 1 ? (isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]') : 'text-[#9334e6]'}`}>
                               +{item.points} {item.points > 1 ? 'Points' : 'Point'}
                             </span>
                           </div>
-
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className={`p-12 text-center font-medium text-lg ${isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]'}`}>
-                      No labs found matching your filter criteria.
-                    </div>
+                    <div className={`p-12 text-center font-medium text-lg ${isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]'}`}>No labs found matching your filter criteria.</div>
                   )}
                 </div>
               </div>
             </div>
           )}
-          
+
           <div className="mt-8 mb-4 text-center w-full animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-            <a 
-              href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={`font-medium text-sm cursor-default no-underline ${isDark ? 'text-[#9aa0a6] hover:text-[#9aa0a6]' : 'text-[#5f6368] hover:text-[#5f6368]'}`}
-            >
+            <a href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" target="_blank" rel="noopener noreferrer" className={`font-medium text-sm cursor-default no-underline ${isDark ? 'text-[#9aa0a6] hover:text-[#9aa0a6]' : 'text-[#5f6368] hover:text-[#5f6368]'}`}>
               You can also explore full Arcade Prize Tiers details here.
             </a>
           </div>
         </div>
 
-        {/* --- PREMIUM AI CHAT MODAL --- */}
+        {/* --- MEGA PREMIUM CENTERED AI CHAT MODAL --- */}
         {showAiChat && (
-          <div className={`fixed bottom-6 right-6 w-[350px] sm:w-[380px] h-[500px] rounded-2xl shadow-2xl flex flex-col z-[100] border overflow-hidden transition-all animate-fade-in-up ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-[#f8f9fa] border-[#dadce0]'}`}>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
             
-            {/* Header with Title and Language Toggle */}
-            <div className={`flex justify-between items-center px-4 py-3 border-b bg-gradient-to-r from-[#4285F4] to-[#8A2BE2] text-white`}>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse shadow-sm"></span>
-                <h3 className="font-bold text-[15px] tracking-wide">
-                  {userName ? userName.split(' ')[0] + "'s Assistant" : "Arcade Assistant"}
-                </h3>
-              </div>
+            <div 
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`w-full max-w-4xl h-[94vh] rounded-xl shadow-2xl flex flex-col overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-[#f8f9fa] border border-[#dadce0]'}`}
+            >
               
-              <div className="flex items-center gap-3">
-                <div className={`flex items-center p-0.5 rounded-full ${isDark ? 'bg-black/30' : 'bg-white/20'}`}>
-                  <button onClick={() => setAiLanguage('English')} className={`px-2.5 py-1 text-[10px] font-black tracking-wider rounded-full transition-all ${aiLanguage === 'English' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>EN</button>
-                  <button onClick={() => setAiLanguage('Hinglish')} className={`px-2.5 py-1 text-[10px] font-black tracking-wider rounded-full transition-all ${aiLanguage === 'Hinglish' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>HI</button>
-                </div>
-                <button onClick={() => setShowAiChat(false)} className="p-1.5 rounded-full transition-colors hover:bg-white/20 text-white">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Messages (whitespace-pre-wrap ADDED HERE FOR BULLETS) */}
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
-              <div className={`whitespace-pre-wrap leading-relaxed p-3 rounded-2xl rounded-tl-sm text-[13px] self-start max-w-[85%] shadow-sm ${isDark ? 'bg-[#2a2d32] text-gray-200' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}>
-                Hi {userName?.split(' ')[0] || 'Player'}! Main tumhare stats dekh sakta hu. Tumhare paas abhi {points || 0} points hain. Bolo, dashboard ke baare me kya janna hai?
-              </div>
-              
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`whitespace-pre-wrap leading-relaxed p-3 rounded-2xl text-[13px] max-w-[85%] shadow-sm ${msg.role === 'user' ? 'self-end bg-[#1a73e8] text-white rounded-tr-sm' : `self-start rounded-tl-sm ${isDark ? 'bg-[#2a2d32] text-gray-200' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}`}>
-                  {/* .replace is added to ensure AI bold markdown ** is stripped if it disobeys */}
-                  {msg.content.replace(/\*\*/g, '')}
-                </div>
-              ))}
-              
-              {isTyping && (
-                <div className={`p-3 rounded-2xl rounded-tl-sm text-[13px] self-start w-16 flex justify-center gap-1 shadow-sm ${isDark ? 'bg-[#2a2d32]' : 'bg-white border border-[#dadce0]'}`}>
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-75"></span>
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce delay-150"></span>
+              {isDragging && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#4285F4]/90 backdrop-blur-sm rounded-xl">
+                   <div className="flex flex-col items-center text-white">
+                      <svg className="w-20 h-20 mb-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                      <h2 className="text-3xl font-black tracking-wider">Drop Screenshot Here!</h2>
+                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Input Field */}
-            <div className={`p-3 border-t ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-              <div className="relative">
-                <input 
-                  type="text" 
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-                  placeholder="Ask anything..." 
-                  className={`w-full pl-4 pr-10 py-2.5 rounded-xl text-sm font-medium focus:outline-none transition-colors border ${isDark ? 'bg-[#2a2d32] text-white placeholder-gray-500 border-[#3c4043] focus:border-[#8ab4f8]' : 'bg-[#f1f3f4] text-[#202124] placeholder-gray-500 border-transparent focus:border-[#1a73e8]'}`}
-                />
-                <button onClick={handleAskAi} disabled={isTyping || !chatInput.trim()} className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 transition-transform hover:scale-110 disabled:opacity-50 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                </button>
+              <div className={`flex justify-between items-center px-6 py-4 border-b bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] text-white`}>
+                <div className="flex items-center gap-3">
+                  <span className="w-3 h-3 rounded-full bg-white animate-pulse shadow-sm"></span>
+                  <div>
+                    <h3 className="font-black text-[18px] tracking-wide leading-tight">
+                      {userName ? userName.split(' ')[0] + "'s Assistant" : "Arcade Assistant"}
+                    </h3>
+                    <p className="text-[10px] font-medium opacity-90 lowercase tracking-widest">online</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  
+                  <div className="relative flex items-center">
+                     <button onClick={() => setShowClearConfirm(true)} className="p-1.5 rounded-full transition-colors hover:bg-white/20 text-white" title="Clear Chat">
+                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                     </button>
+                     
+                     {showClearConfirm && (
+                        <div className={`absolute top-10 right-0 w-48 p-3 rounded-xl shadow-xl border z-50 text-left animate-fade-in-up ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                            <p className={`text-[12px] font-bold leading-snug mb-3 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Clear all chat history? This cannot be undone.</p>
+                            <div className="flex gap-2">
+                                <button onClick={handleClearChat} className="flex-1 bg-red-500 hover:bg-red-600 text-white text-[12px] font-bold py-1.5 rounded-lg transition-colors">Yes</button>
+                                <button onClick={() => setShowClearConfirm(false)} className={`flex-1 text-[12px] font-bold py-1.5 rounded-lg transition-colors border ${isDark ? 'border-[#3c4043] text-gray-300 hover:bg-[#3c4043]' : 'border-[#dadce0] text-[#5f6368] hover:bg-gray-100'}`}>No</button>
+                            </div>
+                        </div>
+                     )}
+                  </div>
+
+                  <div className={`flex items-center p-1 rounded-full ${isDark ? 'bg-black/30' : 'bg-white/20'}`}>
+                    <button onClick={() => setAiLanguage('English')} className={`px-3 py-1 text-xs font-black tracking-wider rounded-full transition-all ${aiLanguage === 'English' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>EN</button>
+                    <button onClick={() => setAiLanguage('Hinglish')} className={`px-3 py-1 text-xs font-black tracking-wider rounded-full transition-all ${aiLanguage === 'Hinglish' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>HI</button>
+                  </div>
+                  
+                  <button onClick={() => setShowAiChat(false)} className="p-2 rounded-full transition-colors hover:bg-white/20 text-white">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
               </div>
+
+              <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 custom-scrollbar relative">
+                
+                {messages.length === 0 && (
+                  <div className="flex flex-col items-center justify-center h-full gap-6 animate-fade-in-up">
+                     <svg className="w-16 h-16 text-[#9b72cb] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                     <h2 className={`text-2xl font-black text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>How can I help you today, {userName?.split(' ')[0] || 'Champ'}?</h2>
+                     
+                     <div className="flex flex-wrap items-center justify-center gap-2 w-full max-w-2xl mt-2">
+                        {["Facilitator report", "Arcade report", "Summary dashboard", "Suggest next labs", "See points", "How to start arcade ?","Give me all links of arcade","See prize tiers"].map((p) => (
+                           <button 
+                             key={p} 
+                             onClick={() => handleAskAi(p)} 
+                             className={`px-3 py-1.5 rounded-full border shadow-sm font-bold text-[11px] md:text-[12px] transition-all hover:scale-105 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-200 hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#3c4043] hover:border-[#1a73e8]'}`}
+                           >
+                             {p}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                )}
+
+                {messages.map((msg, idx) => (
+                  <div key={idx} className={`whitespace-pre-wrap leading-relaxed p-4 rounded-3xl text-[13px] font-medium max-w-[85%] shadow-sm flex flex-col gap-1 ${msg.role === 'user' ? 'self-end bg-[#1a73e8] text-white rounded-tr-sm' : `self-start rounded-tl-sm ${isDark ? 'bg-[#2a2d32] text-gray-200 border border-[#3c4043]' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}`}>
+                    {formatChatText(msg.content, msg.role === 'user')}
+                  </div>
+                ))}
+
+                {isTyping && (
+                  <div className={`p-4 rounded-3xl rounded-tl-sm text-[13px] self-start w-20 flex justify-center items-center gap-1.5 shadow-sm ${isDark ? 'bg-[#2a2d32] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></span>
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></span>
+                  </div>
+                )}
+                
+                <div ref={chatEndRef} />
+              </div>
+
+              <div className={`p-4 md:p-6 border-t flex flex-col gap-3 ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+                
+                {chatImage && (
+                  <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-[#1a73e8] shadow-md animate-fade-in-up">
+                     <img src={chatImage} alt="upload" className="w-full h-full object-cover" />
+                     <button onClick={() => setChatImage(null)} className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-red-500 transition-colors">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                     </button>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3">
+                  
+                  <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
+                  <button onClick={() => fileInputRef.current?.click()} className={`p-3 rounded-full border shadow-sm transition-transform hover:scale-105 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-300 hover:text-white' : 'bg-[#f1f3f4] border-[#dadce0] text-[#5f6368] hover:text-[#202124]'}`} title="Upload Screenshot">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                  </button>
+
+                  <div className="relative flex-1">
+                    <button onClick={startListening} className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${isListening ? 'text-red-500 animate-pulse bg-red-500/10' : (isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-[#202124]')}`} title="Voice Input">
+                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                    </button>
+
+                    <input 
+                      type="text" 
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
+                      placeholder={isListening ? "Listening..." : "Ask anything or paste screenshot..."} 
+                      className={`w-full pl-12 pr-14 py-4 rounded-2xl text-[15px] font-medium focus:outline-none transition-colors border shadow-sm ${isDark ? 'bg-[#2a2d32] text-white placeholder-gray-500 border-[#3c4043] focus:border-[#8ab4f8]' : 'bg-[#f8f9fa] text-[#202124] placeholder-gray-500 border-[#dadce0] focus:border-[#1a73e8]'}`}
+                    />
+                    
+                    <button onClick={() => handleAskAi()} disabled={isTyping || (!chatInput.trim() && !chatImage)} className={`absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-transform hover:scale-110 disabled:opacity-50 ${isDark ? 'bg-[#8ab4f8] text-[#15171b]' : 'bg-[#1a73e8] text-white'}`}>
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
           </div>
         )}
@@ -1148,7 +1252,7 @@ export default function DashboardPage() {
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: ${isDark ? '#3c4043' : '#dadce0'}; border-radius: 20px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: ${isDark ? '#5f6368' : '#bdc1c6'}; }
-        
+
         .animate-fade-in-up {
           animation: fadeInUp 0.4s ease-out forwards;
         }
