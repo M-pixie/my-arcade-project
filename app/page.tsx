@@ -10,7 +10,13 @@ import { useState, useEffect, useRef } from "react";
 // 🔥 FIREBASE IMPORTS 🔥
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase"; 
-import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
+import { savePublicUserToLeaderboard, subscribeLeaderboard } from "@/lib/leaderboard";
+
+// Utility to format numbers into 1K+, 50K+ etc.
+const formatStat = (num: number) => {
+  if (num >= 1000) return (num / 1000).toFixed(1).replace('.0', '') + 'K+';
+  return num.toString();
+};
 
 export default function HomePage() {
   const router = useRouter();
@@ -26,6 +32,9 @@ export default function HomePage() {
   
   const autoCloseTimerRef = useRef<NodeJS.Timeout | null>(null);
   const calculationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 🔥 STATE: Realtime Database Stats
+  const [stats, setStats] = useState({ unique: 0, analyzed: 0 });
 
   // 🔥 STATE: Premium Problem Box Form
   const [formName, setFormName] = useState("");
@@ -69,8 +78,15 @@ export default function HomePage() {
       setReviews(fetchedReviews);
     });
 
+    const unsubLeaderboard = subscribeLeaderboard((data) => {
+      const unique = data.length;
+      const analyzed = data.reduce((acc: number, user: any) => acc + (user.calculationCount || 1), 0);
+      setStats({ unique, analyzed });
+    });
+
     return () => {
       unsubReviews();
+      unsubLeaderboard();
       if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
       if (calculationIntervalRef.current) clearInterval(calculationIntervalRef.current);
     };
@@ -85,7 +101,6 @@ export default function HomePage() {
     setShowResult(false);
     setIsCalculating(true);
     
-    // 🔥 Start the live seconds counter
     setElapsedSecs(0);
     calculationIntervalRef.current = setInterval(() => {
       setElapsedSecs(prev => prev + 1);
@@ -138,11 +153,9 @@ export default function HomePage() {
         profileUrl: targetUrl
       }).catch(err => console.error(err));
 
-      // Show inline result instead of redirecting
       setCalcResult(data);
       setShowResult(true);
 
-      // Auto-close after 1 minute
       if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
       autoCloseTimerRef.current = setTimeout(() => {
         setShowResult(false);
@@ -151,7 +164,6 @@ export default function HomePage() {
     } catch (err) {
       setHeroError("Connection failed. Check your internet and retry.");
     } finally {
-      // Clear calculation states and timer
       setIsCalculating(false);
       if (calculationIntervalRef.current) clearInterval(calculationIntervalRef.current);
     }
@@ -171,30 +183,40 @@ export default function HomePage() {
     <>
       <PopupModal />
       <style>{`
-        .hero-aurora-bg {
-          background: linear-gradient(-45deg, #130026, #3b0a66, #1c0040, #4b0a70);
-          background-size: 400% 400%;
-          animation: auroraBG 15s ease infinite;
+        .hero-gemini-bg {
+          background-color: #0b0213;
           position: relative;
           overflow: hidden;
         }
-        @keyframes auroraBG {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .hero-aurora-bg::before {
+        .hero-gemini-bg::before, .hero-gemini-bg::after, .hero-gemini-bg-glow {
           content: "";
           position: absolute;
-          top: -50%; left: -50%; width: 200%; height: 200%;
-          background: radial-gradient(circle at 50% 50%, rgba(255, 0, 150, 0.15), transparent 60%),
-                      radial-gradient(circle at 80% 20%, rgba(0, 200, 255, 0.15), transparent 50%);
-          animation: auroraMove 20s linear infinite alternate;
+          border-radius: 50%;
+          filter: blur(120px);
           pointer-events: none;
+          z-index: 0;
+          animation: float 14s infinite ease-in-out alternate;
         }
-        @keyframes auroraMove {
-          0% { transform: rotate(0deg) scale(1); }
-          100% { transform: rotate(10deg) scale(1.1); }
+        .hero-gemini-bg::before {
+          width: 50vw; height: 50vw;
+          background: rgba(138, 43, 226, 0.4); 
+          top: -10%; left: -10%;
+        }
+        .hero-gemini-bg::after {
+          width: 45vw; height: 45vw;
+          background: rgba(2, 132, 199, 0.35); 
+          bottom: -15%; right: -5%;
+          animation-delay: -5s;
+        }
+        .hero-gemini-bg-glow {
+          width: 40vw; height: 40vw;
+          background: rgba(236, 72, 153, 0.25); 
+          top: 30%; left: 30%;
+          animation: float 18s infinite ease-in-out alternate-reverse;
+        }
+        @keyframes float {
+          0% { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(50px, 30px) scale(1.1); }
         }
         @keyframes spin-border {
           0% { transform: rotate(0deg); }
@@ -215,27 +237,28 @@ export default function HomePage() {
       <main className="min-h-screen bg-white text-gray-900 font-sans selection:bg-blue-300 selection:text-blue-900">
 
         {/* ================= PREMIUM HERO SECTION ================= */}
-        <div className="hero-aurora-bg pt-32 pb-24 sm:pt-40 sm:pb-32 px-6 lg:px-8 text-center text-white relative shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-10">
+        <div className="hero-gemini-bg pt-20 pb-20 sm:pt-28 sm:pb-28 px-6 lg:px-8 text-center text-white relative shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-10">
+          <div className="hero-gemini-bg-glow"></div>
           <div className="mx-auto max-w-4xl relative z-10">
 
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md border border-blue-500/50 bg-white/5 backdrop-blur-md mb-8 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blue-400/40 bg-white/5 backdrop-blur-md mb-6 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:bg-white/10 transition-colors">
               <span className="text-blue-400 font-black text-[13px]">#1</span>
               <span className="text-white text-[11px] sm:text-xs font-bold tracking-widest uppercase">
                 Arcade Nexus Platform
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-            Welcome to <span className="text-blue-400">Arcade Nexus,</span> <br className="hidden md:block"/>Arcade journey made simpler.
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-5 leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white">
+            Welcome to <span className="text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.6)]">Arcade Nexus,</span> <br className="hidden md:block"/>Arcade journey made simpler.
             </h1>
 
-            <p className="text-sm sm:text-base text-gray-300/90 mb-12 max-w-2xl mx-auto font-medium">
+            <p className="text-sm sm:text-base text-gray-300/90 mb-10 max-w-2xl mx-auto font-medium">
               Calculate your points, track progress, discover useful resources, and stay ahead of every Arcade challenge.
             </p>
 
-            {/* 🔥 ANIMATED INPUT WRAPPER - WHITE */}
-            <div className="max-w-[700px] mx-auto w-full relative">
-              <div className={`relative flex items-center justify-center overflow-hidden rounded-2xl transition-all ${isCalculating ? 'p-[2px]' : 'p-0'}`}>
+            {/* 🔥 SLIM ANIMATED INPUT WRAPPER 🔥 */}
+            <div className="max-w-[700px] mx-auto w-full relative mb-6">
+              <div className={`relative flex items-center justify-center overflow-hidden rounded-full transition-all ${isCalculating ? 'p-[2px]' : 'p-0'}`}>
                 
                 {isCalculating && (
                   <div className="absolute inset-[-100%] z-0 flex items-center justify-center">
@@ -243,32 +266,31 @@ export default function HomePage() {
                   </div>
                 )}
 
-                <form onSubmit={handleHeroSubmit} className="relative z-10 flex w-full items-center bg-white border border-gray-200 rounded-2xl p-1.5 shadow-2xl transition-all focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
-                  <div className="pl-4 pr-1 shrink-0 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-blue-600">
-                      <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5z" clipRule="evenodd" />
+                <form onSubmit={handleHeroSubmit} className="relative z-10 flex w-full items-center bg-white rounded-full p-1 shadow-2xl transition-all focus-within:ring-4 focus-within:ring-blue-500/30">
+                  <div className="pl-4 pr-2 shrink-0 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z" />
                     </svg>
                   </div>
                   <input 
                     type="text" 
                     value={heroUrl}
                     onChange={(e) => setHeroUrl(e.target.value)}
-                    placeholder="Paste your public profile URL here..." 
-                    className="flex-1 bg-transparent border-none outline-none text-gray-900 px-3 placeholder:text-gray-400 text-[15px] font-medium h-10 sm:h-12 w-full disabled:opacity-50" 
+                    placeholder="https://www.skills.google/public_profiles/..." 
+                    className="flex-1 bg-transparent border-none outline-none text-gray-900 px-2 placeholder:text-gray-400 text-[14px] sm:text-[15px] font-medium h-10 sm:h-12 w-full disabled:opacity-50" 
                     required
                     disabled={isCalculating}
                   />
                   <button 
                     type="submit" 
                     disabled={isCalculating}
-                    className="w-10 h-10 sm:w-[42px] sm:h-[42px] rounded-xl bg-blue-600 flex items-center justify-center text-white shrink-0 hover:bg-blue-700 transition-all shadow-sm disabled:opacity-70"
+                    className="w-10 h-10 sm:w-[44px] sm:h-[44px] rounded-full bg-blue-600 flex items-center justify-center text-white shrink-0 hover:bg-blue-700 transition-all shadow-md disabled:opacity-70"
                   >
-                    {/* 🔥 LIVE SECONDS TIMER */}
                     {isCalculating ? (
-                      <span className="font-bold text-sm sm:text-[15px] animate-pulse">{elapsedSecs}s</span>
+                      <span className="font-bold text-sm animate-pulse">{elapsedSecs}s</span>
                     ) : (
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m-6-6l6 6-6 6" />
+                      <svg className="w-5 h-5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
                     )}
                   </button>
@@ -277,94 +299,126 @@ export default function HomePage() {
             </div>
 
             {heroError && (
-              <div className="text-red-300 text-sm mt-3 font-medium bg-red-500/10 inline-block px-4 py-1.5 rounded-lg border border-red-500/20 backdrop-blur-md shadow-sm animate-fade-in-up">
+              <div className="text-red-300 text-sm mb-6 font-medium bg-red-500/10 inline-block px-4 py-1.5 rounded-lg border border-red-500/20 backdrop-blur-md shadow-sm animate-fade-in-up">
                 {heroError}
               </div>
             )}
 
-            {/* 🔥 WHITE RESULT CARD WITH CLICKABLE AVATAR */}
+            {/* 🔥 REFINED RESULT CARD (Match image_64ba87.jpg) 🔥 */}
             {showResult && calcResult && (
-              <div className="mt-6 mx-auto max-w-[700px] w-full bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-2xl relative animate-fade-in-up text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div className="mb-8 mx-auto max-w-[700px] w-full bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-4 sm:px-6 sm:py-4 shadow-2xl relative animate-fade-in-up flex flex-col sm:flex-row items-center justify-between gap-4">
                 
                 <button 
                   onClick={() => setShowResult(false)} 
-                  className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 transition-colors"
+                  className="absolute top-2 right-3 text-gray-400 hover:text-gray-700 transition-colors"
                   title="Close"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
                 
-                <div className="flex items-center gap-4 w-full sm:w-auto">
-                  {/* Clickable Avatar pointing to dashboard */}
+                {/* Left: Avatar + Info */}
+                <div className="flex items-center gap-3 w-full sm:w-auto">
                   <div 
                     onClick={() => router.push('/dashboard')}
                     title="Go to Dashboard"
-                    className="w-14 h-14 shrink-0 rounded-full border-2 border-blue-500 p-0.5 overflow-hidden bg-gray-100 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all"
+                    className="w-12 h-12 shrink-0 rounded-full border border-gray-200 p-0.5 overflow-hidden bg-gray-50 cursor-pointer hover:border-blue-300 transition-all"
                   >
                     {calcResult.userAvatar ? (
                       <img src={calcResult.userAvatar} alt="" className="w-full h-full object-cover rounded-full" />
                     ) : (
-                      <span className="flex items-center justify-center w-full h-full text-xl font-bold text-gray-700">
+                      <span className="flex items-center justify-center w-full h-full text-lg font-bold text-gray-600">
                         {calcResult.userName?.charAt(0) || "U"}
                       </span>
                     )}
                   </div>
-                  <div className="min-w-0">
-                    <h3 className="text-lg font-bold text-gray-900 truncate">{calcResult.userName || "Arcade Player"}</h3>
-                    <p className="text-blue-600 text-sm font-semibold mt-0.5">Total Points: <span className="text-xl ml-1 text-gray-900">{calcResult.totalPoints}</span></p>
+                  <div className="flex flex-col text-left">
+                    <h3 className="text-[15px] font-bold text-gray-900 leading-tight uppercase tracking-wide truncate max-w-[180px] sm:max-w-[200px]">
+                      {calcResult.userName || "GOOGLEUSER"}
+                    </h3>
+                    <p className="text-blue-600 text-[13px] font-medium mt-0.5">
+                      Total Points: <span className="text-gray-900 font-bold ml-1">{calcResult.totalPoints}</span>
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-5 w-full sm:w-auto justify-start sm:justify-end border-t sm:border-t-0 sm:border-l border-gray-200 pt-4 sm:pt-0 sm:pl-6">
+                {/* Middle: Stats */}
+                <div className="flex items-center gap-6 w-full sm:w-auto justify-center pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
                   <div className="text-center">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Game Badges</p>
-                    <p className="text-lg font-bold text-gray-900 mt-0.5">{calcResult.breakdown?.games || 0}</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest leading-tight">Game<br/>Badges</p>
+                    <p className="text-[16px] font-bold text-gray-900 mt-1">{calcResult.breakdown?.games || 0}</p>
                   </div>
                   <div className="w-px h-8 bg-gray-200"></div>
                   <div className="text-center">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Skill Badges</p>
-                    <p className="text-lg font-bold text-gray-900 mt-0.5">{calcResult.breakdown?.skills || 0}</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest leading-tight">Skill<br/>Badges</p>
+                    <p className="text-[16px] font-bold text-gray-900 mt-1">{calcResult.breakdown?.skills || 0}</p>
                   </div>
                 </div>
 
-                <div className="w-full sm:w-auto shrink-0 flex justify-end">
+                {/* Right: Button */}
+                <div className="w-full sm:w-auto shrink-0 flex justify-end mt-2 sm:mt-0">
                   <button 
                     onClick={() => router.push('/dashboard')} 
-                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-[13px] font-semibold py-2 px-4 rounded-full transition-all flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     Full Dashboard
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17l9.2-9.2M17 17V7H7"/>
                     </svg>
                   </button>
                 </div>
               </div>
             )}
 
+            {/* 🔥 PREMIUM SUGGESTED ACTIONS 🔥 */}
             {!showResult && (
               <div className="mt-8 flex flex-col items-center">
-                <span className="text-[#a199a0] text-[12px] mb-3 font-medium">Suggested actions</span>
-                <div className="flex flex-wrap justify-center gap-3">
-                  <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="bg-[#3e2e3d]/80 border border-[#64495f] text-white text-[13px] font-bold px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a] inline-flex items-center justify-center">
+                <span className="text-gray-400 text-[13px] mb-4 font-bold tracking-widest uppercase">Suggested actions</span>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 text-white text-[15px] font-bold px-6 py-3 rounded-full transition-all hover:bg-white/20 hover:scale-105 hover:border-blue-400/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] flex items-center gap-2">
+                    <svg className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                     Start Labs Here
                   </a>
-                  <button onClick={() => router.push('/dashboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
+                  <button onClick={() => router.push('/dashboard')} className="group relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 text-white text-[15px] font-bold px-6 py-3 rounded-full transition-all hover:bg-white/20 hover:scale-105 hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center gap-2">
+                    <svg className="w-5 h-5 text-purple-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
                     Smart Dashboard
                   </button>
-                  <button onClick={() => router.push('/leaderboard')} className="bg-[#3e2e3d]/80 border border-[#64495f] text-[#d6cdd5] text-[13px] font-medium px-4 py-2 rounded-xl transition-colors hover:bg-[#4b384a]">
+                  <button onClick={() => router.push('/leaderboard')} className="group relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 text-white text-[15px] font-bold px-6 py-3 rounded-full transition-all hover:bg-white/20 hover:scale-105 hover:border-amber-400/50 hover:shadow-[0_0_20px_rgba(251,191,36,0.4)] flex items-center gap-2">
+                    <svg className="w-5 h-5 text-amber-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.504-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99-2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.29 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" /></svg>
                     Leaderboard Rank
                   </button>
                 </div>
               </div>
             )}
 
+            {/* 🔥 LIVE METRICS SECTION 🔥 */}
+            <div className="mt-14 max-w-3xl mx-auto pt-10 border-t border-white/10 grid grid-cols-3 gap-4 sm:gap-8">
+              <div className="flex flex-col items-center">
+                <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
+                  {formatStat(stats.unique)}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold text-blue-300 uppercase tracking-widest mt-2">Unique Profiles</span>
+              </div>
+              <div className="flex flex-col items-center border-x border-white/10">
+                <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
+                  {formatStat(stats.analyzed)}
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold text-purple-300 uppercase tracking-widest mt-2">Profiles Analyzed</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
+                  33K+
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-widest mt-2">Total Visitors</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
         {/* ================= ENTERPRISE FEATURES GRID ================= */}
-        <div id="features" className="py-16 sm:py-24 bg-white relative z-20 -mt-6 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+        <div id="features" className="py-16 sm:py-24 bg-white relative z-20 -mt-6 rounded-t-[2.5rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)]">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:max-w-none">
               <dl className="grid max-w-xl grid-cols-1 gap-x-12 gap-y-8 sm:grid-cols-2 lg:max-w-none lg:grid-cols-3">
@@ -519,13 +573,10 @@ export default function HomePage() {
         {/* ================= BLUE CTA BANNER ================= */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative my-16 sm:my-24 z-20 w-full">
           <div className="w-full rounded-[2rem] overflow-hidden relative shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            {/* Base dark blue gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#0f172a] opacity-95"></div>
             
             <div className="absolute inset-0 opacity-40">
-               {/* Lighter blue overlay in top right */}
                <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#3b82f6] via-transparent to-transparent opacity-70 mix-blend-screen"></div>
-               {/* Background wave SVGs recolored to deep blues */}
                <svg className="absolute bottom-0 w-full h-auto text-[#172554]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.4" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,224,1152,197.3C1248,171,1344,160,1392,154.7L1440,149L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
                <svg className="absolute bottom-0 w-full h-auto text-[#1e3a8a]" viewBox="0 0 1440 320" fill="currentColor"><path fillOpacity="0.3" d="M0,160L60,149.3C120,139,240,117,360,138.7C480,160,600,224,720,234.7C840,245,960,203,1080,160C1200,117,1320,75,1380,53.3L1440,32L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
             </div>
