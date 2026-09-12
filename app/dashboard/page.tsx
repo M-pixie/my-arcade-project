@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
+import ArcadeSharePoster from "@/app/components/ArcadeSharePoster";
 import { subscribeLeaderboard, savePublicUserToLeaderboard } from "@/lib/leaderboard"; 
 import { collection, query, where, getCountFromServer } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -30,6 +31,7 @@ export default function DashboardPage() {
   const [leaderboardData, setLeaderboardData] = useState<any[]>([]);
   const [copiedCode, setCopiedCode] = useState<string | null>(null); 
   const [copiedReferral, setCopiedReferral] = useState(false);
+  const [showPoster, setShowPoster] = useState(false);
 
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -204,7 +206,8 @@ export default function DashboardPage() {
   const getCurrentTier = () => {
     if (points === null || points < 50) return "Swag Eligibility Pending";
     const achieved = [...arcadeTiersData].reverse().find(t => points >= t.target);
-    return achieved ? achieved.name : "Swag Eligibility Pending";
+    // Yahan .replace() add kiya gaya hai
+    return achieved ? achieved.name.replace("Arcade ", "") : "Swag Eligibility Pending";
   };
 
   const isLabCompleted = (matchStrings: string[]) => {
@@ -678,74 +681,90 @@ const dashboardData = {
                   {/* 1. Top Control Bar (Responsive) */}
                   <div className={`flex flex-col md:flex-row justify-between items-center px-4 md:px-5 py-3 rounded-2xl border shadow-sm ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#e8eaed]'}`}>
 
-                     {/* Left side: Status Indicator & AI Overview Button */}
-                     <div className="flex items-center gap-2 mb-3 md:mb-0 w-full md:w-auto justify-center md:justify-start">
-                       <div className="w-2 h-2 rounded-full bg-[#34a853] shadow-sm"></div>
-                       <svg className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                       <span className={`text-[13px] sm:text-[14px] font-medium ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                         Last synced <span className="font-bold tracking-wide">{lastRefreshed}</span>
-                       </span>
+                    {/* Left side: Action Buttons */}
+                    <div className="flex items-center gap-2 mb-3 md:mb-0 w-full md:w-auto justify-center md:justify-start">
+                      
+                      {/* Animated Create Poster Button with NEW Badge */}
+                      <div className="relative mr-1 sm:mr-3 mt-1 sm:mt-0">
+                        {/* Background continuous glowing pulse */}
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] rounded-full blur opacity-75 animate-pulse"></div>
+                        
+                        <button 
+                          onClick={() => setShowPoster(true)}
+                          className="relative flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] text-white text-[13px] font-bold shadow-md transition-all hover:scale-105 overflow-hidden"
+                        >
+                          {/* Continuous auto-shine overlay (no hover needed) */}
+                          <span className="absolute inset-0 w-[150%] h-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shine pointer-events-none"></span>
+                          
+                          {/* Sparkle Icon */}
+                          <svg className="w-4 h-4 animate-pulse relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                          <span className="relative z-10">Create Poster</span>
+                        </button>
 
-                       {/* AI Overview Button */}
-                       <div className="relative ml-2 sm:ml-4">
-                         <button
-                           onClick={() => setShowAiOverview(true)}
-                           className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#d96570] text-white text-[13px] font-bold shadow-md hover:shadow-lg transition-transform hover:scale-105"
-                         >
-                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-                           AI Summary
-                         </button>
-                         <span className="absolute -top-2.5 -right-2 bg-[#ff3366] text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-[1.5px] border-white shadow-sm flex items-center gap-1">
-                           <span className="w-1.5 h-1.5 bg-white rounded-full"></span>NEW
-                         </span>
-                       </div>
+                        {/* Flashing "NEW" Badge on top-right */}
+                        <span className="absolute -top-2.5 -right-2 bg-[#ff3366] text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-[1.5px] border-white shadow-sm flex items-center gap-1 z-20 animate-bounce">
+                          <span className="w-1.5 h-1.5 bg-white rounded-full"></span>NEW
+                        </span>
+                      </div>
 
-                       {/* ASK AI BUTTON */}
-                       <div className="relative ml-2">
-                         <button
-                           onClick={() => setShowAiChat(true)}
-                           className={`group flex items-center gap-1.5 px-4 py-1.5 rounded-full border shadow-sm transition-all hover:scale-105 text-[13px] font-bold ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8]'}`}
-                         >
-                           <svg className="w-4 h-4 transition-all duration-700 group-hover:rotate-180 group-hover:scale-125 group-hover:text-[#c58af9]" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
-                           </svg>
-                           Ask AI
-                         </button>
-                       </div>
-                     </div>
+                      {/* ASK AI BUTTON */}
+                      <div className="relative ml-2">
+                        <button
+                          onClick={() => setShowAiChat(true)}
+                          className={`group flex items-center gap-1.5 px-4 py-1.5 rounded-full border shadow-sm transition-all hover:scale-105 text-[13px] font-bold ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#1a73e8]'}`}
+                        >
+                          <svg className="w-4 h-4 transition-all duration-700 group-hover:rotate-180 group-hover:scale-125 group-hover:text-[#c58af9]" fill="currentColor" viewBox="0 0 24 24">
+                             <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+                          </svg>
+                          Ask AI
+                        </button>
+                      </div>
 
-                     {/* Right side: Links & Action Buttons */}
-                     <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto justify-center md:justify-end flex-wrap mt-3 md:mt-0">
-                       <button onClick={() => router.push('/calculator')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
-                         Calculator
-                       </button>
-                       <div className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#5f6368]' : 'bg-[#dadce0]'}`}></div>
+                      {/* AI Overview Button */}
+                      <div className="relative ml-2 sm:ml-4">
+                        <button
+                          onClick={() => setShowAiOverview(true)}
+                          className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#d96570] text-white text-[13px] font-bold shadow-md hover:shadow-lg transition-transform hover:scale-105"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                          AI Summary
+                        </button>
+                      </div>
 
-                       <button onClick={() => router.push('/leaderboard')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
-                         Leaderboard
-                       </button>
-                       <div className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#5f6368]' : 'bg-[#dadce0]'}`}></div>
+                    </div>
 
-                       <button onClick={() => router.push('/resources')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
-                         Skill Badges
-                       </button>
+                    {/* Right side: Links & Action Buttons */}
+                    <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto justify-center md:justify-end flex-wrap mt-3 md:mt-0">
+                      <button onClick={() => router.push('/calculator')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
+                        Calculator
+                      </button>
+                      <div className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#5f6368]' : 'bg-[#dadce0]'}`}></div>
 
-                       <div className={`hidden sm:block w-px h-5 mx-1 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
+                      <button onClick={() => router.push('/leaderboard')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
+                        Leaderboard
+                      </button>
+                      <div className={`w-1 h-1 rounded-full ${isDark ? 'bg-[#5f6368]' : 'bg-[#dadce0]'}`}></div>
 
-                       {/* Dark Mode Toggle */}
-                       <button onClick={toggleDarkMode} className={`p-1.5 rounded transition-colors flex items-center justify-center ${isDark ? 'hover:bg-[#2a2d32] text-gray-200' : 'hover:bg-[#f1f3f4] text-[#fbbc04]'}`}>
-                         {isDark ? (
-                            <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                         ) : (
-                            <svg className="w-5 h-5 text-[#fbbc04]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                         )}
-                       </button>
+                      <button onClick={() => router.push('/resources')} className={`text-[13px] sm:text-[14px] font-bold transition-colors ${isDark ? 'text-gray-300 hover:text-[#8ab4f8]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`}>
+                        Skill Badges
+                      </button>
 
-                       <button onClick={handleRefreshClick} disabled={loading} className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg border font-bold text-[13px] sm:text-sm transition-colors shadow-sm ${isDark ? 'border-[#3c4043] text-[#8ab4f8] hover:bg-[#2a2d32] bg-[#1a1b1e]' : 'border-[#e8eaed] text-[#1a73e8] hover:bg-[#f8f9fa] bg-white'}`}>
-                         <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                         {loading ? 'Refreshing' : 'Refresh'}
-                       </button>
-                     </div>
+                      <div className={`hidden sm:block w-px h-5 mx-1 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
+
+                      {/* Dark Mode Toggle */}
+                      <button onClick={toggleDarkMode} className={`p-1.5 rounded transition-colors flex items-center justify-center ${isDark ? 'hover:bg-[#2a2d32] text-gray-200' : 'hover:bg-[#f1f3f4] text-[#fbbc04]'}`}>
+                        {isDark ? (
+                           <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        ) : (
+                           <svg className="w-5 h-5 text-[#fbbc04]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        )}
+                      </button>
+
+                      <button onClick={handleRefreshClick} disabled={loading} className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg border font-bold text-[13px] sm:text-sm transition-colors shadow-sm ${isDark ? 'border-[#3c4043] text-[#8ab4f8] hover:bg-[#2a2d32] bg-[#1a1b1e]' : 'border-[#e8eaed] text-[#1a73e8] hover:bg-[#f8f9fa] bg-white'}`}>
+                        <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        {loading ? 'Refreshing' : 'Refresh'}
+                      </button>
+                    </div>
                   </div>
                     {/* AI Overview Panel (Floating On Top) */}
                   {showAiOverview && (
@@ -1244,7 +1263,14 @@ const dashboardData = {
             </div>
           </div>
         )}
-
+        {showPoster && (
+          <ArcadeSharePoster
+            name={userName || "Arcade Player"}
+            arcadePoints={points || 0}
+            prizeTier={getCurrentTier()}
+            onClose={() => setShowPoster(false)}
+          />
+        )}
       </main>
 
       <style jsx>{`
@@ -1259,6 +1285,14 @@ const dashboardData = {
         @keyframes fadeInUp {
           0% { transform: translateY(20px); opacity: 0; }
           100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes shine {
+          0% { transform: translateX(-150%) skewX(-15deg); }
+          20% { transform: translateX(150%) skewX(-15deg); }
+          100% { transform: translateX(150%) skewX(-15deg); } 
+        }
+        .animate-shine {
+          animation: shine 3s infinite ease-in-out;
         }
       `}</style>
     </div>
