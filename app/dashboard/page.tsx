@@ -8,6 +8,26 @@ import { subscribeLeaderboard, savePublicUserToLeaderboard } from "@/lib/leaderb
 import { collection, query, where, getCountFromServer } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
+// List of verified emails provided by you
+const validEmails = [
+  "vickykumarpatel2007@gmail.com", "aadityabhavya530@gmail.com", "sparshkotiya11@gmail.com", 
+  "harshpanda2006@gmail.com", "hs129sharma@gmail.com", "saurabh03052005@gmail.com", 
+  "satwik.arcadelabs@gmail.com", "indrajitmishra166@gmail.com", "anikamchoudhury@gmail.com", 
+  "asbabkhan70@gmail.com", "sohomnath2005@gmail.com", "rpritha2005@gmail.com", 
+  "shubham222382111@gmail.com", "nampallyharish05@gmail.com", "vicky192151@gmail.com", 
+  "neerajkumar943068@gmail.com", "ghanshaymkr02@gmail.com", "ayushhajarearc02@gmail.com", 
+  "rajdas996844@gmail.com", "ajitchaudhary956@gmail.com", "dipikabarkat@gmail.com", 
+  "vishalkumar.00170@gmail.com", "divyamagarwal239@gmail.com", "suruchiydv9142@gmail.com", 
+  "himanshu84100@gmail.com", "arpit.cuh@gmail.com", "kumarigunjan140207@gmail.com", 
+  "kaur1107mandeep@gmail.com", "lovelykumari3684@gmail.com", "gagandeep0321bhatti@gmail.com", 
+  "nikikumari81025@gmail.com", "kondabhaskar2509@gmail.com", "rimpyraman07@gmail.com", 
+  "ayushasanjuktha@gmail.com", "priylata04@gmail.com", "mdtaufique7869@gmail.com", 
+  "wahhhshampiwahhh@gmail.com", "bernardo.riffo.c@gmail.com", "deshumukhpratiksha15@gmail.com", 
+  "kaushalloya5@gmail.com", "i.msantuo@gmail.com", "nityayjiwtode14@gmail.com", 
+  "vardhana117@gmail.com", "2200031605cseh1@gmail.com", "ashutoshminde108@gmail.com", 
+  "apurvalakhe12@gmail.com", "razawarsi024@gmail.com", "janhavitalodhikar31@gmail.com"
+];
+
 export default function DashboardPage() {
   const [profileUrl, setProfileUrl] = useState("");
   const [points, setPoints] = useState<number | null>(null);
@@ -49,6 +69,13 @@ export default function DashboardPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [aiLanguage, setAiLanguage] = useState<"English" | "Hinglish">("English");
 
+  // Certificate Verification Modal States
+  const [showCertModal, setShowCertModal] = useState(false);
+  const [certEmail, setCertEmail] = useState("");
+  const [certInputName, setCertInputName] = useState("");
+  const [certError, setCertError] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+
   // Clear Chat Confirmation State
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
@@ -65,6 +92,129 @@ export default function DashboardPage() {
 
   // Auto Scroll Ref
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const handleVerifyAndDownload = async () => {
+    setCertError("");
+    
+    if (!certInputName.trim() || !certEmail.trim()) {
+      setCertError("Please enter both Name and Email to verify.");
+      return;
+    }
+
+    const isVerified = validEmails.some(email => email.toLowerCase() === certEmail.trim().toLowerCase());
+
+    if (!isVerified) {
+      setCertError("You are not under facilitator Manish & Rohit. Your facilitator is other.");
+      return;
+    }
+
+    // Milestone Check after Verification
+    if (!achievedMilestone) {
+      setCertError("You need to complete at least Milestone 1 to download the certificate.");
+      return;
+    }
+
+    // Date Restriction Check after Verification
+    const currentDate = new Date();
+    const unlockDate = new Date("2026-09-13T00:00:00");
+    if (currentDate < unlockDate) {
+      setCertError("Certificate download will be available from 16th September 2026.");
+      return;
+    }
+
+    setIsGenerating(true);
+    await generateCertificatePDF(certInputName);
+    setIsGenerating(false);
+    setShowCertModal(false);
+    setCertEmail("");
+    setCertError("");
+  };
+
+  const generateCertificatePDF = async (nameToPrint: string) => {
+    try {
+      const jsPDF = (await import("jspdf")).default;
+
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4",
+        compress: true,
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();   // 297
+      const pageHeight = pdf.internal.pageSize.getHeight(); // 210
+
+      // ==============================
+      // LOAD CERTIFICATE PNG
+      // ==============================
+      const image = new Image();
+      image.src = "/certificates.pdf.png";
+
+      await new Promise<void>((resolve, reject) => {
+        image.onload = () => resolve();
+        image.onerror = () =>
+          reject(new Error("Certificate image load nahi hui"));
+      });
+
+      // Full background
+      pdf.addImage(
+        image,
+        "PNG",
+        0,
+        0,
+        pageWidth,
+        pageHeight
+      );
+
+      // ==============================
+      // USER NAME (Perfect Size & Dotted Line Ke Upar)
+      // ==============================
+      pdf.setFont("times", "bold");
+      pdf.setFontSize(38); 
+      pdf.setTextColor(242, 153, 74);
+
+      pdf.text(
+        nameToPrint || "Arcade Player",
+        pageWidth / 2,
+        99, 
+        {
+          align: "center",
+        }
+      );
+
+      // ==============================
+      // MILESTONE
+      // ==============================
+      pdf.setFont("times", "bold");
+      pdf.setFontSize(17);
+      pdf.setTextColor(15, 157, 88);
+
+      pdf.text(
+        achievedMilestone?.title || "Milestone 1",
+        179,
+        115,
+        {
+          align: "left",
+        }
+      );
+
+      // ==============================
+      // OPEN PDF IN NEW TAB
+      // ==============================
+      const blob = pdf.output("blob");
+      const pdfUrl = URL.createObjectURL(blob);
+
+      window.open(pdfUrl, "_blank");
+
+      setTimeout(() => {
+        URL.revokeObjectURL(pdfUrl);
+      }, 60000);
+
+    } catch (error) {
+      console.error("Certificate open error:", error);
+      alert("Certificate open nahi ho paya. Please dobara try karein.");
+    }
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("arcade_theme");
@@ -602,7 +752,7 @@ const dashboardData = {
         <div className="w-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] pt-20 pb-2 px-4 shadow-sm animate-fade-in-up">
           <div className="max-w-[1350px] mx-auto text-center">
             <p className="text-white text-[13px] md:text-sm font-bold tracking-wide animate-pulse drop-shadow-md">
-               ✨ {hypeMessage}
+                ✨ {hypeMessage}
             </p>
           </div>
         </div>
@@ -633,7 +783,7 @@ const dashboardData = {
 
                   {/* Profile Avatar & Name */}
                   <div className="px-6 pt-8 pb-6 flex flex-col items-center flex-grow">
-                    <div className="w-[100px] h-[100px] rounded-full p-1 mb-4 shadow-md bg-white dark:bg-[#1a1b1e] relative cursor-pointer hover:scale-105 hover:shadow-[0_0_20px_rgba(66,133,244,0.4)] transition-all duration-300">
+                    <div className="w-[100px] h-[100px] rounded-full p-1 mb-4 shadow-md bg-white dark:bg-[#1a1b1e] relative cursor-pointer hover:scale-105 hover:shadow-[0_0_20px_rgba(66,133,244,0.4)] transition-all duration-300 group">
                       <div className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#2a2d32]' : 'bg-[#0f9d58]'}`}>
                         {userAvatar ? (
                           <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
@@ -847,20 +997,33 @@ const dashboardData = {
                      </div>
 
                      {achievedMilestone ? (
-                       <div className="w-full mb-8 flex flex-col sm:flex-row gap-0 rounded-lg overflow-hidden shadow-sm border border-[#e8eaed] dark:border-[#3c4043] animate-fade-in-up">
-                         <div className="flex-1 bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-3 px-4 text-white flex justify-between items-center border-b sm:border-b-0 sm:border-r border-white/20">
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl drop-shadow-md">👑</span>
-                              <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">{achievedMilestone.title}</div>
-                            </div>
-                            <div className="flex flex-col items-end justify-center h-full"><div className="text-xl font-black leading-none drop-shadow-sm">✓</div></div>
+                       <div className="w-full mb-8 flex flex-col rounded-lg overflow-hidden shadow-sm border border-[#e8eaed] dark:border-[#3c4043] animate-fade-in-up relative">
+                         <div className="flex flex-col sm:flex-row w-full">
+                           <div className="flex-1 bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-3 px-4 text-white flex justify-between items-center border-b sm:border-b-0 sm:border-r border-white/20">
+                              <div className="flex items-center gap-3">
+                                <span className="text-2xl drop-shadow-md">👑</span>
+                                <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">{achievedMilestone.title}</div>
+                              </div>
+                              <div className="flex flex-col items-end justify-center h-full"></div>
+                           </div>
+                           <div className="flex-1 bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-3 px-4 text-white flex justify-between items-center">
+                              <div className="flex items-center gap-3"></div>
+                              <div className="flex flex-col items-end justify-center h-full"><div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div></div>
+                           </div>
                          </div>
-                         <div className="flex-1 bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-3 px-4 text-white flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                              <span className="text-2xl drop-shadow-md">⭐</span>
-                              <div className="font-black text-[15px] tracking-tight leading-tight flex items-center h-full">Bonus Points</div>
-                            </div>
-                            <div className="flex flex-col items-end justify-center h-full"><div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div></div>
+                         
+                         {/* PREMIUM SOLID DOWNLOAD BUTTON */}
+                         <div className="absolute left-[52%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center">
+                           <button 
+                             onClick={() => {
+                               setCertInputName(userName || ""); 
+                               setShowCertModal(true); 
+                             }} 
+                             className="bg-[#0f9d58] hover:bg-[#0b8043] text-white font-black text-xs sm:text-[13px] px-5 py-2 rounded-full shadow-[0_0_15px_rgba(15,157,88,0.5)] border-[3px] border-white dark:border-[#15171b] flex items-center gap-2 whitespace-nowrap transition-transform hover:scale-105"
+                           >
+                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                             DOWNLOAD YOUR CERTIFICATE
+                           </button>
                          </div>
                        </div>
                      ) : (
@@ -929,7 +1092,7 @@ const dashboardData = {
             </div>
           )}
 
-          {points !== null && (
+           {points !== null && (
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
               <div className={`w-full h-px mb-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
@@ -1271,6 +1434,60 @@ const dashboardData = {
             onClose={() => setShowPoster(false)}
           />
         )}
+
+        {/* --- EMAIL VERIFICATION PREMIUM MODAL --- */}
+        {showCertModal && (
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
+            <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
+              {/* Header */}
+              <div className="bg-gradient-to-r from-[#0f9d58] to-[#137333] p-5 text-white flex justify-between items-center">
+                 <h3 className="font-black text-lg tracking-wide flex items-center gap-2">
+                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                   Verify Your Profile
+                 </h3>
+                 <button onClick={() => setShowCertModal(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                 </button>
+              </div>
+              
+              {/* Body */}
+              <div className="p-6 flex flex-col gap-4">
+                 <p className={`text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Please verify your registered Arcade Email to download the facilitator certificate.
+                 </p>
+
+                 {certError && (
+                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-xl text-sm font-bold flex items-start gap-2">
+                      <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      <span>{certError}</span>
+                   </div>
+                 )}
+
+                 <div className="flex flex-col gap-1.5">
+                   <label className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
+                   <input type="text" value={certInputName} onChange={(e) => setCertInputName(e.target.value)} placeholder="Enter your name for certificate" className={`w-full px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#0f9d58] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-gray-50 border-gray-200 text-gray-800'}`} />
+                 </div>
+
+                 <div className="flex flex-col gap-1.5">
+                   <label className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Registered Email</label>
+                   <input type="email" value={certEmail} onChange={(e) => setCertEmail(e.target.value)} placeholder="Enter your Arcade email ID" className={`w-full px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#0f9d58] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-gray-50 border-gray-200 text-gray-800'}`} />
+                 </div>
+
+                 <button onClick={handleVerifyAndDownload} disabled={isGenerating} className={`mt-2 w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wider text-white shadow-md transition-all flex items-center justify-center gap-2 ${isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0f9d58] hover:bg-[#0b8043] hover:shadow-lg'}`}>
+                   {isGenerating ? (
+                     <>
+                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        Verifying & Generating...
+                     </>
+                   ) : (
+                     "Verify & Download"
+                   )}
+                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       <style jsx>{`
