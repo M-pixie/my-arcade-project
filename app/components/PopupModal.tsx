@@ -1,17 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase"; // Make sure this path is correct for your project
 
 export default function PopupModal() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const BONUS_MILESTONE_LINK =
-    "https://rsvp.withgoogle.com/events/arcade-facilitator/bonus-milestone";
-
-  const VERIFICATION_FORM_LINK =
-    "https://docs.google.com/forms/d/e/1FAIpQLSdq6-5RPthTa4D_o7xfgM0We_pnFWmj80ByiZfEl9ov1yZ3iw/viewform";
-
-  const POPUP_STORAGE_KEY = "bonus_milestone_popup_seen_v2";
+  
+  // की (Key) का नाम बदल दिया है ताकि यह सभी यूज़र्स के लिए रीसेट हो जाए और फिर से दिखे
+  const POPUP_STORAGE_KEY = "arcade_feedback_popup_seen_reset_1"; 
 
   useEffect(() => {
     const hasSeenModal = localStorage.getItem(POPUP_STORAGE_KEY);
@@ -25,137 +22,76 @@ export default function PopupModal() {
     }
   }, []);
 
-  const handleClose = (action: "close" | "done") => {
+  // रेटिंग को Firebase में सेव करने का फंक्शन
+  const handleRate = async (score: number) => {
+    // 1. तुरंत पॉपअप बंद करें और लोकल स्टोरेज अपडेट करें (ताकि यूजर को इंतज़ार न करना पड़े)
     setIsOpen(false);
+    localStorage.setItem(POPUP_STORAGE_KEY, "true");
 
-    if (action === "done") {
-      localStorage.setItem(POPUP_STORAGE_KEY, "true");
+    // 2. बैकग्राउंड में Firebase पर डेटा भेज दें
+    try {
+      if (db) {
+        await addDoc(collection(db, "platform_feedback"), {
+          rating: score, // 1 (😞) से 5 (😀) तक का स्कोर
+          source: "popup_modal", // Footer से अलग पहचानने के लिए
+          timestamp: Date.now(),
+          date: new Date().toLocaleDateString('en-IN')
+        });
+      }
+    } catch (error) {
+      console.error("Error saving feedback:", error);
     }
   };
 
   if (!isOpen) return null;
 
+  const emojis = ['😞', '😟', '😐', '🙂', '😀'];
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900/40 px-4 backdrop-blur-sm animate-in fade-in duration-300">
       
-      {/* Modal Container: White bg, rounded-xl, compact max-width */}
       <div className="relative w-full max-w-[400px] overflow-hidden rounded-xl border border-gray-100 bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] animate-in zoom-in-95 duration-300">
         
-        {/* Subtle Close Button */}
-        <button
-          onClick={() => handleClose("close")}
-          aria-label="Close"
-          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-gray-400 transition-all hover:bg-gray-100 hover:text-gray-700"
-        >
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-
-        <div className="px-6 py-8 sm:px-8">
+        <div className="px-6 py-10 sm:px-8 text-center">
           
-          {/* Minimalist Badge */}
-          <div className="mb-4 flex justify-center">
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1">
-              <span className="text-xs">🏆</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600">
-                Bonus Milestone
-              </span>
-            </div>
-          </div>
-
-          {/* Clean Heading */}
-          <div className="text-center">
-            <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-[1.75rem]">
-              Earn Extra <span className="text-blue-600">10 Points</span>
-            </h2>
-            <p className="mx-auto mt-2.5 max-w-[320px] text-[13px] leading-relaxed text-gray-500">
-              Complete the Bonus Milestone and submit your AI Agent for verification.
+          <h2 className="text-xl font-extrabold tracking-tight text-gray-900 sm:text-2xl">
+            Arcade Nexus
+            <span className="block mt-1 text-sm font-medium text-gray-500">Welcome</span>
+          </h2>
+          
+          <div className="mt-4 inline-block rounded-lg bg-blue-50 py-2.5 px-5">
+            <p className="text-[15px] font-bold text-blue-700">
+              Arcade Facilitator Program 2026
+            </p>
+            <p className="mt-0.5 text-xs font-semibold text-blue-600/80">
+              (13 July - 14 Sept)
             </p>
           </div>
 
-          {/* Elegant Info Box */}
-          <div className="mt-6 rounded-xl border border-gray-100 bg-gray-50/50 p-4">
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-100 text-lg shadow-sm">
-                ✨
-              </div>
-              <div>
-                <h3 className="text-[13px] font-bold text-gray-900">
-                  What you need to do
-                </h3>
-                <p className="mt-1 text-[12px] leading-relaxed text-gray-500">
-                  Create your first AI Agent and submit the official verification form before the deadline.
-                </p>
-              </div>
+          <div className="mt-8 flex flex-col items-center justify-center border-t border-gray-100 pt-7">
+            <h3 className="text-[14px] font-bold text-gray-800">Overall, how helpful is this platform?</h3>
+            
+            <div className="mt-5 flex w-full max-w-[280px] justify-between px-2">
+              {emojis.map((emoji, index) => (
+                <button 
+                  key={index} 
+                  // index 0 से शुरू होता है, इसलिए +1 करके 1,2,3,4,5 स्कोर भेज रहे हैं
+                  onClick={() => handleRate(index + 1)} 
+                  className="text-3xl grayscale transition-all duration-200 hover:scale-110 hover:grayscale-0 active:scale-95 focus:outline-none"
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+            
+            <div className="mt-3 flex w-full max-w-[280px] justify-between px-2 text-[11px] font-medium text-gray-400">
+              <span>Very unhelpful</span>
+              <span>Very helpful</span>
             </div>
 
-            {/* Reward & Deadline Row */}
-            <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[14px]">⏰</span>
-                <span className="text-[11px] font-semibold text-gray-600">
-                  14 Sept 2026 · 11:59 PM
-                </span>
-              </div>
-              <span className="rounded-md bg-blue-100 px-2 py-1 text-[11px] font-bold text-blue-700">
-                +10 Points
-              </span>
-            </div>
-          </div>
-
-          {/* Action Buttons (Stacked for cleaner hierarchy) */}
-          <div className="mt-7 flex flex-col gap-2.5">
-            <a
-              href={VERIFICATION_FORM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-[13px] font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg"
-            >
-              Open Verification Form
-              <svg
-                className="h-3.5 w-3.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </a>
-
-            <a
-              href={BONUS_MILESTONE_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-[13px] font-bold text-gray-700 transition-all hover:bg-gray-50 hover:text-gray-900"
-            >
-              View Milestone Details
-            </a>
-          </div>
-
-          {/* Dismiss Text */}
-          <div className="mt-5 text-center">
-            <button
-              onClick={() => handleClose("done")}
-              className="text-[11px] font-medium text-gray-400 transition-colors hover:text-gray-600"
-            >
-              Don't show this again
-            </button>
+            <p className="mt-6 text-[12px] font-medium text-gray-500 bg-gray-50 px-4 py-2 rounded-full border border-gray-200">
+              Rate experience & continue
+            </p>
           </div>
 
         </div>

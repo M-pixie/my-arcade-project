@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import VisitCounter from "@/app/components/VisitCounter";
 import { subscribeLeaderboard } from "@/lib/leaderboard";
-import { doc, setDoc, deleteDoc, collection, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, deleteDoc, collection, onSnapshot, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import {
   Calculator, LayoutGrid, BarChart3, BadgeCheck, UserPlus,
@@ -95,6 +95,22 @@ export default function Footer() {
     return () => unsub();
   }, []);
 
+  // Footer से Firebase में फीडबैक भेजने का फंक्शन
+  const handleFeedback = async (score: number) => {
+    try {
+      if (db) {
+        await addDoc(collection(db, "platform_feedback"), {
+          rating: score,
+          source: "footer", 
+          timestamp: Date.now(),
+          date: new Date().toLocaleDateString('en-IN')
+        });
+      }
+    } catch (error) {
+      console.error("Error saving footer feedback:", error);
+    }
+  };
+
   return (
     <footer className="w-full border-t border-slate-200 bg-white font-sans text-slate-900" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">Footer</h2>
@@ -144,57 +160,86 @@ export default function Footer() {
           {/* Nav & Metrics Grid */}
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 xl:col-span-2 xl:mt-0">
             
-            {/* Links */}
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Platform</h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <button onClick={() => router.push("/calculator")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <Calculator className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Calculator
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => router.push("/dashboard")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <LayoutGrid className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Dashboard
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => router.push("/leaderboard")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <BarChart3 className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Leaderboard
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => router.push("/resources")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <BadgeCheck className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Skill Badges
-                    </button>
-                  </li>
-                </ul>
+            {/* Middle Column: Links + Feedback */}
+            <div className="flex flex-col">
+              <div className="md:grid md:grid-cols-2 md:gap-8">
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Platform</h3>
+                  <ul role="list" className="mt-6 space-y-4">
+                    <li>
+                      <button onClick={() => router.push("/calculator")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <Calculator className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Calculator
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => router.push("/dashboard")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <LayoutGrid className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Dashboard
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => router.push("/leaderboard")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <BarChart3 className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Leaderboard
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => router.push("/resources")} className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <BadgeCheck className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Skill Badges
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-10 md:mt-0">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Resources</h3>
+                  <ul role="list" className="mt-6 space-y-4">
+                    <li>
+                      <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <UserPlus className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Enrollment
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <CircleDollarSign className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Points System
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
+                        <BookOpen className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Syllabus
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">Resources</h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  <li>
-                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/enrol" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <UserPlus className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Enrollment
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <CircleDollarSign className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Points System
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-sm font-medium leading-6 text-slate-600 hover:text-slate-900 transition-colors">
-                      <BookOpen className="h-4 w-4 text-slate-500 group-hover:text-slate-900" /> Syllabus
-                    </a>
-                  </li>
-                </ul>
+
+              {/* Feedback UI Here */}
+              <div className="mt-10 max-w-[280px]">
+                <h3 className="text-base font-medium text-slate-900">Overall, how helpful is this page?</h3>
+                <p className="mt-1 flex items-center text-xs text-slate-600">
+                  Your feedback is used to improve Arcade Nexus 
+                  <svg className="ml-1 h-3.5 w-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </p>
+                
+                <div className="mt-5 min-h-[50px]">
+                  <div className="flex w-full justify-between">
+                    {['😞', '😟', '😐', '🙂', '😀'].map((emoji, i) => (
+                      <button 
+                        key={i} 
+                        onClick={() => handleFeedback(i + 1)} // 1 से 5 तक स्कोर जाएगा
+                        className="text-3xl transition-transform hover:scale-110 active:scale-95 drop-shadow-sm focus:outline-none grayscale hover:grayscale-0"
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-2 flex justify-between text-[11px] font-medium text-slate-500">
+                    <span>Unhelpful</span>
+                    <span>Very helpful</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Metrics */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 h-fit">
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center gap-2 text-slate-600 mb-2">
                   <Eye className="h-4 w-4" />
