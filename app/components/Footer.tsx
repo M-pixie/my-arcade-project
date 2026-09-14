@@ -139,8 +139,7 @@ export default function Footer() {
               <span className="text-xl font-bold tracking-tight text-slate-900">Arcade Nexus Platform</span>
             </div>
             <p className="max-w-xs text-sm font-medium leading-6 text-slate-600">
-              An independent, community-driven platform designed by <span className="font-bold text-slate-900">Manish</span> and <span className="font-bold text-slate-900">Anjali</span>. Built to help Google Cloud Arcade learners effortlessly track progress and analyze achievements.
-            </p>
+An independent, community-driven platform designed by <span className="font-bold text-slate-900">Manish</span> and <span className="font-bold text-slate-900">Anjali</span> to make the Google Cloud Arcade journey simpler, smarter, and more rewarding. Built for Arcade learners and enthusiasts, Arcade Nexus helps you effortlessly calculate and track points, monitor skill badges and achievements, follow milestones, explore leaderboard progress, and stay updated with important Arcade activities. Our goal is to bring everything you need into one clean, reliable, and easy-to-use platform, helping you save time, understand your progress, and stay focused on reaching your next Arcade milestone.            </p>
             <div className="flex gap-x-5">
               <a href="https://chat.whatsapp.com/GWFSFSVWEQE0cwKjVmrdXj" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-900 transition-colors">
                 <span className="sr-only">WhatsApp Community</span>
