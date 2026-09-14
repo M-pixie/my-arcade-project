@@ -210,28 +210,28 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Feedback UI Here */}
-              <div className="mt-10 max-w-[280px]">
+              {/* Added Feedback UI Here - Boxed & Original Colors */}
+              <div className="mt-10 rounded-2xl bg-[#F8F9FA] p-6 max-w-sm border border-slate-100">
                 <h3 className="text-base font-medium text-slate-900">Overall, how helpful is this page?</h3>
                 <p className="mt-1 flex items-center text-xs text-slate-600">
                   Your feedback is used to improve Arcade Nexus 
                   <svg className="ml-1 h-3.5 w-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </p>
                 
-                <div className="mt-5 min-h-[50px]">
-                  <div className="flex w-full justify-between">
+                <div className="mt-6 min-h-[50px]">
+                  <div className="flex w-full justify-between px-1">
                     {['😞', '😟', '😐', '🙂', '😀'].map((emoji, i) => (
                       <button 
                         key={i} 
                         onClick={() => handleFeedback(i + 1)} // 1 से 5 तक स्कोर जाएगा
-                        className="text-3xl transition-transform hover:scale-110 active:scale-95 drop-shadow-sm focus:outline-none grayscale hover:grayscale-0"
+                        className="text-3xl transition-transform hover:scale-110 active:scale-95 drop-shadow-sm focus:outline-none"
                       >
                         {emoji}
                       </button>
                     ))}
                   </div>
-                  <div className="mt-2 flex justify-between text-[11px] font-medium text-slate-500">
-                    <span>Unhelpful</span>
+                  <div className="mt-3 flex justify-between px-1 text-[11px] font-medium text-slate-500">
+                    <span>Very unhelpful</span>
                     <span>Very helpful</span>
                   </div>
                 </div>

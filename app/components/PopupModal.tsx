@@ -77,7 +77,7 @@ export default function PopupModal() {
                   key={index} 
                   // index 0 से शुरू होता है, इसलिए +1 करके 1,2,3,4,5 स्कोर भेज रहे हैं
                   onClick={() => handleRate(index + 1)} 
-                  className="text-3xl grayscale transition-all duration-200 hover:scale-110 hover:grayscale-0 active:scale-95 focus:outline-none"
+                  className="text-3xl transition-transform hover:scale-110 active:scale-95 drop-shadow-sm focus:outline-none"
                 >
                   {emoji}
                 </button>
