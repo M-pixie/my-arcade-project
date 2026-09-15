@@ -1,251 +1,589 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
-import { db } from "@/lib/firebase"; 
+import { useEffect, useMemo, useState } from "react";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  Timestamp,
+} from "firebase/firestore";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import { db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+
+type AdminUser = {
+  id: string;
+  name?: string;
+  photoURL?: string;
+  profileUrl?: string;
+  points?: number;
+  calculationCount?: number;
+  updatedAt?: any;
+  [key: string]: any;
+};
+
+type RangeFilter = "all" | "today" | "7d" | "30d";
+
+const AUTHORIZED_EMAILS = [
+  "vy7manish@gmail.com",
+  "patelanjali0801@gmail.com",
+];
+
+const numberValue = (value: any) => {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+};
+
+const getDate = (value: any): Date | null => {
+  if (!value) return null;
+
+  try {
+    if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+
+    if (value instanceof Timestamp) {
+      const d = value.toDate();
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    if (typeof value?.toDate === "function") {
+      const d = value.toDate();
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    if (typeof value === "number") {
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    if (typeof value === "string") {
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? null : d;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+};
+
+const formatDate = (value: any) => {
+  const d = getDate(value);
+  if (!d) return "N/A";
+
+  return d.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const formatNumber = (value: number) =>
+  new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(value);
+
+const escapeCsv = (value: any) => {
+  const text = String(value ?? "");
+  return `"${text.replace(/"/g, '""')}"`;
+};
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
-  
-  // 🔥 LEADERBOARD STATES
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
-  const [shake, setShake] = useState(false); 
-  
-  // 🔥 COPY ICON TRACKING 🔥
+  const [shake, setShake] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // 🔥 SEARCH & HIGHLIGHT STATE 🔥
   const [searchQuery, setSearchQuery] = useState("");
+  const [rangeFilter, setRangeFilter] = useState<RangeFilter>("all");
+  const [sortBy, setSortBy] = useState<
+    "points" | "calculations" | "updatedAt" | "name"
+  >("points");
+  const [sortDirection, setSortDirection] = useState<"desc" | "asc">("desc");
+
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const [analyticsUser, setAnalyticsUser] = useState<AdminUser | null>(null);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
+
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const router = useRouter();
 
-  // 🔥 AUTHORIZED ADMIN EMAILS 🔥
-  const AUTHORIZED_EMAILS = [
-    "vy7manish@gmail.com", 
-    "patelanjali0801@gmail.com"
-  ];
-
-  // 🔥 PERSISTENT LOGIN LOGIC 🔥
   useEffect(() => {
     const auth = getAuth();
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.email && AUTHORIZED_EMAILS.includes(user.email)) {
+      if (user?.email && AUTHORIZED_EMAILS.includes(user.email)) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
       }
-      setAuthLoading(false); 
+      setAuthLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  // 🔥 GOOGLE LOGIN LOGIC 🔥
-  const handleGoogleLogin = async () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      
-      if (user.email && AUTHORIZED_EMAILS.includes(user.email)) {
-        setIsAuthenticated(true);
-        setError("");
-        setShake(false);
-      } else {
-        await signOut(auth);
-        setError("Unauthorized Admin Email.");
-        setShake(true);
-        setTimeout(() => setShake(false), 500); 
-      }
-    } catch (err) {
-      console.error("Login Error:", err);
-      setError("Login failed. Please try again.");
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-    }
-  };
-
-  // 🔥 DUMMY EMAIL LOGIN CLICK HANDLER FOR SECURITY 🔥
-  const handleEmailAuthClick = () => {
-    setError("Email login is disabled for security. Please use Google Sign In.");
-    setShake(true);
-    setTimeout(() => setShake(false), 500);
-  };
-
-  // 🔥 LOGOUT LOGIC 🔥
-  const handleLogout = async () => {
-    const auth = getAuth();
-    await signOut(auth);
-    setIsAuthenticated(false);
-  };
-
-  // 🔥 1. REAL-TIME FIREBASE LISTENER (LEADERBOARD) 🔥
   useEffect(() => {
     if (!isAuthenticated) return;
 
     setLoading(true);
-    const q = query(collection(db, "leaderboard"), orderBy("points", "desc"));
-    
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const fetchedUsers: any[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedUsers.push({ id: doc.id, ...doc.data() });
-      });
-      setUsers(fetchedUsers);
-      setLoading(false);
-    }, (err) => {
-      console.error("Error fetching real-time data:", err);
-      setError("Failed to sync live data.");
-      setLoading(false);
-    });
+    setIsConnected(false);
+
+    const usersQuery = query(
+      collection(db, "leaderboard"),
+      orderBy("points", "desc")
+    );
+
+    const unsubscribe = onSnapshot(
+      usersQuery,
+      (snapshot) => {
+        const nextUsers: AdminUser[] = [];
+
+        snapshot.forEach((doc) => {
+          nextUsers.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        setUsers(nextUsers);
+        setLoading(false);
+        setIsConnected(true);
+        setError("");
+      },
+      (err) => {
+        console.error("Error fetching admin data:", err);
+        setLoading(false);
+        setIsConnected(false);
+        setError("Failed to sync live data.");
+      }
+    );
 
     return () => unsubscribe();
   }, [isAuthenticated]);
 
-  const lowerQuery = searchQuery.trim().toLowerCase();
-  const isSearching = lowerQuery.length > 0;
-  const isNoMatch = isSearching && users.length > 0 && !users.some(u => u.name?.toLowerCase().includes(lowerQuery));
+  const login = async () => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
 
-  const handleSearchClick = () => {
-    if (isSearching && !isNoMatch) {
-      const firstMatch = users.find(u => u.name?.toLowerCase().includes(lowerQuery));
-      if (firstMatch) {
-        const row = document.getElementById(`user-row-${firstMatch.id}`);
-        if (row) {
-          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+
+      if (email && AUTHORIZED_EMAILS.includes(email)) {
+        setIsAuthenticated(true);
+        setError("");
+        setShake(false);
+        return;
       }
+
+      await signOut(auth);
+      setError("Unauthorized Admin Email.");
+      setShake(true);
+      window.setTimeout(() => setShake(false), 500);
+    } catch (err) {
+      console.error("Login Error:", err);
+      setError("Login failed. Please try again.");
+      setShake(true);
+      window.setTimeout(() => setShake(false), 500);
     }
   };
 
-  const formatDate = (dateValue: any) => {
-    if (!dateValue) return "N/A";
-    if (typeof dateValue === 'string') {
-      const date = new Date(dateValue);
-      if (!isNaN(date.getTime())) {
-        return date.toLocaleString('en-IN', { 
-          day: '2-digit', month: 'short', year: 'numeric',
-          hour: '2-digit', minute: '2-digit'
-        });
+  const logout = async () => {
+    await signOut(getAuth());
+    setIsAuthenticated(false);
+  };
+
+  const openUser = (user: AdminUser, rank: number) => {
+    setSelectedUser({ ...user, rank });
+    setIsDrawerOpen(true);
+  };
+
+  const openAnalytics = (user: AdminUser, rank: number) => {
+    setAnalyticsUser({ ...user, rank });
+    setIsAnalyticsOpen(true);
+  };
+
+  const copyProfile = async (id: string, url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(id);
+      window.setTimeout(() => setCopiedId(null), 1800);
+    } catch {
+      setError("Unable to copy the profile link.");
+    }
+  };
+
+  const filteredUsers = useMemo(() => {
+    const search = searchQuery.trim().toLowerCase();
+    const now = Date.now();
+
+    const rangeMs: Record<Exclude<RangeFilter, "all">, number> = {
+      today: 24 * 60 * 60 * 1000,
+      "7d": 7 * 24 * 60 * 60 * 1000,
+      "30d": 30 * 24 * 60 * 60 * 1000,
+    };
+
+    const result = users.filter((user) => {
+      const matchesSearch =
+        !search ||
+        String(user.name ?? "").toLowerCase().includes(search) ||
+        String(user.profileUrl ?? "").toLowerCase().includes(search);
+
+      const updatedTime = getDate(user.updatedAt)?.getTime() ?? 0;
+      const matchesRange =
+        rangeFilter === "all"
+          ? true
+          : updatedTime > 0 && now - updatedTime <= rangeMs[rangeFilter];
+
+      return matchesSearch && matchesRange;
+    });
+
+    result.sort((a, b) => {
+      let aValue: number | string = 0;
+      let bValue: number | string = 0;
+
+      if (sortBy === "points") {
+        aValue = numberValue(a.points);
+        bValue = numberValue(b.points);
+      } else if (sortBy === "calculations") {
+        aValue = numberValue(a.calculationCount || 1);
+        bValue = numberValue(b.calculationCount || 1);
+      } else if (sortBy === "updatedAt") {
+        aValue = getDate(a.updatedAt)?.getTime() ?? 0;
+        bValue = getDate(b.updatedAt)?.getTime() ?? 0;
+      } else {
+        aValue = String(a.name ?? "").toLowerCase();
+        bValue = String(b.name ?? "").toLowerCase();
       }
-      return dateValue;
+
+      const comparison =
+        typeof aValue === "string" && typeof bValue === "string"
+          ? aValue.localeCompare(bValue)
+          : Number(aValue) - Number(bValue);
+
+      return sortDirection === "desc" ? -comparison : comparison;
+    });
+
+    return result;
+  }, [users, searchQuery, rangeFilter, sortBy, sortDirection]);
+
+  const stats = useMemo(() => {
+    const totalUsers = users.length;
+    const totalPoints = users.reduce(
+      (sum, user) => sum + numberValue(user.points),
+      0
+    );
+    const totalCalculations = users.reduce(
+      (sum, user) => sum + numberValue(user.calculationCount || 1),
+      0
+    );
+
+    const now = Date.now();
+    const activeToday = users.filter((user) => {
+      const time = getDate(user.updatedAt)?.getTime() ?? 0;
+      return time > 0 && now - time <= 24 * 60 * 60 * 1000;
+    }).length;
+
+    const profilesLinked = users.filter(
+      (user) => String(user.profileUrl ?? "").trim().length > 0
+    ).length;
+
+    return {
+      totalUsers,
+      totalPoints,
+      totalCalculations,
+      activeToday,
+      profilesLinked,
+      averagePoints: totalUsers ? Math.round(totalPoints / totalUsers) : 0,
+      averageCalculations: totalUsers
+        ? Math.round((totalCalculations / totalUsers) * 10) / 10
+        : 0,
+      missingProfiles: totalUsers - profilesLinked,
+    };
+  }, [users]);
+
+  const topUsers = useMemo(
+    () =>
+      [...users]
+        .sort((a, b) => numberValue(b.points) - numberValue(a.points))
+        .slice(0, 5),
+    [users]
+  );
+
+  const activityUsers = useMemo(
+    () =>
+      [...users]
+        .filter((u) => getDate(u.updatedAt))
+        .sort(
+          (a, b) =>
+            (getDate(b.updatedAt)?.getTime() ?? 0) -
+            (getDate(a.updatedAt)?.getTime() ?? 0)
+        )
+        .slice(0, 6),
+    [users]
+  );
+
+  const maxPoints = useMemo(
+    () => Math.max(...users.map((u) => numberValue(u.points)), 1),
+    [users]
+  );
+
+  const maxCalculations = useMemo(
+    () =>
+      Math.max(
+        ...users.map((u) => numberValue(u.calculationCount || 1)),
+        1
+      ),
+    [users]
+  );
+
+  const pointsBands = useMemo(() => {
+    const bands = [
+      { label: "0–99", min: 0, max: 99, count: 0 },
+      { label: "100–499", min: 100, max: 499, count: 0 },
+      { label: "500–999", min: 500, max: 999, count: 0 },
+      { label: "1000+", min: 1000, max: Infinity, count: 0 },
+    ];
+
+    users.forEach((user) => {
+      const points = numberValue(user.points);
+      const band = bands.find((item) => points >= item.min && points <= item.max);
+      if (band) band.count += 1;
+    });
+
+    return bands;
+  }, [users]);
+
+
+  const topCalculators = useMemo(
+    () =>
+      [...users]
+        .sort(
+          (a, b) =>
+            numberValue(b.calculationCount || 1) -
+            numberValue(a.calculationCount || 1)
+        )
+        .slice(0, 10),
+    [users]
+  );
+
+  const topPointsUsers = useMemo(
+    () =>
+      [...users]
+        .sort((a, b) => numberValue(b.points) - numberValue(a.points))
+        .slice(0, 10),
+    [users]
+  );
+
+  const activityBuckets = useMemo(() => {
+    const now = Date.now();
+    const bucket = [
+      { label: "0–24h", min: 0, max: 24 * 60 * 60 * 1000, count: 0 },
+      { label: "1–7d", min: 24 * 60 * 60 * 1000, max: 7 * 24 * 60 * 60 * 1000, count: 0 },
+      { label: "8–30d", min: 7 * 24 * 60 * 60 * 1000, max: 30 * 24 * 60 * 60 * 1000, count: 0 },
+      { label: "30d+", min: 30 * 24 * 60 * 60 * 1000, max: Infinity, count: 0 },
+    ];
+
+    users.forEach((user) => {
+      const updated = getDate(user.updatedAt)?.getTime() ?? 0;
+      if (!updated) return;
+      const age = Math.max(0, now - updated);
+      const match = bucket.find((item) => age >= item.min && age < item.max);
+      if (match) match.count += 1;
+    });
+
+    return bucket;
+  }, [users]);
+
+  const analyticsSummary = useMemo(() => {
+    const active = users.filter((user) => {
+      const t = getDate(user.updatedAt)?.getTime() ?? 0;
+      return t > 0 && Date.now() - t <= 7 * 24 * 60 * 60 * 1000;
+    }).length;
+
+    const total = users.length;
+    const activeRate = total ? Math.round((active / total) * 100) : 0;
+    const totalCalcs = users.reduce(
+      (sum, user) => sum + numberValue(user.calculationCount || 1),
+      0
+    );
+    const medianPoints = (() => {
+      const values = users
+        .map((u) => numberValue(u.points))
+        .sort((a, b) => a - b);
+      if (!values.length) return 0;
+      const mid = Math.floor(values.length / 2);
+      return values.length % 2
+        ? values[mid]
+        : Math.round((values[mid - 1] + values[mid]) / 2);
+    })();
+
+    return {
+      active,
+      activeRate,
+      totalCalcs,
+      medianPoints,
+    };
+  }, [users]);
+
+  const toggleSort = (
+    key: "points" | "calculations" | "updatedAt" | "name"
+  ) => {
+    if (sortBy === key) {
+      setSortDirection((current) => (current === "desc" ? "asc" : "desc"));
+    } else {
+      setSortBy(key);
+      setSortDirection(key === "name" ? "asc" : "desc");
     }
-    if (typeof dateValue.toDate === 'function') {
-      return dateValue.toDate().toLocaleString('en-IN', { 
-        day: '2-digit', month: 'short', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-    }
-    return String(dateValue).split("GMT")[0].trim();
   };
 
-  const handleCopy = (id: string, url: string) => {
-    navigator.clipboard.writeText(url);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+  const exportCsv = () => {
+    const rows = [
+      ["Rank", "Name", "Points", "Calculations", "Profile", "Last Update"],
+      ...filteredUsers.map((user, index) => [
+        index + 1,
+        user.name || "Unknown Player",
+        numberValue(user.points),
+        numberValue(user.calculationCount || 1),
+        user.profileUrl || "",
+        formatDate(user.updatedAt),
+      ]),
+    ];
+
+    const csv = rows.map((row) => row.map(escapeCsv).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `arcade-nexus-users-${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
+    link.click();
+
+    URL.revokeObjectURL(url);
   };
 
-  // 🔥 LOADING SCREEN 🔥
+  const clearFilters = () => {
+    setSearchQuery("");
+    setRangeFilter("all");
+    setSortBy("points");
+    setSortDirection("desc");
+  };
+
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center font-sans">
-        <span className="flex h-4 w-4 relative">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d58] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 bg-[#0f9d58]"></span>
-        </span>
+      <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center">
+        <div className="google-spinner">
+          <svg viewBox="25 25 50 50">
+            <circle cx="50" cy="50" r="20" fill="none" />
+          </svg>
+        </div>
       </div>
     );
   }
 
-  // 🔥 1. LOGIN SCREEN (LAYOUT NAVBAR WILL SHOW HERE) 🔥
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-[#f41256]/30">
-        
-        {/* Subtle Ambient Glows */}
-        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-[#f41256] opacity-[0.04] blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-[#7c3aed] opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
-
-        {/* Modal Container */}
-        <div className="bg-[#1a1b1e] border border-[#2a2d32] rounded-2xl shadow-2xl w-full max-w-[420px] p-8 relative z-10">
-          
-          {/* Close X Button */}
-          <button className="absolute top-5 right-5 text-[#80868b] hover:text-white transition-colors focus:outline-none">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-
-          <h1 className="text-[22px] font-bold text-white mb-2 text-center mt-2 tracking-tight"> Arcade Nexus Admin </h1>
-          <p className="text-[#8e949c] text-[14px] text-center mb-6 leading-relaxed">
-            Only authorized Arcade Nexus Admins can access the moderation panel and database.
-          </p>
-
-          {/* Google Sign In Box */}
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-between px-4 py-3 bg-[#131416] border border-[#2a2d32] rounded-xl hover:bg-[#202124] transition-all focus:outline-none shadow-sm group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-[#202124] border border-[#3c4043] flex items-center justify-center">
-                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-              </div>
-              <div className="text-left">
-                <p className="text-white text-[13px] font-semibold leading-tight">Sign in with Google</p>
-                <p className="text-[#8e949c] text-[11px]">Secure Admin Access</p>
-              </div>
-            </div>
-            <div className="bg-white p-1 rounded-full">
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-            </div>
-          </button>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-[1px] bg-[#2a2d32]"></div>
-            <span className="text-[#8e949c] text-[12px] font-bold">OR</span>
-            <div className="flex-1 h-[1px] bg-[#2a2d32]"></div>
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4 font-sans">
+        <div className="bg-[#1a1b1e] border border-[#2a2d32] rounded-2xl shadow-2xl w-full max-w-[420px] p-8">
+          <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mx-auto mb-5 shadow-lg">
+            <svg viewBox="0 0 24 24" className="w-6 h-6">
+              <path
+                d="M21.6 12.23c0-.79-.07-1.55-.2-2.28H12v4.31h5.37a4.6 4.6 0 0 1-1.99 3.02v2.52h3.23c1.89-1.74 2.99-4.3 2.99-7.57Z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 22c2.7 0 4.97-.89 6.61-2.42l-3.23-2.52c-.9.6-2.05.96-3.38.96-2.6 0-4.8-1.76-5.59-4.12H3.08v2.6A10 10 0 0 0 12 22Z"
+                fill="#34A853"
+              />
+              <path
+                d="M6.41 13.9A6.02 6.02 0 0 1 6.1 12c0-.66.11-1.3.31-1.9V7.5H3.08A10 10 0 0 0 2 12c0 1.61.39 3.14 1.08 4.5l3.33-2.6Z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.98c1.47 0 2.79.51 3.83 1.5l2.87-2.87C16.97 3.01 14.7 2 12 2a10 10 0 0 0-8.92 5.5l3.33 2.6C7.2 7.74 9.4 5.98 12 5.98Z"
+                fill="#EA4335"
+              />
+            </svg>
           </div>
 
-          {/* Email / Sign Up Buttons */}
-          <button 
-            onClick={handleEmailAuthClick}
-            className="w-full py-3 bg-[#e11d48] hover:bg-[#be123c] text-white font-semibold text-[15px] rounded-xl transition-all shadow-md focus:outline-none mb-3"
+          <h1 className="text-[22px] font-bold text-white text-center tracking-tight">
+            Arcade Nexus Admin
+          </h1>
+          <p className="text-[#8e949c] text-[14px] text-center mt-2 mb-6 leading-relaxed">
+            Secure access to the Arcade Nexus moderation and analytics panel.
+          </p>
+
+          <button
+            onClick={login}
+            className={`w-full flex items-center justify-between px-4 py-3.5 bg-white text-[#202124] rounded-xl hover:bg-[#f1f3f4] transition-all shadow-sm font-bold ${
+              shake ? "animate-hard-shake" : ""
+            }`}
           >
-            Login with Email
-          </button>
-          
-          <button 
-            onClick={handleEmailAuthClick}
-            className="w-full py-3 bg-white hover:bg-gray-200 text-black font-semibold text-[15px] rounded-xl transition-all shadow-md focus:outline-none"
-          >
-            Sign Up
+            <span className="flex items-center gap-3">
+              <span className="w-7 h-7 rounded-full border border-[#dadce0] flex items-center justify-center">
+                <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <path
+                    d="M21.35 12.27c0-.72-.06-1.42-.18-2.09H12v3.95h5.23a4.5 4.5 0 0 1-1.94 2.95v2.45h3.13c1.84-1.69 2.93-4.18 2.93-7.26Z"
+                    fill="#4285F4"
+                  />
+                  <path
+                    d="M12 21.9c2.63 0 4.84-.87 6.45-2.37l-3.13-2.45c-.87.58-1.98.93-3.32.93-2.55 0-4.7-1.72-5.47-4.04H3.3v2.53A9.75 9.75 0 0 0 12 21.9Z"
+                    fill="#34A853"
+                  />
+                  <path
+                    d="M6.53 13.97A5.94 5.94 0 0 1 6.22 12c0-.69.12-1.36.31-1.97V7.5H3.3A9.8 9.8 0 0 0 2.25 12c0 1.62.39 3.15 1.05 4.5l3.23-2.53Z"
+                    fill="#FBBC05"
+                  />
+                  <path
+                    d="M12 5.99c1.44 0 2.74.5 3.76 1.48l2.82-2.82C16.83 3 14.62 2 12 2a9.75 9.75 0 0 0-8.7 5.5l3.23 2.53C7.3 7.71 9.45 5.99 12 5.99Z"
+                    fill="#EA4335"
+                  />
+                </svg>
+              </span>
+              <span>Sign in with Google</span>
+            </span>
+            <span className="text-xs text-[#5f6368]">Admin only</span>
           </button>
 
           {error && (
-            <div className={`mt-4 p-2.5 rounded-lg bg-[#e11d48]/10 border border-[#e11d48]/20 text-[#e11d48] text-[13px] font-bold text-center ${shake ? 'animate-hard-shake' : ''}`}>
+            <div className="mt-4 p-3 rounded-xl bg-[#e11d48]/10 border border-[#e11d48]/20 text-[#b42318] text-[13px] font-bold text-center">
               {error}
             </div>
           )}
         </div>
 
-        <style jsx>{`
+        <style jsx global>{`
           @keyframes hardShake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
+            0%,
+            100% {
+              transform: translateX(0);
+            }
+            20%,
+            60% {
+              transform: translateX(-6px);
+            }
+            40%,
+            80% {
+              transform: translateX(6px);
+            }
           }
+
           .animate-hard-shake {
             animation: hardShake 0.3s ease-in-out;
           }
@@ -254,166 +592,1048 @@ export default function AdminDashboard() {
     );
   }
 
-  // 🔥 2. FULL-SCREEN DASHBOARD (COVERS LAYOUT NAVBAR AUTOMATICALLY) 🔥
   return (
-    <div className="fixed inset-0 z-[100] bg-[#f8f9fa] h-screen w-screen overflow-y-auto custom-scrollbar font-sans flex flex-col items-center text-[#202124]">
-      
-      {/* Main Content Area - Added pb-24 for extra scrolling space at the bottom */}
-      <div className="w-full max-w-7xl flex flex-col gap-10 p-4 md:p-8 mt-4 pb-24">
-        
-        {/* ================= LEADERBOARD SECTION ================= */}
-        <div className="w-full flex flex-col gap-4">
-          
-          {/* Header Row: Title & Action Controls */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#dadce0] pb-4">
-            <h2 className="text-2xl font-bold text-[#202124]">User Data House</h2>
-            
-            <div className="flex flex-wrap items-center gap-3">
-              {/* Search Box */}
-              <div className="relative flex flex-col w-48 sm:w-64">
-                <div className={`flex items-center gap-2 px-3 py-1.5 border rounded-full transition-colors w-full ${
-                  isNoMatch 
-                    ? 'border-red-500 text-red-700 bg-red-50' 
-                    : 'text-[#5f6368] border-[#dadce0] bg-white focus-within:border-[#1a73e8]'
-                }`}>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}
-                    placeholder="Search user..."
-                    className={`bg-transparent border-none outline-none w-full text-sm font-medium py-1 ${
-                      isNoMatch ? 'text-red-700 placeholder-red-300' : 'text-[#202124] placeholder-[#9aa0a6]'
-                    }`}
-                  />
-                  <button 
-                    onClick={handleSearchClick}
-                    className="shrink-0 p-1 hover:text-[#1a73e8] transition-colors focus:outline-none"
-                    title="Click to find user"
-                  >
-                    <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
-                </div>
-                {isNoMatch && (
-                  <span className="text-[11px] font-bold text-red-500 absolute top-full mt-1 right-1">
-                    No user found
-                  </span>
-                )}
-              </div>
-
-              {/* Logout Button (Red Curve) */}
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-1.5 px-5 py-2 bg-[#ea4335] text-white hover:bg-[#d32f2f] rounded-full text-sm font-bold transition-all shadow-sm focus:outline-none"
+    <div className="fixed inset-0 z-[100] bg-[#f7f7f8] overflow-y-auto font-sans text-[#111827] custom-scrollbar selection:bg-[#dbeafe] selection:text-[#1d4ed8]">
+      <div className="w-full max-w-[1480px] mx-auto px-4 md:px-7 lg:px-9 py-6 md:py-8 pb-24">
+        {/* HEADER */}
+        <header className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 border-b border-[#dadce0] pb-5">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-[25px] font-bold tracking-tight">
+                Arcade Nexus Admin
+              </h1>
+              <span
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${
+                  isConnected
+                    ? "bg-[#eff6ff] text-[#2563eb] border-[#dbeafe]"
+                    : "bg-[#fce8e6] text-[#c5221f] border-[#f6aea8]"
+                }`}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                Logout
-              </button>
-
-              {/* Back Button */}
-              <button
-                onClick={() => router.back()}
-                className="flex items-center gap-1.5 px-5 py-2 bg-white text-[#5f6368] border border-[#dadce0] hover:bg-[#f1f3f4] rounded-full text-sm font-bold transition-all shadow-sm focus:outline-none"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                Back
-              </button>
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    isConnected ? "bg-[#3b82f6]" : "bg-[#ea4335]"
+                  }`}
+                />
+                {isConnected ? "LIVE" : "OFFLINE"}
+              </span>
             </div>
+            <p className="mt-1 text-[13px] text-[#5f6368]">
+              Real-time user data, performance analytics and activity monitoring.
+            </p>
           </div>
 
-          {/* Table Container - max-h 700px to show more rows before scrolling */}
-          <div className="bg-white rounded-lg shadow-sm border border-[#dadce0] w-full overflow-hidden">
-            <div className="w-full overflow-x-auto max-h-[700px] overflow-y-auto custom-scrollbar">
-              {loading ? (
-                <div className="p-10 text-center text-[#5f6368] font-bold">Syncing live data...</div>
-              ) : users.length > 0 ? (
-                <table className="w-full text-left border-collapse min-w-[800px] relative">
-                  <thead className="bg-[#0f9d58] sticky top-0 z-20 border-b border-[#0b8043]">
-                    <tr>
-                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] w-20 text-center">Rank</th>
-                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043]">User Name</th>
-                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043]">Public Profile</th>
-                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] text-center w-28">Points</th>
-                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider border-r border-[#0b8043] text-center w-36">Profile Analyzed</th>
-                      <th className="px-6 py-4 text-xs font-bold text-white uppercase tracking-wider">Last Update</th>
-                    </tr>
-                  </thead>
-                  
-                  <tbody className="divide-y divide-[#e8eaed]">
-                    {users.map((user, index) => {
-                      const isMatch = isSearching && user.name?.toLowerCase().includes(lowerQuery);
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => setShowAnalytics((v) => !v)}
+              className={`px-4 py-2 rounded-full text-sm font-bold border transition-all ${
+                showAnalytics
+                  ? "bg-[#202124] text-white border-[#202124]"
+                  : "bg-white text-[#3c4043] border-[#dadce0] hover:bg-[#f1f3f4]"
+              }`}
+            >
+              {showAnalytics ? "Hide Analytics" : "Analytics"}
+            </button>
+
+            <button
+              onClick={() => router.back()}
+              className="px-4 py-2 rounded-full text-sm font-bold bg-white text-[#5f6368] border border-[#dadce0] hover:bg-[#f1f3f4] transition-all"
+            >
+              ← Back
+            </button>
+
+            <button
+              onClick={logout}
+              className="px-4 py-2 rounded-full text-sm font-bold bg-[#ea4335] text-white hover:bg-[#d32f2f] transition-all shadow-sm"
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+
+        {error && (
+          <div className="mt-4 rounded-xl border border-[#f6aea8] bg-[#fce8e6] px-4 py-3 text-sm font-semibold text-[#c5221f]">
+            {error}
+          </div>
+        )}
+
+        {/* KPI CARDS */}
+        <section className="grid grid-cols-2 lg:grid-cols-6 gap-3 mt-7">
+          {[
+            ["Total Users", stats.totalUsers, "#1a73e8"],
+            ["Active Today", stats.activeToday, "#3b82f6"],
+            ["Total Points", stats.totalPoints, "#9334e6"],
+            ["Calculations", stats.totalCalculations, "#ea4335"],
+            ["Avg Points", stats.averagePoints, "#f29900"],
+            ["Profiles Linked", stats.profilesLinked, "#00897b"],
+          ].map(([label, value, accent]) => (
+            <div
+              key={String(label)}
+              className="bg-white border border-[#dadce0] rounded-2xl p-4 shadow-sm"
+            >
+              <div
+                className="w-8 h-1 rounded-full mb-3"
+                style={{ background: accent as string }}
+              />
+              <p className="text-[11px] uppercase tracking-wider font-bold text-[#80868b]">
+                {label}
+              </p>
+              <p className="text-[25px] leading-none font-bold mt-2 text-[#202124]">
+                {formatNumber(Number(value))}
+              </p>
+            </div>
+          ))}
+        </section>
+
+        {/* ANALYTICS */}
+        {showAnalytics && (
+          <section className="mt-5 space-y-5">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-[19px] font-semibold tracking-tight">Analytics</h2>
+                  <span className="px-2 py-0.5 rounded-full bg-[#eff6ff] text-[#2563eb] border border-[#dbeafe] text-[10px] font-bold uppercase tracking-wider">
+                    Live
+                  </span>
+                </div>
+                <p className="text-[12px] text-[#6b7280] mt-1">
+                  Derived from the current Firebase leaderboard snapshot — no mock history.
+                </p>
+              </div>
+              <div className="text-[11px] text-[#9aa0a6]">
+                Updated in real time
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+              {[
+                ["7D Active", `${analyticsSummary.activeRate}%`, `${analyticsSummary.active} users`],
+                ["Median Points", formatNumber(analyticsSummary.medianPoints), "middle user"],
+                ["Total Calculations", formatNumber(analyticsSummary.totalCalcs), "all users"],
+                ["Top Points", formatNumber(maxPoints), "highest user"],
+                ["Max Calculations", formatNumber(maxCalculations), "single user"],
+              ].map(([label, value, hint]) => (
+                <div key={label} className="rounded-2xl bg-white border border-[#e5e7eb] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#9aa0a6]">{label}</p>
+                  <p className="text-[22px] font-semibold tracking-tight mt-2 text-[#111827]">{value}</p>
+                  <p className="text-[11px] text-[#6b7280] mt-1">{hint}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid xl:grid-cols-[1.1fr_1fr] gap-5">
+              <div className="rounded-2xl bg-white border border-[#e5e7eb] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                <div className="flex items-start justify-between gap-4 mb-5">
+                  <div>
+                    <h3 className="text-[15px] font-semibold">Activity Recency</h3>
+                    <p className="text-[11px] text-[#9aa0a6] mt-1">
+                      Users grouped by their latest <code className="font-mono text-[10px]">updatedAt</code>.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {activityBuckets.map((bucket) => {
+                    const percentage = users.length
+                      ? Math.round((bucket.count / users.length) * 100)
+                      : 0;
+
+                    return (
+                      <div key={bucket.label}>
+                        <div className="flex items-center justify-between text-[11px] font-medium mb-1.5">
+                          <span className="text-[#374151]">{bucket.label}</span>
+                          <span className="text-[#6b7280]">{bucket.count} · {percentage}%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-[#f3f4f6] overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-[#2563eb] transition-all duration-500"
+                            style={{ width: `${percentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6 rounded-xl border border-[#e5e7eb] bg-[#fafafa] p-3 text-[11px] text-[#6b7280] leading-relaxed">
+                  This panel reflects real timestamps that already exist in your documents. It does not fabricate hourly or daily events.
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white border border-[#e5e7eb] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-[15px] font-semibold">Top 10 · Maximum Calculations</h3>
+                    <p className="text-[11px] text-[#9aa0a6] mt-1">
+                      Users with the highest calculation count.
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-bold rounded-full bg-[#eff6ff] text-[#2563eb] border border-[#dbeafe] px-2.5 py-1">
+                    Top 10
+                  </span>
+                </div>
+
+                <div className="space-y-1.5">
+                  {topCalculators.length ? (
+                    topCalculators.map((user, index) => {
+                      const calc = numberValue(user.calculationCount || 1);
+                      const width = Math.max(4, (calc / Math.max(maxCalculations, 1)) * 100);
+
                       return (
-                        <tr 
-                          key={user.id} 
-                          id={`user-row-${user.id}`}
-                          className={`transition-colors duration-500 ${isMatch ? 'bg-[#ceead6]' : 'hover:bg-[#f8f9fa]'}`}
+                        <button
+                          key={user.id}
+                          onClick={() => openUser(user, index + 1)}
+                          className="w-full text-left rounded-xl p-2.5 hover:bg-[#f9fafb] transition-colors group"
                         >
-                          <td className="px-6 py-4 text-sm font-bold text-[#80868b] text-center border-r border-[#e8eaed]">
-                            {index + 1}
-                          </td>
-                          <td className="px-6 py-4 border-r border-[#e8eaed]">
-                            <div className="flex items-center gap-3">
-                              <img src={user.photoURL || "/avatar.png"} alt="Avatar" className="w-8 h-8 rounded-full border border-[#dadce0] shrink-0 object-cover" />
-                              <span className="text-[15px] font-bold text-[#202124]">{user.name || "Unknown Player"}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 border-r border-[#e8eaed] max-w-[250px]">
-                            {user.profileUrl ? (
-                              <div className="flex items-center gap-2">
-                                <button onClick={() => handleCopy(user.id, user.profileUrl)} className={`transition-colors focus:outline-none ${copiedId === user.id ? 'text-[#34a853]' : 'text-[#5f6368] hover:text-[#1a73e8]'}`} title="Copy URL">
-                                  {copiedId === user.id ? (
-                                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                                  ) : (
-                                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                                  )}
-                                </button>
-                                <a href={user.profileUrl} target="_blank" rel="noopener noreferrer" className="text-[13px] font-normal text-[#5f6368] hover:text-[#1a73e8] hover:underline truncate block w-full">{user.profileUrl}</a>
-                              </div>
-                            ) : (
-                              <span className="text-[13px] font-normal italic text-[#9aa0a6]">No profile linked</span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 border-r border-[#e8eaed] text-center">
-                            <span className="text-base font-bold text-[#202124]">{user.points}</span>
-                          </td>
-                          <td className="px-6 py-4 border-r border-[#e8eaed] text-center">
-                            <span className="bg-[#f8f9fa] border border-[#dadce0] px-3 py-1.5 rounded-full text-[12px] font-bold text-[#3c4043] inline-flex items-center gap-1.5">
-                              {user.calculationCount || 1} {user.calculationCount === 1 || !user.calculationCount ? 'Time' : 'Times'}
+                          <div className="flex items-center gap-3">
+                            <span className="w-5 text-[10px] font-bold text-[#9aa0a6] text-center">
+                              {index + 1}
                             </span>
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className="text-[13px] font-medium text-[#5f6368]">{formatDate(user.updatedAt)}</span>
-                          </td>
-                        </tr>
+                            <img
+                              src={user.photoURL || "/avatar.png"}
+                              alt=""
+                              className="w-8 h-8 rounded-full object-cover border border-[#e5e7eb]"
+                            />
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-[12px] font-semibold truncate text-[#111827]">
+                                {user.name || "Unknown Player"}
+                              </span>
+                              <span className="block text-[10px] text-[#9aa0a6] mt-0.5 truncate">
+                                {numberValue(user.points)} points
+                              </span>
+                            </span>
+                            <span className="text-[12px] font-semibold text-[#2563eb]">
+                              {formatNumber(calc)}
+                            </span>
+                          </div>
+                          <div className="mt-2 ml-8 h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-[#60a5fa] group-hover:bg-[#2563eb] transition-all duration-300"
+                              style={{ width: `${width}%` }}
+                            />
+                          </div>
+                        </button>
                       );
-                    })}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="p-10 text-center text-[#5f6368] font-bold">No user data found.</div>
+                    })
+                  ) : (
+                    <div className="py-10 text-center text-xs text-[#9aa0a6]">
+                      No calculation data available.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-white border border-[#e5e7eb] p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+              <div className="flex items-start justify-between mb-5">
+                <div>
+                  <h3 className="text-[15px] font-semibold">Top 10 · Points Leaderboard</h3>
+                  <p className="text-[11px] text-[#9aa0a6] mt-1">
+                    Current points ranking from the live collection.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-x-8 gap-y-2">
+                {topPointsUsers.map((user, index) => {
+                  const points = numberValue(user.points);
+                  const width = Math.max(4, (points / Math.max(maxPoints, 1)) * 100);
+
+                  return (
+                    <button
+                      key={user.id}
+                      onClick={() => openUser(user, index + 1)}
+                      className="w-full text-left rounded-xl p-2.5 hover:bg-[#f9fafb] transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-bold text-[#9aa0a6] w-5 text-center">
+                          {index + 1}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
+                          {user.name || "Unknown Player"}
+                        </span>
+                        <span className="text-[12px] font-semibold text-[#111827]">
+                          {formatNumber(points)}
+                        </span>
+                      </div>
+                      <div className="mt-1.5 ml-8 h-1.5 bg-[#f3f4f6] rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-[#2563eb]"
+                          style={{ width: `${width}%` }}
+                        />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* USERS */}
+        <section className="mt-6">
+          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 mb-4">
+            <div>
+              <h2 className="text-[19px] font-bold">User Data House</h2>
+              <p className="text-[12px] text-[#80868b] mt-1">
+                Showing {filteredUsers.length} of {users.length} users.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1 bg-white border border-[#dadce0] rounded-full p-1">
+                {(["all", "today", "7d", "30d"] as RangeFilter[]).map((range) => (
+                  <button
+                    key={range}
+                    onClick={() => setRangeFilter(range)}
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${
+                      rangeFilter === range
+                        ? "bg-[#202124] text-white"
+                        : "text-[#5f6368] hover:bg-[#f1f3f4]"
+                    }`}
+                  >
+                    {range === "all"
+                      ? "All"
+                      : range === "today"
+                      ? "Today"
+                      : range.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center bg-white border border-[#dadce0] rounded-full px-3 py-2">
+                <svg
+                  className="w-4 h-4 text-[#80868b] mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeWidth="2"
+                    d="m21 21-4.35-4.35m1.35-5.15a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"
+                  />
+                </svg>
+                <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search name or profile..."
+                  className="bg-transparent outline-none w-52 text-[12px] font-medium"
+                />
+              </div>
+
+              <select
+                value={`${sortBy}:${sortDirection}`}
+                onChange={(e) => {
+                  const [key, direction] = e.target.value.split(":") as [
+                    "points" | "calculations" | "updatedAt" | "name",
+                    "desc" | "asc"
+                  ];
+                  setSortBy(key);
+                  setSortDirection(direction);
+                }}
+                className="bg-white border border-[#dadce0] rounded-full px-3 py-2 text-[12px] font-bold text-[#5f6368] outline-none"
+              >
+                <option value="points:desc">Points ↓</option>
+                <option value="points:asc">Points ↑</option>
+                <option value="calculations:desc">Calculations ↓</option>
+                <option value="calculations:asc">Calculations ↑</option>
+                <option value="updatedAt:desc">Latest ↓</option>
+                <option value="updatedAt:asc">Oldest ↑</option>
+                <option value="name:asc">Name A–Z</option>
+                <option value="name:desc">Name Z–A</option>
+              </select>
+
+              <button
+                onClick={exportCsv}
+                className="px-4 py-2 rounded-full bg-[#2563eb] text-white text-[12px] font-bold hover:bg-[#1d4ed8] transition-all"
+              >
+                Export CSV
+              </button>
+
+              {(searchQuery || rangeFilter !== "all") && (
+                <button
+                  onClick={clearFilters}
+                  className="px-3 py-2 rounded-full bg-white border border-[#dadce0] text-[12px] font-bold text-[#5f6368] hover:bg-[#f1f3f4]"
+                >
+                  Clear
+                </button>
               )}
             </div>
           </div>
-        </div>
 
+          <div className="bg-white rounded-2xl shadow-sm border border-[#dadce0] overflow-hidden">
+            <div className="w-full overflow-x-auto max-h-[720px] overflow-y-auto custom-scrollbar">
+              {loading ? (
+                <div className="flex items-center justify-center p-20">
+                  <div className="google-spinner">
+                    <svg viewBox="25 25 50 50">
+                      <circle cx="50" cy="50" r="20" fill="none" />
+                    </svg>
+                  </div>
+                </div>
+              ) : filteredUsers.length > 0 ? (
+                <table className="w-full text-left border-collapse min-w-[1000px]">
+                  <thead className="sticky top-0 z-20 bg-[#2563eb]">
+                    <tr>
+                      <th className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold text-center">
+                        Rank
+                      </th>
+                      <th
+                        className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold cursor-pointer"
+                        onClick={() => toggleSort("name")}
+                      >
+                        User
+                      </th>
+                      <th className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold">
+                        Public Profile
+                      </th>
+                      <th
+                        className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold text-center cursor-pointer"
+                        onClick={() => toggleSort("points")}
+                      >
+                        Points
+                      </th>
+                      <th
+                        className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold text-center cursor-pointer"
+                        onClick={() => toggleSort("calculations")}
+                      >
+                        Calculations
+                      </th>
+                      <th
+                        className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold cursor-pointer"
+                        onClick={() => toggleSort("updatedAt")}
+                      >
+                        Last Update
+                      </th>
+                      <th className="px-5 py-4 text-[11px] text-white uppercase tracking-wider font-bold text-center">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y divide-[#e8eaed]">
+                    {filteredUsers.map((user, index) => (
+                      <tr
+                        key={user.id}
+                        className="hover:bg-[#f8f9fa] transition-colors"
+                      >
+                        <td className="px-5 py-4 text-sm font-bold text-[#80868b] text-center">
+                          {index + 1}
+                        </td>
+
+                        <td className="px-5 py-4">
+                          <button
+                            onClick={() => openUser(user, index + 1)}
+                            className="flex items-center gap-3 text-left"
+                          >
+                            <img
+                              src={user.photoURL || "/avatar.png"}
+                              alt=""
+                              className="w-9 h-9 rounded-full border border-[#dadce0] object-cover"
+                            />
+                            <span>
+                              <span className="block text-[14px] font-bold text-[#202124] hover:text-[#1a73e8]">
+                                {user.name || "Unknown Player"}
+                              </span>
+                              <span className="block text-[11px] text-[#80868b] mt-0.5">
+                                ID: {user.id.slice(0, 10)}
+                                {user.id.length > 10 ? "…" : ""}
+                              </span>
+                            </span>
+                          </button>
+                        </td>
+
+                        <td className="px-5 py-4 max-w-[240px]">
+                          {user.profileUrl ? (
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() =>
+                                  copyProfile(user.id, user.profileUrl as string)
+                                }
+                                className="shrink-0 p-1.5 rounded-lg hover:bg-[#e8f0fe] text-[#5f6368] hover:text-[#1a73e8]"
+                                title="Copy profile"
+                              >
+                                {copiedId === user.id ? "✓" : "⧉"}
+                              </button>
+                              <a
+                                href={user.profileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="truncate text-[12px] text-[#5f6368] hover:text-[#1a73e8] hover:underline"
+                              >
+                                {user.profileUrl}
+                              </a>
+                            </div>
+                          ) : (
+                            <span className="text-[12px] italic text-[#9aa0a6]">
+                              No profile linked
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-5 py-4 text-center">
+                          <span className="inline-flex min-w-16 justify-center px-2.5 py-1 rounded-full bg-[#eff6ff] text-[#2563eb] text-[12px] font-bold">
+                            {formatNumber(numberValue(user.points))}
+                          </span>
+                        </td>
+
+                        <td className="px-5 py-4 text-center">
+                          <span className="text-[13px] font-bold text-[#3c4043]">
+                            {formatNumber(numberValue(user.calculationCount || 1))}
+                          </span>
+                        </td>
+
+                        <td className="px-5 py-4 text-[12px] font-medium text-[#5f6368]">
+                          {formatDate(user.updatedAt)}
+                        </td>
+
+                        <td className="px-5 py-4">
+                          <div className="flex justify-center gap-1">
+                            <button
+                              onClick={() => openAnalytics(user, index + 1)}
+                              className="p-2 rounded-lg text-[#5f6368] hover:text-[#1a73e8] hover:bg-[#e8f0fe]"
+                              title="View analytics"
+                            >
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M4 19V5m0 14h16M8 16v-3m4 3V8m4 8v-6"
+                                />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => openUser(user, index + 1)}
+                              className="p-2 rounded-lg text-[#5f6368] hover:text-[#202124] hover:bg-[#f1f3f4]"
+                              title="View user"
+                            >
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Zm9.5 2.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="p-16 text-center">
+                  <div className="w-12 h-12 rounded-2xl bg-[#f1f3f4] mx-auto flex items-center justify-center text-xl">
+                    🔎
+                  </div>
+                  <p className="mt-4 text-sm font-bold text-[#3c4043]">
+                    No users found
+                  </p>
+                  <p className="mt-1 text-xs text-[#80868b]">
+                    Try clearing the search or date filter.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* RECENT ACTIVITY */}
+        <section className="mt-6 grid lg:grid-cols-[1.2fr_1fr] gap-5">
+          <div className="bg-white border border-[#dadce0] rounded-2xl shadow-sm p-5">
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-[16px] font-bold">Recent Activity</h3>
+                <p className="text-[12px] text-[#80868b] mt-1">
+                  Latest `updatedAt` values from the live leaderboard.
+                </p>
+              </div>
+              <span className="text-[11px] font-bold text-[#1d4ed8] bg-[#eff6ff] px-2.5 py-1.5 rounded-full">
+                Live
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {activityUsers.length ? (
+                activityUsers.map((user) => (
+                  <button
+                    key={user.id}
+                    onClick={() => {
+                      const rank =
+                        users
+                          .slice()
+                          .sort(
+                            (a, b) =>
+                              numberValue(b.points) - numberValue(a.points)
+                          )
+                          .findIndex((item) => item.id === user.id) + 1;
+                      openUser(user, rank || 1);
+                    }}
+                    className="w-full flex items-center gap-3 rounded-xl p-2.5 hover:bg-[#f8f9fa] text-left"
+                  >
+                    <img
+                      src={user.photoURL || "/avatar.png"}
+                      alt=""
+                      className="w-8 h-8 rounded-full border border-[#dadce0] object-cover"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[12px] font-bold truncate">
+                        {user.name || "Unknown Player"}
+                      </span>
+                      <span className="block text-[11px] text-[#80868b] mt-0.5">
+                        {formatDate(user.updatedAt)}
+                      </span>
+                    </span>
+                    <span className="text-[12px] font-bold text-[#2563eb]">
+                      {formatNumber(numberValue(user.points))} pts
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <div className="py-8 text-center text-xs text-[#80868b]">
+                  No activity timestamps available.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#dadce0] rounded-2xl shadow-sm p-5">
+            <h3 className="text-[16px] font-bold">System Snapshot</h3>
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              <div className="rounded-xl bg-[#f8f9fa] border border-[#e8eaed] p-4">
+                <p className="text-[11px] font-bold uppercase text-[#80868b]">
+                  Firebase
+                </p>
+                <p
+                  className={`mt-1 text-[16px] font-bold ${
+                    isConnected ? "text-[#1d4ed8]" : "text-[#c5221f]"
+                  }`}
+                >
+                  {isConnected ? "Connected" : "Not Connected"}
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-[#f8f9fa] border border-[#e8eaed] p-4">
+                <p className="text-[11px] font-bold uppercase text-[#80868b]">
+                  Data Source
+                </p>
+                <p className="mt-1 text-[16px] font-bold">leaderboard</p>
+              </div>
+
+              <div className="rounded-xl bg-[#f8f9fa] border border-[#e8eaed] p-4">
+                <p className="text-[11px] font-bold uppercase text-[#80868b]">
+                  Top Points
+                </p>
+                <p className="mt-1 text-[16px] font-bold text-[#1a73e8]">
+                  {formatNumber(maxPoints)}
+                </p>
+              </div>
+
+              <div className="rounded-xl bg-[#f8f9fa] border border-[#e8eaed] p-4">
+                <p className="text-[11px] font-bold uppercase text-[#80868b]">
+                  Max Calculations
+                </p>
+                <p className="mt-1 text-[16px] font-bold text-[#ea4335]">
+                  {formatNumber(maxCalculations)}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <style jsx>{`
+      {/* USER DRAWER */}
+      {isDrawerOpen && selectedUser && (
+        <>
+          <div
+            className="fixed inset-0 z-[200] bg-black/40 backdrop-blur-sm"
+            onClick={() => setIsDrawerOpen(false)}
+          />
+          <aside className="fixed top-0 right-0 z-[210] h-full w-full sm:w-[410px] bg-white shadow-2xl border-l border-[#dadce0] flex flex-col">
+            <div className="p-5 border-b border-[#dadce0] flex items-center justify-between bg-[#f8f9fa]">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#80868b]">
+                  User Profile
+                </p>
+                <h2 className="text-[18px] font-bold mt-0.5">User Details</h2>
+              </div>
+              <button
+                onClick={() => setIsDrawerOpen(false)}
+                className="w-9 h-9 rounded-full hover:bg-[#e8eaed] text-[#5f6368]"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="flex flex-col items-center">
+                <img
+                  src={selectedUser.photoURL || "/avatar.png"}
+                  alt=""
+                  className="w-24 h-24 rounded-full border-4 border-[#e8f0fe] object-cover shadow-sm"
+                />
+                <h3 className="mt-4 text-[21px] font-bold text-center">
+                  {selectedUser.name || "Unknown Player"}
+                </h3>
+                <span className="mt-1 text-[12px] text-[#80868b]">
+                  Rank #{selectedUser.rank}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mt-7">
+                <div className="rounded-2xl bg-[#eff6ff] p-4">
+                  <p className="text-[11px] font-bold uppercase text-[#1d4ed8]">
+                    Points
+                  </p>
+                  <p className="text-[25px] font-bold mt-1 text-[#2563eb]">
+                    {formatNumber(numberValue(selectedUser.points))}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-[#e8f0fe] p-4">
+                  <p className="text-[11px] font-bold uppercase text-[#1a73e8]">
+                    Rank
+                  </p>
+                  <p className="text-[25px] font-bold mt-1 text-[#1a73e8]">
+                    #{selectedUser.rank}
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-[#fce8e6] p-4 col-span-2">
+                  <p className="text-[11px] font-bold uppercase text-[#c5221f]">
+                    Calculations
+                  </p>
+                  <p className="text-[23px] font-bold mt-1 text-[#ea4335]">
+                    {formatNumber(
+                      numberValue(selectedUser.calculationCount || 1)
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-7 space-y-5">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#80868b]">
+                    Last Update
+                  </p>
+                  <p className="text-[14px] font-medium mt-1">
+                    {formatDate(selectedUser.updatedAt)}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#80868b]">
+                    User ID
+                  </p>
+                  <p className="text-[13px] font-mono break-all mt-1 text-[#3c4043]">
+                    {selectedUser.id}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#80868b]">
+                    Public Profile
+                  </p>
+                  {selectedUser.profileUrl ? (
+                    <a
+                      href={selectedUser.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-[13px] text-[#1a73e8] hover:underline break-all mt-1"
+                    >
+                      {selectedUser.profileUrl}
+                    </a>
+                  ) : (
+                    <p className="text-[13px] text-[#9aa0a6] mt-1">
+                      No profile linked
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 border-t border-[#dadce0] bg-[#f8f9fa] space-y-2.5">
+              {selectedUser.profileUrl && (
+                <>
+                  <a
+                    href={selectedUser.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-3 rounded-xl bg-[#1a73e8] text-white font-bold hover:bg-[#1557b0]"
+                  >
+                    Open Profile
+                  </a>
+                  <button
+                    onClick={() =>
+                      copyProfile(
+                        selectedUser.id,
+                        selectedUser.profileUrl as string
+                      )
+                    }
+                    className="w-full py-3 rounded-xl bg-white border border-[#dadce0] font-bold text-[#5f6368] hover:bg-[#f1f3f4]"
+                  >
+                    {copiedId === selectedUser.id
+                      ? "Copied!"
+                      : "Copy Profile Link"}
+                  </button>
+                </>
+              )}
+              <button
+                onClick={() => {
+                  setIsDrawerOpen(false);
+                  openAnalytics(selectedUser, selectedUser.rank || 1);
+                }}
+                className="w-full py-3 rounded-xl bg-[#202124] text-white font-bold hover:bg-black"
+              >
+                View Analytics
+              </button>
+            </div>
+          </aside>
+        </>
+      )}
+
+      {/* USER ANALYTICS MODAL */}
+      {isAnalyticsOpen && analyticsUser && (
+        <div className="fixed inset-0 z-[300] bg-black/45 backdrop-blur-[2px] flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-2xl rounded-3xl border border-[#e5e7eb] shadow-[0_24px_80px_rgba(0,0,0,0.18)] overflow-hidden">
+            <div className="px-6 py-5 border-b border-[#e5e7eb] flex items-center justify-between">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.14em] font-bold text-[#9aa0a6]">User analytics</p>
+                <h2 className="text-[18px] font-semibold tracking-tight mt-1">
+                  {analyticsUser.name || "Unknown Player"}
+                </h2>
+              </div>
+              <button
+                onClick={() => setIsAnalyticsOpen(false)}
+                className="w-9 h-9 rounded-full hover:bg-[#f3f4f6] text-[#6b7280] transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  ["Points", formatNumber(numberValue(analyticsUser.points))],
+                  ["Calculations", formatNumber(numberValue(analyticsUser.calculationCount || 1))],
+                  ["Rank", `#${analyticsUser.rank}`],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                    <p className="text-[10px] uppercase tracking-wider font-bold text-[#9aa0a6]">{label}</p>
+                    <p className="text-[23px] font-semibold tracking-tight mt-2">{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 grid md:grid-cols-2 gap-3">
+                <div className="rounded-2xl border border-[#e5e7eb] p-4">
+                  <div className="flex justify-between text-[11px] font-medium mb-2">
+                    <span>Points vs #1</span>
+                    <span>
+                      {maxPoints
+                        ? Math.round((numberValue(analyticsUser.points) / maxPoints) * 100)
+                        : 0}
+                      %
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-[#f3f4f6] overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-[#2563eb]"
+                      style={{
+                        width: `${
+                          maxPoints
+                            ? Math.max(
+                                2,
+                                Math.min(100, (numberValue(analyticsUser.points) / maxPoints) * 100)
+                              )
+                            : 0
+                        }%`,
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-[#e5e7eb] p-4">
+                  <div className="flex justify-between text-[11px] font-medium mb-2">
+                    <span>Calculations vs max</span>
+                    <span>
+                      {maxCalculations
+                        ? Math.round(
+                            (numberValue(analyticsUser.calculationCount || 1) /
+                              maxCalculations) *
+                              100
+                          )
+                        : 0}
+                      %
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-[#f3f4f6] overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-[#60a5fa]"
+                      style={{
+                        width: `${
+                          maxCalculations
+                            ? Math.max(
+                                2,
+                                Math.min(
+                                  100,
+                                  (numberValue(analyticsUser.calculationCount || 1) /
+                                    maxCalculations) *
+                                    100
+                                )
+                              )
+                            : 0
+                        }%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 grid sm:grid-cols-3 gap-3">
+                <div className="rounded-2xl border border-[#e5e7eb] p-4 bg-white">
+                  <p className="text-[10px] uppercase font-bold tracking-wider text-[#9aa0a6]">Points / calc</p>
+                  <p className="text-[18px] font-semibold mt-1 text-[#2563eb]">
+                    {formatNumber(
+                      Math.round(
+                        numberValue(analyticsUser.points) /
+                          Math.max(1, numberValue(analyticsUser.calculationCount || 1))
+                      )
+                    )}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] p-4 bg-white">
+                  <p className="text-[10px] uppercase font-bold tracking-wider text-[#9aa0a6]">Last update</p>
+                  <p className="text-[12px] font-semibold mt-2">{formatDate(analyticsUser.updatedAt)}</p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] p-4 bg-white">
+                  <p className="text-[10px] uppercase font-bold tracking-wider text-[#9aa0a6]">Profile</p>
+                  <p className="text-[12px] font-semibold mt-2">
+                    {analyticsUser.profileUrl ? "Linked" : "Missing"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-2xl bg-[#f7f7f8] border border-[#e5e7eb] p-4">
+                <p className="text-[11px] leading-relaxed text-[#6b7280]">
+                  Analytics are computed from the fields currently present in this user's
+                  <code className="font-mono mx-1 text-[10px]">leaderboard</code>
+                  document. Historical daily activity is shown only when the database actually stores historical timestamps/events.
+                </p>
+              </div>
+            </div>
+
+            <div className="px-6 py-4 border-t border-[#e5e7eb] bg-[#fafafa] flex flex-col sm:flex-row gap-2">
+              {analyticsUser.profileUrl && (
+                <a
+                  href={analyticsUser.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-center py-2.5 rounded-xl bg-[#111827] text-white text-[12px] font-semibold hover:bg-black transition-colors"
+                >
+                  Open Profile
+                </a>
+              )}
+              <button
+                onClick={() => {
+                  setIsAnalyticsOpen(false);
+                  openUser(analyticsUser, analyticsUser.rank || 1);
+                }}
+                className="flex-1 py-2.5 rounded-xl border border-[#d1d5db] bg-white text-[#374151] text-[12px] font-semibold hover:bg-[#f3f4f6] transition-colors"
+              >
+                Open User Details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx global>{`
+        body {
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
           height: 8px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
           background: transparent;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #dadce0;
+          background: #dadce0;
           border-radius: 10px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: #9aa0a6;
+          background: #9aa0a6;
+        }
+
+        @keyframes rotate {
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes dash {
+          0% {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+          }
+          50% {
+            stroke-dasharray: 89, 200;
+            stroke-dashoffset: -35px;
+          }
+          100% {
+            stroke-dasharray: 89, 200;
+            stroke-dashoffset: -124px;
+          }
+        }
+
+        .google-spinner {
+          width: 50px;
+          height: 50px;
+          animation: rotate 2s linear infinite;
+        }
+
+        .google-spinner circle {
+          stroke: #2563eb;
+          stroke-width: 4;
+          stroke-dasharray: 1, 200;
+          stroke-dashoffset: 0;
+          animation: dash 1.5s ease-in-out infinite;
+          stroke-linecap: round;
+        }
+
+        @keyframes hardShake {
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          20%,
+          60% {
+            transform: translateX(-6px);
+          }
+          40%,
+          80% {
+            transform: translateX(6px);
+          }
+        }
+
+        .animate-hard-shake {
+          animation: hardShake 0.3s ease-in-out;
         }
       `}</style>
     </div>
