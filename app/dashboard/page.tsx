@@ -87,8 +87,9 @@ export default function DashboardPage() {
   // Voice Command States
   const [isListening, setIsListening] = useState(false);
 
-  // Dynamic Gamified Hype Message
+  // Dynamic Gamified Hype Message & Hide State
   const [hypeMessage, setHypeMessage] = useState<string | null>(null);
+  const [hideHype, setHideHype] = useState(false);
 
   // Auto Scroll Ref
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -260,7 +261,7 @@ export default function DashboardPage() {
     };
   }, [profileUrl]);
 
-  // Generate Hype Message based on Points
+  // Generate Hype Message based on exact Points Tiers
   useEffect(() => {
     if (points !== null) {
       if (points === 0) {
@@ -269,6 +270,10 @@ export default function DashboardPage() {
         setHypeMessage(`Great start, ${userName?.split(' ')[0] || 'Champ'}! You need ${50 - points} more points for the Arcade Trooper Swag! Keep grinding! 🔥`);
       } else if (points >= 50 && points < 75) {
         setHypeMessage(`Awesome! Trooper tier locked 🏆. Just ${75 - points} points to hit Arcade Ranger! You got this! ✨`);
+      } else if (points >= 75 && points < 95) {
+        setHypeMessage(`Fantastic! Ranger tier locked 🏆. Just ${95 - points} points to hit Arcade Champion! Keep it up! 🚀`);
+      } else if (points >= 95 && points < 120) {
+        setHypeMessage(`Incredible! Champion tier locked 🏆. Only ${120 - points} points for the legendary Arcade Legend! Go for it! 🔥`);
       } else {
         setHypeMessage(`Absolute Legend! You're crushing the leaderboard with ${points} points! 👑🔥`);
       }
@@ -356,7 +361,6 @@ export default function DashboardPage() {
   const getCurrentTier = () => {
     if (points === null || points < 50) return "Swag Eligibility Pending";
     const achieved = [...arcadeTiersData].reverse().find(t => points >= t.target);
-    // Yahan .replace() add kiya gaya hai
     return achieved ? achieved.name.replace("Arcade ", "") : "Swag Eligibility Pending";
   };
 
@@ -519,7 +523,9 @@ export default function DashboardPage() {
       const isBadge = item.type === 'Skill Badge' || lowerName.includes('badge');
       const isGame = !isBadge && !(item.type === 'Course' || lowerName.includes('course'));
       const earnedDate = new Date(item.date.replace(/Earned/i, '').trim());
-      if (isBadge || isGame) return earnedDate >= new Date("2026-07-13T00:00:00");
+      if (isBadge || isGame) {
+        return earnedDate >= new Date("2026-07-13T00:00:00") && earnedDate < new Date("2026-09-15T02:00:00");
+      }
       return false; 
     }
     return true; 
@@ -535,13 +541,15 @@ export default function DashboardPage() {
     const lower = item.name.toLowerCase();
     const isGame = !(item.type === 'Skill Badge' || lower.includes('badge')) && !(item.type === 'Course' || lower.includes('course'));
     if (!isGame) return false;
-    return new Date(item.date.replace(/Earned/i, '').trim()) >= new Date("2026-07-13T00:00:00");
+    const earnedDate = new Date(item.date.replace(/Earned/i, '').trim());
+    return earnedDate >= new Date("2026-07-13T00:00:00") && earnedDate < new Date("2026-09-15T02:00:00");
   }).length;
 
   const facilitatorSkillBadgesCount = history.filter(item => {
     const isBadge = item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
     if (!isBadge) return false;
-    return new Date(item.date.replace(/Earned/i, '').trim()) >= new Date("2026-07-13T00:00:00");
+    const earnedDate = new Date(item.date.replace(/Earned/i, '').trim());
+    return earnedDate >= new Date("2026-07-13T00:00:00") && earnedDate < new Date("2026-09-15T02:00:00");
   }).length;
 
   const arcadeOnlyGamesCount = Math.max(0, totalArcadeGamesCount - facilitatorArcadeGamesCount);
@@ -747,18 +755,25 @@ const dashboardData = {
     <div className={`min-h-screen w-full overflow-x-hidden font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f4f7f9] text-[#202124]'}`}>
       <Navbar />
 
-      {/* DYNAMIC HYPE BANNER */}
-      {hypeMessage && (
-        <div className="w-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] pt-20 pb-2 px-4 shadow-sm animate-fade-in-up">
-          <div className="max-w-[1350px] mx-auto text-center">
+      {/* DYNAMIC HYPE BANNER WITH HIDE TOGGLE */}
+      {hypeMessage && !hideHype && (
+        <div className="w-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] pt-20 pb-2 px-4 shadow-sm animate-fade-in-up relative">
+          <div className="max-w-[1350px] mx-auto text-center relative pr-8">
             <p className="text-white text-[13px] md:text-sm font-bold tracking-wide animate-pulse drop-shadow-md">
                 ✨ {hypeMessage}
             </p>
+            <button
+              onClick={() => setHideHype(true)}
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-1 text-white hover:bg-white/20 rounded-full transition-colors"
+              title="Hide Banner"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
         </div>
       )}
 
-      <main className={`w-full mx-auto px-4 sm:px-6 pb-16 flex flex-col items-center ${hypeMessage ? 'pt-6' : 'pt-24'}`}>
+      <main className={`w-full mx-auto px-4 sm:px-6 pb-16 flex flex-col items-center transition-all ${hypeMessage && !hideHype ? 'pt-6' : 'pt-24'}`}>
 
         <div className="w-full max-w-[1350px]">
           {points !== null && (
@@ -834,7 +849,7 @@ const dashboardData = {
                     {/* Left side: Action Buttons */}
                     <div className="flex items-center gap-2 mb-3 md:mb-0 w-full md:w-auto justify-center md:justify-start">
                       
-                      {/* Animated Create Poster Button with NEW Badge */}
+                      {/* Animated Create Poster Button */}
                       <div className="relative mr-1 sm:mr-3 mt-1 sm:mt-0">
                         {/* Background continuous glowing pulse */}
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] rounded-full blur opacity-75 animate-pulse"></div>
@@ -850,11 +865,6 @@ const dashboardData = {
                           <svg className="w-4 h-4 animate-pulse relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
                           <span className="relative z-10">Create Poster</span>
                         </button>
-
-                        {/* Flashing "NEW" Badge on top-right */}
-                        <span className="absolute -top-2.5 -right-2 bg-[#ff3366] text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-[1.5px] border-white shadow-sm flex items-center gap-1 z-20 animate-bounce">
-                          <span className="w-1.5 h-1.5 bg-white rounded-full"></span>NEW
-                        </span>
                       </div>
 
                       {/* ASK AI BUTTON */}
@@ -963,7 +973,7 @@ const dashboardData = {
 
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-                     <h3 className={`font-black text-[26px] tracking-tight text-center mt-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>The Arcade</h3>
+                     <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[46px] tracking-tight text-center mt-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Arcade</h3>
                      <span className={`text-[11px] font-bold uppercase tracking-wider mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>
                      <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
 
@@ -989,42 +999,42 @@ const dashboardData = {
 
                    <div className="w-full md:w-[68%] flex flex-col px-2 md:pl-8 pt-6 md:pt-0">
                      <div className="flex flex-col items-center mb-6 w-full">
-                        <h3 className={`font-black text-[24px] sm:text-[28px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
-                        <span className={`text-[10px] sm:text-[12px] font-bold uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jul 13, 2026 - Sept 14, 2026</span>
+                        <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[46px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
+                        <span className={`text-[10px] sm:text-[12px] font-bold uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Program ends on 14 September 11:59 pm</span>
                      </div>
                      <div className="flex items-center gap-3 sm:gap-4 mb-6 flex-wrap justify-center w-full">
                         <div className={`text-[15px] sm:text-[18px] font-extrabold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span></div>
                      </div>
 
                      {achievedMilestone ? (
-                       <div className="w-full mb-8 flex flex-col rounded-lg overflow-hidden shadow-sm border border-[#e8eaed] dark:border-[#3c4043] animate-fade-in-up relative">
-                         <div className="flex flex-col sm:flex-row w-full">
-                           <div className="flex-1 bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-3 px-4 text-white flex justify-between items-center border-b sm:border-b-0 sm:border-r border-white/20">
-                              <div className="flex items-center gap-3">
-                                <span className="text-2xl drop-shadow-md">👑</span>
-                                <div className="font-black text-[15px] tracking-tight uppercase leading-tight flex items-center h-full">{achievedMilestone.title}</div>
-                              </div>
-                              <div className="flex flex-col items-end justify-center h-full"></div>
-                           </div>
-                           <div className="flex-1 bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-3 px-4 text-white flex justify-between items-center">
-                              <div className="flex items-center gap-3"></div>
-                              <div className="flex flex-col items-end justify-center h-full"><div className="text-xl font-black leading-none drop-shadow-sm">+{achievedMilestone.points}</div></div>
-                           </div>
+                       <div className="w-full mb-8 flex flex-col sm:flex-row items-stretch justify-center gap-4 animate-fade-in-up">
+                         
+                         {/* PART 1: Milestone Box (Slim & Sleek) */}
+                         <div className="bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-2.5 px-6 rounded-xl text-white flex items-center justify-center shadow-sm border border-[#4285f4]/30 w-full sm:w-auto">
+                            <span className="text-xl drop-shadow-md mr-2">👑</span>
+                            <div className="font-black text-[14px] sm:text-[15px] tracking-tight uppercase whitespace-nowrap">{achievedMilestone.title}</div>
                          </div>
                          
-                         {/* PREMIUM SOLID DOWNLOAD BUTTON */}
-                         <div className="absolute left-[52%] top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center">
+                         {/* PART 2: Download Button */}
+                         <div className="w-full sm:w-auto flex items-stretch">
                            <button 
                              onClick={() => {
                                setCertInputName(userName || ""); 
                                setShowCertModal(true); 
                              }} 
-                             className="bg-[#0f9d58] hover:bg-[#0b8043] text-white font-black text-xs sm:text-[13px] px-5 py-2 rounded-full shadow-[0_0_15px_rgba(15,157,88,0.5)] border-[3px] border-white dark:border-[#15171b] flex items-center gap-2 whitespace-nowrap transition-transform hover:scale-105"
+                             style={{ fontFamily: 'Arial, sans-serif' }}
+                             className="w-full bg-gradient-to-r from-[#0f9d58] to-[#137333] hover:from-[#0b8043] hover:to-[#0d5924] text-white font-semibold text-[13px] sm:text-[14px] px-8 py-2.5 rounded-xl shadow-[0_4px_14px_0_rgba(15,157,88,0.39)] hover:shadow-[0_6px_20px_rgba(15,157,88,0.23)] flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:-translate-y-0.5"
                            >
-                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                              DOWNLOAD YOUR CERTIFICATE
                            </button>
                          </div>
+
+                         {/* PART 3: Bonus Points Box (Slim & Sleek) */}
+                         <div className="bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-2.5 px-6 rounded-xl text-white flex items-center justify-center shadow-sm border border-[#c084fc]/30 w-full sm:w-auto">
+                            <div className="text-[15px] sm:text-[16px] font-black drop-shadow-sm whitespace-nowrap">+{achievedMilestone.points} Bonus</div>
+                         </div>
+                         
                        </div>
                      ) : (
                         <div className="mb-6"></div>
