@@ -310,7 +310,34 @@ An independent, community-driven platform designed by <span className="font-bold
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Developed By</span>
+              {/* Legal Links */}
+<div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+  <button
+    onClick={() => router.push("/terms")}
+    className="text-xs font-semibold text-slate-500 transition-colors hover:text-slate-900"
+  >
+    Terms & Conditions
+  </button>
+
+  <span className="h-3.5 w-px bg-slate-300" />
+
+  <button
+    onClick={() => router.push("/privacy")}
+    className="text-xs font-semibold text-slate-500 transition-colors hover:text-slate-900"
+  >
+    Privacy Policy
+  </button>
+
+  <span className="h-3.5 w-px bg-slate-300" />
+
+  <button
+    onClick={() => router.push("/aboutpage")}
+    className="text-xs font-semibold text-slate-500 transition-colors hover:text-slate-900"
+  >
+    About
+  </button>
+</div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500"></span>
               <div className="flex -space-x-2">
                 <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="relative hover:z-10">
                   <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="h-8 w-8 rounded-full ring-2 ring-white object-cover object-top" />
