@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export default function Navbar() {
@@ -16,27 +16,30 @@ export default function Navbar() {
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png"); 
   const [imageError, setImageError] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  
+  // Naya State: Naye swags count karne ke liye
+  const [unreadSwags, setUnreadSwags] = useState(0);
 
+  // Naya Logic: Swag Drops track karne ke liye
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "metadata", "chatStats"), 
-      (docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const total = data.totalMessages || 0;
-          
-          if (pathname === "/chat") {
-            localStorage.setItem("arcade_last_seen_messages", total.toString());
-            setUnreadCount(0);
+    // Database me swag_drops collection ko sun rahe hain
+    const unsub = onSnapshot(collection(db, "swag_drops"), 
+      (snapshot) => {
+        const totalSwags = snapshot.size; // Total swags kitne hain
+        
+        // Agar user pehle se Swags Drop page par hai (/post)
+        if (pathname === "/post") {
+          localStorage.setItem("arcade_last_seen_swags", totalSwags.toString());
+          setUnreadSwags(0);
+        } else {
+          // Agar user kisi aur page par hai
+          if (!localStorage.getItem("arcade_last_seen_swags")) {
+            localStorage.setItem("arcade_last_seen_swags", totalSwags.toString());
+            setUnreadSwags(0);
           } else {
-            if (!localStorage.getItem("arcade_last_seen_messages")) {
-              localStorage.setItem("arcade_last_seen_messages", total.toString());
-              setUnreadCount(0);
-            } else {
-              const lastSeen = parseInt(localStorage.getItem("arcade_last_seen_messages") || "0");
-              const unread = total - lastSeen;
-              setUnreadCount(unread > 0 ? unread : 0);
-            }
+            const lastSeen = parseInt(localStorage.getItem("arcade_last_seen_swags") || "0");
+            const unread = totalSwags - lastSeen;
+            setUnreadSwags(unread > 0 ? unread : 0);
           }
         }
       },
@@ -98,11 +101,10 @@ export default function Navbar() {
     { name: "Leaderboard", href: "/leaderboard" },
     { name: "Skill Badges", href: "/resources" },
     { name: "Facilitator", href: "/facilitator" },
-    { name: "Swags Post", href: "/post" },
+    { name: "Swags Drop", href: "/post" },
     { name: "About", href: "/about" },
     { name: "Events", href: "/members/google-events" },
     { name: "Help", href: "/chat" },
-  
   ];
 
   return (
@@ -157,17 +159,13 @@ export default function Navbar() {
                       : "text-[#5f6368] font-medium hover:bg-[#f1f3f4] hover:text-[#202124]"
                   }`}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-1.5">
                     {link.name}
-                    {link.name === "Help" && (
-                      <div className="relative flex items-center justify-center">
-                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                        {unreadCount > 0 && (
-                          <span className="absolute -top-1 -right-2 flex items-center justify-center w-[16px] h-[16px] bg-[#d93025] text-white text-[9px] font-bold rounded-full animate-pulse border-[1.5px] border-[#f8f9fa]">
-                            {unreadCount > 99 ? '99+' : unreadCount}
-                          </span>
-                        )}
-                      </div>
+                    {/* Yaha Swag Drop ka Notification Badge lagaya hai */}
+                    {link.name === "Swags Drop" && unreadSwags > 0 && (
+                      <span className="flex items-center justify-center px-[5px] min-w-[18px] h-[18px] bg-[#d93025] text-white text-[10px] font-bold rounded-full animate-pulse">
+                        {unreadSwags > 99 ? '99+' : unreadSwags}
+                      </span>
                     )}
                   </span>
                 </Link>
@@ -241,15 +239,11 @@ export default function Navbar() {
                   <span className="flex items-center justify-between">
                     <span className="flex items-center gap-3">
                       {link.name}
-                      {link.name === "Help" && (
-                        <div className="relative flex items-center justify-center">
-                          <svg className="w-[22px] h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                          {unreadCount > 0 && (
-                            <span className="absolute -top-1 -right-1.5 flex items-center justify-center w-[17px] h-[17px] bg-[#d93025] text-white text-[9px] font-bold rounded-full animate-pulse border-[1.5px] border-[#f8f9fa]">
-                              {unreadCount > 99 ? '99+' : unreadCount}
-                            </span>
-                          )}
-                        </div>
+                      {/* Mobile menu me bhi Notification Badge laga diya */}
+                      {link.name === "Swags Drop" && unreadSwags > 0 && (
+                        <span className="flex items-center justify-center px-[5px] min-w-[18px] h-[18px] bg-[#d93025] text-white text-[10px] font-bold rounded-full animate-pulse">
+                          {unreadSwags > 99 ? '99+' : unreadSwags}
+                        </span>
                       )}
                     </span>
                   </span>

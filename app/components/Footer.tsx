@@ -26,7 +26,7 @@ const avatarPositions = [
 
 export default function Footer() {
   const router = useRouter();
-  const lastUpdated = "12 SEPTEMBER 2026 17:34 IST";
+  const lastUpdated = "15 SEPTEMBER 2026 23:10 IST";
   
   const [leaderboardCount, setLeaderboardCount] = useState(0);
   const [profilesAnalyzed, setProfilesAnalyzed] = useState(0);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
 import { db } from "@/lib/firebase"; 
 import { useRouter } from "next/navigation";
@@ -13,10 +13,6 @@ export default function AdminDashboard() {
   // 🔥 LEADERBOARD STATES
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  
-  // 🔥 SWAG POSTS STATES 🔥
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loadingPosts, setLoadingPosts] = useState(false);
 
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false); 
@@ -113,40 +109,6 @@ export default function AdminDashboard() {
 
     return () => unsubscribe();
   }, [isAuthenticated]);
-
-  // 🔥 2. REAL-TIME FIREBASE LISTENER (SWAG POSTS) 🔥
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    setLoadingPosts(true);
-    const postsQuery = query(collection(db, "swag_posts"));
-    
-    const unsubscribePosts = onSnapshot(postsQuery, (querySnapshot) => {
-      const fetchedPosts: any[] = [];
-      querySnapshot.forEach((doc) => {
-        fetchedPosts.push({ id: doc.id, ...doc.data() });
-      });
-      setPosts(fetchedPosts.reverse());
-      setLoadingPosts(false);
-    }, (err) => {
-      console.error("Error fetching posts data:", err);
-      setLoadingPosts(false);
-    });
-
-    return () => unsubscribePosts();
-  }, [isAuthenticated]);
-
-  // 🔥 DELETE POST FUNCTION 🔥
-  const handleDeletePost = async (postId: string) => {
-    if (window.confirm("Are you sure you want to delete this post? This action cannot be undone.")) {
-      try {
-        await deleteDoc(doc(db, "swag_posts", postId));
-      } catch (err) {
-        console.error("Delete failed:", err);
-        alert("Failed to delete the post. Please check the console for details.");
-      }
-    }
-  };
 
   const lowerQuery = searchQuery.trim().toLowerCase();
   const isSearching = lowerQuery.length > 0;
@@ -294,17 +256,17 @@ export default function AdminDashboard() {
 
   // 🔥 2. FULL-SCREEN DASHBOARD (COVERS LAYOUT NAVBAR AUTOMATICALLY) 🔥
   return (
-    <div className="fixed inset-0 z-[100] bg-[#f8f9fa] h-screen w-screen overflow-y-auto font-sans flex flex-col items-center text-[#202124]">
+    <div className="fixed inset-0 z-[100] bg-[#f8f9fa] h-screen w-screen overflow-y-auto custom-scrollbar font-sans flex flex-col items-center text-[#202124]">
       
-      {/* Main Content Area */}
-      <div className="w-full max-w-7xl flex flex-col gap-10 p-4 md:p-8 mt-4">
+      {/* Main Content Area - Added pb-24 for extra scrolling space at the bottom */}
+      <div className="w-full max-w-7xl flex flex-col gap-10 p-4 md:p-8 mt-4 pb-24">
         
         {/* ================= LEADERBOARD SECTION ================= */}
         <div className="w-full flex flex-col gap-4">
           
           {/* Header Row: Title & Action Controls */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#dadce0] pb-4">
-            <h2 className="text-2xl font-bold text-[#202124]">User Points Leaderboard</h2>
+            <h2 className="text-2xl font-bold text-[#202124]">User Data House</h2>
             
             <div className="flex flex-wrap items-center gap-3">
               {/* Search Box */}
@@ -361,9 +323,9 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Table Container - max-h 600px to show up to 10 rows before scrolling */}
+          {/* Table Container - max-h 700px to show more rows before scrolling */}
           <div className="bg-white rounded-lg shadow-sm border border-[#dadce0] w-full overflow-hidden">
-            <div className="w-full overflow-x-auto max-h-[600px] overflow-y-auto custom-scrollbar">
+            <div className="w-full overflow-x-auto max-h-[700px] overflow-y-auto custom-scrollbar">
               {loading ? (
                 <div className="p-10 text-center text-[#5f6368] font-bold">Syncing live data...</div>
               ) : users.length > 0 ? (
@@ -436,124 +398,12 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* ================= SWAG POSTS MANAGEMENT ================= */}
-        <div className="w-full flex flex-col gap-4 mt-6">
-          <div className="flex items-center justify-between border-b border-[#dadce0] pb-4">
-            <h2 className="text-2xl font-bold text-[#202124]">
-              Swag Posts Moderation
-            </h2>
-            <span className="text-[#5f6368] bg-white border border-[#dadce0] px-4 py-1.5 rounded-full text-[14px] font-bold">
-              Total Posts: {posts.length}
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            {loadingPosts ? (
-              <div className="p-10 bg-white rounded-lg shadow-sm border border-[#dadce0] text-center text-[#5f6368] font-bold animate-pulse">
-                Fetching swag posts...
-              </div>
-            ) : posts.length > 0 ? (
-              posts.map((post) => (
-                <div key={post.id} className="bg-white rounded-xl shadow-sm border border-[#dadce0] p-5 flex flex-col lg:flex-row gap-6 hover:shadow-md transition-shadow">
-                  
-                  {/* LEFT: POST INFO */}
-                  <div className="flex-1 flex flex-col">
-                    <div className="flex justify-between items-start mb-4 border-b border-[#f1f3f4] pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#e8eaed] overflow-hidden flex items-center justify-center font-bold text-[#5f6368] border border-[#dadce0]">
-                          {post.authorPhotoURL || post.userAvatar ? (
-                            <img src={post.authorPhotoURL || post.userAvatar} alt="Author" className="w-full h-full object-cover" />
-                          ) : (
-                            (post.authorName || post.name || "U").charAt(0).toUpperCase()
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-[#202124] text-[16px]">{post.authorName || post.name || "Unknown Author"}</h3>
-                          <p className="text-[11px] text-[#9aa0a6] font-bold">Author ID: {post.authorId || "N/A"}</p>
-                        </div>
-                      </div>
-                      
-                      <button 
-                        onClick={() => handleDeletePost(post.id)}
-                        className="bg-white border border-[#dadce0] text-[#d93025] hover:bg-[#fce8e6] hover:border-[#fce8e6] px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
-                        title="Delete this post permanently"
-                      >
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                        Delete
-                      </button>
-                    </div>
-
-                    {(post.imageUrl || post.image || post.photoURL) && (
-                      <div className="w-full max-h-[350px] mb-4 rounded-xl overflow-hidden border border-[#dadce0] bg-[#f8f9fa] flex items-center justify-center">
-                        <img 
-                          src={post.imageUrl || post.image || post.photoURL} 
-                          alt="Swag Post Attachment" 
-                          className="w-full h-full object-contain max-h-[350px]"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex-1 mb-5">
-                      <p className="text-[#3c4043] text-[15px] leading-relaxed whitespace-pre-wrap">
-                        {post.about || post.text || "No description provided."}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-3 text-sm font-bold text-[#5f6368]">
-                      <span className="bg-[#f8f9fa] border border-[#dadce0] px-3 py-1.5 rounded-md flex items-center gap-1.5">
-                        <svg className="w-4 h-4 text-[#d93025]" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" /></svg>
-                        {post.likes?.length || post.likes || 0} Likes
-                      </span>
-                      <span className="bg-[#f8f9fa] border border-[#dadce0] px-3 py-1.5 rounded-md flex items-center gap-1.5">
-                        <svg className="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                        {post.commentsData?.length || 0} Comments
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* RIGHT: COMMENTS BOX */}
-                  <div className="w-full lg:w-[40%] bg-[#f8f9fa] border border-[#dadce0] rounded-xl p-4 flex flex-col">
-                    <h4 className="text-xs font-black text-[#80868b] uppercase tracking-wider mb-3 border-b border-[#dadce0] pb-2">
-                      Live Comments Log
-                    </h4>
-                    
-                    <div className="flex-1 overflow-y-auto max-h-[250px] custom-scrollbar pr-1">
-                      {post.commentsData && post.commentsData.length > 0 ? (
-                        <div className="flex flex-col gap-3">
-                          {post.commentsData.map((cmt: any, i: number) => (
-                            <div key={i} className="bg-white p-3 rounded-lg border border-[#dadce0] shadow-sm hover:border-[#1a73e8] transition-colors">
-                              <div className="flex justify-between items-start mb-1.5">
-                                <span className="font-bold text-[#202124] text-[13px]">{cmt.name || "Unknown User"}</span>
-                                <span className="text-[10px] font-bold text-[#9aa0a6] bg-[#f1f3f4] px-2 py-0.5 rounded">
-                                  {formatDate(cmt.time)}
-                                </span>
-                              </div>
-                              <p className="text-[#3c4043] text-[13px] leading-snug">{cmt.text}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center h-full min-h-[100px]">
-                          <p className="text-sm font-bold text-[#9aa0a6] italic">No comments yet.</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                </div>
-              ))
-            ) : (
-              <div className="p-10 bg-white rounded-lg shadow-sm border border-[#dadce0] text-center text-[#5f6368] font-bold">
-                No swag posts found.
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 5px;
+          width: 8px;
+          height: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
           background: transparent;
