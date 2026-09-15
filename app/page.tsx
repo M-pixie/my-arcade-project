@@ -408,7 +408,7 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
-                  33K+
+                  34K+
                 </span>
                 <span className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-widest mt-2">Total Visitors</span>
               </div>
