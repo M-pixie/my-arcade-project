@@ -104,7 +104,7 @@ export default function Navbar() {
     { name: "Swags Drop", href: "/post" },
     { name: "About", href: "/about" },
     { name: "Events", href: "/members/google-events" },
-    { name: "Help", href: "/chat" },
+    { name: "Ai", href: "/chat" },
   ];
 
   return (
