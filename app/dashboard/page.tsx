@@ -117,9 +117,9 @@ export default function DashboardPage() {
 
     // Date Restriction Check after Verification
     const currentDate = new Date();
-    const unlockDate = new Date("2026-09-16T00:00:00");
+    const unlockDate = new Date("2026-09-19T00:00:00");
     if (currentDate < unlockDate) {
-      setCertError("Certificate download will be available from 16th September 2026.");
+      setCertError("Certificate download will be available from 19th September 2026.");
       return;
     }
 
