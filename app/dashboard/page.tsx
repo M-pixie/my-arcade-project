@@ -1069,38 +1069,84 @@ const dashboardData = {
         </div>
 
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
+
+          
           {points !== null && (
-            <div id="tiers-section" className="w-full animate-fade-in-up scroll-mt-24" style={{ animationDelay: '0.21s' }}>
-              <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>Arcade Prize Tiers</h4>
-                <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}><span className="font-bold">{getCurrentTier()}</span></span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {arcadeTiersData.map((tier, idx) => {
-                  const progressPercentage = Math.min(100, (points / tier.target) * 100);
-                  const isAchieved = points >= tier.target;
-                  return (
-                    <div key={idx} className={`border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : (isDark ? 'border-[#3c4043]' : 'border-[#5f6368]')} ${isDark ? 'bg-[#1e1e24]' : 'bg-[#353840]'}`}>
-                      <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative"><img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" /></div>
-                      <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
-                      <div className="w-full mt-auto flex flex-col gap-2">
-                        <div className={`w-full h-2.5 rounded-full overflow-hidden border shadow-inner ${isDark ? 'bg-[#15171b] border-black/80' : 'bg-[#202124] border-black/50'}`}>
-                          <div className={`h-full rounded-full bg-gradient-to-r ${tier.gradient} transition-all duration-1000 ease-out`} style={{ width: `${progressPercentage}%` }}></div>
-                        </div>
-                        <div className="flex justify-between items-center text-[11px] font-extrabold uppercase tracking-wide w-full">
-                           <span className={isAchieved ? "text-[#81c995]" : "text-[#9aa0a6]"}>{isAchieved ? "Achieved" : "In Progress"}</span>
-                           <span className="text-[#e8eaed]">{points} / {tier.target} pts</span>
-                        </div>
-                        <div className="mt-3 text-center w-full">
-                          <span className="text-xs font-bold text-[#fbbc04] bg-[#fbbc04]/10 px-3 py-1.5 rounded-full border border-[#fbbc04]/20 tracking-wide block">{tier.spots}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+  <div id="tiers-section" className="w-full animate-fade-in-up scroll-mt-24" style={{ animationDelay: '0.21s' }}>
+    
+    {/* Shine Animation */}
+    <style>{`
+      @keyframes slideShine {
+        0% { left: -50px; transform: skewX(-20deg); }
+        100% { left: 150%; transform: skewX(-20deg); }
+      }
+    `}</style>
+
+    <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+      <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>Arcade Prize Tiers</h4>
+      <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}><span className="font-bold">{getCurrentTier()}</span></span>
+    </div>
+    
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {arcadeTiersData.map((tier, idx) => {
+        // Percentage clamp for safety (max 100%)
+        const progressPercentage = Math.min(100, Math.max(0, (points / tier.target) * 100));
+        const isAchieved = points >= tier.target;
+        
+        // Image wale 4 Solid Google Colors (Red, Blue, Yellow, Green)
+        const barColors = ['bg-[#ea4335]', 'bg-[#4285f4]', 'bg-[#fbbc04]', 'bg-[#34a853]'];
+        const activeColor = barColors[idx % 4]; // Har tier pe alag color aayega
+
+        return (
+          <div key={idx} className={`border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : (isDark ? 'border-[#3c4043]' : 'border-[#5f6368]')} ${isDark ? 'bg-[#202124]' : 'bg-[#353840]'}`}>
+            <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative">
+              <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
             </div>
-          )}
+            
+            <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
+            
+            <div className="w-full mt-auto flex flex-col gap-2">
+              
+              {/* --- 1. DARK GRAY ROUNDED PILL (Container) --- */}
+              <div className="relative w-full h-6 rounded-full bg-[#3c4043] border border-[#2a2d32] shadow-inner flex items-center overflow-hidden">
+                
+                {/* --- 2. ACTUAL PROGRESS SOLID COLOR --- */}
+                <div 
+                  className={`absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out overflow-hidden z-10 ${activeColor}`} 
+                  style={{ width: `${progressPercentage}%` }}
+                >
+                  {/* --- 3. LIGHT TRANSLUCENT DIAGONAL SHINE (Clipped inside progress) --- */}
+                  <div 
+                    className="absolute top-0 w-12 h-full bg-white/30"
+                    style={{ animation: 'slideShine 2s infinite linear' }}
+                  ></div>
+                </div>
+
+                {/* --- 4. PERCENTAGE BAR EXACT CENTER FIXED --- */}
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                  <span className="text-[13px] font-extrabold text-white tracking-wide drop-shadow-[0_2px_3px_rgba(0,0,0,0.8)]">
+                    {Math.round(progressPercentage)}%
+                  </span>
+                </div>
+              </div>
+
+              {/* Image ki tarah simple text niche */}
+              <div className="mt-1 text-center w-full flex flex-col gap-1">
+                <span className={`text-[12px] font-medium tracking-wide ${isDark ? 'text-gray-300' : 'text-gray-200'}`}>
+                  {tier.spots} {tier.spots?.toString().includes('spots left') ? '' : 'spots left'}
+                </span>
+                <span className={`text-[11px] ${isAchieved ? "text-[#81c995] font-bold" : "text-[#9aa0a6]"}`}>
+                  {isAchieved ? "Goal Achieved!" : `${points} / ${tier.target} pts`}
+                </span>
+              </div>
+              
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
 
            {points !== null && (
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
