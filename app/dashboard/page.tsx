@@ -1451,7 +1451,7 @@ const dashboardData = {
                              </div>
 
                              <span className={`text-[13px] font-semibold tracking-wide mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                               Available from 19 September 2026 · Registered Users Only
+                               343 Members Found · Registered Members Only · Available
                              </span>
                          </div>
                          
@@ -1892,9 +1892,9 @@ const dashboardData = {
         {showCertModal && (
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
             <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
-              {/* Header */}
-              <div className="bg-gradient-to-r from-[#0f9d58] to-[#137333] p-5 text-white flex justify-between items-center">
-                 <h3 className="font-black text-lg tracking-wide flex items-center gap-2">
+              {/* Header - Sleeker Font */}
+              <div className="bg-gradient-to-r from-[#4285F4] to-[#1a73e8] p-5 text-white flex justify-between items-center">
+                 <h3 className="font-bold text-lg tracking-wide flex items-center gap-2">
                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                    Verify Your Profile
                  </h3>
@@ -1905,33 +1905,51 @@ const dashboardData = {
               
               {/* Body */}
               <div className="p-6 flex flex-col gap-4">
-                 <p className={`text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                 <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     Please verify your registered Arcade Email to download the facilitator certificate.
                  </p>
 
                  {certError && (
-                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-xl text-sm font-bold flex items-start gap-2">
+                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-xl text-[13px] font-medium flex items-start gap-2">
                       <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                       <span>{certError}</span>
                    </div>
                  )}
 
+                 {/* Locked Full Name Input - Medium Font */}
                  <div className="flex flex-col gap-1.5">
-                   <label className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
-                   <input type="text" value={certInputName} onChange={(e) => setCertInputName(e.target.value)} placeholder="Enter your name for certificate" className={`w-full px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#0f9d58] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-gray-50 border-gray-200 text-gray-800'}`} />
+                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
+                   <input 
+                     type="text" 
+                     value={certInputName} 
+                     readOnly 
+                     className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none transition-all border cursor-not-allowed ${isDark ? 'bg-[#1a1b1e] border-[#3c4043] text-gray-500' : 'bg-gray-100 border-gray-200 text-gray-500'}`} 
+                   />
                  </div>
 
+                 {/* Editable Email Input - Medium Font */}
                  <div className="flex flex-col gap-1.5">
-                   <label className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Registered Email</label>
-                   <input type="email" value={certEmail} onChange={(e) => setCertEmail(e.target.value)} placeholder="Enter your Arcade email ID" className={`w-full px-4 py-3 rounded-xl text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#0f9d58] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-gray-50 border-gray-200 text-gray-800'}`} />
+                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Registered Email</label>
+                   <input 
+                     type="email" 
+                     value={certEmail} 
+                     onChange={(e) => setCertEmail(e.target.value)} 
+                     placeholder="Enter your Arcade email ID" 
+                     className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#1a73e8] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} 
+                   />
                  </div>
 
-                 <button onClick={handleVerifyAndDownload} disabled={isGenerating} className={`mt-2 w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wider text-white shadow-md transition-all flex items-center justify-center gap-2 ${isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0f9d58] hover:bg-[#0b8043] hover:shadow-lg'}`}>
+                 {/* Premium Blue Button - Bold instead of Black, No Uppercase text */}
+                 <button 
+                   onClick={handleVerifyAndDownload} 
+                   disabled={isGenerating} 
+                   className={`mt-3 w-full py-3.5 rounded-xl font-bold text-[15px] text-white shadow-md transition-all flex items-center justify-center gap-2 ${isGenerating ? 'bg-[#1a73e8]/70 cursor-wait' : 'bg-[#1a73e8] hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5'}`}
+                 >
                    {isGenerating ? (
-                     <>
-                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        Verifying & Generating...
-                     </>
+                      <svg className="w-6 h-6 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
                    ) : (
                      "Verify & Download"
                    )}
