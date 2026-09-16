@@ -34,6 +34,7 @@ type RangeFilter = "all" | "today" | "7d" | "30d";
 const AUTHORIZED_EMAILS = [
   "vy7manish@gmail.com",
   "patelanjali0801@gmail.com",
+  "rohit.geca.kr@gmail.com",
 ];
 
 const numberValue = (value: any) => {

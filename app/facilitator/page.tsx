@@ -219,7 +219,7 @@ export default function FacilitatorPage() {
                   <ul className="text-[12px] text-[#5f6368] space-y-1.5 font-medium list-disc pl-4">
                     <li>Google Arcade Facilitator Cohort 1 2025 - Ultimate winner ( Manish & Ankana[Microsoft] )</li>
                     <li>Google Arcade Facilitator Cohort 2 2025 - Ultimate winner ( Manish & Anjali )</li>
-                    <li>Google Arcade Facilitator 2026 - Ongoing </li>
+                    <li>Google Arcade Facilitator 2026 - Milestone 1 Winner (Manish & Rohit) </li>
                   </ul>
                 </div>
               </div>
