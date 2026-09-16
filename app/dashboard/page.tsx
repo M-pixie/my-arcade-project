@@ -94,6 +94,9 @@ export default function DashboardPage() {
   // Auto Scroll Ref
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // --- NEW: Side Drawer State for Facilitator Details ---
+  const [showFacilitatorDrawer, setShowFacilitatorDrawer] = useState(false);
+
   const handleVerifyAndDownload = async () => {
     setCertError("");
     
@@ -751,6 +754,73 @@ const dashboardData = {
     });
   };
 
+  // --- NEW: FACILITATOR CONTENT VARIABLE TO REUSE IN DRAWER ---
+  const facilitatorContent = (
+    <>
+      <div className="flex flex-col items-center mb-6 w-full">
+         <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[40px] md:text-[46px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
+         <span className={`text-[10px] sm:text-[12px] font-bold uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Program ends on 14 September 11:59 pm</span>
+      </div>
+      <div className="flex items-center gap-3 sm:gap-4 mb-6 flex-wrap justify-center w-full">
+         <div className={`text-[15px] sm:text-[18px] font-extrabold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span></div>
+      </div>
+
+      {achievedMilestone ? (
+        <div className="w-full mb-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
+          
+          {/* PART 1: Milestone Box (Premium Pill) */}
+          <div className="bg-[#4285f4] py-2 px-5 rounded-full text-white flex items-center justify-center shadow-sm w-full sm:w-auto">
+             <span className="text-lg drop-shadow-md mr-2"></span>
+             <div className="font-bold text-[14px] tracking-tight whitespace-nowrap">{achievedMilestone.title} </div>
+          </div>
+          
+          {/* PART 2: Blue Slim Download Button */}
+          <div className="w-full sm:w-auto flex items-center">
+            <button 
+              onClick={() => {
+                setCertInputName(userName || ""); 
+                setShowCertModal(true); 
+              }} 
+              className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold text-[14px] px-6 py-2 rounded-full shadow-sm transition-all hover:scale-105 flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Get Certificate
+            </button>
+          </div>
+
+          {/* PART 3: Bonus Points Box (Premium Pill) */}
+          <div className="bg-[#a855f7] py-2 px-5 rounded-full text-white flex items-center justify-center shadow-sm w-full sm:w-auto">
+             <div className="text-[14px] font-bold drop-shadow-sm whitespace-nowrap">+{achievedMilestone.points} Bonus</div>
+          </div>
+          
+        </div>
+      ) : (
+        <div className="mb-6"></div>
+      )}
+
+      <div className={`mt-auto p-2 sm:p-3 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
+        {facilitatorMilestones.map((m) => {
+          const arcadePerc = Math.min(100, (facilitatorArcadeGamesCount / m.targetArcade) * 100);
+          const skillPerc = Math.min(100, (facilitatorSkillBadgesCount / m.targetSkills) * 100);
+          const totalPerc = Math.floor((arcadePerc + skillPerc) / 2);
+          return (
+            <div key={m.id} className="flex-1 flex flex-col items-center px-2 sm:px-4 min-w-[70px]">
+              <span className={`text-[13px] sm:text-[16px] font-black mb-2 sm:mb-3 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>{m.title === 'Ultimate' ? 'Ultimate' : m.title}</span>
+              <div className={`w-full h-2.5 sm:h-3 rounded-full overflow-hidden ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}>
+                <div className={`h-full rounded-full ${m.colorClass} transition-all duration-1000 ease-out`} style={{ width: `${totalPerc}%` }}></div>
+              </div>
+              <span className={`text-[13px] sm:text-[15px] font-black mt-2 sm:mt-3 tracking-wide ${isDark ? (totalPerc > 0 ? m.textClass : 'text-gray-500') : m.textClass}`}>{totalPerc}%</span>
+              <div className="flex flex-col text-[10px] sm:text-[12px] text-gray-500 dark:text-gray-400 font-bold mt-1.5 sm:mt-2 leading-tight text-center uppercase tracking-wider">
+                <span>G: {Math.min(facilitatorArcadeGamesCount, m.targetArcade)}/{m.targetArcade}</span>
+                <span className="mt-0.5">S: {Math.min(facilitatorSkillBadgesCount, m.targetSkills)}/{m.targetSkills}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+
   return (
     <div className={`min-h-screen w-full overflow-x-hidden font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0a0a0b] text-gray-200' : 'bg-[#f4f7f9] text-[#202124]'}`}>
       <Navbar />
@@ -997,68 +1067,67 @@ const dashboardData = {
                      </div>
                    </div>
 
-                   <div className="w-full md:w-[68%] flex flex-col px-2 md:pl-8 pt-6 md:pt-0">
-                     <div className="flex flex-col items-center mb-6 w-full">
-                        <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[46px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
-                        <span className={`text-[10px] sm:text-[12px] font-bold uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Program ends on 14 September 11:59 pm</span>
-                     </div>
-                     <div className="flex items-center gap-3 sm:gap-4 mb-6 flex-wrap justify-center w-full">
-                        <div className={`text-[15px] sm:text-[18px] font-extrabold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span></div>
+                   {/* --- PREMIUM BLURRED FACILITATOR SECTION --- */}
+                   <div className="w-full md:w-[68%] flex flex-col px-2 md:pl-8 pt-6 md:pt-0 relative overflow-hidden">
+                     {/* The blurred background layer */}
+                     <div className="w-full h-full flex flex-col filter blur-[6px] opacity-30 pointer-events-none select-none">
+                       {facilitatorContent}
                      </div>
 
-                     {achievedMilestone ? (
-                       <div className="w-full mb-8 flex flex-col sm:flex-row items-stretch justify-center gap-4 animate-fade-in-up">
+                     {/* Overlay Content */}
+                       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4">
                          
-                         {/* PART 1: Milestone Box (Slim & Sleek) */}
-                         <div className="bg-gradient-to-r from-[#1a73e8] to-[#4285f4] py-2.5 px-6 rounded-xl text-white flex items-center justify-center shadow-sm border border-[#4285f4]/30 w-full sm:w-auto">
-                            <span className="text-xl drop-shadow-md mr-2">👑</span>
-                            <div className="font-black text-[14px] sm:text-[15px] tracking-tight uppercase whitespace-nowrap">{achievedMilestone.title}</div>
-                         </div>
-                         
-                         {/* PART 2: Download Button */}
-                         <div className="w-full sm:w-auto flex items-stretch">
-                           <button 
-                             onClick={() => {
-                               setCertInputName(userName || ""); 
-                               setShowCertModal(true); 
-                             }} 
-                             style={{ fontFamily: 'Arial, sans-serif' }}
-                             className="w-full bg-gradient-to-r from-[#0f9d58] to-[#137333] hover:from-[#0b8043] hover:to-[#0d5924] text-white font-semibold text-[13px] sm:text-[14px] px-8 py-2.5 rounded-xl shadow-[0_4px_14px_0_rgba(15,157,88,0.39)] hover:shadow-[0_6px_20px_rgba(15,157,88,0.23)] flex items-center justify-center gap-2 whitespace-nowrap transition-all hover:-translate-y-0.5"
-                           >
-                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                             DOWNLOAD YOUR CERTIFICATE
-                           </button>
-                         </div>
+                         <button 
+                           onClick={() => setShowFacilitatorDrawer(true)}
+                           className={`absolute top-4 right-4 px-4 py-1.5 rounded-full shadow-sm border flex items-center gap-1.5 text-[13px] font-bold transition-all z-20 hover:scale-105 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8] hover:bg-[#3c4043]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-gray-50'}`}
+                         >
+                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                           View Report
+                         </button>
 
-                         {/* PART 3: Bonus Points Box (Slim & Sleek) */}
-                         <div className="bg-gradient-to-r from-[#c084fc] to-[#9333ea] py-2.5 px-6 rounded-xl text-white flex items-center justify-center shadow-sm border border-[#c084fc]/30 w-full sm:w-auto">
-                            <div className="text-[15px] sm:text-[16px] font-black drop-shadow-sm whitespace-nowrap">+{achievedMilestone.points} Bonus</div>
+                         {/* ----- YAHAN SE REPLACE KARO ----- */}
+                         <div className="flex flex-col items-center gap-5 mt-2 w-full max-w-sm">
+                             
+                             {/* Cute Sad Cat SVG - Thoda sa bada kiya taaki clearly dikhe */}
+                             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20 -mb-2">
+                                <polygon points="25,40 15,10 45,30" fill="#fca5a5" opacity="0.7"/>
+                                <polygon points="75,40 85,10 55,30" fill="#fca5a5" opacity="0.7"/>
+                                <circle cx="50" cy="50" r="35" fill="#fca5a5" opacity="0.9"/>
+                                <path d="M 35 45 Q 40 40 45 45" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                                <path d="M 55 45 Q 60 40 65 45" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                                <path d="M 35 50 Q 32 60 35 65 Q 38 60 35 50" fill="#60a5fa" opacity="0.8"/>
+                                <path d="M 65 50 Q 62 60 65 65 Q 68 60 65 50" fill="#60a5fa" opacity="0.8"/>
+                                <path d="M 45 60 Q 50 55 55 60" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                             </svg>
+
+                             <h3 className={`font-black text-[24px] tracking-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>Oops! The Program Has Ended</h3>
+
+                             {/* Button and Milestone wrapper with proper gap */}
+                             <div className="flex flex-col items-center gap-3.5 w-full">
+                               {achievedMilestone && (
+                                 <div className="bg-[#4285f4] py-1.5 px-5 rounded-full text-white text-[14px] font-bold shadow-sm border border-[#4285f4]/30">
+                                    {achievedMilestone.title} 
+                                 </div>
+                               )}
+
+                               <button 
+                                 onClick={() => {
+                                   setCertInputName(userName || ""); 
+                                   setShowCertModal(true); 
+                                 }} 
+                                 className="bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-[15px] px-8 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 hover:scale-105"
+                               >
+                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                 Download Certificate
+                               </button>
+                             </div>
+
+                             <span className={`text-[13px] font-semibold tracking-wide mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                               Available from 19 September 2026 · Registered Users Only
+                             </span>
                          </div>
                          
-                       </div>
-                     ) : (
-                        <div className="mb-6"></div>
-                     )}
 
-                     <div className={`mt-auto p-2 sm:p-3 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
-                       {facilitatorMilestones.map((m) => {
-                         const arcadePerc = Math.min(100, (facilitatorArcadeGamesCount / m.targetArcade) * 100);
-                         const skillPerc = Math.min(100, (facilitatorSkillBadgesCount / m.targetSkills) * 100);
-                         const totalPerc = Math.floor((arcadePerc + skillPerc) / 2);
-                         return (
-                           <div key={m.id} className="flex-1 flex flex-col items-center px-2 sm:px-4 min-w-[70px]">
-                             <span className={`text-[13px] sm:text-[16px] font-black mb-2 sm:mb-3 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>{m.title === 'Ultimate' ? 'Ultimate' : m.title}</span>
-                             <div className={`w-full h-2.5 sm:h-3 rounded-full overflow-hidden ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}>
-                               <div className={`h-full rounded-full ${m.colorClass} transition-all duration-1000 ease-out`} style={{ width: `${totalPerc}%` }}></div>
-                             </div>
-                             <span className={`text-[13px] sm:text-[15px] font-black mt-2 sm:mt-3 tracking-wide ${isDark ? (totalPerc > 0 ? m.textClass : 'text-gray-500') : m.textClass}`}>{totalPerc}%</span>
-                             <div className="flex flex-col text-[10px] sm:text-[12px] text-gray-500 dark:text-gray-400 font-bold mt-1.5 sm:mt-2 leading-tight text-center uppercase tracking-wider">
-                                <span>G: {Math.min(facilitatorArcadeGamesCount, m.targetArcade)}/{m.targetArcade}</span>
-                                <span className="mt-0.5">S: {Math.min(facilitatorSkillBadgesCount, m.targetSkills)}/{m.targetSkills}</span>
-                             </div>
-                           </div>
-                         );
-                       })}
                      </div>
                    </div>
                 </div>
@@ -1545,6 +1614,40 @@ const dashboardData = {
         )}
 
       </main>
+
+      {/* --- FACILITATOR DRAWER --- */}
+      <div className={`fixed inset-0 z-[200] flex justify-end transition-opacity duration-300 ${showFacilitatorDrawer ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowFacilitatorDrawer(false)}></div>
+        
+        <div className={`relative w-full max-w-xl h-full shadow-2xl transform transition-transform duration-300 flex flex-col ${showFacilitatorDrawer ? 'translate-x-0' : 'translate-x-full'} ${isDark ? 'bg-[#15171b] border-l border-[#3c4043]' : 'bg-white border-l border-[#dadce0]'}`}>
+           
+           <div className={`flex items-center justify-between p-5 border-b ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+              <h3 className={`text-xl font-black tracking-wide ${isDark ? 'text-white' : 'text-[#202124]'}`}>Facilitator Details</h3>
+              <button onClick={() => setShowFacilitatorDrawer(false)} className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-[#3c4043] text-gray-300' : 'hover:bg-gray-100 text-gray-600'}`}>
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+           </div>
+           
+           <div className="flex-1 overflow-y-auto p-6 custom-scrollbar flex flex-col pt-6">
+               
+               {/* User Avatar in Drawer */}
+               <div className="flex flex-col items-center mb-8">
+                   <div className="w-20 h-20 rounded-full p-1 border-[3px] border-[#1a73e8] shadow-sm mb-3">
+                      <div className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#2a2d32]' : 'bg-[#0f9d58]'}`}>
+                         {userAvatar ? (
+                            <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                         ) : (
+                            <span className="text-3xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                         )}
+                      </div>
+                   </div>
+                   <h2 className={`text-xl font-black tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>
+               </div>
+
+               {facilitatorContent}
+           </div>
+        </div>
+      </div>
 
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }

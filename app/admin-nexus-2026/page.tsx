@@ -29,6 +29,24 @@ type AdminUser = {
   [key: string]: any;
 };
 
+type AdminFeedback = {
+  id: string;
+  rating?: number;
+  date?: any;
+  timestamp?: any;
+  createdAt?: any;
+  updatedAt?: any;
+  name?: string;
+  email?: string;
+  message?: string;
+  feedback?: string;
+  comment?: string;
+  review?: string;
+  text?: string;
+  source?: string;
+  [key: string]: any;
+};
+
 type RangeFilter = "all" | "today" | "7d" | "30d";
 
 const AUTHORIZED_EMAILS = [
@@ -95,6 +113,43 @@ const escapeCsv = (value: any) => {
   return `"${text.replace(/"/g, '""')}"`;
 };
 
+const getFeedbackDate = (feedback: AdminFeedback) =>
+  getDate(feedback.timestamp || feedback.createdAt || feedback.updatedAt) ||
+  getDate(feedback.date);
+
+const getFeedbackText = (feedback: AdminFeedback) =>
+  String(
+    feedback.message ??
+      feedback.feedback ??
+      feedback.comment ??
+      feedback.review ??
+      feedback.text ??
+      "No written feedback provided."
+  ).trim();
+
+const formatFeedbackValue = (value: any) => {
+  if (value === null || value === undefined || value === "") return "—";
+
+  const date = getDate(value);
+  if (date && (value instanceof Timestamp || typeof value?.toDate === "function")) {
+    return formatDate(value);
+  }
+
+  if (Array.isArray(value)) return value.map((item) => String(item)).join(", ");
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  }
+
+  return String(value);
+};
+
+const getFeedbackIdentity = (feedback: AdminFeedback) =>
+  String(feedback.name ?? feedback.email ?? "Anonymous").trim() || "Anonymous";
+
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
@@ -119,6 +174,13 @@ export default function AdminDashboard() {
 
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+
+  const [feedbacks, setFeedbacks] = useState<AdminFeedback[]>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [feedbackError, setFeedbackError] = useState("");
+  const [feedbackSearch, setFeedbackSearch] = useState("");
+  const [selectedFeedback, setSelectedFeedback] = useState<AdminFeedback | null>(null);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   const router = useRouter();
 
@@ -170,6 +232,45 @@ export default function AdminDashboard() {
         setLoading(false);
         setIsConnected(false);
         setError("Failed to sync live data.");
+      }
+    );
+
+    return () => unsubscribe();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    setFeedbackLoading(true);
+    setFeedbackError("");
+
+    // Read the complete collection without orderBy so no extra Firestore index is required.
+    const feedbackCollection = collection(db, "platform_feedback");
+
+    const unsubscribe = onSnapshot(
+      feedbackCollection,
+      (snapshot) => {
+        const nextFeedback: AdminFeedback[] = [];
+
+        snapshot.forEach((doc) => {
+          nextFeedback.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        nextFeedback.sort((a, b) =>
+          (getFeedbackDate(b)?.getTime() ?? 0) - (getFeedbackDate(a)?.getTime() ?? 0)
+        );
+
+        setFeedbacks(nextFeedback);
+        setFeedbackLoading(false);
+        setFeedbackError("");
+      },
+      (err) => {
+        console.error("Error fetching feedback data:", err);
+        setFeedbackLoading(false);
+        setFeedbackError("Unable to load platform feedback.");
       }
     );
 
@@ -440,6 +541,68 @@ export default function AdminDashboard() {
       medianPoints,
     };
   }, [users]);
+
+  const filteredFeedbacks = useMemo(() => {
+    const search = feedbackSearch.trim().toLowerCase();
+    if (!search) return feedbacks;
+
+    return feedbacks.filter((feedback) => {
+      const haystack = [
+        getFeedbackIdentity(feedback),
+        feedback.email,
+        feedback.source,
+        getFeedbackText(feedback),
+        feedback.id,
+      ]
+        .map((value) => String(value ?? "").toLowerCase())
+        .join(" ");
+
+      return haystack.includes(search);
+    });
+  }, [feedbacks, feedbackSearch]);
+
+  const feedbackSummary = useMemo(() => {
+    const ratings = feedbacks
+      .map((feedback) => numberValue(feedback.rating))
+      .filter((rating) => rating > 0);
+
+    const averageRating = ratings.length
+      ? Math.round((ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length) * 10) / 10
+      : 0;
+
+    const fiveStar = ratings.filter((rating) => rating === 5).length;
+    const fourPlus = ratings.filter((rating) => rating >= 4).length;
+    const sourceCount = new Set(
+      feedbacks.map((feedback) => String(feedback.source ?? "Unknown").trim() || "Unknown")
+    ).size;
+
+    return {
+      total: feedbacks.length,
+      averageRating,
+      fiveStar,
+      fourPlus,
+      sourceCount,
+    };
+  }, [feedbacks]);
+
+  const feedbackRatingBreakdown = useMemo(() => {
+    return [5, 4, 3, 2, 1].map((rating) => ({
+      rating,
+      count: feedbacks.filter((feedback) => numberValue(feedback.rating) === rating).length,
+    }));
+  }, [feedbacks]);
+
+  const openFeedback = (feedback: AdminFeedback) => {
+    setSelectedFeedback(feedback);
+    setIsFeedbackOpen(true);
+  };
+
+  const closeFeedback = () => {
+    setIsFeedbackOpen(false);
+    setSelectedFeedback(null);
+  };
+
+  const resetFeedbackSearch = () => setFeedbackSearch("");
 
   const toggleSort = (
     key: "points" | "calculations" | "updatedAt" | "name"
@@ -1255,6 +1418,159 @@ export default function AdminDashboard() {
         </section>
       </div>
 
+        {/* PLATFORM FEEDBACK */}
+        <section className="mt-6">
+          <div className="bg-white border border-[#dadce0] rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-5 md:p-6 border-b border-[#e5e7eb]">
+              <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2.5">
+                    <h2 className="text-[19px] font-bold tracking-tight">Platform Feedback</h2>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#ecfdf5] text-[#047857] border border-[#a7f3d0]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+                      Live
+                    </span>
+                  </div>
+                  <p className="text-[12px] text-[#80868b] mt-1.5">
+                    All feedback stored in your Firebase <code className="font-mono text-[10px]">platform_feedback</code> collection. Click any entry to open full insights.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center bg-white border border-[#dadce0] rounded-full px-3 py-2 min-w-[220px]">
+                    <svg
+                      className="w-4 h-4 text-[#80868b] mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeWidth="2"
+                        d="m21 21-4.35-4.35m1.35-5.15a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"
+                      />
+                    </svg>
+                    <input
+                      value={feedbackSearch}
+                      onChange={(e) => setFeedbackSearch(e.target.value)}
+                      placeholder="Search feedback..."
+                      className="bg-transparent outline-none w-full text-[12px] font-medium"
+                    />
+                  </div>
+                  {feedbackSearch && (
+                    <button
+                      onClick={resetFeedbackSearch}
+                      className="px-3 py-2 rounded-full bg-white border border-[#dadce0] text-[12px] font-bold text-[#5f6368] hover:bg-[#f1f3f4]"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#9aa0a6]">Total Feedback</p>
+                  <p className="text-[24px] font-semibold mt-2 text-[#111827]">{formatNumber(feedbackSummary.total)}</p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#9aa0a6]">Average Rating</p>
+                  <p className="text-[24px] font-semibold mt-2 text-[#f59e0b]">{feedbackSummary.averageRating || "—"}<span className="text-[14px] ml-1 text-[#9aa0a6]">/ 5</span></p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#9aa0a6]">5-Star</p>
+                  <p className="text-[24px] font-semibold mt-2 text-[#2563eb]">{formatNumber(feedbackSummary.fiveStar)}</p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#9aa0a6]">Sources</p>
+                  <p className="text-[24px] font-semibold mt-2 text-[#111827]">{formatNumber(feedbackSummary.sourceCount)}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 md:p-6">
+              {feedbackLoading ? (
+                <div className="flex items-center justify-center py-16">
+                  <div className="google-spinner">
+                    <svg viewBox="25 25 50 50">
+                      <circle cx="50" cy="50" r="20" fill="none" />
+                    </svg>
+                  </div>
+                </div>
+              ) : feedbackError ? (
+                <div className="rounded-2xl border border-[#f6aea8] bg-[#fce8e6] px-4 py-5 text-center">
+                  <p className="text-sm font-bold text-[#c5221f]">{feedbackError}</p>
+                  <p className="text-xs text-[#8b1e1e] mt-1">Check Firestore permissions for the <code className="font-mono">platform_feedback</code> collection.</p>
+                </div>
+              ) : filteredFeedbacks.length ? (
+                <div className="space-y-2.5 max-h-[620px] overflow-y-auto custom-scrollbar pr-1">
+                  {filteredFeedbacks.map((feedback, index) => {
+                    const rating = Math.min(5, Math.max(0, numberValue(feedback.rating)));
+                    const text = getFeedbackText(feedback);
+                    const identity = getFeedbackIdentity(feedback);
+                    const feedbackDate = getFeedbackDate(feedback);
+
+                    return (
+                      <button
+                        key={feedback.id}
+                        onClick={() => openFeedback(feedback)}
+                        className="w-full text-left rounded-2xl border border-[#e5e7eb] bg-white p-4 md:p-5 hover:border-[#bfdbfe] hover:bg-[#f8fbff] hover:shadow-sm transition-all group"
+                      >
+                        <div className="flex items-start gap-3.5">
+                          <div className="w-10 h-10 shrink-0 rounded-xl bg-[#eff6ff] text-[#2563eb] flex items-center justify-center font-bold text-sm border border-[#dbeafe]">
+                            {identity.slice(0, 1).toUpperCase()}
+                          </div>
+
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                              <div className="min-w-0">
+                                <p className="text-[13px] font-bold text-[#202124] truncate">{identity}</p>
+                                <p className="text-[10px] text-[#9aa0a6] mt-0.5 truncate">
+                                  {feedback.email ? feedback.email : `Feedback #${formatNumber(filteredFeedbacks.length - index)}`}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center gap-2 shrink-0">
+                                <span className="text-[11px] font-bold text-[#f59e0b] tracking-[0.08em]">
+                                  {"★".repeat(rating)}{"☆".repeat(Math.max(0, 5 - rating))}
+                                </span>
+                                <span className="text-[10px] font-bold text-[#6b7280]">{rating ? `${rating}/5` : "No rating"}</span>
+                              </div>
+                            </div>
+
+                            <p className="mt-3 text-[12px] leading-5 text-[#4b5563] line-clamp-2">
+                              {text}
+                            </p>
+
+                            <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] text-[#80868b]">
+                              {feedback.source && (
+                                <span className="px-2 py-1 rounded-full bg-[#f3f4f6] border border-[#e5e7eb] font-semibold">
+                                  {String(feedback.source)}
+                                </span>
+                              )}
+                              {feedbackDate && <span>{formatDate(feedbackDate)}</span>}
+                              <span className="ml-auto text-[#2563eb] font-bold opacity-0 group-hover:opacity-100 transition-opacity">View insights →</span>
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="py-14 text-center">
+                  <div className="w-12 h-12 rounded-2xl bg-[#f1f3f4] mx-auto flex items-center justify-center text-xl">
+                    💬
+                  </div>
+                  <p className="mt-4 text-sm font-bold text-[#3c4043]">No feedback found</p>
+                  <p className="mt-1 text-xs text-[#80868b]">{feedbackSearch ? "Try a different search." : "No documents are available in platform_feedback yet."}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+
       {/* USER DRAWER */}
       {isDrawerOpen && selectedUser && (
         <>
@@ -1553,6 +1869,141 @@ export default function AdminDashboard() {
                 className="flex-1 py-2.5 rounded-xl border border-[#d1d5db] bg-white text-[#374151] text-[12px] font-semibold hover:bg-[#f3f4f6] transition-colors"
               >
                 Open User Details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FEEDBACK INSIGHTS MODAL */}
+      {isFeedbackOpen && selectedFeedback && (
+        <div
+          className="fixed inset-0 z-[400] bg-black/45 backdrop-blur-[2px] flex items-center justify-center p-4"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeFeedback();
+          }}
+        >
+          <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-3xl border border-[#e5e7eb] shadow-[0_24px_80px_rgba(0,0,0,0.18)] overflow-hidden flex flex-col">
+            <div className="px-6 py-5 border-b border-[#e5e7eb] flex items-start justify-between gap-4 bg-[#fafafa]">
+              <div className="min-w-0">
+                <p className="text-[10px] uppercase tracking-[0.14em] font-bold text-[#9aa0a6]">Feedback insights</p>
+                <h2 className="text-[19px] font-semibold tracking-tight mt-1 truncate">
+                  {getFeedbackIdentity(selectedFeedback)}
+                </h2>
+                {selectedFeedback.email && (
+                  <p className="text-[11px] text-[#80868b] mt-1 truncate">{selectedFeedback.email}</p>
+                )}
+              </div>
+
+              <button
+                onClick={closeFeedback}
+                className="w-9 h-9 shrink-0 rounded-full hover:bg-[#e5e7eb] text-[#6b7280] transition-colors"
+                aria-label="Close feedback insights"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto custom-scrollbar">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fffaf0] p-4 col-span-2 sm:col-span-1">
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-[#9aa0a6]">Rating</p>
+                  <p className="text-[21px] font-semibold mt-2 text-[#f59e0b]">
+                    {numberValue(selectedFeedback.rating) > 0 ? `${numberValue(selectedFeedback.rating)}/5` : "—"}
+                  </p>
+                  <p className="text-[11px] mt-1 tracking-[0.08em] text-[#f59e0b]">
+                    {"★".repeat(Math.min(5, Math.max(0, numberValue(selectedFeedback.rating))))}
+                    {"☆".repeat(Math.max(0, 5 - Math.min(5, Math.max(0, numberValue(selectedFeedback.rating)))))}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-[#9aa0a6]">Source</p>
+                  <p className="text-[13px] font-semibold mt-2 break-words">{formatFeedbackValue(selectedFeedback.source)}</p>
+                </div>
+                <div className="rounded-2xl border border-[#e5e7eb] bg-[#fafafa] p-4">
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-[#9aa0a6]">Submitted</p>
+                  <p className="text-[12px] font-semibold mt-2 leading-5">
+                    {getFeedbackDate(selectedFeedback) ? formatDate(getFeedbackDate(selectedFeedback)) : formatFeedbackValue(selectedFeedback.date)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-[#dbeafe] bg-[#f8fbff] p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-[10px] uppercase tracking-[0.12em] font-bold text-[#1d4ed8]">User message</p>
+                  <span className="text-[10px] font-semibold text-[#93a3b8]">Document: {selectedFeedback.id}</span>
+                </div>
+                <p className="mt-3 text-[13px] leading-6 text-[#374151] whitespace-pre-wrap break-words">
+                  {getFeedbackText(selectedFeedback)}
+                </p>
+              </div>
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 className="text-[14px] font-semibold">Rating distribution</h3>
+                    <p className="text-[10px] text-[#9aa0a6] mt-1">Across all feedback currently in Firebase.</p>
+                  </div>
+                  <span className="text-[11px] font-bold text-[#2563eb]">{formatNumber(feedbackSummary.total)} total</span>
+                </div>
+
+                <div className="space-y-2.5">
+                  {feedbackRatingBreakdown.map((item) => {
+                    const percentage = feedbackSummary.total
+                      ? Math.round((item.count / feedbackSummary.total) * 100)
+                      : 0;
+
+                    return (
+                      <div key={item.rating}>
+                        <div className="flex items-center justify-between text-[10px] font-semibold mb-1.5">
+                          <span className="text-[#4b5563]">{item.rating} star</span>
+                          <span className="text-[#6b7280]">{item.count} · {percentage}%</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-[#f3f4f6] overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-[#f59e0b] transition-all duration-500"
+                            style={{ width: `${percentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h3 className="text-[14px] font-semibold">Stored fields</h3>
+                    <p className="text-[10px] text-[#9aa0a6] mt-1">Everything saved in this feedback document.</p>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#9aa0a6]">Raw data</span>
+                </div>
+
+                <div className="rounded-2xl border border-[#e5e7eb] overflow-hidden">
+                  {Object.entries(selectedFeedback)
+                    .filter(([key]) => key !== "message" && key !== "feedback" && key !== "comment" && key !== "review" && key !== "text")
+                    .map(([key, value], index, entries) => (
+                      <div
+                        key={key}
+                        className={`grid grid-cols-[120px_minmax(0,1fr)] gap-4 px-4 py-3 text-[11px] ${
+                          index !== entries.length - 1 ? "border-b border-[#eef0f2]" : ""
+                        }`}
+                      >
+                        <span className="font-bold text-[#6b7280] break-words">{key}</span>
+                        <span className="text-[#202124] break-words">{formatFeedbackValue(value)}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 py-4 border-t border-[#e5e7eb] bg-[#fafafa] flex items-center justify-end">
+              <button
+                onClick={closeFeedback}
+                className="px-4 py-2.5 rounded-xl bg-[#111827] text-white text-[12px] font-semibold hover:bg-black transition-colors"
+              >
+                Close Insights
               </button>
             </div>
           </div>

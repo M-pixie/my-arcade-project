@@ -392,26 +392,46 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* 🔥 LIVE METRICS SECTION 🔥 */}
-            <div className="mt-14 max-w-3xl mx-auto pt-10 border-t border-white/10 grid grid-cols-3 gap-4 sm:gap-8">
+           {/* 🔥 LIVE METRICS SECTION 🔥 */}
+            <div className="mt-14 max-w-4xl mx-auto pt-10 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+              
+              {/* 1. Unique Profiles */}
               <div className="flex flex-col items-center">
                 <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
                   {formatStat(stats.unique)}
                 </span>
                 <span className="text-[10px] sm:text-xs font-bold text-blue-300 uppercase tracking-widest mt-2">Unique Profiles</span>
               </div>
-              <div className="flex flex-col items-center border-x border-white/10">
+              
+              {/* 2. Profiles Analyzed */}
+              <div className="flex flex-col items-center md:border-l border-white/10">
                 <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
                   {formatStat(stats.analyzed)}
                 </span>
                 <span className="text-[10px] sm:text-xs font-bold text-purple-300 uppercase tracking-widest mt-2">Profiles Analyzed</span>
               </div>
-              <div className="flex flex-col items-center">
+              
+              {/* 3. Total Visitors (Real Counter) */}
+              <div className="flex flex-col items-center md:border-l border-white/10">
                 <span className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] tracking-tight">
-                  34K+
+                  {/* Yahan humne tumhara naya component call kar liya */}
+                  
+                  <VisitCounter />
                 </span>
                 <span className="text-[10px] sm:text-xs font-bold text-emerald-300 uppercase tracking-widest mt-2">Total Visitors</span>
               </div>
+
+              {/* 4. Average Rating */}
+              <div className="flex flex-col items-center md:border-l border-white/10">
+                <span className="text-3xl sm:text-4xl font-black text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] tracking-tight flex items-center gap-1.5">
+                  4.9
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-current -mt-1" viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                </span>
+                <span className="text-[10px] sm:text-xs font-bold text-amber-300 uppercase tracking-widest mt-2">Average Rating</span>
+              </div>
+
             </div>
 
           </div>
