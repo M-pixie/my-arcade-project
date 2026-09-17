@@ -616,7 +616,7 @@ export default function DashboardPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  // GPT-Style Typewriter Effect
+  // GPT-Style Typewriter Effect (Superfast Speed 🚀)
   useEffect(() => {
     if (messages.length === 0) return;
     const lastIndex = messages.length - 1;
@@ -627,14 +627,15 @@ export default function DashboardPage() {
       const currentText = lastMsg.content;
 
       if (currentText.length < fullText.length) {
+        // Timeout ko 15ms se 2ms kar diya aur slice ko +3 se +15
         const timer = setTimeout(() => {
           setMessages((prev) => {
             const updated = [...prev];
-            // Types 3 characters at a time for smooth but fast GPT speed
-            updated[lastIndex] = { ...updated[lastIndex], content: fullText.slice(0, currentText.length + 3) };
+            updated[lastIndex] = { ...updated[lastIndex], content: fullText.slice(0, currentText.length + 15) };
             return updated;
           });
-        }, 15);
+        }, 2);
+        
         return () => clearTimeout(timer);
       } else {
         setMessages((prev) => {
@@ -1126,6 +1127,8 @@ const dashboardData = {
         <div className="mb-6"></div>
       )}
 
+      
+
       <div className={`mt-auto p-2 sm:p-3 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
         {facilitatorMilestones.map((m) => {
           const arcadePerc = Math.min(100, (facilitatorArcadeGamesCount / m.targetArcade) * 100);
@@ -1371,9 +1374,10 @@ const dashboardData = {
 
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-                     <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[46px] tracking-tight text-center mt-2 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Arcade</h3>
-                     <span className={`text-[11px] font-bold uppercase tracking-wider mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>
-                     <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
+            <h3 className="font-bold text-[40px] tracking-tight text-center mt-2 bg-gradient-to-r from-[#4285F4] via-[#34A853] via-[#FBBC04] to-[#EA4335] bg-clip-text text-transparent">Arcade</h3>                     
+           <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                     
+  
+           <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
 
                      {arcadeOnlyGamesCount === 0 && arcadeOnlySkillBadgesCount === 0 ? (
                         <div className="mt-2 text-[13px] text-center font-bold text-gray-500 dark:text-gray-400 px-2 leading-relaxed">No labs completed between January and July 13.</div>
@@ -1428,7 +1432,7 @@ const dashboardData = {
                                 <path d="M 45 60 Q 50 55 55 60" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
                              </svg>
 
-                             <h3 className={`font-black text-[24px] tracking-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>Oops! The Program Has Ended</h3>
+                             <h3 className="font-bold text-[24px] tracking-tight text-red-500">Oops! Facilitator Program Ended. </h3>
 
                              {/* Button and Milestone wrapper with proper gap */}
                              <div className="flex flex-col items-center gap-3.5 w-full">
@@ -1758,14 +1762,28 @@ const dashboardData = {
                 </div>
               )}
 
+              {/* PREMIUM HEADER WITH AVATAR AND NORMAL FONT */}
               <div className={`flex justify-between items-center px-6 py-4 border-b bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] text-white`}>
                 <div className="flex items-center gap-3">
-                  <span className="w-3 h-3 rounded-full bg-white animate-pulse shadow-sm"></span>
+                  
+                  {/* User Avatar with Online Dot */}
+                  <div className="relative">
+                    {userAvatar ? (
+                      <img src={userAvatar} alt="Profile" className="w-9 h-9 rounded-full object-cover border-2 border-white/50 shadow-sm" />
+                    ) : (
+                      <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold border-2 border-white/50 shadow-sm">
+                        {userName ? userName.charAt(0).toUpperCase() : "U"}
+                      </div>
+                    )}
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-400 border-[1.5px] border-transparent shadow-sm"></span>
+                  </div>
+
                   <div>
-                    <h3 className="font-black text-[18px] tracking-wide leading-tight">
-                      {userName ? userName.split(' ')[0] + "'s Assistant" : "Arcade Assistant"}
+                    {/* Professional Name - Removed 'Assistant' & Fixed Font */}
+                    <h3 className="font-semibold text-[17px] tracking-normal leading-tight">
+                      {userName ? userName.split(' ')[0] : "Arcade AI"}
                     </h3>
-                    <p className="text-[10px] font-medium opacity-90 lowercase tracking-widest">online</p>
+                    <p className="text-[11px] font-medium opacity-90 lowercase tracking-widest">online</p>
                   </div>
                 </div>
 
@@ -1801,16 +1819,25 @@ const dashboardData = {
               <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 custom-scrollbar relative">
                 
                 {messages.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full gap-6 animate-fade-in-up">
-                     <svg className="w-16 h-16 text-[#9b72cb] animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-                     <h2 className={`text-2xl font-black text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>How can I help you today, {userName?.split(' ')[0] || 'Champ'}?</h2>
+                  <div className="flex flex-col items-center justify-center h-full gap-5 animate-fade-in-up">
                      
-                     <div className="flex flex-wrap items-center justify-center gap-2 w-full max-w-2xl mt-2">
-                        {["Facilitator report", "Arcade report", "Summary dashboard", "Suggest next labs", "See points", "How to start arcade ?","Give me all links of arcade","See prize tiers"].map((p) => (
+                     <div className="relative">
+                       <svg className="w-16 h-16 text-[#9b72cb] animate-pulse relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                       <div className="absolute inset-0 bg-purple-400 blur-2xl opacity-30 rounded-full"></div>
+                     </div>
+
+                     {/* PREMIUM GRADIENT HEADING */}
+                     <h2 className={`text-3xl md:text-4xl font-extrabold text-center tracking-tight pb-1 bg-clip-text text-transparent bg-gradient-to-r ${isDark ? 'from-blue-400 via-purple-400 to-rose-400' : 'from-[#4285F4] via-[#9b72cb] to-[#ea4335]'}`}>
+                       How can I help you today, {userName?.split(' ')[0] || 'Champ'}?
+                     </h2>
+                     
+                     {/* CLEANER PROMPT CHIPS */}
+                     <div className="flex flex-wrap items-center justify-center gap-2.5 w-full max-w-3xl mt-4">
+                        {["Facilitator report", "Arcade report", "Summary dashboard", "Suggest next labs", "See points", "How to start arcade?", "Give me all links of arcade", "See prize tiers"].map((p) => (
                            <button 
                              key={p} 
                              onClick={() => handleAskAi(p)} 
-                             className={`px-3 py-1.5 rounded-full border shadow-sm font-bold text-[11px] md:text-[12px] transition-all hover:scale-105 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-200 hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#3c4043] hover:border-[#1a73e8]'}`}
+                             className={`px-4 py-2 rounded-full border shadow-sm font-semibold text-[12px] md:text-[13px] transition-all hover:-translate-y-0.5 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-300 hover:text-white hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#5f6368] hover:text-[#1a73e8] hover:border-[#1a73e8] hover:bg-blue-50/50'}`}
                            >
                              {p}
                            </button>
@@ -1820,7 +1847,7 @@ const dashboardData = {
                 )}
 
                 {messages.map((msg, idx) => (
-                  <div key={idx} className={`whitespace-pre-wrap leading-relaxed p-4 rounded-3xl text-[13px] font-medium max-w-[85%] shadow-sm flex flex-col gap-1 ${msg.role === 'user' ? 'self-end bg-[#1a73e8] text-white rounded-tr-sm' : `self-start rounded-tl-sm ${isDark ? 'bg-[#2a2d32] text-gray-200 border border-[#3c4043]' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}`}>
+                  <div key={idx} className={`whitespace-pre-wrap leading-relaxed p-4 rounded-3xl text-[14px] font-medium max-w-[85%] shadow-sm flex flex-col gap-1 ${msg.role === 'user' ? 'self-end bg-[#1a73e8] text-white rounded-tr-sm' : `self-start rounded-tl-sm ${isDark ? 'bg-[#2a2d32] text-gray-200 border border-[#3c4043]' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}`}>
                     {formatChatText(msg.content, msg.role === 'user')}
                   </div>
                 ))}
@@ -1836,10 +1863,11 @@ const dashboardData = {
                 <div ref={chatEndRef} />
               </div>
 
-              <div className={`p-4 md:p-6 border-t flex flex-col gap-3 ${isDark ? 'bg-[#15171b] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
+              {/* --- NEW PREMIUM SLIM INPUT BAR SECTION --- */}
+              <div className={`p-4 md:px-8 md:pb-6 md:pt-4 flex flex-col gap-3 z-10 ${isDark ? 'bg-[#15171b]' : 'bg-[#f8f9fa]'}`}>
                 
                 {chatImage && (
-                  <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-[#1a73e8] shadow-md animate-fade-in-up">
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden border shadow-sm ml-4 animate-fade-in-up">
                      <img src={chatImage} alt="upload" className="w-full h-full object-cover" />
                      <button onClick={() => setChatImage(null)} className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-red-500 transition-colors">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -1847,38 +1875,49 @@ const dashboardData = {
                   </div>
                 )}
 
-                <div className="flex items-center gap-3">
+                {/* PREMIUM SLIM PILL INPUT */}
+                <div className={`relative flex items-center w-full mx-auto rounded-full border shadow-[0_2px_15px_rgba(0,0,0,0.04)] px-2.5 py-2 transition-all ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-white border-gray-200'}`}>
                   
                   <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
-                  <button onClick={() => fileInputRef.current?.click()} className={`p-3 rounded-full border shadow-sm transition-transform hover:scale-105 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-300 hover:text-white' : 'bg-[#f1f3f4] border-[#dadce0] text-[#5f6368] hover:text-[#202124]'}`} title="Upload Screenshot">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                  <button onClick={() => fileInputRef.current?.click()} className={`p-2 rounded-full transition-colors flex-shrink-0 ${isDark ? 'text-gray-400 hover:bg-[#3c4043]' : 'text-gray-500 hover:bg-gray-100'}`} title="Upload Screenshot">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14M5 12h14" /></svg>
                   </button>
 
-                  <div className="relative flex-1">
-                    <button onClick={startListening} className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-all ${isListening ? 'text-red-500 animate-pulse bg-red-500/10' : (isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-[#202124]')}`} title="Voice Input">
-                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                    </button>
-
-                    <input 
-                      type="text" 
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-                      placeholder={isListening ? "Listening..." : "Ask anything or paste screenshot..."} 
-                      className={`w-full pl-12 pr-14 py-4 rounded-2xl text-[15px] font-medium focus:outline-none transition-colors border shadow-sm ${isDark ? 'bg-[#2a2d32] text-white placeholder-gray-500 border-[#3c4043] focus:border-[#8ab4f8]' : 'bg-[#f8f9fa] text-[#202124] placeholder-gray-500 border-[#dadce0] focus:border-[#1a73e8]'}`}
-                    />
-                    
-                    <button onClick={() => handleAskAi()} disabled={isTyping || (!chatInput.trim() && !chatImage)} className={`absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-transform hover:scale-110 disabled:opacity-50 ${isDark ? 'bg-[#8ab4f8] text-[#15171b]' : 'bg-[#1a73e8] text-white'}`}>
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                    </button>
+                  <input 
+                    type="text" 
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
+                    placeholder={isListening ? "Listening..." : "Ask anything"} 
+                    className={`flex-1 bg-transparent px-3 py-1.5 text-[15px] font-medium focus:outline-none placeholder-gray-400 ${isDark ? 'text-white' : 'text-[#3c4043]'}`}
+                  />
+                  
+                  {/* 'Think' Badge */}
+                  <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-default transition-colors text-gray-400">
+                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                     <span className="text-[14px] font-medium tracking-wide">Think</span>
                   </div>
 
+                  <button onClick={startListening} className={`p-2 rounded-full transition-colors mx-1 flex-shrink-0 ${isListening ? 'text-red-500 animate-pulse bg-red-50' : (isDark ? 'text-gray-400 hover:bg-[#3c4043]' : 'text-gray-500 hover:bg-gray-100')}`} title="Voice Input">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                  </button>
+
+                  <button onClick={() => handleAskAi()} disabled={isTyping || (!chatInput.trim() && !chatImage)} className={`w-9 h-9 ml-1 rounded-full flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 ${isDark ? 'bg-[#4285F4] text-white' : 'bg-[#4285F4] text-white'}`}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                       <rect x="7" y="9" width="2.5" height="6" rx="1.25" />
+                       <rect x="11" y="5" width="2.5" height="14" rx="1.25" />
+                       <rect x="15" y="9" width="2.5" height="6" rx="1.25" />
+                    </svg>
+                  </button>
+                  
                 </div>
               </div>
 
             </div>
           </div>
         )}
+
+        
         {showPoster && (
           <ArcadeSharePoster
             name={userName || "Arcade Player"}
@@ -1968,7 +2007,7 @@ const dashboardData = {
         <div className={`relative w-full max-w-xl h-full shadow-2xl transform transition-transform duration-300 flex flex-col ${showFacilitatorDrawer ? 'translate-x-0' : 'translate-x-full'} ${isDark ? 'bg-[#15171b] border-l border-[#3c4043]' : 'bg-white border-l border-[#dadce0]'}`}>
            
            <div className={`flex items-center justify-between p-5 border-b ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-              <h3 className={`text-xl font-black tracking-wide ${isDark ? 'text-white' : 'text-[#202124]'}`}>Facilitator Details</h3>
+              <h3 className={`text-xl font-bold tracking-wide ${isDark ? 'text-white' : 'text-[#202124]'}`}>Facilitator Details</h3>
               <button onClick={() => setShowFacilitatorDrawer(false)} className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-[#3c4043] text-gray-300' : 'hover:bg-gray-100 text-gray-600'}`}>
                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
@@ -1987,8 +2026,7 @@ const dashboardData = {
                          )}
                       </div>
                    </div>
-                   <h2 className={`text-xl font-black tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>
-               </div>
+               <h2 className={`text-xl font-bold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>               </div>
 
                {facilitatorContent}
            </div>
