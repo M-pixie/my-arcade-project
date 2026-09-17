@@ -181,7 +181,7 @@ export default function HomePage() {
 
   return (
     <>
-      <PopupModal />
+      
       <style>{`
         .hero-gemini-bg {
           background-color: #0b0213;

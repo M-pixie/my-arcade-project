@@ -61,17 +61,17 @@ export default function SwagDropsPage() {
           
           <div className="flex flex-col md:items-end gap-2">
             {/* 🔥 Live Synced Status */}
-<div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500">
-  <span className="relative flex h-2 w-2">
-    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-50"></span>
-    <span className="relative inline-flex h-2 w-2 rounded-full bg-slate-500"></span>
-  </span>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-50"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-slate-500"></span>
+              </span>
 
-  <span>
-    Synced • Last Checked:{" "}
-    {lastUpdated ? `Today, ${lastUpdated}` : "Syncing..."}
-  </span>
-</div>
+              <span>
+                Synced • Last Checked:{" "}
+                {lastUpdated ? `Today, ${lastUpdated}` : "Syncing..."}
+              </span>
+            </div>
 
             <a 
               href="https://discuss.google.dev/t/google-skills-arcade-2026-tiers/371066" 
@@ -104,12 +104,24 @@ export default function SwagDropsPage() {
           ))}
         </div>
 
-        <p className="text-center text-[#5f6368] font-medium text-sm">
-          Showing <strong className="text-black">{loading ? "..." : filteredSwags.length}</strong> swag item(s)
-        </p>
+        {/* Showing Items Text with Small Spinner */}
+        <div className="text-center text-[#5f6368] font-medium text-sm flex items-center justify-center gap-1.5">
+          Showing 
+          <strong className="text-black flex items-center justify-center min-w-[20px]">
+            {loading ? (
+              <span className="inline-block w-4 h-4 border-2 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></span>
+            ) : (
+              filteredSwags.length
+            )}
+          </strong> 
+          swag item(s)
+        </div>
 
+        {/* Main Swag Loading or Display Section */}
         {loading ? (
-           <div className="text-center text-[#1a73e8] font-bold py-16">Loading Swags...</div>
+           <div className="flex justify-center items-center py-16">
+             <div className="w-10 h-10 border-4 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></div>
+           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
             
