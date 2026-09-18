@@ -111,6 +111,13 @@ export default function DashboardPage() {
   const [certError, setCertError] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Request Again (WhatsApp) Modal States
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [reqName, setReqName] = useState("");
+  const [reqPhone, setReqPhone] = useState("");
+  const [reqEmail, setReqEmail] = useState("");
+  const [reqProfile, setReqProfile] = useState("");
+
   // Clear Chat Confirmation State
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
@@ -142,6 +149,19 @@ export default function DashboardPage() {
       return;
     }
 
+    // CHECK IF ALREADY DOWNLOADED
+    const downloadedEmails = JSON.parse(localStorage.getItem("downloaded_certificates") || "[]");
+    if (downloadedEmails.includes(certEmail.trim().toLowerCase())) {
+      // Open WhatsApp Request Modal
+      setReqName(certInputName || userName || "");
+      setReqEmail(certEmail.trim());
+      setReqProfile(profileUrl || "");
+      setReqPhone("");
+      setShowRequestModal(true);
+      setShowCertModal(false);
+      return;
+    }
+
     const isVerified = validEmails.some(email => email.toLowerCase() === certEmail.trim().toLowerCase());
 
     if (!isVerified) {
@@ -165,10 +185,26 @@ export default function DashboardPage() {
 
     setIsGenerating(true);
     await generateCertificatePDF(certInputName);
+    
+    // SAVE EMAIL TO PREVENT MULTIPLE DOWNLOADS
+    downloadedEmails.push(certEmail.trim().toLowerCase());
+    localStorage.setItem("downloaded_certificates", JSON.stringify(downloadedEmails));
+
     setIsGenerating(false);
     setShowCertModal(false);
     setCertEmail("");
     setCertError("");
+  };
+
+  const handleWhatsAppSubmit = () => {
+    if(!reqName.trim() || !reqPhone.trim() || !reqEmail.trim() || !reqProfile.trim()) {
+      alert("Please fill all fields before submitting.");
+      return;
+    }
+    const text = `Hello Manish,\nI need to download my certificate again. Here are my details:\n\n*Name:* ${reqName}\n*Phone:* ${reqPhone}\n*Email:* ${reqEmail}\n*Public Profile:* ${reqProfile}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=918538980608&text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, "_blank");
+    setShowRequestModal(false);
   };
 
   const generateCertificatePDF = async (nameToPrint: string) => {
@@ -1083,8 +1119,8 @@ const dashboardData = {
 
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-            <h3 className="font-bold text-[40px] tracking-tight text-center mt-2 bg-gradient-to-r from-[#4285F4] via-[#34A853] via-[#FBBC04] to-[#EA4335] bg-clip-text text-transparent">Arcade</h3>                     
-           <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                     
+            <h3 className="font-bold text-[40px] tracking-tight text-center mt-2 bg-gradient-to-r from-[#4285F4] via-[#34A853] via-[#FBBC04] to-[#EA4335] bg-clip-text text-transparent">Arcade</h3>                      
+           <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                      
   
            <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
 
@@ -1414,7 +1450,8 @@ const dashboardData = {
               </div>
               <div className="flex justify-end mt-2">
                  <button onClick={downloadCSV} className={`text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors flex items-center gap-1.5 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] hover:bg-[#3c4043] text-gray-300' : 'bg-white border-[#dadce0] hover:bg-gray-50 text-gray-700'}`}>
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg> Download CSV
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>Download CSV
+                 
                  </button>
               </div>
               <div className="w-full mt-4">
@@ -1707,6 +1744,59 @@ const dashboardData = {
           </div>
         )}
 
+        {/* --- WHATSAPP REQUEST MODAL (FOR THOSE WHO ALREADY DOWNLOADED) --- */}
+        {showRequestModal && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
+            <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
+              {/* Header */}
+              <div className="bg-gradient-to-r from-[#34a853] to-[#137333] p-5 text-white flex justify-between items-center">
+                 <h3 className="font-bold text-lg tracking-wide flex items-center gap-2">
+                   {/* WhatsApp Icon */}
+                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                   </svg>
+                   Request Again
+                 </h3>
+                 <button onClick={() => setShowRequestModal(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                 </button>
+              </div>
+              
+              {/* Body */}
+              <div className="p-6 flex flex-col gap-4">
+                 <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    You have already downloaded this certificate. If you need it again, please fill in your details.
+                  </p>
+
+                 {/* Inputs */}
+                 <div className="flex flex-col gap-1.5">
+                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
+                   <input type="text" value={reqName} onChange={(e) => setReqName(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
+                 </div>
+
+                 <div className="flex flex-col gap-1.5">
+                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Phone No</label>
+                   <input type="tel" value={reqPhone} onChange={(e) => setReqPhone(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} placeholder="Enter WhatsApp number" />
+                 </div>
+
+                 <div className="flex flex-col gap-1.5">
+                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</label>
+                   <input type="email" value={reqEmail} onChange={(e) => setReqEmail(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
+                 </div>
+
+                 <div className="flex flex-col gap-1.5">
+                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Public Profile URL</label>
+                   <input type="text" value={reqProfile} onChange={(e) => setReqProfile(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
+                 </div>
+
+                 <button onClick={handleWhatsAppSubmit} className="mt-3 w-full py-3.5 rounded-xl font-bold text-[15px] text-white shadow-md transition-all flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd57] hover:shadow-lg hover:-translate-y-0.5">
+                   Send on WhatsApp
+                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* --- FACILITATOR DRAWER --- */}
@@ -1714,7 +1804,7 @@ const dashboardData = {
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowFacilitatorDrawer(false)}></div>
         
         <div className={`relative w-full max-w-xl h-full shadow-2xl transform transition-transform duration-300 flex flex-col ${showFacilitatorDrawer ? 'translate-x-0' : 'translate-x-full'} ${isDark ? 'bg-[#15171b] border-l border-[#3c4043]' : 'bg-white border-l border-[#dadce0]'}`}>
-           
+            
            <div className={`flex items-center justify-between p-5 border-b ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
               <h3 className={`text-xl font-bold tracking-wide ${isDark ? 'text-white' : 'text-[#202124]'}`}>Facilitator Details</h3>
               <button onClick={() => setShowFacilitatorDrawer(false)} className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-[#3c4043] text-gray-300' : 'hover:bg-gray-100 text-gray-600'}`}>
