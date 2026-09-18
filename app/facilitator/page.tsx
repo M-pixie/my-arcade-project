@@ -17,6 +17,58 @@ export default function FacilitatorPage() {
     { name: "Santu Gupta", linkedin: "https://www.linkedin.com/in/santu-kumar-163a17279", badges: "125+", points: "92", profileUrl: "https://www.skills.google/public_profiles/b384c49b-874a-48a3-9c0f-a34b61f15a47" }
   ];
 
+  // TOP FACILITATOR MEMBERS 2026 — all 48 members from the Final Progress Report
+  const topFacilitatorMembers2026 = [
+    { rank: 1, name: "SPARSH KOTIYA", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 2, name: "AADITYA VARDHAN", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 3, name: "VICKY KUMAR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 4, name: "CHEEPURUPALLI SATWIK", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 5, name: "GHANSHYAM KUMAR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 6, name: "HARSH PANDA", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 7, name: "HARSH SHARMA", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 8, name: "SAURABH KUMAR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 9, name: "INDRAJIT MISHRA", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 10, name: "ASBAB KHAN", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 11, name: "NAMPALLY HARISH", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 12, name: "PRITHA ROY", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 13, name: "ANIKA CHOUDHURY", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 14, name: "SHUBHAM", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 15, name: "NEERAJ KUMAR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 16, name: "SOHOM NATH", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 17, name: "ARPIT DUBEY", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 18, name: "RAJKUMAR DAS", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 19, name: "VIKAS", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 20, name: "HIMANSHU SHARMA", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 21, name: "HAJARE AYUSH", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 22, name: "GAGANDEEP KAUR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 23, name: "MANDEEP KAUR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 24, name: "AJIT CHAUDHARY", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 25, name: "KONDA BHASKAR REDDY", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 26, name: "DIPIKA VAMAN KANTAPPA POOJARI", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 27, name: "VISHAL KUMAR", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 28, name: "DIVYAM AGRAWAL", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 29, name: "SURUCHI KUMARI", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 30, name: "LOVELY KUMARI", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 31, name: "GUNJAN KUMARI", milestone: "Ultimate Milestone", performance: "Excellent" },
+    { rank: 32, name: "NIKHIL KUMAR", milestone: "Milestone 3", performance: "Very Good" },
+    { rank: 33, name: "PRIYLATA", milestone: "Milestone 3", performance: "Very Good" },
+    { rank: 34, name: "RAMANDEEP RIMPY", milestone: "Milestone 2", performance: "Good" },
+    { rank: 35, name: "AYUSHA SANJUKTHA CHEKKA", milestone: "Milestone 2", performance: "Good" },
+    { rank: 36, name: "MOHAMMAD TAUFIQUE", milestone: "Milestone 2", performance: "Good" },
+    { rank: 37, name: "VAISHNAVI PRASAD RAMANNAVAR", milestone: "Milestone 2", performance: "Good" },
+    { rank: 38, name: "BERNARDO RIFFO", milestone: "Milestone 2", performance: "Good" },
+    { rank: 39, name: "PRATIKSHA DESHMUKH", milestone: "Milestone 2", performance: "Good" },
+    { rank: 40, name: "KAUSHAL LOYA", milestone: "Milestone 2", performance: "Good" },
+    { rank: 41, name: "SANTOSH KUMAR MALLICK", milestone: "Milestone 2", performance: "Good" },
+    { rank: 42, name: "JANHAVI TALODHIKAR", milestone: "Milestone 2", performance: "Good" },
+    { rank: 43, name: "NITYAY SANJAY JIWTODE", milestone: "Milestone 2", performance: "Good" },
+    { rank: 44, name: "SRI BHARATH", milestone: "Milestone 1", performance: "Normal" },
+    { rank: 45, name: "G.PAVANI", milestone: "Milestone 1", performance: "Normal" },
+    { rank: 46, name: "APURVA LAKHE", milestone: "Milestone 1", performance: "Normal" },
+    { rank: 47, name: "ASHUTOSH SUBHASH MINDE", milestone: "Milestone 1", performance: "Normal" },
+    { rank: 48, name: "ESHAMA ARA", milestone: "Milestone 1", performance: "Normal" }
+  ];
+
   return (
     <>
       <div className="min-h-screen bg-[#f4f6f8] text-[#202124] font-sans selection:bg-[#e8f0fe] selection:text-[#1a73e8] pb-10">
@@ -34,9 +86,12 @@ export default function FacilitatorPage() {
           {/* ================= PAGE HEADER & QUICK BUTTONS ================= */}
           <div className="mb-8 flex flex-col xl:flex-row xl:items-end justify-between gap-6">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-              Facilitator Program
-              </h1>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                  Facilitator Program
+                </h1>
+              </div>
+
               <p className="text-[#5f6368] mt-1.5 font-medium text-[15px]">
                 Empowering the community to upskill, earn certifications, and claim Google swags.
               </p>
@@ -72,6 +127,48 @@ export default function FacilitatorPage() {
             {/* 🔥 LEFT COLUMN (Milestones & Top Performers) 🔥 */}
             <div className="lg:col-span-8 flex flex-col gap-6">
               
+              {/* --- Top Facilitator Members 2026 Card --- */}
+              <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden flex flex-col">
+                <div className="px-6 py-5 border-b border-[#e8eaed] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <h2 className="text-[19px] font-extrabold text-[#202124] tracking-tight">Top Facilitator Members 2026</h2>
+
+                  <a
+                    href="https://drive.google.com/file/d/1L7iwR7tGGM1XPu1rMnwfX7JRqj0xr1wh/view?usp=drivesdk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="See Full Report"
+                    className="inline-flex w-fit items-center gap-2 px-3.5 py-2 bg-[#f8f9fa] border border-[#dadce0] text-[#1a73e8] rounded-lg shadow-sm hover:bg-[#e8f0fe] hover:border-[#d2e3fc] hover:-translate-y-0.5 hover:shadow-md transition-all group"
+                  >
+                    <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 17L17 7M9 7h8v8" />
+                    </svg>
+                    <span className="text-[12px] font-extrabold tracking-wide whitespace-nowrap">See Full Report</span>
+                  </a>
+                </div>
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead className="bg-[#f8f9fa] border-b border-[#dadce0] text-[12px] uppercase tracking-wider font-bold text-[#5f6368]">
+                      <tr>
+                        <th className="px-6 py-3.5">Rank</th>
+                        <th className="px-6 py-3.5">Members</th>
+                        <th className="px-6 py-3.5 text-center">Milestone</th>
+                        <th className="px-6 py-3.5 text-right">Performance</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e8eaed]">
+                      {topFacilitatorMembers2026.map((member) => (
+                        <tr key={member.rank} className="hover:bg-[#f8f9fa] transition-colors">
+                          <td className="px-6 py-3.5 font-black text-[#5f6368] text-[14px]">{member.rank}</td>
+                          <td className="px-6 py-3.5 font-bold text-[#1a73e8]">{member.name}</td>
+                          <td className="px-6 py-3.5 text-center font-bold text-[#202124] text-[14px]">{member.milestone}</td>
+                          <td className="px-6 py-3.5 text-right font-bold text-[#137333] text-[14px]">{member.performance}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               {/* --- User Milestones Card --- */}
               <div className="bg-white border border-[#dadce0] rounded-xl shadow-sm overflow-hidden flex flex-col">
                 <div className="px-6 py-5 border-b border-[#e8eaed] bg-white text-center">
