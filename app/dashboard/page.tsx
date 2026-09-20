@@ -165,7 +165,7 @@ export default function DashboardPage() {
     const isVerified = validEmails.some(email => email.toLowerCase() === certEmail.trim().toLowerCase());
 
     if (!isVerified) {
-      setCertError("You are not under facilitator Manish & Rohit. Your facilitator is other.");
+      setCertError("User Not Found (404)");
       return;
     }
 
