@@ -395,7 +395,7 @@ export default function HomePage() {
 
   return (
     <>
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
 
         /* =====================================================
            BASE
@@ -2784,25 +2784,16 @@ export default function HomePage() {
         }
 
         @media (prefers-reduced-motion: reduce) {
-
           *,
           *::before,
           *::after {
-            animation-duration:
-              0.01ms !important;
-
-            animation-iteration-count:
-              1 !important;
-
-            scroll-behavior:
-              auto !important;
-
-            transition-duration:
-              0.01ms !important;
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
           }
         }
-
-      `}</style>
+      `}} />
 
       <main className="nexus-page">
 

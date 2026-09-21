@@ -289,7 +289,7 @@ export default function DashboardPage() {
 
     } catch (error) {
       console.error("Certificate open error:", error);
-      alert("Certificate open nahi ho paya. Please dobara try karein.");
+      alert("The certificate could not be opened. Please try again.");
     }
   };
 
@@ -1488,180 +1488,265 @@ const dashboardData = {
           </div>
         </div>
 
-        {/* --- MEGA PREMIUM CENTERED AI CHAT MODAL --- */}
-        {showAiChat && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
-            
-            <div 
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              className={`w-full max-w-4xl h-[94vh] rounded-xl shadow-2xl flex flex-col overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-[#f8f9fa] border border-[#dadce0]'}`}
+            {/* --- ARCADE AI | REFINED PREMIUM POPUP --- */}
+{showAiChat && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-3 backdrop-blur-sm sm:p-4 animate-fade-in-up">
+    <div
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className="relative flex h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] sm:h-[94vh] sm:rounded-[22px]"
+    >
+      {/* Animated Drag Overlay */}
+      {isDragging && (
+        <div className="absolute inset-0 z-[100] flex items-center justify-center overflow-hidden rounded-2xl bg-white/96 backdrop-blur-sm">
+          <div className="absolute inset-x-0 top-0 h-1 overflow-hidden bg-[#eff4ff]">
+            <div className="h-full w-1/3 animate-[dragSlide_1.2s_ease-in-out_infinite] bg-[#2563eb]" />
+          </div>
+          <div className="flex flex-col items-center text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#e5e5e5] bg-[#f7f7f8]">
+              <svg className="h-7 w-7 text-[#444]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 0L7 9m5-5 5 5M5 14.5v3A2.5 2.5 0 007.5 20h9a2.5 2.5 0 002.5-2.5v-3" />
+              </svg>
+            </div>
+            <p className="mt-4 text-base font-medium text-[#222]">Drop image to upload</p>
+            <p className="mt-1 text-sm text-[#888]">Arcade AI will analyze the screenshot.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Header — Simple "AI replying..." text */}
+      <div className="flex shrink-0 items-center justify-between border-b border-[#eeeeee] bg-white px-4 py-3 sm:px-5">
+        <div className="flex items-center gap-2.5">
+          <div className="min-w-[88px] text-[16px] font-medium tracking-[-0.01em] text-[#2f2f2f]">
+            {isTyping ? (
+              <span className="text-[#4a4a4a]">AI replying...</span>
+            ) : (
+              userName ? userName.split(' ')[0] : "User"
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <div className="hidden items-center rounded-lg bg-[#f7f7f8] p-0.5 sm:flex">
+            <button
+              onClick={() => setAiLanguage('English')}
+              className={`rounded-md px-2.5 py-1.5 text-[11px] font-normal transition-all ${
+                aiLanguage === 'English'
+                  ? 'bg-white text-[#222] shadow-sm'
+                  : 'text-[#888] hover:text-[#444]'
+              }`}
             >
-              
-              {isDragging && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#4285F4]/90 backdrop-blur-sm rounded-xl">
-                   <div className="flex flex-col items-center text-white">
-                      <svg className="w-20 h-20 mb-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                      <h2 className="text-3xl font-black tracking-wider">Drop Screenshot Here!</h2>
-                   </div>
-                </div>
-              )}
+              EN
+            </button>
+            <button
+              onClick={() => setAiLanguage('Hinglish')}
+              className={`rounded-md px-2.5 py-1.5 text-[11px] font-normal transition-all ${
+                aiLanguage === 'Hinglish'
+                  ? 'bg-white text-[#222] shadow-sm'
+                  : 'text-[#888] hover:text-[#444]'
+              }`}
+            >
+              HI
+            </button>
+          </div>
 
-              {/* PREMIUM HEADER WITH AVATAR AND NORMAL FONT */}
-              <div className={`flex justify-between items-center px-6 py-4 border-b bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] text-white`}>
-                <div className="flex items-center gap-3">
-                  
-                  {/* User Avatar with Online Dot */}
-                  <div className="relative">
-                    {userAvatar ? (
-                      <img src={userAvatar} alt="Profile" className="w-9 h-9 rounded-full object-cover border-2 border-white/50 shadow-sm" />
-                    ) : (
-                      <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold border-2 border-white/50 shadow-sm">
-                        {userName ? userName.charAt(0).toUpperCase() : "U"}
-                      </div>
-                    )}
-                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-400 border-[1.5px] border-transparent shadow-sm"></span>
-                  </div>
+          {/* Instant clear */}
+          <button
+            onClick={handleClearChat}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#777] transition-colors hover:bg-[#f5f5f5] hover:text-[#222]"
+            title="Clear chat"
+            aria-label="Clear chat"
+          >
+            <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M9 7V5h6v2m-7 0 .7 12.2a2 2 0 002 1.8h2.6a2 2 0 002-1.8L17 7M10 11v6m4-6v6" />
+            </svg>
+          </button>
 
-                  <div>
-                    {/* Professional Name - Removed 'Assistant' & Fixed Font */}
-                    <h3 className="font-semibold text-[17px] tracking-normal leading-tight">
-                      {userName ? userName.split(' ')[0] : "Arcade AI"}
-                    </h3>
-                    <p className="text-[11px] font-medium opacity-90 lowercase tracking-widest">online</p>
-                  </div>
-                </div>
+          <button
+            onClick={() => setShowAiChat(false)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#777] transition-colors hover:bg-[#f5f5f5] hover:text-[#222]"
+            title="Close"
+            aria-label="Close chat"
+          >
+            <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-                <div className="flex items-center gap-3">
-                  
-                  <div className="relative flex items-center">
-                     <button onClick={() => setShowClearConfirm(true)} className="p-1.5 rounded-full transition-colors hover:bg-white/20 text-white" title="Clear Chat">
-                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                     </button>
-                     
-                     {showClearConfirm && (
-                        <div className={`absolute top-10 right-0 w-48 p-3 rounded-xl shadow-xl border z-50 text-left animate-fade-in-up ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-white border-[#dadce0]'}`}>
-                            <p className={`text-[12px] font-bold leading-snug mb-3 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Clear all chat history? This cannot be undone.</p>
-                            <div className="flex gap-2">
-                                <button onClick={handleClearChat} className="flex-1 bg-red-500 hover:bg-red-600 text-white text-[12px] font-bold py-1.5 rounded-lg transition-colors">Yes</button>
-                                <button onClick={() => setShowClearConfirm(false)} className={`flex-1 text-[12px] font-bold py-1.5 rounded-lg transition-colors border ${isDark ? 'border-[#3c4043] text-gray-300 hover:bg-[#3c4043]' : 'border-[#dadce0] text-[#5f6368] hover:bg-gray-100'}`}>No</button>
-                            </div>
-                        </div>
-                     )}
-                  </div>
-
-                  <div className={`flex items-center p-1 rounded-full ${isDark ? 'bg-black/30' : 'bg-white/20'}`}>
-                    <button onClick={() => setAiLanguage('English')} className={`px-3 py-1 text-xs font-black tracking-wider rounded-full transition-all ${aiLanguage === 'English' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>EN</button>
-                    <button onClick={() => setAiLanguage('Hinglish')} className={`px-3 py-1 text-xs font-black tracking-wider rounded-full transition-all ${aiLanguage === 'Hinglish' ? 'bg-white text-[#4285F4] shadow-sm' : 'text-white'}`}>HI</button>
-                  </div>
-                  
-                  <button onClick={() => setShowAiChat(false)} className="p-2 rounded-full transition-colors hover:bg-white/20 text-white">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 custom-scrollbar relative">
-                
-                {messages.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full gap-5 animate-fade-in-up">
-                     
-                     <div className="relative">
-                       <svg className="w-16 h-16 text-[#9b72cb] animate-pulse relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-                       <div className="absolute inset-0 bg-purple-400 blur-2xl opacity-30 rounded-full"></div>
-                     </div>
-
-                     {/* PREMIUM GRADIENT HEADING */}
-                     <h2 className={`text-3xl md:text-4xl font-extrabold text-center tracking-tight pb-1 bg-clip-text text-transparent bg-gradient-to-r ${isDark ? 'from-blue-400 via-purple-400 to-rose-400' : 'from-[#4285F4] via-[#9b72cb] to-[#ea4335]'}`}>
-                       How can I help you today, {userName?.split(' ')[0] || 'Champ'}?
-                     </h2>
-                     
-                     {/* CLEANER PROMPT CHIPS */}
-                     <div className="flex flex-wrap items-center justify-center gap-2.5 w-full max-w-3xl mt-4">
-                        {["Facilitator report", "Arcade report", "Summary dashboard", "Suggest next labs", "See points", "How to start arcade?", "Give me all links of arcade", "See prize tiers"].map((p) => (
-                           <button 
-                             key={p} 
-                             onClick={() => handleAskAi(p)} 
-                             className={`px-4 py-2 rounded-full border shadow-sm font-semibold text-[12px] md:text-[13px] transition-all hover:-translate-y-0.5 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-300 hover:text-white hover:border-[#8ab4f8]' : 'bg-white border-[#dadce0] text-[#5f6368] hover:text-[#1a73e8] hover:border-[#1a73e8] hover:bg-blue-50/50'}`}
-                           >
-                             {p}
-                           </button>
-                        ))}
-                     </div>
-                  </div>
-                )}
-
-                {messages.map((msg, idx) => (
-                  <div key={idx} className={`whitespace-pre-wrap leading-relaxed p-4 rounded-3xl text-[14px] font-medium max-w-[85%] shadow-sm flex flex-col gap-1 ${msg.role === 'user' ? 'self-end bg-[#1a73e8] text-white rounded-tr-sm' : `self-start rounded-tl-sm ${isDark ? 'bg-[#2a2d32] text-gray-200 border border-[#3c4043]' : 'bg-white border border-[#dadce0] text-[#3c4043]'}`}`}>
-                    {formatChatText(msg.content, msg.role === 'user')}
-                  </div>
-                ))}
-
-                {isTyping && (
-                  <div className={`p-4 rounded-3xl rounded-tl-sm text-[13px] self-start w-20 flex justify-center items-center gap-1.5 shadow-sm ${isDark ? 'bg-[#2a2d32] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></span>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></span>
-                  </div>
-                )}
-                
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* --- NEW PREMIUM SLIM INPUT BAR SECTION --- */}
-              <div className={`p-4 md:px-8 md:pb-6 md:pt-4 flex flex-col gap-3 z-10 ${isDark ? 'bg-[#15171b]' : 'bg-[#f8f9fa]'}`}>
-                
-                {chatImage && (
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden border shadow-sm ml-4 animate-fade-in-up">
-                     <img src={chatImage} alt="upload" className="w-full h-full object-cover" />
-                     <button onClick={() => setChatImage(null)} className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-red-500 transition-colors">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
-                     </button>
-                  </div>
-                )}
-
-                {/* PREMIUM SLIM PILL INPUT */}
-                <div className={`relative flex items-center w-full mx-auto rounded-full border shadow-[0_2px_15px_rgba(0,0,0,0.04)] px-2.5 py-2 transition-all ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-white border-gray-200'}`}>
-                  
-                  <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
-                  <button onClick={() => fileInputRef.current?.click()} className={`p-2 rounded-full transition-colors flex-shrink-0 ${isDark ? 'text-gray-400 hover:bg-[#3c4043]' : 'text-gray-500 hover:bg-gray-100'}`} title="Upload Screenshot">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14M5 12h14" /></svg>
-                  </button>
-
-                  <input 
-                    type="text" 
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-                    placeholder={isListening ? "Listening..." : "Ask anything"} 
-                    className={`flex-1 bg-transparent px-3 py-1.5 text-[15px] font-medium focus:outline-none placeholder-gray-400 ${isDark ? 'text-white' : 'text-[#3c4043]'}`}
-                  />
-                  
-                  {/* 'Think' Badge */}
-                  <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-default transition-colors text-gray-400">
-                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                     <span className="text-[14px] font-medium tracking-wide">Think</span>
-                  </div>
-
-                  <button onClick={startListening} className={`p-2 rounded-full transition-colors mx-1 flex-shrink-0 ${isListening ? 'text-red-500 animate-pulse bg-red-50' : (isDark ? 'text-gray-400 hover:bg-[#3c4043]' : 'text-gray-500 hover:bg-gray-100')}`} title="Voice Input">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                  </button>
-
-                  <button onClick={() => handleAskAi()} disabled={isTyping || (!chatInput.trim() && !chatImage)} className={`w-9 h-9 ml-1 rounded-full flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 ${isDark ? 'bg-[#4285F4] text-white' : 'bg-[#4285F4] text-white'}`}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                       <rect x="7" y="9" width="2.5" height="6" rx="1.25" />
-                       <rect x="11" y="5" width="2.5" height="14" rx="1.25" />
-                       <rect x="15" y="9" width="2.5" height="6" rx="1.25" />
+      {/* Chat area */}
+      <div className="relative flex-1 overflow-y-auto custom-scrollbar bg-white px-4 py-6 sm:px-7 sm:py-8">
+        <div className="mx-auto flex h-full w-full max-w-3xl flex-col">
+          {messages.length === 0 && (
+            <div className="flex h-full flex-col items-center justify-center px-2 text-center animate-fade-in-up">
+              <p className="text-[14px] font-normal text-[#777]">
+                Ready when you are
+              </p>
+              <h2 className="mt-1 text-[28px] font-normal tracking-[-0.025em] text-[#202020] sm:text-[34px]">
+                {userName ? userName.split(' ')[0] : "there"}
+              </h2>
+              <p className="mt-3 max-w-xl text-[14px] font-normal leading-6 text-[#7b7b7b]">
+                Ask about Arcade, your progress, points, reports, or certificates.
+              </p>
+              <div className="mt-7 grid w-full max-w-2xl grid-cols-1 gap-2 sm:grid-cols-2">
+                {[
+                  "Facilitator report",
+                  "Arcade report",
+                  "Summary dashboard",
+                  "Suggest next labs",
+                  "See points",
+                  "How to start arcade?",
+                  "Give me all links of arcade",
+                  "See prize tiers"
+                ].map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => handleAskAi(p)}
+                    className="group flex min-h-[46px] items-center justify-between rounded-xl border border-[#e6e6e6] bg-white px-4 text-left text-[13px] font-normal text-[#555] transition-all hover:border-[#cfcfcf] hover:bg-[#fafafa] hover:text-[#222]"
+                  >
+                    <span>{p}</span>
+                    <svg className="h-4 w-4 shrink-0 text-[#aaa] transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
                     </svg>
                   </button>
-                  
-                </div>
+                ))}
               </div>
-
             </div>
+          )}
+
+          {messages.length > 0 && (
+            <div className="mx-auto flex w-full max-w-[760px] flex-col gap-6 pt-1 sm:gap-7">
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={
+                      msg.role === 'user'
+                        ? 'max-w-[82%] rounded-[20px] bg-[#f1f1f1] px-4 py-2.5 text-[14px] font-normal leading-[1.6] text-[#202020] sm:max-w-[72%] whitespace-pre-wrap'
+                        : 'max-w-[760px] text-[15px] font-normal leading-[1.7] tracking-[-0.005em] text-[#303030] sm:text-[15.5px] whitespace-pre-wrap'
+                    }
+                  >
+                    {formatChatText(msg.content, msg.role === 'user')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <div ref={chatEndRef} />
+        </div>
+      </div>
+
+      {/* Composer */}
+      <div className="shrink-0 bg-white px-3 pb-3 pt-2.5 sm:px-6 sm:pb-6">
+        <div className="mx-auto w-full max-w-[760px]">
+          {chatImage && (
+            <div className="mb-2.5 inline-flex items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm">
+              <div className="relative h-11 w-11 overflow-hidden rounded-lg border border-[#e7e7e7]">
+                <img src={chatImage} alt="upload" className="h-full w-full object-cover" />
+                <button
+                  onClick={() => setChatImage(null)}
+                  className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
+                  title="Remove image"
+                  aria-label="Remove image"
+                >
+                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" />
+                  </svg>
+                </button>
+              </div>
+              <div className="pr-2">
+                <p className="text-[12px] font-normal text-[#333]">Screenshot attached</p>
+                <p className="mt-0.5 text-[11px] font-normal text-[#999]">Ready to analyze</p>
+              </div>
+            </div>
+          )}
+
+          <div className="flex h-[64px] items-center rounded-full border border-[#dedede] bg-white px-4 py-2 sm:px-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all focus-within:border-[#c4c4c4] focus-within:shadow-[0_8px_32px_rgba(0,0,0,0.10)]">
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+
+            {/* Plus Upload */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#555] transition-colors hover:bg-[#f3f3f3] hover:text-[#111]"
+              title="Upload Screenshot"
+              aria-label="Upload Screenshot"
+            >
+              <svg className="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14M5 12h14" />
+              </svg>
+            </button>
+
+            {/* Input */}
+            <input
+              type="text"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
+              placeholder={isListening ? "Listening..." : "Ask anything"}
+              className="min-w-0 flex-1 bg-transparent px-3 py-3 text-[16px] font-normal leading-6 text-[#2f2f2f] outline-none placeholder:text-[#8a8a8a]"
+            />
+
+            {/* Think pill */}
+            <div className="mr-2 hidden h-9 items-center gap-1.5 rounded-full bg-[#f2f6ff] px-3.5 text-[#3980ff] sm:flex transition-all duration-300">
+              {isTyping ? (
+                <svg className="h-[18px] w-[18px] animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ) : (
+                <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 18h5m-4.25 3h3.5M12 3a6.5 6.5 0 0 0-3.86 11.73A3.5 3.5 0 0 0 9.5 17.6V19h5v-1.4a3.5 3.5 0 0 0 1.36-2.87A6.5 6.5 0 0 0 12 3Z" />
+                </svg>
+              )}
+              <span className="text-[14px] font-medium tracking-wide">
+                {isTyping ? 'Thinking...' : 'Think'}
+              </span>
+            </div>
+
+            {/* Mic */}
+            <button
+              onClick={startListening}
+              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors ${
+                isListening
+                  ? 'bg-red-50 text-red-500'
+                  : 'text-[#555] hover:bg-[#f3f3f3] hover:text-[#111]'
+              }`}
+              title="Voice Input"
+              aria-label="Voice Input"
+            >
+              <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 0 1-14 0m7 7v3m-4 0h8M12 4a3 3 0 0 1 3 3v4a3 3 0 1 1-6 0V7a3 3 0 0 1 3-3Z" />
+              </svg>
+            </button>
+
+            {/* Blue arrow */}
+            <button
+              onClick={() => handleAskAi()}
+              disabled={isTyping || (!chatInput.trim() && !chatImage)}
+              className="ml-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2563eb] text-white transition-all hover:bg-[#1d4ed8] hover:shadow-md disabled:cursor-not-allowed disabled:bg-[#d7d7d7] disabled:text-[#999]"
+              title="Send"
+              aria-label="Send"
+            >
+              <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.1">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h12m-4.5-5 4.5 5-4.5 5" />
+              </svg>
+            </button>
           </div>
-        )}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
         
         {showPoster && (
