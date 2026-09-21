@@ -87,7 +87,7 @@ export default function FacilitatorPage() {
           <div className="mb-8 flex flex-col xl:flex-row xl:items-end justify-between gap-6">
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                <h1 className="text-4xl sm:text-[54px] leading-[1.1] font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-[#1a73e8] to-gray-900 tracking-tighter drop-shadow-sm pb-1">
                   Facilitator Program
                 </h1>
               </div>
@@ -145,9 +145,11 @@ export default function FacilitatorPage() {
                     <span className="text-[12px] font-extrabold tracking-wide whitespace-nowrap">See Full Report</span>
                   </a>
                 </div>
-                <div className="overflow-x-auto custom-scrollbar">
-                  <table className="w-full text-left border-collapse min-w-[600px]">
-                    <thead className="bg-[#f8f9fa] border-b border-[#dadce0] text-[12px] uppercase tracking-wider font-bold text-[#5f6368]">
+                
+                {/* 🔥 YAHAN CHANGE KIYA HAI - Scroll bar add and max-height set */}
+                <div className="overflow-auto max-h-[700px] custom-scrollbar">
+                  <table className="w-full text-left border-collapse min-w-[600px] relative">
+                    <thead className="bg-[#f8f9fa] border-b border-[#dadce0] text-[12px] uppercase tracking-wider font-bold text-[#5f6368] sticky top-0 z-10 shadow-[0_1px_0_#dadce0]">
                       <tr>
                         <th className="px-6 py-3.5">Rank</th>
                         <th className="px-6 py-3.5">Members</th>
