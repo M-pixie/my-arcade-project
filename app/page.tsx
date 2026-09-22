@@ -153,6 +153,13 @@ export default function HomePage() {
     },
   ];
 
+  const arcadeCards = [
+    { stars: "★", title: "Arcade Trooper", points: "50 Points", progress: "38%", color: "bg-red-500", spots: "3718 / 6000 spots left" },
+    { stars: "★★", title: "Arcade Ranger", points: "75 Points", progress: "59%", color: "bg-blue-400", spots: "1622 / 4000 spots left" },
+    { stars: "★★★", title: "Arcade Champion", points: "95 Points", progress: "74%", color: "bg-yellow-400", spots: "781 / 3000 spots left" },
+    { stars: "★★★★", title: "Arcade Legend", points: "120 Points", progress: "44%", color: "bg-green-400", spots: "1397 / 2500 spots left" },
+  ];
+
   /* =========================================================
      FIREBASE
   ========================================================= */
@@ -2977,107 +2984,153 @@ export default function HomePage() {
             )}
 
             {/* =================================================
-                BIGGER HIGHLIGHTED ACTIONS
+                BIGGER HIGHLIGHTED ACTIONS & SWAG CARDS
             ================================================= */}
 
             {!showResult && (
+              <>
+                <div className="hero-actions">
 
-              <div className="hero-actions">
-
-                <a
-                  href="https://go.cloudskillsboost.google/arcade"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hero-action"
-                >
-
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M5 12h14" />
-                    <path d="m13 6 6 6-6 6" />
-                  </svg>
-
-                  Start Arcade Labs
-
-                </a>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    router.push(
-                      "/dashboard"
-                    )
-                  }
-                  className="hero-action"
-                >
-
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect
-                      x="3"
-                      y="4"
-                      width="18"
-                      height="16"
-                      rx="2"
-                    />
-
-                    <path d="M8 8h8" />
-                    <path d="M8 12h5" />
-                  </svg>
-
-                  Smart Dashboard
-
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    router.push(
-                      "/leaderboard"
-                    )
-                  }
-                  className="hero-action"
-                >
-
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  <a
+                    href="https://go.cloudskillsboost.google/arcade"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hero-action"
                   >
 
-                    <path d="M8 21h8" />
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
 
-                    <path d="M12 17v4" />
+                    Start Arcade Labs
 
-                    <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
+                  </a>
 
-                    <path d="M7 7H4v2a3 3 0 0 0 3 3" />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      router.push(
+                        "/dashboard"
+                      )
+                    }
+                    className="hero-action"
+                  >
 
-                    <path d="M17 7h3v2a3 3 0 0 1-3 3" />
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="16"
+                        rx="2"
+                      />
 
-                  </svg>
+                      <path d="M8 8h8" />
+                      <path d="M8 12h5" />
+                    </svg>
 
-                  Leaderboard
+                    Smart Dashboard
 
-                </button>
+                  </button>
 
-              </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      router.push(
+                        "/leaderboard"
+                      )
+                    }
+                    className="hero-action"
+                  >
 
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+
+                      <path d="M8 21h8" />
+
+                      <path d="M12 17v4" />
+
+                      <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
+
+                      <path d="M7 7H4v2a3 3 0 0 0 3 3" />
+
+                      <path d="M17 7h3v2a3 3 0 0 1-3 3" />
+
+                    </svg>
+
+                    Leaderboard
+
+                  </button>
+
+                </div>
+
+                {/* 🔥 NEW SECTION: Arcade Tier Cards Added Here */}
+                <div className="mt-14 w-full text-left">
+                  <h2 style={{ color: '#ffffff', fontWeight: 'normal', fontSize: '24px', textAlign: 'center', marginBottom: '20px' }}>
+                    Google Swags 2026
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {arcadeCards.map((card, idx) => (
+                      <div key={idx} className="bg-[#2d2f34] rounded-xl p-5 flex flex-col items-center justify-between border border-gray-700 shadow-lg">
+                        
+                        <div className="text-[#facc15] text-lg mb-1">{card.stars}</div>
+                        <h3 className="text-[#facc15] font-black text-sm tracking-wide text-center uppercase font-mono">
+                          {card.title}
+                        </h3>
+                        
+                        {/* Dashed line */}
+                        <div className="w-full border-b-[3px] border-dashed border-[#facc15] opacity-80 my-4"></div>
+                        
+                        {/* Joystick Icon (Using standard emoji) */}
+                        <div className={`text-6xl mb-4 ${card.title === 'Arcade Legend' ? 'drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]' : ''}`}>
+                          🕹️
+                        </div>
+                        
+                        <div className="text-[#facc15] font-bold font-mono text-lg mb-4">
+                          {card.points}
+                        </div>
+                        
+                        {/* Progress Bar Container */}
+                        <div className="w-full bg-[#404349] rounded-full h-4 mb-3 relative overflow-hidden flex items-center justify-center">
+                          <div 
+                            className={`absolute left-0 top-0 h-full ${card.color} transition-all duration-1000`}
+                            style={{ width: card.progress }}
+                          ></div>
+                          {/* Text centered inside the bar */}
+                          <span className="relative text-[10px] text-white font-bold z-10 font-mono">
+                            {card.progress}
+                          </span>
+                        </div>
+                        
+                        <div className="text-gray-300 text-xs font-medium text-center">
+                          {card.spots}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
             )}
 
             {/* =================================================
