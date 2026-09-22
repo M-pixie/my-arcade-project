@@ -10,12 +10,10 @@ export default function SwagDropsPage() {
   const [swags, setSwags] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Last Cron/Sync time state
   const [lastUpdated, setLastUpdated] = useState<string>("");
 
   const tiers = ["All Tiers", "Trooper", "Ranger", "Champion", "Legend"];
 
-  // Firebase se Swag fetch karne ka logic
   useEffect(() => {
     const q = query(collection(db, "swag_drops"), orderBy("createdAt", "desc"));
     
@@ -27,7 +25,6 @@ export default function SwagDropsPage() {
       setSwags(fetchedSwags);
       setLoading(false);
       
-      // Update the sync time with IST formatting
       setLastUpdated(new Date().toLocaleTimeString('en-IN', { 
         hour: '2-digit', 
         minute: '2-digit',
@@ -41,18 +38,23 @@ export default function SwagDropsPage() {
     return () => unsubscribe();
   }, []);
 
-  // Filter Logic
   const filteredSwags = activeTier === "All Tiers" 
     ? swags 
     : swags.filter(swag => swag.tags && swag.tags.includes(activeTier));
+
+  const arcadeCards = [
+    { stars: "★", title: "Arcade Trooper", points: "50 Points", progress: "38%", color: "bg-red-500", spots: "3718 / 6000 spots left" },
+    { stars: "★★", title: "Arcade Ranger", points: "75 Points", progress: "59%", color: "bg-blue-400", spots: "1622 / 4000 spots left" },
+    { stars: "★★★", title: "Arcade Champion", points: "95 Points", progress: "74%", color: "bg-yellow-400", spots: "781 / 3000 spots left" },
+    { stars: "★★★★", title: "Arcade Legend", points: "120 Points", progress: "44%", color: "bg-green-400", spots: "1397 / 2500 spots left" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans pb-16">
       <Navbar />
 
-      <main className="max-w-[800px] mx-auto px-4 pt-28 space-y-10">
+      <main className="max-w-[1000px] mx-auto px-4 pt-28 space-y-10">
         
-        {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-200 pb-5 gap-4">
           <div className="flex items-center gap-3">
             <span className="text-3xl">🎁</span>
@@ -60,13 +62,11 @@ export default function SwagDropsPage() {
           </div>
           
           <div className="flex flex-col md:items-end gap-2">
-            {/* 🔥 Live Synced Status */}
             <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-500">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-50"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-slate-500"></span>
               </span>
-
               <span>
                 Synced • Last Checked:{" "}
                 {lastUpdated ? `Today, ${lastUpdated}` : "Syncing..."}
@@ -87,7 +87,41 @@ export default function SwagDropsPage() {
           </div>
         </div>
 
-        {/* Tier Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {arcadeCards.map((card, idx) => (
+            <div key={idx} className="bg-[#2d2f34] rounded-xl p-5 flex flex-col items-center justify-between border border-gray-700 shadow-lg">
+              <div className="text-[#facc15] text-lg mb-1">{card.stars}</div>
+              <h3 className="text-[#facc15] font-black text-sm tracking-wide text-center uppercase font-mono">
+                {card.title}
+              </h3>
+              
+              <div className="w-full border-b-[3px] border-dashed border-[#facc15] opacity-80 my-4"></div>
+              
+              <div className={`text-6xl mb-4 ${card.title === 'Arcade Legend' ? 'drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]' : ''}`}>
+                🕹️
+              </div>
+              
+              <div className="text-[#facc15] font-bold font-mono text-lg mb-4">
+                {card.points}
+              </div>
+              
+              <div className="w-full bg-[#404349] rounded-full h-4 mb-3 relative overflow-hidden flex items-center justify-center">
+                <div 
+                  className={`absolute left-0 top-0 h-full ${card.color} transition-all duration-1000`}
+                  style={{ width: card.progress }}
+                ></div>
+                <span className="relative text-[10px] text-white font-bold z-10 font-mono">
+                  {card.progress}
+                </span>
+              </div>
+              
+              <div className="text-gray-300 text-xs font-medium text-center">
+                {card.spots}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className="flex flex-wrap justify-center gap-3">
           {tiers.map((tier) => (
             <button
@@ -104,7 +138,6 @@ export default function SwagDropsPage() {
           ))}
         </div>
 
-        {/* Showing Items Text with Small Spinner */}
         <div className="text-center text-[#5f6368] font-medium text-sm flex items-center justify-center gap-1.5">
           Showing 
           <strong className="text-black flex items-center justify-center min-w-[20px]">
@@ -117,7 +150,6 @@ export default function SwagDropsPage() {
           swag item(s)
         </div>
 
-        {/* Main Swag Loading or Display Section */}
         {loading ? (
            <div className="flex justify-center items-center py-16">
              <div className="w-10 h-10 border-4 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></div>
@@ -125,20 +157,21 @@ export default function SwagDropsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
             
-            {/* Render Firebase Swags */}
             {filteredSwags.map((swag) => (
               <div key={swag.id} className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
                 
-                {/* Image Container */}
-                <div className={`w-full h-[300px] ${swag.bgColor || 'bg-[#fceda6]'} flex justify-center items-center p-6 relative`}>
+                {/* 
+                  UPDATED IMAGE CONTAINER 
+                  Fixed height to 300px (matches right box), added padding, and used object-contain 
+                */}
+                <div className={`w-full h-[300px] p-6 ${swag.bgColor || 'bg-[#fceda6]'} flex justify-center items-center relative`}>
                   <img 
                     src={swag.image} 
                     alt={swag.title} 
-                    className="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" 
+                    className="w-full h-full object-contain rounded-xl hover:scale-[1.02] transition-transform duration-500" 
                   />
                 </div>
 
-                {/* Content Container */}
                 <div className="p-6 flex flex-col flex-grow">
                   <span className="text-[#80868b] text-[13px] font-semibold mb-2">
                     Revealed on {swag.date}
@@ -147,7 +180,6 @@ export default function SwagDropsPage() {
                     {swag.title}
                   </h3>
                   
-                  {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {swag.tags && swag.tags.map((tag: string) => (
                       <span 
@@ -163,7 +195,6 @@ export default function SwagDropsPage() {
                     ))}
                   </div>
 
-                  {/* Drop Link Button */}
                   <div className="mt-auto pt-2">
                     <a 
                       href={swag.link} 
@@ -178,7 +209,6 @@ export default function SwagDropsPage() {
               </div>
             ))}
 
-            {/* Coming Soon Placeholder Card */}
             <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden flex flex-col">
               <div className="w-full h-[300px] bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] flex flex-col justify-center items-center text-white p-6 relative">
                 <span className="text-6xl font-thin mb-2 opacity-80">+</span>
