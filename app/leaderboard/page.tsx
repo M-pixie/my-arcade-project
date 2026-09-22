@@ -16,9 +16,9 @@ import {
   MessageCircle,
   Send,
   Trash2,
+  CornerDownRight, // Reply icon ke liye
 } from "lucide-react";
 
-// TERA FIREBASE IMPORT - Isko apne project ke according adjust kar lena
 import { db } from "@/lib/firebase"; 
 import { 
   doc, 
@@ -29,7 +29,9 @@ import {
   onSnapshot, 
   query, 
   orderBy, 
-  deleteDoc 
+  deleteDoc,
+  arrayUnion,
+  arrayRemove
 } from "firebase/firestore";
 
 type Leader = {
@@ -46,12 +48,21 @@ type Leader = {
   updatedAt?: number | string | { seconds?: number };
 };
 
+type CommentReply = {
+  id: string;
+  authorName: string;
+  authorPhoto: string;
+  text: string;
+  timestamp: number;
+};
+
 type Comment = {
   id: string;
   authorName: string;
   authorPhoto: string;
   text: string;
   timestamp: number;
+  replies?: CommentReply[];
 };
 
 const safeNumber = (value?: number) => {
@@ -388,8 +399,6 @@ function LeaderTableRow({
   currentSessionPhoto: string;
 }) {
   const isTop3 = user.rank <= 3;
-  
-  // Realtime likes state
   const [likesCount, setLikesCount] = useState(user.likesCount || 0); 
   const [isLiked, setIsLiked] = useState(false);
   
@@ -398,8 +407,10 @@ function LeaderTableRow({
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState("");
   const [commentsCount, setCommentsCount] = useState(0);
+  
+  // Naya state reply track karne ke liye
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
 
-  // Sync likes count with Firebase live updates
   useEffect(() => {
     setLikesCount(user.likesCount || 0);
     if (user.hasNewLikes) {
@@ -409,10 +420,8 @@ function LeaderTableRow({
     }
   }, [user.likesCount, user.hasNewLikes]);
 
-  // Fetch comments in realtime when the section is opened
   useEffect(() => {
     if (!showComments) return;
-    
     const commentsRef = collection(db, "leaderboard", user.id, "comments");
     const q = query(commentsRef, orderBy("timestamp", "asc"));
     
@@ -423,28 +432,36 @@ function LeaderTableRow({
       })) as Comment[];
       
       setComments(fetchedComments);
-      setCommentsCount(fetchedComments.length);
+      
+      // Total count (Top comments + their replies)
+      let total = fetchedComments.length;
+      fetchedComments.forEach(c => {
+        if (c.replies) total += c.replies.length;
+      });
+      setCommentsCount(total);
     });
 
     return () => unsubscribe();
   }, [showComments, user.id]);
 
-  // Quick fetch just for comments count without opening
   useEffect(() => {
     const commentsRef = collection(db, "leaderboard", user.id, "comments");
     const unsubscribe = onSnapshot(commentsRef, (snapshot) => {
-      setCommentsCount(snapshot.size);
+      let total = snapshot.size;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.replies) total += data.replies.length;
+      });
+      setCommentsCount(total);
     });
     return () => unsubscribe();
   }, [user.id]);
 
-  // Handle Like - Update in Firestore
   const handleLike = async () => {
     const newLikedState = !isLiked;
     setIsLiked(newLikedState);
-    
-    // Optimistic local update
     setLikesCount(prev => newLikedState ? prev + 1 : prev - 1);
+    
     if (newLikedState) {
       setShowRowHearts(true);
       setTimeout(() => setShowRowHearts(false), 60000);
@@ -452,48 +469,74 @@ function LeaderTableRow({
       setShowRowHearts(false);
     }
 
-    // Backend update
     try {
       const userRef = doc(db, "leaderboard", user.id);
       await updateDoc(userRef, {
         likesCount: increment(newLikedState ? 1 : -1),
-        hasNewLikes: newLikedState // Trigger animation for everyone viewing
+        hasNewLikes: newLikedState 
       });
     } catch (error) {
       console.error("Error updating likes", error);
     }
   };
 
-  // Handle Comment - Save to Firestore
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
     
-    const newComment = {
-      authorName: currentSessionName,
-      authorPhoto: currentSessionPhoto,
-      text: commentText,
-      timestamp: Date.now(),
-    };
-    
+    const textToSubmit = commentText;
     setCommentText("");
-    setShowComments(false); // Immediate close after post
+    setShowComments(false); // Post karte hi immediately close
     
     try {
-      const commentsRef = collection(db, "leaderboard", user.id, "comments");
-      await addDoc(commentsRef, newComment);
+      if (replyingTo) {
+        // Firebase me existing comment ke replies array me add karna
+        const commentRef = doc(db, "leaderboard", user.id, "comments", replyingTo);
+        const newReply: CommentReply = {
+          id: Date.now().toString(),
+          authorName: currentSessionName,
+          authorPhoto: currentSessionPhoto,
+          text: textToSubmit,
+          timestamp: Date.now(),
+        };
+        await updateDoc(commentRef, {
+          replies: arrayUnion(newReply)
+        });
+        setReplyingTo(null);
+      } else {
+        // Naya comment
+        const newComment = {
+          authorName: currentSessionName,
+          authorPhoto: currentSessionPhoto,
+          text: textToSubmit,
+          timestamp: Date.now(),
+          replies: []
+        };
+        const commentsRef = collection(db, "leaderboard", user.id, "comments");
+        await addDoc(commentsRef, newComment);
+      }
     } catch (error) {
       console.error("Error posting comment", error);
     }
   };
 
-  // Delete Comment - Remove from Firestore
   const handleDeleteComment = async (commentId: string) => {
     try {
       const commentRef = doc(db, "leaderboard", user.id, "comments", commentId);
       await deleteDoc(commentRef);
     } catch (error) {
       console.error("Error deleting comment", error);
+    }
+  };
+
+  const handleDeleteReply = async (parentId: string, replyObj: CommentReply) => {
+    try {
+      const commentRef = doc(db, "leaderboard", user.id, "comments", parentId);
+      await updateDoc(commentRef, {
+        replies: arrayRemove(replyObj)
+      });
+    } catch (error) {
+      console.error("Error deleting reply", error);
     }
   };
 
@@ -549,7 +592,10 @@ function LeaderTableRow({
             </div>
             
             <button 
-              onClick={() => setShowComments(!showComments)}
+              onClick={() => {
+                setShowComments(!showComments);
+                setReplyingTo(null); // Reset reply state when toggling
+              }}
               className={`flex items-center gap-1.5 text-[13px] font-medium transition-all px-3 py-1.5 rounded-full ${showComments ? 'text-blue-600 bg-blue-50' : 'text-gray-500 hover:bg-gray-100'}`}
             >
               <MessageCircle className="w-4 h-4" />
@@ -576,34 +622,81 @@ function LeaderTableRow({
                     type="text"
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    placeholder="Add a friendly comment..."
+                    placeholder={replyingTo ? "Write a reply..." : "Add a friendly comment..."}
                     className="w-full bg-white border border-gray-200 rounded-full py-2 pl-4 pr-10 text-[13px] shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
                   />
                   <button type="submit" disabled={!commentText.trim()} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-blue-600 disabled:text-gray-300 hover:bg-blue-50 rounded-full transition-colors">
                     <Send className="w-4 h-4" />
                   </button>
                 </div>
+                {replyingTo && (
+                  <button 
+                    type="button" 
+                    onClick={() => setReplyingTo(null)} 
+                    className="text-[12px] text-gray-500 hover:text-gray-800"
+                  >
+                    Cancel
+                  </button>
+                )}
               </form>
 
               <div className="space-y-4">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="flex gap-3 group text-[13px]">
-                    <img src={comment.authorPhoto} alt="User" className="w-8 h-8 rounded-full border border-gray-200 shrink-0" onError={(e) => (e.currentTarget.src = "/avatar.png")} />
-                    <div className="flex-1">
-                      <div className="bg-white border border-gray-100 px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm inline-block">
-                        <span className="font-semibold text-gray-900 mr-2">{comment.authorName}</span>
-                        <span className="text-gray-700">{comment.text}</span>
-                      </div>
-                      {comment.authorName === currentSessionName && (
-                        <div className="mt-1.5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button onClick={() => handleDeleteComment(comment.id)} className="text-[11px] font-medium text-gray-400 hover:text-red-500 flex items-center gap-1">
-                            <Trash2 className="w-3 h-3" /> Delete
-                          </button>
+                  <div key={comment.id} className="text-[13px]">
+                    {/* Top Level Comment */}
+                    <div className="flex gap-3 group">
+                      <img src={comment.authorPhoto} alt="User" className="w-8 h-8 rounded-full border border-gray-200 shrink-0" onError={(e) => (e.currentTarget.src = "/avatar.png")} />
+                      <div className="flex-1">
+                        <div className="bg-white border border-gray-100 px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm inline-block">
+                          <span className="font-semibold text-gray-900 mr-2">{comment.authorName}</span>
+                          <span className="text-gray-700">{comment.text}</span>
                         </div>
-                      )}
+                        <div className="flex items-center gap-3 mt-1.5 ml-2">
+                          <button 
+                            onClick={() => {
+                              setReplyingTo(comment.id);
+                              setCommentText("");
+                            }} 
+                            className="text-[11px] font-medium text-gray-500 hover:text-blue-600"
+                          >
+                            Reply
+                          </button>
+                          {comment.authorName === currentSessionName && (
+                            <button onClick={() => handleDeleteComment(comment.id)} className="text-[11px] font-medium text-gray-400 hover:text-red-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Trash2 className="w-3 h-3" /> Delete
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Nested Replies */}
+                    {comment.replies && comment.replies.length > 0 && (
+                      <div className="pl-11 mt-3 space-y-3">
+                        {comment.replies.map(reply => (
+                          <div key={reply.id} className="flex gap-2.5 group">
+                            <CornerDownRight className="w-4 h-4 text-gray-300 shrink-0 mt-1.5" />
+                            <img src={reply.authorPhoto} alt="User" className="w-6 h-6 rounded-full border border-gray-200 shrink-0" onError={(e) => (e.currentTarget.src = "/avatar.png")} />
+                            <div className="flex-1">
+                              <div className="bg-white border border-gray-100 px-3.5 py-2 rounded-[14px] rounded-tl-sm shadow-sm inline-block">
+                                <span className="font-semibold text-gray-900 mr-2 text-[12px]">{reply.authorName}</span>
+                                <span className="text-gray-700 text-[12px]">{reply.text}</span>
+                              </div>
+                              {reply.authorName === currentSessionName && (
+                                <div className="mt-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <button onClick={() => handleDeleteReply(comment.id, reply)} className="text-[10px] font-medium text-gray-400 hover:text-red-500 flex items-center gap-1">
+                                    <Trash2 className="w-3 h-3" /> Delete
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
+                
                 {comments.length === 0 && (
                   <p className="text-[13px] text-gray-400 italic">No comments yet. Start the conversation!</p>
                 )}
