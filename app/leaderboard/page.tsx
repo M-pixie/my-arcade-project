@@ -18,6 +18,20 @@ import {
   Trash2,
 } from "lucide-react";
 
+// TERA FIREBASE IMPORT - Isko apne project ke according adjust kar lena
+import { db } from "@/lib/firebase"; 
+import { 
+  doc, 
+  updateDoc, 
+  increment, 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  deleteDoc 
+} from "firebase/firestore";
+
 type Leader = {
   id: string;
   rank: number;
@@ -38,7 +52,6 @@ type Comment = {
   authorPhoto: string;
   text: string;
   timestamp: number;
-  replies: Comment[];
 };
 
 const safeNumber = (value?: number) => {
@@ -375,6 +388,8 @@ function LeaderTableRow({
   currentSessionPhoto: string;
 }) {
   const isTop3 = user.rank <= 3;
+  
+  // Realtime likes state
   const [likesCount, setLikesCount] = useState(user.likesCount || 0); 
   const [isLiked, setIsLiked] = useState(false);
   
@@ -382,48 +397,104 @@ function LeaderTableRow({
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState("");
+  const [commentsCount, setCommentsCount] = useState(0);
 
+  // Sync likes count with Firebase live updates
   useEffect(() => {
+    setLikesCount(user.likesCount || 0);
     if (user.hasNewLikes) {
       setShowRowHearts(true);
       const timer = setTimeout(() => setShowRowHearts(false), 60000);
       return () => clearTimeout(timer);
     }
-  }, [user.hasNewLikes]);
+  }, [user.likesCount, user.hasNewLikes]);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikesCount(prev => isLiked ? prev - 1 : prev + 1);
+  // Fetch comments in realtime when the section is opened
+  useEffect(() => {
+    if (!showComments) return;
     
-    if (!isLiked) {
+    const commentsRef = collection(db, "leaderboard", user.id, "comments");
+    const q = query(commentsRef, orderBy("timestamp", "asc"));
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedComments = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Comment[];
+      
+      setComments(fetchedComments);
+      setCommentsCount(fetchedComments.length);
+    });
+
+    return () => unsubscribe();
+  }, [showComments, user.id]);
+
+  // Quick fetch just for comments count without opening
+  useEffect(() => {
+    const commentsRef = collection(db, "leaderboard", user.id, "comments");
+    const unsubscribe = onSnapshot(commentsRef, (snapshot) => {
+      setCommentsCount(snapshot.size);
+    });
+    return () => unsubscribe();
+  }, [user.id]);
+
+  // Handle Like - Update in Firestore
+  const handleLike = async () => {
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    
+    // Optimistic local update
+    setLikesCount(prev => newLikedState ? prev + 1 : prev - 1);
+    if (newLikedState) {
       setShowRowHearts(true);
       setTimeout(() => setShowRowHearts(false), 60000);
     } else {
       setShowRowHearts(false);
     }
+
+    // Backend update
+    try {
+      const userRef = doc(db, "leaderboard", user.id);
+      await updateDoc(userRef, {
+        likesCount: increment(newLikedState ? 1 : -1),
+        hasNewLikes: newLikedState // Trigger animation for everyone viewing
+      });
+    } catch (error) {
+      console.error("Error updating likes", error);
+    }
   };
 
-  const handlePostComment = (e: React.FormEvent) => {
+  // Handle Comment - Save to Firestore
+  const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
     
-    const newComment: Comment = {
-      id: Date.now().toString(),
+    const newComment = {
       authorName: currentSessionName,
       authorPhoto: currentSessionPhoto,
       text: commentText,
       timestamp: Date.now(),
-      replies: []
     };
-    setComments([...comments, newComment]);
-    setCommentText("");
     
-    // Comment post hote hi yaha se section close ho jayega
-    setShowComments(false);
+    setCommentText("");
+    setShowComments(false); // Immediate close after post
+    
+    try {
+      const commentsRef = collection(db, "leaderboard", user.id, "comments");
+      await addDoc(commentsRef, newComment);
+    } catch (error) {
+      console.error("Error posting comment", error);
+    }
   };
 
-  const handleDeleteComment = (commentId: string) => {
-    setComments(comments.filter(c => c.id !== commentId));
+  // Delete Comment - Remove from Firestore
+  const handleDeleteComment = async (commentId: string) => {
+    try {
+      const commentRef = doc(db, "leaderboard", user.id, "comments", commentId);
+      await deleteDoc(commentRef);
+    } catch (error) {
+      console.error("Error deleting comment", error);
+    }
   };
 
   let rankIcon = <span className="text-gray-500 font-semibold text-[14px]">{user.rank}</span>;
@@ -482,7 +553,7 @@ function LeaderTableRow({
               className={`flex items-center gap-1.5 text-[13px] font-medium transition-all px-3 py-1.5 rounded-full ${showComments ? 'text-blue-600 bg-blue-50' : 'text-gray-500 hover:bg-gray-100'}`}
             >
               <MessageCircle className="w-4 h-4" />
-              <span>{comments.length}</span>
+              <span>{commentsCount}</span>
             </button>
           </div>
         </td>
