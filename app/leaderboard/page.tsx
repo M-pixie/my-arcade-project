@@ -12,7 +12,6 @@ import {
   Target,
   Activity,
   TrendingUp,
-  ChevronRight,
   ChevronDown,
   X,
   Sparkles,
@@ -52,6 +51,28 @@ const toTimestamp = (value?: Leader["createdAt"] | Leader["updatedAt"]) => {
   return 0;
 };
 
+function FloatingHearts() {
+  return (
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50 w-[80px] h-[80px]">
+      {[...Array(15)].map((_, i) => (
+        <span
+          key={i}
+          className="absolute text-red-500 animate-float-heart drop-shadow-sm whitespace-nowrap"
+          style={{
+            left: `${10 + Math.random() * 60}px`,
+            bottom: `${20 + Math.random() * 20}px`,
+            animationDelay: `${Math.random() * 5}s`,
+            animationDuration: `${3 + Math.random() * 2}s`, 
+            fontSize: `${12 + Math.random() * 8}px`,
+          }}
+        >
+          ❤️
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function LeaderboardPage() {
   const [arcadeLeaders, setArcadeLeaders] = useState<Leader[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,9 +83,11 @@ export default function LeaderboardPage() {
 
   const [isInsightsOpen, setIsInsightsOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const [sortMode, setSortMode] = useState<"points-desc" | "points-asc" | "latest" | "oldest">("points-desc");
+  const [sortMode, setSortMode] = useState<
+    "points-desc" | "points-asc" | "latest" | "oldest"
+  >("points-desc");
   const currentUserRef = useRef<HTMLTableRowElement>(null);
-
+  const [showHearts, setShowHearts] = useState(false);
 
   useEffect(() => {
     const unsubscribe = subscribeLeaderboard((data) => {
@@ -148,29 +171,53 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     if (!currentUserData) return;
+    let heartsTimer: number;
     const timer = window.setTimeout(() => {
       currentUserRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
+      setShowHearts(true);
+      heartsTimer = window.setTimeout(() => {
+        setShowHearts(false);
+      }, 60000); 
     }, 500);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      if (heartsTimer) window.clearTimeout(heartsTimer);
+    };
   }, [currentUserData]);
 
   const nextRankUser = useMemo(() => {
     if (!currentRankedUser || currentRankedUser.rank <= 1) return null;
-
     return rankedArcade[currentRankedUser.rank - 2] ?? null;
   }, [currentRankedUser, rankedArcade]);
 
   const pointsToNextRank = useMemo(() => {
     if (!currentRankedUser || !nextRankUser) return 0;
-
     return Math.max(
       0,
       safeNumber(nextRankUser.points) - safeNumber(currentRankedUser.points)
     );
   }, [currentRankedUser, nextRankUser]);
+
+  const fiveNearbyUsers = useMemo(() => {
+    const others = rankedArcade.filter((u) => u.id !== currentRankedUser?.id);
+    if (others.length === 0) return [];
+    
+    if (!currentRankedUser) return others.slice(0, 5);
+
+    const idx = others.findIndex(
+      (u) => safeNumber(u.points) <= safeNumber(currentRankedUser.points)
+    );
+    let start = Math.max(0, idx - 2);
+
+    if (start + 5 > others.length) {
+      start = Math.max(0, others.length - 5);
+    }
+
+    return others.slice(start, start + 5);
+  }, [currentRankedUser, rankedArcade]);
 
   const insightStats = useMemo(() => {
     const totalPoints = arcadeLeaders.reduce(
@@ -178,31 +225,16 @@ export default function LeaderboardPage() {
       0
     );
 
-    const totalCalculations = arcadeLeaders.reduce(
-      (sum, user) => sum + safeNumber(user.calculationCount || 1),
-      0
-    );
-
-    const activeCalculationUsers = arcadeLeaders.filter(
-      (user) => safeNumber(user.calculationCount || 1) > 1
-    ).length;
-
     const averagePoints = arcadeLeaders.length
       ? Math.round(totalPoints / arcadeLeaders.length)
       : 0;
 
-    return {
-      totalPoints,
-      totalCalculations,
-      activeCalculationUsers,
-      averagePoints,
-    };
+    return { totalPoints, averagePoints };
   }, [arcadeLeaders]);
 
   const closestRace = useMemo(() => {
     if (!currentRankedUser || currentRankedUser.rank <= 1) return null;
 
-    // Only compare the current user with the 5 users immediately above them.
     const currentIndex = rankedArcade.findIndex(
       (user) => user.id === currentRankedUser.id
     );
@@ -224,15 +256,9 @@ export default function LeaderboardPage() {
       const gap = Math.abs(
         safeNumber(user.points) - safeNumber(currentRankedUser.points)
       );
-
       if (!best || gap < best.gap) {
-        return {
-          first: user,
-          second: currentRankedUser,
-          gap,
-        };
+        return { first: user, second: currentRankedUser, gap };
       }
-
       return best;
     }, null);
 
@@ -349,7 +375,9 @@ export default function LeaderboardPage() {
 
               <div className="flex items-center gap-2 px-4 py-2.5 rounded-[13px] bg-[#eef5ff] border border-[#d7e6fb] text-[#1a73e8]">
                 <Medal className="w-4 h-4" />
-                <span className="text-[12px] font-semibold">Arcade Leaderboard</span>
+                <span className="text-[12px] font-semibold">
+                  Arcade Leaderboard
+                </span>
               </div>
             </div>
           </section>
@@ -446,6 +474,7 @@ export default function LeaderboardPage() {
                               key={user.id}
                               user={user}
                               isCurrentUser={isExactCurrentUser(user)}
+                              showHearts={showHearts}
                               innerRef={
                                 isExactCurrentUser(user)
                                   ? currentUserRef
@@ -496,16 +525,29 @@ export default function LeaderboardPage() {
 
                         <div className="flex items-center gap-3 mt-5">
                           <img
-                            src={currentRankedUser?.photoURL || currentUserData?.photoURL || "/avatar.png"}
-                            alt={currentRankedUser?.name || currentUserData?.name || currentUserName || "Profile"}
+                            src={
+                              currentRankedUser?.photoURL ||
+                              currentUserData?.photoURL ||
+                              "/avatar.png"
+                            }
+                            alt={
+                              currentRankedUser?.name ||
+                              currentUserData?.name ||
+                              currentUserName ||
+                              "Profile"
+                            }
                             className="w-12 h-12 rounded-full object-cover border-2 border-white/55 bg-white/15 shadow-[0_6px_18px_rgba(0,0,0,0.16)]"
                             onError={(event) => {
-                              (event.currentTarget as HTMLImageElement).src = "/avatar.png";
+                              (event.currentTarget as HTMLImageElement).src =
+                                "/avatar.png";
                             }}
                           />
                           <div className="min-w-0">
                             <p className="text-[15px] font-semibold truncate">
-                              {currentRankedUser?.name || currentUserData?.name || currentUserName || "Guest"}
+                              {currentRankedUser?.name ||
+                                currentUserData?.name ||
+                                currentUserName ||
+                                "Guest"}
                             </p>
                             <p className="text-[11px] text-blue-100 mt-0.5">
                               Arcade member profile
@@ -513,25 +555,82 @@ export default function LeaderboardPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-end gap-6 mt-6">
-                          <div>
-                            <p className="text-[10px] font-semibold text-blue-100 tracking-[0.08em]">YOUR RANK</p>
-                            <p className="text-[35px] leading-none font-semibold tracking-[-0.04em] mt-1">
-                              #{currentRankedUser?.rank || "--"}
-                            </p>
+                        <div className="flex items-center justify-between mt-6 pr-2 md:pr-10">
+                          <div className="flex gap-6">
+                            <div>
+                              <p className="text-[10px] font-semibold text-blue-100 tracking-[0.08em]">
+                                YOUR RANK
+                              </p>
+                              <p className="text-[35px] leading-none font-semibold tracking-[-0.04em] mt-1">
+                                #{currentRankedUser?.rank || "--"}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-semibold text-blue-100 tracking-[0.08em]">
+                                POINTS
+                              </p>
+                              <p className="text-[22px] font-semibold mt-1">
+                                {formatNumber(
+                                  safeNumber(currentRankedUser?.points)
+                                )}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-[10px] font-semibold text-blue-100 tracking-[0.08em]">POINTS</p>
-                            <p className="text-[22px] font-semibold mt-1">
-                              {formatNumber(safeNumber(currentRankedUser?.points))}
-                            </p>
-                          </div>
+
+                          {/* Spinning Avatars */}
+                          {fiveNearbyUsers.length > 0 && (
+                            <div className="relative w-[100px] h-[100px] md:w-[110px] md:h-[110px] rounded-full border border-white/20 shrink-0 flex items-center justify-center animate-spin-slow shadow-sm">
+                              {/* Center Target Icon */}
+                              <div className="absolute w-[24px] h-[24px] rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center z-10">
+                                <Target className="w-3.5 h-3.5 text-white/80" />
+                              </div>
+                              
+                              {fiveNearbyUsers.map((u, i) => {
+                                const angle = (i * 360) / fiveNearbyUsers.length;
+                                return (
+                                  <div
+                                    key={u.id}
+                                    className="absolute top-1/2 left-1/2 w-8 h-8 md:w-9 md:h-9 -mt-4 -ml-4 md:-mt-[18px] md:-ml-[18px] pointer-events-none"
+                                    style={{
+                                      // Push the avatar out to the edge of the circle based on radius
+                                      transform: `rotate(${angle}deg) translateY(-50px)`, 
+                                    }}
+                                  >
+                                    <div className="w-full h-full animate-reverse-spin">
+                                      <div 
+                                        className="w-full h-full flex flex-col items-center justify-center"
+                                        style={{ transform: `rotate(-${angle}deg)` }}
+                                      >
+                                        <span className="text-[10px] md:text-[11px] font-bold text-white mb-0.5 whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                                          {formatNumber(safeNumber(u.points))}
+                                        </span>
+                                        <div className="w-full h-full drop-shadow-md rounded-full border border-white/30 shrink-0">
+                                          <img
+                                            src={u.photoURL || "/avatar.png"}
+                                            alt={u.name}
+                                            className="w-full h-full rounded-full object-cover bg-white/20"
+                                            onError={(event) => {
+                                              (
+                                                event.currentTarget as HTMLImageElement
+                                              ).src = "/avatar.png";
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
 
                         {currentRankedUser && nextRankUser ? (
-                          <div className="mt-6">
+                          <div className="mt-8">
                             <div className="flex items-center justify-between text-[11px] mb-2">
-                              <span className="text-blue-100">Gap to #{nextRankUser.rank}</span>
+                              <span className="text-blue-100">
+                                Gap to #{nextRankUser.rank}
+                              </span>
                               <span className="font-bold text-white">
                                 {formatNumber(pointsToNextRank)} pts
                               </span>
@@ -545,7 +644,10 @@ export default function LeaderboardPage() {
                                     Math.min(
                                       100,
                                       (safeNumber(currentRankedUser.points) /
-                                        Math.max(1, safeNumber(nextRankUser.points))) *
+                                        Math.max(
+                                          1,
+                                          safeNumber(nextRankUser.points)
+                                        )) *
                                         100
                                     )
                                   )}%`,
@@ -577,7 +679,9 @@ export default function LeaderboardPage() {
                         <InsightRow
                           icon={<Trophy className="w-4 h-4 text-[#1a73e8]" />}
                           label="Highest Score"
-                          value={`${formatNumber(safeNumber(rankedArcade[0]?.points))} pts`}
+                          value={`${formatNumber(
+                            safeNumber(rankedArcade[0]?.points)
+                          )} pts`}
                         />
                         <InsightRow
                           icon={<Users className="w-4 h-4 text-[#1a73e8]" />}
@@ -585,7 +689,9 @@ export default function LeaderboardPage() {
                           value={formatNumber(arcadeLeaders.length)}
                         />
                         <InsightRow
-                          icon={<TrendingUp className="w-4 h-4 text-[#1a73e8]" />}
+                          icon={
+                            <TrendingUp className="w-4 h-4 text-[#1a73e8]" />
+                          }
                           label="Average Points"
                           value={formatNumber(insightStats.averagePoints)}
                         />
@@ -608,7 +714,8 @@ export default function LeaderboardPage() {
                         <div className="mt-5">
                           <div className="flex items-center justify-between gap-3">
                             <span className="text-[13px] font-semibold text-[#202124] truncate">
-                              #{closestRace.first.rank} {closestRace.first.name || "Player"}
+                              #{closestRace.first.rank}{" "}
+                              {closestRace.first.name || "Player"}
                             </span>
                             <span className="text-[11px] font-bold text-[#1a73e8] bg-[#e8f0fe] px-2 py-1 rounded-full whitespace-nowrap">
                               {closestRace.gap} pt
@@ -617,14 +724,20 @@ export default function LeaderboardPage() {
                           <div className="h-px bg-[#eef0f2] my-3" />
                           <div className="flex items-center justify-between gap-3">
                             <span className="text-[13px] font-semibold text-[#202124] truncate">
-                              #{closestRace.second.rank} {closestRace.second.name || "Player"}
+                              #{closestRace.second.rank}{" "}
+                              {closestRace.second.name || "Player"}
                             </span>
                             <span className="text-[11px] font-medium text-[#6b7280]">
-                              {formatNumber(safeNumber(closestRace.second.points))} pts
+                              {formatNumber(
+                                safeNumber(closestRace.second.points)
+                              )}{" "}
+                              pts
                             </span>
                           </div>
                           <p className="text-[11px] text-[#9ca3af] mt-4">
-                            Only {closestRace.gap} point{closestRace.gap === 1 ? "" : "s"} separate these positions.
+                            Only {closestRace.gap} point
+                            {closestRace.gap === 1 ? "" : "s"} separate these
+                            positions.
                           </p>
                         </div>
                       ) : (
@@ -650,7 +763,9 @@ export default function LeaderboardPage() {
                               Explore full leaderboard insights
                             </p>
                             <p className="text-[11px] text-[#6b7280] mt-0.5">
-                              {isInsightsOpen ? "Hide the detailed snapshot." : "Open the detailed snapshot below."}
+                              {isInsightsOpen
+                                ? "Hide the detailed snapshot."
+                                : "Open the detailed snapshot below."}
                             </p>
                           </div>
                         </div>
@@ -665,36 +780,37 @@ export default function LeaderboardPage() {
                         <div className="mt-2 rounded-[16px] border border-[#d9e8fb] bg-white p-4 shadow-[0_8px_20px_rgba(26,115,232,0.06)]">
                           <div className="grid grid-cols-2 gap-3">
                             <InsightCard
-                              icon={<Users className="w-5 h-5 text-[#1a73e8]" />}
+                              icon={
+                                <Users className="w-5 h-5 text-[#1a73e8]" />
+                              }
                               label="Total Players"
                               value={formatNumber(arcadeLeaders.length)}
                             />
                             <InsightCard
-                              icon={<Trophy className="w-5 h-5 text-[#1a73e8]" />}
+                              icon={
+                                <Trophy className="w-5 h-5 text-[#1a73e8]" />
+                              }
                               label="Total Points"
                               value={formatNumber(insightStats.totalPoints)}
                             />
                             <InsightCard
-                              icon={<TrendingUp className="w-5 h-5 text-[#1a73e8]" />}
+                              icon={
+                                <TrendingUp className="w-5 h-5 text-[#1a73e8]" />
+                              }
                               label="Average Points"
                               value={formatNumber(insightStats.averagePoints)}
                             />
                             <InsightCard
-                              icon={<Target className="w-5 h-5 text-[#1a73e8]" />}
+                              icon={
+                                <Target className="w-5 h-5 text-[#1a73e8]" />
+                              }
                               label="Your Rank"
-                              value={currentRankedUser ? `#${currentRankedUser.rank}` : "--"}
+                              value={
+                                currentRankedUser
+                                  ? `#${currentRankedUser.rank}`
+                                  : "--"
+                              }
                             />
-                          </div>
-
-                          <div className="mt-3 rounded-[14px] bg-[#f8fbff] border border-[#d9e8fb] p-3.5">
-                            <p className="text-[11px] font-bold text-[#202124]">
-                              Current position
-                            </p>
-                            <p className="text-[12px] text-[#6b7280] mt-1 leading-relaxed">
-                              {currentRankedUser
-                                ? `You're ranked #${currentRankedUser.rank} with ${formatNumber(safeNumber(currentRankedUser.points))} points.`
-                                : "Your player profile will appear here once your Arcade data is available."}
-                            </p>
                           </div>
                         </div>
                       )}
@@ -704,7 +820,6 @@ export default function LeaderboardPage() {
               </section>
             </>
           )}
-
         </div>
       </main>
 
@@ -734,6 +849,49 @@ export default function LeaderboardPage() {
 
         ::selection {
           background: rgba(26, 115, 232, 0.16);
+        }
+
+        @keyframes floatHeart {
+          0% {
+            transform: translateY(0) scale(0.5);
+            opacity: 0;
+          }
+          15% {
+            opacity: 0.9;
+          }
+          75% {
+            opacity: 0.7;
+          }
+          100% {
+            transform: translateY(-70px) scale(1.4);
+            opacity: 0;
+          }
+        }
+        .animate-float-heart {
+          animation: floatHeart linear forwards infinite;
+        }
+
+        @keyframes spinSlow {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes reverseSpin {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+        .animate-spin-slow {
+          animation: spinSlow 20s linear infinite;
+        }
+        .animate-reverse-spin {
+          animation: reverseSpin 20s linear infinite;
         }
       `}</style>
     </div>
@@ -793,10 +951,12 @@ function InsightCard({
 function LeaderTableRow({
   user,
   isCurrentUser = false,
+  showHearts = false,
   innerRef,
 }: {
   user: Leader;
   isCurrentUser?: boolean;
+  showHearts?: boolean;
   innerRef?: React.RefObject<HTMLTableRowElement | null>;
 }) {
   const isTop3 = user.rank <= 3;
@@ -835,16 +995,16 @@ function LeaderTableRow({
     <tr
       id={`player-${user.id}`}
       ref={innerRef}
-      className={`transition-colors ${
+      className={`transition-colors relative ${
         isCurrentUser ? "bg-[#eef5ff]" : "bg-white hover:bg-[#fafbfc]"
       }`}
     >
-      <td className="px-4 md:px-6 py-4 align-middle text-center w-20">
-        {rankIcon}
+      <td className="px-4 md:px-6 py-4 align-middle text-center w-20 relative">
+        <div className="relative z-10">{rankIcon}</div>
       </td>
 
-      <td className="px-4 md:px-6 py-4 align-middle">
-        <div className="flex items-center gap-3">
+      <td className="px-4 md:px-6 py-4 align-middle relative">
+        <div className="flex items-center gap-3 relative z-10">
           <img
             src={user.photoURL || "/avatar.png"}
             alt={user.name || "Player"}
@@ -855,7 +1015,7 @@ function LeaderTableRow({
           />
 
           <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center flex-wrap">
               <span
                 className={`text-[13px] md:text-[14px] font-semibold whitespace-nowrap truncate max-w-[230px] ${
                   isTop3 ? "text-[#111827]" : "text-[#374151]"
@@ -865,8 +1025,9 @@ function LeaderTableRow({
               </span>
 
               {isCurrentUser && (
-                <span className="bg-[#1a73e8] text-white px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.08em]">
+                <span className="relative inline-flex items-center justify-center bg-[#1a73e8] text-white px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.08em] ml-2">
                   You
+                  {showHearts && <FloatingHearts />}
                 </span>
               )}
             </div>
@@ -878,9 +1039,9 @@ function LeaderTableRow({
         </div>
       </td>
 
-      <td className="px-4 md:px-6 py-4 text-right align-middle whitespace-nowrap">
+      <td className="px-4 md:px-6 py-4 text-right align-middle whitespace-nowrap relative">
         <span
-          className={`text-[14px] md:text-[15px] font-bold ${
+          className={`text-[14px] md:text-[15px] font-bold relative z-10 ${
             isTop3 ? "text-[#1a73e8]" : "text-[#202124]"
           }`}
         >
