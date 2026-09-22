@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function AboutPage() {
-  // Tab state manage karne ke liye
   const [activeTab, setActiveTab] = useState('features');
 
   // Tab 1: Features Data
@@ -14,7 +13,6 @@ export default function AboutPage() {
     { title: "User Dashboard", desc: "Manage your tier progression and stats.", link: "/dashboard", icon: "📊", badge: "Go" },
     { title: "Facilitator Program", desc: "Latest news & program announcements.", link: "/facilitator", icon: "📢", badge: "New" },
     { title: "Skill Badges", desc: "Curated active badges to complete.", link: "/resources", icon: "🏅", badge: "94+" },
-    // 🔥 ChatBot link updated to /chat
     { title: "Smart Chatbot", desc: "24/7 AI automated help for your queries.", link: "/chat", icon: "🤖", badge: "AI" }
   ];
 
@@ -32,76 +30,80 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] text-[#202124] font-sans pt-32 pb-16 selection:bg-[#c0262c] selection:text-white">
+    <div className="min-h-screen bg-[#f8f9fa] text-[#202124] font-sans pt-28 pb-20 selection:bg-[#e8f0fe] selection:text-[#1a73e8]">
       
-      <main className="px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto space-y-8">
+      <main className="px-5 sm:px-8 lg:px-12 max-w-[1200px] mx-auto space-y-10">
         
-        {/* ================= HERO SECTION ================= */}
-        <div className="text-center max-w-4xl mx-auto mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#c0262c] mb-3">
+        {/* ================= HERO SECTION (Classic Minimal) ================= */}
+        <div className="max-w-3xl mb-12">
+          <h1 className="text-4xl md:text-5xl font-medium text-[#202124] tracking-tight mb-4">
             About Arcade Nexus
           </h1>
-          <p className="text-[15px] text-[#5f6368] leading-relaxed">
-            The ultimate independent community toolkit built by <strong>Manish & Anjali</strong>. 
-            Join an always-on, no-cost gaming campaign to learn cloud computing and earn official Google Cloud swags.
+          <p className="text-[16px] text-[#5f6368] leading-relaxed">
+            An independent, community-driven platform crafted by <strong className="text-[#202124] font-medium">Manish & Anjali</strong>. 
+            Designed to bring clarity, organization, and practical tools to your Google Cloud Arcade learning journey.
           </p>
         </div>
 
         {/* ================= MAIN LAYOUT ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-          {/* ================= LEFT COLUMN (TABS & LISTS) ================= */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* ================= LEFT COLUMN ================= */}
+          <div className="lg:col-span-8 space-y-8">
             
-            {/* INTERACTIVE TABBED BOX (Light Black Border) */}
-            <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col">
+            {/* INTERACTIVE TABBED BOX (Classic Material Style) */}
+            <div className="bg-white rounded-xl border border-[#dadce0] overflow-hidden">
+              
               {/* Tab Headers */}
-              <div className="flex border-b border-[#707070]">
+              <div className="flex px-2 border-b border-[#dadce0] bg-white">
                 <button 
                   onClick={() => setActiveTab('features')}
-                  className={`flex-1 py-3.5 text-center font-bold text-[14px] sm:text-[15px] transition-colors duration-200 ${activeTab === 'features' ? 'bg-[#007A33] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#007A33]'}`}
+                  className={`px-6 py-4 text-[14px] font-medium transition-colors relative ${activeTab === 'features' ? 'text-[#1a73e8]' : 'text-[#5f6368] hover:text-[#202124]'}`}
                 >
                   Platform Features
+                  {activeTab === 'features' && <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#1a73e8] rounded-t-md"></div>}
                 </button>
                 <button 
                   onClick={() => setActiveTab('official')}
-                  className={`flex-1 py-3.5 text-center font-bold text-[14px] sm:text-[15px] border-l border-[#707070] transition-colors duration-200 ${activeTab === 'official' ? 'bg-[#007A33] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#007A33]'}`}
+                  className={`px-6 py-4 text-[14px] font-medium transition-colors relative ${activeTab === 'official' ? 'text-[#1a73e8]' : 'text-[#5f6368] hover:text-[#202124]'}`}
                 >
                   Official Links
+                  {activeTab === 'official' && <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#1a73e8] rounded-t-md"></div>}
                 </button>
                 <button 
                   onClick={() => setActiveTab('community')}
-                  className={`flex-1 py-3.5 text-center font-bold text-[14px] sm:text-[15px] border-l border-[#707070] transition-colors duration-200 ${activeTab === 'community' ? 'bg-[#007A33] text-white' : 'bg-gray-50 text-[#5f6368] hover:bg-gray-100 hover:text-[#007A33]'}`}
+                  className={`px-6 py-4 text-[14px] font-medium transition-colors relative ${activeTab === 'community' ? 'text-[#1a73e8]' : 'text-[#5f6368] hover:text-[#202124]'}`}
                 >
                   Community
+                  {activeTab === 'community' && <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#1a73e8] rounded-t-md"></div>}
                 </button>
               </div>
               
               {/* Tab Content Area */}
-              <div className="h-[380px] overflow-y-auto custom-scrollbar">
+              <div className="h-[400px] overflow-y-auto custom-scrollbar bg-white">
                 
                 {/* 1. Features Content */}
                 {activeTab === 'features' && (
-                  <div className="divide-y divide-[#e0e0e0]">
+                  <div className="divide-y divide-[#f1f3f4]">
                     {featuresList.map((item, index) => (
                       <Link 
                         href={item.link} 
                         key={index} 
-                        className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full"
+                        className="flex p-5 hover:bg-[#f8f9fa] transition-colors w-full items-start group"
                       >
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
-                            {item.badge}
-                          </span>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#dadce0] bg-white text-lg mr-4 shadow-sm group-hover:border-[#1a73e8] transition-colors">
+                          {item.icon}
                         </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-[#202124] font-bold text-[16px] group-hover:text-[#007A33] transition-colors">
+                        <div className="flex-1">
+                          <h3 className="text-[#202124] font-medium text-[15px] group-hover:text-[#1a73e8] transition-colors flex items-center gap-2">
                             {item.title}
+                            <span className="bg-[#e8f0fe] text-[#1a73e8] text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                              {item.badge}
+                            </span>
                           </h3>
-                          <div className="text-[#5f6368] text-[14px] mt-1 flex items-center gap-2">
-                            <span className="text-[#007A33] font-bold text-[12px]">🔗</span> {item.desc}
-                          </div>
+                          <p className="text-[#5f6368] text-[13px] mt-1 leading-relaxed">
+                            {item.desc}
+                          </p>
                         </div>
                       </Link>
                     ))}
@@ -110,22 +112,20 @@ export default function AboutPage() {
 
                 {/* 2. Official Links Content */}
                 {activeTab === 'official' && (
-                  <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+                  <div className="divide-y divide-[#f1f3f4] animate-fade-in">
                     {officialLinks.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
-                            {item.badge}
-                          </span>
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-[#f8f9fa] transition-colors w-full items-start group">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#dadce0] bg-white text-lg mr-4 shadow-sm group-hover:border-[#1a73e8] transition-colors">
+                          {item.icon}
                         </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-[#202124] font-bold text-[16px] group-hover:text-[#007A33] transition-colors">
-                            {item.title} ↗
+                        <div className="flex-1">
+                          <h3 className="text-[#202124] font-medium text-[15px] group-hover:text-[#1a73e8] transition-colors flex items-center gap-2">
+                            {item.title}
+                            <svg className="w-3.5 h-3.5 text-[#9aa0a6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                           </h3>
-                          <div className="text-[#5f6368] text-[14px] mt-1">
+                          <p className="text-[#5f6368] text-[13px] mt-1 leading-relaxed">
                             {item.desc}
-                          </div>
+                          </p>
                         </div>
                       </a>
                     ))}
@@ -134,22 +134,22 @@ export default function AboutPage() {
 
                 {/* 3. Community Content */}
                 {activeTab === 'community' && (
-                  <div className="divide-y divide-[#e0e0e0] animate-fade-in">
+                  <div className="divide-y divide-[#f1f3f4] animate-fade-in">
                     {communityLinks.map((item, index) => (
-                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-4 hover:bg-green-50 group transition-colors duration-200 w-full">
-                        <div className="flex flex-col items-center justify-center w-24 shrink-0 border-r border-[#e0e0e0] pr-4 mr-4">
-                          <span className="text-[22px] mb-2 transition-all">{item.icon}</span>
-                          <span className="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-widest w-full text-center">
-                            {item.badge}
-                          </span>
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" key={index} className="flex p-5 hover:bg-[#f8f9fa] transition-colors w-full items-start group">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#dadce0] bg-white text-lg mr-4 shadow-sm group-hover:border-[#1a73e8] transition-colors">
+                          {item.icon}
                         </div>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <h3 className="text-[#202124] font-bold text-[16px] group-hover:text-[#007A33] transition-colors">
-                            {item.title} ↗
+                        <div className="flex-1">
+                          <h3 className="text-[#202124] font-medium text-[15px] group-hover:text-[#1a73e8] transition-colors flex items-center gap-2">
+                            {item.title}
+                            <span className="bg-[#e6f4ea] text-[#137333] text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                              {item.badge}
+                            </span>
                           </h3>
-                          <div className="text-[#5f6368] text-[14px] mt-1">
+                          <p className="text-[#5f6368] text-[13px] mt-1 leading-relaxed">
                             {item.desc}
-                          </div>
+                          </p>
                         </div>
                       </a>
                     ))}
@@ -159,128 +159,115 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* KEY HIGHLIGHTS SECTION (Light Black Border all around) */}
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#707070] mt-12">
-              <h3 className="text-[#c0262c] font-bold text-[16px] border-b border-[#e0e0e0] pb-3 mb-4">Key Highlights</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <ul className="space-y-3 text-[14px] text-[#5f6368]">
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Automated Points Calculation</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Real-time Leaderboard</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>AI Chatbot Assistant</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>93+ Skill Badges Support</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Milestone & Tier Tracking</span></li>
-                </ul>
-                <ul className="space-y-3 text-[14px] text-[#5f6368]">
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Community Posts & Reviews</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Admin Panel & Moderation</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>Dark / Light Mode</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>PWA Ready</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[16px] text-[#007A33]">✓</strong> <span>SEO Optimized</span></li>
+            {/* HIGHLIGHTS & WHY PLAY - Classic Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* KEY HIGHLIGHTS */}
+              <div className="bg-white rounded-xl p-6 border border-[#dadce0]">
+                <h3 className="text-[#202124] font-medium text-[15px] mb-4 pb-3 border-b border-[#f1f3f4]">
+                  Key Highlights
+                </h3>
+                <ul className="space-y-3 text-[13px] text-[#5f6368]">
+                  {["Automated Points Calculation", "Real-time Leaderboard", "AI Chatbot Assistant", "93+ Skill Badges Support", "Milestone & Tier Tracking", "Community Posts & Reviews", "PWA Ready & SEO Optimized"].map((text, i) => (
+                    <li key={i} className="flex gap-3 items-center">
+                      <svg className="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path></svg>
+                      {text}
+                    </li>
+                  ))}
                 </ul>
               </div>
-            </div>
 
-            {/* WHY PLAY SECTION (Light Black Border all around) */}
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-[#707070] mt-8">
-              <h3 className="text-[#c0262c] font-bold text-[16px] border-b border-[#e0e0e0] pb-3 mb-4">Why Play The Arcade?</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <ul className="space-y-3 text-[14px] text-[#5f6368]">
-                  <li className="flex gap-2 items-center"><strong className="text-[18px]">🎮</strong> <span>Learn cloud concepts freely.</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[18px]">💸</strong> <span>100% No Cost participation.</span></li>
-                </ul>
-                <ul className="space-y-3 text-[14px] text-[#5f6368]">
-                  <li className="flex gap-2 items-center"><strong className="text-[18px]">🛠️</strong> <span>Hands-on practice in real labs.</span></li>
-                  <li className="flex gap-2 items-center"><strong className="text-[18px]">🎁</strong> <span>Convert points to swags.</span></li>
+              {/* WHY PLAY */}
+              <div className="bg-white rounded-xl p-6 border border-[#dadce0]">
+                <h3 className="text-[#202124] font-medium text-[15px] mb-4 pb-3 border-b border-[#f1f3f4]">
+                  Why Play The Arcade?
+                </h3>
+                <ul className="space-y-4 text-[13px] text-[#5f6368]">
+                  <li className="flex gap-3 items-start">
+                    <span className="mt-0.5 text-lg">🎮</span> 
+                    <span><strong className="text-[#202124] font-medium block">Learn Cloud Concepts</strong> Free, hands-on learning environment.</span>
+                  </li>
+                  <li className="flex gap-3 items-start">
+                    <span className="mt-0.5 text-lg">💸</span> 
+                    <span><strong className="text-[#202124] font-medium block">100% No Cost</strong> Zero charges for participation or labs.</span>
+                  </li>
+                  <li className="flex gap-3 items-start">
+                    <span className="mt-0.5 text-lg">🎁</span> 
+                    <span><strong className="text-[#202124] font-medium block">Earn Swags</strong> Convert your completed points to official Google Cloud prizes.</span>
+                  </li>
                 </ul>
               </div>
-            </div>
 
+            </div>
           </div>
 
           {/* ================= RIGHT COLUMN (HELP & LEGAL) ================= */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-4 space-y-6">
 
-            {/* 🔥 UPDATED FOUNDERS BOX (Aligned to top, Manish First) 🔥 */}
-            <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col p-6 items-center text-center relative">
-              <div className="absolute top-0 left-0 w-full h-12 bg-gradient-to-r from-[#fef8eb] to-[#fffdf5] border-b border-[#e0e0e0]"></div>
+            {/* CLASSIC FOUNDERS BOX */}
+            <div className="bg-white rounded-xl border border-[#dadce0] p-6">
+              <h3 className="text-[12px] font-bold text-[#5f6368] uppercase tracking-wider mb-6 text-center">Platform Creators</h3>
               
-              <div className="flex justify-center gap-6 mb-6 mt-1 w-full relative z-10">
-                
+              <div className="space-y-6">
                 {/* Manish */}
-                <div className="flex flex-col items-center">
-                  <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
-                    <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-24 h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
+                <div className="flex items-center gap-4">
+                  <a href="https://linkedin.com/in/manish-ui" target="_blank" rel="noopener noreferrer" className="shrink-0">
+                    <img src="https://i.postimg.cc/GtV7yP9K/IMG-20260501-130548.jpg" alt="Manish" className="w-14 h-14 rounded-full object-cover border border-[#dadce0]" />
                   </a>
-                  <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Manish Kr.</span>
-                  <span className="text-[11px] text-[#5f6368] font-bold mt-1 tracking-wide">Founder & CEO</span>
+                  <div>
+                    <h4 className="text-[14px] font-medium text-[#202124]">Manish Kr.</h4>
+                    <p className="text-[12px] text-[#5f6368]">Founder & Developer</p>
+                  </div>
                 </div>
 
                 {/* Anjali */}
-                <div className="flex flex-col items-center">
-                  <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="block hover:scale-105 transition-transform">
-                    <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-24 h-32 rounded-2xl shadow-md object-cover object-top border-2 border-white" />
+                <div className="flex items-center gap-4">
+                  <a href="https://www.linkedin.com/in/anjali-p-a2ba1419b" target="_blank" rel="noopener noreferrer" className="shrink-0">
+                    <img src="https://i.postimg.cc/Nf2ykWb1/1000111442.png" alt="Anjali" className="w-14 h-14 rounded-full object-cover border border-[#dadce0]" />
                   </a>
-                  <span className="text-[13px] font-extrabold mt-3 text-[#202124]">Anjali Patel</span>
-                  <span className="text-[11px] text-[#5f6368] font-bold mt-1 tracking-wide">Founder & CEO</span>
+                  <div>
+                    <h4 className="text-[14px] font-medium text-[#202124]">Anjali Patel</h4>
+                    <p className="text-[12px] text-[#5f6368]">Co-Founder & Contributor</p>
+                  </div>
                 </div>
-                
-              </div>
-              
-              <div className="bg-[#fef8eb] text-[#b06000] border border-[#fde293] px-4 py-2.5 rounded-lg text-[12.5px] font-extrabold w-full tracking-wide shadow-sm">
-                Developed By Manish & Anjali
               </div>
             </div>
             
             {/* HELP CENTER BOX */}
-            <div className="bg-white rounded-lg shadow-sm border border-[#707070] overflow-hidden flex flex-col">
-              <div className="bg-[#fef8eb] p-6 flex flex-col items-center justify-center relative border-b border-[#e0e0e0]">
-                 <div className="bg-white rounded-full px-6 py-2 text-[14px] font-bold text-[#c0262c] mb-3 shadow-sm border border-[#e0e0e0]">
-                   Help center
-                 </div>
-                 <div className="text-[12px] text-[#5f6368] mb-2 text-center">Can I help you?</div>
-                 <div className="text-5xl drop-shadow-sm">👨‍💻</div>
-              </div>
-              <div className="p-5 flex flex-col gap-4">
-                 <div>
-                    <p className="text-[11px] text-[#5f6368] uppercase font-bold mb-1 tracking-wider">Email Queries:</p>
-                    <a href="mailto:vy7manish@gmail.com" className="text-[#c0262c] font-bold text-[16px] hover:underline flex items-center gap-2">
-                      Send to Gmail
-                    </a>
-                 </div>
-                 <div>
-                    <p className="text-[11px] text-[#5f6368] uppercase font-bold mb-1 tracking-wider">WhatsApp Support:</p>
-                    <a href="https://wa.me/918538980608" target="_blank" rel="noopener noreferrer" className="text-[#34a853] font-bold text-[16px] hover:underline flex items-center gap-2">
-                       Contact Website Owner
-                    </a>
-                 </div>
+            <div className="bg-white rounded-xl border border-[#dadce0] p-6">
+              <h3 className="text-[#202124] font-medium text-[15px] mb-1">Help Center</h3>
+              <p className="text-[13px] text-[#5f6368] mb-5">Have an issue? Reach out to us directly.</p>
+              
+              <div className="space-y-3">
+                 <a href="mailto:vy7manish@gmail.com" className="flex items-center justify-between p-3 rounded-lg border border-[#dadce0] hover:bg-[#f8f9fa] transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-5 h-5 text-[#5f6368] group-hover:text-[#ea4335]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                      <span className="text-[13px] font-medium text-[#202124]">Email Support</span>
+                    </div>
+                    <svg className="w-4 h-4 text-[#9aa0a6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                 </a>
+                 <a href="https://wa.me/918538980608" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg border border-[#dadce0] hover:bg-[#f8f9fa] transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-5 h-5 text-[#5f6368] group-hover:text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                      <span className="text-[13px] font-medium text-[#202124]">WhatsApp Admin</span>
+                    </div>
+                    <svg className="w-4 h-4 text-[#9aa0a6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                 </a>
               </div>
             </div>
 
-            {/* 🔥 COMBINED PRIVACY POLICY & TERMS BOX 🔥 */}
-            <div className="bg-white rounded-lg p-5 shadow-sm border border-[#707070] hover:shadow-md transition-shadow flex flex-col gap-5 group">
+            {/* LEGAL POLICIES BOX */}
+            <div className="bg-white rounded-xl border border-[#dadce0] p-6">
+               <h3 className="text-[#202124] font-medium text-[15px] mb-4 pb-3 border-b border-[#f1f3f4]">Platform Policies</h3>
                
-               {/* Privacy Policy Section */}
-               <div className="flex gap-4 items-start cursor-pointer">
-                 <div className="text-4xl transition-all mt-1">🔒</div>
+               <div className="space-y-4">
                  <div>
-                   <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Privacy Policy</h3>
-                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">We do not store personal data. Standard log files are used.</p>
-                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">• No tracking cookies or pixels are utilized.</p>
-                   <p className="text-[12px] text-[#5f6368] leading-snug">• Your progression data remains secure locally.</p>
+                   <h4 className="text-[13px] font-bold text-[#202124] mb-1">Privacy Policy</h4>
+                   <p className="text-[12px] text-[#5f6368] leading-relaxed">No personal data is stored. No tracking cookies are utilized. Your progression data remains secure locally.</p>
                  </div>
-               </div>
-
-               {/* Divider */}
-               <div className="border-t border-[#e0e0e0] w-full"></div>
-
-               {/* Terms & Conditions Section */}
-               <div className="flex gap-4 items-start cursor-pointer">
-                 <div className="text-4xl transition-all mt-1">📝</div>
                  <div>
-                   <h3 className="text-[#202124] font-bold text-[15px] group-hover:text-[#c0262c] transition-colors mb-2">Terms & Conditions</h3>
-                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">Provided "as is" to help the community. Final authority lies with Google.</p>
-                   <p className="text-[12px] text-[#5f6368] leading-snug mb-1">• Unofficial toolkits carry no official warranties.</p>
-                   <p className="text-[12px] text-[#5f6368] leading-snug">• Users must comply with Google Cloud guidelines at all times.</p>
+                   <h4 className="text-[13px] font-bold text-[#202124] mb-1">Terms & Conditions</h4>
+                   <p className="text-[12px] text-[#5f6368] leading-relaxed">Provided "as is" to aid the community. Users must comply with official Google Cloud guidelines.</p>
                  </div>
                </div>
             </div>
@@ -289,48 +276,37 @@ export default function AboutPage() {
         </div>
 
         {/* ================= EXACT DISCLAIMER & COPYRIGHT ================= */}
-        <div className="mt-12 pt-8 border-t border-[#d0d0d0] flex flex-col gap-6">
-          <div className="bg-white border border-[#707070] rounded-lg p-6">
-            <h3 className="text-[#c0262c] font-bold text-[15px] mb-3 uppercase tracking-wide">Legal Disclaimer</h3>
-            
-            {/* HIGHLIGHTER EFFECT ON BOLD TEXT */}
-            <p className="text-[14px] font-bold text-[#111] leading-relaxed text-justify bg-[#fff59d] p-4 rounded-sm border border-[#fbc02d] shadow-sm">
-              Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience. All trademarks, logos, and brand names belong to their respective owners and are used only for reference and educational purposes.
+        <div className="mt-12 pt-8 border-t border-[#dadce0] flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="max-w-3xl">
+            <h3 className="text-[#202124] font-bold text-[12px] mb-2 uppercase tracking-wider">Legal Disclaimer</h3>
+            <p className="text-[12px] text-[#5f6368] leading-relaxed text-justify">
+              Arcade Nexus is an independent, community-built platform created for educational and informational purposes only. This website is not affiliated with, endorsed by, or officially connected to Google Cloud Arcade, Google LLC, or Alphabet Inc. Our goal is simply to help Arcade community members by providing useful resources, guides, and tools to enhance their learning experience. All trademarks, logos, and brand names belong to their respective owners.
             </p>
           </div>
           
-          <div className="flex justify-center md:justify-end">
-            <div className="bg-[#202124] text-white px-6 py-3 rounded-md text-[14px] font-bold tracking-wide shadow-sm">
-              © Copyright Arcade Nexus 2026. <span className="text-red-400">Do not copy.</span>
+          <div className="shrink-0 text-right">
+            <div className="text-[#202124] text-[13px] font-medium mb-1">
+              © 2026 Arcade Nexus.
+            </div>
+            <div className="text-[12px] text-[#5f6368]">
+              Do not copy.<br/>Educational use only.
             </div>
           </div>
         </div>
 
       </main>
 
-      {/* Basic CSS for scrollbar and tab animations */}
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f8f9fa; 
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #007A33; 
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #005c26; 
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.3s ease-in-out;
-        }
+      <style dangerouslySetInnerHTML={{ __html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #bdc1c6; }
+        .animate-fade-in { animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-      `}</style>
+      `}} />
     </div>
   );
 }
