@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
 import ArcadeSharePoster from "@/app/components/ArcadeSharePoster";
@@ -140,6 +140,9 @@ export default function DashboardPage() {
 
   // --- NEW: Side Drawer State for Facilitator Details ---
   const [showFacilitatorDrawer, setShowFacilitatorDrawer] = useState(false);
+
+  // Weekly Graph Date Picker State
+  const [selectedDateStr, setSelectedDateStr] = useState(() => new Date().toISOString().split("T")[0]);
 
   const handleVerifyAndDownload = async () => {
     setCertError("");
@@ -448,6 +451,81 @@ export default function DashboardPage() {
 
   const pendingLabs = julyLabs.filter(lab => !isLabCompleted(lab.matchStrings));
   const completedLabs = julyLabs.filter(lab => isLabCompleted(lab.matchStrings));
+
+  // --- DYNAMIC GRAPH DATA CALCULATION ---
+  const parseHistoryDate = (dateStr: string) => {
+    const cleanStr = dateStr.replace(/Earned/i, '').trim();
+    return new Date(cleanStr);
+  };
+
+  const chartData = useMemo(() => {
+    // Determine the base date from the calendar input or fallback to today
+    const targetDate = selectedDateStr ? new Date(selectedDateStr) : new Date();
+    if (isNaN(targetDate.getTime())) {
+       targetDate.setTime(Date.now());
+    }
+
+    const currentDay = targetDate.getDay() || 7; // Convert Sun (0) to 7
+    const startOfWeek = new Date(targetDate);
+    startOfWeek.setDate(targetDate.getDate() - currentDay + 1);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const actualToday = new Date().toDateString(); // For highlighting today specifically
+
+    const weekDays = Array.from({ length: 7 }).map((_, i) => {
+      const d = new Date(startOfWeek);
+      d.setDate(startOfWeek.getDate() + i);
+      return {
+        day: d.toLocaleDateString('en-US', { weekday: 'short' }),
+        date: d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
+        fullDate: d,
+        skill: 0,
+        arcade: 0,
+        total: 0,
+        isToday: d.toDateString() === actualToday
+      };
+    });
+
+    history.forEach(item => {
+      const itemDate = parseHistoryDate(item.date);
+      const dayMatch = weekDays.find(wd => wd.fullDate.toDateString() === itemDate.toDateString());
+      if (dayMatch) {
+        const isBadge = item.type === 'Skill Badge' || item.name.toLowerCase().includes('badge');
+        if (isBadge) dayMatch.skill += 1;
+        else dayMatch.arcade += 1;
+        dayMatch.total += 1;
+      }
+    });
+
+    return weekDays;
+  }, [history, selectedDateStr]);
+
+  const chartStats = useMemo(() => {
+    let skillTotal = 0;
+    let arcadeTotal = 0;
+    let activeDays = 0;
+    let bestDay = { day: '-', total: 0 };
+
+    chartData.forEach(d => {
+      skillTotal += d.skill;
+      arcadeTotal += d.arcade;
+      if (d.total > 0) activeDays += 1;
+      if (d.total > bestDay.total) bestDay = { day: d.day, total: d.total };
+    });
+
+    return {
+      skillTotal,
+      arcadeTotal,
+      totalActivities: skillTotal + arcadeTotal,
+      activeDays,
+      bestDay: bestDay.total > 0 ? `${bestDay.day} (${bestDay.total})` : '-'
+    };
+  }, [chartData]);
+
+  // Maximum Value for Graph Scaling
+  const maxActivityVal = Math.max(...chartData.map(d => Math.max(d.skill, d.arcade)), 10);
+  const graphYAxisLabels = [1, 0.8, 0.6, 0.4, 0.2, 0].map(mult => Math.round(maxActivityVal * mult));
+
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -1060,9 +1138,9 @@ const dashboardData = {
                       {/* Dark Mode Toggle */}
                       <button onClick={toggleDarkMode} className={`p-1.5 rounded transition-colors flex items-center justify-center ${isDark ? 'hover:bg-[#2a2d32] text-gray-200' : 'hover:bg-[#f1f3f4] text-[#fbbc04]'}`}>
                         {isDark ? (
-                           <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                           <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         ) : (
-                           <svg className="w-5 h-5 text-[#fbbc04]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                           <svg className="w-5 h-5 text-[#fbbc04]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                         )}
                       </button>
 
@@ -1072,10 +1150,10 @@ const dashboardData = {
                       </button>
                     </div>
                   </div>
-                    {/* AI Overview Panel (Floating On Top) */}
+                  
+                  {/* AI Overview Panel (Floating On Top) - RESTORED ORIGINAL */}
                   {showAiOverview && (
                     <div className="absolute top-[calc(100%+12px)] left-0 w-full z-50 animate-fade-in-up shadow-2xl rounded-[16px] p-[1.5px] overflow-hidden group">
-
                       {/* GEMINI STYLE ANIMATED GLOWING BORDER */}
                       <div className="absolute inset-[-150%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#9b72cb_30%,#4285F4_50%,transparent_70%)] opacity-70"></div>
 
@@ -1162,7 +1240,6 @@ const dashboardData = {
                            View Report
                          </button>
 
-                         {/* ----- YAHAN SE REPLACE KARO ----- */}
                          <div className="flex flex-col items-center gap-5 mt-2 w-full max-w-sm">
                              
                              {/* Cute Sad Cat SVG - Thoda sa bada kiya taaki clearly dikhe */}
@@ -1216,85 +1293,218 @@ const dashboardData = {
 
         <div className="w-full max-w-[1350px] mt-12 space-y-12">
 
-          
+          {/* --- RESTORED: ARCADE PRIZE TIERS SECTION --- */}
           {points !== null && (
-  <div id="tiers-section" className="w-full animate-fade-in-up scroll-mt-24" style={{ animationDelay: '0.21s' }}>
-    
-    {/* Shine Animation */}
-    <style>{`
-      @keyframes slideShine {
-        0% { left: -50px; transform: skewX(-20deg); }
-        100% { left: 150%; transform: skewX(-20deg); }
-      }
-    `}</style>
-
-    <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-      <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>Arcade Prize Tiers</h4>
-      <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}><span className="font-bold">{getCurrentTier()}</span></span>
-    </div>
-    
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {arcadeTiersData.map((tier, idx) => {
-        // Percentage clamp for safety (max 100%)
-        const progressPercentage = Math.min(100, Math.max(0, (points / tier.target) * 100));
-        const isAchieved = points >= tier.target;
-        
-        // Image wale 4 Solid Google Colors (Red, Blue, Yellow, Green)
-        const barColors = ['bg-[#ea4335]', 'bg-[#4285f4]', 'bg-[#fbbc04]', 'bg-[#34a853]'];
-        const activeColor = barColors[idx % 4]; // Har tier pe alag color aayega
-
-        return (
-          <div key={idx} className={`border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : (isDark ? 'border-[#3c4043]' : 'border-[#5f6368]')} ${isDark ? 'bg-[#202124]' : 'bg-[#353840]'}`}>
-            <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative">
-              <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            
-            <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
-            
-            <div className="w-full mt-auto flex flex-col gap-2">
+            <div id="tiers-section" className="w-full animate-fade-in-up scroll-mt-24" style={{ animationDelay: '0.21s' }}>
               
-              {/* --- 1. DARK GRAY ROUNDED PILL (Container) --- */}
-              <div className="relative w-full h-6 rounded-full bg-[#3c4043] border border-[#2a2d32] shadow-inner flex items-center overflow-hidden">
-                
-                {/* --- 2. ACTUAL PROGRESS SOLID COLOR --- */}
-                <div 
-                  className={`absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out overflow-hidden z-10 ${activeColor}`} 
-                  style={{ width: `${progressPercentage}%` }}
-                >
-                  {/* --- 3. LIGHT TRANSLUCENT DIAGONAL SHINE (Clipped inside progress) --- */}
-                  <div 
-                    className="absolute top-0 w-12 h-full bg-white/30"
-                    style={{ animation: 'slideShine 2s infinite linear' }}
-                  ></div>
-                </div>
+              {/* Shine Animation */}
+              <style>{`
+                @keyframes slideShine {
+                  0% { left: -50px; transform: skewX(-20deg); }
+                  100% { left: 150%; transform: skewX(-20deg); }
+                }
+              `}</style>
 
-                {/* --- 4. PERCENTAGE BAR EXACT CENTER FIXED --- */}
-                <div className="absolute inset-0 flex items-center justify-center z-20">
-                  <span className="text-[13px] font-extrabold text-white tracking-wide drop-shadow-[0_2px_3px_rgba(0,0,0,0.8)]">
-                    {Math.round(progressPercentage)}%
-                  </span>
-                </div>
-              </div>
-
-              {/* Image ki tarah simple text niche */}
-              <div className="mt-1 text-center w-full flex flex-col gap-1">
-                <span className={`text-[12px] font-medium tracking-wide ${isDark ? 'text-gray-300' : 'text-gray-200'}`}>
-                  {tier.spots} {tier.spots?.toString().includes('spots left') ? '' : 'spots left'}
-                </span>
-                <span className={`text-[11px] ${isAchieved ? "text-[#81c995] font-bold" : "text-[#9aa0a6]"}`}>
-                  {isAchieved ? "Goal Achieved!" : `${points} / ${tier.target} pts`}
-                </span>
+              <div className={`flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
+                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>Arcade Prize Tiers</h4>
+                <span className={`text-base font-medium ${isDark ? 'text-white' : 'text-[#202124]'}`}><span className="font-bold">{getCurrentTier()}</span></span>
               </div>
               
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-)}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {arcadeTiersData.map((tier, idx) => {
+                  // Percentage clamp for safety (max 100%)
+                  const progressPercentage = Math.min(100, Math.max(0, (points / tier.target) * 100));
+                  const isAchieved = points >= tier.target;
+                  
+                  // Image wale 4 Solid Google Colors (Red, Blue, Yellow, Green)
+                  const barColors = ['bg-[#ea4335]', 'bg-[#4285f4]', 'bg-[#fbbc04]', 'bg-[#34a853]'];
+                  const activeColor = barColors[idx % 4]; // Har tier pe alag color aayega
 
-           {points !== null && (
+                  return (
+                    <div key={idx} className={`border rounded-xl py-8 px-5 flex flex-col items-center relative overflow-hidden shadow-md hover:shadow-lg transition-all group ${isAchieved ? 'border-[#34a853]' : (isDark ? 'border-[#3c4043]' : 'border-[#5f6368]')} ${isDark ? 'bg-[#202124]' : 'bg-[#353840]'}`}>
+                      <div className="w-32 h-32 mb-6 mt-2 flex items-center justify-center relative">
+                        <img src={tier.image} alt={tier.name} className="max-h-full object-contain z-10 group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                      
+                      <h5 className="text-xl font-bold text-white mb-4 text-center">{tier.name}</h5>
+                      
+                      <div className="w-full mt-auto flex flex-col gap-2">
+                        
+                        {/* --- 1. DARK GRAY ROUNDED PILL (Container) --- */}
+                        <div className="relative w-full h-6 rounded-full bg-[#3c4043] border border-[#2a2d32] shadow-inner flex items-center overflow-hidden">
+                          
+                          {/* --- 2. ACTUAL PROGRESS SOLID COLOR --- */}
+                          <div 
+                            className={`absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out overflow-hidden z-10 ${activeColor}`} 
+                            style={{ width: `${progressPercentage}%` }}
+                          >
+                            {/* --- 3. LIGHT TRANSLUCENT DIAGONAL SHINE (Clipped inside progress) --- */}
+                            <div 
+                              className="absolute top-0 w-12 h-full bg-white/30"
+                              style={{ animation: 'slideShine 2s infinite linear' }}
+                            ></div>
+                          </div>
+
+                          {/* --- 4. PERCENTAGE BAR EXACT CENTER FIXED --- */}
+                          <div className="absolute inset-0 flex items-center justify-center z-20">
+                            <span className="text-[13px] font-extrabold text-white tracking-wide drop-shadow-[0_2px_3px_rgba(0,0,0,0.8)]">
+                              {Math.round(progressPercentage)}%
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Image ki tarah simple text niche */}
+                        <div className="mt-1 text-center w-full flex flex-col gap-1">
+                          <span className={`text-[12px] font-medium tracking-wide ${isDark ? 'text-gray-300' : 'text-gray-200'}`}>
+                            {tier.spots} {tier.spots?.toString().includes('spots left') ? '' : 'spots left'}
+                          </span>
+                          <span className={`text-[11px] ${isAchieved ? "text-[#81c995] font-bold" : "text-[#9aa0a6]"}`}>
+                            {isAchieved ? "Goal Achieved!" : `${points} / ${tier.target} pts`}
+                          </span>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* --- WEEKLY ACTIVITY CHART (DYNAMICALLY CONNECTED TO HISTORY) --- */}
+          {points !== null && (
+            <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
+              <div className={`rounded-2xl shadow-sm border p-5 sm:p-6 pb-2 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
+                {/* Header */}
+                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-8">
+                   <div className="flex gap-3 items-start">
+                     <svg className={`w-7 h-7 mt-0.5 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M4 9h4v11H4zM10 4h4v16h-4zM16 13h4v7h-4z"/></svg>
+                     <div>
+                       <h3 className={`text-xl sm:text-2xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>Your Weekly Activity (Mon - Sun)</h3>
+                       <p className={`text-[13px] sm:text-sm mt-0.5 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Check your daily progress of Skill Badges and Arcade Games. Keep going!</p>
+                     </div>
+                   </div>
+                   
+                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full xl:w-auto mt-2 xl:mt-0">
+                      {/* Legend */}
+                      <div className="flex items-center gap-4 text-[13px] font-bold">
+                        <div className={`flex items-center gap-1.5 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}><span className="w-3 h-3 rounded-full bg-[#34a853]"></span> Skill Badges</div>
+                        <div className={`flex items-center gap-1.5 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}><span className="w-3 h-3 rounded-full bg-[#1a73e8]"></span> Arcade Games</div>
+                      </div>
+                      
+                      {/* Date Picker / Calendar */}
+                      <div className={`flex items-center p-1 rounded-lg border ${isDark ? 'bg-[#2a2d32] border-[#3c4043]' : 'bg-gray-50 border-[#dadce0]'}`}>
+                         <input
+                           type="date"
+                           min="2026-01-01"
+                           value={selectedDateStr}
+                           onChange={(e) => setSelectedDateStr(e.target.value)}
+                           className={`px-3 py-1.5 rounded-md text-[13px] font-bold focus:outline-none transition-all cursor-pointer ${isDark ? 'bg-[#15171b] text-white border border-[#3c4043]' : 'bg-white text-[#202124] border border-[#dadce0]'}`}
+                         />
+                      </div>
+                   </div>
+                </div>
+
+                {/* Chart Area */}
+                <div className="relative w-full h-[220px] sm:h-[260px] mt-8">
+                   {/* Y-Axis & Grid Lines */}
+                   <div className="absolute inset-0 flex flex-col justify-between pointer-events-none z-0">
+                      {graphYAxisLabels.map(val => (
+                        <div key={val} className="flex items-center w-full">
+                           <span className={`w-6 text-[11px] font-bold text-right pr-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#9aa0a6]'}`}>{val}</span>
+                           <div className={`flex-1 h-px border-t border-dashed ${isDark ? 'border-[#3c4043]' : 'border-[#e8eaed]'}${val === 0 ? ' border-solid' : ''}`}></div>
+                        </div>
+                      ))}
+                   </div>
+
+                   {/* Bars */}
+                   <div className="absolute inset-0 ml-8 flex justify-around items-end pb-[1px]">
+                      {chartData.map((d, i) => (
+                        <div key={i} className={`relative flex flex-col items-center justify-end h-full w-[13%] max-w-[90px] rounded-t-[14px] transition-colors ${d.isToday ? (isDark ? 'bg-[#1a73e8]/10' : 'bg-[#e8f0fe]') : 'hover:bg-gray-50 dark:hover:bg-white/5'}`}>
+                           {d.isToday && <div className="absolute -top-7 px-4 py-1 bg-[#1a73e8] text-white text-[11px] font-bold rounded-full shadow-sm">Today</div>}
+                           
+                           {/* Bar Container */}
+                           <div className="flex items-end gap-[3px] sm:gap-[6px] w-full justify-center px-2 z-10 h-full pb-0 relative">
+                              {/* Skill Bar */}
+                              <div className="w-[18px] sm:w-[26px] bg-[#34a853] rounded-t-[6px] relative group flex justify-center transition-all duration-1000" style={{ height: `${(d.skill / maxActivityVal) * 100}%` }}>
+                                 {d.skill > 0 && <span className={`absolute -top-[22px] text-[12px] font-bold ${isDark ? 'text-gray-300' : 'text-[#202124]'}`}>{d.skill}</span>}
+                              </div>
+                              {/* Arcade Bar */}
+                              <div className="w-[18px] sm:w-[26px] bg-[#1a73e8] rounded-t-[6px] relative group flex justify-center transition-all duration-1000" style={{ height: `${(d.arcade / maxActivityVal) * 100}%` }}>
+                                 {d.arcade > 0 && <span className={`absolute -top-[22px] text-[12px] font-bold ${isDark ? 'text-gray-300' : 'text-[#202124]'}`}>{d.arcade}</span>}
+                              </div>
+                           </div>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+
+                {/* X-Axis Labels */}
+                <div className="ml-8 flex justify-around mt-0">
+                   {chartData.map((d, i) => (
+                     <div key={i} className={`flex flex-col items-center w-[13%] max-w-[90px] pt-3 pb-3 ${d.isToday ? (isDark ? 'bg-[#1a73e8]/10 rounded-b-[14px]' : 'bg-[#e8f0fe] rounded-b-[14px]') : ''}`}>
+                        <span className={`text-[13px] font-bold leading-tight ${d.isToday ? 'text-[#1a73e8]' : (isDark ? 'text-gray-300' : 'text-[#3c4043]')}`}>{d.day}</span>
+                        <span className={`text-[11px] font-medium ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{d.date}</span>
+                        
+                        <div className={`mt-3 flex flex-col items-center border rounded-[10px] px-2 py-1.5 w-[85%] max-w-[70px] shadow-sm ${isDark ? 'border-[#3c4043] bg-[#202124]' : 'border-[#dadce0] bg-white'}`}>
+                           <div className="flex items-center gap-1 text-[#1a73e8]">
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                              <span className="font-bold text-[13px] text-[#202124] dark:text-gray-200">{d.total}</span>
+                           </div>
+                           <span className={`text-[9px] text-center uppercase tracking-wide font-bold mt-0.5 leading-[1.2] ${isDark ? 'text-[#9aa0a6]' : 'text-[#70757a]'}`}>Total<br/>Completed</span>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+
+                {/* Bottom Stats Row */}
+                <div className={`mt-5 pt-5 pb-3 border-t grid grid-cols-2 md:grid-cols-5 gap-y-6 gap-x-2 divide-y md:divide-y-0 md:divide-x ${isDark ? 'border-[#3c4043] divide-[#3c4043]' : 'border-[#dadce0] divide-[#dadce0]'}`}>
+                   
+                   <div className="flex items-center gap-3.5 px-2 md:pl-2">
+                      <div className="w-10 h-10 rounded-full bg-[#34a853] flex flex-shrink-0 items-center justify-center text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg></div>
+                      <div>
+                         <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#70757a]'}`}>Total Skill Badges</p>
+                         <p className={`text-2xl font-black mt-0.5 ${isDark ? 'text-[#81c995]' : 'text-[#34a853]'}`}>{chartStats.skillTotal}</p>
+                      </div>
+                   </div>
+
+                   <div className="flex items-center gap-3.5 px-2 pt-4 md:pt-0 md:pl-6">
+                      <div className="w-10 h-10 rounded-full bg-[#1a73e8] flex flex-shrink-0 items-center justify-center text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                      <div>
+                         <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#70757a]'}`}>Total Arcade Games</p>
+                         <p className={`text-2xl font-black mt-0.5 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>{chartStats.arcadeTotal}</p>
+                      </div>
+                   </div>
+
+                   <div className="flex items-center gap-3.5 px-2 pt-4 md:pt-0 md:pl-6">
+                      <div className="w-10 h-10 rounded-full bg-[#1a73e8]/10 flex flex-shrink-0 items-center justify-center text-[#1a73e8]"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg></div>
+                      <div>
+                         <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#70757a]'}`}>Total Activities</p>
+                         <p className={`text-2xl font-black mt-0.5 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>{chartStats.totalActivities}</p>
+                      </div>
+                   </div>
+
+                   <div className="flex items-center gap-3.5 px-2 pt-4 md:pt-0 md:pl-6">
+                      <div className="w-10 h-10 flex flex-shrink-0 items-center justify-center text-[#ea4335]"><svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 12.81 5.04 13.56 3.06C13.62 2.9 13.62 2.72 13.54 2.57C13.46 2.42 13.3 2.33 13.12 2.34C10.15 2.5 7.6 4.67 6.75 7.54C6.4 8.76 6.54 10.08 7.07 11.23C7.23 11.58 7.42 11.92 7.63 12.23C7.8 12.48 7.99 12.72 8.16 12.97C8.42 13.35 8.65 13.76 8.8 14.21C9.04 14.93 8.95 15.74 8.54 16.38C8.38 16.63 8.15 16.82 7.89 16.94C7.62 17.07 7.33 17.1 7.05 17.06C6.77 17.01 6.51 16.88 6.29 16.69C6.07 16.51 5.92 16.27 5.83 16C5.55 15.11 5.76 14.12 6.27 13.37C5.9 13.82 5.59 14.32 5.35 14.86C4.84 15.97 4.71 17.26 5 18.43C5.25 19.46 5.81 20.39 6.58 21.09C7.87 22.28 9.77 22.75 11.54 22.42C13.3 22.09 14.85 20.95 15.82 19.41C16.8 17.88 17.11 15.93 16.69 14.15C16.59 13.74 16.42 13.35 16.2 12.98C16.03 12.69 15.83 12.43 15.6 12.18C15.39 11.95 15.15 11.74 14.9 11.55C14.65 11.36 14.39 11.17 14.12 11.01C13.84 10.84 13.54 10.7 13.23 10.58C13.04 10.5 12.85 10.4 12.66 10.3C12.48 10.21 12.31 10.12 12.14 10.01C11.66 9.69 11.25 9.26 10.96 8.76C10.76 8.42 10.63 8.05 10.58 7.66C10.55 7.37 10.58 7.08 10.65 6.8C10.87 7.78 11.47 8.62 12.3 9.17C12.85 9.53 13.46 9.8 14.1 9.99C14.87 10.22 15.67 10.4 16.39 10.77C16.89 11.03 17.33 11.39 17.71 11.83C17.75 11.88 17.75 11.96 17.71 12.01C17.65 12.08 17.54 12.1 17.47 12.05C17.32 11.94 17.17 11.85 17.01 11.78C16.48 11.55 15.91 11.42 15.34 11.4C14.65 11.37 13.97 11.5 13.34 11.76C12.87 11.95 12.43 12.21 12.04 12.53C11.54 12.94 11.13 13.45 10.86 14.04C10.48 14.87 10.43 15.84 10.74 16.7C10.85 17.01 11.02 17.29 11.23 17.53C11.46 17.79 11.74 17.99 12.05 18.1C12.37 18.21 12.7 18.21 13.02 18.11C13.34 18.01 13.62 17.81 13.81 17.55C14.01 17.27 14.12 16.94 14.12 16.6C14.12 16.27 14.03 15.94 13.85 15.65C13.73 15.46 13.57 15.29 13.39 15.15C13.31 15.09 13.29 14.97 13.35 14.89C13.42 14.82 13.53 14.81 13.61 14.87C14.28 15.4 14.73 16.18 14.86 17.03C14.99 17.89 14.78 18.78 14.29 19.49C13.79 20.21 13.03 20.73 12.16 20.93C11.29 21.13 10.37 21 9.57 20.57C8.63 20.06 7.91 19.22 7.55 18.21C7.2 17.2 7.23 16.08 7.64 15.1C7.87 14.54 8.2 14.03 8.6 13.58C9.01 13.13 9.49 12.74 10.02 12.43C10.44 12.19 10.89 12.01 11.36 11.9C11.83 11.78 12.32 11.74 12.8 11.79C13.41 11.85 14 12.02 14.53 12.28C15.16 12.59 15.72 13.02 16.18 13.54C16.79 14.23 17.24 15.06 17.49 15.97C17.74 16.89 17.79 17.86 17.62 18.81C17.42 19.92 16.92 20.97 16.15 21.8C15.38 22.64 14.39 23.23 13.29 23.51C12.18 23.8 11 23.75 9.92 23.38C8.84 23.01 7.89 22.33 7.15 21.43C6.34 20.45 5.82 19.23 5.64 17.94C5.46 16.65 5.62 15.34 6.11 14.13C6.54 13.07 7.23 12.13 8.1 11.41C8.75 10.87 9.49 10.45 10.27 10.15C10.82 9.94 11.39 9.8 11.98 9.76C12.58 9.72 13.18 9.77 13.76 9.92C14.15 10.02 14.53 10.16 14.89 10.34C15.26 10.53 15.6 10.75 15.92 11.01C16.32 11.33 16.68 11.69 16.99 12.09C17.3 12.49 17.55 12.93 17.74 13.4C17.9 13.79 18.01 14.2 18.06 14.61C18.11 15.03 18.11 15.45 18.06 15.87C17.96 16.73 17.65 17.55 17.15 18.25C16.65 18.96 15.98 19.53 15.21 19.91C14.43 20.29 13.56 20.48 12.69 20.45C11.82 20.42 10.97 20.17 10.22 19.73C9.47 19.29 8.85 18.66 8.41 17.92C7.96 17.18 7.7 16.34 7.66 15.48C7.62 14.62 7.8 13.77 8.18 13.01C8.56 12.25 9.13 11.59 9.84 11.11C10.63 10.57 11.53 10.25 12.46 10.19C13.39 10.13 14.33 10.33 15.17 10.77C15.9 11.15 16.54 11.68 17.06 12.32C17.11 12.38 17.21 12.38 17.26 12.32C17.31 12.26 17.3 12.16 17.24 12.11C16.69 11.43 16.02 10.87 15.25 10.47C14.36 10.01 13.37 9.79 12.38 9.86C11.39 9.92 10.43 10.26 9.59 10.83C8.83 11.34 8.22 12.04 7.82 12.85C7.42 13.66 7.23 14.56 7.27 15.47C7.31 16.39 7.59 17.29 8.06 18.08C8.54 18.88 9.2 19.55 10 20.02C10.8 20.49 11.71 20.76 12.64 20.79C13.57 20.82 14.5 20.62 15.33 20.21C16.15 19.81 16.86 19.2 17.39 18.45C17.93 17.7 18.26 16.82 18.37 15.91C18.43 15.46 18.43 15.01 18.38 14.56C18.33 14.12 18.22 13.68 18.05 13.26C17.85 12.76 17.58 12.29 17.25 11.86C16.92 11.43 16.54 11.04 16.11 10.7C15.77 10.43 15.4 10.19 15.01 9.99C14.62 9.79 14.22 9.64 13.8 9.53C13.19 9.37 12.55 9.32 11.92 9.37C11.29 9.41 10.68 9.56 10.1 9.78C9.28 10.1 8.5 10.55 7.81 11.12C6.88 11.89 6.15 12.89 5.7 14.02C5.18 15.3 5.01 16.69 5.2 18.06C5.4 19.43 5.95 20.72 6.81 21.76C7.6 22.71 8.6 23.43 9.74 23.82C10.88 24.21 12.13 24.27 13.31 23.96C14.48 23.66 15.53 23.03 16.35 21.14C17.17 20.25 17.71 19.14 17.92 17.96C18.1 16.95 18.05 15.92 17.78 14.94C17.51 13.97 17.03 13.08 16.38 12.35C15.89 11.79 15.29 11.33 14.62 11.01C14.05 10.72 13.43 10.53 12.79 10.45C12.14 10.38 11.49 10.43 10.87 10.6C10 10.84 9.19 11.28 8.49 11.91C7.82 12.51 7.29 13.26 6.94 14.11C6.6 14.96 6.44 15.89 6.49 16.82C6.54 17.75 6.79 18.65 7.23 19.45C7.67 20.25 8.28 20.93 9.01 21.43C9.75 21.94 10.61 22.25 11.51 22.35C12.4 22.45 13.31 22.34 14.15 22.02C14.99 21.7 15.75 21.18 16.36 20.51C16.96 19.84 17.41 19.04 17.66 18.17C17.92 17.29 17.98 16.37 17.84 15.47C17.7 14.57 17.37 13.7 16.87 12.95C16.48 12.35 15.98 11.83 15.4 11.44C14.71 10.98 13.93 10.7 13.11 10.62C12.29 10.54 11.45 10.67 10.69 11C9.82 11.38 9.05 11.97 8.45 12.71C7.84 13.45 7.43 14.33 7.25 15.26C7.07 16.19 7.12 17.15 7.4 18.05C7.68 18.95 8.19 19.76 8.87 20.41C9.55 21.06 10.38 21.53 11.3 21.78C12.21 22.03 13.18 22.05 14.1 21.83C15.02 21.61 15.87 21.16 16.57 20.52C17.27 19.88 17.79 19.07 18.09 18.16C18.39 17.25 18.46 16.27 18.29 15.33C18.12 14.39 17.73 13.5 17.15 12.73C16.69 12.12 16.12 11.61 15.46 11.24C14.73 10.82 13.91 10.57 13.06 10.5C12.21 10.43 11.35 10.54 10.54 10.83C9.64 11.16 8.82 11.71 8.16 12.42C7.49 13.13 7.01 13.99 6.76 14.93C6.51 15.87 6.51 16.86 6.75 17.79C6.99 18.72 7.46 19.57 8.11 20.26C8.76 20.95 9.57 21.46 10.48 21.75C11.39 22.04 12.36 22.1 13.3 21.92C14.24 21.74 15.11 21.33 15.86 20.73C16.61 20.13 17.21 19.36 17.59 18.47C17.97 17.58 18.12 16.6 18.03 15.63C17.94 14.66 17.61 13.73 17.07 12.91C16.61 12.22 16.02 11.63 15.34 11.19C14.54 10.67 13.63 10.36 12.68 10.28C11.73 10.2 10.78 10.35 9.89 10.7C8.92 11.08 8.05 11.69 7.37 12.47C6.69 13.25 6.22 14.18 6.01 15.18C5.8 16.18 5.86 17.22 6.17 18.19C6.48 19.16 7.03 20.03 7.77 20.71C8.5 21.39 9.39 21.87 10.37 22.11C11.35 22.35 12.38 22.34 13.36 22.09C14.34 21.84 15.24 21.35 15.99 20.67C16.74 19.99 17.32 19.14 17.68 18.18C18.04 17.22 18.17 16.19 18.06 15.17C17.95 14.15 17.61 13.17 17.06 12.31C16.59 11.57 15.97 10.95 15.24 10.49C14.38 9.94 13.41 9.61 12.4 9.54C11.39 9.47 10.37 9.64 9.42 10.05C8.4 10.49 7.49 11.17 6.78 12.02C6.07 12.87 5.59 13.88 5.39 14.96C5.19 16.04 5.29 17.16 5.67 18.19C6.05 19.22 6.7 20.13 7.55 20.81C8.38 21.49 9.37 21.94 10.42 22.13C11.47 22.32 12.55 22.25 13.57 21.92C14.59 21.59 15.51 21.02 16.27 20.25C17.03 19.48 17.61 18.54 17.96 17.51C18.31 16.48 18.42 15.39 18.28 14.32C18.14 13.25 17.75 12.23 17.14 11.33C16.63 10.59 15.98 9.96 15.22 9.5C14.33 8.95 13.31 8.62 12.25 8.56C11.19 8.5 10.12 8.71 9.13 9.17C8.06 9.67 7.12 10.41 6.4 11.33C5.68 12.25 5.2 13.34 5.01 14.49C4.82 15.64 4.94 16.82 5.38 17.9C5.82 18.98 6.55 19.92 7.49 20.61C8.4 21.28 9.47 21.71 10.59 21.87C11.71 22.03 12.85 21.91 13.91 21.52C14.97 21.13 15.92 20.48 16.69 19.62C17.46 18.76 18.03 17.73 18.35 16.61C18.67 15.49 18.73 14.32 18.53 13.18C18.33 12.04 17.88 10.97 17.21 10.04C16.66 9.29 15.98 8.65 15.19 8.19C14.28 7.66 13.23 7.35 12.15 7.31C11.07 7.27 9.98 7.51 8.96 8.01C7.84 8.55 6.87 9.35 6.13 10.33C5.39 11.31 4.92 12.45 4.75 13.66C4.58 14.87 4.74 16.1 5.22 17.22C5.7 18.34 6.48 19.31 7.48 20.02C8.44 20.7 9.57 21.11 10.75 21.23C11.93 21.35 13.12 21.17 14.21 20.71C15.3 20.25 16.27 19.53 17.06 18.59C17.85 17.65 18.43 16.53 18.74 15.32C19.05 14.11 19.09 12.85 18.84 11.64C18.59 10.43 18.06 9.32 17.3 8.36C16.7 7.6 15.98 6.96 15.16 6.5C14.23 5.97 13.17 5.67 12.08 5.64C10.99 5.61 9.89 5.87 8.86 6.4C7.71 7 6.72 7.85 5.96 8.89C5.2 9.93 4.73 11.13 4.58 12.39C4.43 13.65 4.63 14.93 5.16 16.1C5.69 17.27 6.53 18.27 7.59 18.99C8.6 19.68 9.77 20.07 10.99 20.14C12.21 20.21 13.43 19.97 14.54 19.43C15.65 18.89 16.63 18.08 17.41 17.06C18.19 16.04 18.75 14.84 19.04 13.56C19.33 12.28 19.33 10.95 19 9.69C18.67 8.43 18.06 7.28 17.21 6.31C16.57 5.56 15.81 4.93 14.96 4.47C14.01 3.96 12.95 3.67 11.87 3.65C10.79 3.63 9.71 3.89 8.7 4.44C7.53 5.06 6.52 5.94 5.75 7C4.98 8.06 4.51 9.29 4.38 10.59C4.25 11.89 4.47 13.2 5.04 14.4C5.61 15.6 6.5 16.64 7.61 17.38C8.66 18.08 9.88 18.46 11.14 18.49C12.4 18.52 13.64 18.2 14.77 17.58C15.9 16.96 16.89 16.06 17.65 14.96C18.41 13.86 18.92 12.6 19.15 11.26C19.38 9.92 19.32 8.54 18.97 7.23C18.62 5.92 17.98 4.74 17.08 3.75C16.42 2.99 15.63 2.37 14.75 1.93C13.78 1.43 12.7 1.15 11.61 1.14C10.52 1.13 9.43 1.39 8.42 1.95C7.23 2.61 6.2 3.52 5.42 4.63C4.64 5.74 4.16 7 4.04 8.33C3.92 9.66 4.18 10.99 4.79 12.21C5.4 13.43 6.33 14.49 7.48 15.26C8.58 15.98 9.84 16.35 11.13 16.34C12.42 16.33 13.68 15.94 14.81 15.23C15.94 14.52 16.91 13.52 17.63 12.33C18.35 11.14 18.8 9.8 18.96 8.39C19.12 6.98 18.99 5.56 18.57 4.22C18.15 2.88 17.45 1.67 16.51 0.65C15.82-.12 15 .0 15 .0Z"/></svg></div>
+                      <div>
+                         <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#70757a]'}`}>Active Days</p>
+                         <p className={`text-2xl font-black mt-0.5 ${isDark ? 'text-[#f28b82]' : 'text-[#ea4335]'}`}>{chartStats.activeDays} / 7</p>
+                      </div>
+                   </div>
+
+                   <div className="flex items-center gap-3.5 px-2 pt-4 md:pt-0 md:pl-6">
+                      <div className="w-10 h-10 rounded-full bg-[#1a73e8]/10 flex flex-shrink-0 items-center justify-center text-[#1a73e8]"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                      <div>
+                         <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[#9aa0a6]' : 'text-[#70757a]'}`}>Best Day</p>
+                         <p className={`text-2xl font-black mt-0.5 ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>{chartStats.bestDay}</p>
+                      </div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {points !== null && (
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
               <div className={`w-full h-px mb-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
