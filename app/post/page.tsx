@@ -44,7 +44,6 @@ export default function SwagDropsPage() {
   const filteredSwags = activeTier === "All Tiers" 
     ? swags 
     : swags.filter(swag => {
-        // FRONTEND HACK: Backpack ko forcefully Ranger manenge filter ke liye bhi
         const isBackpack = swag.title && swag.title.toLowerCase().includes("backpack");
         if (isBackpack && activeTier === "Ranger") return true;
         if (isBackpack && activeTier === "All Tiers") return true;
@@ -64,7 +63,35 @@ export default function SwagDropsPage() {
     <div className="min-h-screen bg-[#f8f9fa] font-sans pb-16">
       <Navbar />
 
-      <main className="max-w-[1000px] mx-auto px-4 pt-28 space-y-10">
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes autoOpenLid {
+          0%, 15%, 85%, 100% { transform: translateY(0) rotate(0) translateX(0); }
+          35%, 65% { transform: translateY(-64px) rotate(-18deg) translateX(-24px); }
+        }
+        @keyframes autoGlow {
+          0%, 25%, 75%, 100% { opacity: 0; }
+          45%, 55% { opacity: 1; }
+        }
+        @keyframes autoSparkleMid {
+          0%, 30%, 70%, 100% { opacity: 0; transform: translateY(0); }
+          40%, 60% { opacity: 1; transform: translateY(-50px); }
+        }
+        @keyframes autoSparkleLeft {
+          0%, 35%, 65%, 100% { opacity: 0; transform: translate(0, 0); }
+          45%, 55% { opacity: 1; transform: translate(-30px, -40px); }
+        }
+        @keyframes autoSparkleRight {
+          0%, 40%, 60%, 100% { opacity: 0; transform: translate(0, 0); }
+          48%, 52% { opacity: 1; transform: translate(30px, -35px); }
+        }
+        .animate-auto-lid { animation: autoOpenLid 4s infinite ease-in-out; }
+        .animate-auto-glow { animation: autoGlow 4s infinite ease-in-out; }
+        .animate-auto-sparkle-m { animation: autoSparkleMid 4s infinite ease-in-out; }
+        .animate-auto-sparkle-l { animation: autoSparkleLeft 4s infinite ease-in-out; }
+        .animate-auto-sparkle-r { animation: autoSparkleRight 4s infinite ease-in-out; }
+      `}} />
+
+      <main className="max-w-[1200px] mx-auto px-4 pt-28 space-y-10">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-200 pb-5 gap-4">
           <div className="flex items-center gap-3">
@@ -166,12 +193,11 @@ export default function SwagDropsPage() {
              <div className="w-10 h-10 border-4 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></div>
            </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
             
             {filteredSwags.map((swag) => {
               const isNew = swag.createdAt && (Date.now() - swag.createdAt < 24 * 60 * 60 * 1000);
               
-              // FRONTEND HACK: Override tags for Backpack dynamically
               const isBackpack = swag.title && swag.title.toLowerCase().includes("backpack");
               const displayTags = isBackpack ? ["Ranger"] : (swag.tags || []);
               
@@ -184,7 +210,7 @@ export default function SwagDropsPage() {
                     </div>
                   )}
 
-                  <div className={`w-full h-[300px] p-6 ${swag.bgColor || 'bg-[#fceda6]'} flex justify-center items-center relative group`}>
+                  <div className={`w-full h-[300px] p-2 ${swag.bgColor || 'bg-[#fceda6]'} flex justify-center items-center relative group`}>
                     <img 
                       src={swag.image} 
                       alt={swag.title} 
@@ -231,25 +257,51 @@ export default function SwagDropsPage() {
               );
             })}
 
-            {/* 🔥 NEW ATTRACTIVE "COMING SOON" PLACEHOLDER 🔥 */}
-            <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
-              <div className="w-full h-[300px] bg-gradient-to-br from-[#6366f1] via-[#8b5cf6] to-[#d946ef] flex flex-col justify-center items-center text-white p-6 relative overflow-hidden">
-                {/* Background glowing pulse */}
-                <div className="absolute inset-0 flex justify-center items-center opacity-20 group-hover:opacity-40 transition-opacity duration-700">
-                  <div className="w-48 h-48 bg-white rounded-full blur-3xl animate-pulse"></div>
+            {/* 🔥 AUTO-ANIMATED 3D "COMING SOON" BOX 🔥 */}
+            <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col">
+              <div className="w-full h-[300px] bg-slate-900 flex flex-col justify-center items-center text-white p-6 relative overflow-hidden">
+                
+                {/* Background Ambient Glow */}
+                <div className="absolute inset-0 flex justify-center items-center opacity-40">
+                  <div className="w-64 h-64 bg-fuchsia-600 rounded-full blur-[80px]"></div>
                 </div>
                 
-                {/* Animated Gift Box */}
-                <div className="relative text-7xl mb-4 transform transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
-                  🎁
-                  <span className="absolute -top-4 -right-4 text-3xl animate-ping opacity-75">✨</span>
+                {/* 🎨 PURE CSS 3D GIFT BOX DESIGN WITH AUTO-ANIMATION 🎨 */}
+                <div className="relative w-32 h-32 mt-6 z-10">
+                  
+                  {/* Glowing light coming out of the box automatically */}
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-20 h-10 bg-yellow-300 rounded-full blur-xl opacity-0 animate-auto-glow z-10"></div>
+
+                  {/* Sparkles shooting out automatically */}
+                  <div className="absolute top-12 left-1/2 -translate-x-1/2 opacity-0 animate-auto-sparkle-m z-10 text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">✨</div>
+                  <div className="absolute top-14 left-4 opacity-0 animate-auto-sparkle-l z-10 text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">🌟</div>
+                  <div className="absolute top-14 right-4 opacity-0 animate-auto-sparkle-r z-10 text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">🎉</div>
+
+                  {/* Back wall of the box (inside) */}
+                  <div className="absolute bottom-0 left-2 w-28 h-20 bg-[#1e1b4b] rounded-b-lg border-t-[12px] border-[#312e81] z-0"></div>
+
+                  {/* Front of the box */}
+                  <div className="absolute bottom-0 left-2 w-28 h-20 bg-gradient-to-tr from-[#6366f1] to-[#8b5cf6] rounded-b-lg z-20 shadow-[0_10px_15px_rgba(0,0,0,0.5)] overflow-hidden">
+                    {/* Vertical Ribbon */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-full bg-gradient-to-b from-pink-400 to-pink-600 shadow-lg"></div>
+                    {/* Horizontal Ribbon */}
+                    <div className="absolute top-1/2 -translate-y-1/2 w-full h-5 bg-gradient-to-r from-pink-500 to-pink-600 shadow-lg"></div>
+                  </div>
+
+                  {/* Lid of the box (Auto Animating Lift and Rotate) */}
+                  <div className="absolute bottom-16 left-0 w-32 h-9 bg-gradient-to-tr from-[#8b5cf6] to-[#d946ef] rounded-md z-30 shadow-[0_15px_25px_rgba(0,0,0,0.6)] border-b-4 border-[#7e22ce] animate-auto-lid">
+                    {/* Lid Vertical Ribbon */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-full bg-gradient-to-b from-pink-300 to-pink-500 shadow-md"></div>
+                    {/* The Bow */}
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex justify-center items-end">
+                      <div className="w-7 h-7 bg-transparent border-[5px] border-pink-400 rounded-full -mr-1.5 shadow-sm transform -rotate-12"></div>
+                      <div className="w-7 h-7 bg-transparent border-[5px] border-pink-400 rounded-full -ml-1.5 shadow-sm transform rotate-12"></div>
+                    </div>
+                  </div>
                 </div>
-                
-                <h4 className="font-bold text-2xl tracking-wide z-10 drop-shadow-md">Mystery Swags</h4>
-                <p className="text-sm font-medium opacity-90 mt-1 z-10">Unlocking Soon...</p>
               </div>
               
-              <div className="p-6 flex flex-col flex-grow items-center justify-center text-center bg-gray-50">
+              <div className="p-6 flex flex-col flex-grow items-center justify-center text-center bg-white border-t border-gray-100">
                 <span className="text-[#80868b] text-[13px] font-semibold mb-2 w-full text-left">
                   Stay tuned!
                 </span>
@@ -258,8 +310,7 @@ export default function SwagDropsPage() {
                 </h3>
                 
                 <div className="flex flex-wrap gap-2 w-full mb-6">
-                  {/* Changed "All Tiers" to "Mystery Tier" for the placeholder */}
-                  <span className="text-[12px] font-bold px-3 py-1 rounded-md bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200 shadow-sm">
+                  <span className="text-[12px] font-bold px-3 py-1 rounded-md bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 border border-slate-300 shadow-sm">
                     Mystery Tier 🔒
                   </span>
                 </div>
@@ -267,7 +318,7 @@ export default function SwagDropsPage() {
                 <div className="mt-auto pt-2 w-full">
                   <button 
                     disabled
-                    className="w-full flex items-center justify-center gap-2 bg-[#f1f3f4] text-[#9aa0a6] font-bold py-3 rounded-xl cursor-not-allowed border border-gray-200"
+                    className="w-full flex items-center justify-center gap-2 bg-slate-100 text-slate-400 font-bold py-3 rounded-xl cursor-not-allowed border border-slate-200 transition-all hover:bg-slate-200"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     Dropping Soon
