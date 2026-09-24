@@ -379,12 +379,12 @@ export default function LeaderboardPage() {
           animation: floatHeart cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        @keyframes tooltipFadeUp {
-          0% { transform: translateY(10px); opacity: 0; }
-          100% { transform: translateY(0); opacity: 1; }
+        @keyframes tooltipFadeIn {
+          0% { transform: translateX(-5px); opacity: 0; }
+          100% { transform: translateX(0); opacity: 1; }
         }
         .animate-tooltip {
-          animation: tooltipFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: tooltipFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
     </div>
@@ -421,18 +421,18 @@ function LeaderTableRow({
   // State to track if someone interacted with YOUR profile recently
   const [recentInteraction, setRecentInteraction] = useState<Interaction | null>(null);
 
-  // Check for recent interactions on the current user's profile
+  // Check for recent interactions on the current user's profile (Set to 10 seconds)
   useEffect(() => {
     if (isCurrentUser && user.lastInteraction) {
       const interaction = user.lastInteraction;
       const timeDiff = Date.now() - interaction.timestamp;
       
-      // If within 1.5 minutes (90,000 ms) and it wasn't done by the user themselves
-      if (timeDiff < 90000 && interaction.byName !== currentSessionName) {
+      // If within 10 seconds (10,000 ms) and it wasn't done by the user themselves
+      if (timeDiff < 10000 && interaction.byName !== currentSessionName) {
         setRecentInteraction(interaction);
         const timer = setTimeout(() => {
           setRecentInteraction(null);
-        }, 90000);
+        }, 10000);
         return () => clearTimeout(timer);
       }
     }
@@ -587,26 +587,7 @@ function LeaderTableRow({
           {rankIcon}
         </td>
 
-        <td className="px-6 py-4 align-middle relative">
-          {/* Clean, Tooltip-style Notification attached directly to the user's row */}
-          {isCurrentUser && recentInteraction && (
-            <div className="absolute left-6 -top-10 z-50 animate-tooltip pointer-events-none">
-              <div className="bg-gray-900 text-white px-3.5 py-1.5 rounded-lg text-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center gap-2 whitespace-nowrap">
-                {recentInteraction.type === 'like' ? (
-                  <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
-                ) : (
-                  <MessageCircle className="w-3.5 h-3.5 text-blue-400 fill-current" />
-                )}
-                <span>
-                  <span className="font-semibold">{recentInteraction.byName}</span>{' '}
-                  {recentInteraction.type === 'like' ? 'liked your profile!' : 'commented!'}
-                </span>
-                {/* Tooltip arrow pointing down at the user */}
-                <div className="absolute -bottom-1 left-6 w-2.5 h-2.5 bg-gray-900 rotate-45"></div>
-              </div>
-            </div>
-          )}
-
+        <td className="px-6 py-4 align-middle">
           <div className="flex items-center gap-3">
             <img
               src={user.photoURL || "/avatar.png"}
@@ -615,15 +596,40 @@ function LeaderTableRow({
               onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/avatar.png"; }}
             />
             <div className="min-w-0">
-              <div className="flex items-center">
+              {/* Position Relative wrapper for the tooltip */}
+              <div className="flex items-center relative">
                 <span className={`text-[14px] font-semibold truncate ${isTop3 ? "text-gray-900" : "text-gray-700"}`}>
                   {user.name || "Anonymous"}
                 </span>
+                
                 {isCurrentUser && (
                   <span className="ml-2 bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold">
                     You
                   </span>
                 )}
+
+                {/* Professional Grey Popup next to the 'You' badge */}
+                {isCurrentUser && recentInteraction && (
+                  <div className="absolute left-full ml-3 z-50 animate-tooltip pointer-events-none">
+                    <div className="bg-slate-600 text-white px-3 py-1.5 rounded-md text-[12px] shadow-md flex items-center gap-2 whitespace-nowrap">
+                      {/* Left-pointing small arrow */}
+                      <div className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-slate-600 rotate-45"></div>
+                      
+                      {recentInteraction.type === 'like' ? (
+                        <Heart className="w-3.5 h-3.5 text-pink-400 fill-current" />
+                      ) : (
+                        <MessageCircle className="w-3.5 h-3.5 text-blue-300 fill-current" />
+                      )}
+                      <span>
+                        <span className="font-semibold text-white">{recentInteraction.byName}</span>{' '}
+                        <span className="text-slate-200">
+                          {recentInteraction.type === 'like' ? 'liked your profile!' : 'commented!'}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+
               </div>
             </div>
           </div>
