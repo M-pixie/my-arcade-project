@@ -197,7 +197,7 @@ export default function SwagDropsPage() {
                   
                   {isNew && (
                     <div className="absolute top-4 left-4 z-10 bg-[#ea4335] text-white text-[10px] font-black tracking-wider px-3 py-1.5 rounded-full shadow-md animate-bounce">
-                      NEW 🔥
+                      NEW
                     </div>
                   )}
 
