@@ -89,7 +89,7 @@ export default function SwagDropsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {arcadeCards.map((card, idx) => (
-            <div key={idx} className="bg-[#2d2f34] rounded-xl p-5 flex flex-col items-center justify-between border border-gray-700 shadow-lg">
+            <div key={idx} className="bg-[#2d2f34] rounded-xl p-5 flex flex-col items-center justify-between border border-gray-700 shadow-lg hover:border-gray-500 transition-colors">
               <div className="text-[#facc15] text-lg mb-1">{card.stars}</div>
               <h3 className="text-[#facc15] font-black text-sm tracking-wide text-center uppercase font-mono">
                 {card.title}
@@ -157,58 +157,67 @@ export default function SwagDropsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
             
-            {filteredSwags.map((swag) => (
-              <div key={swag.id} className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
-                
-                {/* 
-                  UPDATED IMAGE CONTAINER 
-                  Fixed height to 300px (matches right box), added padding, and used object-contain 
-                */}
-                <div className={`w-full h-[300px] p-6 ${swag.bgColor || 'bg-[#fceda6]'} flex justify-center items-center relative`}>
-                  <img 
-                    src={swag.image} 
-                    alt={swag.title} 
-                    className="w-full h-full object-contain rounded-xl hover:scale-[1.02] transition-transform duration-500" 
-                  />
-                </div>
-
-                <div className="p-6 flex flex-col flex-grow">
-                  <span className="text-[#80868b] text-[13px] font-semibold mb-2">
-                    Revealed on {swag.date}
-                  </span>
-                  <h3 className="text-[18px] font-bold text-[#202124] leading-snug mb-4">
-                    {swag.title}
-                  </h3>
+            {filteredSwags.map((swag) => {
+              // Check if swag was added in the last 24 hours
+              const isNew = swag.createdAt && (Date.now() - swag.createdAt < 24 * 60 * 60 * 1000);
+              
+              return (
+                <div key={swag.id} className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col relative">
                   
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {swag.tags && swag.tags.map((tag: string) => (
-                      <span 
-                        key={tag} 
-                        className={`text-[12px] font-bold px-3 py-1 rounded-md
-                          ${tag === 'Champion' ? 'bg-purple-100 text-purple-700' : ''}
-                          ${tag === 'Legend' ? 'bg-yellow-100 text-yellow-700' : ''}
-                          ${tag !== 'Champion' && tag !== 'Legend' ? 'bg-blue-50 text-blue-600' : ''}
-                        `}
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  {/* 🔥 NEW BADGE 🔥 */}
+                  {isNew && (
+                    <div className="absolute top-4 left-4 z-10 bg-[#ea4335] text-white text-[10px] font-black tracking-wider px-3 py-1.5 rounded-full shadow-md animate-bounce">
+                      NEW 🔥
+                    </div>
+                  )}
+
+                  <div className={`w-full h-[300px] p-6 ${swag.bgColor || 'bg-[#fceda6]'} flex justify-center items-center relative group`}>
+                    <img 
+                      src={swag.image} 
+                      alt={swag.title} 
+                      className="w-full h-full object-contain rounded-xl group-hover:scale-[1.05] transition-transform duration-500" 
+                    />
                   </div>
 
-                  <div className="mt-auto pt-2">
-                    <a 
-                      href={swag.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-full block text-center bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-bold py-3 rounded-xl transition-colors"
-                    >
-                      Swag Drop ↗
-                    </a>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <span className="text-[#80868b] text-[13px] font-semibold mb-2">
+                      Revealed on {swag.date}
+                    </span>
+                    <h3 className="text-[18px] font-bold text-[#202124] leading-snug mb-4">
+                      {swag.title}
+                    </h3>
+                    
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {swag.tags && swag.tags.map((tag: string) => (
+                        <span 
+                          key={tag} 
+                          className={`text-[12px] font-bold px-3 py-1 rounded-md
+                            ${tag === 'Champion' ? 'bg-purple-100 text-purple-700' : ''}
+                            ${tag === 'Legend' ? 'bg-yellow-100 text-yellow-700' : ''}
+                            ${tag !== 'Champion' && tag !== 'Legend' ? 'bg-blue-50 text-blue-600' : ''}
+                          `}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="mt-auto pt-2">
+                      <a 
+                        href={swag.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-full block text-center bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-bold py-3 rounded-xl transition-colors"
+                      >
+                        Swag Drop ↗
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
+            {/* Coming Soon Placeholder */}
             <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden flex flex-col">
               <div className="w-full h-[300px] bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] flex flex-col justify-center items-center text-white p-6 relative">
                 <span className="text-6xl font-thin mb-2 opacity-80">+</span>
