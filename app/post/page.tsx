@@ -41,16 +41,10 @@ export default function SwagDropsPage() {
     fetchSwags();
   }, []);
 
+  // 🔥 REMOVED THE MANUAL HACK: Ab filter seedha Firebase ke asli tags par chalega
   const filteredSwags = activeTier === "All Tiers" 
     ? swags 
-    : swags.filter(swag => {
-        const isBackpack = swag.title && swag.title.toLowerCase().includes("backpack");
-        if (isBackpack && activeTier === "Ranger") return true;
-        if (isBackpack && activeTier === "All Tiers") return true;
-        if (isBackpack && activeTier !== "Ranger" && activeTier !== "All Tiers") return false;
-        
-        return swag.tags && swag.tags.includes(activeTier);
-      });
+    : swags.filter(swag => swag.tags && swag.tags.includes(activeTier));
 
   const arcadeCards = [
     { stars: "★", title: "Arcade Trooper", points: "50 Points", progress: "38%", color: "bg-red-500", spots: "3718 / 6000 spots left" },
@@ -198,15 +192,12 @@ export default function SwagDropsPage() {
             {filteredSwags.map((swag) => {
               const isNew = swag.createdAt && (Date.now() - swag.createdAt < 24 * 60 * 60 * 1000);
               
-              const isBackpack = swag.title && swag.title.toLowerCase().includes("backpack");
-              const displayTags = isBackpack ? ["Ranger"] : (swag.tags || []);
-              
               return (
                 <div key={swag.id} className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col relative">
                   
                   {isNew && (
                     <div className="absolute top-4 left-4 z-10 bg-[#ea4335] text-white text-[10px] font-black tracking-wider px-3 py-1.5 rounded-full shadow-md animate-bounce">
-                      NEW
+                      NEW 🔥
                     </div>
                   )}
 
@@ -227,7 +218,8 @@ export default function SwagDropsPage() {
                     </h3>
                     
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {displayTags.map((tag: string) => (
+                      {/* 🔥 REMOVED THE MANUAL HACK: Ab direct swag.tags se data aayega 🔥 */}
+                      {(swag.tags || []).map((tag: string) => (
                         <span 
                           key={tag} 
                           className={`text-[12px] font-bold px-3 py-1 rounded-md
@@ -261,38 +253,24 @@ export default function SwagDropsPage() {
             <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col">
               <div className="w-full h-[300px] bg-slate-900 flex flex-col justify-center items-center text-white p-6 relative overflow-hidden">
                 
-                {/* Background Ambient Glow */}
                 <div className="absolute inset-0 flex justify-center items-center opacity-40">
                   <div className="w-64 h-64 bg-fuchsia-600 rounded-full blur-[80px]"></div>
                 </div>
                 
-                {/* 🎨 PURE CSS 3D GIFT BOX DESIGN WITH AUTO-ANIMATION 🎨 */}
                 <div className="relative w-32 h-32 mt-6 z-10">
-                  
-                  {/* Glowing light coming out of the box automatically */}
                   <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-20 h-10 bg-yellow-300 rounded-full blur-xl opacity-0 animate-auto-glow z-10"></div>
-
-                  {/* Sparkles shooting out automatically */}
                   <div className="absolute top-12 left-1/2 -translate-x-1/2 opacity-0 animate-auto-sparkle-m z-10 text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">✨</div>
                   <div className="absolute top-14 left-4 opacity-0 animate-auto-sparkle-l z-10 text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">🌟</div>
                   <div className="absolute top-14 right-4 opacity-0 animate-auto-sparkle-r z-10 text-xl drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">🎉</div>
-
-                  {/* Back wall of the box (inside) */}
                   <div className="absolute bottom-0 left-2 w-28 h-20 bg-[#1e1b4b] rounded-b-lg border-t-[12px] border-[#312e81] z-0"></div>
 
-                  {/* Front of the box */}
                   <div className="absolute bottom-0 left-2 w-28 h-20 bg-gradient-to-tr from-[#6366f1] to-[#8b5cf6] rounded-b-lg z-20 shadow-[0_10px_15px_rgba(0,0,0,0.5)] overflow-hidden">
-                    {/* Vertical Ribbon */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-full bg-gradient-to-b from-pink-400 to-pink-600 shadow-lg"></div>
-                    {/* Horizontal Ribbon */}
                     <div className="absolute top-1/2 -translate-y-1/2 w-full h-5 bg-gradient-to-r from-pink-500 to-pink-600 shadow-lg"></div>
                   </div>
 
-                  {/* Lid of the box (Auto Animating Lift and Rotate) */}
                   <div className="absolute bottom-16 left-0 w-32 h-9 bg-gradient-to-tr from-[#8b5cf6] to-[#d946ef] rounded-md z-30 shadow-[0_15px_25px_rgba(0,0,0,0.6)] border-b-4 border-[#7e22ce] animate-auto-lid">
-                    {/* Lid Vertical Ribbon */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-full bg-gradient-to-b from-pink-300 to-pink-500 shadow-md"></div>
-                    {/* The Bow */}
                     <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex justify-center items-end">
                       <div className="w-7 h-7 bg-transparent border-[5px] border-pink-400 rounded-full -mr-1.5 shadow-sm transform -rotate-12"></div>
                       <div className="w-7 h-7 bg-transparent border-[5px] border-pink-400 rounded-full -ml-1.5 shadow-sm transform rotate-12"></div>
