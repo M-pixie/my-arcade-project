@@ -17,8 +17,6 @@ import {
   Send,
   Trash2,
   CornerDownRight,
-  Star,
-  Sparkles
 } from "lucide-react";
 
 import { db } from "@/lib/firebase";
@@ -49,8 +47,8 @@ type Leader = {
   photoURL?: string;
   points?: number;
   likesCount?: number;
-  likedBy?: string[]; // Track who liked to prevent spam
-  lastInteraction?: Interaction; // Track latest action for the premium popup
+  likedBy?: string[];
+  lastInteraction?: Interaction;
   hasNewLikes?: boolean;
   calculationCount?: number;
   profileUrl?: string;
@@ -95,7 +93,6 @@ const toTimestamp = (value?: Leader["createdAt"] | Leader["updatedAt"]) => {
   return 0;
 };
 
-// Only 3 hearts that animate for exactly 3 seconds
 function FloatingHearts() {
   return (
     <div className="absolute left-1/2 bottom-full -translate-x-1/2 pointer-events-none z-50 w-[40px] h-[40px]">
@@ -130,9 +127,6 @@ export default function LeaderboardPage() {
     "points-desc" | "points-asc" | "latest" | "oldest"
   >("points-desc");
 
-  // Premium Popup State
-  const [activePopup, setActivePopup] = useState<Interaction | null>(null);
-
   const currentUserRef = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
@@ -164,24 +158,6 @@ export default function LeaderboardPage() {
   };
 
   const currentUserData = arcadeLeaders.find((user) => isExactCurrentUser(user));
-
-  // Premium Popup logic (listens to changes on your profile)
-  useEffect(() => {
-    if (currentUserData?.lastInteraction) {
-      const interaction = currentUserData.lastInteraction;
-      const timeDiff = Date.now() - interaction.timestamp;
-      
-      // If the interaction happened within the last 1.5 minutes (90,000 ms), show it
-      if (timeDiff < 90000 && interaction.byName !== currentUserName) {
-        setActivePopup(interaction);
-        // Auto-close after 1.5 minutes (90000 ms)
-        const timer = setTimeout(() => {
-          setActivePopup(null);
-        }, 90000);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [currentUserData?.lastInteraction, currentUserName]);
 
   const rankedArcade = useMemo(() => {
     return [...arcadeLeaders]
@@ -238,35 +214,6 @@ export default function LeaderboardPage() {
 
   return (
     <div className="flex flex-col h-screen bg-[#f7f9fc] text-[#202124] overflow-hidden font-[Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif] relative">
-      
-      {/* Premium Toast Notification (Displays for 1.5 Minutes) */}
-      {activePopup && (
-        <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
-          <div className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-4 rounded-2xl flex items-center gap-4 max-w-sm relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 bg-gradient-to-b from-blue-500 to-purple-500 h-full"></div>
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-              {activePopup.type === "like" ? (
-                <Heart className="w-5 h-5 text-red-500 fill-current" />
-              ) : (
-                <MessageCircle className="w-5 h-5 text-blue-500 fill-current" />
-              )}
-            </div>
-            <div className="flex-1 pr-6">
-              <h4 className="text-[14px] font-bold text-gray-900 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Premium Alert
-              </h4>
-              <p className="text-[13px] text-gray-600 mt-0.5 leading-snug">
-                <span className="font-semibold text-gray-900">{activePopup.byName}</span>{" "}
-                {activePopup.type === "like" ? "liked your profile!" : "commented on your profile!"}
-              </p>
-            </div>
-            <button onClick={() => setActivePopup(null)} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors">
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
-
       <header className="h-[66px] bg-white border-b border-[#e5e7eb] flex items-center justify-between px-4 md:px-7 shrink-0 shadow-sm z-30">
         <div className="flex items-center gap-5 md:gap-9">
           <div className="font-bold text-[15px] md:text-[17px] tracking-tight text-[#202124] flex items-center gap-2.5">
@@ -432,12 +379,12 @@ export default function LeaderboardPage() {
           animation: floatHeart cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        @keyframes slideUp {
-          0% { transform: translateY(100px); opacity: 0; }
+        @keyframes tooltipFadeUp {
+          0% { transform: translateY(10px); opacity: 0; }
           100% { transform: translateY(0); opacity: 1; }
         }
-        .animate-slide-up {
-          animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .animate-tooltip {
+          animation: tooltipFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
     </div>
@@ -461,7 +408,6 @@ function LeaderTableRow({
 }) {
   const isTop3 = user.rank <= 3;
   
-  // Calculate if the current logged-in user has liked this profile
   const hasLiked = (user.likedBy || []).includes(currentSessionId);
   const likesCount = user.likesCount || 0; 
   
@@ -471,6 +417,26 @@ function LeaderTableRow({
   const [commentText, setCommentText] = useState("");
   const [commentsCount, setCommentsCount] = useState(0);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+
+  // State to track if someone interacted with YOUR profile recently
+  const [recentInteraction, setRecentInteraction] = useState<Interaction | null>(null);
+
+  // Check for recent interactions on the current user's profile
+  useEffect(() => {
+    if (isCurrentUser && user.lastInteraction) {
+      const interaction = user.lastInteraction;
+      const timeDiff = Date.now() - interaction.timestamp;
+      
+      // If within 1.5 minutes (90,000 ms) and it wasn't done by the user themselves
+      if (timeDiff < 90000 && interaction.byName !== currentSessionName) {
+        setRecentInteraction(interaction);
+        const timer = setTimeout(() => {
+          setRecentInteraction(null);
+        }, 90000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [user.lastInteraction, isCurrentUser, currentSessionName]);
 
   useEffect(() => {
     if (!showComments) return;
@@ -509,19 +475,17 @@ function LeaderTableRow({
   }, [user.id]);
 
   const handleLike = async () => {
-    if (isCurrentUser) return; // Prevent liking yourself
+    if (isCurrentUser) return; 
 
     try {
       const userRef = doc(db, "leaderboard", user.id);
       
       if (hasLiked) {
-        // Unlike Logic
         await updateDoc(userRef, {
           likedBy: arrayRemove(currentSessionId),
           likesCount: increment(-1)
         });
       } else {
-        // Like Logic
         await updateDoc(userRef, {
           likedBy: arrayUnion(currentSessionId),
           likesCount: increment(1),
@@ -532,7 +496,6 @@ function LeaderTableRow({
           }
         });
         
-        // Show hearts for exactly 3 seconds
         setShowRowHearts(true);
         setTimeout(() => setShowRowHearts(false), 3000);
       }
@@ -575,7 +538,6 @@ function LeaderTableRow({
         await addDoc(commentsRef, newComment);
       }
 
-      // Update interaction for the premium popup
       if (!isCurrentUser) {
         await updateDoc(doc(db, "leaderboard", user.id), {
           lastInteraction: {
@@ -625,7 +587,26 @@ function LeaderTableRow({
           {rankIcon}
         </td>
 
-        <td className="px-6 py-4 align-middle">
+        <td className="px-6 py-4 align-middle relative">
+          {/* Clean, Tooltip-style Notification attached directly to the user's row */}
+          {isCurrentUser && recentInteraction && (
+            <div className="absolute left-6 -top-10 z-50 animate-tooltip pointer-events-none">
+              <div className="bg-gray-900 text-white px-3.5 py-1.5 rounded-lg text-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center gap-2 whitespace-nowrap">
+                {recentInteraction.type === 'like' ? (
+                  <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
+                ) : (
+                  <MessageCircle className="w-3.5 h-3.5 text-blue-400 fill-current" />
+                )}
+                <span>
+                  <span className="font-semibold">{recentInteraction.byName}</span>{' '}
+                  {recentInteraction.type === 'like' ? 'liked your profile!' : 'commented!'}
+                </span>
+                {/* Tooltip arrow pointing down at the user */}
+                <div className="absolute -bottom-1 left-6 w-2.5 h-2.5 bg-gray-900 rotate-45"></div>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
             <img
               src={user.photoURL || "/avatar.png"}
