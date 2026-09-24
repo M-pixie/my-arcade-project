@@ -13,7 +13,6 @@ export default function SwagDropsPage() {
 
   const tiers = ["All Tiers", "Trooper", "Ranger", "Champion", "Legend"];
 
-  // 🔥 UPDATE: onSnapshot hata kar getDocs laga diya 🔥
   useEffect(() => {
     const fetchSwags = async () => {
       try {
@@ -44,7 +43,15 @@ export default function SwagDropsPage() {
 
   const filteredSwags = activeTier === "All Tiers" 
     ? swags 
-    : swags.filter(swag => swag.tags && swag.tags.includes(activeTier));
+    : swags.filter(swag => {
+        // FRONTEND HACK: Backpack ko forcefully Ranger manenge filter ke liye bhi
+        const isBackpack = swag.title && swag.title.toLowerCase().includes("backpack");
+        if (isBackpack && activeTier === "Ranger") return true;
+        if (isBackpack && activeTier === "All Tiers") return true;
+        if (isBackpack && activeTier !== "Ranger" && activeTier !== "All Tiers") return false;
+        
+        return swag.tags && swag.tags.includes(activeTier);
+      });
 
   const arcadeCards = [
     { stars: "★", title: "Arcade Trooper", points: "50 Points", progress: "38%", color: "bg-red-500", spots: "3718 / 6000 spots left" },
@@ -164,12 +171,16 @@ export default function SwagDropsPage() {
             {filteredSwags.map((swag) => {
               const isNew = swag.createdAt && (Date.now() - swag.createdAt < 24 * 60 * 60 * 1000);
               
+              // FRONTEND HACK: Override tags for Backpack dynamically
+              const isBackpack = swag.title && swag.title.toLowerCase().includes("backpack");
+              const displayTags = isBackpack ? ["Ranger"] : (swag.tags || []);
+              
               return (
                 <div key={swag.id} className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col relative">
                   
                   {isNew && (
                     <div className="absolute top-4 left-4 z-10 bg-[#ea4335] text-white text-[10px] font-black tracking-wider px-3 py-1.5 rounded-full shadow-md animate-bounce">
-                      NEW 🔥
+                      NEW
                     </div>
                   )}
 
@@ -190,7 +201,7 @@ export default function SwagDropsPage() {
                     </h3>
                     
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {swag.tags && swag.tags.map((tag: string) => (
+                      {displayTags.map((tag: string) => (
                         <span 
                           key={tag} 
                           className={`text-[12px] font-bold px-3 py-1 rounded-md
@@ -220,33 +231,46 @@ export default function SwagDropsPage() {
               );
             })}
 
-            <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden flex flex-col">
-              <div className="w-full h-[300px] bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] flex flex-col justify-center items-center text-white p-6 relative">
-                <span className="text-6xl font-thin mb-2 opacity-80">+</span>
-                <h4 className="font-bold text-lg">More Swags</h4>
-                <p className="text-sm font-medium opacity-90">Dropping Soon</p>
+            {/* 🔥 NEW ATTRACTIVE "COMING SOON" PLACEHOLDER 🔥 */}
+            <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
+              <div className="w-full h-[300px] bg-gradient-to-br from-[#6366f1] via-[#8b5cf6] to-[#d946ef] flex flex-col justify-center items-center text-white p-6 relative overflow-hidden">
+                {/* Background glowing pulse */}
+                <div className="absolute inset-0 flex justify-center items-center opacity-20 group-hover:opacity-40 transition-opacity duration-700">
+                  <div className="w-48 h-48 bg-white rounded-full blur-3xl animate-pulse"></div>
+                </div>
+                
+                {/* Animated Gift Box */}
+                <div className="relative text-7xl mb-4 transform transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
+                  🎁
+                  <span className="absolute -top-4 -right-4 text-3xl animate-ping opacity-75">✨</span>
+                </div>
+                
+                <h4 className="font-bold text-2xl tracking-wide z-10 drop-shadow-md">Mystery Swags</h4>
+                <p className="text-sm font-medium opacity-90 mt-1 z-10">Unlocking Soon...</p>
               </div>
-              <div className="p-6 flex flex-col flex-grow items-center justify-center text-center">
+              
+              <div className="p-6 flex flex-col flex-grow items-center justify-center text-center bg-gray-50">
                 <span className="text-[#80868b] text-[13px] font-semibold mb-2 w-full text-left">
                   Stay tuned!
                 </span>
                 <h3 className="text-[18px] font-bold text-[#202124] leading-snug mb-6 w-full text-left">
-                  Exciting Prizes Ahead!
+                  More Exciting Prizes Ahead!
                 </h3>
                 
                 <div className="flex flex-wrap gap-2 w-full mb-6">
-                  <span className="text-[12px] font-bold px-3 py-1 rounded-md bg-blue-50 text-blue-600">
-                    All Tiers
+                  {/* Changed "All Tiers" to "Mystery Tier" for the placeholder */}
+                  <span className="text-[12px] font-bold px-3 py-1 rounded-md bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 border border-purple-200 shadow-sm">
+                    Mystery Tier 🔒
                   </span>
                 </div>
 
                 <div className="mt-auto pt-2 w-full">
                   <button 
                     disabled
-                    className="w-full flex items-center justify-center gap-2 bg-[#f1f3f4] text-[#9aa0a6] font-bold py-3 rounded-xl cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 bg-[#f1f3f4] text-[#9aa0a6] font-bold py-3 rounded-xl cursor-not-allowed border border-gray-200"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Coming Soon
+                    Dropping Soon
                   </button>
                 </div>
               </div>
