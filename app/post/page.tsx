@@ -3,39 +3,43 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import { db } from "@/lib/firebase"; 
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 export default function SwagDropsPage() {
   const [activeTier, setActiveTier] = useState("All Tiers");
   const [swags, setSwags] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  
   const [lastUpdated, setLastUpdated] = useState<string>("");
 
   const tiers = ["All Tiers", "Trooper", "Ranger", "Champion", "Legend"];
 
+  // 🔥 UPDATE: onSnapshot hata kar getDocs laga diya 🔥
   useEffect(() => {
-    const q = query(collection(db, "swag_drops"), orderBy("createdAt", "desc"));
-    
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedSwags = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setSwags(fetchedSwags);
-      setLoading(false);
-      
-      setLastUpdated(new Date().toLocaleTimeString('en-IN', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: true 
-      }));
-    }, (error) => {
-      console.error("Firebase fetch error:", error);
-      setLoading(false);
-    });
+    const fetchSwags = async () => {
+      try {
+        const q = query(collection(db, "swag_drops"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        const fetchedSwags = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        setSwags(fetchedSwags);
+        setLoading(false);
+        
+        setLastUpdated(new Date().toLocaleTimeString('en-IN', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: true 
+        }));
+      } catch (error) {
+        console.error("Firebase fetch error:", error);
+        setLoading(false);
+      }
+    };
 
-    return () => unsubscribe();
+    fetchSwags();
   }, []);
 
   const filteredSwags = activeTier === "All Tiers" 
@@ -158,13 +162,11 @@ export default function SwagDropsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
             
             {filteredSwags.map((swag) => {
-              // Check if swag was added in the last 24 hours
               const isNew = swag.createdAt && (Date.now() - swag.createdAt < 24 * 60 * 60 * 1000);
               
               return (
                 <div key={swag.id} className="bg-white rounded-2xl border border-[#dadce0] shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col relative">
                   
-                  {/* 🔥 NEW BADGE 🔥 */}
                   {isNew && (
                     <div className="absolute top-4 left-4 z-10 bg-[#ea4335] text-white text-[10px] font-black tracking-wider px-3 py-1.5 rounded-full shadow-md animate-bounce">
                       NEW 🔥
@@ -194,7 +196,8 @@ export default function SwagDropsPage() {
                           className={`text-[12px] font-bold px-3 py-1 rounded-md
                             ${tag === 'Champion' ? 'bg-purple-100 text-purple-700' : ''}
                             ${tag === 'Legend' ? 'bg-yellow-100 text-yellow-700' : ''}
-                            ${tag !== 'Champion' && tag !== 'Legend' ? 'bg-blue-50 text-blue-600' : ''}
+                            ${tag === 'Ranger' ? 'bg-blue-100 text-blue-700' : ''}
+                            ${tag !== 'Champion' && tag !== 'Legend' && tag !== 'Ranger' ? 'bg-blue-50 text-blue-600' : ''}
                           `}
                         >
                           {tag}
@@ -217,7 +220,6 @@ export default function SwagDropsPage() {
               );
             })}
 
-            {/* Coming Soon Placeholder */}
             <div className="bg-white rounded-2xl border border-[#dadce0] shadow-sm overflow-hidden flex flex-col">
               <div className="w-full h-[300px] bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] flex flex-col justify-center items-center text-white p-6 relative">
                 <span className="text-6xl font-thin mb-2 opacity-80">+</span>
