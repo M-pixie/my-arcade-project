@@ -335,7 +335,7 @@ export default function HomePage() {
       setShowResult(true);
 
       /* =====================================================
-         AUTO CLOSE AFTER 2.5 SECONDS
+         AUTO CLOSE AFTER 10 SECONDS
       ===================================================== */
 
       if (autoCloseTimerRef.current) {
@@ -347,7 +347,7 @@ export default function HomePage() {
       autoCloseTimerRef.current =
         setTimeout(() => {
           setShowResult(false);
-        }, 2500);
+        }, 10000); // Set to 10 seconds
 
     } catch (error) {
       console.error(
@@ -590,178 +590,88 @@ export default function HomePage() {
         }
 
         /* =====================================================
-           HERO
+           HERO (LIGHT MODE)
         ===================================================== */
 
         .nexus-hero {
           position: relative;
-
           min-height: 700px;
-
           overflow: hidden;
-
-          background:
-            radial-gradient(
-              circle at 50% -12%,
-              rgba(59, 130, 246, 0.15),
-              transparent 32%
-            ),
-            radial-gradient(
-              circle at 0% 45%,
-              rgba(37, 99, 235, 0.12),
-              transparent 29%
-            ),
-            radial-gradient(
-              circle at 100% 45%,
-              rgba(168, 85, 247, 0.12),
-              transparent 28%
-            ),
-            #07090e;
+          background: #ffffff;
         }
 
         .nexus-grid {
           position: absolute;
-
           inset: -35%;
-
-          opacity: 0.10;
-
+          opacity: 0.05;
           pointer-events: none;
-
           background-image:
-            linear-gradient(
-              rgba(255, 255, 255, 0.055) 1px,
-              transparent 1px
-            ),
-            linear-gradient(
-              90deg,
-              rgba(255, 255, 255, 0.055) 1px,
-              transparent 1px
-            );
-
+            linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
           background-size: 64px 64px;
-
-          transform:
-            perspective(700px)
-            rotateX(62deg);
-
+          transform: perspective(700px) rotateX(62deg);
           transform-origin: center top;
-
-          animation:
-            nexusGridMove
-            14s
-            linear
-            infinite;
+          animation: nexusGridMove 14s linear infinite;
         }
 
         .hero-noise {
           position: absolute;
-
           inset: 0;
-
           pointer-events: none;
-
-          opacity: 0.023;
-
+          opacity: 0.015;
           background-image:
             url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
         }
 
         .hero-orb {
           position: absolute;
-
           border-radius: 50%;
-
           filter: blur(105px);
-
           pointer-events: none;
         }
 
         .hero-orb-blue {
           width: 430px;
           height: 430px;
-
           left: -170px;
           top: -180px;
-
-          background:
-            rgba(37, 99, 235, 0.20);
-
-          animation:
-            nexusBlueOrb
-            12s
-            ease-in-out
-            infinite
-            alternate;
+          background: rgba(37, 99, 235, 0.20);
+          animation: nexusBlueOrb 12s ease-in-out infinite alternate;
         }
 
         .hero-orb-purple {
           width: 410px;
           height: 410px;
-
           right: -130px;
           top: 75px;
-
-          background:
-            rgba(124, 58, 237, 0.17);
-
-          animation:
-            nexusPurpleOrb
-            14s
-            ease-in-out
-            infinite
-            alternate;
+          background: rgba(124, 58, 237, 0.17);
+          animation: nexusPurpleOrb 14s ease-in-out infinite alternate;
         }
 
         .hero-orb-pink {
           width: 330px;
           height: 330px;
-
           left: 42%;
           top: 28%;
-
-          background:
-            rgba(236, 72, 153, 0.10);
-
-          animation:
-            nexusPinkOrb
-            16s
-            ease-in-out
-            infinite
-            alternate;
+          background: rgba(236, 72, 153, 0.10);
+          animation: nexusPinkOrb 16s ease-in-out infinite alternate;
         }
 
         .hero-orb-cyan {
           width: 260px;
           height: 260px;
-
           right: 18%;
           bottom: -170px;
-
-          background:
-            rgba(6, 182, 212, 0.09);
-
-          animation:
-            nexusGlowPulse
-            5s
-            ease-in-out
-            infinite;
+          background: rgba(6, 182, 212, 0.09);
+          animation: nexusGlowPulse 5s ease-in-out infinite;
         }
 
         .hero-content {
           position: relative;
-
           z-index: 5;
-
           max-width: 1160px;
-
           margin: 0 auto;
-
-          padding:
-            90px
-            24px
-            52px;
-
+          padding: 90px 24px 52px;
           text-align: center;
         }
 
@@ -771,72 +681,32 @@ export default function HomePage() {
 
         .hero-pill {
           display: inline-flex;
-
           align-items: center;
-
           gap: 9px;
-
-          padding:
-            7px
-            12px;
-
-          border:
-            1px solid
-            rgba(255,255,255,0.10);
-
+          padding: 7px 12px;
+          border: 1px solid #e5e7eb;
           border-radius: 999px;
-
-          background:
-            rgba(255,255,255,0.035);
-
-          backdrop-filter:
-            blur(13px);
-
-          color: #cbd5e1;
-
+          background: #f8fafc;
+          color: #475569;
           font-size: 11px;
-
           line-height: 1;
-
           font-weight: 600;
-
           letter-spacing: 0.045em;
-
           text-transform: uppercase;
-
-          box-shadow:
-            0 12px 35px
-            rgba(0,0,0,0.14);
-
-          animation:
-            nexusFadeUp
-            .7s
-            ease
-            both;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+          animation: nexusFadeUp .7s ease both;
         }
 
         .hero-live-dot {
           width: 6px;
           height: 6px;
-
           border-radius: 50%;
-
           flex-shrink: 0;
-
-          background:
-            #60a5fa;
-
+          background: #3b82f6;
           box-shadow:
-            0 0 0 4px
-            rgba(96,165,250,0.08),
-            0 0 15px
-            rgba(96,165,250,0.85);
-
-          animation:
-            nexusGlowPulse
-            2.5s
-            ease-in-out
-            infinite;
+            0 0 0 4px rgba(59,130,246,0.1),
+            0 0 15px rgba(59,130,246,0.6);
+          animation: nexusGlowPulse 2.5s ease-in-out infinite;
         }
 
         /* =====================================================
@@ -845,107 +715,49 @@ export default function HomePage() {
 
         .hero-title {
           max-width: 920px;
-
-          margin:
-            25px
-            auto
-            0;
-
-          color: #ffffff;
-
-          font-size:
-            clamp(
-              44px,
-              5.2vw,
-              68px
-            );
-
+          margin: 25px auto 0;
+          color: #111827;
+          font-size: clamp(44px, 5.2vw, 68px);
           line-height: 1.04;
-
           letter-spacing: -0.045em;
-
           font-weight: 700;
-
-          animation:
-            nexusFadeUp
-            .8s
-            .04s
-            ease
-            both;
+          animation: nexusFadeUp .8s .04s ease both;
         }
 
         .hero-title-gradient {
           background:
             linear-gradient(
               90deg,
-              #dbeafe 0%,
-              #60a5fa 33%,
-              #c084fc 65%,
-              #f0abfc 100%
+              #2563eb 0%,
+              #3b82f6 33%,
+              #9333ea 65%,
+              #d946ef 100%
             );
-
-          background-size:
-            180% auto;
-
-          -webkit-background-clip:
-            text;
-
-          background-clip:
-            text;
-
+          background-size: 180% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
           color: transparent;
-
-          animation:
-            gradientShift
-            7s
-            linear
-            infinite;
+          animation: gradientShift 7s linear infinite;
         }
 
         @keyframes gradientShift {
-          0% {
-            background-position:
-              0% center;
-          }
-
-          50% {
-            background-position:
-              100% center;
-          }
-
-          100% {
-            background-position:
-              0% center;
-          }
+          0% { background-position: 0% center; }
+          50% { background-position: 100% center; }
+          100% { background-position: 0% center; }
         }
 
         .hero-description {
           max-width: 645px;
-
-          margin:
-            19px
-            auto
-            0;
-
-          color: #9ca3af;
-
+          margin: 19px auto 0;
+          color: #4b5563;
           font-size: 14px;
-
           line-height: 1.75;
-
           font-weight: 400;
-
-          animation:
-            nexusFadeUp
-            .9s
-            .10s
-            ease
-            both;
+          animation: nexusFadeUp .9s .10s ease both;
         }
 
         .hero-description strong {
-          color: #e5e7eb;
-
+          color: #111827;
           font-weight: 600;
         }
 
@@ -955,161 +767,99 @@ export default function HomePage() {
 
         .calculator-shell {
           position: relative;
-
           max-width: 760px;
-
-          margin:
-            34px
-            auto
-            0;
-
-          animation:
-            nexusFadeUp
-            1s
-            .16s
-            ease
-            both;
+          margin: 34px auto 0;
+          animation: nexusFadeUp 1s .16s ease both;
         }
 
         .calculator-glow {
           position: absolute;
-
           inset: -22px;
-
           border-radius: 27px;
-
           background:
             linear-gradient(
               100deg,
-              rgba(37,99,235,0.11),
-              rgba(168,85,247,0.10),
-              rgba(236,72,153,0.08)
+              rgba(37,99,235,0.06),
+              rgba(168,85,247,0.05),
+              rgba(236,72,153,0.04)
             );
-
-          filter: blur(30px);
-
+          filter: blur(25px);
           pointer-events: none;
         }
 
         .calculator-border {
           position: relative;
-
           padding: 1px;
-
           border-radius: 17px;
-
           overflow: hidden;
-
           background:
             linear-gradient(
               100deg,
-              rgba(96,165,250,0.60),
-              rgba(168,85,247,0.35),
-              rgba(236,72,153,0.27),
-              rgba(255,255,255,0.08)
+              rgba(37,99,235,0.3),
+              rgba(168,85,247,0.2),
+              rgba(236,72,153,0.1),
+              #e5e7eb
             );
-
-          box-shadow:
-            0 18px 55px
-            rgba(0,0,0,0.23);
+          box-shadow: 0 15px 45px rgba(0,0,0,0.06);
         }
 
         .calculator-border::after {
           content: "";
-
           position: absolute;
-
           top: 0;
           left: -120%;
-
           width: 50%;
           height: 100%;
-
           background:
             linear-gradient(
               90deg,
               transparent,
-              rgba(255,255,255,0.15),
+              rgba(255,255,255,0.5),
               transparent
             );
-
-          transform:
-            skewX(-20deg);
-
+          transform: skewX(-20deg);
           pointer-events: none;
         }
 
         .calculator-border:hover::after {
-          animation:
-            nexusShimmer
-            .85s
-            ease
-            both;
+          animation: nexusShimmer .85s ease both;
         }
 
         .calculator-inner {
           position: relative;
-
           z-index: 2;
-
           display: flex;
-
           align-items: center;
-
           min-height: 60px;
-
           padding: 5px;
-
           border-radius: 16px;
-
-          background:
-            rgba(255,255,255,0.97);
+          background: #ffffff;
         }
 
         .calculator-icon {
           width: 39px;
           height: 39px;
-
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           margin-left: 2px;
-
           border-radius: 11px;
-
           background: #eff6ff;
-
           color: #2563eb;
-
           flex-shrink: 0;
         }
 
         .calculator-input {
           flex: 1;
-
           min-width: 0;
-
           height: 48px;
-
-          padding:
-            0
-            12px;
-
+          padding: 0 12px;
           border: 0;
-
           outline: none;
-
-          background:
-            transparent;
-
+          background: transparent;
           color: #111827;
-
           font-family: inherit;
-
           font-size: 14px;
-
           font-weight: 500;
         }
 
@@ -1124,41 +874,28 @@ export default function HomePage() {
         .calculator-button {
           width: 46px;
           height: 46px;
-
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           border: 0;
-
           border-radius: 12px;
-
           background:
             linear-gradient(
               135deg,
               #2563eb,
               #4f46e5
             );
-
           color: #ffffff;
-
           cursor: pointer;
-
           font-family: inherit;
-
           transition:
             transform .2s ease,
             box-shadow .2s ease;
         }
 
         .calculator-button:hover:not(:disabled) {
-          transform:
-            translateY(-1px);
-
-          box-shadow:
-            0 10px 25px
-            rgba(79,70,229,0.30);
+          transform: translateY(-1px);
+          box-shadow: 0 10px 25px rgba(79,70,229,0.30);
         }
 
         .calculator-button:disabled {
@@ -1173,23 +910,11 @@ export default function HomePage() {
         .premium-spinner {
           width: 17px;
           height: 17px;
-
           display: block;
-
-          border:
-            2px solid
-            rgba(255,255,255,0.28);
-
-          border-top-color:
-            #ffffff;
-
+          border: 2px solid rgba(255,255,255,0.28);
+          border-top-color: #ffffff;
           border-radius: 50%;
-
-          animation:
-            nexusSpinner
-            .65s
-            linear
-            infinite;
+          animation: nexusSpinner .65s linear infinite;
         }
 
         /* =====================================================
@@ -1198,35 +923,16 @@ export default function HomePage() {
 
         .hero-error {
           display: inline-flex;
-
           margin-top: 13px;
-
-          padding:
-            7px
-            10px;
-
-          border:
-            1px solid
-            rgba(248,113,113,0.16);
-
+          padding: 7px 10px;
+          border: 1px solid rgba(248,113,113,0.16);
           border-radius: 8px;
-
-          background:
-            rgba(239,68,68,0.06);
-
-          color: #fca5a5;
-
+          background: rgba(239,68,68,0.06);
+          color: #ef4444;
           font-size: 12px;
-
           line-height: 1.4;
-
           font-weight: 500;
-
-          animation:
-            nexusFadeUp
-            .4s
-            ease
-            both;
+          animation: nexusFadeUp .4s ease both;
         }
 
         /* =====================================================
@@ -1235,135 +941,56 @@ export default function HomePage() {
 
         .hero-actions {
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           gap: 11px;
-
           flex-wrap: wrap;
-
           margin-top: 19px;
-
-          animation:
-            nexusFadeUp
-            1s
-            .18s
-            ease
-            both;
+          animation: nexusFadeUp 1s .18s ease both;
         }
 
         .hero-action {
           position: relative;
-
           display: inline-flex;
-
           align-items: center;
           justify-content: center;
-
           gap: 8px;
-
           min-height: 44px;
-
-          padding:
-            0
-            16px;
-
+          padding: 0 16px;
           overflow: hidden;
-
-          border:
-            1px solid
-            rgba(255,255,255,0.11);
-
+          border: 1px solid #e5e7eb;
           border-radius: 11px;
-
-          background:
-            rgba(255,255,255,0.045);
-
-          color: #e5e7eb;
-
+          background: #ffffff;
+          color: #111827;
           font-family: inherit;
-
           font-size: 12px;
-
           line-height: 1;
-
           font-weight: 700;
-
           text-decoration: none;
-
           cursor: pointer;
-
-          backdrop-filter:
-            blur(13px);
-
+          box-shadow: 0 2px 5px rgba(0,0,0,0.02);
           transition:
             transform .25s ease,
             border-color .25s ease,
             background .25s ease,
             box-shadow .25s ease,
             color .25s ease;
-
-          animation:
-            nexusButtonGlow
-            4.5s
-            ease-in-out
-            infinite;
-        }
-
-        .hero-action::before {
-          content: "";
-
-          position: absolute;
-
-          inset: 0;
-
-          opacity: 0;
-
-          background:
-            linear-gradient(
-              115deg,
-              transparent 18%,
-              rgba(96,165,250,0.13),
-              rgba(192,132,252,0.11),
-              transparent 82%
-            );
-
-          transition:
-            opacity .25s ease;
-        }
-
-        .hero-action:hover::before {
-          opacity: 1;
         }
 
         .hero-action:hover {
-          color: #ffffff;
-
-          transform:
-            translateY(-3px);
-
-          border-color:
-            rgba(147,197,253,0.38);
-
-          background:
-            rgba(255,255,255,0.075);
-
+          color: #2563eb;
+          transform: translateY(-2px);
+          border-color: #bfdbfe;
+          background: #eff6ff;
           box-shadow:
-            0 14px 32px
-            rgba(37,99,235,0.13),
-            0 0 24px
-            rgba(168,85,247,0.09);
+            0 10px 25px rgba(37,99,235,0.08);
         }
 
         .hero-action svg {
           position: relative;
-
           z-index: 2;
-
           width: 16px;
           height: 16px;
-
           flex-shrink: 0;
         }
 
@@ -1378,283 +1005,137 @@ export default function HomePage() {
 
         .result-card {
           position: relative;
-
           display: flex;
-
           align-items: center;
           justify-content: space-between;
-
           gap: 18px;
-
           max-width: 760px;
-
-          margin:
-            23px
-            auto
-            0;
-
-          padding:
-            18px
-            14px
-            14px;
-
-          border:
-            1px solid
-            #e5e7eb;
-
+          margin: 23px auto 0;
+          padding: 18px 14px 14px;
+          border: 1px solid #e5e7eb;
           border-radius: 17px;
-
-          background:
-            rgba(255,255,255,0.98);
-
+          background: rgba(255,255,255,0.98);
           color: #111827;
-
-          box-shadow:
-            0 24px 70px
-            rgba(0,0,0,0.20);
-
+          box-shadow: 0 24px 70px rgba(0,0,0,0.10);
           text-align: left;
-
-          animation:
-            nexusFadeUp
-            .4s
-            ease
-            both;
-        }
-
-        .result-close {
-          position: absolute;
-
-          top: 7px;
-          right: 7px;
-
-          width: 26px;
-          height: 26px;
-
-          display: flex;
-
-          align-items: center;
-          justify-content: center;
-
-          padding: 0;
-
-          border:
-            1px solid
-            #e2e8f0;
-
-          border-radius: 50%;
-
-          background: #ffffff;
-
-          color: #64748b;
-
-          cursor: pointer;
-
-          font-family: inherit;
-
-          font-size: 17px;
-
-          font-weight: 500;
-
-          line-height: 1;
-
-          z-index: 20;
-
-          box-shadow:
-            0 2px 8px
-            rgba(15,23,42,0.08);
-
-          transition:
-            background .18s ease,
-            border-color .18s ease,
-            color .18s ease,
-            transform .18s ease;
-        }
-
-        .result-close:hover {
-          background: #f8fafc;
-
-          border-color: #cbd5e1;
-
-          color: #111827;
-
-          transform:
-            scale(1.05);
+          animation: nexusFadeUp .4s ease both;
         }
 
         .result-user {
           display: flex;
-
           align-items: center;
-
           gap: 11px;
-
           min-width: 0;
         }
 
         .result-avatar {
           width: 46px;
           height: 46px;
-
           overflow: hidden;
-
-          border:
-            1px solid
-            #e5e7eb;
-
+          border: 1px solid #e5e7eb;
           border-radius: 50%;
-
           background: #f3f4f6;
-
           flex-shrink: 0;
-
           cursor: pointer;
         }
 
         .result-avatar img {
           width: 100%;
           height: 100%;
-
           object-fit: cover;
         }
 
         .result-avatar-fallback {
           width: 100%;
           height: 100%;
-
           display: grid;
-
           place-items: center;
-
           color: #4b5563;
-
           font-size: 15px;
-
           font-weight: 700;
         }
 
         .result-name {
           max-width: 185px;
-
           overflow: hidden;
-
           color: #111827;
-
           font-size: 13px;
-
           font-weight: 700;
-
           text-overflow: ellipsis;
-
           white-space: nowrap;
         }
 
         .result-points {
           margin-top: 4px;
-
           color: #2563eb;
-
           font-size: 11px;
-
           font-weight: 500;
         }
 
         .result-points strong {
           color: #111827;
-
           font-weight: 700;
         }
 
         .result-metrics {
           display: flex;
-
           align-items: center;
-
           gap: 19px;
         }
 
         .result-metric {
           min-width: 60px;
-
           text-align: center;
         }
 
         .result-metric span {
           display: block;
-
-          color: #9ca3af;
-
+          color: #64748b;
           font-size: 8px;
-
           line-height: 1.25;
-
           font-weight: 700;
-
           letter-spacing: .08em;
-
           text-transform: uppercase;
         }
 
         .result-metric strong {
           display: block;
-
           margin-top: 4px;
-
           color: #111827;
-
           font-size: 15px;
-
           font-weight: 700;
         }
 
         .result-divider {
           width: 1px;
-
           height: 30px;
-
           background: #e5e7eb;
         }
 
         .result-dashboard {
           min-height: 38px;
-
-          padding:
-            0
-            13px;
-
+          padding: 0 13px;
           border: 0;
-
           border-radius: 10px;
-
           background:
             linear-gradient(
               135deg,
               #2563eb,
               #4f46e5
             );
-
           color: #ffffff;
-
           cursor: pointer;
-
           font-family: inherit;
-
           font-size: 11px;
-
           font-weight: 600;
-
           transition:
             transform .2s ease,
             box-shadow .2s ease;
         }
 
         .result-dashboard:hover {
-          transform:
-            translateY(-1px);
-
-          box-shadow:
-            0 8px 22px
-            rgba(37,99,235,.23);
+          transform: translateY(-1px);
+          box-shadow: 0 8px 22px rgba(37,99,235,.23);
         }
 
         /* =====================================================
@@ -1663,85 +1144,54 @@ export default function HomePage() {
 
         .hero-stats {
           display: grid;
-
-          grid-template-columns:
-            repeat(4,1fr);
-
+          grid-template-columns: repeat(4,1fr);
           max-width: 900px;
-
-          margin:
-            47px
-            auto
-            0;
-
-          border-top:
-            1px solid
-            rgba(255,255,255,.08);
+          margin: 47px auto 0;
+          border-top: 1px solid #e5e7eb;
         }
 
         .hero-stat {
           position: relative;
-
-          padding:
-            22px
-            12px;
+          padding: 22px 12px;
         }
 
         .hero-stat + .hero-stat::before {
           content: "";
-
           position: absolute;
-
           left: 0;
           top: 35%;
-
           width: 1px;
           height: 30%;
-
-          background:
-            rgba(255,255,255,.08);
+          background: #e5e7eb;
         }
 
         .hero-stat-number {
-          color: #ffffff;
-
+          color: #111827;
           font-size: 27px;
-
           line-height: 1;
-
           font-weight: 700;
-
           letter-spacing: -.03em;
         }
 
         .hero-stat-label {
           margin-top: 7px;
-
-          color: #6b7280;
-
+          color: #64748b;
           font-size: 9px;
-
           line-height: 1.2;
-
           font-weight: 600;
-
           letter-spacing: .13em;
-
           text-transform: uppercase;
         }
 
         .rating-number {
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           gap: 4px;
         }
 
         .rating-star {
           color: #fbbf24;
-
           font-size: 20px;
         }
 
@@ -1751,19 +1201,13 @@ export default function HomePage() {
 
         .section {
           position: relative;
-
-          padding:
-            100px
-            24px;
-
+          padding: 100px 24px;
           background: #ffffff;
         }
 
         .resources-section {
           position: relative;
-
           overflow: hidden;
-
           background:
             radial-gradient(
               circle at 5% 20%,
@@ -1776,85 +1220,34 @@ export default function HomePage() {
               transparent 28%
             ),
             #ffffff;
-
-          border-top:
-            1px solid
-            #f1f5f9;
+          border-top: 1px solid #f1f5f9;
         }
 
         .section-container {
           max-width: 1180px;
-
           margin: 0 auto;
         }
 
         .section-heading {
           max-width: 680px;
-
           margin-bottom: 48px;
-        }
-
-        .eyebrow {
-          display: inline-flex;
-
-          align-items: center;
-
-          gap: 8px;
-
-          margin-bottom: 14px;
-
-          color: #2563eb;
-
-          font-size: 10px;
-
-          line-height: 1;
-
-          font-weight: 700;
-
-          letter-spacing: .14em;
-
-          text-transform: uppercase;
-        }
-
-        .eyebrow::before {
-          content: "";
-
-          width: 19px;
-          height: 1px;
-
-          background: #2563eb;
         }
 
         .section-title {
           margin: 0;
-
           color: #111827;
-
-          font-size:
-            clamp(
-              35px,
-              4.6vw,
-              53px
-            );
-
+          font-size: clamp(35px, 4.6vw, 53px);
           line-height: 1.05;
-
           letter-spacing: -.05em;
-
           font-weight: 700;
         }
 
         .section-description {
           max-width: 650px;
-
           margin-top: 17px;
-
           color: #6b7280;
-
           font-size: 14px;
-
           line-height: 1.8;
-
           font-weight: 400;
         }
 
@@ -1864,32 +1257,19 @@ export default function HomePage() {
 
         .feature-grid {
           display: grid;
-
-          grid-template-columns:
-            repeat(3,1fr);
-
+          grid-template-columns: repeat(3,1fr);
           gap: 15px;
         }
 
         .feature-card {
           position: relative;
-
           min-height: 245px;
-
           padding: 26px;
-
           overflow: hidden;
-
-          border:
-            1px solid
-            #e5e7eb;
-
+          border: 1px solid #e5e7eb;
           border-radius: 18px;
-
           background: #ffffff;
-
           text-decoration: none;
-
           transition:
             transform .3s ease,
             border-color .3s ease,
@@ -1898,123 +1278,78 @@ export default function HomePage() {
 
         .feature-card::before {
           content: "";
-
           position: absolute;
-
           width: 190px;
           height: 190px;
-
           top: -105px;
           right: -105px;
-
           border-radius: 50%;
-
           background:
             linear-gradient(
               135deg,
               rgba(37,99,235,.09),
               rgba(168,85,247,.06)
             );
-
           filter: blur(27px);
-
-          transition:
-            transform .4s ease;
+          transition: transform .4s ease;
         }
 
         .feature-card:hover {
-          transform:
-            translateY(-6px);
-
-          border-color:
-            #bfdbfe;
-
-          box-shadow:
-            0 20px 50px
-            rgba(15,23,42,.08);
+          transform: translateY(-6px);
+          border-color: #bfdbfe;
+          box-shadow: 0 20px 50px rgba(15,23,42,.08);
         }
 
         .feature-card:hover::before {
-          transform:
-            scale(1.5);
+          transform: scale(1.5);
         }
 
         .feature-number {
           position: relative;
-
           width: 43px;
           height: 43px;
-
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           border-radius: 12px;
-
           background: #eff6ff;
-
           color: #2563eb;
-
           font-size: 10px;
-
           font-weight: 700;
         }
 
         .feature-card h3 {
           position: relative;
-
-          margin:
-            26px
-            0
-            9px;
-
+          margin: 26px 0 9px;
           color: #111827;
-
           font-size: 18px;
-
           line-height: 1.2;
-
           letter-spacing: -.02em;
-
           font-weight: 700;
         }
 
         .feature-card p {
           position: relative;
-
           margin: 0;
-
           max-width: 320px;
-
           color: #6b7280;
-
           font-size: 13px;
-
           line-height: 1.7;
-
           font-weight: 400;
         }
 
         .feature-link {
           position: absolute;
-
           left: 26px;
           bottom: 22px;
-
           color: #2563eb;
-
           font-size: 11px;
-
           font-weight: 600;
-
-          transition:
-            transform .2s ease;
+          transition: transform .2s ease;
         }
 
         .feature-card:hover .feature-link {
-          transform:
-            translateX(3px);
+          transform: translateX(3px);
         }
 
         /* =====================================================
@@ -2023,63 +1358,34 @@ export default function HomePage() {
 
         .guide-layout {
           display: grid;
-
-          grid-template-columns:
-            1.1fr
-            .9fr;
-
+          grid-template-columns: 1.1fr .9fr;
           gap: 18px;
         }
 
         .light-panel {
           overflow: hidden;
-
-          border:
-            1px solid
-            #e5e7eb;
-
+          border: 1px solid #e5e7eb;
           border-radius: 20px;
-
-          background:
-            rgba(255,255,255,.94);
-
-          box-shadow:
-            0 15px 40px
-            rgba(15,23,42,.045);
+          background: rgba(255,255,255,.94);
+          box-shadow: 0 15px 40px rgba(15,23,42,.045);
         }
 
         .guide-tabs {
           display: grid;
-
-          grid-template-columns:
-            repeat(3,1fr);
-
-          border-bottom:
-            1px solid
-            #e5e7eb;
-
-          background:
-            #f8fafc;
+          grid-template-columns: repeat(3,1fr);
+          border-bottom: 1px solid #e5e7eb;
+          background: #f8fafc;
         }
 
         .guide-tab {
           min-height: 52px;
-
           border: 0;
-
-          background:
-            transparent;
-
+          background: transparent;
           color: #64748b;
-
           cursor: pointer;
-
           font-family: inherit;
-
           font-size: 12px;
-
           font-weight: 600;
-
           transition:
             color .2s ease,
             background .2s ease;
@@ -2087,19 +1393,13 @@ export default function HomePage() {
 
         .guide-tab:hover {
           color: #2563eb;
-
-          background:
-            #ffffff;
+          background: #ffffff;
         }
 
         .guide-tab.active {
           color: #2563eb;
-
           background: #ffffff;
-
-          box-shadow:
-            inset 0 -2px
-            #2563eb;
+          box-shadow: inset 0 -2px #2563eb;
         }
 
         .guide-items {
@@ -2108,19 +1408,11 @@ export default function HomePage() {
 
         .guide-item {
           display: flex;
-
           gap: 15px;
-
           padding: 16px;
-
-          border:
-            1px solid
-            transparent;
-
+          border: 1px solid transparent;
           border-radius: 14px;
-
           text-decoration: none;
-
           transition:
             border-color .2s ease,
             background .2s ease,
@@ -2129,91 +1421,55 @@ export default function HomePage() {
         }
 
         .guide-item:hover {
-          border-color:
-            #dbeafe;
-
-          background:
-            #f8fbff;
-
-          transform:
-            translateX(3px);
-
-          box-shadow:
-            0 7px 20px
-            rgba(37,99,235,.045);
+          border-color: #dbeafe;
+          background: #f8fbff;
+          transform: translateX(3px);
+          box-shadow: 0 7px 20px rgba(37,99,235,.045);
         }
 
         .guide-icon {
           width: 48px;
           height: 48px;
-
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           flex-shrink: 0;
-
-          border:
-            1px solid
-            #dbeafe;
-
+          border: 1px solid #dbeafe;
           border-radius: 13px;
-
           background:
             linear-gradient(
               145deg,
               #eff6ff,
               #f5f3ff
             );
-
           color: #2563eb;
-
           font-size: 11px;
-
           font-weight: 700;
         }
 
         .guide-item h3 {
-          margin:
-            1px
-            0
-            6px;
-
+          margin: 1px 0 6px;
           color: #111827;
-
           font-size: 15px;
-
           line-height: 1.35;
-
           font-weight: 650;
-
           letter-spacing: -.01em;
         }
 
         .guide-item p {
           margin: 0;
-
           color: #64748b;
-
           font-size: 13px;
-
           line-height: 1.65;
-
           font-weight: 400;
         }
 
         .guide-badge {
           margin-left: 8px;
-
           color: #2563eb;
-
           font-size: 9px;
-
           font-weight: 700;
-
           letter-spacing: .09em;
-
           text-transform: uppercase;
         }
 
@@ -2227,38 +1483,24 @@ export default function HomePage() {
 
         .support-title {
           margin: 0;
-
           color: #111827;
-
           font-size: 20px;
-
           line-height: 1.2;
-
           letter-spacing: -.03em;
-
           font-weight: 700;
         }
 
         .support-description {
-          margin:
-            9px
-            0
-            22px;
-
+          margin: 9px 0 22px;
           color: #64748b;
-
           font-size: 12px;
-
           line-height: 1.7;
-
           font-weight: 400;
         }
 
         .support-form {
           display: flex;
-
           flex-direction: column;
-
           gap: 11px;
         }
 
@@ -2266,34 +1508,16 @@ export default function HomePage() {
         .support-select,
         .support-textarea {
           width: 100%;
-
-          border:
-            1px solid
-            #e2e8f0;
-
+          border: 1px solid #e2e8f0;
           border-radius: 12px;
-
           outline: none;
-
-          background:
-            #ffffff;
-
+          background: #ffffff;
           color: #111827;
-
-          padding:
-            12px
-            13px;
-
+          padding: 12px 13px;
           font-family: inherit;
-
           font-size: 12px;
-
           font-weight: 400;
-
-          box-shadow:
-            0 1px 2px
-            rgba(15,23,42,.02);
-
+          box-shadow: 0 1px 2px rgba(15,23,42,.02);
           transition:
             border-color .2s ease,
             box-shadow .2s ease,
@@ -2312,47 +1536,31 @@ export default function HomePage() {
         .support-input:focus,
         .support-select:focus,
         .support-textarea:focus {
-          border-color:
-            #93c5fd;
-
-          background:
-            #ffffff;
-
-          box-shadow:
-            0 0 0 3px
-            rgba(37,99,235,.08);
+          border-color: #93c5fd;
+          background: #ffffff;
+          box-shadow: 0 0 0 3px rgba(37,99,235,.08);
         }
 
         .support-textarea {
           min-height: 105px;
-
           resize: vertical;
         }
 
         .support-button {
           min-height: 43px;
-
           border: 0;
-
           border-radius: 12px;
-
           background:
             linear-gradient(
               135deg,
               #2563eb,
               #4f46e5
             );
-
           color: #ffffff;
-
           cursor: pointer;
-
           font-family: inherit;
-
           font-size: 12px;
-
           font-weight: 600;
-
           transition:
             background .2s ease,
             transform .2s ease,
@@ -2360,12 +1568,8 @@ export default function HomePage() {
         }
 
         .support-button:hover {
-          transform:
-            translateY(-1px);
-
-          box-shadow:
-            0 12px 28px
-            rgba(37,99,235,.20);
+          transform: translateY(-1px);
+          box-shadow: 0 12px 28px rgba(37,99,235,.20);
         }
 
         /* =====================================================
@@ -2377,180 +1581,142 @@ export default function HomePage() {
         }
 
         /* =====================================================
-           CTA
+           CTA - PREMIUM AQUA & ANIMATED FISH
         ===================================================== */
 
         .cta-wrap {
-          padding:
-            0
-            24px
-            90px;
-
-          background:
-            #ffffff;
+          padding: 0 24px 90px;
+          background: #ffffff;
         }
 
         .cta-box {
           position: relative;
-
           max-width: 1180px;
-
           min-height: 350px;
-
           margin: 0 auto;
-
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           overflow: hidden;
-
-          border:
-            1px solid
-            rgba(96,165,250,.16);
-
+          border: 1px solid rgba(255,255,255,0.25);
           border-radius: 26px;
-
-          background:
-            radial-gradient(
-              circle at 18% 20%,
-              rgba(59,130,246,.18),
-              transparent 32%
-            ),
-            radial-gradient(
-              circle at 82% 80%,
-              rgba(168,85,247,.14),
-              transparent 34%
-            ),
-            #080b12;
-
-          box-shadow:
-            0 35px 90px
-            rgba(15,23,42,.15);
+          background: linear-gradient(-45deg, #00b4db, #0891b2, #0ea5e9, #0284c7);
+          background-size: 400% 400%;
+          animation: aquaGradient 12s ease infinite;
+          box-shadow: 0 35px 90px rgba(14, 165, 233, 0.25);
         }
 
-        .cta-ring-one,
-        .cta-ring-two {
+        @keyframes aquaGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes swimRight {
+          0% { transform: translate(-100px, 0) rotate(-4deg); }
+          50% { transform: translate(500px, -30px) rotate(4deg); }
+          100% { transform: translate(1400px, 20px) rotate(-4deg); }
+        }
+
+        @keyframes swimLeft {
+          0% { transform: translate(1400px, 0) scaleX(-1) rotate(-4deg); }
+          50% { transform: translate(500px, 30px) scaleX(-1) rotate(4deg); }
+          100% { transform: translate(-100px, -20px) scaleX(-1) rotate(-4deg); }
+        }
+
+        @keyframes bubbleRise {
+          0% { transform: translateY(0) scale(0.8); opacity: 0; }
+          10% { opacity: 0.7; }
+          90% { opacity: 0.5; }
+          100% { transform: translateY(-400px) scale(1.4); opacity: 0; }
+        }
+
+        .fish-layer {
           position: absolute;
-
-          border:
-            1px solid
-            rgba(255,255,255,.045);
-
-          border-radius: 50%;
-
+          inset: 0;
           pointer-events: none;
+          z-index: 1;
         }
 
-        .cta-ring-one {
-          width: 420px;
-          height: 420px;
-
-          animation:
-            nexusGlowPulse
-            6s
-            ease-in-out
-            infinite;
+        .f-fish {
+          position: absolute;
+          font-size: clamp(35px, 4vw, 55px);
+          filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+          will-change: transform;
         }
 
-        .cta-ring-two {
-          width: 650px;
-          height: 650px;
+        .f-1 { top: 10%; left: -100px; animation: swimRight 18s linear infinite; animation-delay: 0s; }
+        .f-2 { top: 25%; right: -100px; animation: swimLeft 24s linear infinite; animation-delay: -6s; }
+        .f-3 { top: 55%; left: -100px; animation: swimRight 20s linear infinite; animation-delay: -13s; }
+        .f-4 { top: 65%; right: -100px; animation: swimLeft 16s linear infinite; animation-delay: -3s; }
+        .f-5 { top: 80%; left: -100px; animation: swimRight 23s linear infinite; animation-delay: -9s; }
+        .f-6 { top: 40%; right: -100px; animation: swimLeft 21s linear infinite; animation-delay: -16s; }
 
-          opacity: .55;
+        .f-bubble {
+          position: absolute;
+          bottom: -30px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.6);
+          box-shadow: inset 0 0 12px rgba(255,255,255,0.5);
+          animation: bubbleRise 8s linear infinite;
         }
+
+        .b-1 { left: 15%; width: 14px; height: 14px; animation-duration: 7s; animation-delay: 1s; }
+        .b-2 { left: 45%; width: 22px; height: 22px; animation-duration: 9s; animation-delay: 3s; }
+        .b-3 { left: 75%; width: 12px; height: 12px; animation-duration: 6s; animation-delay: 0s; }
+        .b-4 { left: 88%; width: 18px; height: 18px; animation-duration: 11s; animation-delay: 4s; }
+        .b-5 { left: 28%; width: 16px; height: 16px; animation-duration: 8s; animation-delay: 2s; }
+        .b-6 { left: 62%; width: 10px; height: 10px; animation-duration: 6.5s; animation-delay: 5s; }
 
         .cta-content {
           position: relative;
-
           z-index: 3;
-
           max-width: 650px;
-
-          padding:
-            55px
-            24px;
-
+          padding: 55px 24px;
           text-align: center;
         }
 
         .cta-title {
           margin: 0;
-
           color: #ffffff;
-
-          font-size:
-            clamp(
-              38px,
-              5.5vw,
-              59px
-            );
-
+          font-size: clamp(38px, 5.5vw, 59px);
           line-height: 1;
-
           letter-spacing: -.055em;
-
           font-weight: 700;
         }
 
         .cta-description {
           max-width: 570px;
-
-          margin:
-            17px
-            auto
-            25px;
-
-          color: #8b93a1;
-
+          margin: 17px auto 25px;
+          color: rgba(255, 255, 255, 0.9);
           font-size: 13px;
-
           line-height: 1.75;
-
-          font-weight: 400;
+          font-weight: 500;
         }
 
         .cta-button {
           display: inline-flex;
-
           align-items: center;
           justify-content: center;
-
           gap: 8px;
-
           min-height: 42px;
-
-          padding:
-            0
-            17px;
-
+          padding: 0 17px;
           border-radius: 11px;
-
           background: #ffffff;
-
           color: #111827;
-
           text-decoration: none;
-
           font-family: inherit;
-
           font-size: 12px;
-
           font-weight: 700;
-
           transition:
             transform .2s ease,
             box-shadow .2s ease;
         }
 
         .cta-button:hover {
-          transform:
-            translateY(-2px);
-
-          box-shadow:
-            0 15px 38px
-            rgba(255,255,255,.12);
+          transform: translateY(-2px);
+          box-shadow: 0 15px 38px rgba(255,255,255,.12);
         }
 
         /* =====================================================
@@ -2558,233 +1724,144 @@ export default function HomePage() {
         ===================================================== */
 
         @media (max-width: 1000px) {
-
           .feature-grid {
-            grid-template-columns:
-              repeat(2,1fr);
+            grid-template-columns: repeat(2,1fr);
           }
-
           .guide-layout {
-            grid-template-columns:
-              1fr;
+            grid-template-columns: 1fr;
           }
         }
 
         @media (max-width: 760px) {
-
           .nexus-hero {
             min-height: auto;
           }
-
           .hero-content {
-            padding:
-              76px
-              16px
-              42px;
+            padding: 76px 16px 42px;
           }
-
           .hero-title {
-            font-size:
-              clamp(
-                40px,
-                10.8vw,
-                56px
-              );
+            font-size: clamp(40px, 10.8vw, 56px);
           }
-
           .hero-description {
             font-size: 13px;
           }
-
           .calculator-inner {
             min-height: 58px;
           }
-
           .calculator-icon {
             width: 38px;
             height: 38px;
-
             border-radius: 10px;
           }
-
           .calculator-input {
             height: 46px;
-
-            padding:
-              0
-              8px;
-
+            padding: 0 8px;
             font-size: 12px;
           }
-
           .calculator-button {
             width: 44px;
             height: 44px;
-
             border-radius: 11px;
           }
-
           .hero-actions {
             gap: 8px;
           }
-
           .hero-action {
             min-height: 42px;
-
-            padding:
-              0
-              12px;
-
+            padding: 0 12px;
             font-size: 10px;
           }
-
           .result-card {
             flex-direction: column;
-
             align-items: stretch;
-
-            padding:
-              18px
-              13px
-              13px;
+            padding: 18px 13px 13px;
           }
-
           .result-user {
             padding-right: 25px;
           }
-
           .result-metrics {
             justify-content: center;
           }
-
           .result-dashboard {
             width: 100%;
           }
-
           .hero-stats {
-            grid-template-columns:
-              repeat(2,1fr);
-
+            grid-template-columns: repeat(2,1fr);
             margin-top: 38px;
           }
-
           .hero-stat {
-            padding:
-              18px
-              8px;
+            padding: 18px 8px;
           }
-
           .hero-stat-number {
             font-size: 24px;
           }
-
           .hero-stat-label {
             font-size: 8px;
           }
-
           .hero-stat:nth-child(3)::before {
             display: none;
           }
-
           .feature-grid {
-            grid-template-columns:
-              1fr;
+            grid-template-columns: 1fr;
           }
-
           .section {
-            padding:
-              78px
-              16px;
+            padding: 78px 16px;
           }
-
           .section-title {
-            font-size:
-              clamp(
-                34px,
-                9vw,
-                48px
-              );
+            font-size: clamp(34px, 9vw, 48px);
           }
-
           .guide-tabs {
-            grid-template-columns:
-              1fr;
+            grid-template-columns: 1fr;
           }
-
           .guide-tab {
             min-height: 46px;
-
-            border-bottom:
-              1px solid
-              #eef2f7;
+            border-bottom: 1px solid #eef2f7;
           }
-
           .guide-item h3 {
             font-size: 14px;
           }
-
           .guide-item p {
             font-size: 12px;
           }
-
           .guide-icon {
             width: 44px;
             height: 44px;
           }
-
           .support-panel {
             padding: 21px;
           }
-
           .cta-wrap {
-            padding:
-              0
-              16px
-              65px;
+            padding: 0 16px 65px;
           }
-
           .cta-box {
             min-height: 330px;
-
             border-radius: 23px;
           }
-
           .cta-content {
-            padding:
-              45px
-              18px;
+            padding: 45px 18px;
           }
         }
 
         @media (max-width: 420px) {
-
           .hero-pill {
             font-size: 9px;
-
             letter-spacing: .03em;
           }
-
           .hero-actions {
             width: 100%;
-
             max-width: 290px;
-
             margin-left: auto;
             margin-right: auto;
           }
-
           .hero-action {
             width: 100%;
           }
-
           .calculator-input {
             font-size: 11px;
           }
-
           .hero-stat-number {
             font-size: 22px;
           }
-
           .result-metrics {
             gap: 12px;
           }
@@ -2816,11 +1893,8 @@ export default function HomePage() {
           {/* Animated Color Orbs */}
 
           <div className="hero-orb hero-orb-blue" />
-
           <div className="hero-orb hero-orb-purple" />
-
           <div className="hero-orb hero-orb-pink" />
-
           <div className="hero-orb hero-orb-cyan" />
 
           <div className="hero-content">
@@ -2833,11 +1907,7 @@ export default function HomePage() {
 
               Arcade Nexus Platform
 
-              <span
-                style={{
-                  color: "#60a5fa",
-                }}
-              >
+              <span style={{ color: "#60a5fa" }}>
                 •
               </span>
 
@@ -2887,9 +1957,7 @@ export default function HomePage() {
               <div className="calculator-border">
 
                 <form
-                  onSubmit={
-                    handleHeroSubmit
-                  }
+                  onSubmit={handleHeroSubmit}
                   className="calculator-inner"
                 >
 
@@ -2915,14 +1983,8 @@ export default function HomePage() {
                   <input
                     type="text"
                     value={heroUrl}
-                    onChange={(e) =>
-                      setHeroUrl(
-                        e.target.value
-                      )
-                    }
-                    disabled={
-                      isCalculating
-                    }
+                    onChange={(e) => setHeroUrl(e.target.value)}
+                    disabled={isCalculating}
                     required
                     autoComplete="off"
                     placeholder="Paste your Google Cloud Skills public profile URL..."
@@ -2931,9 +1993,7 @@ export default function HomePage() {
 
                   <button
                     type="submit"
-                    disabled={
-                      isCalculating
-                    }
+                    disabled={isCalculating}
                     className="calculator-button"
                     aria-label={
                       isCalculating
@@ -3016,11 +2076,7 @@ export default function HomePage() {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      router.push(
-                        "/dashboard"
-                      )
-                    }
+                    onClick={() => router.push("/dashboard")}
                     className="hero-action"
                   >
 
@@ -3032,14 +2088,7 @@ export default function HomePage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <rect
-                        x="3"
-                        y="4"
-                        width="18"
-                        height="16"
-                        rx="2"
-                      />
-
+                      <rect x="3" y="4" width="18" height="16" rx="2" />
                       <path d="M8 8h8" />
                       <path d="M8 12h5" />
                     </svg>
@@ -3050,11 +2099,7 @@ export default function HomePage() {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      router.push(
-                        "/leaderboard"
-                      )
-                    }
+                    onClick={() => router.push("/leaderboard")}
                     className="hero-action"
                   >
 
@@ -3066,17 +2111,11 @@ export default function HomePage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-
                       <path d="M8 21h8" />
-
                       <path d="M12 17v4" />
-
                       <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
-
                       <path d="M7 7H4v2a3 3 0 0 0 3 3" />
-
                       <path d="M17 7h3v2a3 3 0 0 1-3 3" />
-
                     </svg>
 
                     Leaderboard
@@ -3087,43 +2126,43 @@ export default function HomePage() {
 
                 {/* 🔥 NEW SECTION: Arcade Tier Cards Added Here */}
                 <div className="mt-14 w-full text-left">
-                  <h2 style={{ color: '#ffffff', fontWeight: 'normal', fontSize: '24px', textAlign: 'center', marginBottom: '20px' }}>
+                  <h2 style={{ color: '#111827', fontWeight: '700', fontSize: '24px', textAlign: 'center', marginBottom: '20px' }}>
                     Google Swags 2026
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {arcadeCards.map((card, idx) => (
-                      <div key={idx} className="bg-[#2d2f34] rounded-xl p-5 flex flex-col items-center justify-between border border-gray-700 shadow-lg">
+                      <div key={idx} className="bg-white rounded-xl p-5 flex flex-col items-center justify-between border border-gray-200 shadow-md transition-transform hover:-translate-y-1">
                         
                         <div className="text-[#facc15] text-lg mb-1">{card.stars}</div>
-                        <h3 className="text-[#facc15] font-black text-sm tracking-wide text-center uppercase font-mono">
+                        <h3 className="text-gray-800 font-bold text-sm tracking-wide text-center uppercase font-mono">
                           {card.title}
                         </h3>
                         
                         {/* Dashed line */}
-                        <div className="w-full border-b-[3px] border-dashed border-[#facc15] opacity-80 my-4"></div>
+                        <div className="w-full border-b-[3px] border-dashed border-gray-200 my-4"></div>
                         
                         {/* Joystick Icon (Using standard emoji) */}
-                        <div className={`text-6xl mb-4 ${card.title === 'Arcade Legend' ? 'drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]' : ''}`}>
+                        <div className={`text-6xl mb-4 ${card.title === 'Arcade Legend' ? 'drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]' : ''}`}>
                           🕹️
                         </div>
                         
-                        <div className="text-[#facc15] font-bold font-mono text-lg mb-4">
+                        <div className="text-gray-800 font-bold font-mono text-lg mb-4">
                           {card.points}
                         </div>
                         
                         {/* Progress Bar Container */}
-                        <div className="w-full bg-[#404349] rounded-full h-4 mb-3 relative overflow-hidden flex items-center justify-center">
+                        <div className="w-full bg-gray-100 rounded-full h-4 mb-3 relative overflow-hidden flex items-center justify-center">
                           <div 
                             className={`absolute left-0 top-0 h-full ${card.color} transition-all duration-1000`}
                             style={{ width: card.progress }}
                           ></div>
                           {/* Text centered inside the bar */}
-                          <span className="relative text-[10px] text-white font-bold z-10 font-mono">
+                          <span className="relative text-[10px] text-gray-800 font-bold z-10 font-mono mix-blend-difference">
                             {card.progress}
                           </span>
                         </div>
                         
-                        <div className="text-gray-300 text-xs font-medium text-center">
+                        <div className="text-gray-500 text-xs font-medium text-center">
                           {card.spots}
                         </div>
                       </div>
@@ -3137,137 +2176,74 @@ export default function HomePage() {
                 RESULT
             ================================================= */}
 
-            {showResult &&
-              calcResult && (
+            {showResult && calcResult && (
 
-                <div className="result-card">
+              <div className="result-card">
+                {/* Close Button Removed here as per request */}
+                <div className="result-user">
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setShowResult(false)
-                    }
-                    className="result-close"
-                    aria-label="Close result"
+                  <div
+                    className="result-avatar"
+                    onClick={() => router.push("/dashboard")}
+                    role="button"
+                    tabIndex={0}
+                    title="Open Dashboard"
                   >
-                    ×
-                  </button>
 
-                  <div className="result-user">
-
-                    <div
-                      className="result-avatar"
-                      onClick={() =>
-                        router.push(
-                          "/dashboard"
-                        )
-                      }
-                      role="button"
-                      tabIndex={0}
-                      title="Open Dashboard"
-                    >
-
-                      {calcResult.userAvatar ? (
-
-                        <img
-                          src={
-                            calcResult.userAvatar
-                          }
-                          alt=""
-                        />
-
-                      ) : (
-
-                        <div className="result-avatar-fallback">
-
-                          {calcResult.userName?.charAt(
-                            0
-                          ) || "U"}
-
-                        </div>
-
-                      )}
-
-                    </div>
-
-                    <div>
-
-                      <div className="result-name">
-
-                        {calcResult.userName ||
-                          "GOOGLE USER"}
-
+                    {calcResult.userAvatar ? (
+                      <img src={calcResult.userAvatar} alt="" />
+                    ) : (
+                      <div className="result-avatar-fallback">
+                        {calcResult.userName?.charAt(0) || "U"}
                       </div>
-
-                      <div className="result-points">
-
-                        Total Points:{" "}
-
-                        <strong>
-                          {
-                            calcResult.totalPoints
-                          }
-                        </strong>
-
-                      </div>
-
-                    </div>
+                    )}
 
                   </div>
 
-                  <div className="result-metrics">
+                  <div>
 
-                    <div className="result-metric">
-
-                      <span>
-                        Game Badges
-                      </span>
-
-                      <strong>
-                        {
-                          calcResult
-                            .breakdown
-                            ?.games || 0
-                        }
-                      </strong>
-
+                    <div className="result-name">
+                      {calcResult.userName || "GOOGLE USER"}
                     </div>
 
-                    <div className="result-divider" />
-
-                    <div className="result-metric">
-
-                      <span>
-                        Skill Badges
-                      </span>
-
+                    <div className="result-points">
+                      Total Points:{" "}
                       <strong>
-                        {
-                          calcResult
-                            .breakdown
-                            ?.skills || 0
-                        }
+                        {calcResult.totalPoints}
                       </strong>
-
                     </div>
 
                   </div>
-
-                  <button
-                    type="button"
-                    className="result-dashboard"
-                    onClick={() =>
-                      router.push(
-                        "/dashboard"
-                      )
-                    }
-                  >
-                    Open Dashboard →
-                  </button>
 
                 </div>
 
-              )}
+                <div className="result-metrics">
+
+                  <div className="result-metric">
+                    <span>Game Badges</span>
+                    <strong>{calcResult.breakdown?.games || 0}</strong>
+                  </div>
+
+                  <div className="result-divider" />
+
+                  <div className="result-metric">
+                    <span>Skill Badges</span>
+                    <strong>{calcResult.breakdown?.skills || 0}</strong>
+                  </div>
+
+                </div>
+
+                <button
+                  type="button"
+                  className="result-dashboard"
+                  onClick={() => router.push("/dashboard")}
+                >
+                  Open Dashboard →
+                </button>
+
+              </div>
+
+            )}
 
             {/* =================================================
                 STATS
@@ -3276,63 +2252,40 @@ export default function HomePage() {
             <div className="hero-stats">
 
               <div className="hero-stat">
-
                 <div className="hero-stat-number">
-                  {formatStat(
-                    stats.unique
-                  )}
+                  {formatStat(stats.unique)}
                 </div>
-
                 <div className="hero-stat-label">
                   Unique Profiles
                 </div>
-
               </div>
 
               <div className="hero-stat">
-
                 <div className="hero-stat-number">
-                  {formatStat(
-                    stats.analyzed
-                  )}
+                  {formatStat(stats.analyzed)}
                 </div>
-
                 <div className="hero-stat-label">
                   Profiles Analyzed
                 </div>
-
               </div>
 
               <div className="hero-stat">
-
                 <div className="hero-stat-number">
                   <VisitCounter />
                 </div>
-
                 <div className="hero-stat-label">
                   Total Visitors
                 </div>
-
               </div>
 
               <div className="hero-stat">
-
                 <div className="hero-stat-number rating-number">
-
-                  <span>
-                    4.9
-                  </span>
-
-                  <span className="rating-star">
-                    ★
-                  </span>
-
+                  <span>4.9</span>
+                  <span className="rating-star">★</span>
                 </div>
-
                 <div className="hero-stat-label">
                   Community Rating
                 </div>
-
               </div>
 
             </div>
@@ -3345,44 +2298,26 @@ export default function HomePage() {
             FEATURES
         ===================================================== */}
 
-        <section
-          id="features"
-          className="section"
-        >
+        <section id="features" className="section">
 
           <div className="section-container">
 
             <div className="section-heading">
 
-              <div className="eyebrow">
-                Platform
-              </div>
+              {/* Eyebrow Platform Text Removed Here */}
 
               <h2 className="section-title">
-
                 Everything you need,
-
                 <br />
-
-                <span
-                  style={{
-                    color: "#2563eb",
-                  }}
-                >
+                <span style={{ color: "#2563eb" }}>
                   in one place.
                 </span>
-
               </h2>
 
               <p className="section-description">
-
-                Arcade Nexus brings together
-                your calculator, progress
-                tracking, leaderboard,
-                community resources and
-                more into one focused
-                platform.
-
+                Arcade Nexus brings together your calculator, progress
+                tracking, leaderboard, community resources and
+                more into one focused platform.
               </p>
 
             </div>
@@ -3391,117 +2326,54 @@ export default function HomePage() {
 
               {[
                 {
-                  title:
-                    "Points Calculator",
-
-                  desc:
-                    "Calculate Arcade points directly from your public Google Cloud Skills profile.",
-
-                  link:
-                    "/calculator",
+                  title: "Points Calculator",
+                  desc: "Calculate Arcade points directly from your public Google Cloud Skills profile.",
+                  link: "/calculator",
                 },
-
                 {
-                  title:
-                    "Smart Dashboard",
-
-                  desc:
-                    "View your points, badges, activity and progress in a clean dashboard.",
-
-                  link:
-                    "/dashboard",
+                  title: "Smart Dashboard",
+                  desc: "View your points, badges, activity and progress in a clean dashboard.",
+                  link: "/dashboard",
                 },
-
                 {
-                  title:
-                    "Live Leaderboard",
-
-                  desc:
-                    "Track your ranking and see community progress in real-time.",
-
-                  link:
-                    "/leaderboard",
+                  title: "Live Leaderboard",
+                  desc: "Track your ranking and see community progress in real-time.",
+                  link: "/leaderboard",
                 },
-
                 {
-                  title:
-                    "Facilitator Program",
-
-                  desc:
-                    "Explore facilitator information, guidance and useful resources.",
-
-                  link:
-                    "/facilitator",
+                  title: "Facilitator Program",
+                  desc: "Explore facilitator information, guidance and useful resources.",
+                  link: "/facilitator",
                 },
-
                 {
-                  title:
-                    "Skill Badges Guide",
-
-                  desc:
-                    "Discover skill badges and understand their contribution to your progress.",
-
-                  link:
-                    "/resources",
+                  title: "Skill Badges Guide",
+                  desc: "Discover skill badges and understand their contribution to your progress.",
+                  link: "/resources",
                 },
-
                 {
-                  title:
-                    "Swags & Community",
-
-                  desc:
-                    "Explore community posts, swag experiences and useful resources.",
-
-                  link:
-                    "/post",
+                  title: "Swags & Community",
+                  desc: "Explore community posts, swag experiences and useful resources.",
+                  link: "/post",
                 },
-              ].map(
-                (
-                  feature,
-                  index
-                ) => (
+              ].map((feature, index) => (
 
-                  <Link
-                    key={
-                      feature.title
-                    }
-                    href={
-                      feature.link
-                    }
-                    className="feature-card"
-                  >
+                <Link
+                  key={feature.title}
+                  href={feature.link}
+                  className="feature-card"
+                >
 
-                    <div className="feature-number">
+                  <div className="feature-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
 
-                      {String(
-                        index + 1
-                      ).padStart(
-                        2,
-                        "0"
-                      )}
+                  <h3>{feature.title}</h3>
+                  <p>{feature.desc}</p>
+                  <span className="feature-link">Explore →</span>
 
-                    </div>
+                </Link>
 
-                    <h3>
-                      {
-                        feature.title
-                      }
-                    </h3>
-
-                    <p>
-                      {
-                        feature.desc
-                      }
-                    </p>
-
-                    <span className="feature-link">
-                      Explore →
-                    </span>
-
-                  </Link>
-
-                )
-              )}
+              ))}
 
             </div>
 
@@ -3520,33 +2392,19 @@ export default function HomePage() {
 
             <div className="section-heading">
 
-              <div className="eyebrow">
-                Resources
-              </div>
+              {/* Eyebrow Resources Text Removed Here */}
 
               <h2 className="section-title">
-
                 Get started.
-
                 <br />
-
-                <span
-                  style={{
-                    color: "#2563eb",
-                  }}
-                >
+                <span style={{ color: "#2563eb" }}>
                   Keep moving.
                 </span>
-
               </h2>
 
               <p className="section-description">
-
-                Quick-start resources,
-                platform tools and support —
-                organized in one simple
-                experience.
-
+                Quick-start resources, platform tools and support —
+                organized in one simple experience.
               </p>
 
             </div>
@@ -3561,51 +2419,24 @@ export default function HomePage() {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveGuideTab(
-                        "start"
-                      )
-                    }
-                    className={`guide-tab ${
-                      activeGuideTab ===
-                      "start"
-                        ? "active"
-                        : ""
-                    }`}
+                    onClick={() => setActiveGuideTab("start")}
+                    className={`guide-tab ${activeGuideTab === "start" ? "active" : ""}`}
                   >
                     Getting Started
                   </button>
 
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveGuideTab(
-                        "tools"
-                      )
-                    }
-                    className={`guide-tab ${
-                      activeGuideTab ===
-                      "tools"
-                        ? "active"
-                        : ""
-                    }`}
+                    onClick={() => setActiveGuideTab("tools")}
+                    className={`guide-tab ${activeGuideTab === "tools" ? "active" : ""}`}
                   >
                     Platform Tools
                   </button>
 
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveGuideTab(
-                        "points"
-                      )
-                    }
-                    className={`guide-tab ${
-                      activeGuideTab ===
-                      "points"
-                        ? "active"
-                        : ""
-                    }`}
+                    onClick={() => setActiveGuideTab("points")}
+                    className={`guide-tab ${activeGuideTab === "points" ? "active" : ""}`}
                   >
                     Points System
                   </button>
@@ -3614,154 +2445,63 @@ export default function HomePage() {
 
                 <div className="guide-items">
 
-                  {activeGuideTab ===
-                    "start" &&
-                    startSteps.map(
-                      (item) => (
+                  {activeGuideTab === "start" &&
+                    startSteps.map((item) => (
 
-                        <a
-                          key={
-                            item.title
-                          }
-                          href={
-                            item.link
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="guide-item"
-                        >
-
-                          <div className="guide-icon">
-
-                            {
-                              item.badge
-                            }
-
-                          </div>
-
-                          <div>
-
-                            <h3>
-
-                              {
-                                item.title
-                              }
-
-                              <span className="guide-badge">
-                                Guide
-                              </span>
-
-                            </h3>
-
-                            <p>
-                              {
-                                item.desc
-                              }
-                            </p>
-
-                          </div>
-
-                        </a>
-
-                      )
-                    )}
-
-                  {activeGuideTab ===
-                    "tools" &&
-                    arcadeTools.map(
-                      (item) => (
-
-                        <Link
-                          key={
-                            item.title
-                          }
-                          href={
-                            item.link
-                          }
-                          className="guide-item"
-                        >
-
-                          <div className="guide-icon">
-
-                            {
-                              item.badge
-                            }
-
-                          </div>
-
-                          <div>
-
-                            <h3>
-
-                              {
-                                item.title
-                              }
-
-                              <span className="guide-badge">
-                                Tool
-                              </span>
-
-                            </h3>
-
-                            <p>
-                              {
-                                item.desc
-                              }
-                            </p>
-
-                          </div>
-
-                        </Link>
-
-                      )
-                    )}
-
-                  {activeGuideTab ===
-                    "points" &&
-                    pointsSystem.map(
-                      (item) => (
-
-                        <div
-                          key={
-                            item.title
-                          }
-                          className="guide-item"
-                        >
-
-                          <div className="guide-icon">
-
-                            {
-                              item.badge
-                            }
-
-                          </div>
-
-                          <div>
-
-                            <h3>
-
-                              {
-                                item.title
-                              }
-
-                              <span className="guide-badge">
-                                Points
-                              </span>
-
-                            </h3>
-
-                            <p>
-                              {
-                                item.desc
-                              }
-                            </p>
-
-                          </div>
-
+                      <a
+                        key={item.title}
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="guide-item"
+                      >
+                        <div className="guide-icon">{item.badge}</div>
+                        <div>
+                          <h3>
+                            {item.title}
+                            <span className="guide-badge">Guide</span>
+                          </h3>
+                          <p>{item.desc}</p>
                         </div>
+                      </a>
 
-                      )
-                    )}
+                    ))}
+
+                  {activeGuideTab === "tools" &&
+                    arcadeTools.map((item) => (
+
+                      <Link
+                        key={item.title}
+                        href={item.link}
+                        className="guide-item"
+                      >
+                        <div className="guide-icon">{item.badge}</div>
+                        <div>
+                          <h3>
+                            {item.title}
+                            <span className="guide-badge">Tool</span>
+                          </h3>
+                          <p>{item.desc}</p>
+                        </div>
+                      </Link>
+
+                    ))}
+
+                  {activeGuideTab === "points" &&
+                    pointsSystem.map((item) => (
+
+                      <div key={item.title} className="guide-item">
+                        <div className="guide-icon">{item.badge}</div>
+                        <div>
+                          <h3>
+                            {item.title}
+                            <span className="guide-badge">Points</span>
+                          </h3>
+                          <p>{item.desc}</p>
+                        </div>
+                      </div>
+
+                    ))}
 
                 </div>
 
@@ -3776,142 +2516,64 @@ export default function HomePage() {
                 </h3>
 
                 <p className="support-description">
-
-                  Submit your query and continue
-                  the conversation directly
+                  Submit your query and continue the conversation directly
                   through WhatsApp.
-
                 </p>
 
-                <form
-                  className="support-form"
-                  onSubmit={
-                    handleFormSubmit
-                  }
-                >
+                <form className="support-form" onSubmit={handleFormSubmit}>
 
                   <input
                     className="support-input"
                     type="text"
                     required
-                    value={
-                      formName
-                    }
-                    onChange={(
-                      e
-                    ) =>
-                      setFormName(
-                        e.target.value
-                      )
-                    }
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
                     placeholder="Full name"
                   />
 
                   <select
                     className="support-select"
-                    value={
-                      formCategory
-                    }
-                    onChange={(
-                      e
-                    ) => {
-
-                      setFormCategory(
-                        e.target.value
-                      );
-
-                      setFormSubCategory(
-                        ""
-                      );
-
+                    value={formCategory}
+                    onChange={(e) => {
+                      setFormCategory(e.target.value);
+                      setFormSubCategory("");
                     }}
                   >
-
-                    <option>
-                      Swags Delivery / Issue
-                    </option>
-
-                    <option>
-                      Labs Completion Issue
-                    </option>
-
-                    <option>
-                      Arcade Points Calculation
-                    </option>
-
-                    <option>
-                      Other Queries
-                    </option>
-
+                    <option>Swags Delivery / Issue</option>
+                    <option>Labs Completion Issue</option>
+                    <option>Arcade Points Calculation</option>
+                    <option>Other Queries</option>
                   </select>
 
-                  {(
-                    formCategory ===
-                      "Swags Delivery / Issue" ||
-                    formCategory ===
-                      "Labs Completion Issue" ||
-                    formCategory ===
-                      "Arcade Points Calculation"
-                  ) && (
+                  {(formCategory === "Swags Delivery / Issue" ||
+                    formCategory === "Labs Completion Issue" ||
+                    formCategory === "Arcade Points Calculation") && (
 
                     <select
                       className="support-select"
                       required
-                      value={
-                        formSubCategory
-                      }
-                      onChange={(
-                        e
-                      ) =>
-                        setFormSubCategory(
-                          e.target.value
-                        )
-                      }
+                      value={formSubCategory}
+                      onChange={(e) => setFormSubCategory(e.target.value)}
                     >
-
-                      <option value="">
-                        Select specific issue
-                      </option>
-
-                      {formCategory ===
-                        "Swags Delivery / Issue" && (
+                      <option value="">Select specific issue</option>
+                      {formCategory === "Swags Delivery / Issue" && (
                         <>
-                          <option value="Printos">
-                            Printos Services
-                          </option>
-
-                          <option value="Whitesquare">
-                            Whitesquare International
-                          </option>
+                          <option value="Printos">Printos Services</option>
+                          <option value="Whitesquare">Whitesquare International</option>
                         </>
                       )}
-
-                      {formCategory ===
-                        "Labs Completion Issue" && (
+                      {formCategory === "Labs Completion Issue" && (
                         <>
-                          <option value="Arcade Monthly Labs">
-                            Arcade Monthly Labs
-                          </option>
-
-                          <option value="Skill Badges">
-                            Skill Badges
-                          </option>
+                          <option value="Arcade Monthly Labs">Arcade Monthly Labs</option>
+                          <option value="Skill Badges">Skill Badges</option>
                         </>
                       )}
-
-                      {formCategory ===
-                        "Arcade Points Calculation" && (
+                      {formCategory === "Arcade Points Calculation" && (
                         <>
-                          <option value="Points Count Issue">
-                            Points Count Issue
-                          </option>
-
-                          <option value="Invalid Public Profile Issue">
-                            Invalid Public Profile Issue
-                          </option>
+                          <option value="Points Count Issue">Points Count Issue</option>
+                          <option value="Invalid Public Profile Issue">Invalid Public Profile Issue</option>
                         </>
                       )}
-
                     </select>
 
                   )}
@@ -3919,23 +2581,12 @@ export default function HomePage() {
                   <textarea
                     className="support-textarea"
                     required
-                    value={
-                      formMessage
-                    }
-                    onChange={(
-                      e
-                    ) =>
-                      setFormMessage(
-                        e.target.value
-                      )
-                    }
+                    value={formMessage}
+                    onChange={(e) => setFormMessage(e.target.value)}
                     placeholder="Tell us what you need help with..."
                   />
 
-                  <button
-                    type="submit"
-                    className="support-button"
-                  >
+                  <button type="submit" className="support-button">
                     Submit Request →
                   </button>
 
@@ -3956,76 +2607,58 @@ export default function HomePage() {
         <section className="section faq-section">
 
           <div className="section-container">
-
             <div className="section-heading">
-
-              <div className="eyebrow">
-                FAQ
-              </div>
-
+              {/* Eyebrow FAQ Text Removed Here */}
               <h2 className="section-title">
-
-                Questions,
-
+                Arcade Questions,
                 <br />
-
                 answered.
-
               </h2>
-
             </div>
-
             <FAQ />
-
           </div>
 
         </section>
 
         {/* =====================================================
-            CTA
+            CTA - PREMIUM AQUA & ANIMATED FISH
         ===================================================== */}
 
         <section className="cta-wrap">
-
           <div className="cta-box">
+            
+            <div className="fish-layer">
+              {/* 6 Swimming Fishes */}
+              <div className="f-fish f-1">🐠</div>
+              <div className="f-fish f-2">🐟</div>
+              <div className="f-fish f-3">🐡</div>
+              <div className="f-fish f-4">🐠</div>
+              <div className="f-fish f-5">🐟</div>
+              <div className="f-fish f-6">🐡</div>
 
-            <div className="cta-ring-one" />
-
-            <div className="cta-ring-two" />
+              {/* Water Bubbles */}
+              <div className="f-bubble b-1"></div>
+              <div className="f-bubble b-2"></div>
+              <div className="f-bubble b-3"></div>
+              <div className="f-bubble b-4"></div>
+              <div className="f-bubble b-5"></div>
+              <div className="f-bubble b-6"></div>
+            </div>
 
             <div className="cta-content">
-
-              <div
-                className="eyebrow"
-                style={{
-                  color: "#60a5fa",
-                }}
-              >
-                Keep building
-              </div>
-
-              <h2 className="cta-title">
-                Ready to level up?
-              </h2>
-
+              {/* Eyebrow Keep building Text Removed Here */}
+              <h2 className="cta-title">Ready to level up?</h2>
               <p className="cta-description">
-
-                Jump into Google Cloud Arcade,
-                complete labs, earn points and
-                keep your progress moving
-                forward.
-
+                Jump into Google Cloud Arcade, complete labs, earn points and
+                keep your progress moving forward.
               </p>
-
               <a
                 href="https://go.cloudskillsboost.google/arcade"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cta-button"
               >
-
                 Start Arcade Labs
-
                 <svg
                   width="15"
                   height="15"
@@ -4039,13 +2672,9 @@ export default function HomePage() {
                   <path d="M5 12h14" />
                   <path d="m13 6 6 6-6 6" />
                 </svg>
-
               </a>
-
             </div>
-
           </div>
-
         </section>
 
       </main>

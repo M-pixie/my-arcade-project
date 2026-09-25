@@ -39,13 +39,6 @@ export default function FAQ() {
     // Upar ka space thoda badhaya (pt-12) aur niche ka space kam kiya (pb-4)
     <div className="max-w-4xl mx-auto px-6 pt-12 pb-4 bg-white relative z-10">
       
-      {/* Premium Header Styling */}
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-5xl font-semibold text-[#202124] tracking-tight">
-          Frequently Asked Questions
-        </h2>
-      </div>
-      
       {/* Contiguous Box Style with Soft Curve & Premium Shadow */}
       <div className="border border-[#dadce0] rounded-2xl bg-white divide-y divide-[#dadce0] shadow-[0_8px_30px_rgba(0,0,0,0.04)] overflow-hidden transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
         {faqs.map((faq, index) => (
