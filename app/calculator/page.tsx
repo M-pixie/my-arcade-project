@@ -514,7 +514,7 @@ export default function CalculatorPage() {
           <div className="p-5 sm:p-7">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className={`text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-[#202123]'}`}>Public profile URL</p>
+                <p className={`text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-[#202123]'}`}>Arcade Public profile URL</p>
                 <p className={`mt-1 text-xs leading-5 sm:text-sm ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
                   Paste your Google Skills public profile link below.
                 </p>
@@ -825,7 +825,7 @@ export default function CalculatorPage() {
                   Remember me
                 </label>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScwpRj34Ysw5GEjeubPlkG49MECZTG3z820O_2Uz85IxJ9qcg/viewform" target="_blank" rel="noopener noreferrer" className={`text-sm font-medium hover:underline ${isDark ? 'text-gray-200' : 'text-[#202123]'}`}>
-                  Subscribe
+                  Subscribe Arcade Page
                 </a>
               </div>
               <span className={`text-sm ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>

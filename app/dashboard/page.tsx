@@ -152,23 +152,10 @@ export default function DashboardPage() {
       return;
     }
 
-    // CHECK IF ALREADY DOWNLOADED
-    const downloadedEmails = JSON.parse(localStorage.getItem("downloaded_certificates") || "[]");
-    if (downloadedEmails.includes(certEmail.trim().toLowerCase())) {
-      // Open WhatsApp Request Modal
-      setReqName(certInputName || userName || "");
-      setReqEmail(certEmail.trim());
-      setReqProfile(profileUrl || "");
-      setReqPhone("");
-      setShowRequestModal(true);
-      setShowCertModal(false);
-      return;
-    }
-
     const isVerified = validEmails.some(email => email.toLowerCase() === certEmail.trim().toLowerCase());
 
     if (!isVerified) {
-      setCertError("User Not Found (404)");
+      setCertError("You were not found on the Facilitator List, or you have not yet achieved any eligible milestone.");
       return;
     }
 
@@ -189,10 +176,6 @@ export default function DashboardPage() {
     setIsGenerating(true);
     await generateCertificatePDF(certInputName);
     
-    // SAVE EMAIL TO PREVENT MULTIPLE DOWNLOADS
-    downloadedEmails.push(certEmail.trim().toLowerCase());
-    localStorage.setItem("downloaded_certificates", JSON.stringify(downloadedEmails));
-
     setIsGenerating(false);
     setShowCertModal(false);
     setCertEmail("");
@@ -2061,7 +2044,7 @@ const dashboardData = {
               <div className="p-6 flex flex-col gap-4">
                  <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     You have already downloaded this certificate. If you need it again, please fill in your details.
-                  </p>
+                 </p>
 
                  {/* Inputs */}
                  <div className="flex flex-col gap-1.5">
