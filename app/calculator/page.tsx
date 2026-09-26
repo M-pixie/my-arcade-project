@@ -34,6 +34,49 @@ const getCardTheme = (name: string) => {
   return cardColors[Math.abs(hash) % cardColors.length];
 }
 
+// 🔥 GOOGLE SKILLS ARCADE PRIZE TIERS
+const PRIZE_TIERS = [
+  { points: 50, name: "Arcade Trooper" },
+  { points: 75, name: "Arcade Ranger" },
+  { points: 95, name: "Champion" },
+  { points: 120, name: "Legend" },
+] as const;
+
+const getPrizeProgress = (points: number) => {
+  const safePoints = Math.max(0, points);
+  const maxPoints = PRIZE_TIERS[PRIZE_TIERS.length - 1].points;
+  const nextTier = PRIZE_TIERS.find((tier) => safePoints < tier.points) ?? null;
+  const currentTier = [...PRIZE_TIERS].reverse().find((tier) => safePoints >= tier.points) ?? null;
+
+  // Keep the 4 prize stations evenly spaced visually, while the blue progress
+  // still follows the real point thresholds between each prize tier.
+  const stationSpan = 100 / PRIZE_TIERS.length;
+  let overallProgress = 0;
+
+  if (safePoints <= PRIZE_TIERS[0].points) {
+    overallProgress = (safePoints / PRIZE_TIERS[0].points) * stationSpan;
+  } else {
+    for (let i = 1; i < PRIZE_TIERS.length; i += 1) {
+      const previous = PRIZE_TIERS[i - 1].points;
+      const current = PRIZE_TIERS[i].points;
+      if (safePoints <= current) {
+        const segmentRatio = (safePoints - previous) / (current - previous);
+        overallProgress = i * stationSpan + segmentRatio * stationSpan;
+        break;
+      }
+    }
+    if (safePoints >= maxPoints) overallProgress = 100;
+  }
+
+  return {
+    safePoints,
+    overallProgress: Math.min(100, Math.max(0, overallProgress)),
+    nextTier,
+    currentTier,
+    remaining: nextTier ? Math.max(0, nextTier.points - safePoints) : 0,
+  };
+};
+
 interface RecentProfile {
   url: string;
   time: string;
@@ -55,6 +98,8 @@ export default function CalculatorPage() {
   const [hideRedLine, setHideRedLine] = useState(false);
   const [recentUrls, setRecentUrls] = useState<RecentProfile[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [pasteHint, setPasteHint] = useState<string | null>(null);
+  const profileInputRef = useRef<HTMLInputElement | null>(null);
   
   const [isShaking, setIsShaking] = useState(false);
   const [userPoints, setUserPoints] = useState<number | null>(null);
@@ -203,6 +248,48 @@ export default function CalculatorPage() {
     }, 10);
   };
 
+  // 🔥 QUICK PASTE URL
+  const handlePasteUrl = async () => {
+    setPasteHint(null);
+
+    try {
+      if (!navigator.clipboard?.readText || !window.isSecureContext) {
+        throw new Error("Clipboard API unavailable");
+      }
+
+      const text = (await navigator.clipboard.readText()).trim();
+
+      if (!text) {
+        profileInputRef.current?.focus();
+        setPasteHint("Clipboard is empty. Press Ctrl+V to paste the profile URL.");
+        return;
+      }
+
+      setProfileUrl(text);
+      setError(null);
+      setHideRedLine(false);
+      setUserName(null);
+      setUserAvatar(null);
+      setUserPoints(null);
+
+      try {
+        const cached = JSON.parse(localStorage.getItem('arcade_user_data') || 'null');
+        if (cached?.profileUrl === text) {
+          if (cached.userName) setUserName(cached.userName);
+          if (cached.userAvatar) setUserAvatar(cached.userAvatar);
+          if (typeof cached.points === 'number') setUserPoints(cached.points);
+        }
+      } catch {}
+    } catch {
+      // Modern browsers may block programmatic clipboard reads. Keep this as a
+      // gentle inline hint instead of showing the red calculator error state.
+      profileInputRef.current?.focus();
+      setError(null);
+      setHideRedLine(false);
+      setPasteHint("Paste access is blocked by the browser. Click the field and press Ctrl+V.");
+    }
+  };
+
   const proceedToDashboard = async (overrideUrl?: string | any, isAutoRun: boolean = false) => {
     const targetUrl = typeof overrideUrl === 'string' ? overrideUrl.trim() : profileUrl.trim();
 
@@ -325,6 +412,10 @@ export default function CalculatorPage() {
   const hasProfileUrl = normalizedProfileUrl.length > 0;
   const isValidProfileUrl = publicProfilePattern.test(normalizedProfileUrl);
   const cachedProfileMatches = isValidProfileUrl && !!userName && userPoints !== null;
+  const matchingHistory = recentUrls.find((item) => item.url === normalizedProfileUrl);
+  const previewPreviousPoints = matchingHistory?.previousPoints ?? null;
+  const previewChange = matchingHistory?.change ?? null;
+  const prizeProgress = userPoints !== null ? getPrizeProgress(userPoints) : null;
 
   return (
     <div className={`min-h-screen w-full overflow-x-hidden font-sans transition-colors duration-200 ${isDark ? 'bg-[#0f1115] text-gray-100' : 'bg-[#f7f7f8] text-[#202123]'}`}>
@@ -404,6 +495,20 @@ export default function CalculatorPage() {
               80% { transform: translateX(7px); }
             }
             .animate-fast-shake { animation: fast-shake 0.3s ease both; }
+
+            @keyframes prize-next-pulse {
+              0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(52, 58, 143, 0.18);
+              }
+              50% {
+                transform: scale(1.12);
+                box-shadow: 0 0 0 7px rgba(52, 58, 143, 0.12);
+              }
+            }
+            .animate-prize-next-pulse {
+              animation: prize-next-pulse 1.45s ease-in-out infinite;
+            }
           `}</style>
 
           <div className="p-5 sm:p-7">
@@ -482,31 +587,42 @@ export default function CalculatorPage() {
                         )}
                       </div>
                     ) : (
-                      <input
-                        type="text"
-                        placeholder="https://www.skills.google/public_profiles/..."
-                        value={profileUrl}
-                        onChange={(e) => {
-                          const next = e.target.value;
-                          setProfileUrl(next);
-                          setError(null);
-                          setHideRedLine(false);
-                          setUserName(null);
-                          setUserAvatar(null);
-                          setUserPoints(null);
-                          try {
-                            const cached = JSON.parse(localStorage.getItem('arcade_user_data') || 'null');
-                            if (cached?.profileUrl === next.trim()) {
-                              if (cached.userName) setUserName(cached.userName);
-                              if (cached.userAvatar) setUserAvatar(cached.userAvatar);
-                              if (typeof cached.points === 'number') setUserPoints(cached.points);
-                            }
-                          } catch {}
-                        }}
-                        onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
-                        spellCheck="false"
-                        className={`h-full w-full bg-transparent text-sm outline-none sm:text-[15px] ${isDark ? 'text-white placeholder:text-[#BCAAA4]' : 'text-[#202123] placeholder:text-[#A1887F]'}`}
-                      />
+                      <div className="relative w-full">
+                        <input
+                          type="text"
+                          placeholder="https://www.skills.google/public_profiles/..."
+                          value={profileUrl}
+                          ref={profileInputRef}
+                          onChange={(e) => {
+                            const next = e.target.value;
+                            setProfileUrl(next);
+                            setError(null);
+                            setPasteHint(null);
+                            setHideRedLine(false);
+                            setUserName(null);
+                            setUserAvatar(null);
+                            setUserPoints(null);
+                            try {
+                              const cached = JSON.parse(localStorage.getItem('arcade_user_data') || 'null');
+                              if (cached?.profileUrl === next.trim()) {
+                                if (cached.userName) setUserName(cached.userName);
+                                if (cached.userAvatar) setUserAvatar(cached.userAvatar);
+                                if (typeof cached.points === 'number') setUserPoints(cached.points);
+                              }
+                            } catch {}
+                          }}
+                          onKeyDown={(e) => { if (e.key === 'Enter') proceedToDashboard(); }}
+                          spellCheck="false"
+                          className={`h-14 w-full bg-transparent pr-20 text-sm outline-none sm:text-[15px] ${isDark ? 'text-white placeholder:text-[#BCAAA4]' : 'text-[#202123] placeholder:text-[#A1887F]'}`}
+                        />
+                        <button
+                          type="button"
+                          onClick={handlePasteUrl}
+                          className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-3 py-2 text-xs font-semibold transition-colors ${isDark ? 'text-[#8ab4f8] hover:bg-[#202328]' : 'text-[#343a8f] hover:bg-[#f1f3f8]'}`}
+                        >
+                          Paste
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -516,24 +632,159 @@ export default function CalculatorPage() {
                   disabled={calcState === 'loading' || (calcState === 'idle' && !isValidProfileUrl)}
                   className="min-h-14 rounded-xl bg-[#343a8f] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#2d327e] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-36"
                 >
-                  {isLoading ? 'Calculating…' : isPaused ? 'Resume' : 'Calculate'}
+                  {isLoading ? (
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <span
+                        className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/35 border-t-white"
+                        aria-hidden="true"
+                      />
+                      <span>Calculating…</span>
+                    </span>
+                  ) : isPaused ? 'Resume' : 'Calculate'}
                 </button>
               </div>
 
+              {pasteHint && !error && (
+                <p className={`mt-2 text-xs leading-5 ${isDark ? 'text-[#B8C7E8]' : 'text-[#5f6b85]'}`}>
+                  {pasteHint}
+                </p>
+              )}
+
               {cachedProfileMatches && !isLoading && !isPaused && (
-                <div className={`mt-3 flex items-center gap-3 rounded-xl border px-3.5 py-3 ${isDark ? 'border-[#2f3339] bg-[#111317]' : 'border-[#eceff2] bg-[#fafafa]'}`}>
-                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ${isDark ? 'bg-[#23272d]' : 'bg-[#eceff2]'}`}>
-                    {userAvatar ? (
-                      <img src={userAvatar} alt="" className="h-full w-full object-cover" />
-                    ) : (
-                      <span className="text-sm font-semibold text-[#596070]">{userName?.charAt(0).toUpperCase()}</span>
-                    )}
+                <div className="mt-3 space-y-3">
+                  <div className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 ${isDark ? 'border-[#2f3339] bg-[#111317]' : 'border-[#eceff2] bg-[#fafafa]'}`}>
+                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full ${isDark ? 'bg-[#23272d]' : 'bg-[#eceff2]'}`}>
+                      {userAvatar ? (
+                        <img src={userAvatar} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <span className="text-sm font-semibold text-[#596070]">{userName?.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className={`truncate text-sm font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>{userName}</p>
+                      <p className={`mt-0.5 text-xs ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>{userPoints} points saved locally</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => proceedToDashboard(normalizedProfileUrl)}
+                      className={`shrink-0 rounded-lg border px-3 py-2 text-xs font-semibold transition-colors ${isDark ? 'border-[#34383f] bg-[#202328] text-white hover:bg-[#292e35]' : 'border-[#dfe3e8] bg-white text-[#202123] hover:bg-[#f5f6f8]'}`}
+                    >
+                      ↻ Recalculate
+                    </button>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className={`truncate text-sm font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>{userName}</p>
-                    <p className={`mt-0.5 text-xs ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>{userPoints} points saved locally</p>
-                  </div>
-                  <span className={`hidden text-xs font-medium sm:block ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Ready to calculate</span>
+
+                  {previewChange !== null && previewPreviousPoints !== null && (
+                    <div className={`rounded-xl border px-4 py-3 ${isDark ? 'border-[#2d3238] bg-[#111317]' : 'border-[#e8ebee] bg-[#fafafa]'}`}>
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className={`text-xs font-medium ${isDark ? 'text-[#D7CCC8]' : 'text-[#6b7280]'}`}>Points change</p>
+                          <div className="mt-1 flex items-baseline gap-2">
+                            <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-[#202123]'}`}>{userPoints} pts</span>
+                            <span className={`text-xs ${isDark ? 'text-[#D7CCC8]' : 'text-[#6b7280]'}`}>from {previewPreviousPoints} pts</span>
+                          </div>
+                        </div>
+                        <span className={`inline-flex items-center gap-1 font-bold ${previewChange > 0 ? (isDark ? 'text-emerald-300' : 'text-emerald-700') : previewChange < 0 ? (isDark ? 'text-red-300' : 'text-red-700') : (isDark ? 'text-gray-300' : 'text-gray-600')}`}>
+                          {previewChange > 0 ? (
+                            <>
+                              <span className="text-2xl font-extrabold leading-none">↑</span>
+                              <span className="text-base font-extrabold">+{previewChange}</span>
+                            </>
+                          ) : previewChange < 0 ? (
+                            <>
+                              <span className="text-2xl font-extrabold leading-none">↓</span>
+                              <span className="text-base font-extrabold">{Math.abs(previewChange)}</span>
+                            </>
+                          ) : (
+                            <span className="text-base font-extrabold">0</span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {prizeProgress && (
+                    <div className={`rounded-xl border px-4 py-4 sm:px-5 ${isDark ? 'border-[#2d3238] bg-[#111317]' : 'border-[#e8ebee] bg-[#fafafa]'}`}>
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className={`text-xs font-semibold uppercase tracking-[0.12em] ${isDark ? 'text-[#8ab4f8]' : 'text-[#5b63b6]'}`}>Prize Tiers</p>
+                          <p className={`mt-1 text-sm font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>
+                            {prizeProgress.nextTier
+                              ? `${prizeProgress.remaining} points to ${prizeProgress.nextTier.name}`
+                              : 'All prize tiers reached'}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-[#202123]'}`}>
+                            {prizeProgress.safePoints} / {PRIZE_TIERS[PRIZE_TIERS.length - 1].points}
+                          </p>
+                          <p className={`mt-0.5 text-xs ${isDark ? 'text-[#D7CCC8]' : 'text-[#6b7280]'}`}>
+                            {prizeProgress.currentTier?.name || 'Not reached'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-6">
+                        <div className="relative px-3 sm:px-4">
+                          {/* Progress rail */}
+                          <div className={`absolute left-3 right-3 top-4 h-2 -translate-y-1/2 rounded-full sm:left-4 sm:right-4 ${isDark ? 'bg-[#252a31]' : 'bg-[#e2e5ea]'}`} />
+                          <div
+                            className="absolute left-3 top-4 h-2 -translate-y-1/2 rounded-full bg-[#343a8f] transition-all duration-700 ease-out sm:left-4"
+                            style={{
+                              width: `calc(${prizeProgress.overallProgress}% - ${prizeProgress.overallProgress === 100 ? '0px' : '0px'})`,
+                              maxWidth: 'calc(100% - 32px)',
+                            }}
+                          />
+
+                          {/* Four fixed prize stations */}
+                          <div className="relative grid grid-cols-4">
+                            {PRIZE_TIERS.map((tier) => {
+                              const reached = prizeProgress.safePoints >= tier.points;
+                              const isNext = prizeProgress.nextTier?.points === tier.points;
+
+                              return (
+                                <div key={tier.points} className="flex min-w-0 flex-col items-center">
+                                  <div
+                                    className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-[3px] shadow-sm transition-all duration-500 ${
+                                      reached
+                                        ? 'border-white bg-[#343a8f] text-white'
+                                        : isDark
+                                          ? 'border-[#111317] bg-[#30353d] text-[#9ca3af]'
+                                          : 'border-white bg-[#d9dde3] text-[#6b7280]'
+                                    } ${isNext ? 'animate-prize-next-pulse ring-2 ring-[#343a8f]/20' : ''}`}
+                                    aria-label={`${tier.name} at ${tier.points} points${isNext ? ', next prize tier' : ''}`}
+                                  >
+                                    {reached ? (
+                                      <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fillRule="evenodd" d="M16.704 5.29a1 1 0 010 1.42l-7.25 7.25a1 1 0 01-1.415.005l-3.25-3.15a1 1 0 111.392-1.435l2.543 2.466 6.552-6.556a1 1 0 011.428 0z" clipRule="evenodd" />
+                                      </svg>
+                                    ) : (
+                                      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                                    )}
+                                  </div>
+
+                                  {/* Name + points are directly below their station */}
+                                  <div className="mt-3 w-full text-center">
+                                    <p className={`truncate px-1 text-[11px] font-semibold leading-4 sm:text-xs ${
+                                      reached
+                                        ? (isDark ? 'text-white' : 'text-[#202123]')
+                                        : (isDark ? 'text-[#8f969f]' : 'text-[#7b8491]')
+                                    }`}>
+                                      {tier.name}
+                                    </p>
+                                    <p className={`mt-0.5 text-[10px] font-medium sm:text-[11px] ${
+                                      isDark ? 'text-[#9aa1aa]' : 'text-[#7b8491]'
+                                    }`}>
+                                      {tier.points} pts
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -626,8 +877,18 @@ export default function CalculatorPage() {
                           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                             <span className={`truncate text-sm font-semibold sm:text-[15px] ${isDark ? 'text-gray-100' : 'text-[#202123]'}`}>{item.name || 'Arcade Player'}</span>
                             {typeof item.change === 'number' && item.change !== 0 && (
-                              <span className={`text-xs font-semibold ${item.change > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                                {item.change > 0 ? `↑ +${item.change}` : `↓ ${Math.abs(item.change)}`}
+                              <span className={`inline-flex items-center gap-0.5 text-xs font-semibold ${item.change > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                                {item.change > 0 ? (
+                                  <>
+                                    <span className="text-base font-extrabold leading-none">↑</span>
+                                    <span>+{item.change}</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="text-base font-extrabold leading-none">↓</span>
+                                    <span>{Math.abs(item.change)}</span>
+                                  </>
+                                )}
                               </span>
                             )}
                           </div>
