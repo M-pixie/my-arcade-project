@@ -61,6 +61,8 @@ const validEmails = [
   "janhavitalodhikar31@gmail.com"
 ];
 
+// Pure SVG Design as Data URI - Never fails, no external image link used
+const DEFAULT_HIDDEN_AVATAR = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23e1e3e6'/%3E%3Ccircle cx='12' cy='9.5' r='4.5' fill='%23a0a4a8'/%3E%3Cpath d='M3 24c0-4.97 4.03-9 9-9s9 4.03 9 9' fill='%23a0a4a8'/%3E%3C/svg%3E";
 
 export default function DashboardPage() {
   const [profileUrl, setProfileUrl] = useState("");
@@ -96,6 +98,9 @@ export default function DashboardPage() {
   const [showAiOverview, setShowAiOverview] = useState(false); 
 
   const [isDark, setIsDark] = useState(false);
+  
+  // Avatar Hide Feature
+  const [hideAvatar, setHideAvatar] = useState(false);
 
   // --- NEW AI FEATURES STATES ---
   const [showAiChat, setShowAiChat] = useState(false);
@@ -145,6 +150,9 @@ export default function DashboardPage() {
 
   // Weekly Graph Date Picker State
   const [selectedDateStr, setSelectedDateStr] = useState(() => new Date().toISOString().split("T")[0]);
+
+  // Derived Avatar (Actual vs Default Grey SVG Design)
+  const displayAvatar = hideAvatar ? DEFAULT_HIDDEN_AVATAR : userAvatar;
 
   const handleVerifyAndDownload = async () => {
     setCertError("");
@@ -201,6 +209,26 @@ export default function DashboardPage() {
       setIsPosterLoading(false);
       setShowPoster(true);
     }, 1500); // 1.5 seconds spinner delay before opening modal
+  };
+
+  const handleToggleAvatar = async () => {
+    const newState = !hideAvatar;
+    setHideAvatar(newState);
+    localStorage.setItem("arcade_hide_avatar", newState ? "true" : "false");
+
+    // Instantly update the public leaderboard to ensure privacy with pure SVG design
+    if (profileUrl && userName) {
+      try {
+        await savePublicUserToLeaderboard({
+          name: userName,
+          photoURL: newState ? DEFAULT_HIDDEN_AVATAR : (userAvatar || DEFAULT_HIDDEN_AVATAR),
+          points: points || 0,
+          profileUrl: profileUrl
+        });
+      } catch (err) {
+        console.error("Failed to instantly hide avatar on leaderboard", err);
+      }
+    }
   };
 
   const generateCertificatePDF = async (nameToPrint: string) => {
@@ -299,6 +327,11 @@ export default function DashboardPage() {
       setHideModals(true);
     }
 
+    const storedHide = localStorage.getItem("arcade_hide_avatar");
+    if (storedHide === "true") {
+      setHideAvatar(true);
+    }
+
     // Load Chat History (Data Save Feature)
     const savedChat = localStorage.getItem("arcade_ai_chat_history");
     if (savedChat) {
@@ -368,7 +401,6 @@ export default function DashboardPage() {
       const currentText = lastMsg.content;
 
       if (currentText.length < fullText.length) {
-        // Timeout ko 15ms se 2ms kar diya aur slice ko +3 se +15
         const timer = setTimeout(() => {
           setMessages((prev) => {
             const updated = [...prev];
@@ -613,8 +645,10 @@ export default function DashboardPage() {
       localStorage.setItem("arcade_user_data", JSON.stringify(cacheObj));
 
       try {
+        const isHidden = localStorage.getItem("arcade_hide_avatar") === "true";
         await savePublicUserToLeaderboard({
-          name: data.userName || "Arcade Player", photoURL: data.userAvatar || "/avatar.png",
+          name: data.userName || "Arcade Player", 
+          photoURL: isHidden ? DEFAULT_HIDDEN_AVATAR : (data.userAvatar || DEFAULT_HIDDEN_AVATAR),
           points: data.totalPoints, profileUrl: url.trim()
         });
       } catch (saveErr) {}
@@ -941,8 +975,6 @@ const dashboardData = {
         <div className="mb-6"></div>
       )}
 
-      
-
       <div className={`mt-auto p-2 sm:p-3 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
         {facilitatorMilestones.map((m) => {
           const arcadePerc = Math.min(100, (facilitatorArcadeGamesCount / m.targetArcade) * 100);
@@ -1013,14 +1045,37 @@ const dashboardData = {
 
                   {/* Profile Avatar & Name */}
                   <div className="px-6 pt-8 pb-6 flex flex-col items-center flex-grow">
-                    <div className="w-[100px] h-[100px] rounded-full p-1 mb-4 shadow-md bg-white dark:bg-[#1a1b1e] relative cursor-pointer hover:scale-105 hover:shadow-[0_0_20px_rgba(66,133,244,0.4)] transition-all duration-300 group">
-                      <div className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#2a2d32]' : 'bg-[#0f9d58]'}`}>
-                        {userAvatar ? (
-                          <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-4xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
-                        )}
+                    
+                    <div className="relative inline-block mb-4">
+                      {/* Avatar Container */}
+                      <div className="w-[100px] h-[100px] rounded-full p-1 shadow-md bg-white dark:bg-[#1a1b1e] cursor-pointer hover:scale-105 hover:shadow-[0_0_20px_rgba(66,133,244,0.4)] transition-all duration-300 group">
+                        <div className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#2a2d32]' : 'bg-[#0f9d58]'}`}>
+                          {displayAvatar ? (
+                            <img src={displayAvatar} alt="Profile" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-4xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                          )}
+                        </div>
                       </div>
+
+                      {/* Hide Toggle Button */}
+                      <button
+                        onClick={handleToggleAvatar}
+                        className={`absolute -left-2 top-0 p-1.5 rounded-full shadow-md border z-10 transition-all hover:scale-110 group/tooltip ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-300 hover:text-white' : 'bg-white border-[#dadce0] text-gray-600 hover:text-[#1a73e8]'}`}
+                        aria-label={hideAvatar ? "Unhide Profile Image" : "Hide Profile Image"}
+                      >
+                        {hideAvatar ? (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+                        ) : (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                        )}
+
+                        {/* Tooltip */}
+                        <div className="absolute left-1/2 -translate-x-1/2 bottom-[115%] mb-1 px-2 py-1 text-[10px] font-bold text-white bg-gray-800 rounded opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all whitespace-nowrap shadow-lg pointer-events-none">
+                          {hideAvatar ? "Unhide Profile Image" : "Hide Profile Image"}
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                        </div>
+                      </button>
                     </div>
 
                     <h2 className={`text-xl font-bold mb-6 text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>
@@ -1192,8 +1247,8 @@ const dashboardData = {
 
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-            <h3 className={`font-bold text-[40px] tracking-tight text-center mt-2 ${isDark ? 'text-white' : 'text-black'}`}>Your Arcade </h3>                      
-           <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                      
+            <h3 className={`font-bold text-[40px] tracking-tight text-center mt-2 ${isDark ? 'text-white' : 'text-black'}`}>Your Arcade </h3>                       
+           <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                       
   
            <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
 
@@ -2101,14 +2156,14 @@ const dashboardData = {
                <div className="flex flex-col items-center mb-8">
                    <div className="w-20 h-20 rounded-full p-1 border-[3px] border-[#1a73e8] shadow-sm mb-3">
                       <div className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#2a2d32]' : 'bg-[#0f9d58]'}`}>
-                         {userAvatar ? (
-                            <img src={userAvatar} alt="Profile" className="w-full h-full object-cover" />
+                         {displayAvatar ? (
+                            <img src={displayAvatar} alt="Profile" className="w-full h-full object-cover" />
                          ) : (
                             <span className="text-3xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
                          )}
                       </div>
                    </div>
-                   <h2 className={`text-xl font-bold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>               
+                   <h2 className={`text-xl font-bold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>                
                </div>
 
                {facilitatorContent}

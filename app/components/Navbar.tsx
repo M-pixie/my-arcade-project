@@ -6,6 +6,9 @@ import Link from "next/link";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
+// Pure SVG Design as Data URI - Same as Dashboard
+const DEFAULT_HIDDEN_AVATAR = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%23e1e3e6'/%3E%3Ccircle cx='12' cy='9.5' r='4.5' fill='%23a0a4a8'/%3E%3Cpath d='M3 24c0-4.97 4.03-9 9-9s9 4.03 9 9' fill='%23a0a4a8'/%3E%3C/svg%3E";
+
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); 
@@ -16,6 +19,9 @@ export default function Navbar() {
   const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<string>("/avatar.png"); 
   const [imageError, setImageError] = useState(false);
+  
+  // New State for avatar visibility
+  const [hideAvatar, setHideAvatar] = useState(false);
   
   // Naya State: Naye swags count karne ke liye
   const [unreadSwags, setUnreadSwags] = useState(0);
@@ -64,6 +70,11 @@ export default function Navbar() {
           setImageError(false); 
         }
       }
+
+      // Check hide avatar state
+      const isHidden = localStorage.getItem("arcade_hide_avatar") === "true";
+      setHideAvatar(isHidden);
+
     } catch (e) {
       console.error("Error reading user data", e);
     }
@@ -71,12 +82,18 @@ export default function Navbar() {
 
   useEffect(() => {
     refreshUserData();
+    
+    // Custom event aur storage events listen karenge realtime sync ke liye
     window.addEventListener("arcadeDataUpdated", refreshUserData);
     window.addEventListener("storage", refreshUserData);
+
+    // Ye custom polling laga di hai taaki localStorage me turant check kare
+    const interval = setInterval(refreshUserData, 1000);
 
     return () => {
       window.removeEventListener("arcadeDataUpdated", refreshUserData);
       window.removeEventListener("storage", refreshUserData);
+      clearInterval(interval);
     };
   }, []);
 
@@ -107,6 +124,9 @@ export default function Navbar() {
     
     { name: "Pixi", href: "/admin-nexus-2026" },
   ];
+
+  // Logic to determine which avatar to show
+  const displayAvatar = hideAvatar ? DEFAULT_HIDDEN_AVATAR : (imageError ? "/avatar.png" : currentUserAvatar);
 
   return (
     <header className="fixed top-0 left-0 w-full h-16 bg-[#f8f9fa] border-b border-[#dadce0] z-50">
@@ -179,7 +199,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3 sm:gap-4 shrink-0 justify-end">
           <Link href="/dashboard" prefetch={true} className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden hover:scale-105 transition-transform shrink-0 border-2 border-transparent hover:border-[#dadce0]" title="Go to Dashboard">
             <img 
-              src={imageError ? "/avatar.png" : currentUserAvatar} 
+              src={displayAvatar} 
               alt={currentUserName || "User"} 
               className="w-full h-full object-cover bg-white" 
               onError={() => setImageError(true)} 
