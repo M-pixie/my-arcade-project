@@ -3,7 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation"; 
-import { savePublicUserToLeaderboard } from "@/lib/leaderboard";
+import { subscribeLeaderboard, savePublicUserToLeaderboard } from "@/lib/leaderboard";
+
+// 🔥 TIME-BASED GREETING
+function getTimeGreeting() {
+  const hour = new Date().getHours();
+
+  if (hour >= 5 && hour < 12) return "Good Morning";
+  if (hour >= 12 && hour < 17) return "Good Afternoon";
+  if (hour >= 17 && hour < 21) return "Good Evening";
+  return "Good Night";
+}
 
 // 🔥 TIME AGO UPDATED
 function timeAgo(dateString: string) {
@@ -112,6 +122,8 @@ export default function CalculatorPage() {
   const [calculationMs, setCalculationMs] = useState<number | null>(null);
   const [lastCalculatedAt, setLastCalculatedAt] = useState<string | null>(null);
   const [isDark, setIsDark] = useState(false);
+  const [timeGreeting, setTimeGreeting] = useState<string | null>(null);
+  const [userCalculationCount, setUserCalculationCount] = useState(0);
 
   const router = useRouter();
 
@@ -147,6 +159,15 @@ export default function CalculatorPage() {
         console.error("Error parsing arcade_user_data", e);
       }
     }
+  }, []);
+
+  useEffect(() => {
+    const updateGreeting = () => setTimeGreeting(getTimeGreeting());
+
+    updateGreeting();
+
+    const greetingInterval = setInterval(updateGreeting, 60000);
+    return () => clearInterval(greetingInterval);
   }, []);
 
   const toggleDarkMode = () => {
@@ -417,6 +438,26 @@ export default function CalculatorPage() {
   const previewChange = matchingHistory?.change ?? null;
   const prizeProgress = userPoints !== null ? getPrizeProgress(userPoints) : null;
 
+  useEffect(() => {
+    if (!normalizedProfileUrl || !isValidProfileUrl) {
+      setUserCalculationCount(0);
+      return;
+    }
+
+    const profileId = normalizedProfileUrl.split('/').pop() || null;
+    const unsub = subscribeLeaderboard((data) => {
+      const matchingUser = data.find((user: any) =>
+        user.id === profileId || user.profileUrl === normalizedProfileUrl
+      );
+
+      setUserCalculationCount(
+        matchingUser ? Number(matchingUser.calculationCount || 1) : 0
+      );
+    });
+
+    return () => unsub();
+  }, [normalizedProfileUrl, isValidProfileUrl]);
+
   return (
     <div className={`min-h-screen w-full overflow-x-hidden font-sans transition-colors duration-200 ${isDark ? 'bg-[#0f1115] text-gray-100' : 'bg-[#f7f7f8] text-[#202123]'}`}>
       <Navbar />
@@ -550,7 +591,13 @@ export default function CalculatorPage() {
             <div className="mt-5">
               <div className="mb-2 flex items-center justify-between gap-3">
                 <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-[#4b5563]'}`}>
-                  {isLoading ? 'Calculating your points' : isPaused ? 'Calculation paused' : userName ? `Welcome back, ${userName}` : 'Enter public profile URL'}
+                  {isLoading
+                    ? 'Calculating your points'
+                    : isPaused
+                      ? 'Calculation paused'
+                      : userName
+                        ? `${timeGreeting ? `${timeGreeting},` : ''} ${userName?.trim().split(/\s+/)[0] || ''}`.trim()
+                        : 'Enter public profile URL'}
                 </span>
                 {hasProfileUrl && !isLoading && !isPaused && (
                   <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ${isValidProfileUrl ? (isDark ? 'bg-emerald-500/10 text-emerald-300' : 'bg-emerald-50 text-emerald-700') : (isDark ? 'bg-red-500/10 text-red-300' : 'bg-red-50 text-red-700')}`}>
@@ -663,6 +710,12 @@ export default function CalculatorPage() {
                     <div className="min-w-0 flex-1">
                       <p className={`truncate text-sm font-semibold ${isDark ? 'text-white' : 'text-[#202123]'}`}>{userName}</p>
                       <p className={`mt-0.5 text-xs ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>{userPoints} points saved locally</p>
+                    </div>
+                    <div className={`shrink-0 text-center ${isDark ? 'text-[#D7CCC8]' : 'text-[#5D4037]'}`}>
+                      <p className="text-[10px] font-medium leading-4 sm:text-[11px]">Calculations</p>
+                      <p className={`text-xs font-bold leading-4 sm:text-[13px] ${isDark ? 'text-white' : 'text-[#202123]'}`}>
+                        {userCalculationCount.toLocaleString()} Times
+                      </p>
                     </div>
                     <button
                       type="button"
