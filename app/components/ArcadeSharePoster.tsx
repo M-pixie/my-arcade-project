@@ -526,7 +526,7 @@ export default function ArcadeSharePoster({
                       shadow-sm
                     "
                   >
-                    Generating your poster…
+                Creating..
                   </div>
                 </div>
               )}

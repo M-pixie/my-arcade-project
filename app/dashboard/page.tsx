@@ -10,7 +10,6 @@ import { db } from "@/lib/firebase";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from "firebase/auth";
 
 // List of verified emails provided by you 343
-
 const validEmails = [
   "vickykumarpatel2007@gmail.com",
   "aadityabhavya530@gmail.com",
@@ -87,6 +86,7 @@ export default function DashboardPage() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null); 
   const [copiedReferral, setCopiedReferral] = useState(false);
   const [showPoster, setShowPoster] = useState(false);
+  const [isPosterLoading, setIsPosterLoading] = useState(false);
 
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +103,8 @@ export default function DashboardPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [aiLanguage, setAiLanguage] = useState<"English" | "Hinglish">("English");
+  const [aiError, setAiError] = useState(false);
+  const [lastFailedMessage, setLastFailedMessage] = useState("");
 
   // Certificate Verification Modal States
   const [showCertModal, setShowCertModal] = useState(false);
@@ -191,6 +193,14 @@ export default function DashboardPage() {
     const whatsappUrl = `https://api.whatsapp.com/send?phone=918538980608&text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, "_blank");
     setShowRequestModal(false);
+  };
+
+  const handleCreatePosterClick = () => {
+    setIsPosterLoading(true);
+    setTimeout(() => {
+      setIsPosterLoading(false);
+      setShowPoster(true);
+    }, 1500); // 1.5 seconds spinner delay before opening modal
   };
 
   const generateCertificatePDF = async (nameToPrint: string) => {
@@ -509,7 +519,6 @@ export default function DashboardPage() {
   const maxActivityVal = Math.max(...chartData.map(d => Math.max(d.skill, d.arcade)), 10);
   const graphYAxisLabels = [1, 0.8, 0.6, 0.4, 0.2, 0].map(mult => Math.round(maxActivityVal * mult));
 
-
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
@@ -749,20 +758,27 @@ export default function DashboardPage() {
   };
 
   // MAIN AI CHAT SUBMIT LOGIC
-  const handleAskAi = async (promptOverride?: string) => {
+  const handleAskAi = async (promptOverride?: string, isRetry: boolean = false) => {
     const textToSubmit = promptOverride || chatInput;
     if (!textToSubmit.trim() && !chatImage) return;
 
-    const newMsg = { role: "user", content: textToSubmit || "Analyze this image." };
-    const updatedMessages = [...messages, newMsg];
-    setMessages(updatedMessages);
-    localStorage.setItem("arcade_ai_chat_history", JSON.stringify(updatedMessages));
+    setAiError(false);
+    let updatedMessages = [...messages];
+
+    if (!isRetry) {
+      const newMsg = { role: "user", content: textToSubmit || "Analyze this image." };
+      updatedMessages = [...messages, newMsg];
+      setMessages(updatedMessages);
+      localStorage.setItem("arcade_ai_chat_history", JSON.stringify(updatedMessages));
+    }
     
     const payloadContent = textToSubmit;
     const payloadImage = chatImage;
     
-    setChatInput("");
-    setChatImage(null);
+    if (!isRetry) {
+      setChatInput("");
+      setChatImage(null);
+    }
     setIsTyping(true);
 
     try {
@@ -782,39 +798,25 @@ Rules:
 
 const dashboardData = {
   userName: userName || "Arcade Player",
-
   points: points ?? 0,
-
   rank: realRank,
-
   totalArcadeGames: totalArcadeGamesCount,
-
   totalSkillBadges: totalSkillBadgesCount,
-
   pendingLabs: pendingLabs.map((lab) => lab.title),
-
   completedLabs: completedLabs.map((lab) => lab.title),
-
   breakdown: breakdown || {},
-
   prizeTiers: arcadeTiersData.map((tier) => ({
     name: tier.name,
     target: tier.target,
     spots: tier.spots,
   })),
-
   facilitator: {
     startDate: "2026-07-13",
     endDate: "2026-09-14",
-
     games: facilitatorArcadeGamesCount,
-
     skillBadges: facilitatorSkillBadgesCount,
-
     achievedMilestone: achievedMilestone?.title || null,
-
     bonusPoints: achievedMilestone?.points || 0,
-
     milestones: facilitatorMilestones.map((m) => ({
       id: m.id,
       title: m.title,
@@ -843,6 +845,10 @@ const dashboardData = {
         }),
       });
 
+      if (!res.ok) {
+        throw new Error("Token Exceeded");
+      }
+
       const data = await res.json();
       
       // Start typing effect
@@ -852,6 +858,8 @@ const dashboardData = {
       ]);
     } catch (error) {
       console.error("AI Chat Error:", error);
+      setAiError(true);
+      setLastFailedMessage(payloadContent);
     } finally {
       setIsTyping(false);
     }
@@ -1058,19 +1066,23 @@ const dashboardData = {
                       
                       {/* Animated Create Poster Button */}
                       <div className="relative mr-1 sm:mr-3 mt-1 sm:mt-0">
-                        {/* Background continuous glowing pulse */}
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] rounded-full blur opacity-75 animate-pulse"></div>
-                        
                         <button 
-                          onClick={() => setShowPoster(true)}
-                          className="relative flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#4285F4] via-[#9b72cb] to-[#ea4335] text-white text-[13px] font-bold shadow-md transition-all hover:scale-105 overflow-hidden"
+                          onClick={handleCreatePosterClick}
+                          className="relative flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white text-[13px] font-bold shadow-md transition-all hover:scale-105 overflow-hidden"
                         >
-                          {/* Continuous auto-shine overlay (no hover needed) */}
-                          <span className="absolute inset-0 w-[150%] h-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shine pointer-events-none"></span>
-                          
-                          {/* Sparkle Icon */}
-                          <svg className="w-4 h-4 animate-pulse relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-                          <span className="relative z-10">Create Poster</span>
+                          {isPosterLoading ? (
+                            <svg className="w-5 h-5 animate-spin text-white py-0.5" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                          ) : (
+                            <>
+                              <span className="relative z-10 text-lg animate-star-pulse-rotate">
+                                 <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z"/></svg>
+                              </span>
+                              <span className="relative z-10 text-white">Create Poster</span>
+                            </>
+                          )}
                         </button>
                       </div>
 
@@ -1180,7 +1192,7 @@ const dashboardData = {
 
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-            <h3 className="font-bold text-[40px] tracking-tight text-center mt-2 bg-gradient-to-r from-[#4285F4] via-[#34A853] via-[#FBBC04] to-[#EA4335] bg-clip-text text-transparent">The Arcade </h3>                      
+            <h3 className={`font-bold text-[40px] tracking-tight text-center mt-2 ${isDark ? 'text-white' : 'text-black'}`}>Your Arcade </h3>                      
            <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                      
   
            <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
@@ -1225,19 +1237,7 @@ const dashboardData = {
 
                          <div className="flex flex-col items-center gap-5 mt-2 w-full max-w-sm">
                              
-                             {/* Cute Sad Cat SVG - Thoda sa bada kiya taaki clearly dikhe */}
-                             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20 -mb-2">
-                                <polygon points="25,40 15,10 45,30" fill="#fca5a5" opacity="0.7"/>
-                                <polygon points="75,40 85,10 55,30" fill="#fca5a5" opacity="0.7"/>
-                                <circle cx="50" cy="50" r="35" fill="#fca5a5" opacity="0.9"/>
-                                <path d="M 35 45 Q 40 40 45 45" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-                                <path d="M 55 45 Q 60 40 65 45" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-                                <path d="M 35 50 Q 32 60 35 65 Q 38 60 35 50" fill="#60a5fa" opacity="0.8"/>
-                                <path d="M 65 50 Q 62 60 65 65 Q 68 60 65 50" fill="#60a5fa" opacity="0.8"/>
-                                <path d="M 45 60 Q 50 55 55 60" stroke="#7f1d1d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-                             </svg>
-
-                             <h3 className="font-bold text-[24px] tracking-tight text-red-500">Oops! Facilitator Program Ended. </h3>
+                             <h3 className="font-bold text-[24px] tracking-tight text-red-500 mt-4">Oops! Facilitator Program Ended. </h3>
 
                              {/* Button and Milestone wrapper with proper gap */}
                              <div className="flex flex-col items-center gap-3.5 w-full">
@@ -1260,7 +1260,7 @@ const dashboardData = {
                              </div>
 
                              <span className={`text-[13px] font-semibold tracking-wide mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                               343 Members Found · Registered Members Only · Available
+                               Facilitator Record Not Found
                              </span>
                          </div>
                          
@@ -1495,7 +1495,7 @@ const dashboardData = {
               </div>
               <div className="relative flex items-center justify-between w-full px-2 sm:px-4 mt-6 mb-8">
                 <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 rounded-full z-0 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#f1f3f4]'}`}></div>
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" style={{ width: `${(completedLabs.length / 7) * 100}%` }}></div>
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-[#34a853] to-[#137333] rounded-full z-0 transition-all duration-1000" style={{ width: `${(completedLabs.length / 6) * 100}%` }}></div>
                 {[...completedLabs, ...pendingLabs].map((lab, index) => {
                   const isCompleted = isLabCompleted(lab.matchStrings);
                   const isCurrent = !isCompleted && index === completedLabs.length;
@@ -1680,402 +1680,407 @@ const dashboardData = {
             </a>
           </div>
         </div>
+      </main>
 
-            {/* --- ARCADE AI | REFINED PREMIUM POPUP --- */}
-{showAiChat && (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-3 backdrop-blur-sm sm:p-4 animate-fade-in-up">
-    <div
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-      className="relative flex h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] sm:h-[94vh] sm:rounded-[22px]"
-    >
-      {/* Animated Drag Overlay */}
-      {isDragging && (
-        <div className="absolute inset-0 z-[100] flex items-center justify-center overflow-hidden rounded-2xl bg-white/96 backdrop-blur-sm">
-          <div className="absolute inset-x-0 top-0 h-1 overflow-hidden bg-[#eff4ff]">
-            <div className="h-full w-1/3 animate-[dragSlide_1.2s_ease-in-out_infinite] bg-[#2563eb]" />
-          </div>
-          <div className="flex flex-col items-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#e5e5e5] bg-[#f7f7f8]">
-              <svg className="h-7 w-7 text-[#444]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 0L7 9m5-5 5 5M5 14.5v3A2.5 2.5 0 007.5 20h9a2.5 2.5 0 002.5-2.5v-3" />
-              </svg>
-            </div>
-            <p className="mt-4 text-base font-medium text-[#222]">Drop image to upload</p>
-            <p className="mt-1 text-sm text-[#888]">Arcade AI will analyze the screenshot.</p>
-          </div>
-        </div>
-      )}
-
-      {/* Header — Simple "AI replying..." text */}
-      <div className="flex shrink-0 items-center justify-between border-b border-[#eeeeee] bg-white px-4 py-3 sm:px-5">
-        <div className="flex items-center gap-2.5">
-          <div className="min-w-[88px] text-[16px] font-medium tracking-[-0.01em] text-[#2f2f2f]">
-            {isTyping ? (
-              <span className="text-[#4a4a4a]">AI replying...</span>
-            ) : (
-              userName ? userName.split(' ')[0] : "User"
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1">
-          <div className="hidden items-center rounded-lg bg-[#f7f7f8] p-0.5 sm:flex">
-            <button
-              onClick={() => setAiLanguage('English')}
-              className={`rounded-md px-2.5 py-1.5 text-[11px] font-normal transition-all ${
-                aiLanguage === 'English'
-                  ? 'bg-white text-[#222] shadow-sm'
-                  : 'text-[#888] hover:text-[#444]'
-              }`}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => setAiLanguage('Hinglish')}
-              className={`rounded-md px-2.5 py-1.5 text-[11px] font-normal transition-all ${
-                aiLanguage === 'Hinglish'
-                  ? 'bg-white text-[#222] shadow-sm'
-                  : 'text-[#888] hover:text-[#444]'
-              }`}
-            >
-              HI
-            </button>
-          </div>
-
-          {/* Instant clear */}
-          <button
-            onClick={handleClearChat}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#777] transition-colors hover:bg-[#f5f5f5] hover:text-[#222]"
-            title="Clear chat"
-            aria-label="Clear chat"
+      {/* --- ARCADE AI | REFINED PREMIUM POPUP --- */}
+      {showAiChat && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-3 backdrop-blur-sm sm:p-4 animate-fade-in-up">
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className="relative flex h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)] sm:h-[94vh] sm:rounded-[22px]"
           >
-            <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M9 7V5h6v2m-7 0 .7 12.2a2 2 0 002 1.8h2.6a2 2 0 002-1.8L17 7M10 11v6m4-6v6" />
-            </svg>
-          </button>
-
-          <button
-            onClick={() => setShowAiChat(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#777] transition-colors hover:bg-[#f5f5f5] hover:text-[#222]"
-            title="Close"
-            aria-label="Close chat"
-          >
-            <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Chat area */}
-      <div className="relative flex-1 overflow-y-auto custom-scrollbar bg-white px-4 py-6 sm:px-7 sm:py-8">
-        <div className="mx-auto flex h-full w-full max-w-3xl flex-col">
-          {messages.length === 0 && (
-            <div className="flex h-full flex-col items-center justify-center px-2 text-center animate-fade-in-up">
-              <p className="text-[14px] font-normal text-[#777]">
-                Ready when you are
-              </p>
-              <h2 className="mt-1 text-[28px] font-normal tracking-[-0.025em] text-[#202020] sm:text-[34px]">
-                {userName ? userName.split(' ')[0] : "there"}
-              </h2>
-              <p className="mt-3 max-w-xl text-[14px] font-normal leading-6 text-[#7b7b7b]">
-                Ask about Arcade, your progress, points, reports, or certificates.
-              </p>
-              <div className="mt-7 grid w-full max-w-2xl grid-cols-1 gap-2 sm:grid-cols-2">
-                {[
-                  "Facilitator report",
-                  "Arcade report",
-                  "Summary dashboard",
-                  "Suggest next labs",
-                  "See points",
-                  "How to start arcade?",
-                  "Give me all links of arcade",
-                  "See prize tiers"
-                ].map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => handleAskAi(p)}
-                    className="group flex min-h-[46px] items-center justify-between rounded-xl border border-[#e6e6e6] bg-white px-4 text-left text-[13px] font-normal text-[#555] transition-all hover:border-[#cfcfcf] hover:bg-[#fafafa] hover:text-[#222]"
-                  >
-                    <span>{p}</span>
-                    <svg className="h-4 w-4 shrink-0 text-[#aaa] transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
-                    </svg>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {messages.length > 0 && (
-            <div className="mx-auto flex w-full max-w-[760px] flex-col gap-6 pt-1 sm:gap-7">
-              {messages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={
-                      msg.role === 'user'
-                        ? 'max-w-[82%] rounded-[20px] bg-[#f1f1f1] px-4 py-2.5 text-[14px] font-normal leading-[1.6] text-[#202020] sm:max-w-[72%] whitespace-pre-wrap'
-                        : 'max-w-[760px] text-[15px] font-normal leading-[1.7] tracking-[-0.005em] text-[#303030] sm:text-[15.5px] whitespace-pre-wrap'
-                    }
-                  >
-                    {formatChatText(msg.content, msg.role === 'user')}
-                  </div>
+            {/* Animated Drag Overlay */}
+            {isDragging && (
+              <div className="absolute inset-0 z-[100] flex items-center justify-center overflow-hidden rounded-2xl bg-white/96 backdrop-blur-sm">
+                <div className="absolute inset-x-0 top-0 h-1 overflow-hidden bg-[#eff4ff]">
+                  <div className="h-full w-1/3 animate-[dragSlide_1.2s_ease-in-out_infinite] bg-[#2563eb]" />
                 </div>
-              ))}
-            </div>
-          )}
-          <div ref={chatEndRef} />
-        </div>
-      </div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#e5e5e5] bg-[#f7f7f8]">
+                    <svg className="h-7 w-7 text-[#444]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 16V4m0 0L7 9m5-5 5 5M5 14.5v3A2.5 2.5 0 007.5 20h9a2.5 2.5 0 002.5-2.5v-3" />
+                    </svg>
+                  </div>
+                  <p className="mt-4 text-base font-medium text-[#222]">Drop image to upload</p>
+                  <p className="mt-1 text-sm text-[#888]">Arcade AI will analyze the screenshot.</p>
+                </div>
+              </div>
+            )}
 
-      {/* Composer */}
-      <div className="shrink-0 bg-white px-3 pb-3 pt-2.5 sm:px-6 sm:pb-6">
-        <div className="mx-auto w-full max-w-[760px]">
-          {chatImage && (
-            <div className="mb-2.5 inline-flex items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm">
-              <div className="relative h-11 w-11 overflow-hidden rounded-lg border border-[#e7e7e7]">
-                <img src={chatImage} alt="upload" className="h-full w-full object-cover" />
+            {/* Header — Simple "AI replying..." text */}
+            <div className="flex shrink-0 items-center justify-between border-b border-[#eeeeee] bg-white px-4 py-3 sm:px-5">
+              <div className="flex items-center gap-2.5">
+                <div className="min-w-[88px] text-[16px] font-medium tracking-[-0.01em] text-[#2f2f2f]">
+                  {isTyping ? (
+                    <span className="text-[#4a4a4a]">AI replying...</span>
+                  ) : (
+                    userName ? userName.split(' ')[0] : "User"
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <div className="hidden items-center rounded-lg bg-[#f7f7f8] p-0.5 sm:flex">
+                  <button
+                    onClick={() => setAiLanguage('English')}
+                    className={`rounded-md px-2.5 py-1.5 text-[11px] font-normal transition-all ${
+                      aiLanguage === 'English'
+                        ? 'bg-white text-[#222] shadow-sm'
+                        : 'text-[#888] hover:text-[#444]'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    onClick={() => setAiLanguage('Hinglish')}
+                    className={`rounded-md px-2.5 py-1.5 text-[11px] font-normal transition-all ${
+                      aiLanguage === 'Hinglish'
+                        ? 'bg-white text-[#222] shadow-sm'
+                        : 'text-[#888] hover:text-[#444]'
+                    }`}
+                  >
+                    HI
+                  </button>
+                </div>
+
+                {/* Instant clear / Refresh */}
                 <button
-                  onClick={() => setChatImage(null)}
-                  className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
-                  title="Remove image"
-                  aria-label="Remove image"
+                  onClick={handleClearChat}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-[#777] transition-colors hover:bg-[#f5f5f5] hover:text-[#222]"
+                  title="Clear chat"
+                  aria-label="Clear chat"
                 >
-                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                  <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+
+                <button
+                  onClick={() => setShowAiChat(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-[#777] transition-colors hover:bg-[#f5f5f5] hover:text-[#222]"
+                  title="Close"
+                  aria-label="Close chat"
+                >
+                  <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" />
                   </svg>
                 </button>
               </div>
-              <div className="pr-2">
-                <p className="text-[12px] font-normal text-[#333]">Screenshot attached</p>
-                <p className="mt-0.5 text-[11px] font-normal text-[#999]">Ready to analyze</p>
+            </div>
+
+            {/* Chat area */}
+            <div className="relative flex-1 overflow-y-auto custom-scrollbar bg-white px-4 py-6 sm:px-7 sm:py-8">
+              
+              {aiError && (
+                <div className="absolute top-2 left-0 right-0 mx-4 flex items-center justify-between bg-red-100 text-red-600 px-4 py-2 rounded-lg text-sm border border-red-200 z-10 shadow-sm animate-fade-in-up">
+                  <span className="font-bold">Your Token Exceeded</span>
+                  <button onClick={() => handleAskAi(lastFailedMessage, true)} className="flex items-center gap-1 font-bold hover:text-red-800 transition-colors">
+                     Try Again
+                     <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  </button>
+                </div>
+              )}
+
+              <div className="mx-auto flex h-full w-full max-w-3xl flex-col pt-4">
+                {messages.length === 0 && (
+                  <div className="flex h-full flex-col items-center justify-center px-2 text-center animate-fade-in-up">
+                    <p className="text-[14px] font-normal text-[#777]">
+                      Ready when you are
+                    </p>
+                    <h2 className="mt-1 text-[28px] font-normal tracking-[-0.025em] text-[#202020] sm:text-[34px]">
+                      {userName ? userName.split(' ')[0] : "there"}
+                    </h2>
+                    <p className="mt-3 max-w-xl text-[14px] font-normal leading-6 text-[#7b7b7b]">
+                      Ask about Arcade, your progress, points, reports, or certificates.
+                    </p>
+                    <div className="mt-7 grid w-full max-w-2xl grid-cols-1 gap-2 sm:grid-cols-2">
+                      {[
+                        "Facilitator report",
+                        "Arcade report",
+                        "Summary dashboard",
+                        "Suggest next labs",
+                        "See points",
+                        "How to start arcade?",
+                        "Give me all links of arcade",
+                        "See prize tiers"
+                      ].map((p) => (
+                        <button
+                          key={p}
+                          onClick={() => handleAskAi(p)}
+                          className="group flex min-h-[46px] items-center justify-between rounded-xl border border-[#e6e6e6] bg-white px-4 text-left text-[13px] font-normal text-[#555] transition-all hover:border-[#cfcfcf] hover:bg-[#fafafa] hover:text-[#222]"
+                        >
+                          <span>{p}</span>
+                          <svg className="h-4 w-4 shrink-0 text-[#aaa] transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-5-5 5 5-5 5" />
+                          </svg>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {messages.length > 0 && (
+                  <div className="mx-auto flex w-full max-w-[760px] flex-col gap-6 pt-1 sm:gap-7">
+                    {messages.map((msg, idx) => (
+                      <div
+                        key={idx}
+                        className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      >
+                        <div
+                          className={
+                            msg.role === 'user'
+                              ? 'max-w-[82%] rounded-[20px] bg-[#f1f1f1] px-4 py-2.5 text-[14px] font-normal leading-[1.6] text-[#202020] sm:max-w-[72%] whitespace-pre-wrap'
+                              : 'max-w-[760px] text-[15px] font-normal leading-[1.7] tracking-[-0.005em] text-[#303030] sm:text-[15.5px] whitespace-pre-wrap'
+                          }
+                        >
+                          {formatChatText(msg.content, msg.role === 'user')}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div ref={chatEndRef} />
               </div>
             </div>
-          )}
 
-          <div className="flex h-[64px] items-center rounded-full border border-[#dedede] bg-white px-4 py-2 sm:px-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all focus-within:border-[#c4c4c4] focus-within:shadow-[0_8px_32px_rgba(0,0,0,0.10)]">
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleImageUpload}
-            />
+            {/* Composer */}
+            <div className="shrink-0 bg-white px-3 pb-3 pt-2.5 sm:px-6 sm:pb-6">
+              <div className="mx-auto w-full max-w-[760px]">
+                {chatImage && (
+                  <div className="mb-2.5 inline-flex items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm">
+                    <div className="relative h-11 w-11 overflow-hidden rounded-lg border border-[#e7e7e7]">
+                      <img src={chatImage} alt="upload" className="h-full w-full object-cover" />
+                      <button
+                        onClick={() => setChatImage(null)}
+                        className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
+                        title="Remove image"
+                        aria-label="Remove image"
+                      >
+                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m6 6 12 12M18 6 6 18" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div className="pr-2">
+                      <p className="text-[12px] font-normal text-[#333]">Screenshot attached</p>
+                      <p className="mt-0.5 text-[11px] font-normal text-[#999]">Ready to analyze</p>
+                    </div>
+                  </div>
+                )}
 
-            {/* Plus Upload */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#555] transition-colors hover:bg-[#f3f3f3] hover:text-[#111]"
-              title="Upload Screenshot"
-              aria-label="Upload Screenshot"
-            >
-              <svg className="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14M5 12h14" />
-              </svg>
-            </button>
+                <div className="flex h-[64px] items-center rounded-full border border-[#dedede] bg-white px-4 py-2 sm:px-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-all focus-within:border-[#c4c4c4] focus-within:shadow-[0_8px_32px_rgba(0,0,0,0.10)]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
 
-            {/* Input */}
-            <input
-              type="text"
-              value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
-              placeholder={isListening ? "Listening..." : "Ask anything"}
-              className="min-w-0 flex-1 bg-transparent px-3 py-3 text-[16px] font-normal leading-6 text-[#2f2f2f] outline-none placeholder:text-[#8a8a8a]"
-            />
+                  {/* Plus Upload */}
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#555] transition-colors hover:bg-[#f3f3f3] hover:text-[#111]"
+                    title="Upload Screenshot"
+                    aria-label="Upload Screenshot"
+                  >
+                    <svg className="h-[22px] w-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14M5 12h14" />
+                    </svg>
+                  </button>
 
-            {/* Think pill */}
-            <div className="mr-2 hidden h-9 items-center gap-1.5 rounded-full bg-[#f2f6ff] px-3.5 text-[#3980ff] sm:flex transition-all duration-300">
-              {isTyping ? (
-                <svg className="h-[18px] w-[18px] animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              ) : (
-                <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 18h5m-4.25 3h3.5M12 3a6.5 6.5 0 0 0-3.86 11.73A3.5 3.5 0 0 0 9.5 17.6V19h5v-1.4a3.5 3.5 0 0 0 1.36-2.87A6.5 6.5 0 0 0 12 3Z" />
-                </svg>
-              )}
-              <span className="text-[14px] font-medium tracking-wide">
-                {isTyping ? 'Thinking...' : 'Think'}
-              </span>
+                  {/* Input */}
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAskAi()}
+                    placeholder={isListening ? "Listening..." : "Ask anything"}
+                    className="min-w-0 flex-1 bg-transparent px-3 py-3 text-[16px] font-normal leading-6 text-[#2f2f2f] outline-none placeholder:text-[#8a8a8a]"
+                  />
+
+                  {/* Think pill */}
+                  <div className="mr-2 hidden h-9 items-center gap-1.5 rounded-full bg-[#f2f6ff] px-3.5 text-[#3980ff] sm:flex transition-all duration-300">
+                    {isTyping ? (
+                      <svg className="h-[18px] w-[18px] animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ) : (
+                      <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.7">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 18h5m-4.25 3h3.5M12 3a6.5 6.5 0 0 0-3.86 11.73A3.5 3.5 0 0 0 9.5 17.6V19h5v-1.4a3.5 3.5 0 0 0 1.36-2.87A6.5 6.5 0 0 0 12 3Z" />
+                      </svg>
+                    )}
+                    <span className="text-[14px] font-medium tracking-wide">
+                      {isTyping ? 'Thinking...' : 'Think'}
+                    </span>
+                  </div>
+
+                  {/* Mic */}
+                  <button
+                    onClick={startListening}
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors ${
+                      isListening
+                        ? 'bg-red-50 text-red-500'
+                        : 'text-[#555] hover:bg-[#f3f3f3] hover:text-[#111]'
+                    }`}
+                    title="Voice Input"
+                    aria-label="Voice Input"
+                  >
+                    <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 0 1-14 0m7 7v3m-4 0h8M12 4a3 3 0 0 1 3 3v4a3 3 0 1 1-6 0V7a3 3 0 0 1 3-3Z" />
+                    </svg>
+                  </button>
+
+                  {/* Blue arrow */}
+                  <button
+                    onClick={() => handleAskAi()}
+                    disabled={isTyping || (!chatInput.trim() && !chatImage)}
+                    className="ml-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2563eb] text-white transition-all hover:bg-[#1d4ed8] hover:shadow-md disabled:cursor-not-allowed disabled:bg-[#d7d7d7] disabled:text-[#999]"
+                    title="Send"
+                    aria-label="Send"
+                  >
+                    <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.1">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h12m-4.5-5 4.5 5-4.5 5" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
-
-            {/* Mic */}
-            <button
-              onClick={startListening}
-              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors ${
-                isListening
-                  ? 'bg-red-50 text-red-500'
-                  : 'text-[#555] hover:bg-[#f3f3f3] hover:text-[#111]'
-              }`}
-              title="Voice Input"
-              aria-label="Voice Input"
-            >
-              <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 0 1-14 0m7 7v3m-4 0h8M12 4a3 3 0 0 1 3 3v4a3 3 0 1 1-6 0V7a3 3 0 0 1 3-3Z" />
-              </svg>
-            </button>
-
-            {/* Blue arrow */}
-            <button
-              onClick={() => handleAskAi()}
-              disabled={isTyping || (!chatInput.trim() && !chatImage)}
-              className="ml-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2563eb] text-white transition-all hover:bg-[#1d4ed8] hover:shadow-md disabled:cursor-not-allowed disabled:bg-[#d7d7d7] disabled:text-[#999]"
-              title="Send"
-              aria-label="Send"
-            >
-              <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.1">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h12m-4.5-5 4.5 5-4.5 5" />
-              </svg>
-            </button>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
+      {/* --- POSTER MODAL --- */}
+      {showPoster && (
+        <ArcadeSharePoster
+          name={userName || "Arcade Player"}
+          arcadePoints={points || 0}
+          prizeTier={getCurrentTier()}
+          onClose={() => setShowPoster(false)}
+        />
+      )}
 
-        
-        {showPoster && (
-          <ArcadeSharePoster
-            name={userName || "Arcade Player"}
-            arcadePoints={points || 0}
-            prizeTier={getCurrentTier()}
-            onClose={() => setShowPoster(false)}
-          />
-        )}
+      {/* --- EMAIL VERIFICATION PREMIUM MODAL --- */}
+      {showCertModal && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
+          <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
+            {/* Header - Sleeker Font */}
+            <div className="bg-gradient-to-r from-[#4285F4] to-[#1a73e8] p-5 text-white flex justify-between items-center">
+               <h3 className="font-bold text-lg tracking-wide flex items-center gap-2">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                 Verify Your Profile
+               </h3>
+               <button onClick={() => setShowCertModal(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+               </button>
+            </div>
+            
+            {/* Body */}
+            <div className="p-6 flex flex-col gap-4">
+               <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Please verify your registered Arcade Email to download the facilitator certificate.
+               </p>
 
-        {/* --- EMAIL VERIFICATION PREMIUM MODAL --- */}
-        {showCertModal && (
-          <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
-            <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
-              {/* Header - Sleeker Font */}
-              <div className="bg-gradient-to-r from-[#4285F4] to-[#1a73e8] p-5 text-white flex justify-between items-center">
-                 <h3 className="font-bold text-lg tracking-wide flex items-center gap-2">
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                   Verify Your Profile
-                 </h3>
-                 <button onClick={() => setShowCertModal(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-                 </button>
-              </div>
-              
-              {/* Body */}
-              <div className="p-6 flex flex-col gap-4">
-                 <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Please verify your registered Arcade Email to download the facilitator certificate.
-                 </p>
+               {certError && (
+                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-xl text-[13px] font-medium flex items-start gap-2">
+                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{certError}</span>
+                 </div>
+               )}
 
-                 {certError && (
-                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-xl text-[13px] font-medium flex items-start gap-2">
-                      <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      <span>{certError}</span>
-                   </div>
+               {/* Locked Full Name Input - Medium Font */}
+               <div className="flex flex-col gap-1.5">
+                 <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
+                 <input 
+                   type="text" 
+                   value={certInputName} 
+                   readOnly 
+                   className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none transition-all border cursor-not-allowed ${isDark ? 'bg-[#1a1b1e] border-[#3c4043] text-gray-500' : 'bg-gray-100 border-gray-200 text-gray-500'}`} 
+                 />
+               </div>
+
+               {/* Editable Email Input - Medium Font */}
+               <div className="flex flex-col gap-1.5">
+                 <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Registered Email</label>
+                 <input 
+                   type="email" 
+                   value={certEmail} 
+                   onChange={(e) => setCertEmail(e.target.value)} 
+                   placeholder="Enter your Arcade email ID" 
+                   className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#1a73e8] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} 
+                 />
+               </div>
+
+               {/* Premium Blue Button */}
+               <button 
+                 onClick={handleVerifyAndDownload} 
+                 disabled={isGenerating} 
+                 className={`mt-3 w-full py-3.5 rounded-xl font-bold text-[15px] text-white shadow-md transition-all flex items-center justify-center gap-2 ${isGenerating ? 'bg-[#1a73e8]/70 cursor-wait' : 'bg-[#1a73e8] hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5'}`}
+               >
+                 {isGenerating ? (
+                    <svg className="w-6 h-6 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                 ) : (
+                    "Verify & Download"
                  )}
-
-                 {/* Locked Full Name Input - Medium Font */}
-                 <div className="flex flex-col gap-1.5">
-                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
-                   <input 
-                     type="text" 
-                     value={certInputName} 
-                     readOnly 
-                     className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none transition-all border cursor-not-allowed ${isDark ? 'bg-[#1a1b1e] border-[#3c4043] text-gray-500' : 'bg-gray-100 border-gray-200 text-gray-500'}`} 
-                   />
-                 </div>
-
-                 {/* Editable Email Input - Medium Font */}
-                 <div className="flex flex-col gap-1.5">
-                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Registered Email</label>
-                   <input 
-                     type="email" 
-                     value={certEmail} 
-                     onChange={(e) => setCertEmail(e.target.value)} 
-                     placeholder="Enter your Arcade email ID" 
-                     className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#1a73e8] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} 
-                   />
-                 </div>
-
-                 {/* Premium Blue Button - Bold instead of Black, No Uppercase text */}
-                 <button 
-                   onClick={handleVerifyAndDownload} 
-                   disabled={isGenerating} 
-                   className={`mt-3 w-full py-3.5 rounded-xl font-bold text-[15px] text-white shadow-md transition-all flex items-center justify-center gap-2 ${isGenerating ? 'bg-[#1a73e8]/70 cursor-wait' : 'bg-[#1a73e8] hover:bg-[#1557b0] hover:shadow-lg hover:-translate-y-0.5'}`}
-                 >
-                   {isGenerating ? (
-                      <svg className="w-6 h-6 animate-spin text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                   ) : (
-                      "Verify & Download"
-                   )}
-                 </button>
-              </div>
+               </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* --- WHATSAPP REQUEST MODAL (FOR THOSE WHO ALREADY DOWNLOADED) --- */}
-        {showRequestModal && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
-            <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
-              {/* Header */}
-              <div className="bg-gradient-to-r from-[#34a853] to-[#137333] p-5 text-white flex justify-between items-center">
-                 <h3 className="font-bold text-lg tracking-wide flex items-center gap-2">
-                   {/* WhatsApp Icon */}
-                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                   </svg>
-                   Request Again
-                 </h3>
-                 <button onClick={() => setShowRequestModal(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-                 </button>
-              </div>
-              
-              {/* Body */}
-              <div className="p-6 flex flex-col gap-4">
-                 <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    You have already downloaded this certificate. If you need it again, please fill in your details.
-                 </p>
+      {/* --- WHATSAPP REQUEST MODAL --- */}
+      {showRequestModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in-up">
+          <div className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative transition-all ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
+            <div className="bg-gradient-to-r from-[#34a853] to-[#137333] p-5 text-white flex justify-between items-center">
+               <h3 className="font-bold text-lg tracking-wide flex items-center gap-2">
+                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                 </svg>
+                 Request Again
+               </h3>
+               <button onClick={() => setShowRequestModal(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+               </button>
+            </div>
+            
+            <div className="p-6 flex flex-col gap-4">
+               <p className={`text-[14px] font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  You have already downloaded this certificate. If you need it again, please fill in your details.
+               </p>
 
-                 {/* Inputs */}
-                 <div className="flex flex-col gap-1.5">
-                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
-                   <input type="text" value={reqName} onChange={(e) => setReqName(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
-                 </div>
+               <div className="flex flex-col gap-1.5">
+                 <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</label>
+                 <input type="text" value={reqName} onChange={(e) => setReqName(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
+               </div>
 
-                 <div className="flex flex-col gap-1.5">
-                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Phone No</label>
-                   <input type="tel" value={reqPhone} onChange={(e) => setReqPhone(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} placeholder="Enter WhatsApp number" />
-                 </div>
+               <div className="flex flex-col gap-1.5">
+                 <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Phone No</label>
+                 <input type="tel" value={reqPhone} onChange={(e) => setReqPhone(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} placeholder="Enter WhatsApp number" />
+               </div>
 
-                 <div className="flex flex-col gap-1.5">
-                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</label>
-                   <input type="email" value={reqEmail} onChange={(e) => setReqEmail(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
-                 </div>
+               <div className="flex flex-col gap-1.5">
+                 <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</label>
+                 <input type="email" value={reqEmail} onChange={(e) => setReqEmail(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
+               </div>
 
-                 <div className="flex flex-col gap-1.5">
-                   <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Public Profile URL</label>
-                   <input type="text" value={reqProfile} onChange={(e) => setReqProfile(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
-                 </div>
+               <div className="flex flex-col gap-1.5">
+                 <label className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Public Profile URL</label>
+                 <input type="text" value={reqProfile} onChange={(e) => setReqProfile(e.target.value)} className={`w-full px-4 py-3 rounded-xl text-[15px] font-medium focus:outline-none focus:ring-2 focus:ring-[#34a853] transition-all border ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-white' : 'bg-white border-gray-300 text-[#202124]'}`} />
+               </div>
 
-                 <button onClick={handleWhatsAppSubmit} className="mt-3 w-full py-3.5 rounded-xl font-bold text-[15px] text-white shadow-md transition-all flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd57] hover:shadow-lg hover:-translate-y-0.5">
-                   Send on WhatsApp
-                 </button>
-              </div>
+               <button onClick={handleWhatsAppSubmit} className="mt-3 w-full py-3.5 rounded-xl font-bold text-[15px] text-white shadow-md transition-all flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd57] hover:shadow-lg hover:-translate-y-0.5">
+                 Send on WhatsApp
+               </button>
             </div>
           </div>
-        )}
-
-      </main>
+        </div>
+      )}
 
       {/* --- FACILITATOR DRAWER --- */}
       <div className={`fixed inset-0 z-[200] flex justify-end transition-opacity duration-300 ${showFacilitatorDrawer ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -2103,7 +2108,8 @@ const dashboardData = {
                          )}
                       </div>
                    </div>
-               <h2 className={`text-xl font-bold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>               </div>
+                   <h2 className={`text-xl font-bold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>               
+               </div>
 
                {facilitatorContent}
            </div>
@@ -2130,6 +2136,17 @@ const dashboardData = {
         }
         .animate-shine {
           animation: shine 3s infinite ease-in-out;
+        }
+        @keyframes starPulseRotate {
+          0% { transform: scale(1) rotate(0deg); }
+          25% { transform: scale(1.3) rotate(45deg); }
+          50% { transform: scale(1) rotate(90deg); }
+          75% { transform: scale(1.2) rotate(135deg); }
+          100% { transform: scale(1) rotate(180deg); }
+        }
+        .animate-star-pulse-rotate {
+          display: inline-block;
+          animation: starPulseRotate 3s infinite ease-in-out;
         }
       `}</style>
     </div>
