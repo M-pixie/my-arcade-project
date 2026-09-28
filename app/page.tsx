@@ -347,7 +347,7 @@ export default function HomePage() {
       autoCloseTimerRef.current =
         setTimeout(() => {
           setShowResult(false);
-        }, 3000); // Set to 3 seconds
+        }, 2000); // Set to 2 seconds
 
     } catch (error) {
       console.error(
