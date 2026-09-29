@@ -154,10 +154,10 @@ export default function HomePage() {
   ];
 
   const arcadeCards = [
-    { stars: "★", title: "Arcade Trooper", points: "50 Points", progress: "38%", color: "bg-red-500", spots: "3718 / 6000 spots left" },
-    { stars: "★★", title: "Arcade Ranger", points: "75 Points", progress: "59%", color: "bg-blue-400", spots: "1622 / 4000 spots left" },
-    { stars: "★★★", title: "Arcade Champion", points: "95 Points", progress: "74%", color: "bg-yellow-400", spots: "781 / 3000 spots left" },
-    { stars: "★★★★", title: "Arcade Legend", points: "120 Points", progress: "44%", color: "bg-green-400", spots: "1397 / 2500 spots left" },
+    { stars: "★", title: "Arcade Trooper", points: "50 Points", progress: "38%", color: "bg-red-500", spots: "3719 / 6000 spots left" },
+    { stars: "★★", title: "Arcade Ranger", points: "75 Points", progress: "58%", color: "bg-blue-400", spots: "1684 / 4000 spots left" },
+    { stars: "★★★", title: "Arcade Champion", points: "95 Points", progress: "78%", color: "bg-yellow-400", spots: "671 / 3000 spots left" },
+    { stars: "★★★★", title: "Arcade Legend", points: "120 Points", progress: "46%", color: "bg-green-400", spots: "1361 / 2500 spots left" },
   ];
 
   /* =========================================================
