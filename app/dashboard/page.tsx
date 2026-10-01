@@ -445,12 +445,12 @@ export default function DashboardPage() {
   };
 
   const julyLabs = [
-    { id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/sepvoy.png', accessCode: ' 1q-microservice-9210', points: 1, link: 'https://www.skills.google/games/7442', matchStrings: ['Arcade Voyage: App Modernization'] },
-    { id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/advsep.png', accessCode: '1q-architecture-01381', points: 1, link: 'https://www.skills.google/games/7441', matchStrings: ['Arcade Adventure: Modern Cloud Architecture'] },
-    { id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/septrail.png', accessCode: '1q-vpcpeering-3469', points: 1, link: 'https://www.skills.google/games/7443', matchStrings: ['Arcade Trail: Data Engineering and Security'] },
-    { id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/bcsep.png', accessCode: '1q-basecamp-09304', points: 1, link: 'https://www.skills.google/games/7444', matchStrings: ['Arcade Base Camp September 2026'] },
-    { id: 'data mesh', title: 'Arcade Simulator: DevOps Engineer', subtitle: 'Data Mesh Architect !', image: 'https://services.google.com/fh/files/misc/simulatorsep.png', accessCode: '1q-devops-065131', points: 1, link: 'https://www.skills.google/games/7445', matchStrings: ['Arcade Simulator: DevOps Engineer'] },
-    { id: 'safe', title: 'Pitch Perfect', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/specialsepo.png', accessCode: '1q-analysis-5026', points: 1, link: 'https://www.skills.google/games/7446', matchStrings: ['Pitch Perfect'] }
+    { id: 'voyage', title: 'Arcade Voyage', subtitle: 'Practice as you go.', image: 'https://services.google.com/fh/files/misc/arcvoyoct.png', accessCode: '1q-synthesis-10713', points: 1, link: 'https://www.skills.google/games/7442', matchStrings: ['Arcade Voyage: Language, Voice, and Multimodal Processing'] },
+    { id: 'adventure', title: 'Arcade Adventure', subtitle: 'Play. Explore. Learn.', image: 'https://services.google.com/fh/files/misc/arcadv-oct.png', accessCode: '1q-endpoint-01297', points: 1, link: 'https://www.skills.google/games/7441', matchStrings: ['Arcade Adventure: Google Cloud ML APIs'] },
+    { id: 'trail', title: 'Arcade Trail', subtitle: 'Build through hands-on.', image: 'https://services.google.com/fh/files/misc/arctrail-oct.png', accessCode: '1q-package-53921', points: 1, link: 'https://www.skills.google/games/7443', matchStrings: ['Arcade Trail: Containers & Load Balancing'] },
+    { id: 'basecamp', title: 'Arcade Base Camp', subtitle: 'Gain essential Google Cloud skills', image: 'https://services.google.com/fh/files/misc/arcbc-oct.png', accessCode: '1q-basecamp-61332', points: 1, link: 'https://www.skills.google/games/7499', matchStrings: ['Arcade Base Camp October 2026'] },
+    { id: 'data mesh', title: 'Arcade Simulator: Site Reliability Engineer', subtitle: 'Site Reliability Engineer', image: 'https://services.google.com/fh/files/misc/simul-oct.png', accessCode: '1q-reliability-21924', points: 1, link: 'https://www.skills.google/games/7500', matchStrings: ['Arcade Simulator: Site Reliability Engineer'] },
+    { id: 'safe', title: 'Trick-or-Metric', subtitle: 'Google Skills', image: 'https://services.google.com/fh/files/misc/arcspec-oct.png', accessCode: '1q-spooky-33057', points: 1, link: 'https://www.skills.google/games/7501', matchStrings: ['Trick-or-Metric'] }
   ];
 
   const augustLabs: any[] = [];
@@ -1546,7 +1546,7 @@ const dashboardData = {
             <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.22s' }}>
               <div className={`w-full h-px mb-8 ${isDark ? 'bg-[#3c4043]' : 'bg-[#dadce0]'}`}></div>
               <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-                <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}><span className="text-xl"></span> September Labs</h4>
+                <h4 className={`text-sm sm:text-base font-black uppercase tracking-widest flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}><span className="text-xl"></span> October Labs</h4>
               </div>
               <div className="relative flex items-center justify-between w-full px-2 sm:px-4 mt-6 mb-8">
                 <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-full h-2 rounded-full z-0 ${isDark ? 'bg-[#2a2d32]' : 'bg-[#f1f3f4]'}`}></div>
@@ -1584,90 +1584,148 @@ const dashboardData = {
                 })}
               </div>
               <div className={`mt-10 sm:mt-12 w-full text-center border-t pt-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-                <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>{completedLabs.length} / 6 September Labs Completed</span>
+                <span className={`text-sm sm:text-base font-bold ${isDark ? 'text-white' : 'text-black'}`}>{completedLabs.length} / 6 October Labs Completed</span>
               </div>
             </div>
           )}
 
           {points !== null && (
-            <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
-              <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4 border-b pb-4 ${isDark ? 'border-[#2a2d32]' : 'border-[#dadce0]'}`}>
-                <h4 className={`text-2xl font-extrabold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-[#202124]'}`}>September Labs</h4>
+  <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
+    
+    {/* Header Section */}
+    <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4 border-b pb-5 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+      <h4 className={`text-3xl font-bold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+        October Labs
+      </h4>
+    </div>
+
+    {/* ================= PENDING LABS ================= */}
+    {pendingLabs.length > 0 && (
+      <div className="mb-14">
+        <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+          </span>
+          Pending Labs ({pendingLabs.length})
+        </h5>
+        
+        {/* Premium Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pendingLabs.map((lab) => (
+            <div 
+              key={`pending-${lab.id}`} 
+              className={`group flex flex-col p-5 rounded-[24px] border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                isDark 
+                  ? 'bg-[#13151a] border-white/5 hover:border-white/10 hover:shadow-black/50' 
+                  : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-gray-200/50'
+              }`}
+            >
+              {/* Image & Points Badge Container */}
+              <div className={`relative w-full aspect-[4/3] rounded-2xl mb-5 overflow-hidden flex items-center justify-center p-4 transition-colors ${isDark ? 'bg-white/[0.02] group-hover:bg-white/[0.04]' : 'bg-gray-50 group-hover:bg-gray-100'}`}>
+                {/* Sleek Floating Points Badge */}
+                <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-semibold tracking-wider flex items-center gap-1.5 z-20 ${
+                  isDark ? 'bg-black/40 border-white/10 text-yellow-400' : 'bg-white/80 border-gray-200 text-yellow-600 shadow-sm'
+                }`}>
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  {lab.points} PTS
+                </div>
+                <img src={lab.image} alt={lab.title} className="w-[85%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500 z-10" />
               </div>
 
-              {pendingLabs.length > 0 && (
-                <div className="mb-10">
-                  <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>
-                     <span className="w-2 h-2 rounded-full bg-[#ea4335]"></span> Pending Labs ({pendingLabs.length})
-                  </h5>
-                  <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l rounded-2xl overflow-hidden shadow-sm ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-                    {pendingLabs.map((lab) => (
-                      <div key={`pending-${lab.id}`} className={`flex flex-col items-center p-6 border-b border-r transition-colors ${isDark ? 'border-[#3c4043] bg-[#15171b] hover:bg-[#1e1e24]' : 'border-[#dadce0] bg-white hover:bg-gray-50'}`}>
-                        <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
-                        <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
-                        <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
-                          <img src={lab.image} alt={lab.title} className="w-full object-contain rounded-[12px] shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300 z-10" />
-                        </div>
-                        <div className="flex items-center justify-center gap-2 w-full mb-3">
-                           <p className={`text-[13px] md:text-[14px] font-bold text-center m-0 flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                             Access code: 
-                             <span className={`px-2.5 py-1 rounded-md tracking-wider border shadow-sm ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8]'}`}>
-                                {lab.accessCode}
-                             </span>
-                           </p>
-                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] bg-[#f1f3f4]'}`} title="Copy Code">
-                             {copiedCode === lab.accessCode ? <svg className="w-5 h-5 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>}
-                           </button>
-                        </div>
-                        <div className={`mb-5 px-4 py-1.5 rounded-full border shadow-sm ${isDark ? 'bg-yellow-900/20 border-yellow-700/50 text-yellow-500' : 'bg-yellow-50 border-yellow-200 text-yellow-700'}`}>
-                          <p className="text-[12px] font-black uppercase tracking-wider text-center m-0">Arcade points: {lab.points}</p>
-                        </div>
-                        <a href={lab.link} target="_blank" rel="noopener noreferrer" className="w-[85%] max-w-[280px] font-black text-[15px] py-2.5 rounded-full border transition-all shadow-sm flex justify-center items-center text-white bg-[#1a73e8] hover:bg-[#1557b0] border-[#1557b0]">
-                          Start Lab
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Text Content */}
+              <div className="flex-1">
+                <h5 className={`text-[17px] font-semibold mb-1.5 line-clamp-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{lab.title}</h5>
+                <p className={`text-[13px] leading-relaxed line-clamp-2 mb-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{lab.subtitle}</p>
+              </div>
 
-              {completedLabs.length > 0 && (
-                <div>
-                  <h5 className={`text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2 ${isDark ? 'text-[#81c995]' : 'text-[#137333]'} ${pendingLabs.length > 0 ? (isDark ? 'pt-6 border-t border-[#2a2d32]' : 'pt-6 border-t border-[#dadce0]') : ''}`}>
-                    <span className="w-2 h-2 rounded-full bg-[#34a853]"></span> Completed Labs ({completedLabs.length})
-                  </h5>
-                  <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l rounded-2xl overflow-hidden shadow-sm ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-                    {completedLabs.map((lab) => (
-                      <div key={`completed-${lab.id}`} className={`flex flex-col items-center p-6 border-b border-r transition-colors ${isDark ? 'border-[#3c4043] bg-[#15171b] hover:bg-[#1e1e24]' : 'border-[#dadce0] bg-white hover:bg-gray-50'}`}>
-                        <h5 className={`text-[20px] lg:text-[22px] font-bold mb-2 text-center ${isDark ? 'text-white' : 'text-black'}`}>{lab.title}</h5>
-                        <p className={`text-[14px] font-bold mb-4 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>{lab.subtitle}</p>
-                        <div className="mb-5 w-full max-w-[340px] flex justify-center items-center relative group">
-                          <img src={lab.image} alt={lab.title} className="w-full object-contain rounded-[12px] shadow-sm z-10" />
-                        </div>
-                        <div className="flex items-center justify-center gap-2 w-full mb-3">
-                           <p className={`text-[13px] md:text-[14px] font-bold text-center m-0 flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>
-                             Access code: 
-                             <span className={`px-2.5 py-1 rounded-md tracking-wider border shadow-sm ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8]' : 'bg-[#e8f0fe] border-[#d2e3fc] text-[#1a73e8]'}`}>
-                                {lab.accessCode}
-                             </span>
-                           </p>
-                           <button onClick={() => handleCopyCode(lab.accessCode)} className={`transition-colors p-1.5 rounded-md ${isDark ? 'text-[#9aa0a6] hover:text-[#8ab4f8] bg-[#2a2d32]' : 'text-[#5f6368] hover:text-[#1a73e8] bg-[#f1f3f4]'}`} title="Copy Code">
-                            {copiedCode === lab.accessCode ? <svg className="w-4 h-4 text-[#34a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg> : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>}
-                           </button>
-                        </div>
-                        <div className={`mb-5 px-4 py-1.5 rounded-full border shadow-sm ${isDark ? 'bg-yellow-900/20 border-yellow-700/50 text-yellow-500' : 'bg-yellow-50 border-yellow-200 text-yellow-700'}`}>
-                          <p className="text-[12px] font-black uppercase tracking-wider text-center m-0">Arcade points: {lab.points}</p>
-                        </div>
-                        <a href={lab.link} target="_blank" rel="noopener noreferrer" className={`w-[85%] max-w-[280px] font-black text-[15px] py-2.5 rounded-full border transition-all shadow-sm flex justify-center items-center text-white ${isDark ? 'bg-[#137333] border-[#1e3b29] hover:bg-[#0f5c29]' : 'bg-[#34a853] border-[#137333] hover:bg-[#2b8c45]'}`}>
-                          COMPLETED
-                        </a>
-                      </div>
-                    ))}
+              {/* Bottom Actions */}
+              <div className="mt-auto flex flex-col gap-3">
+                {/* Modern Code Box */}
+                <div className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border transition-colors ${
+                  isDark ? 'bg-white/[0.02] border-white/5' : 'bg-gray-50/50 border-gray-100'
+                }`}>
+                  <div className="flex flex-col">
+                    <span className={`text-[10px] uppercase tracking-widest font-semibold mb-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Access Code</span>
+                    <span className={`text-[14px] font-mono font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{lab.accessCode}</span>
                   </div>
+                  <button onClick={() => handleCopyCode(lab.accessCode)} className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'hover:bg-white hover:shadow-sm text-gray-500 hover:text-gray-900'}`} title="Copy Code">
+                    {copiedCode === lab.accessCode ? (
+                      <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                    ) : (
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    )}
+                  </button>
                 </div>
-              )}
+
+                {/* THIN & ELEGANT BLUE BUTTON */}
+                <a href={lab.link} target="_blank" rel="noopener noreferrer" 
+                   className={`w-full py-2.5 text-[14px] font-medium tracking-wide rounded-xl border-transparent text-white transition-all duration-300 flex justify-center items-center ${
+                     isDark 
+                       ? 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_20px_rgba(37,99,235,0.3)]' 
+                       : 'bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md'
+                   }`}>
+                  Start Lab
+                </a>
+              </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* ================= COMPLETED LABS ================= */}
+    {completedLabs.length > 0 && (
+      <div>
+        <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span> 
+          Completed Labs ({completedLabs.length})
+        </h5>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {completedLabs.map((lab) => (
+            <div 
+              key={`completed-${lab.id}`} 
+              className={`group flex flex-col p-5 rounded-[24px] border transition-all duration-300 opacity-90 hover:opacity-100 ${
+                isDark 
+                  ? 'bg-[#13151a] border-white/5 hover:border-white/10' 
+                  : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-sm'
+              }`}
+            >
+              {/* Image & Points (Grayed out a bit for completed) */}
+              <div className={`relative w-full aspect-[4/3] rounded-2xl mb-5 overflow-hidden flex items-center justify-center p-4 transition-colors grayscale-[20%] group-hover:grayscale-0 ${isDark ? 'bg-white/[0.02]' : 'bg-gray-50'}`}>
+                <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-semibold tracking-wider flex items-center gap-1.5 z-20 ${
+                  isDark ? 'bg-black/40 border-white/10 text-yellow-500/70' : 'bg-white/80 border-gray-200 text-yellow-600/70'
+                }`}>
+                  <span>⭐</span> {lab.points} PTS
+                </div>
+                <img src={lab.image} alt={lab.title} className="w-[85%] object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 z-10" />
+              </div>
+
+              {/* Text Content */}
+              <div className="flex-1">
+                <h5 className={`text-[17px] font-semibold mb-1.5 line-clamp-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{lab.title}</h5>
+                <p className={`text-[13px] leading-relaxed line-clamp-2 mb-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{lab.subtitle}</p>
+              </div>
+
+              <div className="mt-auto flex flex-col gap-3">
+                {/* ELEGANT COMPLETED BUTTON (Ghost Style) */}
+                <div className={`w-full py-2.5 text-[14px] font-medium tracking-wide rounded-xl border flex justify-center items-center gap-2 cursor-default ${
+                    isDark 
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                      : 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                  }`}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
+                  Completed
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+)}
 
           {points !== null && (
             <div id="history-section" className="animate-fade-in-up scroll-mt-24 w-full" style={{animationDelay: '0.3s'}}>

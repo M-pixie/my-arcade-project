@@ -33,7 +33,7 @@ import {
 export default function Footer() {
   const router = useRouter();
 
-  const lastUpdated = "26 SEPTEMBER 2026 00:53 IST";
+  const lastUpdated = "01 OCTOBER 2026 23:25 IST";
 
   /* =========================================================
      LIVE DATA

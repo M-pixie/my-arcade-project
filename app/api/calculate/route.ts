@@ -251,7 +251,9 @@ export async function POST(req: Request) {
           title.includes('arcade re-trail: vaults & vectors') ||  // August 
           title.includes('spans and plans') ||  // August
           title.includes('arcade simulator: devops engineer') || //september
-          title.includes('pitch perfect') //september
+          title.includes('pitch perfect') || //september
+          title.includes('arcade simulator: site reliability engineer') || //october
+          title.includes('trick-or-metric') //october
 
 
         ) {
