@@ -145,7 +145,7 @@ export default function DashboardPage() {
   // Auto Scroll Ref
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // --- NEW: Side Drawer State for Facilitator Details ---
+  // --- NEW: Modal State for Facilitator Details ---
   const [showFacilitatorDrawer, setShowFacilitatorDrawer] = useState(false);
 
   // Weekly Graph Date Picker State
@@ -931,24 +931,23 @@ const dashboardData = {
     });
   };
 
-  // --- NEW: FACILITATOR CONTENT VARIABLE TO REUSE IN DRAWER ---
+  // --- REFINED FACILITATOR CONTENT ---
   const facilitatorContent = (
     <>
-      <div className="flex flex-col items-center mb-6 w-full">
-         <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[40px] md:text-[46px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
-         <span className={`text-[10px] sm:text-[12px] font-bold uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Program ends on 14 September 11:59 pm</span>
+      <div className="flex flex-col items-center mb-4 w-full">
+         <h3 style={{ fontFamily: 'Arial, sans-serif' }} className={`font-semibold text-[22px] tracking-tight text-center ${isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}`}>Facilitator Progress</h3>
+         <span className={`text-[11px] font-medium uppercase tracking-wider mt-1 block text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Program ends on 14 September 11:59 pm</span>
       </div>
-      <div className="flex items-center gap-3 sm:gap-4 mb-6 flex-wrap justify-center w-full">
-         <div className={`text-[15px] sm:text-[18px] font-extrabold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span></div>
+      <div className="flex items-center gap-3 sm:gap-4 mb-5 flex-wrap justify-center w-full">
+         <div className={`text-[14px] sm:text-[15px] font-semibold tracking-wide ${isDark ? 'text-gray-300' : 'text-[#3c4043]'}`}>Games: <span className={isDark ? 'text-[#8ab4f8]' : 'text-[#1a73e8]'}>{facilitatorArcadeGamesCount}</span> <span className="opacity-40 mx-2 text-lg sm:text-xl">•</span> Skill Badges: <span className={isDark ? 'text-[#81c995]' : 'text-[#137333]'}>{facilitatorSkillBadgesCount}</span></div>
       </div>
 
       {achievedMilestone ? (
-        <div className="w-full mb-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
+        <div className="w-full mb-6 flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-in-up">
           
           {/* PART 1: Milestone Box (Premium Pill) */}
-          <div className="bg-[#4285f4] py-2 px-5 rounded-full text-white flex items-center justify-center shadow-sm w-full sm:w-auto">
-             <span className="text-lg drop-shadow-md mr-2"></span>
-             <div className="font-bold text-[14px] tracking-tight whitespace-nowrap">{achievedMilestone.title} </div>
+          <div className="bg-[#4285f4] py-1.5 px-4 rounded-full text-white flex items-center justify-center shadow-sm w-full sm:w-auto">
+             <div className="font-medium text-[13px] tracking-tight whitespace-nowrap">{achievedMilestone.title} </div>
           </div>
           
           {/* PART 2: Blue Slim Download Button */}
@@ -958,7 +957,7 @@ const dashboardData = {
                 setCertInputName(userName || ""); 
                 setShowCertModal(true); 
               }} 
-              className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-semibold text-[14px] px-6 py-2 rounded-full shadow-sm transition-all hover:scale-105 flex items-center justify-center gap-2"
+              className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-[13px] px-5 py-1.5 rounded-full shadow-sm transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
               Get Certificate
@@ -966,28 +965,28 @@ const dashboardData = {
           </div>
 
           {/* PART 3: Bonus Points Box (Premium Pill) */}
-          <div className="bg-[#a855f7] py-2 px-5 rounded-full text-white flex items-center justify-center shadow-sm w-full sm:w-auto">
-             <div className="text-[14px] font-bold drop-shadow-sm whitespace-nowrap">+{achievedMilestone.points} Bonus</div>
+          <div className="bg-[#a855f7] py-1.5 px-4 rounded-full text-white flex items-center justify-center shadow-sm w-full sm:w-auto">
+             <div className="text-[13px] font-medium drop-shadow-sm whitespace-nowrap">+{achievedMilestone.points} Bonus</div>
           </div>
           
         </div>
       ) : (
-        <div className="mb-6"></div>
+        <div className="mb-4"></div>
       )}
 
-      <div className={`mt-auto p-2 sm:p-3 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
+      <div className={`mt-auto p-2 flex flex-row items-start justify-between divide-x w-full overflow-x-auto custom-scrollbar ${isDark ? 'divide-[#3c4043]' : 'divide-[#dadce0]'}`}>
         {facilitatorMilestones.map((m) => {
           const arcadePerc = Math.min(100, (facilitatorArcadeGamesCount / m.targetArcade) * 100);
           const skillPerc = Math.min(100, (facilitatorSkillBadgesCount / m.targetSkills) * 100);
           const totalPerc = Math.floor((arcadePerc + skillPerc) / 2);
           return (
-            <div key={m.id} className="flex-1 flex flex-col items-center px-2 sm:px-4 min-w-[70px]">
-              <span className={`text-[13px] sm:text-[16px] font-black mb-2 sm:mb-3 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>{m.title === 'Ultimate' ? 'Ultimate' : m.title}</span>
-              <div className={`w-full h-2.5 sm:h-3 rounded-full overflow-hidden ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}>
+            <div key={m.id} className="flex-1 flex flex-col items-center px-2 sm:px-3 min-w-[65px]">
+              <span className={`text-[12px] sm:text-[13px] font-semibold mb-2 whitespace-nowrap ${isDark ? 'text-gray-200' : 'text-[#3c4043]'}`}>{m.title === 'Ultimate' ? 'Ultimate' : m.title}</span>
+              <div className={`w-full h-2 sm:h-2.5 rounded-full overflow-hidden ${isDark ? 'bg-[#3c4043]' : 'bg-[#e8eaed]'}`}>
                 <div className={`h-full rounded-full ${m.colorClass} transition-all duration-1000 ease-out`} style={{ width: `${totalPerc}%` }}></div>
               </div>
-              <span className={`text-[13px] sm:text-[15px] font-black mt-2 sm:mt-3 tracking-wide ${isDark ? (totalPerc > 0 ? m.textClass : 'text-gray-500') : m.textClass}`}>{totalPerc}%</span>
-              <div className="flex flex-col text-[10px] sm:text-[12px] text-gray-500 dark:text-gray-400 font-bold mt-1.5 sm:mt-2 leading-tight text-center uppercase tracking-wider">
+              <span className={`text-[12px] sm:text-[13px] font-semibold mt-2 tracking-wide ${isDark ? (totalPerc > 0 ? m.textClass : 'text-gray-500') : m.textClass}`}>{totalPerc}%</span>
+              <div className="flex flex-col text-[10px] text-gray-500 dark:text-gray-400 font-medium mt-1 leading-tight text-center uppercase tracking-wider">
                 <span>G: {Math.min(facilitatorArcadeGamesCount, m.targetArcade)}/{m.targetArcade}</span>
                 <span className="mt-0.5">S: {Math.min(facilitatorSkillBadgesCount, m.targetSkills)}/{m.targetSkills}</span>
               </div>
@@ -1096,6 +1095,15 @@ const dashboardData = {
 
                     {/* Action Buttons */}
                     <div className="w-full mt-auto space-y-3">
+                      {/* NEW TIER BADGE ADDED HERE */}
+                      <div className="w-full flex justify-center mb-6">
+                        <div className={`px-4 py-1.5 rounded-full text-[13px] font-bold shadow-sm border ${
+                          getCurrentTier() !== "Swag Eligibility Pending" ? 'bg-[#7352FF] text-white border-[#7352FF]' : (isDark ? 'bg-[#2a2d32] border-[#3c4043] text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-500')
+                        }`}>
+                          🏆 Swag Tier: {getCurrentTier() !== "Swag Eligibility Pending" ? getCurrentTier() : "Not Yet"}
+                        </div>
+                      </div>
+
                       <button onClick={handleCopyProfile} className={`w-full py-2.5 px-4 rounded-full font-bold text-sm transition-all flex items-center justify-center gap-2 ${copied ? 'bg-[#34a853] text-white' : 'bg-[#1a73e8] hover:bg-[#1557b0] text-white shadow-sm'}`}>
                         {copied ? '✓ Copied URL' : 'Copy Profile URL'}
                       </button>
@@ -1247,8 +1255,8 @@ const dashboardData = {
 
                 <div className={`rounded-2xl shadow-sm border flex flex-col md:flex-row flex-grow p-4 sm:p-6 ${isDark ? 'bg-[#15171b] border-[#2a2d32]' : 'bg-white border-[#dadce0]'}`}>
                    <div className={`w-full md:w-[32%] flex flex-col items-center justify-start px-2 md:pr-6 pb-6 md:pb-0 md:border-r ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-            <h3 className={`font-bold text-[40px] tracking-tight text-center mt-2 ${isDark ? 'text-white' : 'text-black'}`}>Your Arcade </h3>                       
-           <span className={`text-[11px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                       
+            <h3 className={`font-semibold text-[26px] tracking-tight text-center mt-2 ${isDark ? 'text-white' : 'text-black'}`}>Arcade Season Report</h3>                       
+           <span className={`text-[12px] font-medium tracking-wide mt-1 text-center ${isDark ? 'text-[#9aa0a6]' : 'text-[#5f6368]'}`}>Jan 2026 - Dec 2026</span>                       
   
            <img src="https://cdn.qwiklabs.com/assets/leagues/silver_sm_new-deaa0090c8b38c1cde7cbc34bb895870009e6fee.png" alt="Arcade Level" className="h-20 my-4 object-contain filter drop-shadow-md" />
 
@@ -1258,69 +1266,94 @@ const dashboardData = {
                         <div className="flex justify-center gap-6 sm:gap-10 w-full mt-2">
                            <div className="flex flex-col items-center">
                               <div className="flex items-center gap-1.5 mb-1.5 text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider"><span className="w-2.5 h-2.5 rounded-full bg-[#1a73e8]"></span>Arcade Games</div>
-                              <span className={`text-3xl sm:text-4xl font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{arcadeOnlyGamesCount}</span>
+                              <span className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-[#202124]'}`}>{arcadeOnlyGamesCount}</span>
                            </div>
                            <div className="flex flex-col items-center">
                               <div className="flex items-center gap-1.5 mb-1.5 text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider"><span className="w-2.5 h-2.5 rounded-full bg-[#34a853]"></span>Skill Badges</div>
-                              <span className={`text-3xl sm:text-4xl font-black ${isDark ? 'text-white' : 'text-[#202124]'}`}>{arcadeOnlySkillBadgesCount}</span>
+                              <span className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-[#202124]'}`}>{arcadeOnlySkillBadgesCount}</span>
                            </div>
                         </div>
                      )}
 
-                     <div className="mt-8 flex flex-col items-center w-full">
-                       <div className={`px-4 py-2.5 w-full text-center rounded-lg shadow-sm font-black text-[14px] sm:text-[15px] bg-[#1a73e8] text-white border-2 border-[#34a853]`}>🏆 {getCurrentTier()}</div>
+                     {/* REPLACED BUTTON WITH PREMIUM MYSTERY BOX STYLE & SVG */}
+                     <div className="mt-6 flex flex-col items-center w-full relative bg-gradient-to-b from-[#7352FF]/10 to-transparent rounded-2xl p-4 border border-[#7352FF]/20">
+                         <div className="z-10 bg-[#7352FF] text-white px-5 py-1.5 rounded-full text-[14px] font-bold shadow-md mb-2">
+                             {getCurrentTier() !== "Swag Eligibility Pending" ? getCurrentTier() : "Not Yet"}
+                         </div>
+                         
+                         {/* NEW INLINE SVG MYSTERY BOX */}
+                         <svg viewBox="0 0 160 160" className="w-28 h-28 drop-shadow-2xl hover:scale-105 transition-transform duration-500" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                               <radialGradient id="boxGlow" cx="50%" cy="50%" r="50%">
+                                  <stop offset="0%" stopColor="#895DF2" stopOpacity="0.4" />
+                                  <stop offset="100%" stopColor="#895DF2" stopOpacity="0" />
+                               </radialGradient>
+                            </defs>
+                            <circle cx="80" cy="90" r="65" fill="url(#boxGlow)" />
+                            
+                            {/* Sparkles */}
+                            <path d="M30 50 L32 58 L40 60 L32 62 L30 70 L28 62 L20 60 L28 58 Z" fill="#FFD700" />
+                            <path d="M125 40 L127 46 L133 48 L127 50 L125 56 L123 50 L117 48 L123 46 Z" fill="#FFD700" />
+                            <path d="M135 85 L136.5 90 L141.5 91.5 L136.5 93 L135 98 L133.5 93 L128.5 91.5 L133.5 90 Z" fill="#FFD700" />
+                            <circle cx="45" cy="85" r="2.5" fill="#00E5FF" />
+                            <circle cx="115" cy="75" r="3.5" fill="#FF2A7A" />
+
+                            {/* Confetti */}
+                            <path d="M 55 60 Q 60 50 65 65" fill="none" stroke="#FF2A7A" strokeWidth="2.5" strokeLinecap="round" />
+                            <path d="M 105 70 Q 115 60 100 50" fill="none" stroke="#00E5FF" strokeWidth="2.5" strokeLinecap="round" />
+                            
+                            {/* Main Box Base */}
+                            <rect x="35" y="80" width="90" height="65" rx="8" fill="#7248EA" />
+                            <rect x="70" y="80" width="20" height="65" fill="#FF2E93" />
+                            <rect x="35" y="105" width="90" height="20" fill="#FF2E93" />
+                            
+                            {/* Open Lid (Tilted) */}
+                            <g transform="rotate(-15 80 50)">
+                               <rect x="25" y="35" width="110" height="22" rx="6" fill="#895DF2" />
+                               <rect x="70" y="35" width="20" height="22" fill="#FF2E93" />
+                               <ellipse cx="55" cy="28" rx="14" ry="10" fill="none" stroke="#FF2E93" strokeWidth="5" />
+                               <ellipse cx="105" cy="28" rx="14" ry="10" fill="none" stroke="#FF2E93" strokeWidth="5" />
+                               <circle cx="80" cy="35" r="6" fill="#FF2E93" />
+                            </g>
+                         </svg>
                      </div>
                    </div>
 
-                   {/* --- PREMIUM BLURRED FACILITATOR SECTION --- */}
-                   <div className="w-full md:w-[68%] flex flex-col px-2 md:pl-8 pt-6 md:pt-0 relative overflow-hidden">
-                     {/* The blurred background layer */}
-                     <div className="w-full h-full flex flex-col filter blur-[6px] opacity-30 pointer-events-none select-none">
-                       {facilitatorContent}
-                     </div>
-
-                     {/* Overlay Content */}
-                       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4">
-                         
-                         <button 
-                           onClick={() => setShowFacilitatorDrawer(true)}
-                           className={`absolute top-4 right-4 px-4 py-1.5 rounded-full shadow-sm border flex items-center gap-1.5 text-[13px] font-bold transition-all z-20 hover:scale-105 ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8] hover:bg-[#3c4043]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-gray-50'}`}
-                         >
-                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                           View Report
-                         </button>
-
-                         <div className="flex flex-col items-center gap-5 mt-2 w-full max-w-sm">
-                             
-                             <h3 className="font-bold text-[24px] tracking-tight text-red-500 mt-4">Oops! Facilitator Program Ended. </h3>
-
-                             {/* Button and Milestone wrapper with proper gap */}
-                             <div className="flex flex-col items-center gap-3.5 w-full">
-                               {achievedMilestone && (
-                                 <div className="bg-[#4285f4] py-1.5 px-5 rounded-full text-white text-[14px] font-bold shadow-sm border border-[#4285f4]/30">
-                                    {achievedMilestone.title} 
-                                 </div>
-                               )}
-
-                               <button 
-                                 onClick={() => {
-                                   setCertInputName(userName || ""); 
-                                   setShowCertModal(true); 
-                                 }} 
-                                 className="bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-[15px] px-8 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 hover:scale-105"
-                               >
-                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                 Download Certificate
-                               </button>
-                             </div>
-
-                             <span className={`text-[13px] font-semibold tracking-wide mt-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                   {/* --- PREMIUM CLEAN FACILITATOR SECTION --- */}
+                   <div className="w-full md:w-[68%] flex flex-col items-center justify-center px-4 md:pl-8 pt-8 md:pt-0">
+                       <div className={`w-full max-w-xl flex flex-col items-center justify-center p-8 rounded-3xl border shadow-sm transition-all hover:shadow-md ${isDark ? 'bg-[#1a1c20] border-[#3c4043]' : 'bg-[#f8f9fa] border-[#dadce0]'}`}>
+                           <h3 className="font-semibold text-[26px] md:text-[28px] tracking-tight text-red-500 mb-2 text-center">Oops! Facilitator Program Ended.</h3>
+                           <span className={`text-[14px] font-medium tracking-wide mb-8 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                                Facilitator Record Not Found
-                             </span>
-                         </div>
-                         
+                           </span>
 
-                     </div>
+                           <div className="flex flex-col w-full gap-5 items-center">
+                               {achievedMilestone && (
+                                   <div className="bg-[#4285f4] py-2 px-6 rounded-full text-white text-[14px] font-medium shadow-sm">
+                                       {achievedMilestone.title}
+                                   </div>
+                               )}
+                               <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                                   <button
+                                       onClick={() => {
+                                           setCertInputName(userName || "");
+                                           setShowCertModal(true);
+                                       }}
+                                       className="bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-[15px] px-6 py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 hover:scale-105 w-full sm:w-auto"
+                                   >
+                                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                       Download Certificate
+                                   </button>
+                                   <button
+                                       onClick={() => setShowFacilitatorDrawer(true)}
+                                       className={`px-6 py-3 rounded-xl shadow-sm border flex items-center justify-center gap-2 text-[15px] font-medium transition-all hover:scale-105 w-full sm:w-auto ${isDark ? 'bg-[#2a2d32] border-[#3c4043] text-[#8ab4f8] hover:bg-[#3c4043]' : 'bg-white border-[#dadce0] text-[#1a73e8] hover:bg-gray-50'}`}
+                                   >
+                                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                       View Report
+                                   </button>
+                               </div>
+                           </div>
+                       </div>
                    </div>
                 </div>
 
@@ -1590,142 +1623,142 @@ const dashboardData = {
           )}
 
           {points !== null && (
-  <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
-    
-    {/* Header Section */}
-    <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4 border-b pb-5 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
-      <h4 className={`text-3xl font-bold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-        October Labs
-      </h4>
-    </div>
-
-    {/* ================= PENDING LABS ================= */}
-    {pendingLabs.length > 0 && (
-      <div className="mb-14">
-        <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-          </span>
-          Pending Labs ({pendingLabs.length})
-        </h5>
-        
-        {/* Premium Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pendingLabs.map((lab) => (
-            <div 
-              key={`pending-${lab.id}`} 
-              className={`group flex flex-col p-5 rounded-[24px] border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                isDark 
-                  ? 'bg-[#13151a] border-white/5 hover:border-white/10 hover:shadow-black/50' 
-                  : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-gray-200/50'
-              }`}
-            >
-              {/* Image & Points Badge Container */}
-              <div className={`relative w-full aspect-[4/3] rounded-2xl mb-5 overflow-hidden flex items-center justify-center p-4 transition-colors ${isDark ? 'bg-white/[0.02] group-hover:bg-white/[0.04]' : 'bg-gray-50 group-hover:bg-gray-100'}`}>
-                {/* Sleek Floating Points Badge */}
-                <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-semibold tracking-wider flex items-center gap-1.5 z-20 ${
-                  isDark ? 'bg-black/40 border-white/10 text-yellow-400' : 'bg-white/80 border-gray-200 text-yellow-600 shadow-sm'
-                }`}>
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                  {lab.points} PTS
-                </div>
-                <img src={lab.image} alt={lab.title} className="w-[85%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500 z-10" />
+            <div className="w-full animate-fade-in-up relative" style={{ animationDelay: '0.25s' }}>
+              
+              {/* Header Section */}
+              <div className={`flex flex-col sm:flex-row sm:items-center justify-between mb-10 gap-4 border-b pb-5 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+                <h4 className={`text-3xl font-bold tracking-tight flex items-center gap-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  October Labs
+                </h4>
               </div>
 
-              {/* Text Content */}
-              <div className="flex-1">
-                <h5 className={`text-[17px] font-semibold mb-1.5 line-clamp-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{lab.title}</h5>
-                <p className={`text-[13px] leading-relaxed line-clamp-2 mb-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{lab.subtitle}</p>
-              </div>
+              {/* ================= PENDING LABS ================= */}
+              {pendingLabs.length > 0 && (
+                <div className="mb-14">
+                  <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+                    </span>
+                    Pending Labs ({pendingLabs.length})
+                  </h5>
+                  
+                  {/* Premium Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {pendingLabs.map((lab) => (
+                      <div 
+                        key={`pending-${lab.id}`} 
+                        className={`group flex flex-col p-5 rounded-[24px] border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                          isDark 
+                            ? 'bg-[#13151a] border-white/5 hover:border-white/10 hover:shadow-black/50' 
+                            : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-gray-200/50'
+                        }`}
+                      >
+                        {/* Image & Points Badge Container */}
+                        <div className={`relative w-full aspect-[4/3] rounded-2xl mb-5 overflow-hidden flex items-center justify-center p-4 transition-colors ${isDark ? 'bg-white/[0.02] group-hover:bg-white/[0.04]' : 'bg-gray-50 group-hover:bg-gray-100'}`}>
+                          {/* Sleek Floating Points Badge */}
+                          <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-semibold tracking-wider flex items-center gap-1.5 z-20 ${
+                            isDark ? 'bg-black/40 border-white/10 text-yellow-400' : 'bg-white/80 border-gray-200 text-yellow-600 shadow-sm'
+                          }`}>
+                            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {lab.points} PTS
+                          </div>
+                          <img src={lab.image} alt={lab.title} className="w-[85%] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500 z-10" />
+                        </div>
 
-              {/* Bottom Actions */}
-              <div className="mt-auto flex flex-col gap-3">
-                {/* Modern Code Box */}
-                <div className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border transition-colors ${
-                  isDark ? 'bg-white/[0.02] border-white/5' : 'bg-gray-50/50 border-gray-100'
-                }`}>
-                  <div className="flex flex-col">
-                    <span className={`text-[10px] uppercase tracking-widest font-semibold mb-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Access Code</span>
-                    <span className={`text-[14px] font-mono font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{lab.accessCode}</span>
+                        {/* Text Content */}
+                        <div className="flex-1">
+                          <h5 className={`text-[17px] font-semibold mb-1.5 line-clamp-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{lab.title}</h5>
+                          <p className={`text-[13px] leading-relaxed line-clamp-2 mb-5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{lab.subtitle}</p>
+                        </div>
+
+                        {/* Bottom Actions */}
+                        <div className="mt-auto flex flex-col gap-3">
+                          {/* Modern Code Box */}
+                          <div className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border transition-colors ${
+                            isDark ? 'bg-white/[0.02] border-white/5' : 'bg-gray-50/50 border-gray-100'
+                          }`}>
+                            <div className="flex flex-col">
+                              <span className={`text-[10px] uppercase tracking-widest font-semibold mb-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Access Code</span>
+                              <span className={`text-[14px] font-mono font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{lab.accessCode}</span>
+                            </div>
+                            <button onClick={() => handleCopyCode(lab.accessCode)} className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'hover:bg-white hover:shadow-sm text-gray-500 hover:text-gray-900'}`} title="Copy Code">
+                              {copiedCode === lab.accessCode ? (
+                                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                              ) : (
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                              )}
+                            </button>
+                          </div>
+
+                          {/* THIN & ELEGANT BLUE BUTTON */}
+                          <a href={lab.link} target="_blank" rel="noopener noreferrer" 
+                             className={`w-full py-2.5 text-[14px] font-medium tracking-wide rounded-xl border-transparent text-white transition-all duration-300 flex justify-center items-center ${
+                               isDark 
+                                 ? 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_20px_rgba(37,99,235,0.3)]' 
+                                 : 'bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md'
+                             }`}>
+                            Start Lab
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <button onClick={() => handleCopyCode(lab.accessCode)} className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'hover:bg-white hover:shadow-sm text-gray-500 hover:text-gray-900'}`} title="Copy Code">
-                    {copiedCode === lab.accessCode ? (
-                      <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    )}
-                  </button>
                 </div>
+              )}
 
-                {/* THIN & ELEGANT BLUE BUTTON */}
-                <a href={lab.link} target="_blank" rel="noopener noreferrer" 
-                   className={`w-full py-2.5 text-[14px] font-medium tracking-wide rounded-xl border-transparent text-white transition-all duration-300 flex justify-center items-center ${
-                     isDark 
-                       ? 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.15)] hover:shadow-[0_0_20px_rgba(37,99,235,0.3)]' 
-                       : 'bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md'
-                   }`}>
-                  Start Lab
-                </a>
-              </div>
+              {/* ================= COMPLETED LABS ================= */}
+              {completedLabs.length > 0 && (
+                <div>
+                  <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span> 
+                    Completed Labs ({completedLabs.length})
+                  </h5>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {completedLabs.map((lab) => (
+                      <div 
+                        key={`completed-${lab.id}`} 
+                        className={`group flex flex-col p-5 rounded-[24px] border transition-all duration-300 opacity-90 hover:opacity-100 ${
+                          isDark 
+                            ? 'bg-[#13151a] border-white/5 hover:border-white/10' 
+                            : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-sm'
+                        }`}
+                      >
+                        {/* Image & Points (Grayed out a bit for completed) */}
+                        <div className={`relative w-full aspect-[4/3] rounded-2xl mb-5 overflow-hidden flex items-center justify-center p-4 transition-colors grayscale-[20%] group-hover:grayscale-0 ${isDark ? 'bg-white/[0.02]' : 'bg-gray-50'}`}>
+                          <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-semibold tracking-wider flex items-center gap-1.5 z-20 ${
+                            isDark ? 'bg-black/40 border-white/10 text-yellow-500/70' : 'bg-white/80 border-gray-200 text-yellow-600/70'
+                          }`}>
+                            <span>⭐</span> {lab.points} PTS
+                          </div>
+                          <img src={lab.image} alt={lab.title} className="w-[85%] object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 z-10" />
+                        </div>
+
+                        {/* Text Content */}
+                        <div className="flex-1">
+                          <h5 className={`text-[17px] font-semibold mb-1.5 line-clamp-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{lab.title}</h5>
+                          <p className={`text-[13px] leading-relaxed line-clamp-2 mb-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{lab.subtitle}</p>
+                        </div>
+
+                        <div className="mt-auto flex flex-col gap-3">
+                          {/* ELEGANT COMPLETED BUTTON (Ghost Style) */}
+                          <div className={`w-full py-2.5 text-[14px] font-medium tracking-wide rounded-xl border flex justify-center items-center gap-2 cursor-default ${
+                              isDark 
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                                : 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                            }`}>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
+                            Completed
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    {/* ================= COMPLETED LABS ================= */}
-    {completedLabs.length > 0 && (
-      <div>
-        <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span> 
-          Completed Labs ({completedLabs.length})
-        </h5>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {completedLabs.map((lab) => (
-            <div 
-              key={`completed-${lab.id}`} 
-              className={`group flex flex-col p-5 rounded-[24px] border transition-all duration-300 opacity-90 hover:opacity-100 ${
-                isDark 
-                  ? 'bg-[#13151a] border-white/5 hover:border-white/10' 
-                  : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-sm'
-              }`}
-            >
-              {/* Image & Points (Grayed out a bit for completed) */}
-              <div className={`relative w-full aspect-[4/3] rounded-2xl mb-5 overflow-hidden flex items-center justify-center p-4 transition-colors grayscale-[20%] group-hover:grayscale-0 ${isDark ? 'bg-white/[0.02]' : 'bg-gray-50'}`}>
-                <div className={`absolute top-3 right-3 px-3 py-1.5 rounded-full backdrop-blur-md border text-[11px] font-semibold tracking-wider flex items-center gap-1.5 z-20 ${
-                  isDark ? 'bg-black/40 border-white/10 text-yellow-500/70' : 'bg-white/80 border-gray-200 text-yellow-600/70'
-                }`}>
-                  <span>⭐</span> {lab.points} PTS
-                </div>
-                <img src={lab.image} alt={lab.title} className="w-[85%] object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 z-10" />
-              </div>
-
-              {/* Text Content */}
-              <div className="flex-1">
-                <h5 className={`text-[17px] font-semibold mb-1.5 line-clamp-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{lab.title}</h5>
-                <p className={`text-[13px] leading-relaxed line-clamp-2 mb-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{lab.subtitle}</p>
-              </div>
-
-              <div className="mt-auto flex flex-col gap-3">
-                {/* ELEGANT COMPLETED BUTTON (Ghost Style) */}
-                <div className={`w-full py-2.5 text-[14px] font-medium tracking-wide rounded-xl border flex justify-center items-center gap-2 cursor-default ${
-                    isDark 
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
-                      : 'bg-emerald-50 border-emerald-200 text-emerald-600'
-                  }`}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
-                  Completed
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-)}
+          )}
 
           {points !== null && (
             <div id="history-section" className="animate-fade-in-up scroll-mt-24 w-full" style={{animationDelay: '0.3s'}}>
@@ -2197,33 +2230,33 @@ const dashboardData = {
         </div>
       )}
 
-      {/* --- FACILITATOR DRAWER --- */}
-      <div className={`fixed inset-0 z-[200] flex justify-end transition-opacity duration-300 ${showFacilitatorDrawer ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowFacilitatorDrawer(false)}></div>
-        
-        <div className={`relative w-full max-w-xl h-full shadow-2xl transform transition-transform duration-300 flex flex-col ${showFacilitatorDrawer ? 'translate-x-0' : 'translate-x-full'} ${isDark ? 'bg-[#15171b] border-l border-[#3c4043]' : 'bg-white border-l border-[#dadce0]'}`}>
-            
-           <div className={`flex items-center justify-between p-5 border-b ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
-              <h3 className={`text-xl font-bold tracking-wide ${isDark ? 'text-white' : 'text-[#202124]'}`}>Facilitator Details</h3>
-              <button onClick={() => setShowFacilitatorDrawer(false)} className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-[#3c4043] text-gray-300' : 'hover:bg-gray-100 text-gray-600'}`}>
-                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+      {/* --- FACILITATOR CENTER MODAL (NO SCROLL REQUIRED) --- */}
+      <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300 ${showFacilitatorDrawer ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowFacilitatorDrawer(false)}></div>
+
+        <div className={`relative w-full max-w-xl max-h-[85vh] rounded-[20px] shadow-2xl transform transition-transform duration-300 flex flex-col ${showFacilitatorDrawer ? 'scale-100' : 'scale-95'} ${isDark ? 'bg-[#15171b] border border-[#3c4043]' : 'bg-white border border-[#dadce0]'}`}>
+           
+           <div className={`flex items-center justify-between p-4 md:p-5 border-b ${isDark ? 'border-[#3c4043]' : 'border-[#dadce0]'}`}>
+              <h3 className={`text-xl font-semibold tracking-tight ${isDark ? 'text-white' : 'text-[#202124]'}`}>Facilitator Details</h3>
+              <button onClick={() => setShowFacilitatorDrawer(false)} className={`p-1.5 rounded-full transition-colors ${isDark ? 'hover:bg-[#3c4043] text-gray-300' : 'hover:bg-gray-100 text-gray-600'}`}>
+                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
            </div>
            
-           <div className="flex-1 overflow-y-auto p-6 custom-scrollbar flex flex-col pt-6">
+           <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar flex flex-col pt-4">
                
-               {/* User Avatar in Drawer */}
-               <div className="flex flex-col items-center mb-8">
-                   <div className="w-20 h-20 rounded-full p-1 border-[3px] border-[#1a73e8] shadow-sm mb-3">
+               {/* User Avatar in Modal */}
+               <div className="flex flex-col items-center mb-6">
+                   <div className="w-16 h-16 rounded-full p-1 border-[2px] border-[#1a73e8] shadow-sm mb-3">
                       <div className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center ${isDark ? 'bg-[#2a2d32]' : 'bg-[#0f9d58]'}`}>
                          {displayAvatar ? (
                             <img src={displayAvatar} alt="Profile" className="w-full h-full object-cover" />
                          ) : (
-                            <span className="text-3xl font-bold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
+                            <span className="text-2xl font-semibold text-white">{userName ? userName.charAt(0).toUpperCase() : "U"}</span>
                          )}
                       </div>
                    </div>
-                   <h2 className={`text-xl font-bold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>                
+                   <h2 className={`text-xl font-semibold tracking-tight text-center ${isDark ? 'text-white' : 'text-[#202124]'}`}>{userName || "Arcade Player"}</h2>  
                </div>
 
                {facilitatorContent}
